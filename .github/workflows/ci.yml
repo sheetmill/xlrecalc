@@ -37,6 +37,21 @@ jobs:
       - run: uv sync --locked --group dev
       - run: uv run pytest
 
+  # macOS, Excel's reference platform here: the coverage page's staleness test compares only on
+  # the platform the page records (macOS major version and architecture) and skips, saying
+  # why, on any other.
+  test-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.11"
+      - run: uv sync --locked --group dev
+      - run: sw_vers && uname -m
+      - run: uv run pytest -rs
+
   # Without openpyxl (a development dependency only): tests that need it are skipped, never failed.
   test-without-openpyxl:
     runs-on: ubuntu-latest
