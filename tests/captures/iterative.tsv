@@ -1,0 +1,283 @@
+# suite: iterative
+# excel: 16.114.3 for Mac, locale en_US
+# date_system: 1900
+# captured: 2026-11-01
+# generator: capture/suites.py:iterative
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# fixed: {'AK1': -10000.0, 'AK2': 3000.0, 'AK3': 4200.0, 'AK4': 6800.0, 'AK5': 1500.0, 'AL1': 39448.0, 'AL2': 39508.0, 'AL3': 39751.0, 'AL4': 39859.0, 'AL5': 39904.0, 'AM1': -100.0, 'AM2': 'abc', 'AM3': True, 'AM5': 50.0, 'AM6': FormulaInput('=""'), 'AM7': 30.0, 'AN1': 39448.0, 'AN2': 39400.0, 'AN3': 39751.0, 'AN4': 39859.0, 'AN5': 39904.0, 'AO1': 39448.75, 'AO2': 39508.5, 'AO3': 39751.25, 'AO4': 39859.99, 'AO5': 39904.1, 'AP1': 39448.0, 'AP2': '2/1/2008', 'AP3': 39751.0, 'AP4': 39859.0, 'AP5': 39904.0, 'AQ1': -500.0, 'AQ2': 200.0, 'AQ3': 400.0, 'AR1': -500.0, 'AR2': ErrorValue('#N/A'), 'AR3': 400.0, 'AR4': 100.0, 'AR5': 100.0, 'AS1': 500.0, 'AS2': 200.0, 'AS3': 400.0, 'AS4': 100.0, 'AS5': 100.0, 'AT1': 39448.0, 'AT2': -1.0, 'AT3': 39751.0, 'AT4': 39859.0, 'AT5': 39904.0, 'BA1': -10000.0, 'BA2': 3000.0, 'BA3': 4200.0, 'BA4': 6800.0, 'BA5': 1500.0, 'BB1': -70000.0, 'BB2': 12000.0, 'BB3': 15000.0, 'BB4': 18000.0, 'BB5': 21000.0, 'BB6': 26000.0, 'BC1': -100.0, 'BC2': 230.0, 'BC3': -132.0, 'BD1': 100.0, 'BD2': 200.0, 'BD3': 300.0, 'BE1': -1000.0, 'BE2': 0.0, 'BE3': 0.0, 'BE4': 0.0, 'BE5': 1.0, 'BF1': -1.0, 'BF2': 10000000000.0, 'BG1': -1000.0, 'BG2': 999.0, 'BH1': -1000.0, 'BH2': 1100.0, 'BI1': -100.0, 'BI2': 0.0, 'BI3': 0.0, 'BI4': 0.0, 'BI5': 0.0, 'BI6': 0.0, 'BI7': 0.0, 'BI8': 0.0, 'BI9': 0.0, 'BI10': 0.0, 'BI11': 0.0, 'BI12': 200.0, 'BJ1': 1000.0, 'BJ2': -500.0, 'BJ3': -600.0, 'BK1': -100.0, 'BK2': 'abc', 'BK3': True, 'BK5': 50.0, 'BK6': 70.0, 'BL1': -100.0, 'BL2': ErrorValue('#N/A'), 'BL3': 120.0, 'BM1': -5000.0, 'BM2': 1000.0, 'BM3': 1000.0, 'BM4': 1000.0, 'BM5': 1000.0, 'BM6': 1000.0, 'BM7': 1000.0, 'BM8': 1000.0, 'BM9': 1000.0, 'BM10': 1000.0, 'BM11': 1000.0, 'BN1': -1000.0, 'BN2': 300.0, 'BN3': 300.0, 'BN4': 300.0, 'BN5': 300.0, 'BO1': -1e-10, 'BO2': 1.5e-10, 'BP1': -1000.0, 'BP2': 2000.0, 'BP3': -1000.0, 'BQ1': -100.0, 'BQ2': 10.0, 'BQ3': 10.0, 'BQ4': 10.0, 'BQ5': 10.0, 'BQ6': 10.0, 'BQ7': 10.0, 'BQ8': 10.0, 'BQ9': 10.0, 'BQ10': 10.0, 'BQ11': 110.0, 'BR1': -1000.0, 'BR2': 5000.0, 'BR3': -6000.0, 'BR4': 2000.0, 'BU1': 39448.0, 'BU2': 39508.0, 'BU3': 39751.0, 'BU4': 39859.0, 'BU5': 39904.0, 'BV1': 39448.0, 'BV2': 39813.0, 'BV3': 40178.0, 'BV4': 40543.0, 'BV5': 40909.0, 'BV6': 41274.0, 'BW1': 39448.0, 'BW2': 39449.0, 'BW3': 39450.0, 'BX1': 39448.0, 'BX2': 39448.0, 'BX3': 39813.0, 'BY1': 39448.0, 'BY2': 39813.0, 'BY3': 39500.0, 'BY4': 40178.0, 'BY5': 40543.0, 'BZ1': 39448.0, 'BZ2': 43000.0, 'CA1': 39448.0, 'CA2': 39448.5, 'CA3': 39449.7}
+# columns: suite tag case formula inputs expected_type expected_repr
+iterative	irr	1	IRR(BA1:BA5)	()	n	0.20394315372948668
+iterative	irr	2	IRR(BB1:BB6)	()	n	0.08663094803652216
+iterative	irr	3	IRR(BC1:BC3)	()	n	0.10000000000000009
+iterative	irr	4	IRR(BD1:BD3)	()	e	#NUM!
+iterative	irr	5	IRR(BE1:BE5)	()	e	#NUM!
+iterative	irr	6	IRR(BF1:BF2)	()	e	#NUM!
+iterative	irr	7	IRR(BG1:BG2)	()	n	-0.0009999999999998899
+iterative	irr	8	IRR(BH1:BH2)	()	n	0.10000000000000009
+iterative	irr	9	IRR(BI1:BI12)	()	n	0.06504108943996245
+iterative	irr	10	IRR(BJ1:BJ3)	()	n	0.0639410298049845
+iterative	irr	11	IRR(BK1:BK6)	()	n	0.12321245982864903
+iterative	irr	12	IRR(BL1:BL3)	()	e	#VALUE!
+iterative	irr	13	IRR(BM1:BM11)	()	n	0.15098414477083444
+iterative	irr	14	IRR(BN1:BN5)	()	n	0.07713847295204368
+iterative	irr	15	IRR(BO1:BO2)	()	n	0.4999999999999998
+iterative	irr	16	IRR(BP1:BP3)	()	n	1.1057991944340984e-07
+iterative	irr	17	IRR(BQ1:BQ11)	()	n	0.10000000000000009
+iterative	irr	18	IRR(BR1:BR4)	()	n	0.0
+iterative	irr	19	IRR(BA1:BA5,{1})	(0.1,)	n	0.20394315372948668
+iterative	irr	20	IRR(BA1:BA5,{1})	(0.0,)	n	0.20394315372949046
+iterative	irr	21	IRR(BA1:BA5,{1})	(-0.5,)	n	0.20394315372949023
+iterative	irr	22	IRR(BA1:BA5,{1})	(0.5,)	n	0.20394315372949068
+iterative	irr	23	IRR(BA1:BA5,{1})	(2.0,)	n	0.20394315372949046
+iterative	irr	24	IRR(BA1:BA5,{1})	(-0.99,)	n	0.20394315372949023
+iterative	irr	25	IRR(BA1:BA5,{1})	(-1.0,)	e	#VALUE!
+iterative	irr	26	IRR(BA1:BA5,{1})	(10.0,)	n	0.20394315372975425
+iterative	irr	27	IRR(BA1:BA5,{1})	(1e-10,)	n	0.20394315372949023
+iterative	irr	28	IRR(BA1:BA5,{1})	(-0.9,)	n	0.20394315372679928
+iterative	irr	29	IRR(BA1:BA5,{1})	(0.15,)	n	0.20394315372949046
+iterative	irr	30	IRR(BC1:BC3,{1})	(0.1,)	n	0.10000000000000009
+iterative	irr	31	IRR(BC1:BC3,{1})	(0.0,)	n	0.10000000000000231
+iterative	irr	32	IRR(BC1:BC3,{1})	(-0.5,)	n	0.09999999999908082
+iterative	irr	33	IRR(BC1:BC3,{1})	(0.5,)	n	0.19999999999999885
+iterative	irr	34	IRR(BC1:BC3,{1})	(2.0,)	n	0.20000000000000306
+iterative	irr	35	IRR(BC1:BC3,{1})	(-0.99,)	n	0.0999999999999992
+iterative	irr	36	IRR(BC1:BC3,{1})	(-1.0,)	e	#VALUE!
+iterative	irr	37	IRR(BC1:BC3,{1})	(10.0,)	n	0.20000000001634977
+iterative	irr	38	IRR(BC1:BC3,{1})	(1e-10,)	n	0.1000000000000012
+iterative	irr	39	IRR(BC1:BC3,{1})	(-0.9,)	n	0.10000000000000098
+iterative	irr	40	IRR(BC1:BC3,{1})	(0.15,)	n	0.19999999999999862
+iterative	irr	41	IRR(BE1:BE5,{1})	(0.1,)	e	#NUM!
+iterative	irr	42	IRR(BE1:BE5,{1})	(0.0,)	e	#NUM!
+iterative	irr	43	IRR(BE1:BE5,{1})	(-0.5,)	n	-0.8221720589961066
+iterative	irr	44	IRR(BE1:BE5,{1})	(0.5,)	e	#NUM!
+iterative	irr	45	IRR(BE1:BE5,{1})	(2.0,)	e	#NUM!
+iterative	irr	46	IRR(BE1:BE5,{1})	(-0.99,)	n	-0.8221720589961456
+iterative	irr	47	IRR(BE1:BE5,{1})	(-1.0,)	e	#VALUE!
+iterative	irr	48	IRR(BE1:BE5,{1})	(10.0,)	e	#NUM!
+iterative	irr	49	IRR(BE1:BE5,{1})	(1e-10,)	e	#NUM!
+iterative	irr	50	IRR(BE1:BE5,{1})	(-0.9,)	n	-0.8221720589961077
+iterative	irr	51	IRR(BE1:BE5,{1})	(0.15,)	e	#NUM!
+iterative	irr	52	IRR(BJ1:BJ3,{1})	(0.1,)	n	0.0639410298049845
+iterative	irr	53	IRR(BJ1:BJ3,{1})	(0.0,)	n	0.0639410298048475
+iterative	irr	54	IRR(BJ1:BJ3,{1})	(-0.5,)	n	0.0639410298049854
+iterative	irr	55	IRR(BJ1:BJ3,{1})	(0.5,)	n	0.06394102980628058
+iterative	irr	56	IRR(BJ1:BJ3,{1})	(2.0,)	n	0.0639410298049854
+iterative	irr	57	IRR(BJ1:BJ3,{1})	(-0.99,)	n	0.0639410298049854
+iterative	irr	58	IRR(BJ1:BJ3,{1})	(-1.0,)	e	#VALUE!
+iterative	irr	59	IRR(BJ1:BJ3,{1})	(10.0,)	n	0.0639410298049854
+iterative	irr	60	IRR(BJ1:BJ3,{1})	(1e-10,)	n	0.0639410298048475
+iterative	irr	61	IRR(BJ1:BJ3,{1})	(-0.9,)	n	0.06394102980498517
+iterative	irr	62	IRR(BJ1:BJ3,{1})	(0.15,)	n	0.06394102980426708
+iterative	irr	63	IRR(BP1:BP3,{1})	(0.1,)	n	1.1057991944340984e-07
+iterative	irr	64	IRR(BP1:BP3,{1})	(0.0,)	n	0.0
+iterative	irr	65	IRR(BP1:BP3,{1})	(-0.5,)	n	-1.0835708841305802e-07
+iterative	irr	66	IRR(BP1:BP3,{1})	(0.5,)	n	1.5358529070752525e-07
+iterative	irr	67	IRR(BP1:BP3,{1})	(2.0,)	n	1.1761220131134564e-07
+iterative	irr	68	IRR(BP1:BP3,{1})	(-0.99,)	n	-1.414014161316146e-07
+iterative	irr	69	IRR(BP1:BP3,{1})	(-1.0,)	e	#VALUE!
+iterative	irr	70	IRR(BP1:BP3,{1})	(10.0,)	n	1.5889119930889706e-07
+iterative	irr	71	IRR(BP1:BP3,{1})	(1e-10,)	n	9.977263459859387e-11
+iterative	irr	72	IRR(BP1:BP3,{1})	(-0.9,)	n	-1.423038082926098e-07
+iterative	irr	73	IRR(BP1:BP3,{1})	(0.15,)	n	1.572691405993254e-07
+iterative	irr	74	IRR(BR1:BR4,{1})	(0.1,)	n	0.0
+iterative	irr	75	IRR(BR1:BR4,{1})	(0.0,)	n	0.0
+iterative	irr	76	IRR(BR1:BR4,{1})	(-0.5,)	n	-0.41421356237311013
+iterative	irr	77	IRR(BR1:BR4,{1})	(0.5,)	n	-6.661338147750939e-16
+iterative	irr	78	IRR(BR1:BR4,{1})	(2.0,)	n	2.41421356237287
+iterative	irr	79	IRR(BR1:BR4,{1})	(-0.99,)	n	-0.41421356237310325
+iterative	irr	80	IRR(BR1:BR4,{1})	(-1.0,)	e	#VALUE!
+iterative	irr	81	IRR(BR1:BR4,{1})	(10.0,)	n	2.4142135623730945
+iterative	irr	82	IRR(BR1:BR4,{1})	(1e-10,)	n	0.0
+iterative	irr	83	IRR(BR1:BR4,{1})	(-0.9,)	n	-0.4142135623730947
+iterative	irr	84	IRR(BR1:BR4,{1})	(0.15,)	n	1.0880185641326534e-14
+iterative	irr	85	IRR(BF1:BF2,{1})	(0.1,)	e	#NUM!
+iterative	irr	86	IRR(BF1:BF2,{1})	(0.0,)	e	#NUM!
+iterative	irr	87	IRR(BF1:BF2,{1})	(-0.5,)	e	#NUM!
+iterative	irr	88	IRR(BF1:BF2,{1})	(0.5,)	e	#NUM!
+iterative	irr	89	IRR(BF1:BF2,{1})	(2.0,)	e	#NUM!
+iterative	irr	90	IRR(BF1:BF2,{1})	(-0.99,)	e	#NUM!
+iterative	irr	91	IRR(BF1:BF2,{1})	(-1.0,)	e	#VALUE!
+iterative	irr	92	IRR(BF1:BF2,{1})	(10.0,)	e	#NUM!
+iterative	irr	93	IRR(BF1:BF2,{1})	(1e-10,)	e	#NUM!
+iterative	irr	94	IRR(BF1:BF2,{1})	(-0.9,)	e	#NUM!
+iterative	irr	95	IRR(BF1:BF2,{1})	(0.15,)	e	#NUM!
+iterative	irr	96	IRR(BG1:BG2,{1})	(0.1,)	n	-0.0009999999999998899
+iterative	irr	97	IRR(BG1:BG2,{1})	(0.0,)	n	-0.0009999999999998899
+iterative	irr	98	IRR(BG1:BG2,{1})	(-0.5,)	n	-0.001000000000000112
+iterative	irr	99	IRR(BG1:BG2,{1})	(0.5,)	n	-0.0009999999999998899
+iterative	irr	100	IRR(BG1:BG2,{1})	(2.0,)	n	-0.001000000000000112
+iterative	irr	101	IRR(BG1:BG2,{1})	(-0.99,)	n	-0.001000000000000112
+iterative	irr	102	IRR(BG1:BG2,{1})	(-1.0,)	e	#VALUE!
+iterative	irr	103	IRR(BG1:BG2,{1})	(10.0,)	n	-0.001000000000000112
+iterative	irr	104	IRR(BG1:BG2,{1})	(1e-10,)	n	-0.0009999999999998899
+iterative	irr	105	IRR(BG1:BG2,{1})	(-0.9,)	n	-0.001000000000000112
+iterative	irr	106	IRR(BG1:BG2,{1})	(0.15,)	n	-0.0009999999999998899
+iterative	irr	107	IRR(BA1:BA5,{1})	(2.5,)	n	0.20394315372951066
+iterative	irr	108	IRR(BA1:BA5,{1})	(-2.5,)	e	#VALUE!
+iterative	irr	109	IRR(BA1:BA5,{1})	(0.0,)	n	0.20394315372949046
+iterative	irr	110	IRR(BA1:BA5,{1})	('3',)	n	0.20394315372949023
+iterative	irr	111	IRR(BA1:BA5,{1})	('abc',)	e	#VALUE!
+iterative	irr	112	IRR(BA1:BA5,{1})	(True,)	n	0.20394315372946603
+iterative	irr	113	IRR(BA1:BA5,{1})	(False,)	n	0.20394315372949046
+iterative	irr	114	IRR(BA1:BA5,{1})	(None,)	n	0.20394315372949046
+iterative	irr	115	IRR(BA1:BA5,{1})	(FormulaInput('=""'),)	e	#VALUE!
+iterative	irr	116	IRR(BA1:BA5,{1})	(ErrorValue('#N/A'),)	e	#N/A
+iterative	irr	117	IRR({-100,60,60})	()	n	0.1306623862918075
+iterative	irr	118	IRR({-100;60;60})	()	n	0.1306623862918075
+iterative	irr	119	IRR({-100,60;60,10})	()	n	0.180188735547121
+iterative	irr	120	IRR({-100,"a",TRUE,60,60})	()	n	0.1306623862918075
+iterative	irr	121	IRR(BA1)	()	e	#NUM!
+iterative	irr	122	IRR(-100)	()	e	#NUM!
+iterative	irr	123	IRR((BA1:BA2,BA3:BA5))	()	n	0.20394315372948668
+iterative	irr	124	IRR(BA1:BB5)	()	n	0.003530367647328614
+iterative	irr	125	IRR(BA1:BA5)*1	()	n	0.20394315372948668
+iterative	irr	126	IRR(BA1:BA5,)	()	n	0.20394315372949046
+iterative	irr	127	IRR({-1000,100,100,100,100,100,100,100,100,100,100,100,100})	()	n	0.029228540769177025
+iterative	irr	128	IRR({-1000,1,1,1,1})	()	e	#NUM!
+iterative	irr	129	IRR({-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1000000})	()	n	0.6102620275414201
+iterative	xirr	130	XIRR(BA1:BA5,BU1:BU5)	()	n	0.6929685950279239
+iterative	xirr	131	XIRR(BB1:BB6,BV1:BV6)	()	n	0.08659547865390778
+iterative	xirr	132	XIRR(BC1:BC3,BW1:BW3)	()	e	#NUM!
+iterative	xirr	133	XIRR(BC1:BC3,BX1:BX3)	()	e	#NUM!
+iterative	xirr	134	XIRR(BA1:BA5,BY1:BY5)	()	n	0.42054683566093465
+iterative	xirr	135	XIRR(BF1:BF2,BZ1:BZ2)	()	n	9.655898952484131
+iterative	xirr	136	XIRR(BC1:BC3,CA1:CA3)	()	e	#NUM!
+iterative	xirr	137	XIRR(BG1:BG2,BZ1:BZ2)	()	n	-0.000102803111076355
+iterative	xirr	138	XIRR(BH1:BH2,BZ1:BZ2)	()	n	0.009842094779014588
+iterative	xirr	139	XIRR(BD1:BD3,BW1:BW3)	()	e	#NUM!
+iterative	xirr	140	XIRR(BJ1:BJ3,BW1:BW3)	()	n	6682030131.200001
+iterative	xirr	141	XIRR(BA1:BA5,BU1:BU5,{1})	(0.1,)	n	0.6929685950279239
+iterative	xirr	142	XIRR(BC1:BC3,BW1:BW3,{1})	(0.1,)	e	#NUM!
+iterative	xirr	143	XIRR(BA1:BA5,BU1:BU5,{1})	(0.0,)	n	0.6929685839843751
+iterative	xirr	144	XIRR(BC1:BC3,BW1:BW3,{1})	(0.0,)	e	#NUM!
+iterative	xirr	145	XIRR(BA1:BA5,BU1:BU5,{1})	(-0.5,)	e	#NUM!
+iterative	xirr	146	XIRR(BC1:BC3,BW1:BW3,{1})	(-0.5,)	e	#NUM!
+iterative	xirr	147	XIRR(BA1:BA5,BU1:BU5,{1})	(0.5,)	n	0.6929685845971107
+iterative	xirr	148	XIRR(BC1:BC3,BW1:BW3,{1})	(0.5,)	e	#NUM!
+iterative	xirr	149	XIRR(BA1:BA5,BU1:BU5,{1})	(2.0,)	n	0.6929685845971107
+iterative	xirr	150	XIRR(BC1:BC3,BW1:BW3,{1})	(2.0,)	e	#NUM!
+iterative	xirr	151	XIRR(BA1:BA5,BU1:BU5,{1})	(-0.99,)	e	#NUM!
+iterative	xirr	152	XIRR(BC1:BC3,BW1:BW3,{1})	(-0.99,)	e	#NUM!
+iterative	xirr	153	XIRR(BA1:BA5,BU1:BU5,{1})	(-1.0,)	e	#NUM!
+iterative	xirr	154	XIRR(BC1:BC3,BW1:BW3,{1})	(-1.0,)	e	#NUM!
+iterative	xirr	155	XIRR(BA1:BA5,BU1:BU5,{1})	(10.0,)	n	0.6929685827344656
+iterative	xirr	156	XIRR(BC1:BC3,BW1:BW3,{1})	(10.0,)	e	#NUM!
+iterative	xirr	157	XIRR(BA1:BA5,BU1:BU5,{1})	(1e-10,)	n	0.6929685824
+iterative	xirr	158	XIRR(BC1:BC3,BW1:BW3,{1})	(1e-10,)	e	#NUM!
+iterative	xirr	159	XIRR(BA1:BA5,BU1:BU5,{1})	(-0.9,)	e	#NUM!
+iterative	xirr	160	XIRR(BC1:BC3,BW1:BW3,{1})	(-0.9,)	e	#NUM!
+iterative	xirr	161	XIRR(BA1:BA5,BU1:BU5,{1})	(0.15,)	n	0.6929685920476915
+iterative	xirr	162	XIRR(BC1:BC3,BW1:BW3,{1})	(0.15,)	e	#NUM!
+iterative	xirr	163	XIRR(BA1:BA5,BU1:BU5,{1})	(2.5,)	n	0.6929685827344656
+iterative	xirr	164	XIRR(BA1:BA5,BU1:BU5,{1})	(-2.5,)	e	#NUM!
+iterative	xirr	165	XIRR(BA1:BA5,BU1:BU5,{1})	(0.0,)	n	0.6929685839843751
+iterative	xirr	166	XIRR(BA1:BA5,BU1:BU5,{1})	('3',)	n	0.6929685808718204
+iterative	xirr	167	XIRR(BA1:BA5,BU1:BU5,{1})	('abc',)	e	#VALUE!
+iterative	xirr	168	XIRR(BA1:BA5,BU1:BU5,{1})	(True,)	e	#VALUE!
+iterative	xirr	169	XIRR(BA1:BA5,BU1:BU5,{1})	(False,)	e	#VALUE!
+iterative	xirr	170	XIRR(BA1:BA5,BU1:BU5,{1})	(None,)	n	0.6929685839843751
+iterative	xirr	171	XIRR(BA1:BA5,BU1:BU5,{1})	(FormulaInput('=""'),)	e	#VALUE!
+iterative	xirr	172	XIRR(BA1:BA5,BU1:BU5,{1})	(ErrorValue('#N/A'),)	e	#N/A
+iterative	xirr	173	XIRR(BA1:BA5,BU1:BU4)	()	e	#NUM!
+iterative	xirr	174	XIRR(BK1:BK5,BU1:BU5)	()	e	#VALUE!
+iterative	xirr	175	XIRR(BL1:BL3,BU1:BU3)	()	e	#N/A
+iterative	xirr	176	XIRR(AK1:AK5,AP1:AP5)	()	n	0.7192174553871156
+iterative	xirr	177	XIRR(AK1:AK5,AT1:AT5)	()	e	#NUM!
+iterative	xirr	178	XIRR(AK1:AK5,AO1:AO5)	()	n	0.6929685950279239
+iterative	xirr	179	XIRR({-1000,600,600},{39448,39813,40178})	()	n	0.13066238760948182
+iterative	xirr	180	XIRR({-1000,600,600},{39448,39300,40178})	()	n	0.37521433234214785
+iterative	xirr	181	XIRR(BA1:BA5,BU1:BU5)*1	()	n	0.6929685950279239
+iterative	xirr	182	XIRR(BN1:BN5,BU1:BU5)	()	n	0.24816704392433167
+iterative	xirr	183	XIRR(BA1,BU1)	()	e	#N/A
+iterative	xirr	184	XIRR(BA1:BA2,BU1:BU2)	()	n	-0.9993405919056386
+iterative	rate	185	RATE({1},{2},{3})	(48.0, -200.0, 8000.0)	n	0.007701472488201368
+iterative	rate	186	RATE({1},{2},{3})	(10.0, -100.0, 1000.0)	n	-1.963351707292562e-10
+iterative	rate	187	RATE({1},{2},{3},{4},{5})	(360.0, -1000.0, 200000.0, 0.0, 0.0)	n	0.003655927952362746
+iterative	rate	188	RATE({1},{2},{3},{4},{5})	(12.0, 0.0, -1000.0, 2000.0, 0.0)	n	0.05946309435929566
+iterative	rate	189	RATE({1},{2},{3},{4},{5})	(5.0, 100.0, 1000.0, 0.0, 0.0)	e	#NUM!
+iterative	rate	190	RATE({1},{2},{3},{4},{5})	(2.5, -100.0, 200.0, 0.0, 0.0)	n	0.13838234716981965
+iterative	rate	191	RATE({1},{2},{3},{4},{5})	(48.0, -200.0, 8000.0, 0.0, 1.0)	n	0.008052981923906556
+iterative	rate	192	RATE({1},{2},{3},{4},{5})	(10.0, -100.0, 900.0, 100.0, 0.0)	n	-1.8724208943565656e-09
+iterative	rate	193	RATE({1},{2},{3},{4},{5})	(1.0, -110.0, 100.0, 0.0, 0.0)	n	0.099999999999999
+iterative	rate	194	RATE({1},{2},{3},{4},{5})	(0.0, -100.0, 1000.0, 0.0, 0.0)	e	#NUM!
+iterative	rate	195	RATE({1},{2},{3},{4},{5})	(-10.0, -100.0, 1000.0, 0.0, 0.0)	e	#NUM!
+iterative	rate	196	RATE({1},{2},{3},{4},{5})	(600.0, -100.0, 1000.0, 0.0, 0.0)	n	0.1
+iterative	rate	197	RATE({1},{2},{3},{4},{5})	(10.0, -1000.0, 1000.0, 0.0, 0.0)	e	#NUM!
+iterative	rate	198	RATE({1},{2},{3},{4},{5})	(10.0, 0.0, 0.0, 0.0, 0.0)	e	#NUM!
+iterative	rate	199	RATE({1},{2},{3},{4},{5})	(36.0, -300.0, 10000.0, -500.0, 0.5)	n	0.0068444100802057825
+iterative	rate	200	RATE({1},{2},{3},{4},{5})	(10.0, -100.0, 1000.0, 0.0, 2.0)	n	-1.487997633973174e-09
+iterative	rate	201	RATE({1},{2},{3},{4},{5})	(4.0, 0.0, -1000.0, 1000000000.0, 0.0)	e	#NUM!
+iterative	rate	202	RATE(48,-200,8000,0,0,{1})	(0.1,)	n	0.007701472488201368
+iterative	rate	203	RATE(12,0,-1000,2000,0,{1})	(0.1,)	n	0.05946309435929566
+iterative	rate	204	RATE(5,100,1000,0,0,{1})	(0.1,)	e	#NUM!
+iterative	rate	205	RATE(48,-200,8000,0,0,{1})	(0.0,)	n	0.007701472488195906
+iterative	rate	206	RATE(12,0,-1000,2000,0,{1})	(0.0,)	n	0.0594630943592952
+iterative	rate	207	RATE(5,100,1000,0,0,{1})	(0.0,)	e	#NUM!
+iterative	rate	208	RATE(48,-200,8000,0,0,{1})	(-0.5,)	e	#NUM!
+iterative	rate	209	RATE(12,0,-1000,2000,0,{1})	(-0.5,)	e	#NUM!
+iterative	rate	210	RATE(5,100,1000,0,0,{1})	(-0.5,)	e	#NUM!
+iterative	rate	211	RATE(48,-200,8000,0,0,{1})	(1.0,)	n	0.0077014724882126205
+iterative	rate	212	RATE(12,0,-1000,2000,0,{1})	(1.0,)	n	0.0594630943623579
+iterative	rate	213	RATE(5,100,1000,0,0,{1})	(1.0,)	e	#NUM!
+iterative	rate	214	RATE(48,-200,8000,0,0,{1})	(10.0,)	n	0.007701472488203236
+iterative	rate	215	RATE(12,0,-1000,2000,0,{1})	(10.0,)	n	0.05946309435929532
+iterative	rate	216	RATE(5,100,1000,0,0,{1})	(10.0,)	e	#NUM!
+iterative	rate	217	RATE(48,-200,8000,0,0,{1})	(-0.99,)	e	#NUM!
+iterative	rate	218	RATE(12,0,-1000,2000,0,{1})	(-0.99,)	e	#NUM!
+iterative	rate	219	RATE(5,100,1000,0,0,{1})	(-0.99,)	e	#NUM!
+iterative	rate	220	RATE(48,-200,8000,0,0,{1})	(-1.0,)	e	#VALUE!
+iterative	rate	221	RATE(12,0,-1000,2000,0,{1})	(-1.0,)	e	#VALUE!
+iterative	rate	222	RATE(5,100,1000,0,0,{1})	(-1.0,)	e	#VALUE!
+iterative	rate	223	RATE(48,-200,8000,0,0,{1})	(1e-10,)	n	0.007701472488196759
+iterative	rate	224	RATE(12,0,-1000,2000,0,{1})	(1e-10,)	n	0.05946309435929536
+iterative	rate	225	RATE(5,100,1000,0,0,{1})	(1e-10,)	e	#NUM!
+iterative	rate	226	RATE(48,-200,8000,0,0,{1})	(0.5,)	n	0.007701472488447894
+iterative	rate	227	RATE(12,0,-1000,2000,0,{1})	(0.5,)	n	0.059463094359295296
+iterative	rate	228	RATE(5,100,1000,0,0,{1})	(0.5,)	e	#NUM!
+iterative	rate	229	RATE({1},{2},{3})	(2.5, -200.0, 8000.0)	n	-0.7463227324963957
+iterative	rate	230	RATE({1},{2},{3})	(-2.5, -200.0, 8000.0)	e	#NUM!
+iterative	rate	231	RATE({1},{2},{3})	(0.0, -200.0, 8000.0)	e	#NUM!
+iterative	rate	232	RATE({1},{2},{3})	('3', -200.0, 8000.0)	n	-0.6698755783339367
+iterative	rate	233	RATE({1},{2},{3})	('abc', -200.0, 8000.0)	e	#VALUE!
+iterative	rate	234	RATE({1},{2},{3})	(True, -200.0, 8000.0)	n	-0.975
+iterative	rate	235	RATE({1},{2},{3})	(False, -200.0, 8000.0)	e	#NUM!
+iterative	rate	236	RATE({1},{2},{3})	(None, -200.0, 8000.0)	e	#NUM!
+iterative	rate	237	RATE({1},{2},{3})	(FormulaInput('=""'), -200.0, 8000.0)	e	#VALUE!
+iterative	rate	238	RATE({1},{2},{3})	(ErrorValue('#N/A'), -200.0, 8000.0)	e	#N/A
+iterative	rate	239	RATE({1},{2},{3})	(48.0, 2.5, 8000.0)	e	#NUM!
+iterative	rate	240	RATE({1},{2},{3})	(48.0, -2.5, 8000.0)	n	-0.11602443965033822
+iterative	rate	241	RATE({1},{2},{3})	(48.0, 0.0, 8000.0)	e	#NUM!
+iterative	rate	242	RATE({1},{2},{3})	(48.0, '3', 8000.0)	e	#NUM!
+iterative	rate	243	RATE({1},{2},{3})	(48.0, 'abc', 8000.0)	e	#VALUE!
+iterative	rate	244	RATE({1},{2},{3})	(48.0, True, 8000.0)	e	#NUM!
+iterative	rate	245	RATE({1},{2},{3})	(48.0, False, 8000.0)	e	#NUM!
+iterative	rate	246	RATE({1},{2},{3})	(48.0, None, 8000.0)	e	#NUM!
+iterative	rate	247	RATE({1},{2},{3})	(48.0, FormulaInput('=""'), 8000.0)	e	#VALUE!
+iterative	rate	248	RATE({1},{2},{3})	(48.0, ErrorValue('#N/A'), 8000.0)	e	#N/A
+iterative	rate	249	RATE({1},{2},{3})	(48.0, -200.0, 2.5)	e	#NUM!
+iterative	rate	250	RATE({1},{2},{3})	(48.0, -200.0, -2.5)	e	#NUM!
+iterative	rate	251	RATE({1},{2},{3})	(48.0, -200.0, 0.0)	e	#NUM!
+iterative	rate	252	RATE({1},{2},{3})	(48.0, -200.0, '3')	e	#NUM!
+iterative	rate	253	RATE({1},{2},{3})	(48.0, -200.0, 'abc')	e	#VALUE!
+iterative	rate	254	RATE({1},{2},{3})	(48.0, -200.0, True)	e	#NUM!
+iterative	rate	255	RATE({1},{2},{3})	(48.0, -200.0, False)	e	#NUM!
+iterative	rate	256	RATE({1},{2},{3})	(48.0, -200.0, None)	e	#NUM!
+iterative	rate	257	RATE({1},{2},{3})	(48.0, -200.0, FormulaInput('=""'))	e	#VALUE!
+iterative	rate	258	RATE({1},{2},{3})	(48.0, -200.0, ErrorValue('#N/A'))	e	#N/A
+iterative	rate	259	RATE(48,-200,8000,0,0,{1})	(2.5,)	n	0.007701472488202151
+iterative	rate	260	RATE(48,-200,8000,0,0,{1})	(-2.5,)	e	#VALUE!
+iterative	rate	261	RATE(48,-200,8000,0,0,{1})	(0.0,)	n	0.007701472488195906
+iterative	rate	262	RATE(48,-200,8000,0,0,{1})	('3',)	n	0.007701472488201926
+iterative	rate	263	RATE(48,-200,8000,0,0,{1})	('abc',)	e	#VALUE!
+iterative	rate	264	RATE(48,-200,8000,0,0,{1})	(True,)	n	0.0077014724882126205
+iterative	rate	265	RATE(48,-200,8000,0,0,{1})	(False,)	n	0.007701472488195906
+iterative	rate	266	RATE(48,-200,8000,0,0,{1})	(None,)	n	0.007701472488195906
+iterative	rate	267	RATE(48,-200,8000,0,0,{1})	(FormulaInput('=""'),)	e	#VALUE!
+iterative	rate	268	RATE(48,-200,8000,0,0,{1})	(ErrorValue('#N/A'),)	e	#N/A
+iterative	rate	269	RATE(48,-200,8000,,,0.2)	()	n	0.007701472488203191
+iterative	rate	270	RATE({48,24},-200,8000)	()	n	0.007701472488201368
+iterative	rate	271	RATE(48,-200,8000)*12	()	n	0.09241766985841642

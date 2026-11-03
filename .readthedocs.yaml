@@ -1,0 +1,24 @@
+# Read the Docs: Sphinx with the docs dependency group installed by uv, then the Pagefind
+# search index written into the built HTML (the search page uses it instead of Sphinx's).
+version: 2
+
+build:
+  os: ubuntu-24.04
+  tools:
+    python: "3.13"
+    nodejs: "22"
+  jobs:
+    pre_create_environment:
+      - asdf plugin add uv
+      - asdf install uv latest
+      - asdf global uv latest
+    create_environment:
+      - uv venv "${READTHEDOCS_VIRTUALENV_PATH}"
+    install:
+      - UV_PROJECT_ENVIRONMENT="${READTHEDOCS_VIRTUALENV_PATH}" uv sync --frozen --group docs
+    post_build:
+      - npx --yes pagefind@1.5.2 --site "${READTHEDOCS_OUTPUT}/html"
+
+sphinx:
+  configuration: docs/conf.py
+  fail_on_warning: true

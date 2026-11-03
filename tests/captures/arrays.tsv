@@ -1,0 +1,495 @@
+# suite: arrays
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-01
+# generator: capture/array_probe.py
+# method: legacy formulas, legacy array formulas (t=array) and dynamic-array formulas
+#   (cm=1 with the XLDAPR metadata) over Z1:AB5; Excel calculates and saves a copy;
+#   every cell of the copy is recorded
+# input rows: input, kind, cell or range, formula (file form)
+# cell rows: cell, address, type, value (repr), formula (repr), f_t, f_ref, cm, vm
+input	legacy	A20	'Z1:Z5'
+input	legacy	AD20	'Z1:Z5'
+input	legacy	A21	'Z1:Z5*2'
+input	legacy	AD21	'Z1:Z5*2'
+input	legacy	A22	'-Z1:Z5'
+input	legacy	AD22	'-Z1:Z5'
+input	legacy	A23	'Z1:Z5&"x"'
+input	legacy	AD23	'Z1:Z5&"x"'
+input	legacy	A24	'Z1:Z5>2'
+input	legacy	AD24	'Z1:Z5>2'
+input	legacy	A25	'Z1:Z5+AA1:AA5'
+input	legacy	AD25	'Z1:Z5+AA1:AA5'
+input	legacy	A26	'Z:Z'
+input	legacy	AD26	'Z:Z'
+input	legacy	A27	'Z1:AA1'
+input	legacy	AD27	'Z1:AA1'
+input	legacy	A28	'ABS(Z1:Z5)'
+input	legacy	AD28	'ABS(Z1:Z5)'
+input	legacy	A29	'ABS(-Z1:Z5)'
+input	legacy	AD29	'ABS(-Z1:Z5)'
+input	legacy	A30	'N(Z1:Z5)'
+input	legacy	AD30	'N(Z1:Z5)'
+input	legacy	A31	'ISNUMBER(Z1:Z5)'
+input	legacy	AD31	'ISNUMBER(Z1:Z5)'
+input	legacy	A32	'SUM(Z1:Z5)'
+input	legacy	AD32	'SUM(Z1:Z5)'
+input	legacy	A33	'SUM(Z1:Z5*2)'
+input	legacy	AD33	'SUM(Z1:Z5*2)'
+input	legacy	A34	'SUM(Z1:Z5>2)'
+input	legacy	AD34	'SUM(Z1:Z5>2)'
+input	legacy	A35	'SUM(--(Z1:Z5>2))'
+input	legacy	AD35	'SUM(--(Z1:Z5>2))'
+input	legacy	A36	'SUM(IF(Z1:Z5>2,1,0))'
+input	legacy	AD36	'SUM(IF(Z1:Z5>2,1,0))'
+input	legacy	A37	'SUM(Z1:Z5*{1;2;3;4;5})'
+input	legacy	AD37	'SUM(Z1:Z5*{1;2;3;4;5})'
+input	legacy	A38	'MAX(Z1:Z5*2)'
+input	legacy	AD38	'MAX(Z1:Z5*2)'
+input	legacy	A39	'AVERAGE(Z1:Z5*2)'
+input	legacy	AD39	'AVERAGE(Z1:Z5*2)'
+input	legacy	A40	'COUNT(Z1:Z5*2)'
+input	legacy	AD40	'COUNT(Z1:Z5*2)'
+input	legacy	A41	'SUMPRODUCT(Z1:Z5*2)'
+input	legacy	AD41	'SUMPRODUCT(Z1:Z5*2)'
+input	legacy	A42	'SUMPRODUCT(--(Z1:Z5>2))'
+input	legacy	AD42	'SUMPRODUCT(--(Z1:Z5>2))'
+input	legacy	A43	'SUMPRODUCT(Z1:Z5,AA1:AA5)'
+input	legacy	AD43	'SUMPRODUCT(Z1:Z5,AA1:AA5)'
+input	legacy	A44	'SUMPRODUCT((Z1:Z5>2)*AA1:AA5)'
+input	legacy	AD44	'SUMPRODUCT((Z1:Z5>2)*AA1:AA5)'
+input	legacy	A45	'INDEX(Z1:Z5*2,2)'
+input	legacy	AD45	'INDEX(Z1:Z5*2,2)'
+input	legacy	A46	'INDEX(Z1:AA5,0,1)'
+input	legacy	AD46	'INDEX(Z1:AA5,0,1)'
+input	legacy	A47	'SUM(INDEX(Z1:AA5,0,1))'
+input	legacy	AD47	'SUM(INDEX(Z1:AA5,0,1))'
+input	legacy	A48	'MATCH(6,Z1:Z5*2,0)'
+input	legacy	AD48	'MATCH(6,Z1:Z5*2,0)'
+input	legacy	A49	'LOOKUP(6,Z1:Z5*2)'
+input	legacy	AD49	'LOOKUP(6,Z1:Z5*2)'
+input	legacy	A50	'VLOOKUP(6,Z1:Z5*2,1,FALSE)'
+input	legacy	AD50	'VLOOKUP(6,Z1:Z5*2,1,FALSE)'
+input	legacy	A51	'ROWS(Z1:Z5*2)'
+input	legacy	AD51	'ROWS(Z1:Z5*2)'
+input	legacy	A52	'AND(Z1:Z5>0)'
+input	legacy	AD52	'AND(Z1:Z5>0)'
+input	legacy	A53	'OR(Z1:Z5>4)'
+input	legacy	AD53	'OR(Z1:Z5>4)'
+input	legacy	A54	'COUNTIF(Z1:Z5,">2")'
+input	legacy	AD54	'COUNTIF(Z1:Z5,">2")'
+input	legacy	A55	'SUMIF(Z1:Z5,">2",AA1:AA5)'
+input	legacy	AD55	'SUMIF(Z1:Z5,">2",AA1:AA5)'
+input	legacy	A56	'IF(Z1:Z5>2,"big","small")'
+input	legacy	AD56	'IF(Z1:Z5>2,"big","small")'
+input	legacy	A57	'CONCATENATE(AB1:AB5)'
+input	legacy	AD57	'CONCATENATE(AB1:AB5)'
+input	legacy	A58	'{1,2,3}'
+input	legacy	AD58	'{1,2,3}'
+input	legacy	A59	'{1,2,3}*2'
+input	legacy	AD59	'{1,2,3}*2'
+input	legacy	A60	'SUM({1,2,3}*2)'
+input	legacy	AD60	'SUM({1,2,3}*2)'
+input	legacy	A61	'ABS({-1,-2})'
+input	legacy	AD61	'ABS({-1,-2})'
+input	legacy	A62	'SUM(ABS({-1,-2}))'
+input	legacy	AD62	'SUM(ABS({-1,-2}))'
+input	legacy	A63	'{1,2,3}+{1;2}'
+input	legacy	AD63	'{1,2,3}+{1;2}'
+input	legacy	A64	'INDEX({1,2;3,4},2,1)'
+input	legacy	AD64	'INDEX({1,2;3,4},2,1)'
+input	legacy_row3	AE3	'Z1:Z5'
+input	legacy_row3	AF3	'Z1:Z5*2'
+input	legacy_row3	AG3	'-Z1:Z5'
+input	legacy_row3	AH3	'Z1:Z5&"x"'
+input	legacy_row3	AI3	'Z1:Z5>2'
+input	legacy_row3	AJ3	'Z1:Z5+AA1:AA5'
+input	legacy_row3	AK3	'Z:Z'
+input	legacy_row3	AL3	'Z1:AA1'
+input	legacy_row3	AM3	'ABS(Z1:Z5)'
+input	legacy_row3	AN3	'ABS(-Z1:Z5)'
+input	legacy_row3	AO3	'N(Z1:Z5)'
+input	legacy_row3	AP3	'ISNUMBER(Z1:Z5)'
+input	legacy_row3	AQ3	'SUM(Z1:Z5)'
+input	legacy_row3	AR3	'SUM(Z1:Z5*2)'
+input	legacy_row3	AS3	'SUM(Z1:Z5>2)'
+input	legacy_row3	AT3	'SUM(--(Z1:Z5>2))'
+input	legacy_row3	AU3	'SUM(IF(Z1:Z5>2,1,0))'
+input	legacy_row3	AV3	'SUM(Z1:Z5*{1;2;3;4;5})'
+input	legacy_row3	AW3	'MAX(Z1:Z5*2)'
+input	legacy_row3	AX3	'AVERAGE(Z1:Z5*2)'
+input	legacy_row3	AY3	'COUNT(Z1:Z5*2)'
+input	legacy_row3	AZ3	'SUMPRODUCT(Z1:Z5*2)'
+input	legacy_row3	BA3	'SUMPRODUCT(--(Z1:Z5>2))'
+input	legacy_row3	BB3	'SUMPRODUCT(Z1:Z5,AA1:AA5)'
+input	legacy_row3	BC3	'SUMPRODUCT((Z1:Z5>2)*AA1:AA5)'
+input	legacy_row3	BD3	'INDEX(Z1:Z5*2,2)'
+input	legacy_row3	BE3	'INDEX(Z1:AA5,0,1)'
+input	legacy_row3	BF3	'SUM(INDEX(Z1:AA5,0,1))'
+input	legacy_row3	BG3	'MATCH(6,Z1:Z5*2,0)'
+input	legacy_row3	BH3	'LOOKUP(6,Z1:Z5*2)'
+input	legacy_row3	BI3	'VLOOKUP(6,Z1:Z5*2,1,FALSE)'
+input	legacy_row3	BJ3	'ROWS(Z1:Z5*2)'
+input	legacy_row3	BK3	'AND(Z1:Z5>0)'
+input	legacy_row3	BL3	'OR(Z1:Z5>4)'
+input	legacy_row3	BM3	'COUNTIF(Z1:Z5,">2")'
+input	legacy_row3	BN3	'SUMIF(Z1:Z5,">2",AA1:AA5)'
+input	legacy_row3	BO3	'IF(Z1:Z5>2,"big","small")'
+input	legacy_row3	BP3	'CONCATENATE(AB1:AB5)'
+input	legacy_row3	BQ3	'{1,2,3}'
+input	legacy_row3	BR3	'{1,2,3}*2'
+input	legacy_row3	BS3	'SUM({1,2,3}*2)'
+input	legacy_row3	BT3	'ABS({-1,-2})'
+input	legacy_row3	BU3	'SUM(ABS({-1,-2}))'
+input	legacy_row3	BV3	'{1,2,3}+{1;2}'
+input	legacy_row3	BW3	'INDEX({1,2;3,4},2,1)'
+input	cse	C1:C5	'Z1:Z5*2'
+input	cse	C7:C9	'Z1:Z5*2'
+input	cse	C11:C17	'Z1:Z5*2'
+input	cse	E1:F5	'Z1:AA5'
+input	cse	E7:F11	'Z1:Z5'
+input	cse	C19:C19	'SUM(Z1:Z5*AA1:AA5)'
+input	cse	H1:J1	'{1,2,3}'
+input	cse	H3:H5	'{1,2,3}'
+input	cse	C21:C25	'IF(Z1:Z5>2,Z1:Z5,0)'
+input	cse	E13:F17	'Z1:Z5+{10,20}'
+input	cse	H7:J8	'{1,2,3}+{1;2}'
+input	cse	H10:J10	'{1,2,3}+{1,2}'
+input	cse	C27:C31	'ABS(-Z1:Z5)'
+input	cse	E19:E23	'Z1:Z5&"x"'
+input	cse	C33:C33	'MAX(IF(Z1:Z5>2,AA1:AA5))'
+input	cse	C35:C35	'INDEX(Z1:Z5*2,2)'
+input	cse	C37:C37	'MATCH(6,Z1:Z5*2,0)'
+input	cse	H12:H12	'Z1:Z5'
+input	cse	H14:H18	'Z3:Z5*2'
+input	reader	V19	'L2+1'
+input	reader	V20	'SUM(L1:L5)'
+input	reader	V21	'S2'
+input	dynamic	L1	'Z1:Z5*2'
+input	dynamic	N1	'Z1:AA5'
+input	dynamic	Q1	'{1,2;3,4}'
+input	dynamic	L10	'Z1:Z5+{10,20}'
+input	dynamic	S1	'Z1:Z5*2'
+input	dynamic	U3	'_xlfn.SINGLE(Z1:Z5)'
+input	dynamic	U5	'Z3'
+input	dynamic	U7	'SUM(Z1:Z5*2)'
+input	dynamic	W1	'IF(Z1:Z5>2,"big","small")'
+input	dynamic	X1	'_xlfn.ANCHORARRAY(L1)*2'
+input	dynamic	U9	'SUM(_xlfn.ANCHORARRAY(L1))'
+input	dynamic	U11	'ROWS(_xlfn.ANCHORARRAY(N1))'
+input	dynamic	U13	'MATCH(6,Z1:Z5*2,0)'
+input	dynamic	U15	'SUMPRODUCT(--(Z1:Z5>2))'
+input	dynamic	L17	'ABS(-Z1:Z5)'
+input	dynamic	N17	'Z1:Z5>2'
+input	dynamic	Q10	'{1,2,3}+{1;2}'
+input	dynamic	Q13	'{1,2,3}+{1,2}'
+input	dynamic	U17	'Z1:Z5'
+cell	C1	n	'2'	'Z1:Z5*2'	array	C1:C5		
+cell	E1	n	'1'	'Z1:AA5'	array	E1:F5		
+cell	F1	n	'10'	None				
+cell	H1	n	'1'	'{1,2,3}'	array	H1:J1		
+cell	I1	n	'2'	None				
+cell	J1	n	'3'	None				
+cell	L1	n	'2'	'Z1:Z5*2'	array	L1:L5	1	
+cell	N1	n	'1'	'Z1:AA5'	array	N1:O5	1	
+cell	O1	n	'10'	None				
+cell	Q1	n	'1'	'{1,2;3,4}'	array	Q1:R2	1	
+cell	R1	n	'2'	None				
+cell	S1	e	'#VALUE!'	'Z1:Z5*2'	array	S1	1	1
+cell	W1	str	'small'	'IF(Z1:Z5>2,"big","small")'	array	W1:W5	1	
+cell	X1	n	'4'	'_xlfn.ANCHORARRAY(L1)*2'	array	X1:X5	1	
+cell	Z1	n	'1'	None				
+cell	AA1	n	'10'	None				
+cell	AB1	s	'a'	None				
+cell	C2	n	'4'	None				
+cell	E2	n	'2'	None				
+cell	F2	n	'20'	None				
+cell	L2	n	'4'	None				
+cell	N2	n	'2'	None				
+cell	O2	n	'20'	None				
+cell	Q2	n	'3'	None				
+cell	R2	n	'4'	None				
+cell	W2	str	'small'	None				
+cell	X2	n	'8'	None				
+cell	Z2	n	'2'	None				
+cell	AA2	n	'20'	None				
+cell	AB2	s	'b'	None				
+cell	C3	n	'6'	None				
+cell	E3	n	'3'	None				
+cell	F3	n	'30'	None				
+cell	H3	n	'1'	'{1,2,3}'	array	H3:H5		
+cell	L3	n	'6'	None				
+cell	N3	n	'3'	None				
+cell	O3	n	'30'	None				
+cell	S3	s	'in the way'	None				
+cell	U3	n	'3'	'_xlfn.SINGLE(Z1:Z5)'	array	U3	1	
+cell	W3	str	'big'	None				
+cell	X3	n	'12'	None				
+cell	Z3	n	'3'	None				
+cell	AA3	n	'30'	None				
+cell	AB3	s	'c'	None				
+cell	AE3	n	'3'	'Z1:Z5'	normal			
+cell	AF3	n	'6'	'Z1:Z5*2'	normal			
+cell	AG3	n	'-3'	'-Z1:Z5'	normal			
+cell	AH3	str	'3x'	'Z1:Z5&"x"'	normal			
+cell	AI3	b	True	'Z1:Z5>2'	normal			
+cell	AJ3	n	'33'	'Z1:Z5+AA1:AA5'	normal			
+cell	AK3	n	'3'	'Z:Z'	normal			
+cell	AL3	e	'#VALUE!'	'Z1:AA1'	normal			
+cell	AM3	n	'3'	'ABS(Z1:Z5)'	normal			
+cell	AN3	n	'3'	'ABS(-Z1:Z5)'	normal			
+cell	AO3	n	'1'	'N(Z1:Z5)'	normal			
+cell	AP3	b	True	'ISNUMBER(Z1:Z5)'	normal			
+cell	AQ3	n	'15'	'SUM(Z1:Z5)'	normal			
+cell	AR3	n	'6'	'SUM(Z1:Z5*2)'	normal			
+cell	AS3	n	'1'	'SUM(Z1:Z5>2)'	normal			
+cell	AT3	n	'1'	'SUM(--(Z1:Z5>2))'	normal			
+cell	AU3	n	'1'	'SUM(IF(Z1:Z5>2,1,0))'	normal			
+cell	AV3	n	'45'	'SUM(Z1:Z5*{1;2;3;4;5})'	normal			
+cell	AW3	n	'6'	'MAX(Z1:Z5*2)'	normal			
+cell	AX3	n	'6'	'AVERAGE(Z1:Z5*2)'	normal			
+cell	AY3	n	'1'	'COUNT(Z1:Z5*2)'	normal			
+cell	AZ3	n	'30'	'SUMPRODUCT(Z1:Z5*2)'	normal			
+cell	BA3	n	'3'	'SUMPRODUCT(--(Z1:Z5>2))'	normal			
+cell	BB3	n	'550'	'SUMPRODUCT(Z1:Z5,AA1:AA5)'	normal			
+cell	BC3	n	'120'	'SUMPRODUCT((Z1:Z5>2)*AA1:AA5)'	normal			
+cell	BD3	n	'4'	'INDEX(Z1:Z5*2,2)'	normal			
+cell	BE3	n	'3'	'INDEX(Z1:AA5,0,1)'	normal			
+cell	BF3	n	'15'	'SUM(INDEX(Z1:AA5,0,1))'	normal			
+cell	BG3	e	'#N/A'	'MATCH(6,Z1:Z5*2,0)'	normal			
+cell	BH3	n	'6'	'LOOKUP(6,Z1:Z5*2)'	normal			
+cell	BI3	e	'#N/A'	'VLOOKUP(6,Z1:Z5*2,1,FALSE)'	normal			
+cell	BJ3	n	'5'	'ROWS(Z1:Z5*2)'	normal			
+cell	BK3	b	True	'AND(Z1:Z5>0)'	normal			
+cell	BL3	b	False	'OR(Z1:Z5>4)'	normal			
+cell	BM3	n	'3'	'COUNTIF(Z1:Z5,">2")'	normal			
+cell	BN3	n	'120'	'SUMIF(Z1:Z5,">2",AA1:AA5)'	normal			
+cell	BO3	str	'big'	'IF(Z1:Z5>2,"big","small")'	normal			
+cell	BP3	str	'c'	'CONCATENATE(AB1:AB5)'	normal			
+cell	BQ3	n	'1'	'{1,2,3}'	normal			
+cell	BR3	n	'2'	'{1,2,3}*2'	normal			
+cell	BS3	n	'12'	'SUM({1,2,3}*2)'	normal			
+cell	BT3	n	'1'	'ABS({-1,-2})'	normal			
+cell	BU3	n	'3'	'SUM(ABS({-1,-2}))'	normal			
+cell	BV3	n	'2'	'{1,2,3}+{1;2}'	normal			
+cell	BW3	n	'3'	'INDEX({1,2;3,4},2,1)'	normal			
+cell	C4	n	'8'	None				
+cell	E4	n	'4'	None				
+cell	F4	n	'40'	None				
+cell	H4	n	'1'	None				
+cell	L4	n	'8'	None				
+cell	N4	n	'4'	None				
+cell	O4	n	'40'	None				
+cell	W4	str	'big'	None				
+cell	X4	n	'16'	None				
+cell	Z4	n	'4'	None				
+cell	AA4	n	'40'	None				
+cell	AB4	s	'd'	None				
+cell	C5	n	'10'	None				
+cell	E5	n	'5'	None				
+cell	F5	n	'50'	None				
+cell	H5	n	'1'	None				
+cell	L5	n	'10'	None				
+cell	N5	n	'5'	None				
+cell	O5	n	'50'	None				
+cell	U5	n	'3'	'Z3'	array	U5	1	
+cell	W5	str	'big'	None				
+cell	X5	n	'20'	None				
+cell	Z5	n	'5'	None				
+cell	AA5	n	'50'	None				
+cell	AB5	s	'e'	None				
+cell	C7	n	'2'	'Z1:Z5*2'	array	C7:C9		
+cell	E7	n	'1'	'Z1:Z5'	array	E7:F11		
+cell	F7	n	'1'	None				
+cell	H7	n	'2'	'{1,2,3}+{1;2}'	array	H7:J8		
+cell	I7	n	'3'	None				
+cell	J7	n	'4'	None				
+cell	U7	n	'30'	'SUM(Z1:Z5*2)'	array	U7	1	
+cell	C8	n	'4'	None				
+cell	E8	n	'2'	None				
+cell	F8	n	'2'	None				
+cell	H8	n	'3'	None				
+cell	I8	n	'4'	None				
+cell	J8	n	'5'	None				
+cell	C9	n	'6'	None				
+cell	E9	n	'3'	None				
+cell	F9	n	'3'	None				
+cell	U9	n	'30'	'SUM(_xlfn.ANCHORARRAY(L1))'	array	U9	1	
+cell	E10	n	'4'	None				
+cell	F10	n	'4'	None				
+cell	H10	n	'2'	'{1,2,3}+{1,2}'	array	H10:J10		
+cell	I10	n	'4'	None				
+cell	J10	e	'#N/A'	None				
+cell	L10	n	'11'	'Z1:Z5+{10,20}'	array	L10:M14	1	
+cell	M10	n	'21'	None				
+cell	Q10	n	'2'	'{1,2,3}+{1;2}'	array	Q10:S11	1	
+cell	R10	n	'3'	None				
+cell	S10	n	'4'	None				
+cell	C11	n	'2'	'Z1:Z5*2'	array	C11:C17		
+cell	E11	n	'5'	None				
+cell	F11	n	'5'	None				
+cell	L11	n	'12'	None				
+cell	M11	n	'22'	None				
+cell	Q11	n	'3'	None				
+cell	R11	n	'4'	None				
+cell	S11	n	'5'	None				
+cell	U11	n	'5'	'ROWS(_xlfn.ANCHORARRAY(N1))'	array	U11	1	
+cell	C12	n	'4'	None				
+cell	H12	n	'1'	'Z1:Z5'	array	H12		
+cell	L12	n	'13'	None				
+cell	M12	n	'23'	None				
+cell	C13	n	'6'	None				
+cell	E13	n	'11'	'Z1:Z5+{10,20}'	array	E13:F17		
+cell	F13	n	'21'	None				
+cell	L13	n	'14'	None				
+cell	M13	n	'24'	None				
+cell	Q13	n	'2'	'{1,2,3}+{1,2}'	array	Q13:S13	1	
+cell	R13	n	'4'	None				
+cell	S13	e	'#N/A'	None				
+cell	U13	n	'3'	'MATCH(6,Z1:Z5*2,0)'	array	U13	1	
+cell	C14	n	'8'	None				
+cell	E14	n	'12'	None				
+cell	F14	n	'22'	None				
+cell	H14	n	'6'	'Z3:Z5*2'	array	H14:H18		
+cell	L14	n	'15'	None				
+cell	M14	n	'25'	None				
+cell	C15	n	'10'	None				
+cell	E15	n	'13'	None				
+cell	F15	n	'23'	None				
+cell	H15	n	'8'	None				
+cell	U15	n	'3'	'SUMPRODUCT(--(Z1:Z5>2))'	array	U15	1	
+cell	C16	e	'#N/A'	None				
+cell	E16	n	'14'	None				
+cell	F16	n	'24'	None				
+cell	H16	n	'10'	None				
+cell	C17	e	'#N/A'	None				
+cell	E17	n	'15'	None				
+cell	F17	n	'25'	None				
+cell	H17	e	'#N/A'	None				
+cell	L17	n	'1'	'ABS(-Z1:Z5)'	array	L17:L21	1	
+cell	N17	b	False	'Z1:Z5>2'	array	N17:N21	1	
+cell	U17	n	'1'	'Z1:Z5'	array	U17:U21	1	
+cell	H18	e	'#N/A'	None				
+cell	L18	n	'2'	None				
+cell	N18	b	False	None				
+cell	U18	n	'2'	None				
+cell	C19	n	'550'	'SUM(Z1:Z5*AA1:AA5)'	array	C19		
+cell	E19	str	'1x'	'Z1:Z5&"x"'	array	E19:E23		
+cell	L19	n	'3'	None				
+cell	N19	b	True	None				
+cell	U19	n	'3'	None				
+cell	V19	n	'5'	'L2+1'	normal			
+cell	A20	e	'#VALUE!'	'Z1:Z5'	normal			
+cell	E20	str	'2x'	None				
+cell	L20	n	'4'	None				
+cell	N20	b	True	None				
+cell	U20	n	'4'	None				
+cell	V20	n	'30'	'SUM(L1:L5)'	normal			
+cell	AD20	e	'#VALUE!'	'Z1:Z5'	normal			
+cell	A21	e	'#VALUE!'	'Z1:Z5*2'	normal			
+cell	C21	n	'0'	'IF(Z1:Z5>2,Z1:Z5,0)'	array	C21:C25		
+cell	E21	str	'3x'	None				
+cell	L21	n	'5'	None				
+cell	N21	b	True	None				
+cell	U21	n	'5'	None				
+cell	V21	n	'0'	'S2'	normal			
+cell	AD21	e	'#VALUE!'	'Z1:Z5*2'	normal			
+cell	A22	e	'#VALUE!'	'-Z1:Z5'	normal			
+cell	C22	n	'0'	None				
+cell	E22	str	'4x'	None				
+cell	AD22	e	'#VALUE!'	'-Z1:Z5'	normal			
+cell	A23	e	'#VALUE!'	'Z1:Z5&"x"'	normal			
+cell	C23	n	'3'	None				
+cell	E23	str	'5x'	None				
+cell	AD23	e	'#VALUE!'	'Z1:Z5&"x"'	normal			
+cell	A24	e	'#VALUE!'	'Z1:Z5>2'	normal			
+cell	C24	n	'4'	None				
+cell	AD24	e	'#VALUE!'	'Z1:Z5>2'	normal			
+cell	A25	e	'#VALUE!'	'Z1:Z5+AA1:AA5'	normal			
+cell	C25	n	'5'	None				
+cell	AD25	e	'#VALUE!'	'Z1:Z5+AA1:AA5'	normal			
+cell	A26	n	'0'	'Z:Z'	normal			
+cell	AD26	n	'0'	'Z:Z'	normal			
+cell	A27	e	'#VALUE!'	'Z1:AA1'	normal			
+cell	C27	n	'1'	'ABS(-Z1:Z5)'	array	C27:C31		
+cell	AD27	e	'#VALUE!'	'Z1:AA1'	normal			
+cell	A28	e	'#VALUE!'	'ABS(Z1:Z5)'	normal			
+cell	C28	n	'2'	None				
+cell	AD28	e	'#VALUE!'	'ABS(Z1:Z5)'	normal			
+cell	A29	e	'#VALUE!'	'ABS(-Z1:Z5)'	normal			
+cell	C29	n	'3'	None				
+cell	AD29	e	'#VALUE!'	'ABS(-Z1:Z5)'	normal			
+cell	A30	n	'1'	'N(Z1:Z5)'	normal			
+cell	C30	n	'4'	None				
+cell	AD30	n	'1'	'N(Z1:Z5)'	normal			
+cell	A31	b	False	'ISNUMBER(Z1:Z5)'	normal			
+cell	C31	n	'5'	None				
+cell	AD31	b	False	'ISNUMBER(Z1:Z5)'	normal			
+cell	A32	n	'15'	'SUM(Z1:Z5)'	normal			
+cell	AD32	n	'15'	'SUM(Z1:Z5)'	normal			
+cell	A33	e	'#VALUE!'	'SUM(Z1:Z5*2)'	normal			
+cell	C33	n	'50'	'MAX(IF(Z1:Z5>2,AA1:AA5))'	array	C33		
+cell	AD33	e	'#VALUE!'	'SUM(Z1:Z5*2)'	normal			
+cell	A34	e	'#VALUE!'	'SUM(Z1:Z5>2)'	normal			
+cell	AD34	e	'#VALUE!'	'SUM(Z1:Z5>2)'	normal			
+cell	A35	e	'#VALUE!'	'SUM(--(Z1:Z5>2))'	normal			
+cell	C35	n	'4'	'INDEX(Z1:Z5*2,2)'	array	C35		
+cell	AD35	e	'#VALUE!'	'SUM(--(Z1:Z5>2))'	normal			
+cell	A36	e	'#VALUE!'	'SUM(IF(Z1:Z5>2,1,0))'	normal			
+cell	AD36	e	'#VALUE!'	'SUM(IF(Z1:Z5>2,1,0))'	normal			
+cell	A37	e	'#VALUE!'	'SUM(Z1:Z5*{1;2;3;4;5})'	normal			
+cell	C37	n	'3'	'MATCH(6,Z1:Z5*2,0)'	array	C37		
+cell	AD37	e	'#VALUE!'	'SUM(Z1:Z5*{1;2;3;4;5})'	normal			
+cell	A38	e	'#VALUE!'	'MAX(Z1:Z5*2)'	normal			
+cell	AD38	e	'#VALUE!'	'MAX(Z1:Z5*2)'	normal			
+cell	A39	e	'#VALUE!'	'AVERAGE(Z1:Z5*2)'	normal			
+cell	AD39	e	'#VALUE!'	'AVERAGE(Z1:Z5*2)'	normal			
+cell	A40	n	'0'	'COUNT(Z1:Z5*2)'	normal			
+cell	AD40	n	'0'	'COUNT(Z1:Z5*2)'	normal			
+cell	A41	n	'30'	'SUMPRODUCT(Z1:Z5*2)'	normal			
+cell	AD41	n	'30'	'SUMPRODUCT(Z1:Z5*2)'	normal			
+cell	A42	n	'3'	'SUMPRODUCT(--(Z1:Z5>2))'	normal			
+cell	AD42	n	'3'	'SUMPRODUCT(--(Z1:Z5>2))'	normal			
+cell	A43	n	'550'	'SUMPRODUCT(Z1:Z5,AA1:AA5)'	normal			
+cell	AD43	n	'550'	'SUMPRODUCT(Z1:Z5,AA1:AA5)'	normal			
+cell	A44	n	'120'	'SUMPRODUCT((Z1:Z5>2)*AA1:AA5)'	normal			
+cell	AD44	n	'120'	'SUMPRODUCT((Z1:Z5>2)*AA1:AA5)'	normal			
+cell	A45	n	'4'	'INDEX(Z1:Z5*2,2)'	normal			
+cell	AD45	n	'4'	'INDEX(Z1:Z5*2,2)'	normal			
+cell	A46	e	'#VALUE!'	'INDEX(Z1:AA5,0,1)'	normal			
+cell	AD46	e	'#VALUE!'	'INDEX(Z1:AA5,0,1)'	normal			
+cell	A47	n	'15'	'SUM(INDEX(Z1:AA5,0,1))'	normal			
+cell	AD47	n	'15'	'SUM(INDEX(Z1:AA5,0,1))'	normal			
+cell	A48	e	'#VALUE!'	'MATCH(6,Z1:Z5*2,0)'	normal			
+cell	AD48	e	'#VALUE!'	'MATCH(6,Z1:Z5*2,0)'	normal			
+cell	A49	n	'6'	'LOOKUP(6,Z1:Z5*2)'	normal			
+cell	AD49	n	'6'	'LOOKUP(6,Z1:Z5*2)'	normal			
+cell	A50	e	'#VALUE!'	'VLOOKUP(6,Z1:Z5*2,1,FALSE)'	normal			
+cell	AD50	e	'#VALUE!'	'VLOOKUP(6,Z1:Z5*2,1,FALSE)'	normal			
+cell	A51	n	'5'	'ROWS(Z1:Z5*2)'	normal			
+cell	AD51	n	'5'	'ROWS(Z1:Z5*2)'	normal			
+cell	A52	e	'#VALUE!'	'AND(Z1:Z5>0)'	normal			
+cell	AD52	e	'#VALUE!'	'AND(Z1:Z5>0)'	normal			
+cell	A53	e	'#VALUE!'	'OR(Z1:Z5>4)'	normal			
+cell	AD53	e	'#VALUE!'	'OR(Z1:Z5>4)'	normal			
+cell	A54	n	'3'	'COUNTIF(Z1:Z5,">2")'	normal			
+cell	AD54	n	'3'	'COUNTIF(Z1:Z5,">2")'	normal			
+cell	A55	n	'120'	'SUMIF(Z1:Z5,">2",AA1:AA5)'	normal			
+cell	AD55	n	'120'	'SUMIF(Z1:Z5,">2",AA1:AA5)'	normal			
+cell	A56	e	'#VALUE!'	'IF(Z1:Z5>2,"big","small")'	normal			
+cell	AD56	e	'#VALUE!'	'IF(Z1:Z5>2,"big","small")'	normal			
+cell	A57	e	'#VALUE!'	'CONCATENATE(AB1:AB5)'	normal			
+cell	AD57	e	'#VALUE!'	'CONCATENATE(AB1:AB5)'	normal			
+cell	A58	n	'1'	'{1,2,3}'	normal			
+cell	AD58	n	'1'	'{1,2,3}'	normal			
+cell	A59	n	'2'	'{1,2,3}*2'	normal			
+cell	AD59	n	'2'	'{1,2,3}*2'	normal			
+cell	A60	n	'12'	'SUM({1,2,3}*2)'	normal			
+cell	AD60	n	'12'	'SUM({1,2,3}*2)'	normal			
+cell	A61	n	'1'	'ABS({-1,-2})'	normal			
+cell	AD61	n	'1'	'ABS({-1,-2})'	normal			
+cell	A62	n	'3'	'SUM(ABS({-1,-2}))'	normal			
+cell	AD62	n	'3'	'SUM(ABS({-1,-2}))'	normal			
+cell	A63	n	'2'	'{1,2,3}+{1;2}'	normal			
+cell	AD63	n	'2'	'{1,2,3}+{1;2}'	normal			
+cell	A64	n	'3'	'INDEX({1,2;3,4},2,1)'	normal			
+cell	AD64	n	'3'	'INDEX({1,2;3,4},2,1)'	normal			

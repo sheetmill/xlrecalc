@@ -1,0 +1,7 @@
+# Pagefind search index for the Sphinx HTML. Run after sphinx-build, from the repository root:
+#   npx --yes pagefind@1.5.2 --site docs/_build/html
+# Only elements marked data-pagefind-body are indexed (docs/_templates/page.html marks Furo's
+# article on content pages); the pilcrow permalinks on headings are skipped.
+site: docs/_build/html
+exclude_selectors:
+  - "a.headerlink"

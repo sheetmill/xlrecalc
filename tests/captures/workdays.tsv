@@ -1,0 +1,493 @@
+# suite: workdays
+# excel: 16.114.3 for Mac, locale en_US
+# date_system: 1900
+# captured: 2026-11-01
+# generator: capture/suites.py:workdays
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# fixed: {'CB1': 45292.0, 'CB2': 45297.0, 'CB3': 45292.0, 'CB4': '1/15/2024', 'CB5': 45341.75, 'CB7': 'x', 'CC1': 45292.0, 'CC2': 45306.0, 'CC3': 45651.0, 'CD1': 45292.0, 'CD2': ErrorValue('#N/A')}
+# columns: suite tag case formula inputs expected_type expected_repr
+workdays	workday	1	WORKDAY({1},{2})	(45289.0, 0.0)	n	45289.0
+workdays	workday	2	WORKDAY({1},{2},CB1:CB5)	(45289.0, 0.0)	n	45289.0
+workdays	workday	3	WORKDAY({1},{2})	(45289.0, 1.0)	n	45292.0
+workdays	workday	4	WORKDAY({1},{2},CB1:CB5)	(45289.0, 1.0)	n	45293.0
+workdays	workday	5	WORKDAY({1},{2})	(45289.0, -1.0)	n	45288.0
+workdays	workday	6	WORKDAY({1},{2},CB1:CB5)	(45289.0, -1.0)	n	45288.0
+workdays	workday	7	WORKDAY({1},{2})	(45289.0, 5.0)	n	45296.0
+workdays	workday	8	WORKDAY({1},{2},CB1:CB5)	(45289.0, 5.0)	n	45299.0
+workdays	workday	9	WORKDAY({1},{2})	(45289.0, -5.0)	n	45282.0
+workdays	workday	10	WORKDAY({1},{2},CB1:CB5)	(45289.0, -5.0)	n	45282.0
+workdays	workday	11	WORKDAY({1},{2})	(45289.0, 10.0)	n	45303.0
+workdays	workday	12	WORKDAY({1},{2},CB1:CB5)	(45289.0, 10.0)	n	45307.0
+workdays	workday	13	WORKDAY({1},{2})	(45289.0, 2.7)	n	45293.0
+workdays	workday	14	WORKDAY({1},{2},CB1:CB5)	(45289.0, 2.7)	n	45294.0
+workdays	workday	15	WORKDAY({1},{2})	(45289.0, -2.7)	n	45286.0
+workdays	workday	16	WORKDAY({1},{2},CB1:CB5)	(45289.0, -2.7)	n	45286.0
+workdays	workday	17	WORKDAY({1},{2})	(45289.0, 260.0)	n	45653.0
+workdays	workday	18	WORKDAY({1},{2},CB1:CB5)	(45289.0, 260.0)	n	45658.0
+workdays	workday	19	WORKDAY({1},{2})	(45289.0, -260.0)	n	44925.0
+workdays	workday	20	WORKDAY({1},{2},CB1:CB5)	(45289.0, -260.0)	n	44925.0
+workdays	networkdays	21	NETWORKDAYS({1},{2})	(45289.0, 45319.0)	n	21.0
+workdays	networkdays	22	NETWORKDAYS({1},{2},CC1:CC3)	(45289.0, 45319.0)	n	19.0
+workdays	networkdays	23	NETWORKDAYS({1},{2})	(45319.0, 45289.0)	n	-21.0
+workdays	networkdays	24	NETWORKDAYS({1},{2})	(45289.0, 45326.0)	n	26.0
+workdays	networkdays	25	NETWORKDAYS({1},{2},CC1:CC3)	(45289.0, 45326.0)	n	24.0
+workdays	networkdays	26	NETWORKDAYS({1},{2})	(45326.0, 45289.0)	n	-26.0
+workdays	networkdays	27	NETWORKDAYS({1},{2})	(45289.0, 45327.0)	n	27.0
+workdays	networkdays	28	NETWORKDAYS({1},{2},CC1:CC3)	(45289.0, 45327.0)	n	25.0
+workdays	networkdays	29	NETWORKDAYS({1},{2})	(45327.0, 45289.0)	n	-27.0
+workdays	networkdays	30	NETWORKDAYS({1},{2})	(45289.0, 45328.0)	n	28.0
+workdays	networkdays	31	NETWORKDAYS({1},{2},CC1:CC3)	(45289.0, 45328.0)	n	26.0
+workdays	networkdays	32	NETWORKDAYS({1},{2})	(45328.0, 45289.0)	n	-28.0
+workdays	networkdays	33	NETWORKDAYS({1},{2})	(45289.0, 45322.0)	n	24.0
+workdays	networkdays	34	NETWORKDAYS({1},{2},CC1:CC3)	(45289.0, 45322.0)	n	22.0
+workdays	networkdays	35	NETWORKDAYS({1},{2})	(45322.0, 45289.0)	n	-24.0
+workdays	networkdays	36	NETWORKDAYS({1},{2})	(45289.0, 45371.5)	n	59.0
+workdays	networkdays	37	NETWORKDAYS({1},{2},CC1:CC3)	(45289.0, 45371.5)	n	57.0
+workdays	networkdays	38	NETWORKDAYS({1},{2})	(45371.5, 45289.0)	n	-59.0
+workdays	workday	39	WORKDAY({1},{2})	(45296.0, 0.0)	n	45296.0
+workdays	workday	40	WORKDAY({1},{2},CB1:CB5)	(45296.0, 0.0)	n	45296.0
+workdays	workday	41	WORKDAY({1},{2})	(45296.0, 1.0)	n	45299.0
+workdays	workday	42	WORKDAY({1},{2},CB1:CB5)	(45296.0, 1.0)	n	45299.0
+workdays	workday	43	WORKDAY({1},{2})	(45296.0, -1.0)	n	45295.0
+workdays	workday	44	WORKDAY({1},{2},CB1:CB5)	(45296.0, -1.0)	n	45295.0
+workdays	workday	45	WORKDAY({1},{2})	(45296.0, 5.0)	n	45303.0
+workdays	workday	46	WORKDAY({1},{2},CB1:CB5)	(45296.0, 5.0)	n	45303.0
+workdays	workday	47	WORKDAY({1},{2})	(45296.0, -5.0)	n	45289.0
+workdays	workday	48	WORKDAY({1},{2},CB1:CB5)	(45296.0, -5.0)	n	45288.0
+workdays	workday	49	WORKDAY({1},{2})	(45296.0, 10.0)	n	45310.0
+workdays	workday	50	WORKDAY({1},{2},CB1:CB5)	(45296.0, 10.0)	n	45313.0
+workdays	workday	51	WORKDAY({1},{2})	(45296.0, 2.7)	n	45300.0
+workdays	workday	52	WORKDAY({1},{2},CB1:CB5)	(45296.0, 2.7)	n	45300.0
+workdays	workday	53	WORKDAY({1},{2})	(45296.0, -2.7)	n	45293.0
+workdays	workday	54	WORKDAY({1},{2},CB1:CB5)	(45296.0, -2.7)	n	45293.0
+workdays	workday	55	WORKDAY({1},{2})	(45296.0, 260.0)	n	45660.0
+workdays	workday	56	WORKDAY({1},{2},CB1:CB5)	(45296.0, 260.0)	n	45664.0
+workdays	workday	57	WORKDAY({1},{2})	(45296.0, -260.0)	n	44932.0
+workdays	workday	58	WORKDAY({1},{2},CB1:CB5)	(45296.0, -260.0)	n	44931.0
+workdays	networkdays	59	NETWORKDAYS({1},{2})	(45296.0, 45319.0)	n	16.0
+workdays	networkdays	60	NETWORKDAYS({1},{2},CC1:CC3)	(45296.0, 45319.0)	n	15.0
+workdays	networkdays	61	NETWORKDAYS({1},{2})	(45319.0, 45296.0)	n	-16.0
+workdays	networkdays	62	NETWORKDAYS({1},{2})	(45296.0, 45326.0)	n	21.0
+workdays	networkdays	63	NETWORKDAYS({1},{2},CC1:CC3)	(45296.0, 45326.0)	n	20.0
+workdays	networkdays	64	NETWORKDAYS({1},{2})	(45326.0, 45296.0)	n	-21.0
+workdays	networkdays	65	NETWORKDAYS({1},{2})	(45296.0, 45327.0)	n	22.0
+workdays	networkdays	66	NETWORKDAYS({1},{2},CC1:CC3)	(45296.0, 45327.0)	n	21.0
+workdays	networkdays	67	NETWORKDAYS({1},{2})	(45327.0, 45296.0)	n	-22.0
+workdays	networkdays	68	NETWORKDAYS({1},{2})	(45296.0, 45328.0)	n	23.0
+workdays	networkdays	69	NETWORKDAYS({1},{2},CC1:CC3)	(45296.0, 45328.0)	n	22.0
+workdays	networkdays	70	NETWORKDAYS({1},{2})	(45328.0, 45296.0)	n	-23.0
+workdays	networkdays	71	NETWORKDAYS({1},{2})	(45296.0, 45322.0)	n	19.0
+workdays	networkdays	72	NETWORKDAYS({1},{2},CC1:CC3)	(45296.0, 45322.0)	n	18.0
+workdays	networkdays	73	NETWORKDAYS({1},{2})	(45322.0, 45296.0)	n	-19.0
+workdays	networkdays	74	NETWORKDAYS({1},{2})	(45296.0, 45371.5)	n	54.0
+workdays	networkdays	75	NETWORKDAYS({1},{2},CC1:CC3)	(45296.0, 45371.5)	n	53.0
+workdays	networkdays	76	NETWORKDAYS({1},{2})	(45371.5, 45296.0)	n	-54.0
+workdays	workday	77	WORKDAY({1},{2})	(45297.0, 0.0)	n	45297.0
+workdays	workday	78	WORKDAY({1},{2},CB1:CB5)	(45297.0, 0.0)	n	45297.0
+workdays	workday	79	WORKDAY({1},{2})	(45297.0, 1.0)	n	45299.0
+workdays	workday	80	WORKDAY({1},{2},CB1:CB5)	(45297.0, 1.0)	n	45299.0
+workdays	workday	81	WORKDAY({1},{2})	(45297.0, -1.0)	n	45296.0
+workdays	workday	82	WORKDAY({1},{2},CB1:CB5)	(45297.0, -1.0)	n	45296.0
+workdays	workday	83	WORKDAY({1},{2})	(45297.0, 5.0)	n	45303.0
+workdays	workday	84	WORKDAY({1},{2},CB1:CB5)	(45297.0, 5.0)	n	45303.0
+workdays	workday	85	WORKDAY({1},{2})	(45297.0, -5.0)	n	45292.0
+workdays	workday	86	WORKDAY({1},{2},CB1:CB5)	(45297.0, -5.0)	n	45289.0
+workdays	workday	87	WORKDAY({1},{2})	(45297.0, 10.0)	n	45310.0
+workdays	workday	88	WORKDAY({1},{2},CB1:CB5)	(45297.0, 10.0)	n	45313.0
+workdays	workday	89	WORKDAY({1},{2})	(45297.0, 2.7)	n	45300.0
+workdays	workday	90	WORKDAY({1},{2},CB1:CB5)	(45297.0, 2.7)	n	45300.0
+workdays	workday	91	WORKDAY({1},{2})	(45297.0, -2.7)	n	45294.0
+workdays	workday	92	WORKDAY({1},{2},CB1:CB5)	(45297.0, -2.7)	n	45294.0
+workdays	workday	93	WORKDAY({1},{2})	(45297.0, 260.0)	n	45660.0
+workdays	workday	94	WORKDAY({1},{2},CB1:CB5)	(45297.0, 260.0)	n	45664.0
+workdays	workday	95	WORKDAY({1},{2})	(45297.0, -260.0)	n	44935.0
+workdays	workday	96	WORKDAY({1},{2},CB1:CB5)	(45297.0, -260.0)	n	44932.0
+workdays	networkdays	97	NETWORKDAYS({1},{2})	(45297.0, 45319.0)	n	15.0
+workdays	networkdays	98	NETWORKDAYS({1},{2},CC1:CC3)	(45297.0, 45319.0)	n	14.0
+workdays	networkdays	99	NETWORKDAYS({1},{2})	(45319.0, 45297.0)	n	-15.0
+workdays	networkdays	100	NETWORKDAYS({1},{2})	(45297.0, 45326.0)	n	20.0
+workdays	networkdays	101	NETWORKDAYS({1},{2},CC1:CC3)	(45297.0, 45326.0)	n	19.0
+workdays	networkdays	102	NETWORKDAYS({1},{2})	(45326.0, 45297.0)	n	-20.0
+workdays	networkdays	103	NETWORKDAYS({1},{2})	(45297.0, 45327.0)	n	21.0
+workdays	networkdays	104	NETWORKDAYS({1},{2},CC1:CC3)	(45297.0, 45327.0)	n	20.0
+workdays	networkdays	105	NETWORKDAYS({1},{2})	(45327.0, 45297.0)	n	-21.0
+workdays	networkdays	106	NETWORKDAYS({1},{2})	(45297.0, 45328.0)	n	22.0
+workdays	networkdays	107	NETWORKDAYS({1},{2},CC1:CC3)	(45297.0, 45328.0)	n	21.0
+workdays	networkdays	108	NETWORKDAYS({1},{2})	(45328.0, 45297.0)	n	-22.0
+workdays	networkdays	109	NETWORKDAYS({1},{2})	(45297.0, 45322.0)	n	18.0
+workdays	networkdays	110	NETWORKDAYS({1},{2},CC1:CC3)	(45297.0, 45322.0)	n	17.0
+workdays	networkdays	111	NETWORKDAYS({1},{2})	(45322.0, 45297.0)	n	-18.0
+workdays	networkdays	112	NETWORKDAYS({1},{2})	(45297.0, 45371.5)	n	53.0
+workdays	networkdays	113	NETWORKDAYS({1},{2},CC1:CC3)	(45297.0, 45371.5)	n	52.0
+workdays	networkdays	114	NETWORKDAYS({1},{2})	(45371.5, 45297.0)	n	-53.0
+workdays	workday	115	WORKDAY({1},{2})	(45298.0, 0.0)	n	45298.0
+workdays	workday	116	WORKDAY({1},{2},CB1:CB5)	(45298.0, 0.0)	n	45298.0
+workdays	workday	117	WORKDAY({1},{2})	(45298.0, 1.0)	n	45299.0
+workdays	workday	118	WORKDAY({1},{2},CB1:CB5)	(45298.0, 1.0)	n	45299.0
+workdays	workday	119	WORKDAY({1},{2})	(45298.0, -1.0)	n	45296.0
+workdays	workday	120	WORKDAY({1},{2},CB1:CB5)	(45298.0, -1.0)	n	45296.0
+workdays	workday	121	WORKDAY({1},{2})	(45298.0, 5.0)	n	45303.0
+workdays	workday	122	WORKDAY({1},{2},CB1:CB5)	(45298.0, 5.0)	n	45303.0
+workdays	workday	123	WORKDAY({1},{2})	(45298.0, -5.0)	n	45292.0
+workdays	workday	124	WORKDAY({1},{2},CB1:CB5)	(45298.0, -5.0)	n	45289.0
+workdays	workday	125	WORKDAY({1},{2})	(45298.0, 10.0)	n	45310.0
+workdays	workday	126	WORKDAY({1},{2},CB1:CB5)	(45298.0, 10.0)	n	45313.0
+workdays	workday	127	WORKDAY({1},{2})	(45298.0, 2.7)	n	45300.0
+workdays	workday	128	WORKDAY({1},{2},CB1:CB5)	(45298.0, 2.7)	n	45300.0
+workdays	workday	129	WORKDAY({1},{2})	(45298.0, -2.7)	n	45294.0
+workdays	workday	130	WORKDAY({1},{2},CB1:CB5)	(45298.0, -2.7)	n	45294.0
+workdays	workday	131	WORKDAY({1},{2})	(45298.0, 260.0)	n	45660.0
+workdays	workday	132	WORKDAY({1},{2},CB1:CB5)	(45298.0, 260.0)	n	45664.0
+workdays	workday	133	WORKDAY({1},{2})	(45298.0, -260.0)	n	44935.0
+workdays	workday	134	WORKDAY({1},{2},CB1:CB5)	(45298.0, -260.0)	n	44932.0
+workdays	networkdays	135	NETWORKDAYS({1},{2})	(45298.0, 45319.0)	n	15.0
+workdays	networkdays	136	NETWORKDAYS({1},{2},CC1:CC3)	(45298.0, 45319.0)	n	14.0
+workdays	networkdays	137	NETWORKDAYS({1},{2})	(45319.0, 45298.0)	n	-15.0
+workdays	networkdays	138	NETWORKDAYS({1},{2})	(45298.0, 45326.0)	n	20.0
+workdays	networkdays	139	NETWORKDAYS({1},{2},CC1:CC3)	(45298.0, 45326.0)	n	19.0
+workdays	networkdays	140	NETWORKDAYS({1},{2})	(45326.0, 45298.0)	n	-20.0
+workdays	networkdays	141	NETWORKDAYS({1},{2})	(45298.0, 45327.0)	n	21.0
+workdays	networkdays	142	NETWORKDAYS({1},{2},CC1:CC3)	(45298.0, 45327.0)	n	20.0
+workdays	networkdays	143	NETWORKDAYS({1},{2})	(45327.0, 45298.0)	n	-21.0
+workdays	networkdays	144	NETWORKDAYS({1},{2})	(45298.0, 45328.0)	n	22.0
+workdays	networkdays	145	NETWORKDAYS({1},{2},CC1:CC3)	(45298.0, 45328.0)	n	21.0
+workdays	networkdays	146	NETWORKDAYS({1},{2})	(45328.0, 45298.0)	n	-22.0
+workdays	networkdays	147	NETWORKDAYS({1},{2})	(45298.0, 45322.0)	n	18.0
+workdays	networkdays	148	NETWORKDAYS({1},{2},CC1:CC3)	(45298.0, 45322.0)	n	17.0
+workdays	networkdays	149	NETWORKDAYS({1},{2})	(45322.0, 45298.0)	n	-18.0
+workdays	networkdays	150	NETWORKDAYS({1},{2})	(45298.0, 45371.5)	n	53.0
+workdays	networkdays	151	NETWORKDAYS({1},{2},CC1:CC3)	(45298.0, 45371.5)	n	52.0
+workdays	networkdays	152	NETWORKDAYS({1},{2})	(45371.5, 45298.0)	n	-53.0
+workdays	workday	153	WORKDAY({1},{2})	(45292.0, 0.0)	n	45292.0
+workdays	workday	154	WORKDAY({1},{2},CB1:CB5)	(45292.0, 0.0)	n	45292.0
+workdays	workday	155	WORKDAY({1},{2})	(45292.0, 1.0)	n	45293.0
+workdays	workday	156	WORKDAY({1},{2},CB1:CB5)	(45292.0, 1.0)	n	45293.0
+workdays	workday	157	WORKDAY({1},{2})	(45292.0, -1.0)	n	45289.0
+workdays	workday	158	WORKDAY({1},{2},CB1:CB5)	(45292.0, -1.0)	n	45289.0
+workdays	workday	159	WORKDAY({1},{2})	(45292.0, 5.0)	n	45299.0
+workdays	workday	160	WORKDAY({1},{2},CB1:CB5)	(45292.0, 5.0)	n	45299.0
+workdays	workday	161	WORKDAY({1},{2})	(45292.0, -5.0)	n	45285.0
+workdays	workday	162	WORKDAY({1},{2},CB1:CB5)	(45292.0, -5.0)	n	45285.0
+workdays	workday	163	WORKDAY({1},{2})	(45292.0, 10.0)	n	45306.0
+workdays	workday	164	WORKDAY({1},{2},CB1:CB5)	(45292.0, 10.0)	n	45307.0
+workdays	workday	165	WORKDAY({1},{2})	(45292.0, 2.7)	n	45294.0
+workdays	workday	166	WORKDAY({1},{2},CB1:CB5)	(45292.0, 2.7)	n	45294.0
+workdays	workday	167	WORKDAY({1},{2})	(45292.0, -2.7)	n	45287.0
+workdays	workday	168	WORKDAY({1},{2},CB1:CB5)	(45292.0, -2.7)	n	45287.0
+workdays	workday	169	WORKDAY({1},{2})	(45292.0, 260.0)	n	45656.0
+workdays	workday	170	WORKDAY({1},{2},CB1:CB5)	(45292.0, 260.0)	n	45658.0
+workdays	workday	171	WORKDAY({1},{2})	(45292.0, -260.0)	n	44928.0
+workdays	workday	172	WORKDAY({1},{2},CB1:CB5)	(45292.0, -260.0)	n	44928.0
+workdays	networkdays	173	NETWORKDAYS({1},{2})	(45292.0, 45319.0)	n	20.0
+workdays	networkdays	174	NETWORKDAYS({1},{2},CC1:CC3)	(45292.0, 45319.0)	n	18.0
+workdays	networkdays	175	NETWORKDAYS({1},{2})	(45319.0, 45292.0)	n	-20.0
+workdays	networkdays	176	NETWORKDAYS({1},{2})	(45292.0, 45326.0)	n	25.0
+workdays	networkdays	177	NETWORKDAYS({1},{2},CC1:CC3)	(45292.0, 45326.0)	n	23.0
+workdays	networkdays	178	NETWORKDAYS({1},{2})	(45326.0, 45292.0)	n	-25.0
+workdays	networkdays	179	NETWORKDAYS({1},{2})	(45292.0, 45327.0)	n	26.0
+workdays	networkdays	180	NETWORKDAYS({1},{2},CC1:CC3)	(45292.0, 45327.0)	n	24.0
+workdays	networkdays	181	NETWORKDAYS({1},{2})	(45327.0, 45292.0)	n	-26.0
+workdays	networkdays	182	NETWORKDAYS({1},{2})	(45292.0, 45328.0)	n	27.0
+workdays	networkdays	183	NETWORKDAYS({1},{2},CC1:CC3)	(45292.0, 45328.0)	n	25.0
+workdays	networkdays	184	NETWORKDAYS({1},{2})	(45328.0, 45292.0)	n	-27.0
+workdays	networkdays	185	NETWORKDAYS({1},{2})	(45292.0, 45322.0)	n	23.0
+workdays	networkdays	186	NETWORKDAYS({1},{2},CC1:CC3)	(45292.0, 45322.0)	n	21.0
+workdays	networkdays	187	NETWORKDAYS({1},{2})	(45322.0, 45292.0)	n	-23.0
+workdays	networkdays	188	NETWORKDAYS({1},{2})	(45292.0, 45371.5)	n	58.0
+workdays	networkdays	189	NETWORKDAYS({1},{2},CC1:CC3)	(45292.0, 45371.5)	n	56.0
+workdays	networkdays	190	NETWORKDAYS({1},{2})	(45371.5, 45292.0)	n	-58.0
+workdays	workday	191	WORKDAY({1},{2})	(45341.5, 0.0)	n	45341.0
+workdays	workday	192	WORKDAY({1},{2},CB1:CB5)	(45341.5, 0.0)	n	45341.0
+workdays	workday	193	WORKDAY({1},{2})	(45341.5, 1.0)	n	45342.0
+workdays	workday	194	WORKDAY({1},{2},CB1:CB5)	(45341.5, 1.0)	n	45342.0
+workdays	workday	195	WORKDAY({1},{2})	(45341.5, -1.0)	n	45338.0
+workdays	workday	196	WORKDAY({1},{2},CB1:CB5)	(45341.5, -1.0)	n	45338.0
+workdays	workday	197	WORKDAY({1},{2})	(45341.5, 5.0)	n	45348.0
+workdays	workday	198	WORKDAY({1},{2},CB1:CB5)	(45341.5, 5.0)	n	45348.0
+workdays	workday	199	WORKDAY({1},{2})	(45341.5, -5.0)	n	45334.0
+workdays	workday	200	WORKDAY({1},{2},CB1:CB5)	(45341.5, -5.0)	n	45334.0
+workdays	workday	201	WORKDAY({1},{2})	(45341.5, 10.0)	n	45355.0
+workdays	workday	202	WORKDAY({1},{2},CB1:CB5)	(45341.5, 10.0)	n	45355.0
+workdays	workday	203	WORKDAY({1},{2})	(45341.5, 2.7)	n	45343.0
+workdays	workday	204	WORKDAY({1},{2},CB1:CB5)	(45341.5, 2.7)	n	45343.0
+workdays	workday	205	WORKDAY({1},{2})	(45341.5, -2.7)	n	45336.0
+workdays	workday	206	WORKDAY({1},{2},CB1:CB5)	(45341.5, -2.7)	n	45336.0
+workdays	workday	207	WORKDAY({1},{2})	(45341.5, 260.0)	n	45705.0
+workdays	workday	208	WORKDAY({1},{2},CB1:CB5)	(45341.5, 260.0)	n	45705.0
+workdays	workday	209	WORKDAY({1},{2})	(45341.5, -260.0)	n	44977.0
+workdays	workday	210	WORKDAY({1},{2},CB1:CB5)	(45341.5, -260.0)	n	44973.0
+workdays	networkdays	211	NETWORKDAYS({1},{2})	(45341.5, 45319.0)	n	-16.0
+workdays	networkdays	212	NETWORKDAYS({1},{2},CC1:CC3)	(45341.5, 45319.0)	n	-16.0
+workdays	networkdays	213	NETWORKDAYS({1},{2})	(45319.0, 45341.5)	n	16.0
+workdays	networkdays	214	NETWORKDAYS({1},{2})	(45341.5, 45326.0)	n	-11.0
+workdays	networkdays	215	NETWORKDAYS({1},{2},CC1:CC3)	(45341.5, 45326.0)	n	-11.0
+workdays	networkdays	216	NETWORKDAYS({1},{2})	(45326.0, 45341.5)	n	11.0
+workdays	networkdays	217	NETWORKDAYS({1},{2})	(45341.5, 45327.0)	n	-11.0
+workdays	networkdays	218	NETWORKDAYS({1},{2},CC1:CC3)	(45341.5, 45327.0)	n	-11.0
+workdays	networkdays	219	NETWORKDAYS({1},{2})	(45327.0, 45341.5)	n	11.0
+workdays	networkdays	220	NETWORKDAYS({1},{2})	(45341.5, 45328.0)	n	-10.0
+workdays	networkdays	221	NETWORKDAYS({1},{2},CC1:CC3)	(45341.5, 45328.0)	n	-10.0
+workdays	networkdays	222	NETWORKDAYS({1},{2})	(45328.0, 45341.5)	n	10.0
+workdays	networkdays	223	NETWORKDAYS({1},{2})	(45341.5, 45322.0)	n	-14.0
+workdays	networkdays	224	NETWORKDAYS({1},{2},CC1:CC3)	(45341.5, 45322.0)	n	-14.0
+workdays	networkdays	225	NETWORKDAYS({1},{2})	(45322.0, 45341.5)	n	14.0
+workdays	networkdays	226	NETWORKDAYS({1},{2})	(45341.5, 45371.5)	n	23.0
+workdays	networkdays	227	NETWORKDAYS({1},{2},CC1:CC3)	(45341.5, 45371.5)	n	23.0
+workdays	networkdays	228	NETWORKDAYS({1},{2})	(45371.5, 45341.5)	n	-23.0
+workdays	workday.intl	229	WORKDAY.INTL({1},7,{2})	(45289.0, 1.0)	n	45300.0
+workdays	workday.intl	230	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 1.0)	n	45300.0
+workdays	networkdays.intl	231	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 1.0)	n	29.0
+workdays	networkdays.intl	232	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 1.0)	n	29.0
+workdays	workday.intl	233	WORKDAY.INTL({1},7,{2})	(45289.0, 2.0)	n	45300.0
+workdays	workday.intl	234	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 2.0)	n	45300.0
+workdays	networkdays.intl	235	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 2.0)	n	29.0
+workdays	networkdays.intl	236	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 2.0)	n	29.0
+workdays	workday.intl	237	WORKDAY.INTL({1},7,{2})	(45289.0, 3.0)	n	45298.0
+workdays	workday.intl	238	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 3.0)	n	45298.0
+workdays	networkdays.intl	239	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 3.0)	n	29.0
+workdays	networkdays.intl	240	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 3.0)	n	29.0
+workdays	workday.intl	241	WORKDAY.INTL({1},7,{2})	(45289.0, 4.0)	n	45298.0
+workdays	workday.intl	242	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 4.0)	n	45298.0
+workdays	networkdays.intl	243	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 4.0)	n	29.0
+workdays	networkdays.intl	244	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 4.0)	n	29.0
+workdays	workday.intl	245	WORKDAY.INTL({1},7,{2})	(45289.0, 5.0)	n	45298.0
+workdays	workday.intl	246	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 5.0)	n	45298.0
+workdays	networkdays.intl	247	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 5.0)	n	30.0
+workdays	networkdays.intl	248	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 5.0)	n	30.0
+workdays	workday.intl	249	WORKDAY.INTL({1},7,{2})	(45289.0, 6.0)	n	45298.0
+workdays	workday.intl	250	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 6.0)	n	45298.0
+workdays	networkdays.intl	251	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 6.0)	n	30.0
+workdays	networkdays.intl	252	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 6.0)	n	30.0
+workdays	workday.intl	253	WORKDAY.INTL({1},7,{2})	(45289.0, 7.0)	n	45299.0
+workdays	workday.intl	254	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 7.0)	n	45299.0
+workdays	networkdays.intl	255	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 7.0)	n	29.0
+workdays	networkdays.intl	256	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 7.0)	n	29.0
+workdays	workday.intl	257	WORKDAY.INTL({1},7,{2})	(45289.0, 11.0)	n	45297.0
+workdays	workday.intl	258	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 11.0)	n	45297.0
+workdays	networkdays.intl	259	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 11.0)	n	35.0
+workdays	networkdays.intl	260	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 11.0)	n	35.0
+workdays	workday.intl	261	WORKDAY.INTL({1},7,{2})	(45289.0, 12.0)	n	45297.0
+workdays	workday.intl	262	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 12.0)	n	45297.0
+workdays	networkdays.intl	263	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 12.0)	n	35.0
+workdays	networkdays.intl	264	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 12.0)	n	35.0
+workdays	workday.intl	265	WORKDAY.INTL({1},7,{2})	(45289.0, 13.0)	n	45297.0
+workdays	workday.intl	266	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 13.0)	n	45297.0
+workdays	networkdays.intl	267	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 13.0)	n	35.0
+workdays	networkdays.intl	268	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 13.0)	n	35.0
+workdays	workday.intl	269	WORKDAY.INTL({1},7,{2})	(45289.0, 14.0)	n	45297.0
+workdays	workday.intl	270	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 14.0)	n	45297.0
+workdays	networkdays.intl	271	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 14.0)	n	35.0
+workdays	networkdays.intl	272	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 14.0)	n	35.0
+workdays	workday.intl	273	WORKDAY.INTL({1},7,{2})	(45289.0, 15.0)	n	45297.0
+workdays	workday.intl	274	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 15.0)	n	45297.0
+workdays	networkdays.intl	275	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 15.0)	n	36.0
+workdays	networkdays.intl	276	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 15.0)	n	36.0
+workdays	workday.intl	277	WORKDAY.INTL({1},7,{2})	(45289.0, 16.0)	n	45297.0
+workdays	workday.intl	278	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 16.0)	n	45297.0
+workdays	networkdays.intl	279	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 16.0)	n	35.0
+workdays	networkdays.intl	280	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 16.0)	n	35.0
+workdays	workday.intl	281	WORKDAY.INTL({1},7,{2})	(45289.0, 17.0)	n	45298.0
+workdays	workday.intl	282	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 17.0)	n	45298.0
+workdays	networkdays.intl	283	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 17.0)	n	35.0
+workdays	networkdays.intl	284	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 17.0)	n	35.0
+workdays	workday.intl	285	WORKDAY.INTL({1},7,{2})	(45289.0, 0.0)	e	#NUM!
+workdays	workday.intl	286	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 0.0)	e	#NUM!
+workdays	networkdays.intl	287	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 0.0)	e	#NUM!
+workdays	networkdays.intl	288	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 0.0)	e	#NUM!
+workdays	workday.intl	289	WORKDAY.INTL({1},7,{2})	(45289.0, 8.0)	e	#NUM!
+workdays	workday.intl	290	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 8.0)	e	#NUM!
+workdays	networkdays.intl	291	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 8.0)	e	#NUM!
+workdays	networkdays.intl	292	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 8.0)	e	#NUM!
+workdays	workday.intl	293	WORKDAY.INTL({1},7,{2})	(45289.0, 18.0)	e	#NUM!
+workdays	workday.intl	294	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 18.0)	e	#NUM!
+workdays	networkdays.intl	295	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 18.0)	e	#NUM!
+workdays	networkdays.intl	296	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 18.0)	e	#NUM!
+workdays	workday.intl	297	WORKDAY.INTL({1},7,{2})	(45289.0, '0000011')	n	45300.0
+workdays	workday.intl	298	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, '0000011')	n	45300.0
+workdays	networkdays.intl	299	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '0000011')	n	29.0
+workdays	networkdays.intl	300	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '0000011')	n	29.0
+workdays	workday.intl	301	WORKDAY.INTL({1},7,{2})	(45289.0, '1000001')	n	45300.0
+workdays	workday.intl	302	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, '1000001')	n	45300.0
+workdays	networkdays.intl	303	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '1000001')	n	29.0
+workdays	networkdays.intl	304	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '1000001')	n	29.0
+workdays	workday.intl	305	WORKDAY.INTL({1},7,{2})	(45289.0, '1111110')	n	45333.0
+workdays	workday.intl	306	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, '1111110')	n	45333.0
+workdays	networkdays.intl	307	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '1111110')	n	6.0
+workdays	networkdays.intl	308	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '1111110')	n	6.0
+workdays	workday.intl	309	WORKDAY.INTL({1},7,{2})	(45289.0, '1111111')	e	#VALUE!
+workdays	workday.intl	310	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, '1111111')	e	#VALUE!
+workdays	networkdays.intl	311	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '1111111')	n	0.0
+workdays	networkdays.intl	312	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '1111111')	n	0.0
+workdays	workday.intl	313	WORKDAY.INTL({1},7,{2})	(45289.0, '0000000')	n	45296.0
+workdays	workday.intl	314	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, '0000000')	n	45296.0
+workdays	networkdays.intl	315	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '0000000')	n	41.0
+workdays	networkdays.intl	316	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '0000000')	n	41.0
+workdays	workday.intl	317	WORKDAY.INTL({1},7,{2})	(45289.0, '000001')	e	#VALUE!
+workdays	workday.intl	318	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, '000001')	e	#VALUE!
+workdays	networkdays.intl	319	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '000001')	e	#VALUE!
+workdays	networkdays.intl	320	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '000001')	e	#VALUE!
+workdays	workday.intl	321	WORKDAY.INTL({1},7,{2})	(45289.0, '00000a1')	e	#VALUE!
+workdays	workday.intl	322	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, '00000a1')	e	#VALUE!
+workdays	networkdays.intl	323	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '00000a1')	e	#VALUE!
+workdays	networkdays.intl	324	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, '00000a1')	e	#VALUE!
+workdays	workday.intl	325	WORKDAY.INTL({1},7,{2})	(45289.0, 'abc')	e	#VALUE!
+workdays	workday.intl	326	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 'abc')	e	#VALUE!
+workdays	networkdays.intl	327	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 'abc')	e	#VALUE!
+workdays	networkdays.intl	328	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 'abc')	e	#VALUE!
+workdays	workday.intl	329	WORKDAY.INTL({1},7,{2})	(45289.0, True)	n	45300.0
+workdays	workday.intl	330	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, True)	n	45300.0
+workdays	networkdays.intl	331	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, True)	n	29.0
+workdays	networkdays.intl	332	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, True)	n	29.0
+workdays	workday.intl	333	WORKDAY.INTL({1},7,{2})	(45289.0, None)	e	#NUM!
+workdays	workday.intl	334	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, None)	e	#NUM!
+workdays	networkdays.intl	335	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, None)	e	#NUM!
+workdays	networkdays.intl	336	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, None)	e	#NUM!
+workdays	workday.intl	337	WORKDAY.INTL({1},7,{2})	(45289.0, 1.5)	n	45300.0
+workdays	workday.intl	338	_xlfn.WORKDAY.INTL({1},7,{2})	(45289.0, 1.5)	n	45300.0
+workdays	networkdays.intl	339	NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 1.5)	n	29.0
+workdays	networkdays.intl	340	_xlfn.NETWORKDAYS.INTL({1},{2},{3})	(45289.0, 45329.0, 1.5)	n	29.0
+workdays	workday.intl	341	WORKDAY.INTL({1},-9,7,CB1:CB5)	(45289.0,)	n	45278.0
+workdays	networkdays.intl	342	NETWORKDAYS.INTL({1},{2},11,CC1:CC3)	(45289.0, 45689.0)	n	341.0
+workdays	workday.intl	343	WORKDAY.INTL({1},-9,7,CB1:CB5)	(45296.0,)	n	45284.0
+workdays	networkdays.intl	344	NETWORKDAYS.INTL({1},{2},11,CC1:CC3)	(45296.0, 45696.0)	n	342.0
+workdays	workday.intl	345	WORKDAY.INTL({1},-9,7,CB1:CB5)	(45297.0,)	n	45284.0
+workdays	networkdays.intl	346	NETWORKDAYS.INTL({1},{2},11,CC1:CC3)	(45297.0, 45697.0)	n	341.0
+workdays	workday.intl	347	WORKDAY.INTL({1},-9,7,CB1:CB5)	(45298.0,)	n	45284.0
+workdays	networkdays.intl	348	NETWORKDAYS.INTL({1},{2},11,CC1:CC3)	(45298.0, 45698.0)	n	341.0
+workdays	workday.intl	349	WORKDAY.INTL({1},-9,7,CB1:CB5)	(45292.0,)	n	45279.0
+workdays	networkdays.intl	350	NETWORKDAYS.INTL({1},{2},11,CC1:CC3)	(45292.0, 45692.0)	n	341.0
+workdays	workday.intl	351	WORKDAY.INTL({1},-9,7,CB1:CB5)	(45341.5,)	n	45328.0
+workdays	networkdays.intl	352	NETWORKDAYS.INTL({1},{2},11,CC1:CC3)	(45341.5, 45741.5)	n	343.0
+workdays	workday	353	WORKDAY({1},3)	(2.5,)	n	5.0
+workdays	workday	354	WORKDAY(45292,{1})	(2.5,)	n	45294.0
+workdays	networkdays	355	NETWORKDAYS({1},45320)	(2.5,)	n	32371.0
+workdays	networkdays	356	NETWORKDAYS(45292,45320,{1})	(2.5,)	n	21.0
+workdays	workday	357	WORKDAY({1},3)	(-2.5,)	e	#NUM!
+workdays	workday	358	WORKDAY(45292,{1})	(-2.5,)	n	45287.0
+workdays	networkdays	359	NETWORKDAYS({1},45320)	(-2.5,)	e	#NUM!
+workdays	networkdays	360	NETWORKDAYS(45292,45320,{1})	(-2.5,)	e	#NUM!
+workdays	workday	361	WORKDAY({1},3)	(0.0,)	n	4.0
+workdays	workday	362	WORKDAY(45292,{1})	(0.0,)	n	45292.0
+workdays	networkdays	363	NETWORKDAYS({1},45320)	(0.0,)	n	32371.0
+workdays	networkdays	364	NETWORKDAYS(45292,45320,{1})	(0.0,)	n	21.0
+workdays	workday	365	WORKDAY({1},3)	('3',)	n	6.0
+workdays	workday	366	WORKDAY(45292,{1})	('3',)	n	45295.0
+workdays	networkdays	367	NETWORKDAYS({1},45320)	('3',)	n	32370.0
+workdays	networkdays	368	NETWORKDAYS(45292,45320,{1})	('3',)	n	21.0
+workdays	workday	369	WORKDAY({1},3)	('abc',)	e	#VALUE!
+workdays	workday	370	WORKDAY(45292,{1})	('abc',)	e	#VALUE!
+workdays	networkdays	371	NETWORKDAYS({1},45320)	('abc',)	e	#VALUE!
+workdays	networkdays	372	NETWORKDAYS(45292,45320,{1})	('abc',)	e	#VALUE!
+workdays	workday	373	WORKDAY({1},3)	(True,)	e	#VALUE!
+workdays	workday	374	WORKDAY(45292,{1})	(True,)	e	#VALUE!
+workdays	networkdays	375	NETWORKDAYS({1},45320)	(True,)	e	#VALUE!
+workdays	networkdays	376	NETWORKDAYS(45292,45320,{1})	(True,)	e	#VALUE!
+workdays	workday	377	WORKDAY({1},3)	(False,)	e	#VALUE!
+workdays	workday	378	WORKDAY(45292,{1})	(False,)	e	#VALUE!
+workdays	networkdays	379	NETWORKDAYS({1},45320)	(False,)	e	#VALUE!
+workdays	networkdays	380	NETWORKDAYS(45292,45320,{1})	(False,)	e	#VALUE!
+workdays	workday	381	WORKDAY({1},3)	(None,)	n	4.0
+workdays	workday	382	WORKDAY(45292,{1})	(None,)	n	45292.0
+workdays	networkdays	383	NETWORKDAYS({1},45320)	(None,)	n	32371.0
+workdays	networkdays	384	NETWORKDAYS(45292,45320,{1})	(None,)	n	21.0
+workdays	workday	385	WORKDAY({1},3)	(FormulaInput('=""'),)	e	#VALUE!
+workdays	workday	386	WORKDAY(45292,{1})	(FormulaInput('=""'),)	e	#VALUE!
+workdays	networkdays	387	NETWORKDAYS({1},45320)	(FormulaInput('=""'),)	e	#VALUE!
+workdays	networkdays	388	NETWORKDAYS(45292,45320,{1})	(FormulaInput('=""'),)	e	#VALUE!
+workdays	workday	389	WORKDAY({1},3)	(ErrorValue('#N/A'),)	e	#N/A
+workdays	workday	390	WORKDAY(45292,{1})	(ErrorValue('#N/A'),)	e	#N/A
+workdays	networkdays	391	NETWORKDAYS({1},45320)	(ErrorValue('#N/A'),)	e	#N/A
+workdays	networkdays	392	NETWORKDAYS(45292,45320,{1})	(ErrorValue('#N/A'),)	e	#N/A
+workdays	workday	393	WORKDAY(45292,3,CB7)	()	e	#VALUE!
+workdays	workday	394	WORKDAY(45292,3,CD1:CD2)	()	e	#N/A
+workdays	workday	395	WORKDAY(45292,3,{45293,45294})	()	n	45299.0
+workdays	workday	396	WORKDAY(-1,3)	()	e	#NUM!
+workdays	workday	397	WORKDAY(2958465,1)	()	e	#NUM!
+workdays	workday	398	WORKDAY(1,-1)	()	e	#NUM!
+workdays	workday	399	WORKDAY(45292,{1,2})	()	n	45293.0
+workdays	networkdays	400	NETWORKDAYS(45292,45320,CB7)	()	e	#VALUE!
+workdays	networkdays	401	NETWORKDAYS(45292,45320,CD1:CD2)	()	e	#N/A
+workdays	networkdays	402	NETWORKDAYS(45292,45292)	()	n	1.0
+workdays	networkdays	403	NETWORKDAYS(45293,45293)	()	n	1.0
+workdays	networkdays	404	NETWORKDAYS(-1,45320)	()	e	#NUM!
+workdays	networkdays	405	NETWORKDAYS(0,10)	()	n	7.0
+workdays	networkdays	406	NETWORKDAYS("1/1/2024","2/1/2024")	()	n	24.0
+workdays	hour	407	HOUR({1})	(0.0,)	n	0.0
+workdays	hour	408	HOUR({1})	(0.5,)	n	12.0
+workdays	hour	409	HOUR({1})	(0.75,)	n	18.0
+workdays	hour	410	HOUR({1})	(0.999999,)	n	0.0
+workdays	hour	411	HOUR({1})	(0.9999999999,)	n	0.0
+workdays	hour	412	HOUR({1})	(45000.25,)	n	6.0
+workdays	hour	413	HOUR({1})	(0.3333333333333333,)	n	8.0
+workdays	hour	414	HOUR({1})	(0.6666666666666666,)	n	16.0
+workdays	hour	415	HOUR({1})	(0.5000057858796296,)	n	12.0
+workdays	hour	416	HOUR({1})	(0.500005787037037,)	n	12.0
+workdays	hour	417	HOUR({1})	(0.5003472222222223,)	n	12.0
+workdays	hour	418	HOUR({1})	(-0.5,)	e	#NUM!
+workdays	hour	419	HOUR({1})	(2958465.99999,)	n	23.0
+workdays	hour	420	HOUR({1})	(2958466.0,)	e	#NUM!
+workdays	hour	421	HOUR({1})	('12:30:45',)	n	12.0
+workdays	hour	422	HOUR({1})	('3:15 PM',)	n	15.0
+workdays	hour	423	HOUR({1})	('25:00',)	n	1.0
+workdays	hour	424	HOUR({1})	('1/2/2024 6:07:08',)	n	6.0
+workdays	hour	425	HOUR({1})	(True,)	n	0.0
+workdays	hour	426	HOUR({1})	('abc',)	e	#VALUE!
+workdays	hour	427	HOUR({1})	(None,)	n	0.0
+workdays	hour	428	HOUR({1})	(FormulaInput('=""'),)	e	#VALUE!
+workdays	hour	429	HOUR({1})	(ErrorValue('#N/A'),)	e	#N/A
+workdays	hour	430	HOUR({1})	(0.4999999999999999,)	n	12.0
+workdays	hour	431	HOUR({1})	(0.041666666666666664,)	n	1.0
+workdays	minute	432	MINUTE({1})	(0.0,)	n	0.0
+workdays	minute	433	MINUTE({1})	(0.5,)	n	0.0
+workdays	minute	434	MINUTE({1})	(0.75,)	n	0.0
+workdays	minute	435	MINUTE({1})	(0.999999,)	n	0.0
+workdays	minute	436	MINUTE({1})	(0.9999999999,)	n	0.0
+workdays	minute	437	MINUTE({1})	(45000.25,)	n	0.0
+workdays	minute	438	MINUTE({1})	(0.3333333333333333,)	n	0.0
+workdays	minute	439	MINUTE({1})	(0.6666666666666666,)	n	0.0
+workdays	minute	440	MINUTE({1})	(0.5000057858796296,)	n	0.0
+workdays	minute	441	MINUTE({1})	(0.500005787037037,)	n	0.0
+workdays	minute	442	MINUTE({1})	(0.5003472222222223,)	n	0.0
+workdays	minute	443	MINUTE({1})	(-0.5,)	e	#NUM!
+workdays	minute	444	MINUTE({1})	(2958465.99999,)	n	59.0
+workdays	minute	445	MINUTE({1})	(2958466.0,)	e	#NUM!
+workdays	minute	446	MINUTE({1})	('12:30:45',)	n	30.0
+workdays	minute	447	MINUTE({1})	('3:15 PM',)	n	15.0
+workdays	minute	448	MINUTE({1})	('25:00',)	n	0.0
+workdays	minute	449	MINUTE({1})	('1/2/2024 6:07:08',)	n	7.0
+workdays	minute	450	MINUTE({1})	(True,)	n	0.0
+workdays	minute	451	MINUTE({1})	('abc',)	e	#VALUE!
+workdays	minute	452	MINUTE({1})	(None,)	n	0.0
+workdays	minute	453	MINUTE({1})	(FormulaInput('=""'),)	e	#VALUE!
+workdays	minute	454	MINUTE({1})	(ErrorValue('#N/A'),)	e	#N/A
+workdays	minute	455	MINUTE({1})	(0.4999999999999999,)	n	0.0
+workdays	minute	456	MINUTE({1})	(0.041666666666666664,)	n	0.0
+workdays	second	457	SECOND({1})	(0.0,)	n	0.0
+workdays	second	458	SECOND({1})	(0.5,)	n	0.0
+workdays	second	459	SECOND({1})	(0.75,)	n	0.0
+workdays	second	460	SECOND({1})	(0.999999,)	n	0.0
+workdays	second	461	SECOND({1})	(0.9999999999,)	n	0.0
+workdays	second	462	SECOND({1})	(45000.25,)	n	0.0
+workdays	second	463	SECOND({1})	(0.3333333333333333,)	n	0.0
+workdays	second	464	SECOND({1})	(0.6666666666666666,)	n	0.0
+workdays	second	465	SECOND({1})	(0.5000057858796296,)	n	0.0
+workdays	second	466	SECOND({1})	(0.500005787037037,)	n	0.0
+workdays	second	467	SECOND({1})	(0.5003472222222223,)	n	30.0
+workdays	second	468	SECOND({1})	(-0.5,)	e	#NUM!
+workdays	second	469	SECOND({1})	(2958465.99999,)	n	59.0
+workdays	second	470	SECOND({1})	(2958466.0,)	e	#NUM!
+workdays	second	471	SECOND({1})	('12:30:45',)	n	45.0
+workdays	second	472	SECOND({1})	('3:15 PM',)	n	0.0
+workdays	second	473	SECOND({1})	('25:00',)	n	0.0
+workdays	second	474	SECOND({1})	('1/2/2024 6:07:08',)	n	8.0
+workdays	second	475	SECOND({1})	(True,)	n	0.0
+workdays	second	476	SECOND({1})	('abc',)	e	#VALUE!
+workdays	second	477	SECOND({1})	(None,)	n	0.0
+workdays	second	478	SECOND({1})	(FormulaInput('=""'),)	e	#VALUE!
+workdays	second	479	SECOND({1})	(ErrorValue('#N/A'),)	e	#N/A
+workdays	second	480	SECOND({1})	(0.4999999999999999,)	n	0.0
+workdays	second	481	SECOND({1})	(0.041666666666666664,)	n	0.0

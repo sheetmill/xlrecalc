@@ -1,0 +1,28 @@
+# suite: repair_uncached
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-01
+# generator: capture/repair_probe.py
+# method: openpyxl writes each formula into column A with the cached value 100+row and
+#   (refused formulas: no cached value, openpyxl's <v />); column C holds
+#   =ISBLANK(A<row>) cached 0, and saved_c is that cell in the saved copy
+#   calcPr calcId="191029" (Excel trusts cached values); Excel opens it with alerts
+#   on and a person accepts the repair; formula, value and text are read from the
+#   repaired workbook (xlrecalc_repair_uncached.xlsx); saved is the cell as its saved copy holds it
+# columns: row tag written formula_after value_after text_after saved saved_c (Python repr)
+1	control	'1+1'	'=1+1'	'2.0'	'2'	'<c r="A1"><f>1+1</f><v>2</v></c>'	'<c r="C1" t="b"><f t="shared" ref="C1:C17" si="0">ISBLANK(A1)</f><v>0</v></c>'
+2	refused	'#SPILL!'	''	''	''	''	'<c r="C2" t="b"><f t="shared" si="0" /><v>1</v></c>'
+3	control	'B1*3'	'=B1*3'	'6.0'	'6'	'<c r="A3"><f>B1*3</f><v>6</v></c>'	'<c r="C3" t="b"><f t="shared" si="0" /><v>0</v></c>'
+4	refused	'#CALC!'	''	''	''	''	'<c r="C4" t="b"><f t="shared" si="0" /><v>1</v></c>'
+5	control	'"ok"'	'="ok"'	'ok'	'ok'	'<c r="A5" t="str"><f>"ok"</f><v>ok</v></c>'	'<c r="C5" t="b"><f t="shared" si="0" /><v>0</v></c>'
+6	refused	'A1#'	''	''	''	''	'<c r="C6" t="b"><f t="shared" si="0" /><v>1</v></c>'
+7	control	'1+1'	'=1+1'	'2.0'	'2'	'<c r="A7"><f>1+1</f><v>2</v></c>'	'<c r="C7" t="b"><f t="shared" si="0" /><v>0</v></c>'
+8	refused	'Sheet2!A1#'	''	''	''	''	'<c r="C8" t="b"><f t="shared" si="0" /><v>1</v></c>'
+9	control	'B1*3'	'=B1*3'	'6.0'	'6'	'<c r="A9"><f>B1*3</f><v>6</v></c>'	'<c r="C9" t="b"><f t="shared" si="0" /><v>0</v></c>'
+10	refused	'Table1[@[Unit Price]]'	''	''	''	''	'<c r="C10" t="b"><f t="shared" si="0" /><v>1</v></c>'
+11	control	'"ok"'	'="ok"'	'ok'	'ok'	'<c r="A11" t="str"><f>"ok"</f><v>ok</v></c>'	'<c r="C11" t="b"><f t="shared" si="0" /><v>0</v></c>'
+12	refused	'[@[Unit Price]]*2'	''	''	''	''	'<c r="C12" t="b"><f t="shared" si="0" /><v>1</v></c>'
+13	control	'1+1'	'=1+1'	'2.0'	'2'	'<c r="A13"><f>1+1</f><v>2</v></c>'	'<c r="C13" t="b"><f t="shared" si="0" /><v>0</v></c>'
+14	refused	'-\t1'	''	''	''	''	'<c r="C14" t="b"><f t="shared" si="0" /><v>1</v></c>'
+15	control	'B1*3'	'=B1*3'	'6.0'	'6'	'<c r="A15"><f>B1*3</f><v>6</v></c>'	'<c r="C15" t="b"><f t="shared" si="0" /><v>0</v></c>'
+16	refused	'SUM( )'	''	''	''	''	'<c r="C16" t="b"><f t="shared" si="0" /><v>1</v></c>'
+17	control	'"ok"'	'="ok"'	'ok'	'ok'	'<c r="A17" t="str"><f>"ok"</f><v>ok</v></c>'	'<c r="C17" t="b"><f t="shared" si="0" /><v>0</v></c>'

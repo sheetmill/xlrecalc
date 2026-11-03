@@ -1,0 +1,15 @@
+{#- Furo's page with the article body marked for Pagefind.
+
+    Pagefind indexes only elements with data-pagefind-body, so the navigation, the table of
+    contents, the search page, the general index and the highlighted source pages (_modules/)
+    stay out of the search index. Templates that replace the content block (search.html,
+    genindex.html) lose the marker, which is the intent. -#}
+{% extends "!page.html" %}
+
+{% block content %}
+{%- if pagename.startswith("_modules") -%}
+{{ body }}
+{%- else -%}
+<div data-pagefind-body>{{ body }}</div>
+{%- endif -%}
+{% endblock %}

@@ -1,0 +1,527 @@
+# suite: text_number
+# excel: 16.114.3 for Mac, locale en_US
+# date_system: 1900
+# captured: 2026-11-01
+# generator: capture/suites.py:text_number
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# columns: suite tag case formula inputs expected_type expected_repr
+text_number	value	1	VALUE({1})	('0',)	n	0.0
+text_number	implicit	2	{1}+0	('0',)	n	0.0
+text_number	datevalue	3	DATEVALUE({1})	('0',)	e	#VALUE!
+text_number	timevalue	4	TIMEVALUE({1})	('0',)	e	#VALUE!
+text_number	value	5	VALUE({1})	('1',)	n	1.0
+text_number	implicit	6	{1}+0	('1',)	n	1.0
+text_number	datevalue	7	DATEVALUE({1})	('1',)	e	#VALUE!
+text_number	timevalue	8	TIMEVALUE({1})	('1',)	e	#VALUE!
+text_number	value	9	VALUE({1})	('-1',)	n	-1.0
+text_number	implicit	10	{1}+0	('-1',)	n	-1.0
+text_number	datevalue	11	DATEVALUE({1})	('-1',)	e	#VALUE!
+text_number	timevalue	12	TIMEVALUE({1})	('-1',)	e	#VALUE!
+text_number	value	13	VALUE({1})	('+1',)	n	1.0
+text_number	implicit	14	{1}+0	('+1',)	n	1.0
+text_number	datevalue	15	DATEVALUE({1})	('+1',)	e	#VALUE!
+text_number	timevalue	16	TIMEVALUE({1})	('+1',)	e	#VALUE!
+text_number	value	17	VALUE({1})	('1.5',)	n	1.5
+text_number	implicit	18	{1}+0	('1.5',)	n	1.5
+text_number	datevalue	19	DATEVALUE({1})	('1.5',)	e	#VALUE!
+text_number	timevalue	20	TIMEVALUE({1})	('1.5',)	e	#VALUE!
+text_number	value	21	VALUE({1})	('.5',)	n	0.5
+text_number	implicit	22	{1}+0	('.5',)	n	0.5
+text_number	datevalue	23	DATEVALUE({1})	('.5',)	e	#VALUE!
+text_number	timevalue	24	TIMEVALUE({1})	('.5',)	e	#VALUE!
+text_number	value	25	VALUE({1})	('1.',)	n	1.0
+text_number	implicit	26	{1}+0	('1.',)	n	1.0
+text_number	datevalue	27	DATEVALUE({1})	('1.',)	e	#VALUE!
+text_number	timevalue	28	TIMEVALUE({1})	('1.',)	e	#VALUE!
+text_number	value	29	VALUE({1})	('1e3',)	n	1000.0
+text_number	implicit	30	{1}+0	('1e3',)	n	1000.0
+text_number	datevalue	31	DATEVALUE({1})	('1e3',)	e	#VALUE!
+text_number	timevalue	32	TIMEVALUE({1})	('1e3',)	e	#VALUE!
+text_number	value	33	VALUE({1})	('1E3',)	n	1000.0
+text_number	implicit	34	{1}+0	('1E3',)	n	1000.0
+text_number	datevalue	35	DATEVALUE({1})	('1E3',)	e	#VALUE!
+text_number	timevalue	36	TIMEVALUE({1})	('1E3',)	e	#VALUE!
+text_number	value	37	VALUE({1})	('1E+3',)	n	1000.0
+text_number	implicit	38	{1}+0	('1E+3',)	n	1000.0
+text_number	datevalue	39	DATEVALUE({1})	('1E+3',)	e	#VALUE!
+text_number	timevalue	40	TIMEVALUE({1})	('1E+3',)	e	#VALUE!
+text_number	value	41	VALUE({1})	('1e-3',)	n	0.001
+text_number	implicit	42	{1}+0	('1e-3',)	n	0.001
+text_number	datevalue	43	DATEVALUE({1})	('1e-3',)	e	#VALUE!
+text_number	timevalue	44	TIMEVALUE({1})	('1e-3',)	e	#VALUE!
+text_number	value	45	VALUE({1})	('-1.5E-3',)	n	-0.0015
+text_number	implicit	46	{1}+0	('-1.5E-3',)	n	-0.0015
+text_number	datevalue	47	DATEVALUE({1})	('-1.5E-3',)	e	#VALUE!
+text_number	timevalue	48	TIMEVALUE({1})	('-1.5E-3',)	e	#VALUE!
+text_number	value	49	VALUE({1})	('1,234',)	n	1234.0
+text_number	implicit	50	{1}+0	('1,234',)	n	1234.0
+text_number	datevalue	51	DATEVALUE({1})	('1,234',)	e	#VALUE!
+text_number	timevalue	52	TIMEVALUE({1})	('1,234',)	e	#VALUE!
+text_number	value	53	VALUE({1})	('1,234.5',)	n	1234.5
+text_number	implicit	54	{1}+0	('1,234.5',)	n	1234.5
+text_number	datevalue	55	DATEVALUE({1})	('1,234.5',)	e	#VALUE!
+text_number	timevalue	56	TIMEVALUE({1})	('1,234.5',)	e	#VALUE!
+text_number	value	57	VALUE({1})	('-1,234',)	n	-1234.0
+text_number	implicit	58	{1}+0	('-1,234',)	n	-1234.0
+text_number	datevalue	59	DATEVALUE({1})	('-1,234',)	e	#VALUE!
+text_number	timevalue	60	TIMEVALUE({1})	('-1,234',)	e	#VALUE!
+text_number	value	61	VALUE({1})	('12,34',)	e	#VALUE!
+text_number	implicit	62	{1}+0	('12,34',)	e	#VALUE!
+text_number	datevalue	63	DATEVALUE({1})	('12,34',)	e	#VALUE!
+text_number	timevalue	64	TIMEVALUE({1})	('12,34',)	e	#VALUE!
+text_number	value	65	VALUE({1})	('1,2345',)	n	12345.0
+text_number	implicit	66	{1}+0	('1,2345',)	n	12345.0
+text_number	datevalue	67	DATEVALUE({1})	('1,2345',)	e	#VALUE!
+text_number	timevalue	68	TIMEVALUE({1})	('1,2345',)	e	#VALUE!
+text_number	value	69	VALUE({1})	('1,,234',)	e	#VALUE!
+text_number	implicit	70	{1}+0	('1,,234',)	e	#VALUE!
+text_number	datevalue	71	DATEVALUE({1})	('1,,234',)	e	#VALUE!
+text_number	timevalue	72	TIMEVALUE({1})	('1,,234',)	e	#VALUE!
+text_number	value	73	VALUE({1})	(',123',)	e	#VALUE!
+text_number	implicit	74	{1}+0	(',123',)	e	#VALUE!
+text_number	datevalue	75	DATEVALUE({1})	(',123',)	e	#VALUE!
+text_number	timevalue	76	TIMEVALUE({1})	(',123',)	e	#VALUE!
+text_number	value	77	VALUE({1})	('123,',)	e	#VALUE!
+text_number	implicit	78	{1}+0	('123,',)	e	#VALUE!
+text_number	datevalue	79	DATEVALUE({1})	('123,',)	e	#VALUE!
+text_number	timevalue	80	TIMEVALUE({1})	('123,',)	e	#VALUE!
+text_number	value	81	VALUE({1})	('1,234,567',)	n	1234567.0
+text_number	implicit	82	{1}+0	('1,234,567',)	n	1234567.0
+text_number	datevalue	83	DATEVALUE({1})	('1,234,567',)	e	#VALUE!
+text_number	timevalue	84	TIMEVALUE({1})	('1,234,567',)	e	#VALUE!
+text_number	value	85	VALUE({1})	('1 234',)	e	#VALUE!
+text_number	implicit	86	{1}+0	('1 234',)	e	#VALUE!
+text_number	datevalue	87	DATEVALUE({1})	('1 234',)	e	#VALUE!
+text_number	timevalue	88	TIMEVALUE({1})	('1 234',)	e	#VALUE!
+text_number	value	89	VALUE({1})	('  42  ',)	n	42.0
+text_number	implicit	90	{1}+0	('  42  ',)	n	42.0
+text_number	datevalue	91	DATEVALUE({1})	('  42  ',)	e	#VALUE!
+text_number	timevalue	92	TIMEVALUE({1})	('  42  ',)	e	#VALUE!
+text_number	value	93	VALUE({1})	('\t42',)	e	#VALUE!
+text_number	implicit	94	{1}+0	('\t42',)	e	#VALUE!
+text_number	datevalue	95	DATEVALUE({1})	('\t42',)	e	#VALUE!
+text_number	timevalue	96	TIMEVALUE({1})	('\t42',)	e	#VALUE!
+text_number	value	97	VALUE({1})	('42\n',)	e	#VALUE!
+text_number	implicit	98	{1}+0	('42\n',)	e	#VALUE!
+text_number	datevalue	99	DATEVALUE({1})	('42\n',)	e	#VALUE!
+text_number	timevalue	100	TIMEVALUE({1})	('42\n',)	e	#VALUE!
+text_number	value	101	VALUE({1})	('0005',)	n	5.0
+text_number	implicit	102	{1}+0	('0005',)	n	5.0
+text_number	datevalue	103	DATEVALUE({1})	('0005',)	e	#VALUE!
+text_number	timevalue	104	TIMEVALUE({1})	('0005',)	e	#VALUE!
+text_number	value	105	VALUE({1})	('-0',)	n	0.0
+text_number	implicit	106	{1}+0	('-0',)	n	0.0
+text_number	datevalue	107	DATEVALUE({1})	('-0',)	e	#VALUE!
+text_number	timevalue	108	TIMEVALUE({1})	('-0',)	e	#VALUE!
+text_number	value	109	VALUE({1})	('00.50',)	n	0.5
+text_number	implicit	110	{1}+0	('00.50',)	n	0.5
+text_number	datevalue	111	DATEVALUE({1})	('00.50',)	e	#VALUE!
+text_number	timevalue	112	TIMEVALUE({1})	('00.50',)	e	#VALUE!
+text_number	value	113	VALUE({1})	('$5',)	n	5.0
+text_number	implicit	114	{1}+0	('$5',)	n	5.0
+text_number	datevalue	115	DATEVALUE({1})	('$5',)	e	#VALUE!
+text_number	timevalue	116	TIMEVALUE({1})	('$5',)	e	#VALUE!
+text_number	value	117	VALUE({1})	('-$5',)	n	-5.0
+text_number	implicit	118	{1}+0	('-$5',)	n	-5.0
+text_number	datevalue	119	DATEVALUE({1})	('-$5',)	e	#VALUE!
+text_number	timevalue	120	TIMEVALUE({1})	('-$5',)	e	#VALUE!
+text_number	value	121	VALUE({1})	('$-5',)	n	-5.0
+text_number	implicit	122	{1}+0	('$-5',)	n	-5.0
+text_number	datevalue	123	DATEVALUE({1})	('$-5',)	e	#VALUE!
+text_number	timevalue	124	TIMEVALUE({1})	('$-5',)	e	#VALUE!
+text_number	value	125	VALUE({1})	('($5)',)	n	-5.0
+text_number	implicit	126	{1}+0	('($5)',)	n	-5.0
+text_number	datevalue	127	DATEVALUE({1})	('($5)',)	e	#VALUE!
+text_number	timevalue	128	TIMEVALUE({1})	('($5)',)	e	#VALUE!
+text_number	value	129	VALUE({1})	('(5)',)	n	-5.0
+text_number	implicit	130	{1}+0	('(5)',)	n	-5.0
+text_number	datevalue	131	DATEVALUE({1})	('(5)',)	e	#VALUE!
+text_number	timevalue	132	TIMEVALUE({1})	('(5)',)	e	#VALUE!
+text_number	value	133	VALUE({1})	('(-5)',)	e	#VALUE!
+text_number	implicit	134	{1}+0	('(-5)',)	e	#VALUE!
+text_number	datevalue	135	DATEVALUE({1})	('(-5)',)	e	#VALUE!
+text_number	timevalue	136	TIMEVALUE({1})	('(-5)',)	e	#VALUE!
+text_number	value	137	VALUE({1})	('( 5 )',)	n	-5.0
+text_number	implicit	138	{1}+0	('( 5 )',)	n	-5.0
+text_number	datevalue	139	DATEVALUE({1})	('( 5 )',)	e	#VALUE!
+text_number	timevalue	140	TIMEVALUE({1})	('( 5 )',)	e	#VALUE!
+text_number	value	141	VALUE({1})	('$1,234.50',)	n	1234.5
+text_number	implicit	142	{1}+0	('$1,234.50',)	n	1234.5
+text_number	datevalue	143	DATEVALUE({1})	('$1,234.50',)	e	#VALUE!
+text_number	timevalue	144	TIMEVALUE({1})	('$1,234.50',)	e	#VALUE!
+text_number	value	145	VALUE({1})	('$ 5',)	n	5.0
+text_number	implicit	146	{1}+0	('$ 5',)	n	5.0
+text_number	datevalue	147	DATEVALUE({1})	('$ 5',)	e	#VALUE!
+text_number	timevalue	148	TIMEVALUE({1})	('$ 5',)	e	#VALUE!
+text_number	value	149	VALUE({1})	('5%',)	n	0.05
+text_number	implicit	150	{1}+0	('5%',)	n	0.05
+text_number	datevalue	151	DATEVALUE({1})	('5%',)	e	#VALUE!
+text_number	timevalue	152	TIMEVALUE({1})	('5%',)	e	#VALUE!
+text_number	value	153	VALUE({1})	('50%',)	n	0.5
+text_number	implicit	154	{1}+0	('50%',)	n	0.5
+text_number	datevalue	155	DATEVALUE({1})	('50%',)	e	#VALUE!
+text_number	timevalue	156	TIMEVALUE({1})	('50%',)	e	#VALUE!
+text_number	value	157	VALUE({1})	('-50%',)	n	-0.5
+text_number	implicit	158	{1}+0	('-50%',)	n	-0.5
+text_number	datevalue	159	DATEVALUE({1})	('-50%',)	e	#VALUE!
+text_number	timevalue	160	TIMEVALUE({1})	('-50%',)	e	#VALUE!
+text_number	value	161	VALUE({1})	('5 %',)	n	0.05
+text_number	implicit	162	{1}+0	('5 %',)	n	0.05
+text_number	datevalue	163	DATEVALUE({1})	('5 %',)	e	#VALUE!
+text_number	timevalue	164	TIMEVALUE({1})	('5 %',)	e	#VALUE!
+text_number	value	165	VALUE({1})	('%5',)	n	0.05
+text_number	implicit	166	{1}+0	('%5',)	n	0.05
+text_number	datevalue	167	DATEVALUE({1})	('%5',)	e	#VALUE!
+text_number	timevalue	168	TIMEVALUE({1})	('%5',)	e	#VALUE!
+text_number	value	169	VALUE({1})	('$5%',)	e	#VALUE!
+text_number	implicit	170	{1}+0	('$5%',)	e	#VALUE!
+text_number	datevalue	171	DATEVALUE({1})	('$5%',)	e	#VALUE!
+text_number	timevalue	172	TIMEVALUE({1})	('$5%',)	e	#VALUE!
+text_number	value	173	VALUE({1})	('1e2%',)	n	1.0
+text_number	implicit	174	{1}+0	('1e2%',)	n	1.0
+text_number	datevalue	175	DATEVALUE({1})	('1e2%',)	e	#VALUE!
+text_number	timevalue	176	TIMEVALUE({1})	('1e2%',)	e	#VALUE!
+text_number	value	177	VALUE({1})	('(5%)',)	n	-0.05
+text_number	implicit	178	{1}+0	('(5%)',)	n	-0.05
+text_number	datevalue	179	DATEVALUE({1})	('(5%)',)	e	#VALUE!
+text_number	timevalue	180	TIMEVALUE({1})	('(5%)',)	e	#VALUE!
+text_number	value	181	VALUE({1})	('1/2',)	n	46024.0
+text_number	implicit	182	{1}+0	('1/2',)	n	46024.0
+text_number	datevalue	183	DATEVALUE({1})	('1/2',)	n	46024.0
+text_number	timevalue	184	TIMEVALUE({1})	('1/2',)	n	0.0
+text_number	value	185	VALUE({1})	('1 1/2',)	n	1.5
+text_number	implicit	186	{1}+0	('1 1/2',)	n	1.5
+text_number	datevalue	187	DATEVALUE({1})	('1 1/2',)	e	#VALUE!
+text_number	timevalue	188	TIMEVALUE({1})	('1 1/2',)	e	#VALUE!
+text_number	value	189	VALUE({1})	('-1 1/2',)	n	-1.5
+text_number	implicit	190	{1}+0	('-1 1/2',)	n	-1.5
+text_number	datevalue	191	DATEVALUE({1})	('-1 1/2',)	e	#VALUE!
+text_number	timevalue	192	TIMEVALUE({1})	('-1 1/2',)	e	#VALUE!
+text_number	value	193	VALUE({1})	('1 1/3',)	n	1.3333333333333333
+text_number	implicit	194	{1}+0	('1 1/3',)	n	1.3333333333333333
+text_number	datevalue	195	DATEVALUE({1})	('1 1/3',)	e	#VALUE!
+text_number	timevalue	196	TIMEVALUE({1})	('1 1/3',)	e	#VALUE!
+text_number	value	197	VALUE({1})	('0 1/2',)	n	0.5
+text_number	implicit	198	{1}+0	('0 1/2',)	n	0.5
+text_number	datevalue	199	DATEVALUE({1})	('0 1/2',)	e	#VALUE!
+text_number	timevalue	200	TIMEVALUE({1})	('0 1/2',)	e	#VALUE!
+text_number	value	201	VALUE({1})	('1/0',)	n	36526.0
+text_number	implicit	202	{1}+0	('1/0',)	n	36526.0
+text_number	datevalue	203	DATEVALUE({1})	('1/0',)	n	36526.0
+text_number	timevalue	204	TIMEVALUE({1})	('1/0',)	n	0.0
+text_number	value	205	VALUE({1})	('3/4/2025',)	n	45720.0
+text_number	implicit	206	{1}+0	('3/4/2025',)	n	45720.0
+text_number	datevalue	207	DATEVALUE({1})	('3/4/2025',)	n	45720.0
+text_number	timevalue	208	TIMEVALUE({1})	('3/4/2025',)	n	0.0
+text_number	value	209	VALUE({1})	('3/4/25',)	n	45720.0
+text_number	implicit	210	{1}+0	('3/4/25',)	n	45720.0
+text_number	datevalue	211	DATEVALUE({1})	('3/4/25',)	n	45720.0
+text_number	timevalue	212	TIMEVALUE({1})	('3/4/25',)	n	0.0
+text_number	value	213	VALUE({1})	('03/04/2025',)	n	45720.0
+text_number	implicit	214	{1}+0	('03/04/2025',)	n	45720.0
+text_number	datevalue	215	DATEVALUE({1})	('03/04/2025',)	n	45720.0
+text_number	timevalue	216	TIMEVALUE({1})	('03/04/2025',)	n	0.0
+text_number	value	217	VALUE({1})	('2025-03-04',)	n	45720.0
+text_number	implicit	218	{1}+0	('2025-03-04',)	n	45720.0
+text_number	datevalue	219	DATEVALUE({1})	('2025-03-04',)	n	45720.0
+text_number	timevalue	220	TIMEVALUE({1})	('2025-03-04',)	n	0.0
+text_number	value	221	VALUE({1})	('2025/3/4',)	n	45720.0
+text_number	implicit	222	{1}+0	('2025/3/4',)	n	45720.0
+text_number	datevalue	223	DATEVALUE({1})	('2025/3/4',)	n	45720.0
+text_number	timevalue	224	TIMEVALUE({1})	('2025/3/4',)	n	0.0
+text_number	value	225	VALUE({1})	('4-Mar-2025',)	n	45720.0
+text_number	implicit	226	{1}+0	('4-Mar-2025',)	n	45720.0
+text_number	datevalue	227	DATEVALUE({1})	('4-Mar-2025',)	n	45720.0
+text_number	timevalue	228	TIMEVALUE({1})	('4-Mar-2025',)	n	0.0
+text_number	value	229	VALUE({1})	('4-Mar-25',)	n	45720.0
+text_number	implicit	230	{1}+0	('4-Mar-25',)	n	45720.0
+text_number	datevalue	231	DATEVALUE({1})	('4-Mar-25',)	n	45720.0
+text_number	timevalue	232	TIMEVALUE({1})	('4-Mar-25',)	n	0.0
+text_number	value	233	VALUE({1})	('Mar 4, 2025',)	n	45720.0
+text_number	implicit	234	{1}+0	('Mar 4, 2025',)	n	45720.0
+text_number	datevalue	235	DATEVALUE({1})	('Mar 4, 2025',)	n	45720.0
+text_number	timevalue	236	TIMEVALUE({1})	('Mar 4, 2025',)	n	0.0
+text_number	value	237	VALUE({1})	('March 4, 2025',)	n	45720.0
+text_number	implicit	238	{1}+0	('March 4, 2025',)	n	45720.0
+text_number	datevalue	239	DATEVALUE({1})	('March 4, 2025',)	n	45720.0
+text_number	timevalue	240	TIMEVALUE({1})	('March 4, 2025',)	n	0.0
+text_number	value	241	VALUE({1})	('4 March 2025',)	n	45720.0
+text_number	implicit	242	{1}+0	('4 March 2025',)	n	45720.0
+text_number	datevalue	243	DATEVALUE({1})	('4 March 2025',)	n	45720.0
+text_number	timevalue	244	TIMEVALUE({1})	('4 March 2025',)	n	0.0
+text_number	value	245	VALUE({1})	('March 4 2025',)	e	#VALUE!
+text_number	implicit	246	{1}+0	('March 4 2025',)	e	#VALUE!
+text_number	datevalue	247	DATEVALUE({1})	('March 4 2025',)	e	#VALUE!
+text_number	timevalue	248	TIMEVALUE({1})	('March 4 2025',)	e	#VALUE!
+text_number	value	249	VALUE({1})	('3/4',)	n	46085.0
+text_number	implicit	250	{1}+0	('3/4',)	n	46085.0
+text_number	datevalue	251	DATEVALUE({1})	('3/4',)	n	46085.0
+text_number	timevalue	252	TIMEVALUE({1})	('3/4',)	n	0.0
+text_number	value	253	VALUE({1})	('Mar-2025',)	n	45717.0
+text_number	implicit	254	{1}+0	('Mar-2025',)	n	45717.0
+text_number	datevalue	255	DATEVALUE({1})	('Mar-2025',)	n	45717.0
+text_number	timevalue	256	TIMEVALUE({1})	('Mar-2025',)	n	0.0
+text_number	value	257	VALUE({1})	('Mar 2025',)	n	45717.0
+text_number	implicit	258	{1}+0	('Mar 2025',)	n	45717.0
+text_number	datevalue	259	DATEVALUE({1})	('Mar 2025',)	n	45717.0
+text_number	timevalue	260	TIMEVALUE({1})	('Mar 2025',)	n	0.0
+text_number	value	261	VALUE({1})	('13/1/2025',)	e	#VALUE!
+text_number	implicit	262	{1}+0	('13/1/2025',)	e	#VALUE!
+text_number	datevalue	263	DATEVALUE({1})	('13/1/2025',)	e	#VALUE!
+text_number	timevalue	264	TIMEVALUE({1})	('13/1/2025',)	e	#VALUE!
+text_number	value	265	VALUE({1})	('2/30/2025',)	e	#VALUE!
+text_number	implicit	266	{1}+0	('2/30/2025',)	e	#VALUE!
+text_number	datevalue	267	DATEVALUE({1})	('2/30/2025',)	e	#VALUE!
+text_number	timevalue	268	TIMEVALUE({1})	('2/30/2025',)	e	#VALUE!
+text_number	value	269	VALUE({1})	('2/29/2024',)	n	45351.0
+text_number	implicit	270	{1}+0	('2/29/2024',)	n	45351.0
+text_number	datevalue	271	DATEVALUE({1})	('2/29/2024',)	n	45351.0
+text_number	timevalue	272	TIMEVALUE({1})	('2/29/2024',)	n	0.0
+text_number	value	273	VALUE({1})	('2/29/2023',)	e	#VALUE!
+text_number	implicit	274	{1}+0	('2/29/2023',)	e	#VALUE!
+text_number	datevalue	275	DATEVALUE({1})	('2/29/2023',)	e	#VALUE!
+text_number	timevalue	276	TIMEVALUE({1})	('2/29/2023',)	e	#VALUE!
+text_number	value	277	VALUE({1})	('2/29/1900',)	n	60.0
+text_number	implicit	278	{1}+0	('2/29/1900',)	n	60.0
+text_number	datevalue	279	DATEVALUE({1})	('2/29/1900',)	n	60.0
+text_number	timevalue	280	TIMEVALUE({1})	('2/29/1900',)	n	0.0
+text_number	value	281	VALUE({1})	('2/28/1900',)	n	59.0
+text_number	implicit	282	{1}+0	('2/28/1900',)	n	59.0
+text_number	datevalue	283	DATEVALUE({1})	('2/28/1900',)	n	59.0
+text_number	timevalue	284	TIMEVALUE({1})	('2/28/1900',)	n	0.0
+text_number	value	285	VALUE({1})	('3/1/1900',)	n	61.0
+text_number	implicit	286	{1}+0	('3/1/1900',)	n	61.0
+text_number	datevalue	287	DATEVALUE({1})	('3/1/1900',)	n	61.0
+text_number	timevalue	288	TIMEVALUE({1})	('3/1/1900',)	n	0.0
+text_number	value	289	VALUE({1})	('1/1/1900',)	n	1.0
+text_number	implicit	290	{1}+0	('1/1/1900',)	n	1.0
+text_number	datevalue	291	DATEVALUE({1})	('1/1/1900',)	n	1.0
+text_number	timevalue	292	TIMEVALUE({1})	('1/1/1900',)	n	0.0
+text_number	value	293	VALUE({1})	('12/31/1899',)	e	#VALUE!
+text_number	implicit	294	{1}+0	('12/31/1899',)	e	#VALUE!
+text_number	datevalue	295	DATEVALUE({1})	('12/31/1899',)	e	#VALUE!
+text_number	timevalue	296	TIMEVALUE({1})	('12/31/1899',)	e	#VALUE!
+text_number	value	297	VALUE({1})	('1/0/1900',)	e	#VALUE!
+text_number	implicit	298	{1}+0	('1/0/1900',)	e	#VALUE!
+text_number	datevalue	299	DATEVALUE({1})	('1/0/1900',)	e	#VALUE!
+text_number	timevalue	300	TIMEVALUE({1})	('1/0/1900',)	e	#VALUE!
+text_number	value	301	VALUE({1})	('1/1/10000',)	e	#VALUE!
+text_number	implicit	302	{1}+0	('1/1/10000',)	e	#VALUE!
+text_number	datevalue	303	DATEVALUE({1})	('1/1/10000',)	e	#VALUE!
+text_number	timevalue	304	TIMEVALUE({1})	('1/1/10000',)	e	#VALUE!
+text_number	value	305	VALUE({1})	('10:30',)	n	0.4375
+text_number	implicit	306	{1}+0	('10:30',)	n	0.4375
+text_number	datevalue	307	DATEVALUE({1})	('10:30',)	n	0.0
+text_number	timevalue	308	TIMEVALUE({1})	('10:30',)	n	0.4375
+text_number	value	309	VALUE({1})	('10:30 AM',)	n	0.4375
+text_number	implicit	310	{1}+0	('10:30 AM',)	n	0.4375
+text_number	datevalue	311	DATEVALUE({1})	('10:30 AM',)	n	0.0
+text_number	timevalue	312	TIMEVALUE({1})	('10:30 AM',)	n	0.4375
+text_number	value	313	VALUE({1})	('10:30 PM',)	n	0.9375
+text_number	implicit	314	{1}+0	('10:30 PM',)	n	0.9375
+text_number	datevalue	315	DATEVALUE({1})	('10:30 PM',)	n	0.0
+text_number	timevalue	316	TIMEVALUE({1})	('10:30 PM',)	n	0.9375
+text_number	value	317	VALUE({1})	('10:30AM',)	e	#VALUE!
+text_number	implicit	318	{1}+0	('10:30AM',)	e	#VALUE!
+text_number	datevalue	319	DATEVALUE({1})	('10:30AM',)	e	#VALUE!
+text_number	timevalue	320	TIMEVALUE({1})	('10:30AM',)	e	#VALUE!
+text_number	value	321	VALUE({1})	('10:30 am',)	n	0.4375
+text_number	implicit	322	{1}+0	('10:30 am',)	n	0.4375
+text_number	datevalue	323	DATEVALUE({1})	('10:30 am',)	n	0.0
+text_number	timevalue	324	TIMEVALUE({1})	('10:30 am',)	n	0.4375
+text_number	value	325	VALUE({1})	('10:30:15',)	n	0.43767361111111114
+text_number	implicit	326	{1}+0	('10:30:15',)	n	0.43767361111111114
+text_number	datevalue	327	DATEVALUE({1})	('10:30:15',)	n	0.0
+text_number	timevalue	328	TIMEVALUE({1})	('10:30:15',)	n	0.43767361111111114
+text_number	value	329	VALUE({1})	('10:30:15.5',)	n	0.43767939814814816
+text_number	implicit	330	{1}+0	('10:30:15.5',)	n	0.43767939814814816
+text_number	datevalue	331	DATEVALUE({1})	('10:30:15.5',)	n	0.0
+text_number	timevalue	332	TIMEVALUE({1})	('10:30:15.5',)	n	0.43767939814814816
+text_number	value	333	VALUE({1})	('10:30:15.123',)	n	0.43767503472222224
+text_number	implicit	334	{1}+0	('10:30:15.123',)	n	0.43767503472222224
+text_number	datevalue	335	DATEVALUE({1})	('10:30:15.123',)	n	0.0
+text_number	timevalue	336	TIMEVALUE({1})	('10:30:15.123',)	n	0.43767503472222224
+text_number	value	337	VALUE({1})	('25:00',)	n	1.0416666666666667
+text_number	implicit	338	{1}+0	('25:00',)	n	1.0416666666666667
+text_number	datevalue	339	DATEVALUE({1})	('25:00',)	n	1.0
+text_number	timevalue	340	TIMEVALUE({1})	('25:00',)	n	0.04166666666666674
+text_number	value	341	VALUE({1})	('24:00',)	n	1.0
+text_number	implicit	342	{1}+0	('24:00',)	n	1.0
+text_number	datevalue	343	DATEVALUE({1})	('24:00',)	n	1.0
+text_number	timevalue	344	TIMEVALUE({1})	('24:00',)	n	0.0
+text_number	value	345	VALUE({1})	('1:00:00 AM',)	n	0.041666666666666664
+text_number	implicit	346	{1}+0	('1:00:00 AM',)	n	0.041666666666666664
+text_number	datevalue	347	DATEVALUE({1})	('1:00:00 AM',)	n	0.0
+text_number	timevalue	348	TIMEVALUE({1})	('1:00:00 AM',)	n	0.041666666666666664
+text_number	value	349	VALUE({1})	('12:00 AM',)	n	0.0
+text_number	implicit	350	{1}+0	('12:00 AM',)	n	0.0
+text_number	datevalue	351	DATEVALUE({1})	('12:00 AM',)	n	0.0
+text_number	timevalue	352	TIMEVALUE({1})	('12:00 AM',)	n	0.0
+text_number	value	353	VALUE({1})	('12:00 PM',)	n	0.5
+text_number	implicit	354	{1}+0	('12:00 PM',)	n	0.5
+text_number	datevalue	355	DATEVALUE({1})	('12:00 PM',)	n	0.0
+text_number	timevalue	356	TIMEVALUE({1})	('12:00 PM',)	n	0.5
+text_number	value	357	VALUE({1})	('0:0',)	n	0.0
+text_number	implicit	358	{1}+0	('0:0',)	n	0.0
+text_number	datevalue	359	DATEVALUE({1})	('0:0',)	n	0.0
+text_number	timevalue	360	TIMEVALUE({1})	('0:0',)	n	0.0
+text_number	value	361	VALUE({1})	('10:61',)	n	0.45902777777777776
+text_number	implicit	362	{1}+0	('10:61',)	n	0.45902777777777776
+text_number	datevalue	363	DATEVALUE({1})	('10:61',)	n	0.0
+text_number	timevalue	364	TIMEVALUE({1})	('10:61',)	n	0.45902777777777776
+text_number	value	365	VALUE({1})	('3/4/2025 10:30',)	n	45720.4375
+text_number	implicit	366	{1}+0	('3/4/2025 10:30',)	n	45720.4375
+text_number	datevalue	367	DATEVALUE({1})	('3/4/2025 10:30',)	n	45720.0
+text_number	timevalue	368	TIMEVALUE({1})	('3/4/2025 10:30',)	n	0.4375
+text_number	value	369	VALUE({1})	('10:30 3/4/2025',)	n	45720.4375
+text_number	implicit	370	{1}+0	('10:30 3/4/2025',)	n	45720.4375
+text_number	datevalue	371	DATEVALUE({1})	('10:30 3/4/2025',)	n	45720.0
+text_number	timevalue	372	TIMEVALUE({1})	('10:30 3/4/2025',)	n	0.4375
+text_number	value	373	VALUE({1})	('2025-03-04 10:30',)	n	45720.4375
+text_number	implicit	374	{1}+0	('2025-03-04 10:30',)	n	45720.4375
+text_number	datevalue	375	DATEVALUE({1})	('2025-03-04 10:30',)	n	45720.0
+text_number	timevalue	376	TIMEVALUE({1})	('2025-03-04 10:30',)	n	0.4375
+text_number	value	377	VALUE({1})	('2025-03-04T10:30',)	e	#VALUE!
+text_number	implicit	378	{1}+0	('2025-03-04T10:30',)	e	#VALUE!
+text_number	datevalue	379	DATEVALUE({1})	('2025-03-04T10:30',)	e	#VALUE!
+text_number	timevalue	380	TIMEVALUE({1})	('2025-03-04T10:30',)	e	#VALUE!
+text_number	value	381	VALUE({1})	('0x10',)	e	#VALUE!
+text_number	implicit	382	{1}+0	('0x10',)	e	#VALUE!
+text_number	datevalue	383	DATEVALUE({1})	('0x10',)	e	#VALUE!
+text_number	timevalue	384	TIMEVALUE({1})	('0x10',)	e	#VALUE!
+text_number	value	385	VALUE({1})	('1e309',)	e	#VALUE!
+text_number	implicit	386	{1}+0	('1e309',)	e	#VALUE!
+text_number	datevalue	387	DATEVALUE({1})	('1e309',)	e	#VALUE!
+text_number	timevalue	388	TIMEVALUE({1})	('1e309',)	e	#VALUE!
+text_number	value	389	VALUE({1})	('1e308',)	e	#VALUE!
+text_number	implicit	390	{1}+0	('1e308',)	e	#VALUE!
+text_number	datevalue	391	DATEVALUE({1})	('1e308',)	e	#VALUE!
+text_number	timevalue	392	TIMEVALUE({1})	('1e308',)	e	#VALUE!
+text_number	value	393	VALUE({1})	('123456789012345678',)	n	1.23456789012345e+17
+text_number	implicit	394	{1}+0	('123456789012345678',)	n	1.23456789012345e+17
+text_number	datevalue	395	DATEVALUE({1})	('123456789012345678',)	e	#VALUE!
+text_number	timevalue	396	TIMEVALUE({1})	('123456789012345678',)	e	#VALUE!
+text_number	value	397	VALUE({1})	('0.12345678901234567',)	n	0.123456789012345
+text_number	implicit	398	{1}+0	('0.12345678901234567',)	n	0.123456789012345
+text_number	datevalue	399	DATEVALUE({1})	('0.12345678901234567',)	e	#VALUE!
+text_number	timevalue	400	TIMEVALUE({1})	('0.12345678901234567',)	e	#VALUE!
+text_number	value	401	VALUE({1})	('12345678901234.567',)	n	12345678901234.5
+text_number	implicit	402	{1}+0	('12345678901234.567',)	n	12345678901234.5
+text_number	datevalue	403	DATEVALUE({1})	('12345678901234.567',)	e	#VALUE!
+text_number	timevalue	404	TIMEVALUE({1})	('12345678901234.567',)	e	#VALUE!
+text_number	value	405	VALUE({1})	('1234567890123456789012345',)	n	1.23456789012345e+24
+text_number	implicit	406	{1}+0	('1234567890123456789012345',)	n	1.23456789012345e+24
+text_number	datevalue	407	DATEVALUE({1})	('1234567890123456789012345',)	e	#VALUE!
+text_number	timevalue	408	TIMEVALUE({1})	('1234567890123456789012345',)	e	#VALUE!
+text_number	value	409	VALUE({1})	('TRUE',)	e	#VALUE!
+text_number	implicit	410	{1}+0	('TRUE',)	e	#VALUE!
+text_number	datevalue	411	DATEVALUE({1})	('TRUE',)	e	#VALUE!
+text_number	timevalue	412	TIMEVALUE({1})	('TRUE',)	e	#VALUE!
+text_number	value	413	VALUE({1})	('FALSE',)	e	#VALUE!
+text_number	implicit	414	{1}+0	('FALSE',)	e	#VALUE!
+text_number	datevalue	415	DATEVALUE({1})	('FALSE',)	e	#VALUE!
+text_number	timevalue	416	TIMEVALUE({1})	('FALSE',)	e	#VALUE!
+text_number	value	417	VALUE({1})	('true',)	e	#VALUE!
+text_number	implicit	418	{1}+0	('true',)	e	#VALUE!
+text_number	datevalue	419	DATEVALUE({1})	('true',)	e	#VALUE!
+text_number	timevalue	420	TIMEVALUE({1})	('true',)	e	#VALUE!
+text_number	value	421	VALUE({1})	(' ',)	e	#VALUE!
+text_number	implicit	422	{1}+0	(' ',)	e	#VALUE!
+text_number	datevalue	423	DATEVALUE({1})	(' ',)	e	#VALUE!
+text_number	timevalue	424	TIMEVALUE({1})	(' ',)	e	#VALUE!
+text_number	value	425	VALUE({1})	('abc',)	e	#VALUE!
+text_number	implicit	426	{1}+0	('abc',)	e	#VALUE!
+text_number	datevalue	427	DATEVALUE({1})	('abc',)	e	#VALUE!
+text_number	timevalue	428	TIMEVALUE({1})	('abc',)	e	#VALUE!
+text_number	value	429	VALUE({1})	('1a',)	e	#VALUE!
+text_number	implicit	430	{1}+0	('1a',)	e	#VALUE!
+text_number	datevalue	431	DATEVALUE({1})	('1a',)	e	#VALUE!
+text_number	timevalue	432	TIMEVALUE({1})	('1a',)	e	#VALUE!
+text_number	value	433	VALUE({1})	('a1',)	e	#VALUE!
+text_number	implicit	434	{1}+0	('a1',)	e	#VALUE!
+text_number	datevalue	435	DATEVALUE({1})	('a1',)	e	#VALUE!
+text_number	timevalue	436	TIMEVALUE({1})	('a1',)	e	#VALUE!
+text_number	value	437	VALUE({1})	('1-2',)	n	46024.0
+text_number	implicit	438	{1}+0	('1-2',)	n	46024.0
+text_number	datevalue	439	DATEVALUE({1})	('1-2',)	n	46024.0
+text_number	timevalue	440	TIMEVALUE({1})	('1-2',)	n	0.0
+text_number	value	441	VALUE({1})	('--1',)	e	#VALUE!
+text_number	implicit	442	{1}+0	('--1',)	e	#VALUE!
+text_number	datevalue	443	DATEVALUE({1})	('--1',)	e	#VALUE!
+text_number	timevalue	444	TIMEVALUE({1})	('--1',)	e	#VALUE!
+text_number	value	445	VALUE({1})	('1d',)	e	#VALUE!
+text_number	implicit	446	{1}+0	('1d',)	e	#VALUE!
+text_number	datevalue	447	DATEVALUE({1})	('1d',)	e	#VALUE!
+text_number	timevalue	448	TIMEVALUE({1})	('1d',)	e	#VALUE!
+text_number	value	449	VALUE({1})	('1f',)	e	#VALUE!
+text_number	implicit	450	{1}+0	('1f',)	e	#VALUE!
+text_number	datevalue	451	DATEVALUE({1})	('1f',)	e	#VALUE!
+text_number	timevalue	452	TIMEVALUE({1})	('1f',)	e	#VALUE!
+text_number	value	453	VALUE({1})	('€5',)	n	5.0
+text_number	implicit	454	{1}+0	('€5',)	n	5.0
+text_number	datevalue	455	DATEVALUE({1})	('€5',)	e	#VALUE!
+text_number	timevalue	456	TIMEVALUE({1})	('€5',)	e	#VALUE!
+text_number	value	457	VALUE({1})	('£5',)	e	#VALUE!
+text_number	implicit	458	{1}+0	('£5',)	e	#VALUE!
+text_number	datevalue	459	DATEVALUE({1})	('£5',)	e	#VALUE!
+text_number	timevalue	460	TIMEVALUE({1})	('£5',)	e	#VALUE!
+text_number	value	461	VALUE({1})	('¥5',)	e	#VALUE!
+text_number	implicit	462	{1}+0	('¥5',)	e	#VALUE!
+text_number	datevalue	463	DATEVALUE({1})	('¥5',)	e	#VALUE!
+text_number	timevalue	464	TIMEVALUE({1})	('¥5',)	e	#VALUE!
+text_number	value	465	VALUE({1})	('Infinity',)	e	#VALUE!
+text_number	implicit	466	{1}+0	('Infinity',)	e	#VALUE!
+text_number	datevalue	467	DATEVALUE({1})	('Infinity',)	e	#VALUE!
+text_number	timevalue	468	TIMEVALUE({1})	('Infinity',)	e	#VALUE!
+text_number	value	469	VALUE({1})	('NaN',)	e	#VALUE!
+text_number	implicit	470	{1}+0	('NaN',)	e	#VALUE!
+text_number	datevalue	471	DATEVALUE({1})	('NaN',)	e	#VALUE!
+text_number	timevalue	472	TIMEVALUE({1})	('NaN',)	e	#VALUE!
+text_number	value	473	VALUE({1})	('١٢٣',)	n	123.0
+text_number	implicit	474	{1}+0	('١٢٣',)	n	123.0
+text_number	datevalue	475	DATEVALUE({1})	('١٢٣',)	e	#VALUE!
+text_number	timevalue	476	TIMEVALUE({1})	('١٢٣',)	e	#VALUE!
+text_number	value	477	VALUE({1})	('１２３',)	e	#VALUE!
+text_number	implicit	478	{1}+0	('１２３',)	e	#VALUE!
+text_number	datevalue	479	DATEVALUE({1})	('１２３',)	e	#VALUE!
+text_number	timevalue	480	TIMEVALUE({1})	('１２３',)	e	#VALUE!
+text_number	value	481	VALUE({1})	('−5',)	e	#VALUE!
+text_number	implicit	482	{1}+0	('−5',)	e	#VALUE!
+text_number	datevalue	483	DATEVALUE({1})	('−5',)	e	#VALUE!
+text_number	timevalue	484	TIMEVALUE({1})	('−5',)	e	#VALUE!
+text_number	value	485	VALUE({1})	('5-',)	e	#VALUE!
+text_number	implicit	486	{1}+0	('5-',)	e	#VALUE!
+text_number	datevalue	487	DATEVALUE({1})	('5-',)	e	#VALUE!
+text_number	timevalue	488	TIMEVALUE({1})	('5-',)	e	#VALUE!
+text_number	value	489	VALUE({1})	('5+',)	e	#VALUE!
+text_number	implicit	490	{1}+0	('5+',)	e	#VALUE!
+text_number	datevalue	491	DATEVALUE({1})	('5+',)	e	#VALUE!
+text_number	timevalue	492	TIMEVALUE({1})	('5+',)	e	#VALUE!
+text_number	value	493	VALUE({1})	('1.2.3',)	e	#VALUE!
+text_number	implicit	494	{1}+0	('1.2.3',)	e	#VALUE!
+text_number	datevalue	495	DATEVALUE({1})	('1.2.3',)	e	#VALUE!
+text_number	timevalue	496	TIMEVALUE({1})	('1.2.3',)	e	#VALUE!
+text_number	value	497	VALUE({1})	('1e',)	e	#VALUE!
+text_number	implicit	498	{1}+0	('1e',)	e	#VALUE!
+text_number	datevalue	499	DATEVALUE({1})	('1e',)	e	#VALUE!
+text_number	timevalue	500	TIMEVALUE({1})	('1e',)	e	#VALUE!
+text_number	value	501	VALUE({1})	('e3',)	e	#VALUE!
+text_number	implicit	502	{1}+0	('e3',)	e	#VALUE!
+text_number	datevalue	503	DATEVALUE({1})	('e3',)	e	#VALUE!
+text_number	timevalue	504	TIMEVALUE({1})	('e3',)	e	#VALUE!
+text_number	value_other	505	VALUE({1})	(True,)	e	#VALUE!
+text_number	implicit_other	506	{1}+0	(True,)	n	1.0
+text_number	value_other	507	VALUE({1})	(False,)	e	#VALUE!
+text_number	implicit_other	508	{1}+0	(False,)	n	0.0
+text_number	value_other	509	VALUE({1})	(None,)	n	0.0
+text_number	implicit_other	510	{1}+0	(None,)	n	0.0
+text_number	value_other	511	VALUE({1})	(1.5,)	n	1.5
+text_number	implicit_other	512	{1}+0	(1.5,)	n	1.5
+text_number	value_other	513	VALUE({1})	(ErrorValue('#N/A'),)	e	#N/A
+text_number	implicit_other	514	{1}+0	(ErrorValue('#N/A'),)	e	#N/A
+text_number	value_other	515	VALUE({1})	(FormulaInput('=""'),)	e	#VALUE!
+text_number	implicit_other	516	{1}+0	(FormulaInput('=""'),)	e	#VALUE!

@@ -1,0 +1,14 @@
+[project]
+name = "xlbench"
+version = "0.1.0"
+description = "Benchmarks for xlrecalc and the packages it is compared with"
+authors = [{ name = "Ethan Post" }]
+requires-python = ">=3.13"
+dependencies = [
+    "formulas>=1.3.4",
+    "openpyxl>=3.1.5",
+    "psutil>=7.2.2",
+    "pycel>=1.0b30",
+    "xlcalculator>=0.5.0",
+]
+

@@ -1,0 +1,27 @@
+# suite: circular
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-01
+# generator: capture/circular_probe.py
+# method: openpyxl writes the formulas into column A (constants in B, no cached values,
+#   fullCalcOnLoad); Excel opens it, calculates and saves a copy; expected is the copy's
+#   cached value (type, repr) and saved its XML; shown_saved is what Excel shows when it
+#   opens that copy (value|text, alerts off). Then the copy's cycle cells get the cached
+#   value 900+row: shown_patched is what Excel shows when it opens that file
+# saved_calcPr: <calcPr calcId="191029"/>
+# columns: row tag formula constant expected_type expected_repr saved shown_saved shown_patched
+1	pair	A2+1	None	str	''	'<c r="A1" t="str"><f ca="1">A2+1</f><v /></c>'	|	901.0|901
+2	pair	A1+1	None	str	''	'<c r="A2" t="str"><f ca="1">A1+1</f><v /></c>'	|	902.0|902
+3	self	A3+1	None	str	''	'<c r="A3" t="str"><f ca="1">A3+1</f><v /></c>'	|	903.0|903
+4	dependent	A1*2	None	str	''	'<c r="A4" t="str"><f ca="1">A1*2</f><v /></c>'	|	|
+5	control	1+1	None	n	2.0	'<c r="A5"><f>1+1</f><v>2</v></c>'	2.0|2	2.0|2
+6	self_range	A6+B6	5.0	str	''	'<c r="A6" t="str"><f ca="1">A6+B6</f><v /></c>'	|	906.0|906
+7	triple	A8+1	None	str	''	'<c r="A7" t="str"><f ca="1">A8+1</f><v /></c>'	|	907.0|907
+8	triple	A9+1	None	str	''	'<c r="A8" t="str"><f ca="1">A9+1</f><v /></c>'	|	908.0|908
+9	triple	A7+1	None	str	''	'<c r="A9" t="str"><f ca="1">A7+1</f><v /></c>'	|	909.0|909
+10	text	"x"&A11	None	str	''	'<c r="A10" t="str"><f ca="1">"x"&amp;A11</f><v /></c>'	|	910.0|910
+11	text	A10	None	str	''	'<c r="A11" t="str"><f ca="1">A10</f><v /></c>'	|	911.0|911
+12	iferror	IFERROR(1/0,A12)	None	str	''	'<c r="A12" t="str"><f ca="1">IFERROR(1/0,A12)</f><v /></c>'	|	912.0|912
+13	untaken	IF(FALSE,A13,5)	None	n	5.0	'<c r="A13"><f>IF(FALSE,A13,5)</f><v>5</v></c>'	5.0|5	913.0|913
+14	dependent2	A3+A1	None	str	''	'<c r="A14" t="str"><f ca="1">A3+A1</f><v /></c>'	|	|
+15	dependent_const	A4+B15	1.0	str	''	'<c r="A15" t="str"><f ca="1">A4+B15</f><v /></c>'	|	|
+16	control	B16*3	2.0	n	6.0	'<c r="A16"><f>B16*3</f><v>6</v></c>'	6.0|6	6.0|6

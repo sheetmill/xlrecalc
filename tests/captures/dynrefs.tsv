@@ -1,0 +1,98 @@
+# suite: dynrefs
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-01
+# generator: capture/dynref_probe.py
+# method: legacy formulas written by openpyxl (column A, and placed cells in column C);
+#   Excel calculates and saves a copy; value and type from the copy; the file's
+#   directory in CELL("filename") results is written as <dir>
+# columns: cell, formula, type, value (Python repr)
+A1	'OFFSET(Z1,1,0)'	n	2.0
+A2	'OFFSET(Z1,0,1)'	n	10.0
+A3	'SUM(OFFSET(Z1,0,0,3,1))'	n	6.0
+A4	'SUM(OFFSET(Z1,1,0,2,2))'	n	55.0
+A5	'OFFSET(Z1,-1,0)'	e	'#REF!'
+A6	'OFFSET(Z5,0,0,-2,1)'	e	'#VALUE!'
+A7	'SUM(OFFSET(Z5,0,0,-2,1))'	n	9.0
+A8	'SUM(OFFSET(AA5,0,0,-2,-2))'	n	99.0
+A9	'OFFSET(Z1,0,0,0,1)'	e	'#REF!'
+A10	'OFFSET(Z1,1.9,0)'	n	2.0
+A11	'OFFSET(Z1,-0.5,1)'	n	10.0
+A12	'OFFSET(Z1,"1",0)'	n	2.0
+A13	'ROWS(OFFSET(Z1,0,0,3,2))'	n	3.0
+A14	'COLUMNS(OFFSET(Z1,0,0,3,2))'	n	2.0
+A15	'SUM(OFFSET(Z1:Z3,1,0))'	n	9.0
+A16	'SUM(OFFSET(Z1:AA2,1,0,,1))'	n	5.0
+A17	'OFFSET(Z1,1048576,0)'	e	'#REF!'
+A18	'OFFSET(Sheet2!A1,0,0)'	n	100.0
+A19	'INDIRECT("Z2")'	n	2.0
+A20	'INDIRECT("Z"&2)'	n	2.0
+A21	'INDIRECT("z2")'	n	2.0
+A22	'INDIRECT("$Z$2")'	n	2.0
+A23	'INDIRECT(" Z2")'	e	'#REF!'
+A24	'INDIRECT("Z2 ")'	n	2.0
+A25	'SUM(INDIRECT("Z1:Z3"))'	n	6.0
+A26	'INDIRECT("R2C26",FALSE)'	n	2.0
+A27	'INDIRECT("R[1]C[25]",FALSE)'	n	0.0
+A28	'INDIRECT("r2c26",FALSE)'	n	2.0
+A29	'INDIRECT("Sheet2!A1")'	n	100.0
+A30	'INDIRECT("\'My Sheet\'!A1")'	n	200.0
+A31	'INDIRECT("My Sheet!A1")'	e	'#REF!'
+A32	'INDIRECT("Rate")'	n	2.0
+A33	'INDIRECT("nosuch")'	e	'#REF!'
+A34	'INDIRECT("")'	e	'#REF!'
+A35	'INDIRECT("[other.xlsx]S!A1")'	e	'#REF!'
+A36	'SUM(INDIRECT("Z:Z"))'	n	15.0
+A37	'INDIRECT(5)'	e	'#REF!'
+A38	'INDIRECT("Z2",0)'	e	'#REF!'
+A39	'ROWS(INDIRECT("Z1:Z3"))'	n	3.0
+A40	'INDIRECT("ZZZZ1")'	e	'#REF!'
+A41	'INDIRECT("Z2",TRUE)'	n	2.0
+A42	'CELL("row",Z3)'	n	3.0
+A43	'CELL("col",Z3)'	n	26.0
+A44	'CELL("address",Z3)'	str	'$Z$3'
+A45	'CELL("address",Sheet2!A1)'	str	'[<book>]Sheet2!$A$1'
+A46	'CELL("address",\'My Sheet\'!A1)'	str	"'[<book>]My Sheet'!$A$1"
+A47	'CELL("address",Z1:Z3)'	str	'$Z$1'
+A48	'CELL("contents",Z3)'	n	3.0
+A49	'CELL("contents",AB1)'	str	'text'
+A50	'CELL("contents",Y1)'	n	0.0
+A51	'CELL("type",Z3)'	str	'v'
+A52	'CELL("type",AB1)'	str	'l'
+A53	'CELL("type",Y1)'	str	'b'
+A54	'CELL("ROW",Z3)'	n	3.0
+A55	'CELL("nosuch",Z3)'	e	'#VALUE!'
+A56	'CELL("filename",Z3)'	str	'<dir>/[<book>]S'
+A57	'CELL("filename",Sheet2!A1)'	str	'<dir>/[<book>]Sheet2'
+A58	'CELL("format",Z3)'	str	'G'
+A59	'CELL("protect",Z3)'	n	1.0
+A60	'CELL("width",Z3)'	n	8.0
+A61	'CELL("prefix",AB1)'	str	"'"
+A62	'CELL("color",Z3)'	n	0.0
+A63	'CELL("parentheses",Z3)'	n	0.0
+A64	'MID(CELL("filename",Z3),FIND("]",CELL("filename",Z3))+1,255)'	str	'S'
+A65	'SUM(Z1:INDEX(Z1:Z5,3))'	n	6.0
+A66	'ROWS(Z1:INDEX(Z1:Z5,3))'	n	3.0
+A67	'SUM(INDEX(Z1:Z5,2):INDEX(Z1:Z5,4))'	n	9.0
+A68	'CELL("address",INDEX(Z1:AA5,2,2))'	str	'$AA$2'
+A69	'INDEX(Z1:Z5,3)'	n	3.0
+A70	'SUM(INDEX(Z1:AA5,0,2))'	n	150.0
+A71	'SUM(OFFSET(INDEX(Z1:Z5,2),0,0,2,1))'	n	5.0
+C1	'INDIRECT("C1")'	str	''
+C3	'OFFSET(C4,-1,0)'	str	''
+C5	'IF(FALSE,C5,5)'	n	5.0
+C7	'INDIRECT("C8")+1'	n	6.0
+C8	'2+3'	n	5.0
+C10	'SUM(OFFSET(C11,0,0,2,1))'	n	6.0
+C11	'1+1'	n	2.0
+C12	'C11*2'	n	4.0
+C14	'IF(TRUE,5,C14)'	n	5.0
+C16	'CHOOSE(2,C16,7)'	n	7.0
+C18	'IFERROR(1,C18)'	n	1.0
+C20	'C21'	n	1.0
+C21	'IF(C22>0,1,C20)'	n	1.0
+C22	'1+0'	n	1.0
+C24	'INDIRECT("C25")*2'	n	8.0
+C25	'INDIRECT("C26")+1'	n	4.0
+C26	'3+0'	n	3.0
+C28	'IF(C29,C28,4)'	n	4.0
+C29	'FALSE'	b	False

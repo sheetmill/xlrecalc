@@ -1,0 +1,2 @@
+```{include} ../QUIRKS.md
+```

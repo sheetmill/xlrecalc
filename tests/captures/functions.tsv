@@ -1,0 +1,1106 @@
+# suite: functions
+# excel: 16.114.3 for Mac, locale en_US
+# date_system: 1900
+# captured: 2026-11-01
+# generator: capture/suites.py:functions
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# fixed: {'Z1': 'a', 'AA1': 1.0, 'Z2': 'b', 'AA2': 2.0, 'Z3': 'c', 'AA3': 3.0, 'Z4': 1.0, 'AA4': 'one', 'Z5': 2.0, 'AA5': 'two', 'Z6': 'B', 'AA6': 'upper b', 'AC1': 1.0, 'AD1': 'x1', 'AC2': 3.0, 'AD2': 'x3', 'AC3': 5.0, 'AD3': 'x5', 'AC4': 7.0, 'AD4': 'x7', 'AC5': 9.0, 'AD5': 'x9', 'AF1': 9.0, 'AF2': 7.0, 'AF3': 5.0, 'AF4': 3.0, 'AF5': 1.0}
+# columns: suite tag case formula inputs expected_type expected_repr
+functions	abs	1	ABS({1})	(2.5,)	n	2.5
+functions	abs	2	ABS({1})	(-2.5,)	n	2.5
+functions	abs	3	ABS({1})	(0.0,)	n	0.0
+functions	abs	4	ABS({1})	('3',)	n	3.0
+functions	abs	5	ABS({1})	('abc',)	e	#VALUE!
+functions	abs	6	ABS({1})	(True,)	n	1.0
+functions	abs	7	ABS({1})	(False,)	n	0.0
+functions	abs	8	ABS({1})	(None,)	n	0.0
+functions	abs	9	ABS({1})	(FormulaInput('=""'),)	e	#VALUE!
+functions	abs	10	ABS({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	abs	11	ABS({1})	(2.5,)	n	2.5
+functions	abs	12	ABS({1})	(-2.5,)	n	2.5
+functions	abs	13	ABS({1})	(0.5,)	n	0.5
+functions	abs	14	ABS({1})	(1e-10,)	n	1e-10
+functions	abs	15	ABS({1})	(123456.789,)	n	123456.789
+functions	abs	16	ABS({1})	(45720.75,)	n	45720.75
+functions	int	17	INT({1})	(2.5,)	n	2.0
+functions	int	18	INT({1})	(-2.5,)	n	-3.0
+functions	int	19	INT({1})	(0.0,)	n	0.0
+functions	int	20	INT({1})	('3',)	n	3.0
+functions	int	21	INT({1})	('abc',)	e	#VALUE!
+functions	int	22	INT({1})	(True,)	n	1.0
+functions	int	23	INT({1})	(False,)	n	0.0
+functions	int	24	INT({1})	(None,)	n	0.0
+functions	int	25	INT({1})	(FormulaInput('=""'),)	e	#VALUE!
+functions	int	26	INT({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	int	27	INT({1})	(2.5,)	n	2.0
+functions	int	28	INT({1})	(-2.5,)	n	-3.0
+functions	int	29	INT({1})	(0.5,)	n	0.0
+functions	int	30	INT({1})	(1e-10,)	n	0.0
+functions	int	31	INT({1})	(123456.789,)	n	123456.0
+functions	int	32	INT({1})	(45720.75,)	n	45720.0
+functions	sqrt	33	SQRT({1})	(2.5,)	n	1.5811388300841898
+functions	sqrt	34	SQRT({1})	(-2.5,)	e	#NUM!
+functions	sqrt	35	SQRT({1})	(0.0,)	n	0.0
+functions	sqrt	36	SQRT({1})	('3',)	n	1.7320508075688772
+functions	sqrt	37	SQRT({1})	('abc',)	e	#VALUE!
+functions	sqrt	38	SQRT({1})	(True,)	n	1.0
+functions	sqrt	39	SQRT({1})	(False,)	n	0.0
+functions	sqrt	40	SQRT({1})	(None,)	n	0.0
+functions	sqrt	41	SQRT({1})	(FormulaInput('=""'),)	e	#VALUE!
+functions	sqrt	42	SQRT({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	sqrt	43	SQRT({1})	(2.5,)	n	1.5811388300841898
+functions	sqrt	44	SQRT({1})	(-2.5,)	e	#NUM!
+functions	sqrt	45	SQRT({1})	(0.5,)	n	0.7071067811865476
+functions	sqrt	46	SQRT({1})	(1e-10,)	n	1e-05
+functions	sqrt	47	SQRT({1})	(123456.789,)	n	351.3641828644462
+functions	sqrt	48	SQRT({1})	(45720.75,)	n	213.82410995956465
+functions	ln	49	LN({1})	(2.5,)	n	0.9162907318741551
+functions	ln	50	LN({1})	(-2.5,)	e	#NUM!
+functions	ln	51	LN({1})	(0.0,)	e	#NUM!
+functions	ln	52	LN({1})	('3',)	n	1.0986122886681098
+functions	ln	53	LN({1})	('abc',)	e	#VALUE!
+functions	ln	54	LN({1})	(True,)	n	0.0
+functions	ln	55	LN({1})	(False,)	e	#NUM!
+functions	ln	56	LN({1})	(None,)	e	#NUM!
+functions	ln	57	LN({1})	(FormulaInput('=""'),)	e	#VALUE!
+functions	ln	58	LN({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	ln	59	LN({1})	(2.5,)	n	0.9162907318741551
+functions	ln	60	LN({1})	(-2.5,)	e	#NUM!
+functions	ln	61	LN({1})	(0.5,)	n	-0.6931471805599453
+functions	ln	62	LN({1})	(1e-10,)	n	-23.025850929940457
+functions	ln	63	LN({1})	(123456.789,)	n	11.723646487185881
+functions	ln	64	LN({1})	(45720.75,)	n	10.730307521973675
+functions	exp	65	EXP({1})	(2.5,)	n	12.182493960703473
+functions	exp	66	EXP({1})	(-2.5,)	n	0.0820849986238988
+functions	exp	67	EXP({1})	(0.0,)	n	1.0
+functions	exp	68	EXP({1})	('3',)	n	20.085536923187668
+functions	exp	69	EXP({1})	('abc',)	e	#VALUE!
+functions	exp	70	EXP({1})	(True,)	n	2.718281828459045
+functions	exp	71	EXP({1})	(False,)	n	1.0
+functions	exp	72	EXP({1})	(None,)	n	1.0
+functions	exp	73	EXP({1})	(FormulaInput('=""'),)	e	#VALUE!
+functions	exp	74	EXP({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	exp	75	EXP({1})	(2.5,)	n	12.182493960703473
+functions	exp	76	EXP({1})	(-2.5,)	n	0.0820849986238988
+functions	exp	77	EXP({1})	(0.5,)	n	1.6487212707001282
+functions	exp	78	EXP({1})	(1e-10,)	n	1.0000000001
+functions	exp	79	EXP({1})	(123456.789,)	e	#NUM!
+functions	exp	80	EXP({1})	(45720.75,)	e	#NUM!
+functions	isnumber	81	ISNUMBER({1})	(2.5,)	b	True
+functions	isnumber	82	ISNUMBER({1})	(-2.5,)	b	True
+functions	isnumber	83	ISNUMBER({1})	(0.0,)	b	True
+functions	isnumber	84	ISNUMBER({1})	('3',)	b	False
+functions	isnumber	85	ISNUMBER({1})	('abc',)	b	False
+functions	isnumber	86	ISNUMBER({1})	(True,)	b	False
+functions	isnumber	87	ISNUMBER({1})	(False,)	b	False
+functions	isnumber	88	ISNUMBER({1})	(None,)	b	False
+functions	isnumber	89	ISNUMBER({1})	(FormulaInput('=""'),)	b	False
+functions	isnumber	90	ISNUMBER({1})	(ErrorValue('#N/A'),)	b	False
+functions	isnumber	91	ISNUMBER({1})	(2.5,)	b	True
+functions	isnumber	92	ISNUMBER({1})	(-2.5,)	b	True
+functions	isnumber	93	ISNUMBER({1})	(0.5,)	b	True
+functions	isnumber	94	ISNUMBER({1})	(1e-10,)	b	True
+functions	isnumber	95	ISNUMBER({1})	(123456.789,)	b	True
+functions	isnumber	96	ISNUMBER({1})	(45720.75,)	b	True
+functions	istext	97	ISTEXT({1})	(2.5,)	b	False
+functions	istext	98	ISTEXT({1})	(-2.5,)	b	False
+functions	istext	99	ISTEXT({1})	(0.0,)	b	False
+functions	istext	100	ISTEXT({1})	('3',)	b	True
+functions	istext	101	ISTEXT({1})	('abc',)	b	True
+functions	istext	102	ISTEXT({1})	(True,)	b	False
+functions	istext	103	ISTEXT({1})	(False,)	b	False
+functions	istext	104	ISTEXT({1})	(None,)	b	False
+functions	istext	105	ISTEXT({1})	(FormulaInput('=""'),)	b	True
+functions	istext	106	ISTEXT({1})	(ErrorValue('#N/A'),)	b	False
+functions	istext	107	ISTEXT({1})	(2.5,)	b	False
+functions	istext	108	ISTEXT({1})	(-2.5,)	b	False
+functions	istext	109	ISTEXT({1})	(0.5,)	b	False
+functions	istext	110	ISTEXT({1})	(1e-10,)	b	False
+functions	istext	111	ISTEXT({1})	(123456.789,)	b	False
+functions	istext	112	ISTEXT({1})	(45720.75,)	b	False
+functions	isblank	113	ISBLANK({1})	(2.5,)	b	False
+functions	isblank	114	ISBLANK({1})	(-2.5,)	b	False
+functions	isblank	115	ISBLANK({1})	(0.0,)	b	False
+functions	isblank	116	ISBLANK({1})	('3',)	b	False
+functions	isblank	117	ISBLANK({1})	('abc',)	b	False
+functions	isblank	118	ISBLANK({1})	(True,)	b	False
+functions	isblank	119	ISBLANK({1})	(False,)	b	False
+functions	isblank	120	ISBLANK({1})	(None,)	b	True
+functions	isblank	121	ISBLANK({1})	(FormulaInput('=""'),)	b	False
+functions	isblank	122	ISBLANK({1})	(ErrorValue('#N/A'),)	b	False
+functions	isblank	123	ISBLANK({1})	(2.5,)	b	False
+functions	isblank	124	ISBLANK({1})	(-2.5,)	b	False
+functions	isblank	125	ISBLANK({1})	(0.5,)	b	False
+functions	isblank	126	ISBLANK({1})	(1e-10,)	b	False
+functions	isblank	127	ISBLANK({1})	(123456.789,)	b	False
+functions	isblank	128	ISBLANK({1})	(45720.75,)	b	False
+functions	iserror	129	ISERROR({1})	(2.5,)	b	False
+functions	iserror	130	ISERROR({1})	(-2.5,)	b	False
+functions	iserror	131	ISERROR({1})	(0.0,)	b	False
+functions	iserror	132	ISERROR({1})	('3',)	b	False
+functions	iserror	133	ISERROR({1})	('abc',)	b	False
+functions	iserror	134	ISERROR({1})	(True,)	b	False
+functions	iserror	135	ISERROR({1})	(False,)	b	False
+functions	iserror	136	ISERROR({1})	(None,)	b	False
+functions	iserror	137	ISERROR({1})	(FormulaInput('=""'),)	b	False
+functions	iserror	138	ISERROR({1})	(ErrorValue('#N/A'),)	b	True
+functions	iserror	139	ISERROR({1})	(2.5,)	b	False
+functions	iserror	140	ISERROR({1})	(-2.5,)	b	False
+functions	iserror	141	ISERROR({1})	(0.5,)	b	False
+functions	iserror	142	ISERROR({1})	(1e-10,)	b	False
+functions	iserror	143	ISERROR({1})	(123456.789,)	b	False
+functions	iserror	144	ISERROR({1})	(45720.75,)	b	False
+functions	iserr	145	ISERR({1})	(2.5,)	b	False
+functions	iserr	146	ISERR({1})	(-2.5,)	b	False
+functions	iserr	147	ISERR({1})	(0.0,)	b	False
+functions	iserr	148	ISERR({1})	('3',)	b	False
+functions	iserr	149	ISERR({1})	('abc',)	b	False
+functions	iserr	150	ISERR({1})	(True,)	b	False
+functions	iserr	151	ISERR({1})	(False,)	b	False
+functions	iserr	152	ISERR({1})	(None,)	b	False
+functions	iserr	153	ISERR({1})	(FormulaInput('=""'),)	b	False
+functions	iserr	154	ISERR({1})	(ErrorValue('#N/A'),)	b	False
+functions	iserr	155	ISERR({1})	(2.5,)	b	False
+functions	iserr	156	ISERR({1})	(-2.5,)	b	False
+functions	iserr	157	ISERR({1})	(0.5,)	b	False
+functions	iserr	158	ISERR({1})	(1e-10,)	b	False
+functions	iserr	159	ISERR({1})	(123456.789,)	b	False
+functions	iserr	160	ISERR({1})	(45720.75,)	b	False
+functions	isna	161	ISNA({1})	(2.5,)	b	False
+functions	isna	162	ISNA({1})	(-2.5,)	b	False
+functions	isna	163	ISNA({1})	(0.0,)	b	False
+functions	isna	164	ISNA({1})	('3',)	b	False
+functions	isna	165	ISNA({1})	('abc',)	b	False
+functions	isna	166	ISNA({1})	(True,)	b	False
+functions	isna	167	ISNA({1})	(False,)	b	False
+functions	isna	168	ISNA({1})	(None,)	b	False
+functions	isna	169	ISNA({1})	(FormulaInput('=""'),)	b	False
+functions	isna	170	ISNA({1})	(ErrorValue('#N/A'),)	b	True
+functions	isna	171	ISNA({1})	(2.5,)	b	False
+functions	isna	172	ISNA({1})	(-2.5,)	b	False
+functions	isna	173	ISNA({1})	(0.5,)	b	False
+functions	isna	174	ISNA({1})	(1e-10,)	b	False
+functions	isna	175	ISNA({1})	(123456.789,)	b	False
+functions	isna	176	ISNA({1})	(45720.75,)	b	False
+functions	islogical	177	ISLOGICAL({1})	(2.5,)	b	False
+functions	islogical	178	ISLOGICAL({1})	(-2.5,)	b	False
+functions	islogical	179	ISLOGICAL({1})	(0.0,)	b	False
+functions	islogical	180	ISLOGICAL({1})	('3',)	b	False
+functions	islogical	181	ISLOGICAL({1})	('abc',)	b	False
+functions	islogical	182	ISLOGICAL({1})	(True,)	b	True
+functions	islogical	183	ISLOGICAL({1})	(False,)	b	True
+functions	islogical	184	ISLOGICAL({1})	(None,)	b	False
+functions	islogical	185	ISLOGICAL({1})	(FormulaInput('=""'),)	b	False
+functions	islogical	186	ISLOGICAL({1})	(ErrorValue('#N/A'),)	b	False
+functions	islogical	187	ISLOGICAL({1})	(2.5,)	b	False
+functions	islogical	188	ISLOGICAL({1})	(-2.5,)	b	False
+functions	islogical	189	ISLOGICAL({1})	(0.5,)	b	False
+functions	islogical	190	ISLOGICAL({1})	(1e-10,)	b	False
+functions	islogical	191	ISLOGICAL({1})	(123456.789,)	b	False
+functions	islogical	192	ISLOGICAL({1})	(45720.75,)	b	False
+functions	not	193	NOT({1})	(2.5,)	b	False
+functions	not	194	NOT({1})	(-2.5,)	b	False
+functions	not	195	NOT({1})	(0.0,)	b	True
+functions	not	196	NOT({1})	('3',)	e	#VALUE!
+functions	not	197	NOT({1})	('abc',)	e	#VALUE!
+functions	not	198	NOT({1})	(True,)	b	False
+functions	not	199	NOT({1})	(False,)	b	True
+functions	not	200	NOT({1})	(None,)	b	True
+functions	not	201	NOT({1})	(FormulaInput('=""'),)	e	#VALUE!
+functions	not	202	NOT({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	not	203	NOT({1})	(2.5,)	b	False
+functions	not	204	NOT({1})	(-2.5,)	b	False
+functions	not	205	NOT({1})	(0.5,)	b	False
+functions	not	206	NOT({1})	(1e-10,)	b	False
+functions	not	207	NOT({1})	(123456.789,)	b	False
+functions	not	208	NOT({1})	(45720.75,)	b	False
+functions	len	209	LEN({1})	(2.5,)	n	3.0
+functions	len	210	LEN({1})	(-2.5,)	n	4.0
+functions	len	211	LEN({1})	(0.0,)	n	1.0
+functions	len	212	LEN({1})	('3',)	n	1.0
+functions	len	213	LEN({1})	('abc',)	n	3.0
+functions	len	214	LEN({1})	(True,)	n	4.0
+functions	len	215	LEN({1})	(False,)	n	5.0
+functions	len	216	LEN({1})	(None,)	n	0.0
+functions	len	217	LEN({1})	(FormulaInput('=""'),)	n	0.0
+functions	len	218	LEN({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	len	219	LEN({1})	(2.5,)	n	3.0
+functions	len	220	LEN({1})	(-2.5,)	n	4.0
+functions	len	221	LEN({1})	(0.5,)	n	3.0
+functions	len	222	LEN({1})	(1e-10,)	n	12.0
+functions	len	223	LEN({1})	(123456.789,)	n	10.0
+functions	len	224	LEN({1})	(45720.75,)	n	8.0
+functions	trim	225	TRIM({1})	(2.5,)	str	'2.5'
+functions	trim	226	TRIM({1})	(-2.5,)	str	'-2.5'
+functions	trim	227	TRIM({1})	(0.0,)	str	'0'
+functions	trim	228	TRIM({1})	('3',)	str	'3'
+functions	trim	229	TRIM({1})	('abc',)	str	'abc'
+functions	trim	230	TRIM({1})	(True,)	str	'TRUE'
+functions	trim	231	TRIM({1})	(False,)	str	'FALSE'
+functions	trim	232	TRIM({1})	(None,)	str	''
+functions	trim	233	TRIM({1})	(FormulaInput('=""'),)	str	''
+functions	trim	234	TRIM({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	trim	235	TRIM({1})	(2.5,)	str	'2.5'
+functions	trim	236	TRIM({1})	(-2.5,)	str	'-2.5'
+functions	trim	237	TRIM({1})	(0.5,)	str	'0.5'
+functions	trim	238	TRIM({1})	(1e-10,)	str	'0.0000000001'
+functions	trim	239	TRIM({1})	(123456.789,)	str	'123456.789'
+functions	trim	240	TRIM({1})	(45720.75,)	str	'45720.75'
+functions	upper	241	UPPER({1})	(2.5,)	str	'2.5'
+functions	upper	242	UPPER({1})	(-2.5,)	str	'-2.5'
+functions	upper	243	UPPER({1})	(0.0,)	str	'0'
+functions	upper	244	UPPER({1})	('3',)	str	'3'
+functions	upper	245	UPPER({1})	('abc',)	str	'ABC'
+functions	upper	246	UPPER({1})	(True,)	str	'TRUE'
+functions	upper	247	UPPER({1})	(False,)	str	'FALSE'
+functions	upper	248	UPPER({1})	(None,)	str	''
+functions	upper	249	UPPER({1})	(FormulaInput('=""'),)	str	''
+functions	upper	250	UPPER({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	upper	251	UPPER({1})	(2.5,)	str	'2.5'
+functions	upper	252	UPPER({1})	(-2.5,)	str	'-2.5'
+functions	upper	253	UPPER({1})	(0.5,)	str	'0.5'
+functions	upper	254	UPPER({1})	(1e-10,)	str	'0.0000000001'
+functions	upper	255	UPPER({1})	(123456.789,)	str	'123456.789'
+functions	upper	256	UPPER({1})	(45720.75,)	str	'45720.75'
+functions	lower	257	LOWER({1})	(2.5,)	str	'2.5'
+functions	lower	258	LOWER({1})	(-2.5,)	str	'-2.5'
+functions	lower	259	LOWER({1})	(0.0,)	str	'0'
+functions	lower	260	LOWER({1})	('3',)	str	'3'
+functions	lower	261	LOWER({1})	('abc',)	str	'abc'
+functions	lower	262	LOWER({1})	(True,)	str	'true'
+functions	lower	263	LOWER({1})	(False,)	str	'false'
+functions	lower	264	LOWER({1})	(None,)	str	''
+functions	lower	265	LOWER({1})	(FormulaInput('=""'),)	str	''
+functions	lower	266	LOWER({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	lower	267	LOWER({1})	(2.5,)	str	'2.5'
+functions	lower	268	LOWER({1})	(-2.5,)	str	'-2.5'
+functions	lower	269	LOWER({1})	(0.5,)	str	'0.5'
+functions	lower	270	LOWER({1})	(1e-10,)	str	'0.0000000001'
+functions	lower	271	LOWER({1})	(123456.789,)	str	'123456.789'
+functions	lower	272	LOWER({1})	(45720.75,)	str	'45720.75'
+functions	value	273	VALUE({1})	(2.5,)	n	2.5
+functions	value	274	VALUE({1})	(-2.5,)	n	-2.5
+functions	value	275	VALUE({1})	(0.0,)	n	0.0
+functions	value	276	VALUE({1})	('3',)	n	3.0
+functions	value	277	VALUE({1})	('abc',)	e	#VALUE!
+functions	value	278	VALUE({1})	(True,)	e	#VALUE!
+functions	value	279	VALUE({1})	(False,)	e	#VALUE!
+functions	value	280	VALUE({1})	(None,)	n	0.0
+functions	value	281	VALUE({1})	(FormulaInput('=""'),)	e	#VALUE!
+functions	value	282	VALUE({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	value	283	VALUE({1})	(2.5,)	n	2.5
+functions	value	284	VALUE({1})	(-2.5,)	n	-2.5
+functions	value	285	VALUE({1})	(0.5,)	n	0.5
+functions	value	286	VALUE({1})	(1e-10,)	n	1e-10
+functions	value	287	VALUE({1})	(123456.789,)	n	123456.789
+functions	value	288	VALUE({1})	(45720.75,)	n	45720.75
+functions	year	289	YEAR({1})	(2.5,)	n	1900.0
+functions	year	290	YEAR({1})	(-2.5,)	e	#NUM!
+functions	year	291	YEAR({1})	(0.0,)	n	1900.0
+functions	year	292	YEAR({1})	('3',)	n	1900.0
+functions	year	293	YEAR({1})	('abc',)	e	#VALUE!
+functions	year	294	YEAR({1})	(True,)	n	1900.0
+functions	year	295	YEAR({1})	(False,)	n	1900.0
+functions	year	296	YEAR({1})	(None,)	n	1900.0
+functions	year	297	YEAR({1})	(FormulaInput('=""'),)	e	#VALUE!
+functions	year	298	YEAR({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	year	299	YEAR({1})	(2.5,)	n	1900.0
+functions	year	300	YEAR({1})	(-2.5,)	e	#NUM!
+functions	year	301	YEAR({1})	(0.5,)	n	1900.0
+functions	year	302	YEAR({1})	(1e-10,)	n	1900.0
+functions	year	303	YEAR({1})	(123456.789,)	n	2238.0
+functions	year	304	YEAR({1})	(45720.75,)	n	2025.0
+functions	month	305	MONTH({1})	(2.5,)	n	1.0
+functions	month	306	MONTH({1})	(-2.5,)	e	#NUM!
+functions	month	307	MONTH({1})	(0.0,)	n	1.0
+functions	month	308	MONTH({1})	('3',)	n	1.0
+functions	month	309	MONTH({1})	('abc',)	e	#VALUE!
+functions	month	310	MONTH({1})	(True,)	n	1.0
+functions	month	311	MONTH({1})	(False,)	n	1.0
+functions	month	312	MONTH({1})	(None,)	n	1.0
+functions	month	313	MONTH({1})	(FormulaInput('=""'),)	e	#VALUE!
+functions	month	314	MONTH({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	month	315	MONTH({1})	(2.5,)	n	1.0
+functions	month	316	MONTH({1})	(-2.5,)	e	#NUM!
+functions	month	317	MONTH({1})	(0.5,)	n	1.0
+functions	month	318	MONTH({1})	(1e-10,)	n	1.0
+functions	month	319	MONTH({1})	(123456.789,)	n	1.0
+functions	month	320	MONTH({1})	(45720.75,)	n	3.0
+functions	day	321	DAY({1})	(2.5,)	n	2.0
+functions	day	322	DAY({1})	(-2.5,)	e	#NUM!
+functions	day	323	DAY({1})	(0.0,)	n	0.0
+functions	day	324	DAY({1})	('3',)	n	3.0
+functions	day	325	DAY({1})	('abc',)	e	#VALUE!
+functions	day	326	DAY({1})	(True,)	n	1.0
+functions	day	327	DAY({1})	(False,)	n	0.0
+functions	day	328	DAY({1})	(None,)	n	0.0
+functions	day	329	DAY({1})	(FormulaInput('=""'),)	e	#VALUE!
+functions	day	330	DAY({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	day	331	DAY({1})	(2.5,)	n	2.0
+functions	day	332	DAY({1})	(-2.5,)	e	#NUM!
+functions	day	333	DAY({1})	(0.5,)	n	0.0
+functions	day	334	DAY({1})	(1e-10,)	n	0.0
+functions	day	335	DAY({1})	(123456.789,)	n	3.0
+functions	day	336	DAY({1})	(45720.75,)	n	4.0
+functions	weekday	337	WEEKDAY({1})	(2.5,)	n	2.0
+functions	weekday	338	WEEKDAY({1})	(-2.5,)	e	#NUM!
+functions	weekday	339	WEEKDAY({1})	(0.0,)	n	7.0
+functions	weekday	340	WEEKDAY({1})	('3',)	n	3.0
+functions	weekday	341	WEEKDAY({1})	('abc',)	e	#VALUE!
+functions	weekday	342	WEEKDAY({1})	(True,)	n	1.0
+functions	weekday	343	WEEKDAY({1})	(False,)	n	7.0
+functions	weekday	344	WEEKDAY({1})	(None,)	n	7.0
+functions	weekday	345	WEEKDAY({1})	(FormulaInput('=""'),)	e	#VALUE!
+functions	weekday	346	WEEKDAY({1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	weekday	347	WEEKDAY({1})	(2.5,)	n	2.0
+functions	weekday	348	WEEKDAY({1})	(-2.5,)	e	#NUM!
+functions	weekday	349	WEEKDAY({1})	(0.5,)	n	7.0
+functions	weekday	350	WEEKDAY({1})	(1e-10,)	n	7.0
+functions	weekday	351	WEEKDAY({1})	(123456.789,)	n	4.0
+functions	weekday	352	WEEKDAY({1})	(45720.75,)	n	3.0
+functions	round	353	ROUND({1},{2})	(0.0, 0.0)	n	0.0
+functions	round	354	ROUND({1},{2})	(0.0, 1.0)	n	0.0
+functions	round	355	ROUND({1},{2})	(0.0, 2.0)	n	0.0
+functions	round	356	ROUND({1},{2})	(0.0, -1.0)	n	0.0
+functions	round	357	ROUND({1},{2})	(0.0, -2.0)	n	0.0
+functions	round	358	ROUND({1},{2})	(1.0, 0.0)	n	1.0
+functions	round	359	ROUND({1},{2})	(1.0, 1.0)	n	1.0
+functions	round	360	ROUND({1},{2})	(1.0, 2.0)	n	1.0
+functions	round	361	ROUND({1},{2})	(1.0, -1.0)	n	0.0
+functions	round	362	ROUND({1},{2})	(1.0, -2.0)	n	0.0
+functions	round	363	ROUND({1},{2})	(-1.0, 0.0)	n	-1.0
+functions	round	364	ROUND({1},{2})	(-1.0, 1.0)	n	-1.0
+functions	round	365	ROUND({1},{2})	(-1.0, 2.0)	n	-1.0
+functions	round	366	ROUND({1},{2})	(-1.0, -1.0)	n	0.0
+functions	round	367	ROUND({1},{2})	(-1.0, -2.0)	n	0.0
+functions	round	368	ROUND({1},{2})	(2.5, 0.0)	n	3.0
+functions	round	369	ROUND({1},{2})	(2.5, 1.0)	n	2.5
+functions	round	370	ROUND({1},{2})	(2.5, 2.0)	n	2.5
+functions	round	371	ROUND({1},{2})	(2.5, -1.0)	n	0.0
+functions	round	372	ROUND({1},{2})	(2.5, -2.0)	n	0.0
+functions	round	373	ROUND({1},{2})	(-2.5, 0.0)	n	-3.0
+functions	round	374	ROUND({1},{2})	(-2.5, 1.0)	n	-2.5
+functions	round	375	ROUND({1},{2})	(-2.5, 2.0)	n	-2.5
+functions	round	376	ROUND({1},{2})	(-2.5, -1.0)	n	0.0
+functions	round	377	ROUND({1},{2})	(-2.5, -2.0)	n	0.0
+functions	round	378	ROUND({1},{2})	(0.5, 0.0)	n	1.0
+functions	round	379	ROUND({1},{2})	(0.5, 1.0)	n	0.5
+functions	round	380	ROUND({1},{2})	(0.5, 2.0)	n	0.5
+functions	round	381	ROUND({1},{2})	(0.5, -1.0)	n	0.0
+functions	round	382	ROUND({1},{2})	(0.5, -2.0)	n	0.0
+functions	round	383	ROUND({1},{2})	(1e-10, 0.0)	n	0.0
+functions	round	384	ROUND({1},{2})	(1e-10, 1.0)	n	0.0
+functions	round	385	ROUND({1},{2})	(1e-10, 2.0)	n	0.0
+functions	round	386	ROUND({1},{2})	(1e-10, -1.0)	n	0.0
+functions	round	387	ROUND({1},{2})	(1e-10, -2.0)	n	0.0
+functions	round	388	ROUND({1},{2})	(123456.789, 0.0)	n	123457.0
+functions	round	389	ROUND({1},{2})	(123456.789, 1.0)	n	123456.8
+functions	round	390	ROUND({1},{2})	(123456.789, 2.0)	n	123456.79
+functions	round	391	ROUND({1},{2})	(123456.789, -1.0)	n	123460.0
+functions	round	392	ROUND({1},{2})	(123456.789, -2.0)	n	123500.0
+functions	round	393	ROUND({1},{2})	(2.675, 0.0)	n	3.0
+functions	round	394	ROUND({1},{2})	(2.675, 1.0)	n	2.7
+functions	round	395	ROUND({1},{2})	(2.675, 2.0)	n	2.68
+functions	round	396	ROUND({1},{2})	(2.675, -1.0)	n	0.0
+functions	round	397	ROUND({1},{2})	(2.675, -2.0)	n	0.0
+functions	round	398	ROUND({1},{2})	(-2.675, 0.0)	n	-3.0
+functions	round	399	ROUND({1},{2})	(-2.675, 1.0)	n	-2.7
+functions	round	400	ROUND({1},{2})	(-2.675, 2.0)	n	-2.68
+functions	round	401	ROUND({1},{2})	(-2.675, -1.0)	n	0.0
+functions	round	402	ROUND({1},{2})	(-2.675, -2.0)	n	0.0
+functions	round	403	ROUND({1},{2})	(1.005, 0.0)	n	1.0
+functions	round	404	ROUND({1},{2})	(1.005, 1.0)	n	1.0
+functions	round	405	ROUND({1},{2})	(1.005, 2.0)	n	1.01
+functions	round	406	ROUND({1},{2})	(1.005, -1.0)	n	0.0
+functions	round	407	ROUND({1},{2})	(1.005, -2.0)	n	0.0
+functions	round	408	ROUND({1},{2})	(1000000000000000.5, 0.0)	n	1000000000000000.0
+functions	round	409	ROUND({1},{2})	(1000000000000000.5, 1.0)	n	1000000000000000.0
+functions	round	410	ROUND({1},{2})	(1000000000000000.5, 2.0)	n	1000000000000000.0
+functions	round	411	ROUND({1},{2})	(1000000000000000.5, -1.0)	n	1000000000000000.0
+functions	round	412	ROUND({1},{2})	(1000000000000000.5, -2.0)	n	1000000000000000.0
+functions	round	413	ROUND({1},{2})	('2.5', True)	n	2.5
+functions	round	414	ROUND({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+functions	roundup	415	ROUNDUP({1},{2})	(0.0, 0.0)	n	0.0
+functions	roundup	416	ROUNDUP({1},{2})	(0.0, 1.0)	n	0.0
+functions	roundup	417	ROUNDUP({1},{2})	(0.0, 2.0)	n	0.0
+functions	roundup	418	ROUNDUP({1},{2})	(0.0, -1.0)	n	0.0
+functions	roundup	419	ROUNDUP({1},{2})	(0.0, -2.0)	n	0.0
+functions	roundup	420	ROUNDUP({1},{2})	(1.0, 0.0)	n	1.0
+functions	roundup	421	ROUNDUP({1},{2})	(1.0, 1.0)	n	1.0
+functions	roundup	422	ROUNDUP({1},{2})	(1.0, 2.0)	n	1.0
+functions	roundup	423	ROUNDUP({1},{2})	(1.0, -1.0)	n	10.0
+functions	roundup	424	ROUNDUP({1},{2})	(1.0, -2.0)	n	100.0
+functions	roundup	425	ROUNDUP({1},{2})	(-1.0, 0.0)	n	-1.0
+functions	roundup	426	ROUNDUP({1},{2})	(-1.0, 1.0)	n	-1.0
+functions	roundup	427	ROUNDUP({1},{2})	(-1.0, 2.0)	n	-1.0
+functions	roundup	428	ROUNDUP({1},{2})	(-1.0, -1.0)	n	-10.0
+functions	roundup	429	ROUNDUP({1},{2})	(-1.0, -2.0)	n	-100.0
+functions	roundup	430	ROUNDUP({1},{2})	(2.5, 0.0)	n	3.0
+functions	roundup	431	ROUNDUP({1},{2})	(2.5, 1.0)	n	2.5
+functions	roundup	432	ROUNDUP({1},{2})	(2.5, 2.0)	n	2.5
+functions	roundup	433	ROUNDUP({1},{2})	(2.5, -1.0)	n	10.0
+functions	roundup	434	ROUNDUP({1},{2})	(2.5, -2.0)	n	100.0
+functions	roundup	435	ROUNDUP({1},{2})	(-2.5, 0.0)	n	-3.0
+functions	roundup	436	ROUNDUP({1},{2})	(-2.5, 1.0)	n	-2.5
+functions	roundup	437	ROUNDUP({1},{2})	(-2.5, 2.0)	n	-2.5
+functions	roundup	438	ROUNDUP({1},{2})	(-2.5, -1.0)	n	-10.0
+functions	roundup	439	ROUNDUP({1},{2})	(-2.5, -2.0)	n	-100.0
+functions	roundup	440	ROUNDUP({1},{2})	(0.5, 0.0)	n	1.0
+functions	roundup	441	ROUNDUP({1},{2})	(0.5, 1.0)	n	0.5
+functions	roundup	442	ROUNDUP({1},{2})	(0.5, 2.0)	n	0.5
+functions	roundup	443	ROUNDUP({1},{2})	(0.5, -1.0)	n	10.0
+functions	roundup	444	ROUNDUP({1},{2})	(0.5, -2.0)	n	100.0
+functions	roundup	445	ROUNDUP({1},{2})	(1e-10, 0.0)	n	1.0
+functions	roundup	446	ROUNDUP({1},{2})	(1e-10, 1.0)	n	0.1
+functions	roundup	447	ROUNDUP({1},{2})	(1e-10, 2.0)	n	0.01
+functions	roundup	448	ROUNDUP({1},{2})	(1e-10, -1.0)	n	10.0
+functions	roundup	449	ROUNDUP({1},{2})	(1e-10, -2.0)	n	100.0
+functions	roundup	450	ROUNDUP({1},{2})	(123456.789, 0.0)	n	123457.0
+functions	roundup	451	ROUNDUP({1},{2})	(123456.789, 1.0)	n	123456.8
+functions	roundup	452	ROUNDUP({1},{2})	(123456.789, 2.0)	n	123456.79
+functions	roundup	453	ROUNDUP({1},{2})	(123456.789, -1.0)	n	123460.0
+functions	roundup	454	ROUNDUP({1},{2})	(123456.789, -2.0)	n	123500.0
+functions	roundup	455	ROUNDUP({1},{2})	(2.675, 0.0)	n	3.0
+functions	roundup	456	ROUNDUP({1},{2})	(2.675, 1.0)	n	2.7
+functions	roundup	457	ROUNDUP({1},{2})	(2.675, 2.0)	n	2.6799999999999997
+functions	roundup	458	ROUNDUP({1},{2})	(2.675, -1.0)	n	10.0
+functions	roundup	459	ROUNDUP({1},{2})	(2.675, -2.0)	n	100.0
+functions	roundup	460	ROUNDUP({1},{2})	(-2.675, 0.0)	n	-3.0
+functions	roundup	461	ROUNDUP({1},{2})	(-2.675, 1.0)	n	-2.7
+functions	roundup	462	ROUNDUP({1},{2})	(-2.675, 2.0)	n	-2.6799999999999997
+functions	roundup	463	ROUNDUP({1},{2})	(-2.675, -1.0)	n	-10.0
+functions	roundup	464	ROUNDUP({1},{2})	(-2.675, -2.0)	n	-100.0
+functions	roundup	465	ROUNDUP({1},{2})	(1.005, 0.0)	n	2.0
+functions	roundup	466	ROUNDUP({1},{2})	(1.005, 1.0)	n	1.1
+functions	roundup	467	ROUNDUP({1},{2})	(1.005, 2.0)	n	1.01
+functions	roundup	468	ROUNDUP({1},{2})	(1.005, -1.0)	n	10.0
+functions	roundup	469	ROUNDUP({1},{2})	(1.005, -2.0)	n	100.0
+functions	roundup	470	ROUNDUP({1},{2})	(1000000000000000.5, 0.0)	n	1000000000000000.0
+functions	roundup	471	ROUNDUP({1},{2})	(1000000000000000.5, 1.0)	n	1000000000000000.0
+functions	roundup	472	ROUNDUP({1},{2})	(1000000000000000.5, 2.0)	n	1000000000000000.0
+functions	roundup	473	ROUNDUP({1},{2})	(1000000000000000.5, -1.0)	n	1000000000000000.0
+functions	roundup	474	ROUNDUP({1},{2})	(1000000000000000.5, -2.0)	n	1000000000000000.0
+functions	roundup	475	ROUNDUP({1},{2})	('2.5', True)	n	2.5
+functions	roundup	476	ROUNDUP({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+functions	rounddown	477	ROUNDDOWN({1},{2})	(0.0, 0.0)	n	0.0
+functions	rounddown	478	ROUNDDOWN({1},{2})	(0.0, 1.0)	n	0.0
+functions	rounddown	479	ROUNDDOWN({1},{2})	(0.0, 2.0)	n	0.0
+functions	rounddown	480	ROUNDDOWN({1},{2})	(0.0, -1.0)	n	0.0
+functions	rounddown	481	ROUNDDOWN({1},{2})	(0.0, -2.0)	n	0.0
+functions	rounddown	482	ROUNDDOWN({1},{2})	(1.0, 0.0)	n	1.0
+functions	rounddown	483	ROUNDDOWN({1},{2})	(1.0, 1.0)	n	1.0
+functions	rounddown	484	ROUNDDOWN({1},{2})	(1.0, 2.0)	n	1.0
+functions	rounddown	485	ROUNDDOWN({1},{2})	(1.0, -1.0)	n	0.0
+functions	rounddown	486	ROUNDDOWN({1},{2})	(1.0, -2.0)	n	0.0
+functions	rounddown	487	ROUNDDOWN({1},{2})	(-1.0, 0.0)	n	-1.0
+functions	rounddown	488	ROUNDDOWN({1},{2})	(-1.0, 1.0)	n	-1.0
+functions	rounddown	489	ROUNDDOWN({1},{2})	(-1.0, 2.0)	n	-1.0
+functions	rounddown	490	ROUNDDOWN({1},{2})	(-1.0, -1.0)	n	0.0
+functions	rounddown	491	ROUNDDOWN({1},{2})	(-1.0, -2.0)	n	0.0
+functions	rounddown	492	ROUNDDOWN({1},{2})	(2.5, 0.0)	n	2.0
+functions	rounddown	493	ROUNDDOWN({1},{2})	(2.5, 1.0)	n	2.5
+functions	rounddown	494	ROUNDDOWN({1},{2})	(2.5, 2.0)	n	2.5
+functions	rounddown	495	ROUNDDOWN({1},{2})	(2.5, -1.0)	n	0.0
+functions	rounddown	496	ROUNDDOWN({1},{2})	(2.5, -2.0)	n	0.0
+functions	rounddown	497	ROUNDDOWN({1},{2})	(-2.5, 0.0)	n	-2.0
+functions	rounddown	498	ROUNDDOWN({1},{2})	(-2.5, 1.0)	n	-2.5
+functions	rounddown	499	ROUNDDOWN({1},{2})	(-2.5, 2.0)	n	-2.5
+functions	rounddown	500	ROUNDDOWN({1},{2})	(-2.5, -1.0)	n	0.0
+functions	rounddown	501	ROUNDDOWN({1},{2})	(-2.5, -2.0)	n	0.0
+functions	rounddown	502	ROUNDDOWN({1},{2})	(0.5, 0.0)	n	0.0
+functions	rounddown	503	ROUNDDOWN({1},{2})	(0.5, 1.0)	n	0.5
+functions	rounddown	504	ROUNDDOWN({1},{2})	(0.5, 2.0)	n	0.5
+functions	rounddown	505	ROUNDDOWN({1},{2})	(0.5, -1.0)	n	0.0
+functions	rounddown	506	ROUNDDOWN({1},{2})	(0.5, -2.0)	n	0.0
+functions	rounddown	507	ROUNDDOWN({1},{2})	(1e-10, 0.0)	n	0.0
+functions	rounddown	508	ROUNDDOWN({1},{2})	(1e-10, 1.0)	n	0.0
+functions	rounddown	509	ROUNDDOWN({1},{2})	(1e-10, 2.0)	n	0.0
+functions	rounddown	510	ROUNDDOWN({1},{2})	(1e-10, -1.0)	n	0.0
+functions	rounddown	511	ROUNDDOWN({1},{2})	(1e-10, -2.0)	n	0.0
+functions	rounddown	512	ROUNDDOWN({1},{2})	(123456.789, 0.0)	n	123456.0
+functions	rounddown	513	ROUNDDOWN({1},{2})	(123456.789, 1.0)	n	123456.7
+functions	rounddown	514	ROUNDDOWN({1},{2})	(123456.789, 2.0)	n	123456.78
+functions	rounddown	515	ROUNDDOWN({1},{2})	(123456.789, -1.0)	n	123450.0
+functions	rounddown	516	ROUNDDOWN({1},{2})	(123456.789, -2.0)	n	123400.0
+functions	rounddown	517	ROUNDDOWN({1},{2})	(2.675, 0.0)	n	2.0
+functions	rounddown	518	ROUNDDOWN({1},{2})	(2.675, 1.0)	n	2.6
+functions	rounddown	519	ROUNDDOWN({1},{2})	(2.675, 2.0)	n	2.67
+functions	rounddown	520	ROUNDDOWN({1},{2})	(2.675, -1.0)	n	0.0
+functions	rounddown	521	ROUNDDOWN({1},{2})	(2.675, -2.0)	n	0.0
+functions	rounddown	522	ROUNDDOWN({1},{2})	(-2.675, 0.0)	n	-2.0
+functions	rounddown	523	ROUNDDOWN({1},{2})	(-2.675, 1.0)	n	-2.6
+functions	rounddown	524	ROUNDDOWN({1},{2})	(-2.675, 2.0)	n	-2.67
+functions	rounddown	525	ROUNDDOWN({1},{2})	(-2.675, -1.0)	n	0.0
+functions	rounddown	526	ROUNDDOWN({1},{2})	(-2.675, -2.0)	n	0.0
+functions	rounddown	527	ROUNDDOWN({1},{2})	(1.005, 0.0)	n	1.0
+functions	rounddown	528	ROUNDDOWN({1},{2})	(1.005, 1.0)	n	1.0
+functions	rounddown	529	ROUNDDOWN({1},{2})	(1.005, 2.0)	n	1.0
+functions	rounddown	530	ROUNDDOWN({1},{2})	(1.005, -1.0)	n	0.0
+functions	rounddown	531	ROUNDDOWN({1},{2})	(1.005, -2.0)	n	0.0
+functions	rounddown	532	ROUNDDOWN({1},{2})	(1000000000000000.5, 0.0)	n	1000000000000000.0
+functions	rounddown	533	ROUNDDOWN({1},{2})	(1000000000000000.5, 1.0)	n	1000000000000000.0
+functions	rounddown	534	ROUNDDOWN({1},{2})	(1000000000000000.5, 2.0)	n	1000000000000000.0
+functions	rounddown	535	ROUNDDOWN({1},{2})	(1000000000000000.5, -1.0)	n	1000000000000000.0
+functions	rounddown	536	ROUNDDOWN({1},{2})	(1000000000000000.5, -2.0)	n	1000000000000000.0
+functions	rounddown	537	ROUNDDOWN({1},{2})	('2.5', True)	n	2.5
+functions	rounddown	538	ROUNDDOWN({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+functions	mod	539	MOD({1},{2})	(10.0, 3.0)	n	1.0
+functions	power	540	POWER({1},{2})	(10.0, 3.0)	n	1000.0
+functions	mod	541	MOD({1},{2})	(-10.0, 3.0)	n	2.0
+functions	power	542	POWER({1},{2})	(-10.0, 3.0)	n	-1000.0
+functions	mod	543	MOD({1},{2})	(10.0, -3.0)	n	-2.0
+functions	power	544	POWER({1},{2})	(10.0, -3.0)	n	0.001
+functions	mod	545	MOD({1},{2})	(5.5, 2.0)	n	1.5
+functions	power	546	POWER({1},{2})	(5.5, 2.0)	n	30.25
+functions	mod	547	MOD({1},{2})	(1.0, 0.0)	e	#DIV/0!
+functions	power	548	POWER({1},{2})	(1.0, 0.0)	n	1.0
+functions	mod	549	MOD({1},{2})	(10000000000.0, 7.0)	n	4.0
+functions	power	550	POWER({1},{2})	(10000000000.0, 7.0)	n	1e+70
+functions	mod	551	MOD({1},{2})	(0.0, 0.0)	e	#DIV/0!
+functions	power	552	POWER({1},{2})	(0.0, 0.0)	e	#NUM!
+functions	mod	553	MOD({1},{2})	(2.0, 0.5)	n	0.0
+functions	power	554	POWER({1},{2})	(2.0, 0.5)	n	1.4142135623730951
+functions	mod	555	MOD({1},{2})	(-8.0, 0.3333333333333333)	n	0.33333333333333287
+functions	power	556	POWER({1},{2})	(-8.0, 0.3333333333333333)	n	-1.9999999999999998
+functions	mod	557	MOD({1},{2})	(0.0, -1.0)	n	0.0
+functions	power	558	POWER({1},{2})	(0.0, -1.0)	e	#DIV/0!
+functions	mod	559	MOD({1},{2})	(10.0, 400.0)	n	10.0
+functions	power	560	POWER({1},{2})	(10.0, 400.0)	e	#NUM!
+functions	pi	561	PI()	()	n	3.141592653589793
+functions	sum	562	SUM({1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	6.0
+functions	sum	563	SUM({5}:{5})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	0.0
+functions	sum	564	SUM({1},"3",TRUE)	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	5.0
+functions	sum	565	SUM({1},"abc")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	e	#VALUE!
+functions	sum	566	SUM({1}:{3},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, ErrorValue('#N/A'))	e	#N/A
+functions	sum	567	SUM({4},{5},{8})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	0.0
+functions	average	568	AVERAGE({1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	1.2
+functions	average	569	AVERAGE({5}:{5})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	e	#DIV/0!
+functions	average	570	AVERAGE({1},"3",TRUE)	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	1.6666666666666667
+functions	average	571	AVERAGE({1},"abc")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	e	#VALUE!
+functions	average	572	AVERAGE({1}:{3},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, ErrorValue('#N/A'))	e	#N/A
+functions	average	573	AVERAGE({4},{5},{8})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	e	#DIV/0!
+functions	min	574	MIN({1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	-1.5
+functions	min	575	MIN({5}:{5})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	0.0
+functions	min	576	MIN({1},"3",TRUE)	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	1.0
+functions	min	577	MIN({1},"abc")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	e	#VALUE!
+functions	min	578	MIN({1}:{3},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, ErrorValue('#N/A'))	e	#N/A
+functions	min	579	MIN({4},{5},{8})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	0.0
+functions	max	580	MAX({1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	4.5
+functions	max	581	MAX({5}:{5})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	0.0
+functions	max	582	MAX({1},"3",TRUE)	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	3.0
+functions	max	583	MAX({1},"abc")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	e	#VALUE!
+functions	max	584	MAX({1}:{3},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, ErrorValue('#N/A'))	e	#N/A
+functions	max	585	MAX({4},{5},{8})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	0.0
+functions	count	586	COUNT({1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	5.0
+functions	count	587	COUNT({5}:{5})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	0.0
+functions	count	588	COUNT({1},"3",TRUE)	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	3.0
+functions	count	589	COUNT({1},"abc")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	1.0
+functions	count	590	COUNT({1}:{3},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, ErrorValue('#N/A'))	n	2.0
+functions	count	591	COUNT({4},{5},{8})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	0.0
+functions	counta	592	COUNTA({1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	9.0
+functions	counta	593	COUNTA({5}:{5})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	0.0
+functions	counta	594	COUNTA({1},"3",TRUE)	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	3.0
+functions	counta	595	COUNTA({1},"abc")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	2.0
+functions	counta	596	COUNTA({1}:{3},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, ErrorValue('#N/A'))	n	4.0
+functions	counta	597	COUNTA({4},{5},{8})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	2.0
+functions	product	598	PRODUCT({1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	0.0
+functions	product	599	PRODUCT({5}:{5})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	0.0
+functions	product	600	PRODUCT({1},"3",TRUE)	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	3.0
+functions	product	601	PRODUCT({1},"abc")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	e	#VALUE!
+functions	product	602	PRODUCT({1}:{3},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, ErrorValue('#N/A'))	e	#N/A
+functions	product	603	PRODUCT({4},{5},{8})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	0.0
+functions	countblank	604	COUNTBLANK({1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	2.0
+functions	countblank	605	COUNTBLANK({5}:{5})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	1.0
+functions	countif	606	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>2')	n	1.0
+functions	sumif	607	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>2')	n	4.5
+functions	sumif	608	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>2')	n	4.5
+functions	countif	609	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<=2')	n	4.0
+functions	sumif	610	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<=2')	n	1.5
+functions	sumif	611	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<=2')	n	1.5
+functions	countif	612	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>1')	n	9.0
+functions	sumif	613	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>1')	n	5.0
+functions	sumif	614	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>1')	n	5.0
+functions	countif	615	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '1')	n	1.0
+functions	sumif	616	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '1')	n	1.0
+functions	sumif	617	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '1')	n	1.0
+functions	countif	618	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 1.0)	n	1.0
+functions	sumif	619	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 1.0)	n	1.0
+functions	sumif	620	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 1.0)	n	1.0
+functions	countif	621	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '3')	n	1.0
+functions	sumif	622	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '3')	n	0.0
+functions	sumif	623	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '3')	n	0.0
+functions	countif	624	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 'a*')	n	1.0
+functions	sumif	625	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 'a*')	n	0.0
+functions	sumif	626	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 'a*')	n	0.0
+functions	countif	627	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '?bc')	n	1.0
+functions	sumif	628	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '?bc')	n	0.0
+functions	sumif	629	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '?bc')	n	0.0
+functions	countif	630	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 'ABC')	n	1.0
+functions	sumif	631	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 'ABC')	n	0.0
+functions	sumif	632	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 'ABC')	n	0.0
+functions	countif	633	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '')	n	2.0
+functions	sumif	634	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '')	n	0.0
+functions	sumif	635	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '')	n	0.0
+functions	countif	636	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '=')	n	1.0
+functions	sumif	637	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '=')	n	0.0
+functions	sumif	638	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '=')	n	0.0
+functions	countif	639	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>')	n	9.0
+functions	sumif	640	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>')	n	6.0
+functions	sumif	641	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>')	n	6.0
+functions	countif	642	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, True)	n	1.0
+functions	sumif	643	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, True)	n	0.0
+functions	sumif	644	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, True)	n	0.0
+functions	countif	645	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 'TRUE')	n	1.0
+functions	sumif	646	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 'TRUE')	n	0.0
+functions	sumif	647	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 'TRUE')	n	0.0
+functions	countif	648	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>=abc')	n	1.0
+functions	sumif	649	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>=abc')	n	0.0
+functions	sumif	650	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>=abc')	n	0.0
+functions	countif	651	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<a')	n	2.0
+functions	sumif	652	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<a')	n	0.0
+functions	sumif	653	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<a')	n	0.0
+functions	countif	654	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '~*')	n	0.0
+functions	sumif	655	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '~*')	n	0.0
+functions	sumif	656	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '~*')	n	0.0
+functions	countif	657	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 4.5)	n	1.0
+functions	sumif	658	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 4.5)	n	4.5
+functions	sumif	659	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 4.5)	n	4.5
+functions	countif	660	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '4.5')	n	1.0
+functions	sumif	661	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '4.5')	n	4.5
+functions	sumif	662	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '4.5')	n	4.5
+functions	countif	663	COUNTIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '-1.5')	n	1.0
+functions	sumif	664	SUMIF({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '-1.5')	n	-1.5
+functions	sumif	665	SUMIF({1}:{10},{11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '-1.5')	n	-1.5
+functions	countifs	666	COUNTIFS({1}:{10},">0",{1}:{10},"<3")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	2.0
+functions	sumifs	667	SUMIFS({1}:{10},{1}:{10},">0",{1}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	5.5
+functions	sumifs	668	SUMIFS({1}:{10},{1}:{9},">0")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	e	#VALUE!
+functions	if	669	IF({1},"yes","no")	(2.5,)	str	'yes'
+functions	if	670	IF({1},"yes","no")	(-2.5,)	str	'yes'
+functions	if	671	IF({1},"yes","no")	(0.0,)	str	'no'
+functions	if	672	IF({1},"yes","no")	('3',)	e	#VALUE!
+functions	if	673	IF({1},"yes","no")	('abc',)	e	#VALUE!
+functions	if	674	IF({1},"yes","no")	(True,)	str	'yes'
+functions	if	675	IF({1},"yes","no")	(False,)	str	'no'
+functions	if	676	IF({1},"yes","no")	(None,)	str	'no'
+functions	if	677	IF({1},"yes","no")	(FormulaInput('=""'),)	e	#VALUE!
+functions	if	678	IF({1},"yes","no")	(ErrorValue('#N/A'),)	e	#N/A
+functions	if	679	IF({1},"yes","no")	('TRUE',)	str	'yes'
+functions	if	680	IF({1},"yes","no")	('false',)	str	'no'
+functions	if	681	IF({1},"yes","no")	(1.0,)	str	'yes'
+functions	if	682	IF(FALSE,1)	()	b	False
+functions	if	683	IF(TRUE,,2)	()	n	0.0
+functions	if	684	IF(FALSE,1,)	()	n	0.0
+functions	if	685	IF(TRUE,{1})	(None,)	n	0.0
+functions	and	686	AND({1},{2})	(True, True)	b	True
+functions	and	687	AND({1}:{2})	(True, True)	b	True
+functions	and	688	AND({1},{2})	(True, False)	b	False
+functions	and	689	AND({1}:{2})	(True, False)	b	False
+functions	and	690	AND({1},{2})	(1.0, 0.0)	b	False
+functions	and	691	AND({1}:{2})	(1.0, 0.0)	b	False
+functions	and	692	AND({1},{2})	('TRUE', True)	b	True
+functions	and	693	AND({1}:{2})	('TRUE', True)	b	True
+functions	and	694	AND({1},{2})	('x', True)	b	True
+functions	and	695	AND({1}:{2})	('x', True)	b	True
+functions	and	696	AND({1},{2})	(None, True)	b	True
+functions	and	697	AND({1}:{2})	(None, True)	b	True
+functions	and	698	AND({1},{2})	(ErrorValue('#N/A'), True)	e	#N/A
+functions	and	699	AND({1}:{2})	(ErrorValue('#N/A'), True)	e	#N/A
+functions	and	700	AND({1},{2})	(2.5, 'abc')	b	True
+functions	and	701	AND({1}:{2})	(2.5, 'abc')	b	True
+functions	or	702	OR({1},{2})	(True, True)	b	True
+functions	or	703	OR({1}:{2})	(True, True)	b	True
+functions	or	704	OR({1},{2})	(True, False)	b	True
+functions	or	705	OR({1}:{2})	(True, False)	b	True
+functions	or	706	OR({1},{2})	(1.0, 0.0)	b	True
+functions	or	707	OR({1}:{2})	(1.0, 0.0)	b	True
+functions	or	708	OR({1},{2})	('TRUE', True)	b	True
+functions	or	709	OR({1}:{2})	('TRUE', True)	b	True
+functions	or	710	OR({1},{2})	('x', True)	b	True
+functions	or	711	OR({1}:{2})	('x', True)	b	True
+functions	or	712	OR({1},{2})	(None, True)	b	True
+functions	or	713	OR({1}:{2})	(None, True)	b	True
+functions	or	714	OR({1},{2})	(ErrorValue('#N/A'), True)	e	#N/A
+functions	or	715	OR({1}:{2})	(ErrorValue('#N/A'), True)	e	#N/A
+functions	or	716	OR({1},{2})	(2.5, 'abc')	b	True
+functions	or	717	OR({1}:{2})	(2.5, 'abc')	b	True
+functions	iferror	718	IFERROR({1},"alt")	(2.5,)	n	2.5
+functions	ifna	719	_xlfn.IFNA({1},"alt")	(2.5,)	n	2.5
+functions	iferror	720	IFERROR({1},"alt")	(-2.5,)	n	-2.5
+functions	ifna	721	_xlfn.IFNA({1},"alt")	(-2.5,)	n	-2.5
+functions	iferror	722	IFERROR({1},"alt")	(0.0,)	n	0.0
+functions	ifna	723	_xlfn.IFNA({1},"alt")	(0.0,)	n	0.0
+functions	iferror	724	IFERROR({1},"alt")	('3',)	str	'3'
+functions	ifna	725	_xlfn.IFNA({1},"alt")	('3',)	str	'3'
+functions	iferror	726	IFERROR({1},"alt")	('abc',)	str	'abc'
+functions	ifna	727	_xlfn.IFNA({1},"alt")	('abc',)	str	'abc'
+functions	iferror	728	IFERROR({1},"alt")	(True,)	b	True
+functions	ifna	729	_xlfn.IFNA({1},"alt")	(True,)	b	True
+functions	iferror	730	IFERROR({1},"alt")	(False,)	b	False
+functions	ifna	731	_xlfn.IFNA({1},"alt")	(False,)	b	False
+functions	iferror	732	IFERROR({1},"alt")	(None,)	n	0.0
+functions	ifna	733	_xlfn.IFNA({1},"alt")	(None,)	n	0.0
+functions	iferror	734	IFERROR({1},"alt")	(FormulaInput('=""'),)	str	''
+functions	ifna	735	_xlfn.IFNA({1},"alt")	(FormulaInput('=""'),)	str	''
+functions	iferror	736	IFERROR({1},"alt")	(ErrorValue('#N/A'),)	str	'alt'
+functions	ifna	737	_xlfn.IFNA({1},"alt")	(ErrorValue('#N/A'),)	str	'alt'
+functions	iferror	738	IFERROR(1/0,"alt")	()	str	'alt'
+functions	ifna	739	_xlfn.IFNA(1/0,"alt")	()	e	#DIV/0!
+functions	concatenate	740	CONCATENATE({1},"|",{1})	(2.5,)	str	'2.5|2.5'
+functions	concatenate	741	CONCATENATE({1},"|",{1})	(-2.5,)	str	'-2.5|-2.5'
+functions	concatenate	742	CONCATENATE({1},"|",{1})	(0.0,)	str	'0|0'
+functions	concatenate	743	CONCATENATE({1},"|",{1})	('3',)	str	'3|3'
+functions	concatenate	744	CONCATENATE({1},"|",{1})	('abc',)	str	'abc|abc'
+functions	concatenate	745	CONCATENATE({1},"|",{1})	(True,)	str	'TRUE|TRUE'
+functions	concatenate	746	CONCATENATE({1},"|",{1})	(False,)	str	'FALSE|FALSE'
+functions	concatenate	747	CONCATENATE({1},"|",{1})	(None,)	str	'|'
+functions	concatenate	748	CONCATENATE({1},"|",{1})	(FormulaInput('=""'),)	str	'|'
+functions	concatenate	749	CONCATENATE({1},"|",{1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	left	750	LEFT({1},{2})	('hello', 2.0)	str	'he'
+functions	right	751	RIGHT({1},{2})	('hello', 2.0)	str	'lo'
+functions	mid	752	MID({1},2,{2})	('hello', 2.0)	str	'el'
+functions	left	753	LEFT({1},{2})	('hello', 0.0)	str	''
+functions	right	754	RIGHT({1},{2})	('hello', 0.0)	str	''
+functions	mid	755	MID({1},2,{2})	('hello', 0.0)	str	''
+functions	left	756	LEFT({1},{2})	('hello', 10.0)	str	'hello'
+functions	right	757	RIGHT({1},{2})	('hello', 10.0)	str	'hello'
+functions	mid	758	MID({1},2,{2})	('hello', 10.0)	str	'ello'
+functions	left	759	LEFT({1},{2})	('hello', -1.0)	e	#VALUE!
+functions	right	760	RIGHT({1},{2})	('hello', -1.0)	e	#VALUE!
+functions	mid	761	MID({1},2,{2})	('hello', -1.0)	e	#VALUE!
+functions	left	762	LEFT({1},{2})	('', 1.0)	str	''
+functions	right	763	RIGHT({1},{2})	('', 1.0)	str	''
+functions	mid	764	MID({1},2,{2})	('', 1.0)	str	''
+functions	left	765	LEFT({1},{2})	(12345.0, 2.0)	str	'12'
+functions	right	766	RIGHT({1},{2})	(12345.0, 2.0)	str	'45'
+functions	mid	767	MID({1},2,{2})	(12345.0, 2.0)	str	'23'
+functions	left	768	LEFT({1},{2})	(True, 2.0)	str	'TR'
+functions	right	769	RIGHT({1},{2})	(True, 2.0)	str	'UE'
+functions	mid	770	MID({1},2,{2})	(True, 2.0)	str	'RU'
+functions	left	771	LEFT({1})	('hello',)	str	'h'
+functions	mid	772	MID({1},0,2)	('hello',)	e	#VALUE!
+functions	mid	773	MID({1},9,2)	('hello',)	str	''
+functions	find	774	FIND({1},{2},{3})	('l', 'hello', 1.0)	n	3.0
+functions	find	775	FIND({1},{2},{3})	('L', 'hello', 1.0)	e	#VALUE!
+functions	find	776	FIND({1},{2},{3})	('l', 'hello', 4.0)	n	4.0
+functions	find	777	FIND({1},{2},{3})	('', 'hello', 3.0)	n	3.0
+functions	find	778	FIND({1},{2},{3})	('z', 'hello', 1.0)	e	#VALUE!
+functions	find	779	FIND({1},{2},{3})	('l', 'hello', 9.0)	e	#VALUE!
+functions	find	780	FIND({1},{2},{3})	('l', 'hello', 0.0)	e	#VALUE!
+functions	trim	781	TRIM({1})	('  a   b  ',)	str	'a b'
+functions	text	782	TEXT({1},"0.00")	(1234.5,)	str	'1234.50'
+functions	text	783	TEXT({1},"#,##0")	(1234.5,)	str	'1,235'
+functions	text	784	TEXT({1},"0%")	(1234.5,)	str	'123450%'
+functions	text	785	TEXT({1},"yyyy-mm-dd")	(1234.5,)	str	'1903-05-18'
+functions	text	786	TEXT({1},"General")	(1234.5,)	str	'1234.5'
+functions	text	787	TEXT({1},"@")	(1234.5,)	str	'1234.5'
+functions	text	788	TEXT({1},"0.0E+00")	(1234.5,)	str	'1.2E+03'
+functions	text	789	TEXT({1},"mmm d")	(1234.5,)	str	'May 18'
+functions	text	790	TEXT({1},"0.00")	(-1234.5,)	str	'-1234.50'
+functions	text	791	TEXT({1},"#,##0")	(-1234.5,)	str	'-1,235'
+functions	text	792	TEXT({1},"0%")	(-1234.5,)	str	'-123450%'
+functions	text	793	TEXT({1},"yyyy-mm-dd")	(-1234.5,)	e	#VALUE!
+functions	text	794	TEXT({1},"General")	(-1234.5,)	str	'-1234.5'
+functions	text	795	TEXT({1},"@")	(-1234.5,)	str	'-1234.5'
+functions	text	796	TEXT({1},"0.0E+00")	(-1234.5,)	str	'-1.2E+03'
+functions	text	797	TEXT({1},"mmm d")	(-1234.5,)	e	#VALUE!
+functions	text	798	TEXT({1},"0.00")	(0.5,)	str	'0.50'
+functions	text	799	TEXT({1},"#,##0")	(0.5,)	str	'1'
+functions	text	800	TEXT({1},"0%")	(0.5,)	str	'50%'
+functions	text	801	TEXT({1},"yyyy-mm-dd")	(0.5,)	str	'1900-01-00'
+functions	text	802	TEXT({1},"General")	(0.5,)	str	'0.5'
+functions	text	803	TEXT({1},"@")	(0.5,)	str	'0.5'
+functions	text	804	TEXT({1},"0.0E+00")	(0.5,)	str	'5.0E-01'
+functions	text	805	TEXT({1},"mmm d")	(0.5,)	str	'Jan 0'
+functions	text	806	TEXT({1},"0.00")	(45720.75,)	str	'45720.75'
+functions	text	807	TEXT({1},"#,##0")	(45720.75,)	str	'45,721'
+functions	text	808	TEXT({1},"0%")	(45720.75,)	str	'4572075%'
+functions	text	809	TEXT({1},"yyyy-mm-dd")	(45720.75,)	str	'2025-03-04'
+functions	text	810	TEXT({1},"General")	(45720.75,)	str	'45720.75'
+functions	text	811	TEXT({1},"@")	(45720.75,)	str	'45720.75'
+functions	text	812	TEXT({1},"0.0E+00")	(45720.75,)	str	'4.6E+04'
+functions	text	813	TEXT({1},"mmm d")	(45720.75,)	str	'Mar 4'
+functions	text	814	TEXT({1},"0.00")	('abc',)	str	'abc'
+functions	text	815	TEXT({1},"#,##0")	('abc',)	str	'abc'
+functions	text	816	TEXT({1},"0%")	('abc',)	str	'abc'
+functions	text	817	TEXT({1},"yyyy-mm-dd")	('abc',)	str	'abc'
+functions	text	818	TEXT({1},"General")	('abc',)	str	'abc'
+functions	text	819	TEXT({1},"@")	('abc',)	str	'abc'
+functions	text	820	TEXT({1},"0.0E+00")	('abc',)	str	'abc'
+functions	text	821	TEXT({1},"mmm d")	('abc',)	str	'abc'
+functions	text	822	TEXT({1},"0.00")	(True,)	str	'TRUE'
+functions	text	823	TEXT({1},"#,##0")	(True,)	str	'TRUE'
+functions	text	824	TEXT({1},"0%")	(True,)	str	'TRUE'
+functions	text	825	TEXT({1},"yyyy-mm-dd")	(True,)	str	'TRUE'
+functions	text	826	TEXT({1},"General")	(True,)	str	'TRUE'
+functions	text	827	TEXT({1},"@")	(True,)	str	'TRUE'
+functions	text	828	TEXT({1},"0.0E+00")	(True,)	str	'TRUE'
+functions	text	829	TEXT({1},"mmm d")	(True,)	str	'TRUE'
+functions	text	830	TEXT({1},"0.00")	(None,)	str	'0.00'
+functions	text	831	TEXT({1},"#,##0")	(None,)	str	'0'
+functions	text	832	TEXT({1},"0%")	(None,)	str	'0%'
+functions	text	833	TEXT({1},"yyyy-mm-dd")	(None,)	str	'1900-01-00'
+functions	text	834	TEXT({1},"General")	(None,)	str	'0'
+functions	text	835	TEXT({1},"@")	(None,)	str	'0'
+functions	text	836	TEXT({1},"0.0E+00")	(None,)	str	'0.0E+00'
+functions	text	837	TEXT({1},"mmm d")	(None,)	str	'Jan 0'
+functions	date	838	DATE({1},{2},{3})	(2025.0, 3.0, 4.0)	n	45720.0
+functions	date	839	DATE({1},{2},{3})	(2025.0, 14.0, 1.0)	n	46054.0
+functions	date	840	DATE({1},{2},{3})	(2025.0, 0.0, 0.0)	n	45626.0
+functions	date	841	DATE({1},{2},{3})	(2024.0, 2.0, 30.0)	n	45352.0
+functions	date	842	DATE({1},{2},{3})	(99.0, 1.0, 1.0)	n	36161.0
+functions	date	843	DATE({1},{2},{3})	(2025.5, 3.7, 4.9)	n	45720.0
+functions	date	844	DATE({1},{2},{3})	(-1.0, 1.0, 1.0)	e	#NUM!
+functions	weekday	845	WEEKDAY({1},{2})	(45720.0, 1.0)	n	3.0
+functions	weekday	846	WEEKDAY({1},{2})	(45720.0, 2.0)	n	2.0
+functions	weekday	847	WEEKDAY({1},{2})	(45720.0, 3.0)	n	1.0
+functions	weekday	848	WEEKDAY({1},{2})	(45720.0, 11.0)	n	2.0
+functions	weekday	849	WEEKDAY({1},{2})	(45720.0, 17.0)	n	3.0
+functions	weekday	850	WEEKDAY({1},{2})	(45720.0, 4.0)	e	#NUM!
+functions	eomonth	851	EOMONTH({1},{2})	(45720.0, 0.0)	n	45747.0
+functions	edate	852	EDATE({1},{2})	(45720.0, 0.0)	n	45720.0
+functions	eomonth	853	EOMONTH({1},{2})	(45720.0, 1.0)	n	45777.0
+functions	edate	854	EDATE({1},{2})	(45720.0, 1.0)	n	45751.0
+functions	eomonth	855	EOMONTH({1},{2})	(45720.0, -1.0)	n	45716.0
+functions	edate	856	EDATE({1},{2})	(45720.0, -1.0)	n	45692.0
+functions	eomonth	857	EOMONTH({1},{2})	(45720.0, 12.0)	n	46112.0
+functions	edate	858	EDATE({1},{2})	(45720.0, 12.0)	n	46085.0
+functions	eomonth	859	EOMONTH({1},{2})	(45720.0, 1.5)	n	45777.0
+functions	edate	860	EDATE({1},{2})	(45720.0, 1.5)	n	45751.0
+functions	eomonth	861	EOMONTH({1},{2})	(45720.0, -13.0)	n	45351.0
+functions	edate	862	EDATE({1},{2})	(45720.0, -13.0)	n	45326.0
+functions	weekday	863	WEEKDAY({1},{2})	(45351.0, 1.0)	n	5.0
+functions	weekday	864	WEEKDAY({1},{2})	(45351.0, 2.0)	n	4.0
+functions	weekday	865	WEEKDAY({1},{2})	(45351.0, 3.0)	n	3.0
+functions	weekday	866	WEEKDAY({1},{2})	(45351.0, 11.0)	n	4.0
+functions	weekday	867	WEEKDAY({1},{2})	(45351.0, 17.0)	n	5.0
+functions	weekday	868	WEEKDAY({1},{2})	(45351.0, 4.0)	e	#NUM!
+functions	eomonth	869	EOMONTH({1},{2})	(45351.0, 0.0)	n	45351.0
+functions	edate	870	EDATE({1},{2})	(45351.0, 0.0)	n	45351.0
+functions	eomonth	871	EOMONTH({1},{2})	(45351.0, 1.0)	n	45382.0
+functions	edate	872	EDATE({1},{2})	(45351.0, 1.0)	n	45380.0
+functions	eomonth	873	EOMONTH({1},{2})	(45351.0, -1.0)	n	45322.0
+functions	edate	874	EDATE({1},{2})	(45351.0, -1.0)	n	45320.0
+functions	eomonth	875	EOMONTH({1},{2})	(45351.0, 12.0)	n	45716.0
+functions	edate	876	EDATE({1},{2})	(45351.0, 12.0)	n	45716.0
+functions	eomonth	877	EOMONTH({1},{2})	(45351.0, 1.5)	n	45382.0
+functions	edate	878	EDATE({1},{2})	(45351.0, 1.5)	n	45380.0
+functions	eomonth	879	EOMONTH({1},{2})	(45351.0, -13.0)	n	44957.0
+functions	edate	880	EDATE({1},{2})	(45351.0, -13.0)	n	44955.0
+functions	weekday	881	WEEKDAY({1},{2})	(1.0, 1.0)	n	1.0
+functions	weekday	882	WEEKDAY({1},{2})	(1.0, 2.0)	n	7.0
+functions	weekday	883	WEEKDAY({1},{2})	(1.0, 3.0)	n	6.0
+functions	weekday	884	WEEKDAY({1},{2})	(1.0, 11.0)	n	7.0
+functions	weekday	885	WEEKDAY({1},{2})	(1.0, 17.0)	n	1.0
+functions	weekday	886	WEEKDAY({1},{2})	(1.0, 4.0)	e	#NUM!
+functions	eomonth	887	EOMONTH({1},{2})	(1.0, 0.0)	n	31.0
+functions	edate	888	EDATE({1},{2})	(1.0, 0.0)	n	1.0
+functions	eomonth	889	EOMONTH({1},{2})	(1.0, 1.0)	n	59.0
+functions	edate	890	EDATE({1},{2})	(1.0, 1.0)	n	32.0
+functions	eomonth	891	EOMONTH({1},{2})	(1.0, -1.0)	e	#NUM!
+functions	edate	892	EDATE({1},{2})	(1.0, -1.0)	e	#NUM!
+functions	eomonth	893	EOMONTH({1},{2})	(1.0, 12.0)	n	397.0
+functions	edate	894	EDATE({1},{2})	(1.0, 12.0)	n	367.0
+functions	eomonth	895	EOMONTH({1},{2})	(1.0, 1.5)	n	59.0
+functions	edate	896	EDATE({1},{2})	(1.0, 1.5)	n	32.0
+functions	eomonth	897	EOMONTH({1},{2})	(1.0, -13.0)	e	#NUM!
+functions	edate	898	EDATE({1},{2})	(1.0, -13.0)	e	#NUM!
+functions	weekday	899	WEEKDAY({1},{2})	(59.0, 1.0)	n	3.0
+functions	weekday	900	WEEKDAY({1},{2})	(59.0, 2.0)	n	2.0
+functions	weekday	901	WEEKDAY({1},{2})	(59.0, 3.0)	n	1.0
+functions	weekday	902	WEEKDAY({1},{2})	(59.0, 11.0)	n	2.0
+functions	weekday	903	WEEKDAY({1},{2})	(59.0, 17.0)	n	3.0
+functions	weekday	904	WEEKDAY({1},{2})	(59.0, 4.0)	e	#NUM!
+functions	eomonth	905	EOMONTH({1},{2})	(59.0, 0.0)	n	59.0
+functions	edate	906	EDATE({1},{2})	(59.0, 0.0)	n	59.0
+functions	eomonth	907	EOMONTH({1},{2})	(59.0, 1.0)	n	91.0
+functions	edate	908	EDATE({1},{2})	(59.0, 1.0)	n	88.0
+functions	eomonth	909	EOMONTH({1},{2})	(59.0, -1.0)	n	31.0
+functions	edate	910	EDATE({1},{2})	(59.0, -1.0)	n	28.0
+functions	eomonth	911	EOMONTH({1},{2})	(59.0, 12.0)	n	425.0
+functions	edate	912	EDATE({1},{2})	(59.0, 12.0)	n	425.0
+functions	eomonth	913	EOMONTH({1},{2})	(59.0, 1.5)	n	91.0
+functions	edate	914	EDATE({1},{2})	(59.0, 1.5)	n	88.0
+functions	eomonth	915	EOMONTH({1},{2})	(59.0, -13.0)	e	#NUM!
+functions	edate	916	EDATE({1},{2})	(59.0, -13.0)	e	#NUM!
+functions	weekday	917	WEEKDAY({1},{2})	(60.0, 1.0)	n	4.0
+functions	weekday	918	WEEKDAY({1},{2})	(60.0, 2.0)	n	3.0
+functions	weekday	919	WEEKDAY({1},{2})	(60.0, 3.0)	n	2.0
+functions	weekday	920	WEEKDAY({1},{2})	(60.0, 11.0)	n	3.0
+functions	weekday	921	WEEKDAY({1},{2})	(60.0, 17.0)	n	4.0
+functions	weekday	922	WEEKDAY({1},{2})	(60.0, 4.0)	e	#NUM!
+functions	eomonth	923	EOMONTH({1},{2})	(60.0, 0.0)	n	59.0
+functions	edate	924	EDATE({1},{2})	(60.0, 0.0)	n	59.0
+functions	eomonth	925	EOMONTH({1},{2})	(60.0, 1.0)	n	91.0
+functions	edate	926	EDATE({1},{2})	(60.0, 1.0)	n	89.0
+functions	eomonth	927	EOMONTH({1},{2})	(60.0, -1.0)	n	31.0
+functions	edate	928	EDATE({1},{2})	(60.0, -1.0)	n	29.0
+functions	eomonth	929	EOMONTH({1},{2})	(60.0, 12.0)	n	425.0
+functions	edate	930	EDATE({1},{2})	(60.0, 12.0)	n	425.0
+functions	eomonth	931	EOMONTH({1},{2})	(60.0, 1.5)	n	91.0
+functions	edate	932	EDATE({1},{2})	(60.0, 1.5)	n	89.0
+functions	eomonth	933	EOMONTH({1},{2})	(60.0, -13.0)	e	#NUM!
+functions	edate	934	EDATE({1},{2})	(60.0, -13.0)	e	#NUM!
+functions	weekday	935	WEEKDAY({1},{2})	(61.0, 1.0)	n	5.0
+functions	weekday	936	WEEKDAY({1},{2})	(61.0, 2.0)	n	4.0
+functions	weekday	937	WEEKDAY({1},{2})	(61.0, 3.0)	n	3.0
+functions	weekday	938	WEEKDAY({1},{2})	(61.0, 11.0)	n	4.0
+functions	weekday	939	WEEKDAY({1},{2})	(61.0, 17.0)	n	5.0
+functions	weekday	940	WEEKDAY({1},{2})	(61.0, 4.0)	e	#NUM!
+functions	eomonth	941	EOMONTH({1},{2})	(61.0, 0.0)	n	91.0
+functions	edate	942	EDATE({1},{2})	(61.0, 0.0)	n	61.0
+functions	eomonth	943	EOMONTH({1},{2})	(61.0, 1.0)	n	121.0
+functions	edate	944	EDATE({1},{2})	(61.0, 1.0)	n	92.0
+functions	eomonth	945	EOMONTH({1},{2})	(61.0, -1.0)	n	59.0
+functions	edate	946	EDATE({1},{2})	(61.0, -1.0)	n	32.0
+functions	eomonth	947	EOMONTH({1},{2})	(61.0, 12.0)	n	456.0
+functions	edate	948	EDATE({1},{2})	(61.0, 12.0)	n	426.0
+functions	eomonth	949	EOMONTH({1},{2})	(61.0, 1.5)	n	121.0
+functions	edate	950	EDATE({1},{2})	(61.0, 1.5)	n	92.0
+functions	eomonth	951	EOMONTH({1},{2})	(61.0, -13.0)	e	#NUM!
+functions	edate	952	EDATE({1},{2})	(61.0, -13.0)	e	#NUM!
+functions	edate	953	EDATE(DATE(2024,1,31),1)	()	n	45351.0
+functions	edate	954	EDATE(DATE(1900,1,29),1)	()	n	59.0
+functions	eomonth	955	EOMONTH(DATE(1900,1,15),1)	()	n	59.0
+functions	vlookup	956	VLOOKUP({1},$Z$1:$AA$6,2,FALSE)	('a',)	n	1.0
+functions	vlookup	957	VLOOKUP({1},$Z$1:$AA$6,2,)	('a',)	n	1.0
+functions	match	958	MATCH({1},$Z$1:$Z$6,0)	('a',)	n	1.0
+functions	hlookup	959	HLOOKUP({1},{2}:{4},1,FALSE)	('a', 'a', 1.0, 'b')	str	'a'
+functions	vlookup	960	VLOOKUP({1},$Z$1:$AA$6,2,FALSE)	('B',)	n	2.0
+functions	vlookup	961	VLOOKUP({1},$Z$1:$AA$6,2,)	('B',)	n	2.0
+functions	match	962	MATCH({1},$Z$1:$Z$6,0)	('B',)	n	2.0
+functions	hlookup	963	HLOOKUP({1},{2}:{4},1,FALSE)	('B', 'a', 1.0, 'b')	str	'b'
+functions	vlookup	964	VLOOKUP({1},$Z$1:$AA$6,2,FALSE)	('c',)	n	3.0
+functions	vlookup	965	VLOOKUP({1},$Z$1:$AA$6,2,)	('c',)	n	3.0
+functions	match	966	MATCH({1},$Z$1:$Z$6,0)	('c',)	n	3.0
+functions	hlookup	967	HLOOKUP({1},{2}:{4},1,FALSE)	('c', 'a', 1.0, 'b')	e	#N/A
+functions	vlookup	968	VLOOKUP({1},$Z$1:$AA$6,2,FALSE)	(1.0,)	str	'one'
+functions	vlookup	969	VLOOKUP({1},$Z$1:$AA$6,2,)	(1.0,)	str	'one'
+functions	match	970	MATCH({1},$Z$1:$Z$6,0)	(1.0,)	n	4.0
+functions	hlookup	971	HLOOKUP({1},{2}:{4},1,FALSE)	(1.0, 'a', 1.0, 'b')	n	1.0
+functions	vlookup	972	VLOOKUP({1},$Z$1:$AA$6,2,FALSE)	(2.0,)	str	'two'
+functions	vlookup	973	VLOOKUP({1},$Z$1:$AA$6,2,)	(2.0,)	str	'two'
+functions	match	974	MATCH({1},$Z$1:$Z$6,0)	(2.0,)	n	5.0
+functions	hlookup	975	HLOOKUP({1},{2}:{4},1,FALSE)	(2.0, 'a', 1.0, 'b')	e	#N/A
+functions	vlookup	976	VLOOKUP({1},$Z$1:$AA$6,2,FALSE)	('zz',)	e	#N/A
+functions	vlookup	977	VLOOKUP({1},$Z$1:$AA$6,2,)	('zz',)	e	#N/A
+functions	match	978	MATCH({1},$Z$1:$Z$6,0)	('zz',)	e	#N/A
+functions	hlookup	979	HLOOKUP({1},{2}:{4},1,FALSE)	('zz', 'a', 1.0, 'b')	e	#N/A
+functions	vlookup	980	VLOOKUP({1},$Z$1:$AA$6,2,FALSE)	('b*',)	n	2.0
+functions	vlookup	981	VLOOKUP({1},$Z$1:$AA$6,2,)	('b*',)	n	2.0
+functions	match	982	MATCH({1},$Z$1:$Z$6,0)	('b*',)	n	2.0
+functions	hlookup	983	HLOOKUP({1},{2}:{4},1,FALSE)	('b*', 'a', 1.0, 'b')	str	'b'
+functions	vlookup	984	VLOOKUP({1},$Z$1:$AA$6,2,FALSE)	('?',)	n	1.0
+functions	vlookup	985	VLOOKUP({1},$Z$1:$AA$6,2,)	('?',)	n	1.0
+functions	match	986	MATCH({1},$Z$1:$Z$6,0)	('?',)	n	1.0
+functions	hlookup	987	HLOOKUP({1},{2}:{4},1,FALSE)	('?', 'a', 1.0, 'b')	str	'a'
+functions	vlookup	988	VLOOKUP({1},$Z$1:$AA$6,2,FALSE)	('~*',)	e	#N/A
+functions	vlookup	989	VLOOKUP({1},$Z$1:$AA$6,2,)	('~*',)	e	#N/A
+functions	match	990	MATCH({1},$Z$1:$Z$6,0)	('~*',)	e	#N/A
+functions	hlookup	991	HLOOKUP({1},{2}:{4},1,FALSE)	('~*', 'a', 1.0, 'b')	e	#N/A
+functions	vlookup	992	VLOOKUP({1},$Z$1:$AA$6,2,FALSE)	(True,)	e	#N/A
+functions	vlookup	993	VLOOKUP({1},$Z$1:$AA$6,2,)	(True,)	e	#N/A
+functions	match	994	MATCH({1},$Z$1:$Z$6,0)	(True,)	e	#N/A
+functions	hlookup	995	HLOOKUP({1},{2}:{4},1,FALSE)	(True, 'a', 1.0, 'b')	e	#N/A
+functions	vlookup	996	VLOOKUP({1},$Z$1:$AA$6,2,FALSE)	(None,)	e	#N/A
+functions	vlookup	997	VLOOKUP({1},$Z$1:$AA$6,2,)	(None,)	e	#N/A
+functions	match	998	MATCH({1},$Z$1:$Z$6,0)	(None,)	e	#N/A
+functions	hlookup	999	HLOOKUP({1},{2}:{4},1,FALSE)	(None, 'a', 1.0, 'b')	e	#N/A
+functions	vlookup	1000	VLOOKUP({1},$Z$1:$AA$6,2,FALSE)	(ErrorValue('#N/A'),)	e	#N/A
+functions	vlookup	1001	VLOOKUP({1},$Z$1:$AA$6,2,)	(ErrorValue('#N/A'),)	e	#N/A
+functions	match	1002	MATCH({1},$Z$1:$Z$6,0)	(ErrorValue('#N/A'),)	e	#N/A
+functions	hlookup	1003	HLOOKUP({1},{2}:{4},1,FALSE)	(ErrorValue('#N/A'), 'a', 1.0, 'b')	e	#N/A
+functions	vlookup	1004	VLOOKUP({1},$Z$1:$AA$6,2,FALSE)	(4.0,)	e	#N/A
+functions	vlookup	1005	VLOOKUP({1},$Z$1:$AA$6,2,)	(4.0,)	e	#N/A
+functions	match	1006	MATCH({1},$Z$1:$Z$6,0)	(4.0,)	e	#N/A
+functions	hlookup	1007	HLOOKUP({1},{2}:{4},1,FALSE)	(4.0, 'a', 1.0, 'b')	e	#N/A
+functions	vlookup	1008	VLOOKUP({1},$AC$1:$AD$5,2)	(0.0,)	e	#N/A
+functions	vlookup	1009	VLOOKUP({1},$AC$1:$AD$5,2,TRUE)	(0.0,)	e	#N/A
+functions	match	1010	MATCH({1},$AC$1:$AC$5)	(0.0,)	e	#N/A
+functions	match	1011	MATCH({1},$AC$1:$AC$5,1)	(0.0,)	e	#N/A
+functions	match	1012	MATCH({1},$AF$1:$AF$5,-1)	(0.0,)	n	5.0
+functions	vlookup	1013	VLOOKUP({1},$AC$1:$AD$5,2)	(1.0,)	str	'x1'
+functions	vlookup	1014	VLOOKUP({1},$AC$1:$AD$5,2,TRUE)	(1.0,)	str	'x1'
+functions	match	1015	MATCH({1},$AC$1:$AC$5)	(1.0,)	n	1.0
+functions	match	1016	MATCH({1},$AC$1:$AC$5,1)	(1.0,)	n	1.0
+functions	match	1017	MATCH({1},$AF$1:$AF$5,-1)	(1.0,)	n	5.0
+functions	vlookup	1018	VLOOKUP({1},$AC$1:$AD$5,2)	(2.0,)	str	'x1'
+functions	vlookup	1019	VLOOKUP({1},$AC$1:$AD$5,2,TRUE)	(2.0,)	str	'x1'
+functions	match	1020	MATCH({1},$AC$1:$AC$5)	(2.0,)	n	1.0
+functions	match	1021	MATCH({1},$AC$1:$AC$5,1)	(2.0,)	n	1.0
+functions	match	1022	MATCH({1},$AF$1:$AF$5,-1)	(2.0,)	n	4.0
+functions	vlookup	1023	VLOOKUP({1},$AC$1:$AD$5,2)	(3.0,)	str	'x3'
+functions	vlookup	1024	VLOOKUP({1},$AC$1:$AD$5,2,TRUE)	(3.0,)	str	'x3'
+functions	match	1025	MATCH({1},$AC$1:$AC$5)	(3.0,)	n	2.0
+functions	match	1026	MATCH({1},$AC$1:$AC$5,1)	(3.0,)	n	2.0
+functions	match	1027	MATCH({1},$AF$1:$AF$5,-1)	(3.0,)	n	4.0
+functions	vlookup	1028	VLOOKUP({1},$AC$1:$AD$5,2)	(6.0,)	str	'x5'
+functions	vlookup	1029	VLOOKUP({1},$AC$1:$AD$5,2,TRUE)	(6.0,)	str	'x5'
+functions	match	1030	MATCH({1},$AC$1:$AC$5)	(6.0,)	n	3.0
+functions	match	1031	MATCH({1},$AC$1:$AC$5,1)	(6.0,)	n	3.0
+functions	match	1032	MATCH({1},$AF$1:$AF$5,-1)	(6.0,)	n	2.0
+functions	vlookup	1033	VLOOKUP({1},$AC$1:$AD$5,2)	(9.0,)	str	'x9'
+functions	vlookup	1034	VLOOKUP({1},$AC$1:$AD$5,2,TRUE)	(9.0,)	str	'x9'
+functions	match	1035	MATCH({1},$AC$1:$AC$5)	(9.0,)	n	5.0
+functions	match	1036	MATCH({1},$AC$1:$AC$5,1)	(9.0,)	n	5.0
+functions	match	1037	MATCH({1},$AF$1:$AF$5,-1)	(9.0,)	n	1.0
+functions	vlookup	1038	VLOOKUP({1},$AC$1:$AD$5,2)	(10.0,)	str	'x9'
+functions	vlookup	1039	VLOOKUP({1},$AC$1:$AD$5,2,TRUE)	(10.0,)	str	'x9'
+functions	match	1040	MATCH({1},$AC$1:$AC$5)	(10.0,)	n	5.0
+functions	match	1041	MATCH({1},$AC$1:$AC$5,1)	(10.0,)	n	5.0
+functions	match	1042	MATCH({1},$AF$1:$AF$5,-1)	(10.0,)	e	#N/A
+functions	vlookup	1043	VLOOKUP({1},$AC$1:$AD$5,2)	('5',)	e	#N/A
+functions	vlookup	1044	VLOOKUP({1},$AC$1:$AD$5,2,TRUE)	('5',)	e	#N/A
+functions	match	1045	MATCH({1},$AC$1:$AC$5)	('5',)	e	#N/A
+functions	match	1046	MATCH({1},$AC$1:$AC$5,1)	('5',)	e	#N/A
+functions	match	1047	MATCH({1},$AF$1:$AF$5,-1)	('5',)	e	#N/A
+functions	vlookup	1048	VLOOKUP({1},$AC$1:$AD$5,2)	(5.5,)	str	'x5'
+functions	vlookup	1049	VLOOKUP({1},$AC$1:$AD$5,2,TRUE)	(5.5,)	str	'x5'
+functions	match	1050	MATCH({1},$AC$1:$AC$5)	(5.5,)	n	3.0
+functions	match	1051	MATCH({1},$AC$1:$AC$5,1)	(5.5,)	n	3.0
+functions	match	1052	MATCH({1},$AF$1:$AF$5,-1)	(5.5,)	n	2.0
+functions	vlookup	1053	VLOOKUP(1,$AC$1:$AD$5,3,FALSE)	()	e	#REF!
+functions	vlookup	1054	VLOOKUP(1,$AC$1:$AD$5,0,FALSE)	()	e	#VALUE!
+functions	index	1055	INDEX($Z$1:$AA$6,{1},{2})	(1.0, 1.0)	str	'a'
+functions	index	1056	INDEX($Z$1:$AA$6,{1},{2})	(2.0, 2.0)	n	2.0
+functions	index	1057	INDEX($Z$1:$AA$6,{1},{2})	(6.0, 1.0)	str	'B'
+functions	index	1058	INDEX($Z$1:$AA$6,{1},{2})	(7.0, 1.0)	e	#REF!
+functions	index	1059	INDEX($Z$1:$AA$6,{1},{2})	(0.0, 1.0)	e	#VALUE!
+functions	index	1060	INDEX($Z$1:$AA$6,{1},{2})	(1.0, 3.0)	e	#REF!
+functions	index	1061	INDEX($Z$1:$Z$6,3)	()	str	'c'
+functions	index	1062	INDEX({1}:{4},3)	('a', 1.0, 'b', 2.0)	str	'b'
+functions	choose	1063	CHOOSE({1},"x","y","z")	(1.0,)	str	'x'
+functions	choose	1064	CHOOSE({1},"x","y","z")	(2.0,)	str	'y'
+functions	choose	1065	CHOOSE({1},"x","y","z")	(3.0,)	str	'z'
+functions	choose	1066	CHOOSE({1},"x","y","z")	(0.0,)	e	#VALUE!
+functions	choose	1067	CHOOSE({1},"x","y","z")	(4.0,)	e	#VALUE!
+functions	choose	1068	CHOOSE({1},"x","y","z")	(2.9,)	str	'y'
+functions	rows	1069	ROWS($Z$1:$AA$6)	()	n	6.0
+functions	columns	1070	COLUMNS($Z$1:$AA$6)	()	n	2.0
+functions	row	1071	ROW($Z$4)	()	n	4.0
+functions	column	1072	COLUMN($AA$4)	()	n	27.0
+functions	row	1073	ROW()	()	n	1073.0
+functions	column	1074	COLUMN()	()	n	1.0
+functions	sumproduct	1075	SUMPRODUCT($AC$1:$AC$5,$AC$1:$AC$5)	()	n	165.0
+functions	sumproduct	1076	SUMPRODUCT({1}:{10},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5)	n	27.5
+functions	sumproduct	1077	SUMPRODUCT($AC$1:$AC$5,$Z$1:$Z$5)	()	n	25.0
+functions	sumproduct	1078	SUMPRODUCT($AC$1:$AC$5,$AC$1:$AC$4)	()	e	#VALUE!
+functions	subtotal	1079	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 1.0)	n	1.2
+functions	subtotal	1080	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 2.0)	n	5.0
+functions	subtotal	1081	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 3.0)	n	9.0
+functions	subtotal	1082	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 4.0)	n	4.5
+functions	subtotal	1083	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 5.0)	n	-1.5
+functions	subtotal	1084	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 6.0)	n	0.0
+functions	subtotal	1085	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 7.0)	n	2.252776065213762
+functions	subtotal	1086	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 8.0)	n	2.0149441679609885
+functions	subtotal	1087	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 9.0)	n	6.0
+functions	subtotal	1088	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 10.0)	n	5.075
+functions	subtotal	1089	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 11.0)	n	4.06
+functions	subtotal	1090	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 109.0)	n	6.0
+functions	subtotal	1091	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, 12.0)	e	#VALUE!
+functions	subtotal	1092	SUBTOTAL(9,{1}:{2})	(1.0, FormulaInput('=SUBTOTAL(9,C1:C1)'))	n	1.0
+functions	na	1093	NA()	()	e	#N/A
+functions	true	1094	TRUE()	()	b	True

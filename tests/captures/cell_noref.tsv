@@ -1,0 +1,44 @@
+# suite: cell_noref
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-01
+# generator: capture/cell_probe.py
+# method: three workbooks differing in the active sheet and the sheets' active cells;
+#   CELL without a reference in A1:A4 of each sheet; Excel calculates on open and saves
+#   a copy; values from the copy, directory and name as <dir> and <book>
+# columns: variant, active sheet index, active cells of S1..S3, sheet, formula, value
+0	0	C5,D7,E9	S1	'CELL("address")'	'$C$5'
+0	0	C5,D7,E9	S1	'CELL("filename")'	'<dir>/[<book>]S1'
+0	0	C5,D7,E9	S1	'CELL("row")'	5.0
+0	0	C5,D7,E9	S1	'CELL("col")'	3.0
+0	0	C5,D7,E9	S2	'CELL("address")'	'[<book>]S1!$C$5'
+0	0	C5,D7,E9	S2	'CELL("filename")'	'<dir>/[<book>]S1'
+0	0	C5,D7,E9	S2	'CELL("row")'	5.0
+0	0	C5,D7,E9	S2	'CELL("col")'	3.0
+0	0	C5,D7,E9	S3	'CELL("address")'	'[<book>]S1!$C$5'
+0	0	C5,D7,E9	S3	'CELL("filename")'	'<dir>/[<book>]S1'
+0	0	C5,D7,E9	S3	'CELL("row")'	5.0
+0	0	C5,D7,E9	S3	'CELL("col")'	3.0
+1	1	C5,D7,E9	S1	'CELL("address")'	'[<book>]S2!$D$7'
+1	1	C5,D7,E9	S1	'CELL("filename")'	'<dir>/[<book>]S2'
+1	1	C5,D7,E9	S1	'CELL("row")'	7.0
+1	1	C5,D7,E9	S1	'CELL("col")'	4.0
+1	1	C5,D7,E9	S2	'CELL("address")'	'$D$7'
+1	1	C5,D7,E9	S2	'CELL("filename")'	'<dir>/[<book>]S2'
+1	1	C5,D7,E9	S2	'CELL("row")'	7.0
+1	1	C5,D7,E9	S2	'CELL("col")'	4.0
+1	1	C5,D7,E9	S3	'CELL("address")'	'[<book>]S2!$D$7'
+1	1	C5,D7,E9	S3	'CELL("filename")'	'<dir>/[<book>]S2'
+1	1	C5,D7,E9	S3	'CELL("row")'	7.0
+1	1	C5,D7,E9	S3	'CELL("col")'	4.0
+2	2	B2,A1,F3	S1	'CELL("address")'	'[<book>]S3!$F$3'
+2	2	B2,A1,F3	S1	'CELL("filename")'	'<dir>/[<book>]S3'
+2	2	B2,A1,F3	S1	'CELL("row")'	3.0
+2	2	B2,A1,F3	S1	'CELL("col")'	6.0
+2	2	B2,A1,F3	S2	'CELL("address")'	'[<book>]S3!$F$3'
+2	2	B2,A1,F3	S2	'CELL("filename")'	'<dir>/[<book>]S3'
+2	2	B2,A1,F3	S2	'CELL("row")'	3.0
+2	2	B2,A1,F3	S2	'CELL("col")'	6.0
+2	2	B2,A1,F3	S3	'CELL("address")'	'$F$3'
+2	2	B2,A1,F3	S3	'CELL("filename")'	'<dir>/[<book>]S3'
+2	2	B2,A1,F3	S3	'CELL("row")'	3.0
+2	2	B2,A1,F3	S3	'CELL("col")'	6.0

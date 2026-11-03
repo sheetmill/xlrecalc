@@ -1,0 +1,68 @@
+# suite: dates_1904
+# excel: 16.114.3 for Mac, locale en_US
+# date_system: 1904
+# captured: 2026-11-01
+# generator: capture/suites.py:dates
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# columns: suite tag case formula inputs expected_type expected_repr
+dates_1904	date	1	DATE({1},{2},{3})	(1900.0, 1.0, 0.0)	e	#NUM!
+dates_1904	date	2	DATE({1},{2},{3})	(1900.0, 1.0, 1.0)	e	#NUM!
+dates_1904	date	3	DATE({1},{2},{3})	(1900.0, 2.0, 28.0)	e	#NUM!
+dates_1904	date	4	DATE({1},{2},{3})	(1900.0, 2.0, 29.0)	e	#NUM!
+dates_1904	date	5	DATE({1},{2},{3})	(1900.0, 3.0, 1.0)	e	#NUM!
+dates_1904	date	6	DATE({1},{2},{3})	(1899.0, 12.0, 31.0)	n	692500.0
+dates_1904	date	7	DATE({1},{2},{3})	(1900.0, 0.0, 1.0)	e	#NUM!
+dates_1904	date	8	DATE({1},{2},{3})	(1904.0, 1.0, 1.0)	n	0.0
+dates_1904	date	9	DATE({1},{2},{3})	(1904.0, 1.0, 2.0)	n	1.0
+dates_1904	date	10	DATE({1},{2},{3})	(2025.0, 3.0, 4.0)	n	44258.0
+dates_1904	date	11	DATE({1},{2},{3})	(9999.0, 12.0, 31.0)	n	2957003.0
+dates_1904	date	12	DATE({1},{2},{3})	(10000.0, 1.0, 1.0)	e	#NUM!
+dates_1904	year	13	YEAR({1})	(-1.0,)	e	#NUM!
+dates_1904	month	14	MONTH({1})	(-1.0,)	e	#NUM!
+dates_1904	day	15	DAY({1})	(-1.0,)	e	#NUM!
+dates_1904	weekday	16	WEEKDAY({1})	(-1.0,)	e	#NUM!
+dates_1904	year	17	YEAR({1})	(0.0,)	n	1904.0
+dates_1904	month	18	MONTH({1})	(0.0,)	n	1.0
+dates_1904	day	19	DAY({1})	(0.0,)	n	1.0
+dates_1904	weekday	20	WEEKDAY({1})	(0.0,)	n	6.0
+dates_1904	year	21	YEAR({1})	(1.0,)	n	1904.0
+dates_1904	month	22	MONTH({1})	(1.0,)	n	1.0
+dates_1904	day	23	DAY({1})	(1.0,)	n	2.0
+dates_1904	weekday	24	WEEKDAY({1})	(1.0,)	n	7.0
+dates_1904	year	25	YEAR({1})	(59.0,)	n	1904.0
+dates_1904	month	26	MONTH({1})	(59.0,)	n	2.0
+dates_1904	day	27	DAY({1})	(59.0,)	n	29.0
+dates_1904	weekday	28	WEEKDAY({1})	(59.0,)	n	2.0
+dates_1904	year	29	YEAR({1})	(60.0,)	n	1904.0
+dates_1904	month	30	MONTH({1})	(60.0,)	n	3.0
+dates_1904	day	31	DAY({1})	(60.0,)	n	1.0
+dates_1904	weekday	32	WEEKDAY({1})	(60.0,)	n	3.0
+dates_1904	year	33	YEAR({1})	(61.0,)	n	1904.0
+dates_1904	month	34	MONTH({1})	(61.0,)	n	3.0
+dates_1904	day	35	DAY({1})	(61.0,)	n	2.0
+dates_1904	weekday	36	WEEKDAY({1})	(61.0,)	n	4.0
+dates_1904	year	37	YEAR({1})	(1461.0,)	n	1908.0
+dates_1904	month	38	MONTH({1})	(1461.0,)	n	1.0
+dates_1904	day	39	DAY({1})	(1461.0,)	n	1.0
+dates_1904	weekday	40	WEEKDAY({1})	(1461.0,)	n	4.0
+dates_1904	year	41	YEAR({1})	(2958465.0,)	e	#NUM!
+dates_1904	month	42	MONTH({1})	(2958465.0,)	e	#NUM!
+dates_1904	day	43	DAY({1})	(2958465.0,)	e	#NUM!
+dates_1904	weekday	44	WEEKDAY({1})	(2958465.0,)	e	#NUM!
+dates_1904	year	45	YEAR({1})	(2958466.0,)	e	#NUM!
+dates_1904	month	46	MONTH({1})	(2958466.0,)	e	#NUM!
+dates_1904	day	47	DAY({1})	(2958466.0,)	e	#NUM!
+dates_1904	weekday	48	WEEKDAY({1})	(2958466.0,)	e	#NUM!
+dates_1904	year	49	YEAR({1})	(60.5,)	n	1904.0
+dates_1904	month	50	MONTH({1})	(60.5,)	n	3.0
+dates_1904	day	51	DAY({1})	(60.5,)	n	1.0
+dates_1904	weekday	52	WEEKDAY({1})	(60.5,)	n	3.0
+dates_1904	datevalue	53	DATEVALUE({1})	('2/29/1900',)	e	#VALUE!
+dates_1904	datevalue	54	DATEVALUE({1})	('1/1/1900',)	e	#VALUE!
+dates_1904	datevalue	55	DATEVALUE({1})	('1/1/1904',)	n	0.0
+dates_1904	datevalue	56	DATEVALUE({1})	('1/2/1904',)	n	1.0
+dates_1904	datevalue	57	DATEVALUE({1})	('12/31/1903',)	e	#VALUE!

@@ -1,0 +1,4 @@
+{"rows": 1000, "formulas": 3003, "load_s": 0.01, "eval_s": 0.01, "write_s": 0.02, "total_s": 0.04, "cells_written": 3003, "rewrite_unchanged_s": 0.01, "cells_rewritten": 0, "size_before_mb": 0.0, "size_after_mb": 0.1, "peak_mb": 31}
+{"rows": 10000, "formulas": 30003, "load_s": 0.14, "eval_s": 0.14, "write_s": 0.17, "total_s": 0.45, "cells_written": 30003, "rewrite_unchanged_s": 0.12, "cells_rewritten": 0, "size_before_mb": 0.3, "size_after_mb": 0.5, "peak_mb": 47}
+{"rows": 100000, "formulas": 300003, "load_s": 1.48, "eval_s": 1.58, "write_s": 1.76, "total_s": 4.82, "cells_written": 300003, "rewrite_unchanged_s": 1.24, "cells_rewritten": 0, "size_before_mb": 3.3, "size_after_mb": 5.1, "peak_mb": 202}
+{"rows": 1000000, "formulas": 3000003, "load_s": 23.73, "eval_s": 17.45, "write_s": 18.42, "total_s": 59.61, "cells_written": 3000003, "rewrite_unchanged_s": 12.94, "cells_rewritten": 0, "size_before_mb": 33.7, "size_after_mb": 50.7, "peak_mb": 1892}

@@ -1,0 +1,26 @@
+# suite: repair
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-01
+# generator: capture/repair_probe.py
+# method: openpyxl writes each formula into column A with the cached value 100+row and
+#   calcPr calcId="191029" (Excel trusts cached values); Excel opens it with alerts
+#   on and a person accepts the repair; formula, value and text are read from the
+#   repaired workbook (xlrecalc_repair.xlsx); saved is the cell as its saved copy holds it
+# columns: row tag written formula_after value_after text_after saved (Python repr)
+1	control	'1+1'	'=1+1'	'2.0'	'2'	'<c r="A1"><f>1+1</f><v>2</v></c>'
+2	refused	'#SPILL!'	'102'	'102.0'	'102'	'<c r="A2"><v>102</v></c>'
+3	control	'B1*3'	'=B1*3'	'6.0'	'6'	'<c r="A3"><f>B1*3</f><v>6</v></c>'
+4	refused	'#CALC!'	'104'	'104.0'	'104'	'<c r="A4"><v>104</v></c>'
+5	control	'"ok"'	'="ok"'	'ok'	'ok'	'<c r="A5" t="str"><f>"ok"</f><v>ok</v></c>'
+6	refused	'A1#'	'106'	'106.0'	'106'	'<c r="A6"><v>106</v></c>'
+7	control	'1+1'	'=1+1'	'2.0'	'2'	'<c r="A7"><f>1+1</f><v>2</v></c>'
+8	refused	'Sheet2!A1#'	'108'	'108.0'	'108'	'<c r="A8"><v>108</v></c>'
+9	control	'B1*3'	'=B1*3'	'6.0'	'6'	'<c r="A9"><f>B1*3</f><v>6</v></c>'
+10	refused	'Table1[@[Unit Price]]'	'110'	'110.0'	'110'	'<c r="A10"><v>110</v></c>'
+11	control	'"ok"'	'="ok"'	'ok'	'ok'	'<c r="A11" t="str"><f>"ok"</f><v>ok</v></c>'
+12	refused	'[@[Unit Price]]*2'	'112'	'112.0'	'112'	'<c r="A12"><v>112</v></c>'
+13	control	'1+1'	'=1+1'	'2.0'	'2'	'<c r="A13"><f>1+1</f><v>2</v></c>'
+14	refused	'-\t1'	'114'	'114.0'	'114'	'<c r="A14"><v>114</v></c>'
+15	control	'B1*3'	'=B1*3'	'6.0'	'6'	'<c r="A15"><f>B1*3</f><v>6</v></c>'
+16	refused	'SUM( )'	'116'	'116.0'	'116'	'<c r="A16"><v>116</v></c>'
+17	control	'"ok"'	'="ok"'	'ok'	'ok'	'<c r="A17" t="str"><f>"ok"</f><v>ok</v></c>'

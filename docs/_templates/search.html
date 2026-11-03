@@ -1,0 +1,96 @@
+{#- Furo's search page, with Pagefind on a served site and Sphinx's own search otherwise.
+
+    The sidebar form (Furo's own) submits to search.html?q=... in both cases. Over http or
+    https the page loads the Pagefind UI, whose index (pagefind/, written by
+    `npx --yes pagefind@1.5.2 --site docs/_build/html` after the Sphinx build) it fetches.
+    Browsers refuse such fetches from a page opened with file://, so a downloaded copy uses
+    Sphinx's search instead, which reads searchindex.js as a script. A served copy whose
+    Pagefind files are missing falls back to Sphinx's search as well. -#}
+{% extends "page.html" %}
+
+{%- block htmltitle -%}
+<title>{{ _("Search") }} - {{ docstitle }}</title>
+{%- endblock htmltitle -%}
+
+{%- block extra_styles -%}
+{{ super() }}
+<link rel="stylesheet" href="{{ pathto('pagefind/pagefind-ui.css', 1) }}">
+<style>
+  #pagefind-search {
+    --pagefind-ui-primary: var(--color-brand-primary);
+    --pagefind-ui-text: var(--color-foreground-primary);
+    --pagefind-ui-background: var(--color-background-primary);
+    --pagefind-ui-border: var(--color-background-border);
+    --pagefind-ui-tag: var(--color-background-secondary);
+    --pagefind-ui-font: var(--font-stack);
+  }
+</style>
+{%- endblock extra_styles -%}
+
+{% block content %}
+<noscript>
+<div class="admonition error">
+  <p class="admonition-title">{% trans %}Error{% endtrans %}</p>
+  <p>{% trans %}Please activate JavaScript to enable the search functionality.{% endtrans %}</p>
+</div>
+</noscript>
+<div id="pagefind-search"></div>
+<div id="search-results"></div>
+{% endblock %}
+
+{% block scripts -%}
+{{ super() }}
+<script>
+  (function () {
+    const urls = {
+      pagefind: "{{ pathto('pagefind/pagefind-ui.js', 1) }}",
+      languageData: "{{ pathto('_static/language_data.js', 1) }}",
+      searchtools: "{{ pathto('_static/searchtools.js', 1) }}",
+      searchindex: "{{ pathto('searchindex.js', 1) }}",
+    };
+    const load = (src) =>
+      new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.body.appendChild(script);
+      });
+    // Sphinx's search: searchtools.js reads ?q= when it loads and runs the query once
+    // searchindex.js has called Search.setIndex, so the three load in this order.
+    const served = location.protocol === "http:" || location.protocol === "https:";
+    const sphinxSearch = () => {
+      // Sphinx fetches each result page for a text snippet, which a file:// page cannot do;
+      // without a server the results are listed without snippets.
+      if (!served) DOCUMENTATION_OPTIONS.SHOW_SEARCH_SUMMARY = false;
+      return load(urls.languageData)
+        .then(() => load(urls.searchtools))
+        .then(() => load(urls.searchindex));
+    };
+    const pagefindSearch = () =>
+      load(urls.pagefind).then(() => {
+        // Result links are relative to the site root, which is the folder above pagefind/:
+        // "/" on a local server, "/en/latest/" on Read the Docs.
+        const pagefindUrl = new URL(urls.pagefind, location.href).pathname;
+        const ui = new PagefindUI({
+          element: "#pagefind-search",
+          baseUrl: pagefindUrl.slice(0, pagefindUrl.lastIndexOf("pagefind/")),
+          showSubResults: true,
+          showImages: false,
+          resetStyles: false,
+        });
+        const query = new URLSearchParams(window.location.search).get("q");
+        // the sidebar box shows the query, as Sphinx's search does on its own page
+        document.querySelectorAll('input[name="q"]').forEach((el) => (el.value = query));
+        if (query) ui.triggerSearch(query);
+      });
+    if (served) pagefindSearch().catch(sphinxSearch);
+    else sphinxSearch();
+  })();
+</script>
+{%- endblock scripts %}
+
+{% block site_meta %}
+{{ super() }}
+<meta name="robots" content="noindex" />
+{% endblock site_meta %}

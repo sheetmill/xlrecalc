@@ -1,0 +1,24 @@
+# environments and caches
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+
+# macOS and editors
+.DS_Store
+.idea/
+.vscode/
+*.sublime-workspace
+
+# generated benchmark data and capture output
+bench/data/
+capture/build/
+
+# documentation build (Sphinx HTML and the Pagefind index inside it)
+docs/_build/
+node_modules/

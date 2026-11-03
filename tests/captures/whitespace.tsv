@@ -1,0 +1,23 @@
+# suite: whitespace
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-01
+# generator: capture/space_probe.py
+# method: each case written without xml:space as an inline string (column A) and a
+#   shared string (column B), LEN of each in C and D; Excel opens it, calculates and
+#   saves a copy; text and lengths are read from the copy
+# columns: row tag written inline_text inline_len shared_text shared_len (Python repr)
+1	leading	'<t> lead</t>'	'lead'	4.0	'lead'	4.0
+2	trailing	'<t>trail </t>'	'trail'	5.0	'trail'	5.0
+3	spaces	'<t>  </t>'	''	0.0	''	0.0
+4	space	'<t> </t>'	''	0.0	''	0.0
+5	inner_newline	'<t>a\nb</t>'	'a\nb'	3.0	'a\nb'	3.0
+6	leading_newline	'<t>\nlead</t>'	'lead'	4.0	'lead'	4.0
+7	trailing_newline	'<t>trail\n</t>'	'trail'	5.0	'trail'	5.0
+8	leading_tab	'<t>\tlead</t>'	'lead'	4.0	'lead'	4.0
+9	inner_spaces	'<t>mid  dle</t>'	'mid  dle'	8.0	'mid  dle'	8.0
+10	empty	'<t/>'	''	0.0	''	0.0
+11	runs	'<r><t>a </t></r><r><t> b</t></r>'	'ab'	2.0	'ab'	2.0
+12	runs_spaces	'<r><t> </t></r><r><t>b</t></r>'	'b'	1.0	'b'	1.0
+13	preserved	'<t xml:space="preserve"> kept </t>'	' kept '	6.0	' kept '	6.0
+14	char_ref	'<t>&#32;ref&#32;</t>'	'ref'	3.0	'ref'	3.0
+15	escaped_cr	'<t>_x000D_cr</t>'	'\rcr'	3.0	'\rcr'	3.0

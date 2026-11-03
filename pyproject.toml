@@ -1,0 +1,115 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "xlrecalc"
+dynamic = ["version"]
+description = "Recalculate Excel workbooks in pure Python and write the results back as cached values."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Ethan Post" }]
+requires-python = ">=3.11"
+dependencies = ["xlformat>=0.2,<1"]
+keywords = ["excel", "xlsx", "formula", "spreadsheet", "recalculate", "openpyxl"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Office/Business :: Financial :: Spreadsheet",
+  "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/sheetmill/xlrecalc"
+Documentation = "https://xlrecalc.readthedocs.io"
+Source = "https://github.com/sheetmill/xlrecalc"
+Changelog = "https://github.com/sheetmill/xlrecalc/blob/main/CHANGELOG.md"
+Issues = "https://github.com/sheetmill/xlrecalc/issues"
+
+[dependency-groups]
+dev = [
+  "pytest>=8",
+  "ruff>=0.8",
+  "mypy>=1.13",
+  # Tests and the capture tooling build workbooks with openpyxl.
+  "openpyxl>=3.1",
+]
+docs = [
+  "furo>=2025.12.19",
+  "myst-parser>=5.1.0",
+  "sphinx>=9.0.4",
+  "sphinx-autodoc-typehints>=3.6.1",
+]
+
+[tool.hatch.version]
+path = "src/xlrecalc/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xlrecalc"]
+
+[tool.hatch.build.targets.sdist]
+# Source, tests, the capture tooling, the documentation sources and the project documents.
+# Never capture workbooks, benchmark data or build output.
+include = [
+  "src/xlrecalc",
+  "tests",
+  "capture",
+  "tools",
+  "docs",
+  "README.md",
+  "CHANGELOG.md",
+  "ARCHITECTURE.md",
+  "CAPTURING.md",
+  "QUIRKS.md",
+  "CONTRIBUTING.md",
+  "LICENSE",
+  "pagefind.yml",
+]
+exclude = ["capture/build", "docs/_build", "capture/**/*.xlsx", "**/__pycache__"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests", "capture", "tools"]
+extend-exclude = ["*.md", "bench"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "A", "C4", "SIM", "RUF", "D", "ANN", "PT", "N", "PERF"]
+ignore = ["D105", "D107", "D203", "D213", "ANN401"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "ANN", "S101"]
+"capture/**" = ["D", "ANN", "PERF401"]
+"tools/**" = ["D"]
+# Worksheet functions keep Excel's own (upper-case) names.
+"src/xlrecalc/_functions/*" = ["N802"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unreachable = true
+packages = ["xlrecalc"]
+mypy_path = "src"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers"
+markers = [
+    "excel: rows captured from Excel",
+    "excel_app: drives Excel 16 for Mac (run with --tier excel)",
+]

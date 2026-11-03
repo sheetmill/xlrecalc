@@ -1,0 +1,21 @@
+# suite: marker_value
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-01
+# generator: capture/marker_probe.py
+# method: each formula entered through AppleScript's value of a cell, as typed; Excel
+#   saves a copy; the cell's file form, cm, f t and f ref are read from the copy
+# columns: typed, file form, cm, f_t, f_ref, value (Python repr)
+'=Z1:Z3*2'	'Z1:Z3*2'	None	'normal'	None	2.0
+'=Z1:Z3'	'Z1:Z3'	None	'normal'	None	3.0
+'={1,2,3}'	'{1,2,3}'	None	'normal'	None	1.0
+'=IF(Z1>0,Z1:Z3,0)'	'IF(Z1>0,Z1:Z3,0)'	None	'normal'	None	'#VALUE!'
+'=ABS(Z1:Z3)'	'ABS(Z1:Z3)'	None	'normal'	None	'#VALUE!'
+'=SUM(Z1:Z3)'	'SUM(Z1:Z3)'	None	'normal'	None	6.0
+'=Z1*2'	'Z1*2'	None	'normal'	None	2.0
+'=SUM(Z1:Z3*2)'	'SUM(Z1:Z3*2)'	None	'normal'	None	'#VALUE!'
+'=MAX(Z1:Z3*2)'	'MAX(Z1:Z3*2)'	None	'normal'	None	'#VALUE!'
+'=@Z1:Z3'	'Z1:Z3'	None	'normal'	None	'#VALUE!'
+'=INDEX(Z1:Z3,2)'	'INDEX(Z1:Z3,2)'	None	'normal'	None	2.0
+'=SUMPRODUCT(Z1:Z3*2)'	'SUMPRODUCT(Z1:Z3*2)'	None	'normal'	None	12.0
+'=Z:Z'	'Z:Z'	None	'normal'	None	0.0
+'=Z1&"x"'	'Z1&"x"'	None	'normal'	None	'1x'

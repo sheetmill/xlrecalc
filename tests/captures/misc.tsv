@@ -1,0 +1,623 @@
+# suite: misc
+# excel: 16.114.3 for Mac, locale en_US
+# date_system: 1900
+# captured: 2026-11-01
+# generator: capture/suites.py:misc
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# fixed: {'DP1': 'Tree', 'DQ1': 'Height', 'DR1': 'Age', 'DS1': 'Profit', 'DP2': 'Apple', 'DQ2': 18.0, 'DR2': 20.0, 'DS2': 14.0, 'DP3': 'Pear', 'DQ3': 12.0, 'DR3': 12.0, 'DS3': 10.0, 'DP4': 'Cherry', 'DQ4': 13.0, 'DR4': 14.0, 'DS4': 9.0, 'DP5': 'Apple', 'DQ5': 14.0, 'DR5': 15.0, 'DS5': 10.0, 'DP6': 'Pear', 'DQ6': 9.0, 'DR6': 8.0, 'DS6': 8.0, 'DP7': 'Applesauce', 'DQ7': 8.0, 'DR7': 9.0, 'DS7': 'n/a', 'DU1': 'Tree', 'DU2': 'Apple', 'DV1': 'Height', 'DV2': '>10', 'DW1': 'Tree', 'DX1': 'Height', 'DW2': 'Apple', 'DX2': '>10', 'DY1': 'Tree', 'DY2': 'Apple', 'DY3': 'Pear', 'DZ1': 'Tree', 'DZ2': '=Apple', 'EA1': 'Tree', 'EA2': 'A*', 'EB1': 'Height', 'EC1': 'Nope', 'EC2': 'x', 'ED1': 'Calc', 'ED2': FormulaInput('=DQ2>DR2'), 'EE1': 'Height', 'EF1': 'Height', 'EE2': '>10', 'EF2': '<16', 'EG1': 'tree', 'EG2': 'pear', 'EI1': 1.0, 'EJ1': 2.0, 'EK1': 3.0, 'EI2': 'a', 'EJ2': True, 'EK2': ErrorValue('#N/A')}
+# columns: suite tag case formula inputs expected_type expected_repr
+misc	transpose	1	TRANSPOSE(EI1:EK2)	()	e	#VALUE!
+misc	transpose	2	INDEX(TRANSPOSE(EI1:EK2),3,1)	()	e	#VALUE!
+misc	transpose	3	INDEX(TRANSPOSE(EI1:EK2),2,2)	()	e	#VALUE!
+misc	transpose	4	ROWS(TRANSPOSE(EI1:EK2))	()	e	#VALUE!
+misc	transpose	5	COLUMNS(TRANSPOSE(EI1:EK2))	()	e	#VALUE!
+misc	transpose	6	SUM(TRANSPOSE(EI1:EK1))	()	e	#VALUE!
+misc	transpose	7	SUMPRODUCT(TRANSPOSE(EI1:EK1)*{1;2;3})	()	e	#VALUE!
+misc	transpose	8	INDEX(TRANSPOSE({1,2,3}),2,1)	()	n	2.0
+misc	transpose	9	TRANSPOSE(5)	()	n	5.0
+misc	transpose	10	TRANSPOSE("x")	()	str	'x'
+misc	transpose	11	INDEX(TRANSPOSE(EI1:EK2),2,3)	()	e	#VALUE!
+misc	transpose	12	INDEX(TRANSPOSE(EI1:EI2),1,2)	()	e	#VALUE!
+misc	address	13	ADDRESS({1},{2})	(1.0, 1.0)	str	'$A$1'
+misc	address	14	ADDRESS({1},{2},{3})	(1.0, 1.0, 1.0)	str	'$A$1'
+misc	address	15	ADDRESS({1},{2},{3},FALSE)	(1.0, 1.0, 1.0)	str	'R1C1'
+misc	address	16	ADDRESS({1},{2},{3})	(1.0, 1.0, 2.0)	str	'A$1'
+misc	address	17	ADDRESS({1},{2},{3},FALSE)	(1.0, 1.0, 2.0)	str	'R1C[1]'
+misc	address	18	ADDRESS({1},{2},{3})	(1.0, 1.0, 3.0)	str	'$A1'
+misc	address	19	ADDRESS({1},{2},{3},FALSE)	(1.0, 1.0, 3.0)	str	'R[1]C1'
+misc	address	20	ADDRESS({1},{2},{3})	(1.0, 1.0, 4.0)	str	'A1'
+misc	address	21	ADDRESS({1},{2},{3},FALSE)	(1.0, 1.0, 4.0)	str	'R[1]C[1]'
+misc	address	22	ADDRESS({1},{2},{3})	(1.0, 1.0, 0.0)	e	#VALUE!
+misc	address	23	ADDRESS({1},{2},{3},FALSE)	(1.0, 1.0, 0.0)	e	#VALUE!
+misc	address	24	ADDRESS({1},{2},{3})	(1.0, 1.0, 5.0)	e	#VALUE!
+misc	address	25	ADDRESS({1},{2},{3},FALSE)	(1.0, 1.0, 5.0)	e	#VALUE!
+misc	address	26	ADDRESS({1},{2})	(5.0, 3.0)	str	'$C$5'
+misc	address	27	ADDRESS({1},{2},{3})	(5.0, 3.0, 1.0)	str	'$C$5'
+misc	address	28	ADDRESS({1},{2},{3},FALSE)	(5.0, 3.0, 1.0)	str	'R5C3'
+misc	address	29	ADDRESS({1},{2},{3})	(5.0, 3.0, 2.0)	str	'C$5'
+misc	address	30	ADDRESS({1},{2},{3},FALSE)	(5.0, 3.0, 2.0)	str	'R5C[3]'
+misc	address	31	ADDRESS({1},{2},{3})	(5.0, 3.0, 3.0)	str	'$C5'
+misc	address	32	ADDRESS({1},{2},{3},FALSE)	(5.0, 3.0, 3.0)	str	'R[5]C3'
+misc	address	33	ADDRESS({1},{2},{3})	(5.0, 3.0, 4.0)	str	'C5'
+misc	address	34	ADDRESS({1},{2},{3},FALSE)	(5.0, 3.0, 4.0)	str	'R[5]C[3]'
+misc	address	35	ADDRESS({1},{2},{3})	(5.0, 3.0, 0.0)	e	#VALUE!
+misc	address	36	ADDRESS({1},{2},{3},FALSE)	(5.0, 3.0, 0.0)	e	#VALUE!
+misc	address	37	ADDRESS({1},{2},{3})	(5.0, 3.0, 5.0)	e	#VALUE!
+misc	address	38	ADDRESS({1},{2},{3},FALSE)	(5.0, 3.0, 5.0)	e	#VALUE!
+misc	address	39	ADDRESS({1},{2})	(1048576.0, 16384.0)	str	'$XFD$1048576'
+misc	address	40	ADDRESS({1},{2},{3})	(1048576.0, 16384.0, 1.0)	str	'$XFD$1048576'
+misc	address	41	ADDRESS({1},{2},{3},FALSE)	(1048576.0, 16384.0, 1.0)	str	'R1048576C16384'
+misc	address	42	ADDRESS({1},{2},{3})	(1048576.0, 16384.0, 2.0)	str	'XFD$1048576'
+misc	address	43	ADDRESS({1},{2},{3},FALSE)	(1048576.0, 16384.0, 2.0)	e	#VALUE!
+misc	address	44	ADDRESS({1},{2},{3})	(1048576.0, 16384.0, 3.0)	str	'$XFD1048576'
+misc	address	45	ADDRESS({1},{2},{3},FALSE)	(1048576.0, 16384.0, 3.0)	e	#VALUE!
+misc	address	46	ADDRESS({1},{2},{3})	(1048576.0, 16384.0, 4.0)	str	'XFD1048576'
+misc	address	47	ADDRESS({1},{2},{3},FALSE)	(1048576.0, 16384.0, 4.0)	e	#VALUE!
+misc	address	48	ADDRESS({1},{2},{3})	(1048576.0, 16384.0, 0.0)	e	#VALUE!
+misc	address	49	ADDRESS({1},{2},{3},FALSE)	(1048576.0, 16384.0, 0.0)	e	#VALUE!
+misc	address	50	ADDRESS({1},{2},{3})	(1048576.0, 16384.0, 5.0)	e	#VALUE!
+misc	address	51	ADDRESS({1},{2},{3},FALSE)	(1048576.0, 16384.0, 5.0)	e	#VALUE!
+misc	address	52	ADDRESS({1},{2})	(0.0, 1.0)	e	#VALUE!
+misc	address	53	ADDRESS({1},{2},{3})	(0.0, 1.0, 1.0)	e	#VALUE!
+misc	address	54	ADDRESS({1},{2},{3},FALSE)	(0.0, 1.0, 1.0)	e	#VALUE!
+misc	address	55	ADDRESS({1},{2},{3})	(0.0, 1.0, 2.0)	e	#VALUE!
+misc	address	56	ADDRESS({1},{2},{3},FALSE)	(0.0, 1.0, 2.0)	e	#VALUE!
+misc	address	57	ADDRESS({1},{2},{3})	(0.0, 1.0, 3.0)	e	#VALUE!
+misc	address	58	ADDRESS({1},{2},{3},FALSE)	(0.0, 1.0, 3.0)	str	'RC1'
+misc	address	59	ADDRESS({1},{2},{3})	(0.0, 1.0, 4.0)	e	#VALUE!
+misc	address	60	ADDRESS({1},{2},{3},FALSE)	(0.0, 1.0, 4.0)	str	'RC[1]'
+misc	address	61	ADDRESS({1},{2},{3})	(0.0, 1.0, 0.0)	e	#VALUE!
+misc	address	62	ADDRESS({1},{2},{3},FALSE)	(0.0, 1.0, 0.0)	e	#VALUE!
+misc	address	63	ADDRESS({1},{2},{3})	(0.0, 1.0, 5.0)	e	#VALUE!
+misc	address	64	ADDRESS({1},{2},{3},FALSE)	(0.0, 1.0, 5.0)	e	#VALUE!
+misc	address	65	ADDRESS({1},{2})	(1.0, 16385.0)	e	#VALUE!
+misc	address	66	ADDRESS({1},{2},{3})	(1.0, 16385.0, 1.0)	e	#VALUE!
+misc	address	67	ADDRESS({1},{2},{3},FALSE)	(1.0, 16385.0, 1.0)	e	#VALUE!
+misc	address	68	ADDRESS({1},{2},{3})	(1.0, 16385.0, 2.0)	e	#VALUE!
+misc	address	69	ADDRESS({1},{2},{3},FALSE)	(1.0, 16385.0, 2.0)	e	#VALUE!
+misc	address	70	ADDRESS({1},{2},{3})	(1.0, 16385.0, 3.0)	e	#VALUE!
+misc	address	71	ADDRESS({1},{2},{3},FALSE)	(1.0, 16385.0, 3.0)	e	#VALUE!
+misc	address	72	ADDRESS({1},{2},{3})	(1.0, 16385.0, 4.0)	e	#VALUE!
+misc	address	73	ADDRESS({1},{2},{3},FALSE)	(1.0, 16385.0, 4.0)	e	#VALUE!
+misc	address	74	ADDRESS({1},{2},{3})	(1.0, 16385.0, 0.0)	e	#VALUE!
+misc	address	75	ADDRESS({1},{2},{3},FALSE)	(1.0, 16385.0, 0.0)	e	#VALUE!
+misc	address	76	ADDRESS({1},{2},{3})	(1.0, 16385.0, 5.0)	e	#VALUE!
+misc	address	77	ADDRESS({1},{2},{3},FALSE)	(1.0, 16385.0, 5.0)	e	#VALUE!
+misc	address	78	ADDRESS({1},{2})	(2.9, 27.9)	str	'$AA$2'
+misc	address	79	ADDRESS({1},{2},{3})	(2.9, 27.9, 1.0)	str	'$AA$2'
+misc	address	80	ADDRESS({1},{2},{3},FALSE)	(2.9, 27.9, 1.0)	str	'R2C27'
+misc	address	81	ADDRESS({1},{2},{3})	(2.9, 27.9, 2.0)	str	'AA$2'
+misc	address	82	ADDRESS({1},{2},{3},FALSE)	(2.9, 27.9, 2.0)	str	'R2C[27]'
+misc	address	83	ADDRESS({1},{2},{3})	(2.9, 27.9, 3.0)	str	'$AA2'
+misc	address	84	ADDRESS({1},{2},{3},FALSE)	(2.9, 27.9, 3.0)	str	'R[2]C27'
+misc	address	85	ADDRESS({1},{2},{3})	(2.9, 27.9, 4.0)	str	'AA2'
+misc	address	86	ADDRESS({1},{2},{3},FALSE)	(2.9, 27.9, 4.0)	str	'R[2]C[27]'
+misc	address	87	ADDRESS({1},{2},{3})	(2.9, 27.9, 0.0)	e	#VALUE!
+misc	address	88	ADDRESS({1},{2},{3},FALSE)	(2.9, 27.9, 0.0)	e	#VALUE!
+misc	address	89	ADDRESS({1},{2},{3})	(2.9, 27.9, 5.0)	e	#VALUE!
+misc	address	90	ADDRESS({1},{2},{3},FALSE)	(2.9, 27.9, 5.0)	e	#VALUE!
+misc	address	91	ADDRESS({1},{2})	(100.0, 702.0)	str	'$ZZ$100'
+misc	address	92	ADDRESS({1},{2},{3})	(100.0, 702.0, 1.0)	str	'$ZZ$100'
+misc	address	93	ADDRESS({1},{2},{3},FALSE)	(100.0, 702.0, 1.0)	str	'R100C702'
+misc	address	94	ADDRESS({1},{2},{3})	(100.0, 702.0, 2.0)	str	'ZZ$100'
+misc	address	95	ADDRESS({1},{2},{3},FALSE)	(100.0, 702.0, 2.0)	str	'R100C[702]'
+misc	address	96	ADDRESS({1},{2},{3})	(100.0, 702.0, 3.0)	str	'$ZZ100'
+misc	address	97	ADDRESS({1},{2},{3},FALSE)	(100.0, 702.0, 3.0)	str	'R[100]C702'
+misc	address	98	ADDRESS({1},{2},{3})	(100.0, 702.0, 4.0)	str	'ZZ100'
+misc	address	99	ADDRESS({1},{2},{3},FALSE)	(100.0, 702.0, 4.0)	str	'R[100]C[702]'
+misc	address	100	ADDRESS({1},{2},{3})	(100.0, 702.0, 0.0)	e	#VALUE!
+misc	address	101	ADDRESS({1},{2},{3},FALSE)	(100.0, 702.0, 0.0)	e	#VALUE!
+misc	address	102	ADDRESS({1},{2},{3})	(100.0, 702.0, 5.0)	e	#VALUE!
+misc	address	103	ADDRESS({1},{2},{3},FALSE)	(100.0, 702.0, 5.0)	e	#VALUE!
+misc	address	104	ADDRESS({1},{2})	(100.0, 703.0)	str	'$AAA$100'
+misc	address	105	ADDRESS({1},{2},{3})	(100.0, 703.0, 1.0)	str	'$AAA$100'
+misc	address	106	ADDRESS({1},{2},{3},FALSE)	(100.0, 703.0, 1.0)	str	'R100C703'
+misc	address	107	ADDRESS({1},{2},{3})	(100.0, 703.0, 2.0)	str	'AAA$100'
+misc	address	108	ADDRESS({1},{2},{3},FALSE)	(100.0, 703.0, 2.0)	str	'R100C[703]'
+misc	address	109	ADDRESS({1},{2},{3})	(100.0, 703.0, 3.0)	str	'$AAA100'
+misc	address	110	ADDRESS({1},{2},{3},FALSE)	(100.0, 703.0, 3.0)	str	'R[100]C703'
+misc	address	111	ADDRESS({1},{2},{3})	(100.0, 703.0, 4.0)	str	'AAA100'
+misc	address	112	ADDRESS({1},{2},{3},FALSE)	(100.0, 703.0, 4.0)	str	'R[100]C[703]'
+misc	address	113	ADDRESS({1},{2},{3})	(100.0, 703.0, 0.0)	e	#VALUE!
+misc	address	114	ADDRESS({1},{2},{3},FALSE)	(100.0, 703.0, 0.0)	e	#VALUE!
+misc	address	115	ADDRESS({1},{2},{3})	(100.0, 703.0, 5.0)	e	#VALUE!
+misc	address	116	ADDRESS({1},{2},{3},FALSE)	(100.0, 703.0, 5.0)	e	#VALUE!
+misc	address	117	ADDRESS(2,3,1,TRUE,{1})	('Sheet1',)	str	'Sheet1!$C$2'
+misc	address	118	ADDRESS(2,3,4,FALSE,{1})	('Sheet1',)	str	'Sheet1!R[2]C[3]'
+misc	address	119	ADDRESS(2,3,1,TRUE,{1})	('My Sheet',)	str	"'My Sheet'!$C$2"
+misc	address	120	ADDRESS(2,3,4,FALSE,{1})	('My Sheet',)	str	"'My Sheet'!R[2]C[3]"
+misc	address	121	ADDRESS(2,3,1,TRUE,{1})	('',)	str	'!$C$2'
+misc	address	122	ADDRESS(2,3,4,FALSE,{1})	('',)	str	'!R[2]C[3]'
+misc	address	123	ADDRESS(2,3,1,TRUE,{1})	("it's",)	str	"'it''s'!$C$2"
+misc	address	124	ADDRESS(2,3,4,FALSE,{1})	("it's",)	str	"'it''s'!R[2]C[3]"
+misc	address	125	ADDRESS(2,3,1,TRUE,{1})	('A1',)	str	"'A1'!$C$2"
+misc	address	126	ADDRESS(2,3,4,FALSE,{1})	('A1',)	str	"'A1'!R[2]C[3]"
+misc	address	127	ADDRESS(2,3,1,TRUE,{1})	('[b]x',)	str	'[b]x!$C$2'
+misc	address	128	ADDRESS(2,3,4,FALSE,{1})	('[b]x',)	str	'[b]x!R[2]C[3]'
+misc	address	129	ADDRESS(2,3,1,TRUE,{1})	('Résumé',)	str	'Résumé!$C$2'
+misc	address	130	ADDRESS(2,3,4,FALSE,{1})	('Résumé',)	str	'Résumé!R[2]C[3]'
+misc	address	131	ADDRESS(2,3,1,TRUE,{1})	('1x',)	str	"'1x'!$C$2"
+misc	address	132	ADDRESS(2,3,4,FALSE,{1})	('1x',)	str	"'1x'!R[2]C[3]"
+misc	address	133	ADDRESS(2,3,1,TRUE,{1})	('TRUE',)	str	"'TRUE'!$C$2"
+misc	address	134	ADDRESS(2,3,4,FALSE,{1})	('TRUE',)	str	"'TRUE'!R[2]C[3]"
+misc	address	135	ADDRESS({1},2)	(2.5,)	str	'$B$2'
+misc	address	136	ADDRESS(2,2,1,{1})	(2.5,)	str	'$B$2'
+misc	address	137	ADDRESS({1},2)	(-2.5,)	e	#VALUE!
+misc	address	138	ADDRESS(2,2,1,{1})	(-2.5,)	str	'$B$2'
+misc	address	139	ADDRESS({1},2)	(0.0,)	e	#VALUE!
+misc	address	140	ADDRESS(2,2,1,{1})	(0.0,)	str	'R2C2'
+misc	address	141	ADDRESS({1},2)	('3',)	str	'$B$3'
+misc	address	142	ADDRESS(2,2,1,{1})	('3',)	e	#VALUE!
+misc	address	143	ADDRESS({1},2)	('abc',)	e	#VALUE!
+misc	address	144	ADDRESS(2,2,1,{1})	('abc',)	e	#VALUE!
+misc	address	145	ADDRESS({1},2)	(True,)	str	'$B$1'
+misc	address	146	ADDRESS(2,2,1,{1})	(True,)	str	'$B$2'
+misc	address	147	ADDRESS({1},2)	(False,)	e	#VALUE!
+misc	address	148	ADDRESS(2,2,1,{1})	(False,)	str	'R2C2'
+misc	address	149	ADDRESS({1},2)	(None,)	e	#VALUE!
+misc	address	150	ADDRESS(2,2,1,{1})	(None,)	str	'R2C2'
+misc	address	151	ADDRESS({1},2)	(FormulaInput('=""'),)	e	#VALUE!
+misc	address	152	ADDRESS(2,2,1,{1})	(FormulaInput('=""'),)	e	#VALUE!
+misc	address	153	ADDRESS({1},2)	(ErrorValue('#N/A'),)	e	#N/A
+misc	address	154	ADDRESS(2,2,1,{1})	(ErrorValue('#N/A'),)	e	#N/A
+misc	rept	155	REPT({1},{2})	('ab', 3.0)	str	'ababab'
+misc	rept	156	LEN(REPT({1},{2}))	('ab', 3.0)	n	6.0
+misc	rept	157	REPT({1},{2})	('ab', 0.0)	str	''
+misc	rept	158	LEN(REPT({1},{2}))	('ab', 0.0)	n	0.0
+misc	rept	159	REPT({1},{2})	('ab', 2.9)	str	'abab'
+misc	rept	160	LEN(REPT({1},{2}))	('ab', 2.9)	n	4.0
+misc	rept	161	REPT({1},{2})	('ab', -1.0)	e	#VALUE!
+misc	rept	162	LEN(REPT({1},{2}))	('ab', -1.0)	e	#VALUE!
+misc	rept	163	REPT({1},{2})	('', 5.0)	str	''
+misc	rept	164	LEN(REPT({1},{2}))	('', 5.0)	n	0.0
+misc	rept	165	REPT({1},{2})	('x', 32767.0)	str	'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+misc	rept	166	LEN(REPT({1},{2}))	('x', 32767.0)	n	32767.0
+misc	rept	167	REPT({1},{2})	('x', 32768.0)	e	#VALUE!
+misc	rept	168	LEN(REPT({1},{2}))	('x', 32768.0)	e	#VALUE!
+misc	rept	169	REPT({1},{2})	('ab', 16384.0)	e	#VALUE!
+misc	rept	170	LEN(REPT({1},{2}))	('ab', 16384.0)	e	#VALUE!
+misc	rept	171	REPT({1},{2})	('ab', 16383.5)	str	'ababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababab'
+misc	rept	172	LEN(REPT({1},{2}))	('ab', 16383.5)	n	32766.0
+misc	rept	173	REPT({1},{2})	(1.5, 2.0)	str	'1.51.5'
+misc	rept	174	LEN(REPT({1},{2}))	(1.5, 2.0)	n	6.0
+misc	rept	175	REPT({1},{2})	(True, 2.0)	str	'TRUETRUE'
+misc	rept	176	LEN(REPT({1},{2}))	(True, 2.0)	n	8.0
+misc	rept	177	REPT({1},{2})	('é', 3.0)	str	'ééé'
+misc	rept	178	LEN(REPT({1},{2}))	('é', 3.0)	n	3.0
+misc	rand	179	AND(RAND()>=0,RAND()<1)	()	b	True
+misc	rand	180	ISNUMBER(RAND())	()	b	True
+misc	randbetween	181	RANDBETWEEN(3,3)	()	n	3.0
+misc	randbetween	182	RANDBETWEEN(5,1)	()	e	#NUM!
+misc	randbetween	183	RANDBETWEEN(1.5,2.5)	()	n	2.0
+misc	randbetween	184	RANDBETWEEN(2.5,2.7)	()	n	3.0
+misc	randbetween	185	AND(RANDBETWEEN(1,6)>=1,RANDBETWEEN(1,6)<=6)	()	b	True
+misc	randbetween	186	RANDBETWEEN(-2.5,-2.2)	()	n	-2.0
+misc	randbetween	187	RANDBETWEEN("a",2)	()	e	#VALUE!
+misc	randbetween	188	INT(RANDBETWEEN(1,10))=RANDBETWEEN(4,4)+0*RAND()-4+RANDBETWEEN(1,1)	()	b	False
+misc	dsum	189	DSUM(DP1:DS7,"Profit",DU1:DU2)	()	n	24.0
+misc	dsum	190	DSUM(DP1:DS7,"Profit",DV1:DV2)	()	n	43.0
+misc	dsum	191	DSUM(DP1:DS7,"Profit",DW1:DX2)	()	n	24.0
+misc	dsum	192	DSUM(DP1:DS7,"Profit",DY1:DY3)	()	n	42.0
+misc	dsum	193	DSUM(DP1:DS7,"Profit",DZ1:DZ2)	()	n	24.0
+misc	dsum	194	DSUM(DP1:DS7,"Profit",EA1:EA2)	()	n	24.0
+misc	dsum	195	DSUM(DP1:DS7,"Profit",EB1:EB2)	()	n	51.0
+misc	dsum	196	DSUM(DP1:DS7,"Profit",EC1:EC2)	()	n	0.0
+misc	dsum	197	DSUM(DP1:DS7,"Profit",ED1:ED2)	()	n	8.0
+misc	dsum	198	DSUM(DP1:DS7,"Profit",EE1:EF2)	()	n	29.0
+misc	dsum	199	DSUM(DP1:DS7,"Profit",EG1:EG2)	()	n	18.0
+misc	dsum	200	DSUM(DP1:DS7,"Profit",DY1:DY3)	()	n	42.0
+misc	dsum	201	DSUM(DP1:DS7,4,DY1:DY3)	()	n	42.0
+misc	dsum	202	DSUM(DP1:DS7,"Age",DY1:DY3)	()	n	64.0
+misc	dsum	203	DSUM(DP1:DS7,"profit",DY1:DY3)	()	n	42.0
+misc	dsum	204	DSUM(DP1:DS7,0,DY1:DY3)	()	e	#VALUE!
+misc	dsum	205	DSUM(DP1:DS7,5,DY1:DY3)	()	e	#VALUE!
+misc	dsum	206	DSUM(DP1:DS7,"Nope",DY1:DY3)	()	e	#VALUE!
+misc	dsum	207	DSUM(DP1:DS7,DS1,DY1:DY3)	()	n	42.0
+misc	dsum	208	DSUM(DP1:DS7,2.9,DY1:DY3)	()	n	61.0
+misc	dsum	209	DSUM(DP1:DS7,TRUE,DY1:DY3)	()	n	0.0
+misc	dsum	210	DSUM(DP1:DS7,"Tree",DU1:DU2)	()	n	0.0
+misc	dsum	211	DSUM(DP1:DS1,"Profit",DU1:DU2)	()	e	#VALUE!
+misc	dsum	212	DSUM(DP1:DS7,"Profit",DU1)	()	e	#VALUE!
+misc	dsum	213	DSUM(DP2:DS7,"Profit",DU1:DU2)	()	e	#VALUE!
+misc	daverage	214	DAVERAGE(DP1:DS7,"Profit",DU1:DU2)	()	n	12.0
+misc	daverage	215	DAVERAGE(DP1:DS7,"Profit",DV1:DV2)	()	n	10.75
+misc	daverage	216	DAVERAGE(DP1:DS7,"Profit",DW1:DX2)	()	n	12.0
+misc	daverage	217	DAVERAGE(DP1:DS7,"Profit",DY1:DY3)	()	n	10.5
+misc	daverage	218	DAVERAGE(DP1:DS7,"Profit",DZ1:DZ2)	()	n	12.0
+misc	daverage	219	DAVERAGE(DP1:DS7,"Profit",EA1:EA2)	()	n	12.0
+misc	daverage	220	DAVERAGE(DP1:DS7,"Profit",EB1:EB2)	()	n	10.2
+misc	daverage	221	DAVERAGE(DP1:DS7,"Profit",EC1:EC2)	()	e	#DIV/0!
+misc	daverage	222	DAVERAGE(DP1:DS7,"Profit",ED1:ED2)	()	n	8.0
+misc	daverage	223	DAVERAGE(DP1:DS7,"Profit",EE1:EF2)	()	n	9.666666666666666
+misc	daverage	224	DAVERAGE(DP1:DS7,"Profit",EG1:EG2)	()	n	9.0
+misc	daverage	225	DAVERAGE(DP1:DS7,"Profit",DY1:DY3)	()	n	10.5
+misc	daverage	226	DAVERAGE(DP1:DS7,4,DY1:DY3)	()	n	10.5
+misc	daverage	227	DAVERAGE(DP1:DS7,"Age",DY1:DY3)	()	n	12.8
+misc	daverage	228	DAVERAGE(DP1:DS7,"profit",DY1:DY3)	()	n	10.5
+misc	daverage	229	DAVERAGE(DP1:DS7,0,DY1:DY3)	()	e	#VALUE!
+misc	daverage	230	DAVERAGE(DP1:DS7,5,DY1:DY3)	()	e	#VALUE!
+misc	daverage	231	DAVERAGE(DP1:DS7,"Nope",DY1:DY3)	()	e	#VALUE!
+misc	daverage	232	DAVERAGE(DP1:DS7,DS1,DY1:DY3)	()	n	10.5
+misc	daverage	233	DAVERAGE(DP1:DS7,2.9,DY1:DY3)	()	n	12.2
+misc	daverage	234	DAVERAGE(DP1:DS7,TRUE,DY1:DY3)	()	e	#DIV/0!
+misc	daverage	235	DAVERAGE(DP1:DS7,"Tree",DU1:DU2)	()	e	#DIV/0!
+misc	daverage	236	DAVERAGE(DP1:DS1,"Profit",DU1:DU2)	()	e	#VALUE!
+misc	daverage	237	DAVERAGE(DP1:DS7,"Profit",DU1)	()	e	#VALUE!
+misc	daverage	238	DAVERAGE(DP2:DS7,"Profit",DU1:DU2)	()	e	#VALUE!
+misc	dcount	239	DCOUNT(DP1:DS7,"Profit",DU1:DU2)	()	n	2.0
+misc	dcount	240	DCOUNT(DP1:DS7,"Profit",DV1:DV2)	()	n	4.0
+misc	dcount	241	DCOUNT(DP1:DS7,"Profit",DW1:DX2)	()	n	2.0
+misc	dcount	242	DCOUNT(DP1:DS7,"Profit",DY1:DY3)	()	n	4.0
+misc	dcount	243	DCOUNT(DP1:DS7,"Profit",DZ1:DZ2)	()	n	2.0
+misc	dcount	244	DCOUNT(DP1:DS7,"Profit",EA1:EA2)	()	n	2.0
+misc	dcount	245	DCOUNT(DP1:DS7,"Profit",EB1:EB2)	()	n	5.0
+misc	dcount	246	DCOUNT(DP1:DS7,"Profit",EC1:EC2)	()	n	0.0
+misc	dcount	247	DCOUNT(DP1:DS7,"Profit",ED1:ED2)	()	n	1.0
+misc	dcount	248	DCOUNT(DP1:DS7,"Profit",EE1:EF2)	()	n	3.0
+misc	dcount	249	DCOUNT(DP1:DS7,"Profit",EG1:EG2)	()	n	2.0
+misc	dcount	250	DCOUNT(DP1:DS7,"Profit",DY1:DY3)	()	n	4.0
+misc	dcount	251	DCOUNT(DP1:DS7,4,DY1:DY3)	()	n	4.0
+misc	dcount	252	DCOUNT(DP1:DS7,"Age",DY1:DY3)	()	n	5.0
+misc	dcount	253	DCOUNT(DP1:DS7,"profit",DY1:DY3)	()	n	4.0
+misc	dcount	254	DCOUNT(DP1:DS7,0,DY1:DY3)	()	e	#VALUE!
+misc	dcount	255	DCOUNT(DP1:DS7,5,DY1:DY3)	()	e	#VALUE!
+misc	dcount	256	DCOUNT(DP1:DS7,"Nope",DY1:DY3)	()	e	#VALUE!
+misc	dcount	257	DCOUNT(DP1:DS7,DS1,DY1:DY3)	()	n	4.0
+misc	dcount	258	DCOUNT(DP1:DS7,2.9,DY1:DY3)	()	n	5.0
+misc	dcount	259	DCOUNT(DP1:DS7,TRUE,DY1:DY3)	()	n	0.0
+misc	dcount	260	DCOUNT(DP1:DS7,"Tree",DU1:DU2)	()	n	0.0
+misc	dcount	261	DCOUNT(DP1:DS1,"Profit",DU1:DU2)	()	e	#VALUE!
+misc	dcount	262	DCOUNT(DP1:DS7,"Profit",DU1)	()	e	#VALUE!
+misc	dcount	263	DCOUNT(DP2:DS7,"Profit",DU1:DU2)	()	e	#VALUE!
+misc	dmax	264	DMAX(DP1:DS7,"Profit",DU1:DU2)	()	n	14.0
+misc	dmax	265	DMAX(DP1:DS7,"Profit",DV1:DV2)	()	n	14.0
+misc	dmax	266	DMAX(DP1:DS7,"Profit",DW1:DX2)	()	n	14.0
+misc	dmax	267	DMAX(DP1:DS7,"Profit",DY1:DY3)	()	n	14.0
+misc	dmax	268	DMAX(DP1:DS7,"Profit",DZ1:DZ2)	()	n	14.0
+misc	dmax	269	DMAX(DP1:DS7,"Profit",EA1:EA2)	()	n	14.0
+misc	dmax	270	DMAX(DP1:DS7,"Profit",EB1:EB2)	()	n	14.0
+misc	dmax	271	DMAX(DP1:DS7,"Profit",EC1:EC2)	()	n	0.0
+misc	dmax	272	DMAX(DP1:DS7,"Profit",ED1:ED2)	()	n	8.0
+misc	dmax	273	DMAX(DP1:DS7,"Profit",EE1:EF2)	()	n	10.0
+misc	dmax	274	DMAX(DP1:DS7,"Profit",EG1:EG2)	()	n	10.0
+misc	dmax	275	DMAX(DP1:DS7,"Profit",DY1:DY3)	()	n	14.0
+misc	dmax	276	DMAX(DP1:DS7,4,DY1:DY3)	()	n	14.0
+misc	dmax	277	DMAX(DP1:DS7,"Age",DY1:DY3)	()	n	20.0
+misc	dmax	278	DMAX(DP1:DS7,"profit",DY1:DY3)	()	n	14.0
+misc	dmax	279	DMAX(DP1:DS7,0,DY1:DY3)	()	e	#VALUE!
+misc	dmax	280	DMAX(DP1:DS7,5,DY1:DY3)	()	e	#VALUE!
+misc	dmax	281	DMAX(DP1:DS7,"Nope",DY1:DY3)	()	e	#VALUE!
+misc	dmax	282	DMAX(DP1:DS7,DS1,DY1:DY3)	()	n	14.0
+misc	dmax	283	DMAX(DP1:DS7,2.9,DY1:DY3)	()	n	18.0
+misc	dmax	284	DMAX(DP1:DS7,TRUE,DY1:DY3)	()	n	0.0
+misc	dmax	285	DMAX(DP1:DS7,"Tree",DU1:DU2)	()	n	0.0
+misc	dmax	286	DMAX(DP1:DS1,"Profit",DU1:DU2)	()	e	#VALUE!
+misc	dmax	287	DMAX(DP1:DS7,"Profit",DU1)	()	e	#VALUE!
+misc	dmax	288	DMAX(DP2:DS7,"Profit",DU1:DU2)	()	e	#VALUE!
+misc	dmin	289	DMIN(DP1:DS7,"Profit",DU1:DU2)	()	n	10.0
+misc	dmin	290	DMIN(DP1:DS7,"Profit",DV1:DV2)	()	n	9.0
+misc	dmin	291	DMIN(DP1:DS7,"Profit",DW1:DX2)	()	n	10.0
+misc	dmin	292	DMIN(DP1:DS7,"Profit",DY1:DY3)	()	n	8.0
+misc	dmin	293	DMIN(DP1:DS7,"Profit",DZ1:DZ2)	()	n	10.0
+misc	dmin	294	DMIN(DP1:DS7,"Profit",EA1:EA2)	()	n	10.0
+misc	dmin	295	DMIN(DP1:DS7,"Profit",EB1:EB2)	()	n	8.0
+misc	dmin	296	DMIN(DP1:DS7,"Profit",EC1:EC2)	()	n	0.0
+misc	dmin	297	DMIN(DP1:DS7,"Profit",ED1:ED2)	()	n	8.0
+misc	dmin	298	DMIN(DP1:DS7,"Profit",EE1:EF2)	()	n	9.0
+misc	dmin	299	DMIN(DP1:DS7,"Profit",EG1:EG2)	()	n	8.0
+misc	dmin	300	DMIN(DP1:DS7,"Profit",DY1:DY3)	()	n	8.0
+misc	dmin	301	DMIN(DP1:DS7,4,DY1:DY3)	()	n	8.0
+misc	dmin	302	DMIN(DP1:DS7,"Age",DY1:DY3)	()	n	8.0
+misc	dmin	303	DMIN(DP1:DS7,"profit",DY1:DY3)	()	n	8.0
+misc	dmin	304	DMIN(DP1:DS7,0,DY1:DY3)	()	e	#VALUE!
+misc	dmin	305	DMIN(DP1:DS7,5,DY1:DY3)	()	e	#VALUE!
+misc	dmin	306	DMIN(DP1:DS7,"Nope",DY1:DY3)	()	e	#VALUE!
+misc	dmin	307	DMIN(DP1:DS7,DS1,DY1:DY3)	()	n	8.0
+misc	dmin	308	DMIN(DP1:DS7,2.9,DY1:DY3)	()	n	8.0
+misc	dmin	309	DMIN(DP1:DS7,TRUE,DY1:DY3)	()	n	0.0
+misc	dmin	310	DMIN(DP1:DS7,"Tree",DU1:DU2)	()	n	0.0
+misc	dmin	311	DMIN(DP1:DS1,"Profit",DU1:DU2)	()	e	#VALUE!
+misc	dmin	312	DMIN(DP1:DS7,"Profit",DU1)	()	e	#VALUE!
+misc	dmin	313	DMIN(DP2:DS7,"Profit",DU1:DU2)	()	e	#VALUE!
+misc	dcount	314	DCOUNT(DP1:DS7,,DY1:DY3)	()	n	5.0
+misc	dsum	315	DSUM(DP1:DS7,,DY1:DY3)	()	e	#VALUE!
+misc	replace	316	REPLACE({1},{2},{3},{4})	('abcdef', 2.0, 3.0, 'XY')	str	'aXYef'
+misc	replace	317	REPLACE({1},{2},{3},{4})	('abcdef', 1.0, 0.0, 'Z')	str	'Zabcdef'
+misc	replace	318	REPLACE({1},{2},{3},{4})	('abcdef', 7.0, 2.0, 'Z')	str	'abcdefZ'
+misc	replace	319	REPLACE({1},{2},{3},{4})	('abcdef', 10.0, 2.0, 'Z')	str	'abcdefZ'
+misc	replace	320	REPLACE({1},{2},{3},{4})	('abcdef', 0.0, 1.0, 'Z')	e	#VALUE!
+misc	replace	321	REPLACE({1},{2},{3},{4})	('abcdef', 2.0, -1.0, 'Z')	e	#VALUE!
+misc	replace	322	REPLACE({1},{2},{3},{4})	('abcdef', 2.9, 1.9, 'Z')	str	'aZcdef'
+misc	replace	323	REPLACE({1},{2},{3},{4})	('abc', 2.0, 100.0, '')	str	'a'
+misc	replace	324	REPLACE({1},{2},{3},{4})	(12345.0, 2.0, 2.0, 0.0)	str	'1045'
+misc	replace	325	REPLACE({1},{2},{3},{4})	('', 1.0, 1.0, 'x')	str	'x'
+misc	replace	326	REPLACE({1},{2},{3},{4})	(True, 1.0, 1.0, 'x')	str	'xRUE'
+misc	replace	327	REPLACE({1},{2},{3},{4})	('abc', 32768.0, 1.0, 'x')	e	#VALUE!
+misc	char	328	CHAR({1})	(0.0,)	e	#VALUE!
+misc	char	329	CHAR({1})	(1.0,)	str	'_x0001_'
+misc	char	330	CHAR({1})	(2.0,)	str	'_x0002_'
+misc	char	331	CHAR({1})	(3.0,)	str	'_x0003_'
+misc	char	332	CHAR({1})	(4.0,)	str	'_x0004_'
+misc	char	333	CHAR({1})	(5.0,)	str	'_x0005_'
+misc	char	334	CHAR({1})	(6.0,)	str	'_x0006_'
+misc	char	335	CHAR({1})	(7.0,)	str	'_x0007_'
+misc	char	336	CHAR({1})	(8.0,)	str	'_x0008_'
+misc	char	337	CHAR({1})	(9.0,)	str	'\t'
+misc	char	338	CHAR({1})	(10.0,)	str	'\n'
+misc	char	339	CHAR({1})	(11.0,)	str	'_x000B_'
+misc	char	340	CHAR({1})	(12.0,)	str	'_x000C_'
+misc	char	341	CHAR({1})	(13.0,)	str	'_x000D_'
+misc	char	342	CHAR({1})	(14.0,)	str	'_x000E_'
+misc	char	343	CHAR({1})	(15.0,)	str	'_x000F_'
+misc	char	344	CHAR({1})	(16.0,)	str	'_x0010_'
+misc	char	345	CHAR({1})	(17.0,)	str	'_x0011_'
+misc	char	346	CHAR({1})	(18.0,)	str	'_x0012_'
+misc	char	347	CHAR({1})	(19.0,)	str	'_x0013_'
+misc	char	348	CHAR({1})	(20.0,)	str	'_x0014_'
+misc	char	349	CHAR({1})	(21.0,)	str	'_x0015_'
+misc	char	350	CHAR({1})	(22.0,)	str	'_x0016_'
+misc	char	351	CHAR({1})	(23.0,)	str	'_x0017_'
+misc	char	352	CHAR({1})	(24.0,)	str	'_x0018_'
+misc	char	353	CHAR({1})	(25.0,)	str	'_x0019_'
+misc	char	354	CHAR({1})	(26.0,)	str	'_x001A_'
+misc	char	355	CHAR({1})	(27.0,)	str	'_x001B_'
+misc	char	356	CHAR({1})	(28.0,)	str	'_x001C_'
+misc	char	357	CHAR({1})	(29.0,)	str	'_x001D_'
+misc	char	358	CHAR({1})	(30.0,)	str	'_x001E_'
+misc	char	359	CHAR({1})	(31.0,)	str	'_x001F_'
+misc	char	360	CHAR({1})	(32.0,)	str	' '
+misc	char	361	CHAR({1})	(33.0,)	str	'!'
+misc	char	362	CHAR({1})	(34.0,)	str	'"'
+misc	char	363	CHAR({1})	(35.0,)	str	'#'
+misc	char	364	CHAR({1})	(36.0,)	str	'$'
+misc	char	365	CHAR({1})	(37.0,)	str	'%'
+misc	char	366	CHAR({1})	(38.0,)	str	'&'
+misc	char	367	CHAR({1})	(39.0,)	str	"'"
+misc	char	368	CHAR({1})	(40.0,)	str	'('
+misc	char	369	CHAR({1})	(41.0,)	str	')'
+misc	char	370	CHAR({1})	(42.0,)	str	'*'
+misc	char	371	CHAR({1})	(43.0,)	str	'+'
+misc	char	372	CHAR({1})	(44.0,)	str	','
+misc	char	373	CHAR({1})	(45.0,)	str	'-'
+misc	char	374	CHAR({1})	(46.0,)	str	'.'
+misc	char	375	CHAR({1})	(47.0,)	str	'/'
+misc	char	376	CHAR({1})	(48.0,)	str	'0'
+misc	char	377	CHAR({1})	(49.0,)	str	'1'
+misc	char	378	CHAR({1})	(50.0,)	str	'2'
+misc	char	379	CHAR({1})	(51.0,)	str	'3'
+misc	char	380	CHAR({1})	(52.0,)	str	'4'
+misc	char	381	CHAR({1})	(53.0,)	str	'5'
+misc	char	382	CHAR({1})	(54.0,)	str	'6'
+misc	char	383	CHAR({1})	(55.0,)	str	'7'
+misc	char	384	CHAR({1})	(56.0,)	str	'8'
+misc	char	385	CHAR({1})	(57.0,)	str	'9'
+misc	char	386	CHAR({1})	(58.0,)	str	':'
+misc	char	387	CHAR({1})	(59.0,)	str	';'
+misc	char	388	CHAR({1})	(60.0,)	str	'<'
+misc	char	389	CHAR({1})	(61.0,)	str	'='
+misc	char	390	CHAR({1})	(62.0,)	str	'>'
+misc	char	391	CHAR({1})	(63.0,)	str	'?'
+misc	char	392	CHAR({1})	(64.0,)	str	'@'
+misc	char	393	CHAR({1})	(65.0,)	str	'A'
+misc	char	394	CHAR({1})	(66.0,)	str	'B'
+misc	char	395	CHAR({1})	(67.0,)	str	'C'
+misc	char	396	CHAR({1})	(68.0,)	str	'D'
+misc	char	397	CHAR({1})	(69.0,)	str	'E'
+misc	char	398	CHAR({1})	(70.0,)	str	'F'
+misc	char	399	CHAR({1})	(71.0,)	str	'G'
+misc	char	400	CHAR({1})	(72.0,)	str	'H'
+misc	char	401	CHAR({1})	(73.0,)	str	'I'
+misc	char	402	CHAR({1})	(74.0,)	str	'J'
+misc	char	403	CHAR({1})	(75.0,)	str	'K'
+misc	char	404	CHAR({1})	(76.0,)	str	'L'
+misc	char	405	CHAR({1})	(77.0,)	str	'M'
+misc	char	406	CHAR({1})	(78.0,)	str	'N'
+misc	char	407	CHAR({1})	(79.0,)	str	'O'
+misc	char	408	CHAR({1})	(80.0,)	str	'P'
+misc	char	409	CHAR({1})	(81.0,)	str	'Q'
+misc	char	410	CHAR({1})	(82.0,)	str	'R'
+misc	char	411	CHAR({1})	(83.0,)	str	'S'
+misc	char	412	CHAR({1})	(84.0,)	str	'T'
+misc	char	413	CHAR({1})	(85.0,)	str	'U'
+misc	char	414	CHAR({1})	(86.0,)	str	'V'
+misc	char	415	CHAR({1})	(87.0,)	str	'W'
+misc	char	416	CHAR({1})	(88.0,)	str	'X'
+misc	char	417	CHAR({1})	(89.0,)	str	'Y'
+misc	char	418	CHAR({1})	(90.0,)	str	'Z'
+misc	char	419	CHAR({1})	(91.0,)	str	'['
+misc	char	420	CHAR({1})	(92.0,)	str	'\\'
+misc	char	421	CHAR({1})	(93.0,)	str	']'
+misc	char	422	CHAR({1})	(94.0,)	str	'^'
+misc	char	423	CHAR({1})	(95.0,)	str	'_'
+misc	char	424	CHAR({1})	(96.0,)	str	'`'
+misc	char	425	CHAR({1})	(97.0,)	str	'a'
+misc	char	426	CHAR({1})	(98.0,)	str	'b'
+misc	char	427	CHAR({1})	(99.0,)	str	'c'
+misc	char	428	CHAR({1})	(100.0,)	str	'd'
+misc	char	429	CHAR({1})	(101.0,)	str	'e'
+misc	char	430	CHAR({1})	(102.0,)	str	'f'
+misc	char	431	CHAR({1})	(103.0,)	str	'g'
+misc	char	432	CHAR({1})	(104.0,)	str	'h'
+misc	char	433	CHAR({1})	(105.0,)	str	'i'
+misc	char	434	CHAR({1})	(106.0,)	str	'j'
+misc	char	435	CHAR({1})	(107.0,)	str	'k'
+misc	char	436	CHAR({1})	(108.0,)	str	'l'
+misc	char	437	CHAR({1})	(109.0,)	str	'm'
+misc	char	438	CHAR({1})	(110.0,)	str	'n'
+misc	char	439	CHAR({1})	(111.0,)	str	'o'
+misc	char	440	CHAR({1})	(112.0,)	str	'p'
+misc	char	441	CHAR({1})	(113.0,)	str	'q'
+misc	char	442	CHAR({1})	(114.0,)	str	'r'
+misc	char	443	CHAR({1})	(115.0,)	str	's'
+misc	char	444	CHAR({1})	(116.0,)	str	't'
+misc	char	445	CHAR({1})	(117.0,)	str	'u'
+misc	char	446	CHAR({1})	(118.0,)	str	'v'
+misc	char	447	CHAR({1})	(119.0,)	str	'w'
+misc	char	448	CHAR({1})	(120.0,)	str	'x'
+misc	char	449	CHAR({1})	(121.0,)	str	'y'
+misc	char	450	CHAR({1})	(122.0,)	str	'z'
+misc	char	451	CHAR({1})	(123.0,)	str	'{'
+misc	char	452	CHAR({1})	(124.0,)	str	'|'
+misc	char	453	CHAR({1})	(125.0,)	str	'}'
+misc	char	454	CHAR({1})	(126.0,)	str	'~'
+misc	char	455	CHAR({1})	(127.0,)	str	'\x7f'
+misc	char	456	CHAR({1})	(128.0,)	str	'Ä'
+misc	char	457	CHAR({1})	(129.0,)	str	'Å'
+misc	char	458	CHAR({1})	(130.0,)	str	'Ç'
+misc	char	459	CHAR({1})	(131.0,)	str	'É'
+misc	char	460	CHAR({1})	(132.0,)	str	'Ñ'
+misc	char	461	CHAR({1})	(133.0,)	str	'Ö'
+misc	char	462	CHAR({1})	(134.0,)	str	'Ü'
+misc	char	463	CHAR({1})	(135.0,)	str	'á'
+misc	char	464	CHAR({1})	(136.0,)	str	'à'
+misc	char	465	CHAR({1})	(137.0,)	str	'â'
+misc	char	466	CHAR({1})	(138.0,)	str	'ä'
+misc	char	467	CHAR({1})	(139.0,)	str	'ã'
+misc	char	468	CHAR({1})	(140.0,)	str	'å'
+misc	char	469	CHAR({1})	(141.0,)	str	'ç'
+misc	char	470	CHAR({1})	(142.0,)	str	'é'
+misc	char	471	CHAR({1})	(143.0,)	str	'è'
+misc	char	472	CHAR({1})	(144.0,)	str	'ê'
+misc	char	473	CHAR({1})	(145.0,)	str	'ë'
+misc	char	474	CHAR({1})	(146.0,)	str	'í'
+misc	char	475	CHAR({1})	(147.0,)	str	'ì'
+misc	char	476	CHAR({1})	(148.0,)	str	'î'
+misc	char	477	CHAR({1})	(149.0,)	str	'ï'
+misc	char	478	CHAR({1})	(150.0,)	str	'ñ'
+misc	char	479	CHAR({1})	(151.0,)	str	'ó'
+misc	char	480	CHAR({1})	(152.0,)	str	'ò'
+misc	char	481	CHAR({1})	(153.0,)	str	'ô'
+misc	char	482	CHAR({1})	(154.0,)	str	'ö'
+misc	char	483	CHAR({1})	(155.0,)	str	'õ'
+misc	char	484	CHAR({1})	(156.0,)	str	'ú'
+misc	char	485	CHAR({1})	(157.0,)	str	'ù'
+misc	char	486	CHAR({1})	(158.0,)	str	'û'
+misc	char	487	CHAR({1})	(159.0,)	str	'ü'
+misc	char	488	CHAR({1})	(160.0,)	str	'†'
+misc	char	489	CHAR({1})	(161.0,)	str	'°'
+misc	char	490	CHAR({1})	(162.0,)	str	'¢'
+misc	char	491	CHAR({1})	(163.0,)	str	'£'
+misc	char	492	CHAR({1})	(164.0,)	str	'§'
+misc	char	493	CHAR({1})	(165.0,)	str	'•'
+misc	char	494	CHAR({1})	(166.0,)	str	'¶'
+misc	char	495	CHAR({1})	(167.0,)	str	'ß'
+misc	char	496	CHAR({1})	(168.0,)	str	'®'
+misc	char	497	CHAR({1})	(169.0,)	str	'©'
+misc	char	498	CHAR({1})	(170.0,)	str	'™'
+misc	char	499	CHAR({1})	(171.0,)	str	'´'
+misc	char	500	CHAR({1})	(172.0,)	str	'¨'
+misc	char	501	CHAR({1})	(173.0,)	str	'≠'
+misc	char	502	CHAR({1})	(174.0,)	str	'Æ'
+misc	char	503	CHAR({1})	(175.0,)	str	'Ø'
+misc	char	504	CHAR({1})	(176.0,)	str	'∞'
+misc	char	505	CHAR({1})	(177.0,)	str	'±'
+misc	char	506	CHAR({1})	(178.0,)	str	'≤'
+misc	char	507	CHAR({1})	(179.0,)	str	'≥'
+misc	char	508	CHAR({1})	(180.0,)	str	'¥'
+misc	char	509	CHAR({1})	(181.0,)	str	'µ'
+misc	char	510	CHAR({1})	(182.0,)	str	'∂'
+misc	char	511	CHAR({1})	(183.0,)	str	'∑'
+misc	char	512	CHAR({1})	(184.0,)	str	'∏'
+misc	char	513	CHAR({1})	(185.0,)	str	'π'
+misc	char	514	CHAR({1})	(186.0,)	str	'∫'
+misc	char	515	CHAR({1})	(187.0,)	str	'ª'
+misc	char	516	CHAR({1})	(188.0,)	str	'º'
+misc	char	517	CHAR({1})	(189.0,)	str	'Ω'
+misc	char	518	CHAR({1})	(190.0,)	str	'æ'
+misc	char	519	CHAR({1})	(191.0,)	str	'ø'
+misc	char	520	CHAR({1})	(192.0,)	str	'¿'
+misc	char	521	CHAR({1})	(193.0,)	str	'¡'
+misc	char	522	CHAR({1})	(194.0,)	str	'¬'
+misc	char	523	CHAR({1})	(195.0,)	str	'√'
+misc	char	524	CHAR({1})	(196.0,)	str	'ƒ'
+misc	char	525	CHAR({1})	(197.0,)	str	'≈'
+misc	char	526	CHAR({1})	(198.0,)	str	'∆'
+misc	char	527	CHAR({1})	(199.0,)	str	'«'
+misc	char	528	CHAR({1})	(200.0,)	str	'»'
+misc	char	529	CHAR({1})	(201.0,)	str	'…'
+misc	char	530	CHAR({1})	(202.0,)	str	'\xa0'
+misc	char	531	CHAR({1})	(203.0,)	str	'À'
+misc	char	532	CHAR({1})	(204.0,)	str	'Ã'
+misc	char	533	CHAR({1})	(205.0,)	str	'Õ'
+misc	char	534	CHAR({1})	(206.0,)	str	'Œ'
+misc	char	535	CHAR({1})	(207.0,)	str	'œ'
+misc	char	536	CHAR({1})	(208.0,)	str	'–'
+misc	char	537	CHAR({1})	(209.0,)	str	'—'
+misc	char	538	CHAR({1})	(210.0,)	str	'“'
+misc	char	539	CHAR({1})	(211.0,)	str	'”'
+misc	char	540	CHAR({1})	(212.0,)	str	'‘'
+misc	char	541	CHAR({1})	(213.0,)	str	'’'
+misc	char	542	CHAR({1})	(214.0,)	str	'÷'
+misc	char	543	CHAR({1})	(215.0,)	str	'◊'
+misc	char	544	CHAR({1})	(216.0,)	str	'ÿ'
+misc	char	545	CHAR({1})	(217.0,)	str	'Ÿ'
+misc	char	546	CHAR({1})	(218.0,)	str	'⁄'
+misc	char	547	CHAR({1})	(219.0,)	str	'€'
+misc	char	548	CHAR({1})	(220.0,)	str	'‹'
+misc	char	549	CHAR({1})	(221.0,)	str	'›'
+misc	char	550	CHAR({1})	(222.0,)	str	'ﬁ'
+misc	char	551	CHAR({1})	(223.0,)	str	'ﬂ'
+misc	char	552	CHAR({1})	(224.0,)	str	'‡'
+misc	char	553	CHAR({1})	(225.0,)	str	'·'
+misc	char	554	CHAR({1})	(226.0,)	str	'‚'
+misc	char	555	CHAR({1})	(227.0,)	str	'„'
+misc	char	556	CHAR({1})	(228.0,)	str	'‰'
+misc	char	557	CHAR({1})	(229.0,)	str	'Â'
+misc	char	558	CHAR({1})	(230.0,)	str	'Ê'
+misc	char	559	CHAR({1})	(231.0,)	str	'Á'
+misc	char	560	CHAR({1})	(232.0,)	str	'Ë'
+misc	char	561	CHAR({1})	(233.0,)	str	'È'
+misc	char	562	CHAR({1})	(234.0,)	str	'Í'
+misc	char	563	CHAR({1})	(235.0,)	str	'Î'
+misc	char	564	CHAR({1})	(236.0,)	str	'Ï'
+misc	char	565	CHAR({1})	(237.0,)	str	'Ì'
+misc	char	566	CHAR({1})	(238.0,)	str	'Ó'
+misc	char	567	CHAR({1})	(239.0,)	str	'Ô'
+misc	char	568	CHAR({1})	(240.0,)	str	'\uf8ff'
+misc	char	569	CHAR({1})	(241.0,)	str	'Ò'
+misc	char	570	CHAR({1})	(242.0,)	str	'Ú'
+misc	char	571	CHAR({1})	(243.0,)	str	'Û'
+misc	char	572	CHAR({1})	(244.0,)	str	'Ù'
+misc	char	573	CHAR({1})	(245.0,)	str	'ı'
+misc	char	574	CHAR({1})	(246.0,)	str	'ˆ'
+misc	char	575	CHAR({1})	(247.0,)	str	'˜'
+misc	char	576	CHAR({1})	(248.0,)	str	'¯'
+misc	char	577	CHAR({1})	(249.0,)	str	'˘'
+misc	char	578	CHAR({1})	(250.0,)	str	'˙'
+misc	char	579	CHAR({1})	(251.0,)	str	'˚'
+misc	char	580	CHAR({1})	(252.0,)	str	'¸'
+misc	char	581	CHAR({1})	(253.0,)	str	'˝'
+misc	char	582	CHAR({1})	(254.0,)	str	'˛'
+misc	char	583	CHAR({1})	(255.0,)	str	'ˇ'
+misc	char	584	CHAR({1})	(256.0,)	e	#VALUE!
+misc	char	585	CHAR({1})	(1.5,)	str	'_x0001_'
+misc	char	586	CHAR({1})	(65.9,)	str	'A'
+misc	char	587	CHAR({1})	(-1.0,)	e	#VALUE!
+misc	char	588	CHAR({1})	(10000000000.0,)	e	#VALUE!
+misc	char	589	CHAR({1})	(2.5,)	str	'_x0002_'
+misc	char	590	CHAR({1})	(-2.5,)	e	#VALUE!
+misc	char	591	CHAR({1})	(0.0,)	e	#VALUE!
+misc	char	592	CHAR({1})	('3',)	str	'_x0003_'
+misc	char	593	CHAR({1})	('abc',)	e	#VALUE!
+misc	char	594	CHAR({1})	(True,)	str	'_x0001_'
+misc	char	595	CHAR({1})	(False,)	e	#VALUE!
+misc	char	596	CHAR({1})	(None,)	e	#VALUE!
+misc	char	597	CHAR({1})	(FormulaInput('=""'),)	e	#VALUE!
+misc	char	598	CHAR({1})	(ErrorValue('#N/A'),)	e	#N/A
+misc	code	599	CODE({1})	('A',)	n	65.0
+misc	code	600	CODE({1})	('abc',)	n	97.0
+misc	code	601	CODE({1})	('',)	e	#VALUE!
+misc	code	602	CODE({1})	('é',)	n	142.0
+misc	code	603	CODE({1})	('€',)	n	219.0
+misc	code	604	CODE({1})	('ÿ',)	n	216.0
+misc	code	605	CODE({1})	(' ',)	n	32.0
+misc	code	606	CODE({1})	('1',)	n	49.0
+misc	code	607	CODE({1})	('☃',)	n	95.0
+misc	code	608	CODE({1})	('😀',)	n	95.0
+misc	code	609	CODE(CHAR(200))	()	n	200.0
+misc	code	610	CODE(TRUE)	()	n	84.0
+misc	code	611	CODE(65)	()	n	54.0
