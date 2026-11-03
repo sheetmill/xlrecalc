@@ -9,7 +9,7 @@ from xlrecalc._values import ErrorValue
 from xlrecalc._workbook import CellValue, FormulaError, Workbook, load
 from xlrecalc._xlsx import LimitError, PackageError, ReadLimits
 
-__version__ = "0.1.0.dev0"
+__version__ = "0.1.0"
 
 __all__ = [
     "CellRef",

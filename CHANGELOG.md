@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-02
+
 First release.
 
 ### Added
@@ -62,3 +64,6 @@ First release.
   cell's formula and cached value, with shared and array formulas, defined names, tables and
   calculation settings; archive limits (`ReadLimits`, `LimitError`) and a refusal of DTDs
   protect against hostile files; `PackageError` for a file that is not a readable package.
+
+[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/sheetmill/xlrecalc/releases/tag/v0.1.0
