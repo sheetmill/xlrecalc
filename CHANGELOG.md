@@ -50,6 +50,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- An exact lookup over its own column was called circular wherever the formula sat. `MATCH`,
+  `VLOOKUP`, `HLOOKUP`, `XLOOKUP` and `XMATCH` stop at their match, as Excel does (capture
+  `index_range`): a formula below the match is computed, and only one that reads past itself is
+  circular.
 - A union of ranges as an argument gave a wrong value with no report: `SUM((A1,B2))` and
   `LARGE((A1,B2),1)` were `#VALUE!`, `COUNT((A1,B2))` was 0. Unions are not implemented; such a
   formula now keeps the value the file holds and is reported.

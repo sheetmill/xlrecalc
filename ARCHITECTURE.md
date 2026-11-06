@@ -628,6 +628,9 @@ a sheet holds, and they give Excel's value over a whole sheet (capture `array_fu
 `MATCH`, `VLOOKUP`, `HLOOKUP` and `LOOKUP` read a range's non-blank cells likewise, since neither an
 exact match nor the bisection of cells of the key's type can land on a blank.
 `XLOOKUP` and `XMATCH` do too; a blank key, which finds a blank cell, looks for the first gap.
+An exact search reads only as far as its match, so it is circular only if it reaches its own cell
+(capture `index_range`); an approximate one reads the whole line. `INDEX` reads nothing, so
+`INDEX(C:C,1):INDEX(C:C,3)` in column C is circular only if the range it makes holds the formula.
 `tests/test_function_sweep.py`, generated from the registry, runs every function over a whole
 sheet of two cells under the memory watchdog, so one that walks a range by position fails there.
 

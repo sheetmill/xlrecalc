@@ -11,6 +11,7 @@ from pathlib import Path
 import pytest
 
 from xlrecalc._engine import Engine
+from xlrecalc._formula._tokens import column_number
 
 CAPTURES = Path(__file__).with_name("captures")
 
@@ -72,3 +73,26 @@ def test_cached_values_of_cycles_are_shown(row):
     number, tag, *_rest, shown_patched = row
     if tag in ("pair", "self", "self_range", "triple", "text", "iferror", "untaken"):
         assert shown_patched == f"{900 + int(number)}.0|{900 + int(number)}"
+
+
+INDEX_RANGE = [
+    line.rstrip("\n").split("\t")
+    for line in (Path(__file__).with_name("captures") / "index_range.tsv")
+    .read_text(encoding="utf-8")
+    .splitlines()
+    if not line.startswith("#")
+]
+
+
+@pytest.mark.parametrize("row", INDEX_RANGE, ids=lambda r: r[0])
+def test_a_range_over_a_formulas_own_column_is_circular_only_as_read(row):
+    """Capture ``index_range``: an exact lookup stops at its match, and ``INDEX`` reads nothing."""
+    text, address, _kind, value = row
+    column = address.rstrip("0123456789")
+    number = column_number(column)
+    cells: dict[str, object] = {f"{column}{r}": float(r) for r in range(1, 6)}
+    cells[address] = "=" + text
+    engine = Engine.from_cells({"probe": cells})
+    engine.recalculate()
+    r = int(address[len(column) :])
+    assert engine.get(0, r - 1, number - 1) == ast.literal_eval(value)

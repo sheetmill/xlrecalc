@@ -114,6 +114,11 @@ class _Cells:
     ) -> Iterator[tuple[int, int, Value]]:
         return self.sheets[sheet].box(r1, c1, r2, c2)
 
+    def walk(
+        self, sheet: int, r1: int, c1: int, r2: int, c2: int
+    ) -> Iterator[tuple[int, int, Value]]:
+        return self.sheets[sheet].box(r1, c1, r2, c2)
+
     def values(self, sheet: int, r1: int, c1: int, r2: int, c2: int) -> list[Value]:
         return self.sheets[sheet].box_values(r1, c1, r2, c2)
 
@@ -151,6 +156,17 @@ class _CheckedCells(_Cells):
     def values(self, sheet: int, r1: int, c1: int, r2: int, c2: int) -> list[Value]:
         self.engine._check_box(sheet, r1, c1, r2, c2)
         return super().values(sheet, r1, c1, r2, c2)
+
+    def walk(
+        self, sheet: int, r1: int, c1: int, r2: int, c2: int
+    ) -> Iterator[tuple[int, int, Value]]:
+        self.engine._check_anchors(sheet, r1, c1, r2, c2)
+        s = self.sheets[sheet]
+        for r, c in s.positions(r1, c1, r2, c2):
+            self.engine._check(sheet, r, c)
+            v = s.values.get(r * COLS + c)
+            if v is not None:
+                yield r, c, v
 
 
 class Engine:
@@ -697,6 +713,10 @@ class Engine:
         for r, c in self.sheets[sheet].formulas_in(r1, c1, r2, c2):
             if node(sheet, r, c) in stale:
                 raise _NotEvaluatedError(node(sheet, r, c))
+        self._check_anchors(sheet, r1, c1, r2, c2)
+
+    def _check_anchors(self, sheet: int, r1: int, c1: int, r2: int, c2: int) -> None:
+        stale = self.stale
         for a1, b1, a2, b2, anchor in self._anchor_list(sheet):
             if anchor in stale and a1 <= r2 and r1 <= a2 and b1 <= c2 and c1 <= b2:
                 raise _NotEvaluatedError(anchor)

@@ -163,6 +163,14 @@ class Ref:
         for r, c, v in self.source.box(self.sheet, self.r1, self.c1, self.r2, self.c2):  # type: ignore[attr-defined]
             yield r - self.r1, c - self.c1, v
 
+    def walk(self) -> Iterator[tuple[int, int, Value]]:
+        """Non-blank cells as ``cells`` yields them, checked one by one as they are reached.
+
+        For a search that stops at what it finds: it depends only on the cells it reached.
+        """
+        for r, c, v in self.source.walk(self.sheet, self.r1, self.c1, self.r2, self.c2):  # type: ignore[attr-defined]
+            yield r - self.r1, c - self.c1, v
+
     def values(self) -> list[Value]:
         """The non-blank values, row-major, as ``cells`` yields them, in one list."""
         return self.source.values(self.sheet, self.r1, self.c1, self.r2, self.c2)  # type: ignore[attr-defined, no-any-return]

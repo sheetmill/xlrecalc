@@ -45,6 +45,8 @@ class Grid:
                 self.reads += 1
                 yield r, c, v
 
+    walk = box
+
 
 def _grid(rng: random.Random, rows: int, cols: int, density: float) -> Grid:
     cells = {}

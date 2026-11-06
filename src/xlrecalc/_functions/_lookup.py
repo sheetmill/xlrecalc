@@ -93,6 +93,19 @@ def _line(ref: Ref | _Grid, horizontal: bool) -> list[tuple[int, Any]]:
     return [(r, ref.value(r, 0)) for r in range(ref.rows)]
 
 
+def _walked(ref: Ref | _Grid, horizontal: bool) -> Any:
+    """``_line`` read as far as a search goes.
+
+    An exact search stops at its match and depends only on the cells before it, so a formula
+    below the match is not circular (capture ``index_range``).
+    """
+    if not isinstance(ref, Ref):
+        return _line(ref, horizontal)
+    last_row, last_col = (ref.r1, ref.c2) if horizontal else (ref.r2, ref.c1)
+    line = Ref(ref.source, ref.sheet, ref.r1, ref.c1, last_row, last_col)
+    return ((c if horizontal else r, v) for r, c, v in line.walk())
+
+
 def _lookup_value(lookup: Any, ctx: Context) -> Any:
     v = scalar(lookup, ctx)
     return 0.0 if v is BLANK else v
@@ -111,7 +124,7 @@ def MATCH(ctx: Context, lookup: Any, ref: Any, kind: Any = 1.0) -> float | Error
     if isinstance(ref, tuple):
         cells = list(enumerate(x for row in ref for x in row))
     elif isinstance(ref, Ref) and (ref.rows == 1 or ref.columns == 1):
-        cells = _line(ref, ref.rows == 1)
+        cells = _walked(ref, ref.rows == 1) if kind == 0 else _line(ref, ref.rows == 1)
     else:
         return NA
     k = 0 if kind == 0 else (1 if kind > 0 else -1)
@@ -145,8 +158,11 @@ def _table_lookup(
         if isinstance(approx, ErrorValue):
             return approx
         approx = bool(approx) if not isinstance(approx, str) else approx.upper() == "TRUE"
-    keys = _line(table, horizontal)
-    i = _approximate(v, keys, False, ctx) if approx else _exact(v, keys)
+    i = (
+        _approximate(v, _line(table, horizontal), False, ctx)
+        if approx
+        else _exact(v, _walked(table, horizontal))
+    )
     if i is None:
         return NA
     result = table.value(n - 1, i) if horizontal else table.value(i, n - 1)
@@ -400,8 +416,8 @@ def _mode(arg: Any, default: int, allowed: tuple[int, ...], ctx: Context) -> int
     return k if k in allowed else VALUE
 
 
-def _x_cells(array: Any) -> list[tuple[int, Any]] | ErrorValue:
-    """A one-line range or array as (position, value), blanks left out."""
+def _x_cells(array: Any, lazily: bool = False) -> Any:
+    """A one-line range or array as (position, value), blanks left out; ``lazily``, as searched."""
     if isinstance(array, ErrorValue):
         return array
     if isinstance(array, tuple):
@@ -411,7 +427,7 @@ def _x_cells(array: Any) -> list[tuple[int, Any]] | ErrorValue:
     if isinstance(array, Ref):
         if array.rows > 1 and array.columns > 1:
             return VALUE
-        return _line(array, array.rows == 1)
+        return _walked(array, array.rows == 1) if lazily else _line(array, array.rows == 1)
     return [(0, array)]
 
 
@@ -539,7 +555,7 @@ def XMATCH(ctx: Context, key: Any, array: Any, match: Any = MISSING, search: Any
         return s
     if m == 2 and s in (2, -2):
         return VALUE  # wildcards cannot be bisected (capture modern)
-    cells = _x_cells(array)
+    cells = _x_cells(array, lazily=s == 1 and v is not BLANK and m in (0, 2))
     if isinstance(cells, ErrorValue):
         return cells
     found = _x_search(v, cells, _x_size(array), m, s, ctx)
@@ -584,7 +600,7 @@ def XLOOKUP(
         return s
     if m == 2 and s in (2, -2):
         return VALUE  # wildcards cannot be bisected (capture modern)
-    cells = _x_cells(array)
+    cells = _x_cells(array, lazily=s == 1 and v is not BLANK and m in (0, 2))
     if isinstance(cells, ErrorValue):
         return cells
     if isinstance(results, ErrorValue):
