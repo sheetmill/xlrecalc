@@ -28,6 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- `TEXT` with a format holding `b` reads it as the Buddhist-era year (`TEXT(12.5,"abc")` is
+  `a43c`), and `TEXT(x,"General")` with a three-digit exponent keeps what fits 11 characters
+  (`2.2251E-308`), as Excel does (xlformat 0.3); both were known deviations.
 - `TEXT(1,"""#""")`, a format of a quoted `#` alone, gave `#VALUE!` where Excel gives `#`
   (`-#` for -1): any result made only of `#` was taken for a run Excel shows when a value does
   not fit.

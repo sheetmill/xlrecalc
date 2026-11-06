@@ -88,12 +88,6 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 - A row off Excel's grid in a file (`r="99999999999"`): Excel opens the file and drops the cell
   (capture `value_forms`), though it refuses rows 0 and 1048577; the reader refuses every row
   off the grid with a `PackageError`.
-- `TEXT` with a format holding `b`: Excel reads it as the Buddhist-era year
-  (`TEXT(12.5,"abc")` is `a43c`); xlformat does not know that code yet. One row of
-  `textfmt`.
-- `TEXT(x,"General")` with a three-digit exponent: Excel keeps what fits 11 characters
-  (`2.2251E-308`, `1.7977E+308`), xlformat six significant digits. Two rows of `number_text`,
-  listed in `tests/test_captures.py`.
 - `VDB` (`finance`) within 4 units in the last place but five rows: the last period of a
   long schedule (7 to 48 units), and two edge cases Excel answers oddly (`#DIV/0!` for start
   = end = life at a rate of 1 per period; cost - salvage when salvage exceeds cost).

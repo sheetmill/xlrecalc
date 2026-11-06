@@ -722,12 +722,10 @@ format gives the empty text for a number (`-` for a negative one) and leaves tex
 as text, a logical format is `#VALUE!`, and a format of a quoted `#` alone is that text
 (`TEXT(1,"""#""")` is `#`, `-#` for -1). The seam converts text that reads as a number
 and refuses a logical format; xlformat's `text_function` does the rest as `TEXT` does it.
-Capture `textfmt` (24 values in 39 formats and argument kinds) covers them,
-every row but one matching: Excel reads `b` as the Buddhist-era year (`TEXT(12.5,"abc")` is
-`a43c`), which xlformat does not know yet. `TEXT(x,"General")` matches xlformat's `General`
-on every captured row but two: with a three-digit exponent Excel keeps what fits 11
-characters (`2.2251E-308`, `1.7977E+308`) where xlformat keeps six significant digits; both
-are listed as known deviations.
+Capture `textfmt` (24 values in 39 formats and argument kinds) covers them, every row
+matching, `b` as the Buddhist-era year included (`TEXT(12.5,"abc")` is `a43c`); and
+`TEXT(x,"General")` matches Excel's `General` on every row of `number_text`, a three-digit
+exponent included (`2.2251E-308`).
 
 ### 8.4 Coverage matrix
 

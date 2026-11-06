@@ -27,10 +27,6 @@ from xlrecalc._numtext import DBL_MIN
 from xlrecalc._quirks import Quirks
 from xlrecalc._values import Value
 
-_XLFORMAT_EXPONENT = (
-    "xlformat's General keeps six significant digits with a three-digit exponent; Excel keeps "
-    "what fits 11 characters (2.2251E-308, 1.7977E+308); an xlformat fix is planned"
-)
 # (suite, case) -> reason.
 _IPMT_TAIL = (
     "IPMT at a fractional period or late in a long term: Excel's balance computation is not "
@@ -167,13 +163,7 @@ _COMPUTED_CRITERIA = (
     "a computed criterion (a formula under a name the database lacks, evaluated for each "
     "record) is not supported; it matches no record"
 )
-_BUDDHIST_YEAR = (
-    "TEXT with the format abc: Excel reads b as the Buddhist-era year (a43c for 12.5); "
-    "xlformat does not know that code yet"
-)
 KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
-    ("number_text", 312): _XLFORMAT_EXPONENT,
-    ("number_text", 314): _XLFORMAT_EXPONENT,
     **{("finance", case): _IPMT_TAIL for case in (359, 367, 368, 371, 373, 397)},
     **{("iterative", case): _ITER_NEAR_ZERO for case in _ITER_NEAR_ZERO_CASES},
     **{("iterative", case): _ITER_OUTCOME for case in _ITER_OUTCOME_CASES},
@@ -188,13 +178,31 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("finance", case): _VDB_ROUNDING for case in (785, 786, 787)},
     **{("finance", case): _VDB_EDGES for case in (903, 920)},
     **{("misc", case): _RANDOM for case in (183, 188)},
-    ("textfmt", 941): _BUDDHIST_YEAR,
     **{("misc", case): _COMPUTED_CRITERIA for case in (197, 222, 247, 272, 297)},
     **{
         ("statistics", case): _NORMAL_TAIL
         for case in (609, 610, 612, 613, 615, 616, 660, 661, 675, 676, 770)
     },
 }
+# A listed deviation that matches Excel fails the test, so a stale entry cannot survive, with two
+# exceptions. A random result can match by chance. And a row listed because the platform's math
+# library (exp, log1p, expm1, pow, erfc) differs from Excel's in the last bits may match on another
+# platform's library: it must still differ on the platform the captures' split is measured on
+# (docs/coverage.md records it), and elsewhere it counts as listed whether or not it matches, so
+# the published counts are the same on every platform.
+EXEMPT = frozenset({_RANDOM})
+MATH_LIBRARY = frozenset(
+    {_IPMT_TAIL, _ITER_NEAR_ZERO, _ITER_OUTCOME, _XIRR, _YIELD_ZERO_COUPON, _PRICE_EXTREME,
+     _NORMAL_TAIL}
+)  # fmt: skip
+
+
+def _reference_platform() -> bool:
+    from tools.coverage import OUTPUT, platform_label, recorded_platform
+
+    return recorded_platform(OUTPUT.read_text(encoding="utf-8")) == platform_label()
+
+
 SUITES = [
     "number_text",
     "text_number",
@@ -335,6 +343,7 @@ def outcomes(name: str) -> tuple[dict[str, int], dict[str, int], tuple[str, ...]
     counts = dict.fromkeys(("match", "ulps", "rel", "listed", "not evaluated"), 0)
     reasons: dict[str, int] = {}
     failures = []
+    reference = _reference_platform()
     for k, row in enumerate(suite.rows, 1):
         template = engine.templates[engine.sheets[s].templates[(k - 1) * 16384]]
         if template.unsupported:
@@ -343,16 +352,26 @@ def outcomes(name: str) -> tuple[dict[str, int], dict[str, int], tuple[str, ...]
             reasons[why] = reasons.get(why, 0) + 1
             continue
         got = engine.get(s, k - 1, 0)
-        if (name, row.case) in KNOWN_DEVIATIONS:  # first: listed on every platform, any draw
-            counts["listed"] += 1
-        elif same(got, row.expected):
-            counts["match"] += 1
+        if same(got, row.expected):
+            outcome = "match"
         elif within(got, row.expected, tolerance(row.formula)):
-            counts["ulps"] += 1
+            outcome = "ulps"
         elif within_relative(got, row.expected, relative(row.formula)):
-            counts["rel"] += 1
-        elif (name, row.case) in KNOWN_DEVIATIONS:
-            counts["listed"] += 1
+            outcome = "rel"
+        else:
+            outcome = "differs"
+        reason = KNOWN_DEVIATIONS.get((name, row.case))
+        if reason is not None:
+            may_match = reason in EXEMPT or (reason in MATH_LIBRARY and not reference)
+            if outcome == "differs" or may_match:
+                counts["listed"] += 1
+            else:
+                failures.append(
+                    f"{row.id} ={formula_text(row, k)}: listed as a known deviation but matches "
+                    f"Excel ({outcome}): remove it from KNOWN_DEVIATIONS and QUIRKS.md"
+                )
+        elif outcome != "differs":
+            counts[outcome] += 1
         else:
             failures.append(
                 f"{row.id} ={formula_text(row, k)} {row.inputs!r}: "
@@ -472,3 +491,12 @@ def test_status_needs_note():
         function("_TEST_STATUS", "number", status="partial")
     with pytest.raises(ValueError, match="partial"):
         function("_TEST_STATUS", "number", status="beta", note="x")
+
+
+def test_every_listed_deviation_is_a_captured_row():
+    rows = {(name, row.case) for name in SUITES for row in load(name).rows}
+    assert sorted(set(KNOWN_DEVIATIONS) - rows) == []
+
+
+def test_exemptions_are_listed_reasons():
+    assert (EXEMPT | MATH_LIBRARY).issubset(KNOWN_DEVIATIONS.values())

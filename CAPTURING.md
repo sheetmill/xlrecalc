@@ -79,7 +79,10 @@ inputs; fixed lookup tables through a suite's `fixed` cells), across argument ki
 errors; run `uv run python -m capture.pipeline SUITE`; implement it under
 `src/xlrecalc/_functions/` with its registry kinds (§8.1 of [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md)); add a new suite
 to `SUITES` in `tests/test_captures.py`. A row that cannot be matched needs its reason in
-`KNOWN_DEVIATIONS` there and in `QUIRKS.md`; a function whose results stay a few units in the
+`KNOWN_DEVIATIONS` there and in `QUIRKS.md`. The list is strict: a listed row that matches Excel
+fails the test, so an entry cannot outlive its cause; a random result is exempt
+(`EXEMPT`), and a row listed because the platform's math library differs from Excel's in the
+last bits (`MATH_LIBRARY`) must differ only on the platform `docs/coverage.md` records. A function whose results stay a few units in the
 last place from Excel's after a time-boxed attempt at bit-exactness declares a tolerance in the
 registry instead ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1), listed in `QUIRKS.md` too. Iterative functions (`IRR`, `XIRR`, `RATE`,
 `YIELD`) get many inputs, so that a rule for their iteration can be fitted. With
