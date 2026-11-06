@@ -110,6 +110,9 @@ class _Cells:
         return self.sheets[sheet].box_values(r1, c1, r2, c2)
 
 
+_LARGE_BOX = 256  # cells: smaller boxes are listed again rather than remembered
+
+
 class _ReferenceArrayError(Exception):
     """A function was given an array of references, which none implements yet (§7.7)."""
 
@@ -627,6 +630,9 @@ class Engine:
         path: list[int] = []
         cyclic: set[int] = set()
         suspects: set[int] = set()  # on a static cycle: evaluated with every read checked
+        marked_from = marked_to = 0  # path[marked_from:marked_to] is all in suspects
+        clean: set[tuple[int, int, int, int, int]] = set()  # large boxes with nothing stale left
+        live: dict[tuple[int, int, int], tuple[RefSpec, ...]] = {}
         for target in targets:  # one at a time: no stack entry per stale cell up front
             if target not in pending:
                 continue
@@ -650,6 +656,7 @@ class Engine:
                         self._strict = False
                     del on_stack[n]
                     path.pop()
+                    marked_to = min(marked_to, len(path))
                     pending.discard(n)
                     continue
                 if n in on_stack:
@@ -657,12 +664,17 @@ class Engine:
                 on_stack[n] = len(path)
                 path.append(n)
                 stack.append((n, True))
-                for p in self.precedents(n):
-                    if p in pending:
-                        if p in on_stack:
-                            suspects.update(path[on_stack[p] :])
-                        else:
-                            stack.append((p, False))
+                for p in self._stale_precedents(n, pending, clean, live):
+                    if p not in on_stack:
+                        stack.append((p, False))
+                        continue
+                    first, last = on_stack[p], len(path)  # marked once: a path may be long
+                    if first < marked_from or first > marked_to:
+                        suspects.update(path[first:last])
+                        marked_from = first
+                    else:
+                        suspects.update(path[marked_to:last])
+                    marked_to = last
         if cyclic:
             self._circular(cyclic)
 
@@ -823,6 +835,76 @@ class Engine:
             for a1, b1, a2, b2, anchor in self._anchor_list(sheet) if self.anchors else ():
                 if anchor != n and a1 <= r2 and r1 <= a2 and b1 <= c2 and c1 <= b2:
                     yield anchor
+
+    def _live_specs(self, tid: int, sheet: int, col: int) -> tuple[RefSpec, ...]:
+        """The references of a template in a column that can reach a formula cell.
+
+        A reference to columns holding no formula has no precedent, whatever the row.
+        """
+        out = []
+        for spec in self.templates[tid].refs:
+            target = sheet if spec.sheet is None else self.sheet_index(spec.sheet)
+            if spec.kind == "box" and not self.anchors:
+                if target is None:
+                    continue
+                c1, c2 = _at(spec.c1, col), _at(spec.c2, col)
+                c1, c2 = max(0, min(c1, c2)), min(MAX_COL, max(c1, c2))
+                columns = self.sheets[target].formula_columns
+                candidates = range(c1, c2 + 1) if c2 - c1 < len(columns) else columns
+                if not any(c1 <= c <= c2 and columns.get(c) for c in candidates):
+                    continue
+            out.append(spec)
+        return tuple(out)
+
+    def _stale_precedents(
+        self,
+        n: int,
+        stale: set[int],
+        clean: set[tuple[int, int, int, int, int]],
+        live: dict[tuple[int, int, int], tuple[RefSpec, ...]],
+    ) -> Iterator[int]:
+        """``precedents`` that are stale, for one pass of the scheduler.
+
+        Nothing becomes stale during a pass, and no formula appears, so a large box found with
+        nothing stale (``clean``) is not listed again by the many formulas that may refer to it,
+        and a template's references to columns of no formula are dropped once for all its cells
+        (``live``).
+        """
+        at_sheet, row, col = unpack(n)
+        tid = self.sheets[at_sheet].templates.at(row, col)
+        if tid is None:
+            return
+        key = (tid, at_sheet, col)
+        specs = live.get(key)
+        if specs is None:
+            specs = live[key] = self._live_specs(tid, at_sheet, col)
+        boxes = (box for spec in specs for box in self._spec_boxes(spec, at_sheet, row, col))
+        for sheet, r1, c1, r2, c2 in boxes:
+            s = self.sheets[sheet]
+            if r1 == r2 and c1 == c2:
+                m = node(sheet, r1, c1)
+                if m in stale and s.templates.at(r1, c1) is not None:
+                    yield m
+                found = False
+            else:
+                box = (sheet, r1, c1, r2, c2)
+                if box in clean:
+                    continue
+                found = False
+                for r, c in s.formulas_in(r1, c1, r2, c2):
+                    m = node(sheet, r, c)
+                    if m in stale:
+                        found = True
+                        yield m
+            for a1, b1, a2, b2, anchor in self._anchor_list(sheet) if self.anchors else ():
+                if anchor in stale and a1 <= r2 and r1 <= a2 and b1 <= c2 and c1 <= b2:
+                    if anchor != n:
+                        found = True
+                        yield anchor
+                    else:
+                        found = True
+            if not found and (r2 - r1 + 1) * (c2 - c1 + 1) >= _LARGE_BOX:
+                clean.add((sheet, r1, c1, r2, c2))
 
     def index(self) -> DependencyIndex:
         """The reverse-dependency index, rebuilt after formulas change."""
