@@ -1,0 +1,83 @@
+# suite: names
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-06
+# generator: capture/name_probe.py
+# method: legacy formulas written by openpyxl into column A; Excel calculates and saves a
+#   copy; value and type from the copy
+# names: {'One': 'S!$Z$2', 'Top': 'S!$Z$1', 'Bot': 'S!$Z$4', 'Block': 'S!$Z$1:$Z$3', 'Grown': 'S!$Z$1:Bot', 'Moving': 'Top:OFFSET(Top,2,0)', 'Alias': 'One', 'Elsewhere': 'Other!$A$2', 'Hole': 'S!$Z$9', 'Start': 'S!$Z$1', 'Finish': 'S!$Z$4', 'Joined': 'Start:Finish', 'EndOther': 'Other!$A$3', 'Number': '5', 'Word': '"x"', 'Total': 'SUM(S!$Z$1:$Z$2)', 'Broken': '#REF!'}
+# columns: row, formula, type, value (Python repr)
+1	'One'	n	2.0
+2	'One+1'	n	3.0
+3	'-One'	n	-2.0
+4	'One*One'	n	4.0
+5	'One&""'	str	'2'
+6	'ROW(One)'	n	2.0
+7	'COLUMN(One)'	n	26.0
+8	'ROWS(One)'	n	1.0
+9	'COLUMNS(One)'	n	1.0
+10	'ISNUMBER(One)'	b	True
+11	'N(One)'	n	2.0
+12	'SUM(One)'	n	2.0
+13	'COUNT(One)'	n	1.0
+14	'OFFSET(One,1,0)'	n	3.0
+15	'OFFSET(One,0,1)'	n	20.0
+16	'SUM(OFFSET(One,0,0,2))'	n	5.0
+17	'SUMIF(OFFSET(One,1,0),">0")'	n	3.0
+18	'COUNTIF(One,2)'	n	1.0
+19	'INDEX(One,1,1)'	n	2.0
+20	'CELL("address",One)'	str	'$Z$2'
+21	'ISBLANK(Hole)'	b	True
+22	'Hole'	n	0.0
+23	'Hole+1'	n	1.0
+24	'ROW(Hole)'	n	9.0
+25	'Alias'	n	2.0
+26	'ROW(Alias)'	n	2.0
+27	'OFFSET(Alias,1,0)'	n	3.0
+28	'Elsewhere'	n	200.0
+29	'ROW(Elsewhere)'	n	2.0
+30	'OFFSET(Elsewhere,1,0)'	n	300.0
+31	'SUM(OFFSET(Elsewhere,-1,0,3))'	n	600.0
+32	'SUM(Top:Bot)'	n	0.0
+33	'ROWS(Top:Bot)'	n	1048576.0
+34	'SUM(Z1:Bot)'	n	10.0
+35	'SUM(Top:Z3)'	n	6.0
+36	'SUM(Grown)'	n	10.0
+37	'ROWS(Grown)'	n	4.0
+38	'MAX(Moving)'	n	3.0
+39	'ROWS(Moving)'	n	3.0
+40	'MIN(Top:OFFSET(Top,2,0))'	n	1.0
+41	'SUM(Block)'	n	6.0
+42	'ROWS(Block)'	n	3.0
+43	'SUM(One Block)'	n	2.0
+44	'ROW(One Block)'	n	2.0
+45	'Number'	n	5.0
+46	'Number+1'	n	6.0
+47	'ROW(Number)'	e	'#VALUE!'
+48	'OFFSET(Number,1,0)'	e	'#VALUE!'
+49	'Word'	str	'x'
+50	'ROW(Word)'	e	'#VALUE!'
+51	'Total'	n	3.0
+52	'Total+1'	n	4.0
+53	'ROW(Total)'	e	'#VALUE!'
+54	'OFFSET(Total,1,0)'	e	'#VALUE!'
+55	'Broken'	e	'#REF!'
+56	'ROW(Broken)'	e	'#REF!'
+57	'OFFSET(Broken,1,0)'	e	'#REF!'
+58	'SUM(Top:Broken)'	e	'#REF!'
+59	'IF(TRUE,One)'	n	2.0
+60	'ROW(IF(TRUE,One))'	n	2.0
+61	'CHOOSE(1,One,Top)'	n	2.0
+62	'ROW(CHOOSE(1,One,Top))'	n	2.0
+63	'One:One'	n	0.0
+64	'ROW(One:One)'	n	1.0
+65	'ROW((One))'	n	2.0
+66	'OFFSET((One),1,0)'	n	3.0
+67	'SUMPRODUCT(OFFSET(One,0,0,2)*2)'	n	10.0
+68	'SUM(Start:Finish)'	n	10.0
+69	'ROWS(Start:Finish)'	n	4.0
+70	'SUM(Z2:Finish)'	n	9.0
+71	'SUM(Joined)'	n	10.0
+72	'ROWS(Joined)'	n	4.0
+73	'SUM(Other!$A$1:EndOther)'	n	600.0
+74	'ROWS(Other!$A$1:EndOther)'	n	3.0
+75	'SUM(Start:EndOther)'	e	'#VALUE!'

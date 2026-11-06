@@ -168,6 +168,7 @@ def compile_formula(
     ops: Any,
     quirks: Quirks = Quirks.EXCEL,
     array_mode: bool = False,
+    as_reference: bool = False,
 ) -> Compiled:
     """Compile a formula in the cell (row, col), 0-based.
 
@@ -183,11 +184,19 @@ def compile_formula(
             under ``fifteen_digit_precision``, as Excel computes them (capture ``literals``).
         array_mode: Compile an array formula (a legacy array formula, or a dynamic-array
             formula): ranges are arrays everywhere, and the result may be an array.
+        as_reference: Compile a defined name's definition: one cell gives a reference, as a
+            function argument does, not its value (capture ``names``).
     """
     gen = _Generator(row, col, functions, quirks)
     gen.arrays = 1 if array_mode else 0
     gen.array_formula = array_mode
-    result = gen.expr(formula.root, top=True)
+    if as_reference:
+        root = formula.root
+        while isinstance(root, Group):
+            root = root.inner
+        result = gen.argument(root)
+    else:
+        result = gen.expr(formula.root, top=True)
     if array_mode:
         result = gen.emit(f"ctx.arr({result})")
     body = "".join(f"    {line}\n" for line in gen.lines)

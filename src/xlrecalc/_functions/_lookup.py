@@ -285,7 +285,13 @@ def COLUMNS(ctx: Context, ref: Any) -> float | ErrorValue:
 
 
 def _not_one_area(ref: Any) -> ErrorValue:
-    """``ROW`` of what is not a reference: an error stays, anything else is ``#REF!``."""
+    """``ROW`` of what is not a reference.
+
+    An error stays, a value (a name for one, capture ``names``) is ``#VALUE!``, and anything else
+    (a union) is ``#REF!``.
+    """
+    if isinstance(ref, float | str | bool):
+        return VALUE
     return ref if isinstance(ref, ErrorValue) and ref is not VALUE else REF
 
 

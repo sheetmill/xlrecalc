@@ -66,6 +66,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   keeps the values, on opening, with `fullCalcOnLoad`, after a full recalculation and after saving
   (capture `circular_cached`), and so does the package; a cell with no value is still the empty text,
   and one set through the API is 0, as Excel gives. They stay in `Report.circular`.
+- A defined name for one cell gave that cell's value, not a reference, so `OFFSET(Name,1,0)`,
+  `SUMIF(OFFSET(Name,1,0),">0")`, `ROW(Name)`, `Name:OFFSET(...)` and ranges defined through such a name
+  (`Sheet!$C$2:Name`) were `#VALUE!` or `#REF!` (capture `names`). An error in the range operator is now
+  that error, not `#VALUE!`, and `ROW` of a name for a value is `#VALUE!`.
 - A loop of references through a branch not taken was called circular, depending on the order of
   its cells: `A1` as `=IF(TRUE,1,B1)` and `B1` as `=A1+1` were both empty, and are 1 and 2 (capture
   `static_cycle`). Only references that evaluation follows make a cycle.

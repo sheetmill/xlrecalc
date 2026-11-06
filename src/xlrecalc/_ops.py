@@ -271,8 +271,12 @@ class Ops:
         return broadcast(op, (x, y), (True, True), self._limit())  # type: ignore[return-value]
 
     def range(self, a: Raw, b: Raw) -> Value:
-        # A range between computed references (A1:INDEX(...)) needs functions that return
-        # references; until then it is a value error.
+        # Between computed references (A1:INDEX(...), a name): an error in either is the result,
+        # and references on two sheets or anything else are a value error (capture names).
+        if isinstance(a, ErrorValue):
+            return a
+        if isinstance(b, ErrorValue):
+            return b
         if isinstance(a, Ref) and isinstance(b, Ref) and a.sheet == b.sheet:
             return Ref(  # type: ignore[return-value]
                 a.source,

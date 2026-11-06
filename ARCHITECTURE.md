@@ -508,7 +508,8 @@ The engine (`_engine.py`) is itself the context the generated code calls (§5.4)
 cell's value, `cref` and `box` a `Ref` (a single cell passed as a function argument is a
 reference, so `ROW(A1)` and `SUMIF(A1,...)` see one; in operators it is the value), `columns`
 and `rows` whole-column and whole-row references, `name` a defined name (compiled once, with its
-sheet scope first), and `unsupported` the `#NAME?` of a function or feature not implemented,
+sheet scope first; a name for one cell is a reference, as a name for a range is, capture `names`),
+and `unsupported` the `#NAME?` of a function or feature not implemented,
 recorded in the report. It also holds the quirks, the date system, the date that texts without a
 year take, and the cell being evaluated, for implicit intersection, `ROW()` and `COLUMN()`. The
 operators are one `Ops` object per engine (`_ops.py`). A `Ref` reads through the store without

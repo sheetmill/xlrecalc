@@ -310,8 +310,18 @@ class Engine:
             tid = self._compile(formula, key, row, col, array_mode)
         return tid
 
-    def _compile(self, formula: Any, key: str, row: int, col: int, array_mode: bool = False) -> int:
-        compiled = compile_formula(formula, row, col, REGISTRY, self.ops, self.quirks, array_mode)
+    def _compile(
+        self,
+        formula: Any,
+        key: str,
+        row: int,
+        col: int,
+        array_mode: bool = False,
+        as_reference: bool = False,
+    ) -> int:
+        compiled = compile_formula(
+            formula, row, col, REGISTRY, self.ops, self.quirks, array_mode, as_reference
+        )
         unsupported = {c for c in compiled.calls if c not in REGISTRY} | compiled.features
         template = Template(
             key,
@@ -1126,7 +1136,12 @@ class Engine:
             template = None
             if text is not None:
                 try:
-                    template = self.templates[self.template_for(text, 0, 0)]
+                    formula = parse(text)
+                    name_key = "{name}" + _template_key(formula, 0, 0)
+                    tid = self._template_ids.get(name_key)
+                    if tid is None:
+                        tid = self._compile(formula, name_key, 0, 0, as_reference=True)
+                    template = self.templates[tid]
                 except (FormulaSyntaxError, TokenizeError):
                     template = None
             self._name_templates[key] = template
