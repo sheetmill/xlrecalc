@@ -48,6 +48,8 @@ def intersect(ref: Ref, ctx: Context) -> Value:
         return ref.value(ctx.row - ref.r1, 0)
     if ref.r1 == ref.r2 and ref.c1 <= ctx.col <= ref.c2:
         return ref.value(0, ctx.col - ref.c1)
+    if ref.r1 <= ctx.row <= ref.r2 and ref.c1 <= ctx.col <= ref.c2:  # capture names
+        return ref.value(ctx.row - ref.r1, ctx.col - ref.c1)
     return VALUE
 
 

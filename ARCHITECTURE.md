@@ -764,7 +764,7 @@ supported) (capture `misc`);
 `INDEX` with a 0 index gives a whole row or column, and into a range returns a reference.
 `CELL`'s kinds that depend on formatting (`format`, `width`, `prefix`, `protect`, `color`,
 `parentheses`) are reported unsupported, since styles are not read. Not yet: `SUBTOTAL`
-codes 101 to 111 leaving out hidden rows (row visibility is not read yet; they act as 1 to 11),
+codes 101 to 111 leaving out hidden rows and 1 to 11 too when a filter is hiding rows on a sheet the call names,
 structured references, 3-D references.
 
 Each registered function declares a status: `implemented`, or `partial` with a note on what

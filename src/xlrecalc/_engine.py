@@ -1319,6 +1319,13 @@ class Engine:
         self.report.uncomputed.add(CellRef(s.name, self.row + 1, self.col + 1))
         return NAME
 
+    def row_hidden(self, sheet: int, row: int) -> bool:
+        return row in self.sheets[sheet].hidden_rows
+
+    def filtering(self, sheet: int) -> bool:
+        """A filter is hiding rows on this sheet."""
+        return self.sheets[sheet].filter_mode
+
     def is_subtotal(self, sheet: int, row: int, col: int) -> bool:
         tid = self.sheets[sheet].templates.at(row, col)
         return tid is not None and self.templates[tid].subtotal

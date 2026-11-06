@@ -154,10 +154,20 @@ class TemplateIds:
 class Sheet:
     """One worksheet's cells."""
 
-    __slots__ = ("columns", "formula_columns", "name", "templates", "values")
+    __slots__ = (
+        "columns",
+        "filter_mode",
+        "formula_columns",
+        "hidden_rows",
+        "name",
+        "templates",
+        "values",
+    )
 
     def __init__(self, name: str) -> None:
         self.name = name
+        self.hidden_rows: frozenset[int] = frozenset()  # 0-based, as the file left them
+        self.filter_mode = False  # a filter is hiding rows: SUBTOTAL 1 to 11 leave out hidden ones
         self.values: dict[int, Value] = {}
         self.templates = TemplateIds()  # formula cells: key -> template id
         self.columns: dict[int, array[int]] = {}  # col -> sorted rows holding a value or formula

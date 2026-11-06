@@ -72,6 +72,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   keeps the values, on opening, with `fullCalcOnLoad`, after a full recalculation and after saving
   (capture `circular_cached`), and so does the package; a cell with no value is still the empty text,
   and one set through the API is 0, as Excel gives. They stay in `Report.circular`.
+- `VLOOKUP`, `HLOOKUP` and `LOOKUP` that find a blank cell give a blank, not 0, so `ISBLANK` of one is
+  TRUE, `&""` is empty and `=""` is TRUE; as a cell's value it is still 0 (capture `criteria`).
+- `SUBTOTAL` reads hidden rows: 101 to 111 leave out every hidden row, and 1 to 11 do too when a filter is
+  hiding rows on a sheet the call names, as Excel does (capture `hidden_rows`). All counted every row.
+- A name or reference to a block (several rows and columns) where one cell is meant takes the cell in the
+  formula's row and column, on its sheet or another (capture `names`). It was `#VALUE!`.
+- The intersection of two single cells works: `A1 A1` is that cell and `A1 A2` is `#NULL!`; both were
+  `#VALUE!` (capture `criteria`).
 - A blank cell as the criterion of `COUNTIF`, `SUMIF`, `AVERAGEIF`, `COUNTIFS`, `SUMIFS`, `AVERAGEIFS`,
   `MAXIFS` and `MINIFS` matched blank cells; it is 0, as in Excel (capture `criteria`):
   `COUNTIF(T1:T9000,A5)` with `A5` empty gave the number of blank cells, and `0` is the answer when no

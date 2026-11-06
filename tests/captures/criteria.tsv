@@ -8,7 +8,7 @@
 #   and type of A are read from the copy's XML (n: number, str: text, b: logical,
 #   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
 #   error input and FormulaInput('=""') for an input cell holding that formula
-# fixed: {'T1': 0.0, 'T2': 5.0, 'T4': '', 'T5': 'a', 'T6': 0.0, 'T7': True, 'T8': ErrorValue('#N/A'), 'U1': 1.0, 'U2': 2.0, 'U3': 4.0, 'U4': 8.0, 'U5': 16.0, 'U6': 32.0, 'U7': 64.0, 'U8': 128.0, 'X1': '', 'X2': 0.0, 'W1': 'a'}
+# fixed: {'T1': 0.0, 'T2': 5.0, 'T4': '', 'T5': 'a', 'T6': 0.0, 'T7': True, 'T8': ErrorValue('#N/A'), 'U1': 1.0, 'U2': 2.0, 'U3': 4.0, 'U4': 8.0, 'U5': 16.0, 'U6': 32.0, 'U7': 64.0, 'U8': 128.0, 'X1': '', 'X2': 0.0, 'W1': 'a', 'AA1': 1.0, 'AA2': 2.0, 'AB2': 5.0, 'AC1': 1.0, 'AD1': 2.0, 'AD2': 5.0}
 # columns: suite tag case formula inputs expected_type expected_repr
 criteria	countif	1	COUNTIF($T$1:$T$8,$Y$1)	()	n	2.0
 criteria	sumif	2	SUMIF($T$1:$T$8,$Y$1,$U$1:$U$8)	()	n	33.0
@@ -113,3 +113,44 @@ criteria	vlookup	100	VLOOKUP($Y$1,$T$1:$U$8,2,FALSE)	()	n	1.0
 criteria	hlookup	101	HLOOKUP($Y$1,$T$1:$U$1,1,FALSE)	()	n	0.0
 criteria	xlookup	102	_xlfn.XLOOKUP($Y$1,$T$1:$T$8,$U$1:$U$8)	()	n	4.0
 criteria	xmatch	103	_xlfn.XMATCH($Y$1,$T$1:$T$8)	()	n	3.0
+criteria	found_blank	104	VLOOKUP(1,$AA$1:$AB$2,2,FALSE)	()	n	0.0
+criteria	found_blank	105	ISBLANK(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	b	True
+criteria	found_blank	106	ISNUMBER(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	b	False
+criteria	found_blank	107	ISTEXT(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	b	False
+criteria	found_blank	108	ISLOGICAL(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	b	False
+criteria	found_blank	109	ISERROR(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	b	False
+criteria	found_blank	110	VLOOKUP(1,$AA$1:$AB$2,2,FALSE)+1	()	n	1.0
+criteria	found_blank	111	VLOOKUP(1,$AA$1:$AB$2,2,FALSE)&""	()	str	''
+criteria	found_blank	112	LEN(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	n	0.0
+criteria	found_blank	113	VLOOKUP(1,$AA$1:$AB$2,2,FALSE)=""	()	b	True
+criteria	found_blank	114	VLOOKUP(1,$AA$1:$AB$2,2,FALSE)=0	()	b	True
+criteria	found_blank	115	N(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	n	0.0
+criteria	found_blank	116	IF(ISBLANK(VLOOKUP(1,$AA$1:$AB$2,2,FALSE)),"na",VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	str	'na'
+criteria	found_blank	117	ISBLANK(HLOOKUP(1,$AC$1:$AD$2,2,FALSE))	()	b	True
+criteria	found_blank	118	ISBLANK(LOOKUP(1,$AA$1:$AA$2,$AB$1:$AB$2))	()	b	True
+criteria	found_blank	119	ISBLANK(_xlfn.XLOOKUP(1,$AA$1:$AA$2,$AB$1:$AB$2))	()	b	True
+criteria	found_blank	120	ISBLANK(INDEX($AB$1:$AB$2,1))	()	b	True
+criteria	found_blank	121	ISBLANK(CHOOSE(1,$AB$1))	()	b	True
+criteria	found_blank	122	ISBLANK(IF(TRUE,$AB$1))	()	b	True
+criteria	found_blank	123	ISBLANK(OFFSET($AB$1,0,0))	()	b	True
+criteria	found_blank	124	ISBLANK($AB$1)	()	b	True
+criteria	found_blank	125	ISBLANK($X$1)	()	b	False
+criteria	found_blank	126	ISBLANK("")	()	b	False
+criteria	found_blank	127	ISBLANK(0)	()	b	False
+criteria	found_blank	128	ISBLANK(MATCH(1,$AA$1:$AA$2,0))	()	b	False
+criteria	range_error	129	SUM(OFFSET($AB$2,NA(),0):$AB$2)	()	e	#N/A
+criteria	range_error	130	SUM($AB$2:OFFSET($AB$2,NA(),0))	()	e	#N/A
+criteria	range_error	131	SUM(OFFSET($AB$2,NA(),0):OFFSET($AB$2,1/0,0))	()	e	#N/A
+criteria	range_error	132	SUM(OFFSET($AB$2,1/0,0):OFFSET($AB$2,NA(),0))	()	e	#DIV/0!
+criteria	range_error	133	ROWS(OFFSET($AB$2,NA(),0):$AB$2)	()	e	#N/A
+criteria	range_error	134	COUNT(OFFSET($AB$2,NA(),0):$AB$2)	()	n	0.0
+criteria	range_error	135	SUM(INDEX($AA$1:$AA$2,3):$AA$2)	()	e	#REF!
+criteria	range_error	136	CORREL(OFFSET($AA$1,NA(),0):$AA$2,$AA$1:$AA$2)	()	e	#N/A
+criteria	meets_itself	137	$AA$2 $AA$2	()	n	2.0
+criteria	meets_itself	138	SUM($AA$2 $AA$2)	()	n	2.0
+criteria	meets_itself	139	CONCATENATE("x",$AA$2 $AA$2)	()	str	'x2'
+criteria	meets_itself	140	CONCATENATE("x",$AA$1:$AB$2 $AA$2)	()	str	'x2'
+criteria	meets_itself	141	$AA$1 $AA$2	()	e	#NULL!
+criteria	meets_itself	142	SUM($AA$1 $AA$2)	()	e	#NULL!
+criteria	meets_itself	143	SUM($AA$1:$AA$2 $AA$2:$AB$2)	()	n	2.0
+criteria	meets_itself	144	SUM($AA$1:$AA$2 $AB$1:$AB$2)	()	e	#NULL!

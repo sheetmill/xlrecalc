@@ -455,15 +455,14 @@ _SUBTOTAL = {1: "AVERAGE", 2: "COUNT", 3: "COUNTA", 4: "MAX", 5: "MIN", 6: "PROD
     "raw",
     min_args=2,
     variadic=True,
-    status="partial",
-    note="codes 101 to 111 act as 1 to 11: row visibility is not read",
     category=C,
 )
 def SUBTOTAL(ctx: Context, kind: float, *refs: Any) -> float | ErrorValue:
     """An aggregate over references, leaving out cells that hold SUBTOTAL themselves.
 
-    Codes 101 to 111 also leave out hidden rows; row visibility is not read yet, so they act
-    as 1 to 11.
+    Codes 101 to 111 leave out every hidden row. Codes 1 to 11 do so too when a filter is hiding
+    rows on any sheet the call names, each sheet by its own hidden rows, even one with no filter
+    (capture ``hidden_rows``). Hidden columns stay in.
     """
     code = int(kind) % 100
     name = _SUBTOTAL.get(code)
@@ -473,10 +472,15 @@ def SUBTOTAL(ctx: Context, kind: float, *refs: Any) -> float | ErrorValue:
         return VALUE
     skip = getattr(ctx, "is_subtotal", lambda sheet, row, col: False)
     values: list[Any] = []
+    filtering = getattr(ctx, "filtering", lambda sheet: False)
+    row_hidden = getattr(ctx, "row_hidden", lambda sheet, row: False)
+    leave_hidden = int(kind) > 100 or any(filtering(ref.sheet) for ref in refs)
     for ref in refs:
         for r, c, v in ref.cells():
-            if not skip(ref.sheet, ref.r1 + r, ref.c1 + c):
-                values.append(v)
+            row = ref.r1 + r
+            if skip(ref.sheet, row, ref.c1 + c) or (leave_hidden and row_hidden(ref.sheet, row)):
+                continue
+            values.append(v)
     nums = [v for v in values if isinstance(v, float) and not isinstance(v, bool)]
     errors = [v for v in values if isinstance(v, ErrorValue)]
     if errors:

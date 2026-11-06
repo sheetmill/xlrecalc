@@ -4,7 +4,7 @@
 # generator: capture/name_probe.py
 # method: legacy formulas written by openpyxl into column A; Excel calculates and saves a
 #   copy; value and type from the copy
-# names: {'One': 'S!$Z$2', 'Top': 'S!$Z$1', 'Bot': 'S!$Z$4', 'Block': 'S!$Z$1:$Z$3', 'Grown': 'S!$Z$1:Bot', 'Moving': 'Top:OFFSET(Top,2,0)', 'Alias': 'One', 'Elsewhere': 'Other!$A$2', 'Hole': 'S!$Z$9', 'Start': 'S!$Z$1', 'Finish': 'S!$Z$4', 'Joined': 'Start:Finish', 'EndOther': 'Other!$A$3', 'Number': '5', 'Word': '"x"', 'Total': 'SUM(S!$Z$1:$Z$2)', 'Broken': '#REF!'}
+# names: {'One': 'S!$Z$2', 'Top': 'S!$Z$1', 'Bot': 'S!$Z$4', 'Block': 'S!$Z$1:$Z$3', 'Grown': 'S!$Z$1:Bot', 'Moving': 'Top:OFFSET(Top,2,0)', 'Alias': 'One', 'Elsewhere': 'Other!$A$2', 'Hole': 'S!$Z$9', 'Start': 'S!$Z$1', 'Finish': 'S!$Z$4', 'Joined': 'Start:Finish', 'EndOther': 'Other!$A$3', 'Across': 'Other!$C$5:$E$5', 'Down': 'Other!$G$1:$G$3', 'Grid': 'Other!$C$7:$E$8', 'Near': 'S!$AC$1:$AC$3', 'Number': '5', 'Word': '"x"', 'Total': 'SUM(S!$Z$1:$Z$2)', 'Broken': '#REF!'}
 # columns: row, formula, type, value (Python repr)
 1	'One'	n	2.0
 2	'One+1'	n	3.0
@@ -81,3 +81,20 @@
 73	'SUM(Other!$A$1:EndOther)'	n	600.0
 74	'ROWS(Other!$A$1:EndOther)'	n	3.0
 75	'SUM(Start:EndOther)'	e	'#VALUE!'
+D10	'Across'	n	12.0
+B10	'Across'	e	'#VALUE!'
+D11	'Across+1'	n	13.0
+B11	'Across+1'	e	'#VALUE!'
+D12	'SUM(Across)'	n	36.0
+F2	'Down'	n	22.0
+F9	'Down'	e	'#VALUE!'
+F3	'Down*2'	n	46.0
+D7	'Grid'	n	24.0
+D9	'Grid'	e	'#VALUE!'
+C2	'Near'	n	44.0
+C8	'Near'	e	'#VALUE!'
+H2	'IF(TRUE,Down)'	n	22.0
+H3	'Down&""'	str	'23'
+H4	'ISNUMBER(Across)'	b	False
+D13	'ABS(Across)'	n	12.0
+B13	'ABS(Across)'	e	'#VALUE!'

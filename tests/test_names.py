@@ -30,8 +30,16 @@ def engine() -> Engine:
         sheet[f"Z{r}"] = float(r)
         sheet[f"AA{r}"] = float(10 * r)
     for number, formula, *_ in ROWS:
-        sheet[f"A{number}"] = "=" + ast.literal_eval(formula)
+        where = f"A{number}" if number.isdigit() else number
+        sheet[where] = "=" + ast.literal_eval(formula)
     other = {f"A{r}": float(100 * r) for r in range(1, 4)}
+    for c, value in zip("CDE", (11.0, 12.0, 13.0), strict=True):
+        other[f"{c}5"] = value
+        other[f"{c}7"] = value * 2
+        other[f"{c}8"] = value * 3
+    for r, value in enumerate((21.0, 22.0, 23.0), 1):
+        other[f"G{r}"] = value
+        sheet[f"AC{r}"] = value * 2
     e = Engine.from_cells({"S": sheet, "Other": other})
     for name, text in NAMES.items():
         e.define_name(name, text)
@@ -44,7 +52,10 @@ def engine() -> Engine:
 def test_matches_excel(engine: Engine, row: list[str]) -> None:
     number, _formula, kind, text = row
     value = ast.literal_eval(text)
-    got = engine.get(0, int(number) - 1, 0)
+    if number.isdigit():
+        got = engine.get(0, int(number) - 1, 0)
+    else:
+        got = engine.get(0, int(number[1:]) - 1, ord(number[0]) - 65)
     if kind == "e":
         assert got == ErrorValue(value)
     else:

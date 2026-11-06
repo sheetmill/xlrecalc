@@ -1859,6 +1859,8 @@ CRITERIA_TABLE: dict[str, Input] = {
     "T1": 0.0, "T2": 5.0, "T4": "", "T5": "a", "T6": 0.0, "T7": True, "T8": ErrorValue.NA,
     "U1": 1.0, "U2": 2.0, "U3": 4.0, "U4": 8.0, "U5": 16.0, "U6": 32.0, "U7": 64.0, "U8": 128.0,
     "X1": "", "X2": 0.0, "W1": "a",
+    # AA and AB: keys and values, the value of key 1 blank; AC1:AD1 and AC2:AD2 the same across
+    "AA1": 1.0, "AA2": 2.0, "AB2": 5.0, "AC1": 1.0, "AD1": 2.0, "AD2": 5.0,
 }  # fmt: skip
 
 
@@ -1893,6 +1895,54 @@ def criteria() -> list[Case]:
         Case("hlookup", "HLOOKUP($Y$1,$T$1:$U$1,1,FALSE)"),
         Case("xlookup", "_xlfn.XLOOKUP($Y$1,$T$1:$T$8,$U$1:$U$8)"),
         Case("xmatch", "_xlfn.XMATCH($Y$1,$T$1:$T$8)"),
+    ]
+    # What a lookup gives when it finds a blank cell.
+    found = "VLOOKUP(1,$AA$1:$AB$2,2,FALSE)"
+    cases += [
+        Case("found_blank", found),
+        Case("found_blank", f"ISBLANK({found})"),
+        Case("found_blank", f"ISNUMBER({found})"),
+        Case("found_blank", f"ISTEXT({found})"),
+        Case("found_blank", f"ISLOGICAL({found})"),
+        Case("found_blank", f"ISERROR({found})"),
+        Case("found_blank", f"{found}+1"),
+        Case("found_blank", f'{found}&""'),
+        Case("found_blank", f"LEN({found})"),
+        Case("found_blank", f'{found}=""'),
+        Case("found_blank", f"{found}=0"),
+        Case("found_blank", f"N({found})"),
+        Case("found_blank", f'IF(ISBLANK({found}),"na",{found})'),
+        Case("found_blank", "ISBLANK(HLOOKUP(1,$AC$1:$AD$2,2,FALSE))"),
+        Case("found_blank", "ISBLANK(LOOKUP(1,$AA$1:$AA$2,$AB$1:$AB$2))"),
+        Case("found_blank", "ISBLANK(_xlfn.XLOOKUP(1,$AA$1:$AA$2,$AB$1:$AB$2))"),
+        Case("found_blank", "ISBLANK(INDEX($AB$1:$AB$2,1))"),
+        Case("found_blank", "ISBLANK(CHOOSE(1,$AB$1))"),
+        Case("found_blank", "ISBLANK(IF(TRUE,$AB$1))"),
+        Case("found_blank", "ISBLANK(OFFSET($AB$1,0,0))"),
+        Case("found_blank", "ISBLANK($AB$1)"),
+        Case("found_blank", "ISBLANK($X$1)"),
+        Case("found_blank", 'ISBLANK("")'),
+        Case("found_blank", "ISBLANK(0)"),
+        Case("found_blank", "ISBLANK(MATCH(1,$AA$1:$AA$2,0))"),
+    ]
+    # The range operator and intersection given errors, and a cell meeting itself.
+    cases += [
+        Case("range_error", "SUM(OFFSET($AB$2,NA(),0):$AB$2)"),
+        Case("range_error", "SUM($AB$2:OFFSET($AB$2,NA(),0))"),
+        Case("range_error", "SUM(OFFSET($AB$2,NA(),0):OFFSET($AB$2,1/0,0))"),
+        Case("range_error", "SUM(OFFSET($AB$2,1/0,0):OFFSET($AB$2,NA(),0))"),
+        Case("range_error", "ROWS(OFFSET($AB$2,NA(),0):$AB$2)"),
+        Case("range_error", "COUNT(OFFSET($AB$2,NA(),0):$AB$2)"),
+        Case("range_error", "SUM(INDEX($AA$1:$AA$2,3):$AA$2)"),
+        Case("range_error", "CORREL(OFFSET($AA$1,NA(),0):$AA$2,$AA$1:$AA$2)"),
+        Case("meets_itself", "$AA$2 $AA$2"),
+        Case("meets_itself", "SUM($AA$2 $AA$2)"),
+        Case("meets_itself", 'CONCATENATE("x",$AA$2 $AA$2)'),
+        Case("meets_itself", 'CONCATENATE("x",$AA$1:$AB$2 $AA$2)'),
+        Case("meets_itself", "$AA$1 $AA$2"),
+        Case("meets_itself", "SUM($AA$1 $AA$2)"),
+        Case("meets_itself", "SUM($AA$1:$AA$2 $AA$2:$AB$2)"),
+        Case("meets_itself", "SUM($AA$1:$AA$2 $AB$1:$AB$2)"),
     ]
     return cases
 

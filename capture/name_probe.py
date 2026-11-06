@@ -22,6 +22,7 @@ import openpyxl
 from openpyxl.workbook.defined_name import DefinedName
 
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
+from xlrecalc._report import column_letters
 from xlrecalc._xlsx import Book
 
 HERE = Path(__file__).resolve().parent
@@ -41,6 +42,10 @@ NAMES = {
     "Finish": "S!$Z$4",
     "Joined": "Start:Finish",
     "EndOther": "Other!$A$3",
+    "Across": "Other!$C$5:$E$5",
+    "Down": "Other!$G$1:$G$3",
+    "Grid": "Other!$C$7:$E$8",
+    "Near": "S!$AC$1:$AC$3",
     "Number": "5",
     "Word": '"x"',
     "Total": "SUM(S!$Z$1:$Z$2)",
@@ -125,6 +130,28 @@ FORMULAS = [
 ]
 
 
+# (cell, formula): a name for a range taken where one cell is meant, by where the formula is.
+PLACED = [
+    ("D10", "Across"),
+    ("B10", "Across"),
+    ("D11", "Across+1"),
+    ("B11", "Across+1"),
+    ("D12", "SUM(Across)"),
+    ("F2", "Down"),
+    ("F9", "Down"),
+    ("F3", "Down*2"),
+    ("D7", "Grid"),
+    ("D9", "Grid"),
+    ("C2", "Near"),
+    ("C8", "Near"),
+    ("H2", "IF(TRUE,Down)"),
+    ("H3", 'Down&""'),
+    ("H4", "ISNUMBER(Across)"),
+    ("D13", "ABS(Across)"),
+    ("B13", "ABS(Across)"),
+]
+
+
 def build(path: Path) -> None:
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -135,10 +162,19 @@ def build(path: Path) -> None:
     other = wb.create_sheet("Other")
     for r in range(1, 4):
         other.cell(r, 1, float(100 * r))
+    for c, value in zip("CDE", (11.0, 12.0, 13.0), strict=True):
+        other[f"{c}5"] = value
+        other[f"{c}7"] = value * 2
+        other[f"{c}8"] = value * 3
+    for r, value in enumerate((21.0, 22.0, 23.0), 1):
+        other[f"G{r}"] = value
+        ws[f"AC{r}"] = value * 2
     for name, text in NAMES.items():
         wb.defined_names[name] = DefinedName(name, attr_text=text)
     for k, formula in enumerate(FORMULAS, 1):
         ws.cell(k, 1, "=" + formula)
+    for where, formula in PLACED:
+        ws[where] = "=" + formula
     wb.save(path)
 
 
@@ -162,6 +198,7 @@ def main() -> None:
     if result.returncode:
         sys.exit(f"Excel did not open the workbook: {result.stderr.strip()}")
     with Book(copy) as book:
+        all_cells = {f"{column_letters(c.column)}{c.row}": c for c in book.cells("S")}
         cells = {c.row: c for c in book.cells("S") if c.column == 1}
     header = [
         "# suite: names",
@@ -179,6 +216,11 @@ def main() -> None:
         value = c.value if c else None
         body.append("\t".join([str(k), repr(formula), c.type if c else "none", repr(value)]))
         print(f"{k:3} {formula:34} {c.type if c else '':4} {value!r}")
+    for where, formula in PLACED:
+        c = all_cells.get(where)
+        value = c.value if c else None
+        body.append("\t".join([where, repr(formula), c.type if c else "none", repr(value)]))
+        print(f"{where:5} {formula:32} {c.type if c else '':4} {value!r}")
     (CAPTURES / "names.tsv").write_text("\n".join([*header, *body]) + "\n", encoding="utf-8")
     for p in (src, copy):
         p.unlink(missing_ok=True)

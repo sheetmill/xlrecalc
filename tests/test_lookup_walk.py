@@ -57,7 +57,7 @@ def _position(found):
 
 
 def _value(cell):
-    return 0.0 if cell is BLANK else cell
+    return cell  # a blank stays one: ISBLANK of a lookup sees it (capture criteria)
 
 
 def _grid(rng, rows, cols, density):

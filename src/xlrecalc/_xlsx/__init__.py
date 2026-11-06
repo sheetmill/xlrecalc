@@ -4,7 +4,7 @@ Internal, and kept apart so it can become a package of its own (ARCHITECTURE.md 
 """
 
 from xlrecalc._xlsx._book import Book, CalcProperties, DefinedName, SheetInfo, Table
-from xlrecalc._xlsx._cells import Cell, Formula, unescape
+from xlrecalc._xlsx._cells import Cell, Formula, SheetRows, unescape
 from xlrecalc._xlsx._package import LimitError, PackageError, ReadLimits
 
 __all__ = [
@@ -17,6 +17,7 @@ __all__ = [
     "PackageError",
     "ReadLimits",
     "SheetInfo",
+    "SheetRows",
     "Table",
     "unescape",
 ]

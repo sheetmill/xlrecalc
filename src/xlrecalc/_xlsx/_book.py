@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from types import TracebackType
 from typing import Any, BinaryIO
 
-from xlrecalc._xlsx._cells import Cell, read_cells, read_shared_strings
+from xlrecalc._xlsx._cells import Cell, SheetRows, read_cells, read_shared_strings
 from xlrecalc._xlsx._package import Package, PackageError, ReadLimits
 
 __all__ = ["Book", "CalcProperties", "DefinedName", "SheetInfo", "Table"]
@@ -288,15 +288,15 @@ class Book:
                 return sheet
         raise KeyError(f"no sheet named {name!r}")
 
-    def cells(self, sheet: str | SheetInfo) -> Iterator[Cell]:
-        """The cells of a worksheet, streamed in file order."""
+    def cells(self, sheet: str | SheetInfo, rows: SheetRows | None = None) -> Iterator[Cell]:
+        """The cells of a worksheet, streamed in file order; ``rows`` gathers its hidden rows."""
         info = sheet if isinstance(sheet, SheetInfo) else self.sheet(sheet)
         if info.kind != "worksheet":
             raise ValueError(f"{info.name!r} is a {info.kind}, not a worksheet")
         strings = self.shared_strings
         with self._package.part(info.part) as f:
             try:
-                yield from read_cells(f, strings)
+                yield from read_cells(f, strings, rows)
             except xml.parsers.expat.ExpatError as exc:
                 raise PackageError(f"{info.part}: {exc}") from exc
 

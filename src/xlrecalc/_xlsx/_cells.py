@@ -10,11 +10,12 @@ from __future__ import annotations
 import re
 import xml.parsers.expat
 from collections.abc import Iterator
+from dataclasses import dataclass, field
 from typing import BinaryIO, NamedTuple
 
 from xlrecalc._xlsx._package import PackageError
 
-__all__ = ["Cell", "Formula", "read_cells", "read_shared_strings", "unescape"]
+__all__ = ["Cell", "Formula", "SheetRows", "read_cells", "read_shared_strings", "unescape"]
 
 _CHUNK = 1 << 16
 _SPACE = " \t\n\r"
@@ -31,7 +32,7 @@ def unescape(text: str) -> str:
     return _ESCAPE.sub(lambda m: chr(int(m[1], 16)), text)
 
 
-_LOCAL = {"row": 1, "c": 2, "v": 3, "f": 4, "is": 5, "t": 6, "rPh": 7, "si": 8}
+_LOCAL = {"row": 1, "c": 2, "v": 3, "f": 4, "is": 5, "t": 6, "rPh": 7, "si": 8, "sheetPr": 9}
 
 
 def _codes() -> dict[str, int]:
@@ -178,8 +179,18 @@ def _number(text: str, row: int, col: int) -> tuple[float | str, str]:
     return "#NULL!", "e"
 
 
-def read_cells(stream: BinaryIO, strings: list[str]) -> Iterator[Cell]:
-    """The cells of a worksheet part, in file order.
+@dataclass
+class SheetRows:
+    """What a worksheet says about its rows, filled in as its cells are read."""
+
+    hidden: list[int] = field(default_factory=list)  # 1-based
+    filter_mode: bool = False  # ``<sheetPr filterMode>``: a filter is hiding rows
+
+
+def read_cells(
+    stream: BinaryIO, strings: list[str], rows: SheetRows | None = None
+) -> Iterator[Cell]:
+    """The cells of a worksheet part, in file order; ``rows`` gathers what it says about rows.
 
     The element handlers are the hot path of a load: expat runs without namespace processing
     (names are matched by their local part, so a prefixed file reads the same), and the state
@@ -238,11 +249,15 @@ def read_cells(stream: BinaryIO, strings: list[str]) -> Iterator[Cell]:
             if row > _MAX_ROW:
                 raise PackageError(f"row {row} is off the sheet")
             col = 0
+            if rows is not None and attrs.get("hidden") in ("1", "true"):
+                rows.hidden.append(row)
         elif code == 5:
             in_is += 1
             inline = []
         elif code == 7:
             phonetic += 1
+        elif code == 9 and rows is not None:
+            rows.filter_mode = attrs.get("filterMode") in ("1", "true")
         elif code == 6 and in_is:
             buffer.clear()
             collect = 6

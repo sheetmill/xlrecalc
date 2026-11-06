@@ -166,7 +166,7 @@ def _table_lookup(
     if i is None:
         return NA
     result = table.value(n - 1, i) if horizontal else table.value(i, n - 1)
-    return 0.0 if result is BLANK else result
+    return result  # blank when it finds a blank cell: ISBLANK sees it (capture criteria)
 
 
 @function("VLOOKUP", "key", "raw", "number", "raw", min_args=3, errors=True, category=L)
@@ -393,7 +393,7 @@ def LOOKUP(ctx: Context, value: Any, lookup: Any, result: Any = MISSING) -> Any:
         if i is None:
             return NA
         found = grid.value(grid.rows - 1, i) if wide else grid.value(i, grid.columns - 1)
-        return 0.0 if found is BLANK else found
+        return found
     keys = _line(grid, grid.rows == 1)
     i = _approximate(v, keys, False, ctx)
     if i is None:
@@ -408,7 +408,7 @@ def LOOKUP(ctx: Context, value: Any, lookup: Any, result: Any = MISSING) -> Any:
         if i >= len(line):
             return NA
         found = line[i]
-    return 0.0 if found is BLANK else found
+    return found
 
 
 def _mode(arg: Any, default: int, allowed: tuple[int, ...], ctx: Context) -> int | ErrorValue:

@@ -342,11 +342,12 @@ class _Generator:
         while isinstance(current, Binary) and not _boxable(current):
             spine.append(current)
             current = current.left
-        first_range = bool(spine) and spine[-1].op is not None and spine[-1].op.text == ":"
-        # The operands of ":" are references (A1:INDEX(...)): a cell compiles as one.
+        first_range = bool(spine) and (spine[-1].op is None or spine[-1].op.text == ":")
+        # The operands of ":" and of the intersection (a space) are references (A1:INDEX(...),
+        # A1 A2): a cell compiles as one.
         result = self.argument(current) if first_range else self.expr(current)
         for item in reversed(spine):
-            is_range = item.op is not None and item.op.text == ":"
+            is_range = item.op is None or item.op.text == ":"
             right = self.argument(item.right) if is_range else self.expr(item.right)
             name = "intersect" if item.op is None else _BINARY[item.op.text]
             if name not in ("intersect", "range"):

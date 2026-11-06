@@ -21,7 +21,7 @@ from xlrecalc._numtext import DBL_MIN
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef
 from xlrecalc._values import BLANK, ErrorValue, Value
-from xlrecalc._xlsx import Book, Cell, ReadLimits
+from xlrecalc._xlsx import Book, Cell, ReadLimits, SheetRows
 from xlrecalc._xlsx._cells import _column as _cell
 
 __all__ = ["load", "refused_in_file"]
@@ -162,7 +162,8 @@ def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
     dependents: list[tuple[int, int, int, Value | None]] = []
     report = engine.report
     boxes: list[tuple[int, int, int, int, int]] = []  # ranges array formulas fill (§7.7)
-    for cell in book.cells(book.sheets[index]):
+    rows = SheetRows()
+    for cell in book.cells(book.sheets[index], rows):
         row, col = cell.row - 1, cell.column - 1
         cached = _value(cell, engine.date1904, engine.quirks, book.value_errors)
         f = cell.formula
@@ -226,6 +227,8 @@ def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
         if f.kind == "shared" and f.si is not None:
             masters[f.si] = tid
         engine.set_formula(index, row, col, template=tid, cached=cached, stale=full)
+    s.hidden_rows = frozenset(r - 1 for r in rows.hidden)
+    s.filter_mode = rows.filter_mode
     for row, col, si, cached in dependents:
         master = masters.get(si)
         if master is None:  # no master in the file: keep the value, as there is no formula
