@@ -37,6 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   placed by position, as Excel places it.
 
 ### Changed
+- `MATCH`, `VLOOKUP`, `HLOOKUP` and `LOOKUP` over a whole column read its non-blank cells, not its
+  million rows: a workbook of 31,912 such lookups went from more than 15 minutes to under 3 s.
 - Requires xlformat 0.3 or later (`xlformat>=0.3,<1`): `TEXT` is xlformat's `text_function`,
   which does what `TEXT` does differently from a cell's display (a blank is 0, the empty format,
   a format Excel refuses, a value the format cannot show).

@@ -24,14 +24,15 @@ L = "lookup and reference"
 _WILD = re.compile(r"[*?~]")
 
 
-def _exact(lookup: Any, values: list[Any]) -> int | None:
+def _exact(lookup: Any, cells: list[tuple[int, Any]]) -> int | None:
+    """The first position holding the value. A blank never matches, so only cells are visited."""
     if isinstance(lookup, str) and _WILD.search(lookup):
         pattern = wildcard(lookup)
-        for i, v in enumerate(values):
+        for i, v in cells:
             if isinstance(v, str) and pattern.fullmatch(v):
                 return i
         return None
-    for i, v in enumerate(values):
+    for i, v in cells:
         if lookup_equal(lookup, v):
             return i
     return None
@@ -47,17 +48,22 @@ def _kind(v: Any) -> int:
     return -1
 
 
-def _approximate(lookup: Any, values: list[Any], descending: bool, ctx: Context) -> int | None:
-    """Last position whose value is <= lookup (>= when descending), by bisection."""
+def _approximate(
+    lookup: Any, cells: list[tuple[int, Any]], descending: bool, ctx: Context
+) -> int | None:
+    """Last position whose value is <= lookup (>= when descending), by bisection.
+
+    It bisects the cells of the lookup value's type: a blank is never one.
+    """
     kind = _kind(lookup)
-    candidates = [i for i, v in enumerate(values) if _kind(v) == kind]
+    candidates = [cell for cell in cells if _kind(cell[1]) == kind]
     lo, hi, found = 0, len(candidates) - 1, None
     while lo <= hi:
         mid = (lo + hi) // 2
-        v = values[candidates[mid]]
+        i, v = candidates[mid]
         order = compare(v, lookup, ">=" if descending else "<=", ctx.quirks)
         if order is True:
-            found = candidates[mid]
+            found = i
             lo = mid + 1
         else:
             hi = mid - 1
@@ -76,10 +82,15 @@ class _Grid:
         return self.array[row][col]
 
 
-def _line(ref: Ref | _Grid, horizontal: bool) -> list[Any]:
+def _line(ref: Ref | _Grid, horizontal: bool) -> list[tuple[int, Any]]:
+    """A range's first row or column as (position, value), blanks left out (§7.7)."""
+    if isinstance(ref, Ref):
+        last_row, last_col = (ref.r1, ref.c2) if horizontal else (ref.r2, ref.c1)
+        line = Ref(ref.source, ref.sheet, ref.r1, ref.c1, last_row, last_col)
+        return [(c if horizontal else r, v) for r, c, v in line.cells()]
     if horizontal:
-        return [ref.value(0, c) for c in range(ref.columns)]
-    return [ref.value(r, 0) for r in range(ref.rows)]
+        return [(c, ref.value(0, c)) for c in range(ref.columns)]
+    return [(r, ref.value(r, 0)) for r in range(ref.rows)]
 
 
 def _lookup_value(lookup: Any, ctx: Context) -> Any:
@@ -98,13 +109,13 @@ def MATCH(ctx: Context, lookup: Any, ref: Any, kind: Any = 1.0) -> float | Error
     if isinstance(kind, ErrorValue):
         return kind
     if isinstance(ref, tuple):
-        values = [x for row in ref for x in row]
+        cells = list(enumerate(x for row in ref for x in row))
     elif isinstance(ref, Ref) and (ref.rows == 1 or ref.columns == 1):
-        values = _line(ref, ref.rows == 1)
+        cells = _line(ref, ref.rows == 1)
     else:
         return NA
     k = 0 if kind == 0 else (1 if kind > 0 else -1)
-    i = _exact(v, values) if k == 0 else _approximate(v, values, k < 0, ctx)
+    i = _exact(v, cells) if k == 0 else _approximate(v, cells, k < 0, ctx)
     return NA if i is None else float(i + 1)
 
 

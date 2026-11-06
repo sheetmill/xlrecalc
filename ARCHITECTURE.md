@@ -625,6 +625,8 @@ memory, and computes `SUMPRODUCT` over whole columns without making the array (c
 limits the matches to that range's non-blank cells; otherwise a position fails only where a
 non-blank cell fails its criterion, and every other position counts. Their cost follows the cells
 a sheet holds, and they give Excel's value over a whole sheet (capture `array_functions`).
+`MATCH`, `VLOOKUP`, `HLOOKUP` and `LOOKUP` read a range's non-blank cells likewise, since neither an
+exact match nor the bisection of cells of the key's type can land on a blank.
 `tests/test_function_sweep.py`, generated from the registry, runs every function over a whole
 sheet of two cells under the memory watchdog, so one that walks a range by position fails there.
 
