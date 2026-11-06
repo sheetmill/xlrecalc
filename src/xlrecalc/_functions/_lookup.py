@@ -269,7 +269,7 @@ def COLUMNS(ctx: Context, ref: Any) -> float | ErrorValue:
 
 
 def _not_one_area(ref: Any) -> ErrorValue:
-    """``ROW`` of what is not one area: a union is ``#REF!`` (capture ``array_refs``)."""
+    """``ROW`` of what is not a reference: an error stays, anything else is ``#REF!``."""
     return ref if isinstance(ref, ErrorValue) and ref is not VALUE else REF
 
 

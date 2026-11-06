@@ -19,7 +19,15 @@ from dataclasses import dataclass
 from typing import Any
 
 from xlrecalc._arith import flush
-from xlrecalc._arrays import ArrayLimitError, check_area, element, is_array, shape, to_array
+from xlrecalc._arrays import (
+    ArrayLimitError,
+    NotImplementedFormError,
+    check_area,
+    element,
+    is_array,
+    shape,
+    to_array,
+)
 from xlrecalc._coerce import intersect
 from xlrecalc._deps import DependencyIndex
 from xlrecalc._formula import MISSING, FormulaSyntaxError, TokenizeError, compile_formula, parse
@@ -111,10 +119,6 @@ class _Cells:
 
 
 _LARGE_BOX = 256  # cells: smaller boxes are listed again rather than remembered
-
-
-class _ReferenceArrayError(Exception):
-    """A function was given an array of references, which none implements yet (§7.7)."""
 
 
 class _NotEvaluatedError(Exception):
@@ -736,7 +740,7 @@ class Engine:
         try:
             value = template.fn(self, row, col)
             if self.reference_array is not None and value is not self.reference_array:
-                raise _ReferenceArrayError  # read by another function: not implemented
+                raise NotImplementedFormError("an array of references read by a function")
             if n in self.anchors:
                 self._fill(n, value)
                 return
@@ -746,8 +750,8 @@ class Engine:
             self.report.unsupported[f"an array of more than {exc.limit:,} cells"] += 1
             self.report.uncomputed.add(where)
             return
-        except _ReferenceArrayError:  # keep the cached value, as for a function not supported
-            self.report.unsupported["an array of references read by a function"] += 1
+        except NotImplementedFormError as exc:  # keep the cached value, likewise
+            self.report.unsupported[exc.label] += 1
             self.report.uncomputed.add(where)
             return
         except Exception as exc:  # a bug in a function must not stop the recalculation

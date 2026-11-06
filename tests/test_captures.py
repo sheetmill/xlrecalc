@@ -163,7 +163,7 @@ _COMPUTED_CRITERIA = (
     "a computed criterion (a formula under a name the database lacks, evaluated for each "
     "record) is not supported; it matches no record"
 )
-_UNION = "a union of ranges as an argument is not implemented"
+_UNION = "a union of ranges is not implemented, and the cell is reported"
 _REGEX = "the regular-expression match mode (3) is not implemented, and the cell is reported"
 KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("modern", case): _UNION for case in (300, 328)},

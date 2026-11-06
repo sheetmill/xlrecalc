@@ -50,6 +50,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- A union of ranges as an argument gave a wrong value with no report: `SUM((A1,B2))` and
+  `LARGE((A1,B2),1)` were `#VALUE!`, `COUNT((A1,B2))` was 0. Unions are not implemented; such a
+  formula now keeps the value the file holds and is reported.
 - Text compares in Excel's order: marks and symbols before digits, in the order of CLDR's root
   collation, and accents after their base letter. `"a"<"~"` was TRUE and is FALSE, for the operators,
   criteria such as `">=a"`, and sorted lookups.

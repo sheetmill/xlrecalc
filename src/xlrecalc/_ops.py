@@ -11,7 +11,7 @@ import math
 from typing import Any
 
 from xlrecalc._arith import flush, snap
-from xlrecalc._arrays import broadcast
+from xlrecalc._arrays import NotImplementedFormError, broadcast
 from xlrecalc._coerce import Context, Raw, scalar, to_bool, to_number, to_text
 from xlrecalc._compare import compare, switch_equal
 from xlrecalc._formula import MISSING
@@ -294,7 +294,7 @@ class Ops:
         return VALUE
 
     def union(self, *items: Raw) -> Value:
-        return VALUE  # multi-area references come with the functions that take them
+        raise NotImplementedFormError("a union of ranges")
 
     def invoke(self, ctx: object, fn: Raw, *args: Raw) -> Value:
-        return VALUE
+        raise NotImplementedFormError("a call of a formula's result")

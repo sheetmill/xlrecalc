@@ -8,6 +8,7 @@ the failure this looks for: it is a wrong answer nobody is told about.
 
 from __future__ import annotations
 
+import dataclasses
 import tempfile
 from pathlib import Path
 from xml.sax.saxutils import escape
@@ -17,9 +18,12 @@ import pytest
 import xlrecalc
 from tests import test_array_refs, test_arrays
 from tests.captures import Formula, load
+from tests.formula_corpus import CORPUS as FORMULAS
 from tests.test_array_limit import two_sheets
 from tests.test_captures import SUITES, column_letters, formula_text
 from tests.test_xlsx import MAIN, package
+from xlrecalc._formula import FormulaSyntaxError, TokenizeError, parse
+from xlrecalc._formula._nodes import Call, Invoke, Union
 from xlrecalc._formula._template import cell_axes
 from xlrecalc._values import BLANK, ErrorValue
 from xlrecalc._xlsx import Book
@@ -126,3 +130,64 @@ def test_array_refs_leave_no_old_value_unreported():
     stale, kept = stale_and_unreported(test_array_refs.workbook(cached=str(SENTINEL)))
     assert stale[:10] == []
     assert kept > 0  # the arrays of references in test_array_refs.KNOWN are reported
+
+
+NOT_IMPLEMENTED = [
+    "SUM((D!A1,D!B2))",
+    "COUNT((D!A1,D!B2))",
+    "LARGE((D!A1,D!B2),1)",
+    "(D!A1,D!B2)",
+    "SUM(D!A1:A2,(D!A1,D!B2))",
+    "SUM(1)(2)",
+    "SUM(S:D!A1)",
+    "SUM(Table1[a])",
+    "_xlfn.LET(_xlpm.x,1,_xlpm.x+1)",
+    "N(OFFSET(D!A1,{0;1},0))",
+]
+
+
+@pytest.mark.parametrize("formula", NOT_IMPLEMENTED)
+def test_a_form_not_implemented_keeps_its_value_and_is_reported(formula):
+    """A wrong value would not hold the sentinel: these must keep it, not merely be listed."""
+    stale, kept = stale_and_unreported(two_sheets(escape(formula), cached=str(SENTINEL)))
+    assert (stale, kept) == ([], 1)
+
+
+def _has_form_not_implemented(node: object) -> bool:
+    """Whether a parsed formula has a union (not as ``ROW``'s reference) or a call of a result."""
+    stack = [node]
+    while stack:
+        item = stack.pop()
+        if isinstance(item, Invoke):
+            return True
+        if isinstance(item, Call) and item.name.text.upper() in ("ROW", "COLUMN"):
+            continue
+        if isinstance(item, Union):
+            return True
+        if isinstance(item, list | tuple):
+            stack.extend(item)
+        elif dataclasses.is_dataclass(item):
+            stack.extend(getattr(item, f.name) for f in dataclasses.fields(item))
+    return False
+
+
+def test_every_such_form_in_the_formula_corpus_is_reported():
+    """Generated from the corpus's parse trees, so a new form of this kind cannot be missed."""
+    formulas = []
+    for text in FORMULAS:
+        try:
+            if _has_form_not_implemented(parse(text).root):
+                formulas.append(text)
+        except (FormulaSyntaxError, TokenizeError):
+            continue
+    assert formulas
+    wrong = []
+    for text in formulas:
+        data = two_sheets(escape(text), cached=str(SENTINEL))
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "book.xlsx"
+            path.write_bytes(data)
+            report = xlrecalc.recalculate(path, full=True)
+        if not (report.uncomputed or report.refused or report.circular):
+            wrong.append(text)
+    assert wrong == []

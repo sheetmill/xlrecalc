@@ -98,8 +98,9 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   `tests/test_array_refs.py`). `OFFSET`, `INDIRECT` and `INDEX` given an array as the whole formula
   give Excel's value.
 - `XLOOKUP` and `XMATCH` with the regular-expression match mode (3) are not computed, and are
-  reported. A union of ranges as an argument (`LARGE((A1:A3,C1:C3),1)`) is `#VALUE!` (capture
-  `modern`).
+  reported. Nor is a union of ranges (`LARGE((A1:A3,C1:C3),1)`, `SUM((A1,B2))`): the formula keeps
+  the value the file holds and is reported (capture `modern`). `ROW` and `COLUMN` of a union are
+  `#REF!`, as in Excel.
 - A row off Excel's grid in a file (`r="99999999999"`): Excel opens the file and drops the cell
   (capture `value_forms`), though it refuses rows 0 and 1048577; the reader refuses every row
   off the grid with a `PackageError`.

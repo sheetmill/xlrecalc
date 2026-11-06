@@ -424,6 +424,9 @@ class _Generator:
         if fn is not None and name.text.upper() in _LAZY and args:
             self.calls.add(name.text.upper())
             return self.lazy(fn, name.text.upper(), args)
+        if name.text.upper() in ("ROW", "COLUMN") and len(args) == 1 and _is_union(args[0]):
+            self.calls.add(name.text.upper())
+            return self.constant(ErrorValue.REF)  # of several areas (capture array_refs)
         if self.arrays:
             fn = getattr(fn, "in_array", fn)
         kinds: tuple[str, ...] = getattr(fn, "kinds", ())
@@ -479,6 +482,12 @@ class _Generator:
             self.refs.append(RefSpec("box", where, r, c, r, c))
             return self.emit(f"ctx.cref({sheet}, {self.axis(r, 'r')}, {self.axis(c, 'c')})")
         return self.expr(node)
+
+
+def _is_union(node: Node) -> bool:
+    while isinstance(node, Group):
+        node = node.inner
+    return isinstance(node, Union)
 
 
 def kind_at(kinds: tuple[str, ...], i: int, cycle: int = 1) -> str:

@@ -20,6 +20,7 @@ from xlrecalc._values import BLANK, ErrorValue, Ref
 
 __all__ = [
     "ArrayLimitError",
+    "NotImplementedFormError",
     "broadcast",
     "check_area",
     "element",
@@ -43,6 +44,18 @@ class ArrayLimitError(Exception):
     def __init__(self, cells: int, limit: int) -> None:
         super().__init__(f"an array of {cells:,} cells, more than the limit of {limit:,}")
         self.limit = limit
+
+
+class NotImplementedFormError(Exception):
+    """A formula uses a form that is not implemented, which only evaluating it can show.
+
+    Not an Excel error value: the engine catches it per cell, keeps the cell's cached value and
+    reports it, so that a form with no answer here never shows a wrong one.
+    """
+
+    def __init__(self, label: str) -> None:
+        super().__init__(label)
+        self.label = label
 
 
 def check_area(rows: int, cols: int, limit: int | None) -> None:
