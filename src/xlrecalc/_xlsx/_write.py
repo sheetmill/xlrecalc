@@ -296,7 +296,9 @@ def patch_cells(
         if n == "c" and not in_c:
             ref = attrs.get("r")
             if ref:
-                row, col = _column(ref)
+                row, ref_col = _column(ref)
+                # A column off the grid is placed by position, as the reader and Excel do.
+                col = ref_col if 1 <= ref_col <= 16_384 else col + 1
             else:
                 col += 1
             if by_row.get(row):

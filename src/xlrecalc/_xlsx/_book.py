@@ -179,7 +179,7 @@ class Book:
                 DefinedName(
                     dn.get("name", ""),  # type: ignore[attr-defined]
                     dn.text or "",  # type: ignore[attr-defined]
-                    int(local) if local is not None else None,
+                    _integer(local, "localSheetId") if local is not None else None,
                     dn.get("hidden", "0") in _TRUE,  # type: ignore[attr-defined]
                 )
             )
@@ -218,15 +218,15 @@ class Book:
                     if rc is None:
                         out.append(("", 0))
                         continue
-                    t = int(rc.get("t", "0"))
-                    v = int(rc.get("v", "0"))
+                    t = _int_or(rc.get("t", "0"), 0)
+                    v = _int_or(rc.get("v", "0"), -1)
                     out.append((types[t - 1] if 0 < t <= len(types) else "", v))
             return out
 
         dynamic = set()
         for k, (name, v) in enumerate(entries("cellMetadata"), 1):
             blocks = future.get(name, [])
-            if name == "XLDAPR" and v < len(blocks):
+            if name == "XLDAPR" and 0 <= v < len(blocks):
                 props = next(iter(_local(blocks[v], "dynamicArrayProperties")), None)
                 if props is not None and props.get("fDynamic", "0") in _TRUE:
                     dynamic.add(str(k))
@@ -234,10 +234,10 @@ class Book:
         values = self._rich_errors(rels)
         for k, (name, v) in enumerate(entries("valueMetadata"), 1):
             blocks = future.get(name, [])
-            if name == "XLRICHVALUE" and v < len(blocks):
+            if name == "XLRICHVALUE" and 0 <= v < len(blocks):
                 rvb = next(iter(_local(blocks[v], "rvb")), None)
                 if rvb is not None:
-                    error = values.get(int(rvb.get("i", "-1")))
+                    error = values.get(_int_or(rvb.get("i", "-1"), -1))
                     if error is not None:
                         self.value_errors[str(k)] = error
 
@@ -256,7 +256,7 @@ class Book:
             structures.append((st.get("t", ""), keys))
         out = {}
         for i, rv in enumerate(_local(self._package.xml(values_part), "rv")):
-            s = int(rv.get("s", "-1"))
+            s = _int_or(rv.get("s", "-1"), -1)
             if not 0 <= s < len(structures) or structures[s][0] != "_error":
                 continue
             fields = dict(zip(structures[s][1], (v.text for v in _local(rv, "v")), strict=False))
@@ -359,8 +359,8 @@ class Book:
                     root.get("displayName", root.get("name", "")),
                     root.get("ref", ""),
                     columns,
-                    int(root.get("headerRowCount", "1")),
-                    int(root.get("totalsRowCount", "0")),
+                    _int_or(root.get("headerRowCount", "1"), 1),
+                    _int_or(root.get("totalsRowCount", "0"), 0),
                 )
             )
         return out
@@ -370,16 +370,36 @@ class Book:
         return posixpath.normpath(posixpath.join(posixpath.dirname(self.workbook_part), relative))
 
 
+def _int_or(text: str, default: int) -> int:
+    """An integer attribute the reader can do without: its default when it is not one."""
+    try:
+        return int(text)
+    except ValueError:
+        return default
+
+
+def _integer(text: str, what: str) -> int:
+    try:
+        return int(text)
+    except ValueError:
+        raise PackageError(f"{what}: not an integer: {text[:40]!r}") from None
+
+
 def _calc(element: object) -> CalcProperties:
+    """The calculation settings; a number that is not one is taken as absent (none computes)."""
     get = element.get  # type: ignore[attr-defined]
     calc_id = get("calcId")
     count = get("iterateCount")
     delta = get("iterateDelta")
+    try:
+        iterate_delta = float(delta) if delta is not None else None
+    except ValueError:
+        iterate_delta = None
     return CalcProperties(
-        calc_id=int(calc_id) if calc_id is not None else None,
+        calc_id=_int_or(calc_id, -1) if calc_id is not None else None,
         full_calc_on_load=get("fullCalcOnLoad", "0") in _TRUE,
         calc_mode=get("calcMode"),
         iterate=get("iterate", "0") in _TRUE,
-        iterate_count=int(count) if count is not None else None,
-        iterate_delta=float(delta) if delta is not None else None,
+        iterate_count=_int_or(count, -1) if count is not None else None,
+        iterate_delta=iterate_delta,
     )

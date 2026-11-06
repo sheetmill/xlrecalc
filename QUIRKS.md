@@ -85,6 +85,9 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 
 ## Known deviations
 
+- A row off Excel's grid in a file (`r="99999999999"`): Excel opens the file and drops the cell
+  (capture `value_forms`), though it refuses rows 0 and 1048577; the reader refuses every row
+  off the grid with a `PackageError`.
 - `TEXT` with a format holding `b`: Excel reads it as the Buddhist-era year
   (`TEXT(12.5,"abc")` is `a43c`); xlformat does not know that code yet. One row of
   `textfmt`.

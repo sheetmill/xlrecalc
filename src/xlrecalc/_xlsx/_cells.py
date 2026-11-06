@@ -12,11 +12,16 @@ import xml.parsers.expat
 from collections.abc import Iterator
 from typing import BinaryIO, NamedTuple
 
+from xlrecalc._xlsx._package import PackageError
+
 __all__ = ["Cell", "Formula", "read_cells", "read_shared_strings", "unescape"]
 
 _CHUNK = 1 << 16
 _SPACE = " \t\n\r"
 _ESCAPE = re.compile(r"_x([0-9A-Fa-f]{4})_")
+_MAX_ROW = 1_048_576
+_MAX_COL = 16_384
+_INF = float("inf")
 
 
 def unescape(text: str) -> str:
@@ -138,6 +143,41 @@ def _column(ref: str) -> tuple[int, int]:
     raise ValueError(f"not a cell reference: {ref!r}")
 
 
+def _row(text: str) -> int:
+    """A row number from the file; Excel refuses one off its grid (capture ``value_forms``)."""
+    try:
+        row = int(text)
+    except ValueError:
+        raise PackageError(f"not a row number: {text!r}") from None
+    if not 1 <= row <= _MAX_ROW:
+        raise PackageError(f"row {row} is off the sheet")
+    return row
+
+
+def _number(text: str, row: int, col: int) -> tuple[float | str, str]:
+    """A ``<v>`` of a number cell as Excel reads it (capture ``value_forms``).
+
+    Python's ``float`` takes more than Excel: ``nan``, ``inf``, ``+5`` and ``1_000``, which make
+    Excel refuse the file, are refused here too. A number too large for a double is ``#NULL!``,
+    as Excel reads it.
+    """
+    try:
+        value = float(text)
+    except ValueError:
+        raise PackageError(f"row {row}, column {col}: not a number: {text[:40]!r}") from None
+    if -_INF < value < _INF and "_" not in text and text[0] != "+" and text[0] not in _SPACE:
+        return value, "n"
+    if -_INF < value < _INF and "_" not in text and text.lstrip()[:1] != "+":
+        return value, "n"  # leading whitespace, which Excel allows
+    if (
+        "_" in text
+        or text.lstrip()[:1] == "+"
+        or any(ch.isalpha() and ch not in "eE" for ch in text)
+    ):
+        raise PackageError(f"row {row}, column {col}: not a number Excel reads: {text[:40]!r}")
+    return "#NULL!", "e"
+
+
 def read_cells(stream: BinaryIO, strings: list[str]) -> Iterator[Cell]:
     """The cells of a worksheet part, in file order.
 
@@ -166,9 +206,20 @@ def read_cells(stream: BinaryIO, strings: list[str]) -> Iterator[Cell]:
         if code == 2:
             ref = attrs.get("r")
             if ref:
-                row, col = _column(ref)
+                try:
+                    ref_row, ref_col = _column(ref)
+                except ValueError:
+                    raise PackageError(f"not a cell reference: {ref[:40]!r}") from None
+                if not 1 <= ref_row <= _MAX_ROW:
+                    raise PackageError(f"row {ref_row} is off the sheet")
+                row = ref_row
+                # Excel places a cell whose column is off its grid by position (capture
+                # value_forms: XFE1 after nothing is A1).
+                col = ref_col if 1 <= ref_col <= _MAX_COL else col + 1
             else:
                 col += 1
+            if col > _MAX_COL:
+                raise PackageError(f"row {row}: more cells than columns")
             attrs_c = attrs
             v = f_text = None
             v_preserve = False
@@ -183,7 +234,9 @@ def read_cells(stream: BinaryIO, strings: list[str]) -> Iterator[Cell]:
             f_attrs = attrs
         elif code == 1:
             r = attrs.get("r")
-            row = int(r) if r else row + 1
+            row = _row(r) if r else row + 1
+            if row > _MAX_ROW:
+                raise PackageError(f"row {row} is off the sheet")
             col = 0
         elif code == 5:
             in_is += 1
@@ -246,7 +299,7 @@ def _cell(
     value: float | str | bool | None
     if t == "n":
         if v:
-            value = float(v)
+            value, t = _number(v, row, col)
         else:
             value, t = None, "none"
     elif t == "inlineStr":
@@ -254,7 +307,13 @@ def _cell(
     elif v is None or (v == "" and t != "str"):
         value, t = None, "none"
     elif t == "s":
-        value = strings[int(v)]
+        try:
+            index = int(v)
+        except ValueError:
+            index = -1
+        if not 0 <= index < len(strings):
+            raise PackageError(f"row {row}, column {col}: no shared string {v[:40]!r}")
+        value = strings[index]
     elif t == "str":
         # Excel drops leading and trailing whitespace of a <v> not marked xml:space="preserve"
         value = unescape(v if v_preserve else v.strip(_SPACE))
@@ -269,7 +328,16 @@ def _cell(
             unescape(f_text) if f_text else None,  # Excel decodes escapes in formulas too
             f_attrs.get("t", "normal"),
             f_attrs.get("ref"),
-            int(si) if si is not None else None,
+            _shared_index(si, row, col) if si is not None else None,
             f_attrs,
         )
     return Cell(row, col, value, t, formula, attrs.get("cm"), attrs.get("vm"))
+
+
+def _shared_index(text: str, row: int, col: int) -> int:
+    try:
+        return int(text)
+    except ValueError:
+        raise PackageError(
+            f"row {row}, column {col}: not a shared formula index: {text[:40]!r}"
+        ) from None

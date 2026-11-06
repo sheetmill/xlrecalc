@@ -15,9 +15,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   element, for every part read, whatever its name. An entity expansion that got through was
   stopped only by expat's amplification limit, a ratio that depends on expat's version.
 
+- A part stated in the archive as smaller than it is was read cut short, silently when its CRC
+  matched the shorter part; bytes hidden past a part's stated size were ignored. A part must now
+  inflate to exactly its stated size and CRC. Encrypted parts and compression methods other than
+  stored and deflated (bzip2 and LZMA were read) are refused, as Excel refuses them.
+- A cell reference to a column past XFD gave a key that collided with another cell; the cell is
+  placed by position, as Excel places it.
+
 ### Fixed
 - A part that is not well-formed XML (a worksheet or the shared strings) raised expat's
-  `ExpatError`; it is a `PackageError`, as documented.
+  `ExpatError`; it is a `PackageError`, as documented. So do damaged data and false sizes
+  (`zipfile.BadZipFile`, `zlib.error`), a row number off the sheet (`OverflowError`), a number,
+  shared string or shared-formula index that is not one (`ValueError`, `IndexError`), and a
+  sheet scope (`localSheetId`) that is not a number.
+- Numbers in `<v>` are read as Excel reads them (capture `value_forms`): `nan`, `INF`,
+  `Infinity`, `1_000`, `+5` and `0x10`, which Python reads and Excel refuses, make the file a
+  `PackageError`; a number too large for a double is `#NULL!`; a negative shared-string index
+  no longer reads the last string. Calculation settings that are not numbers are ignored.
 
 ## [0.1.0] - 2026-11-02
 

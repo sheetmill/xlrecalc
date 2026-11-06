@@ -809,9 +809,18 @@ fetches anything a file names:
   `load` and `recalculate` take `limits=ReadLimits(...)` (`max_parts`, `max_part_bytes`,
   `max_total_bytes`); a service that accepts files from untrusted users should lower them to
   what it is willing to spend on one file. Sizes
-  are counted while decompressing, never taken from the archive's own size fields. A compression ratio is not a usable test: real sheet parts
+  are counted while decompressing, and a part must inflate to exactly the size and CRC the
+  archive states, or it is refused (`zipfile` stopped at the stated size, so bytes past it were
+  dropped silently). A compression ratio is not a usable test: real sheet parts
   compress about 5:1, but a legitimately repetitive one reaches 400:1, close to deflate's
-  limit. Duplicate part names are refused.
+  limit. Duplicate part names, encrypted parts and compression methods other than stored and
+  deflated are refused, as Excel refuses them (sheetpeek's capture `package`).
+- *Content Excel refuses*: a number in `<v>` that Excel does not read (`nan`, `INF`, `1_000`,
+  `+5`, `0x10`; a value too large for a double is `#NULL!`, as Excel reads it), a row off the
+  grid, more cells in a row than columns, a shared string or shared-formula index that is not
+  one, are refused (capture `value_forms`); a column reference off the grid places the cell by
+  position, as Excel does. Calculation settings, styles and metadata indexes that lead nowhere
+  are ignored.
 - *No DTDs*, protection against XML entity attacks: Open Packaging Conventions parts never
   declare a DTD, so a part that declares one is refused before it is parsed. The check is expat
   reading the part's prolog, with a handler that refuses a doctype declaration and stops at the

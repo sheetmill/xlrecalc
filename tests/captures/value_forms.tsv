@@ -1,0 +1,30 @@
+# suite: value_forms (capture.value_probe); Excel 16.114.3 for Mac, en_US
+# captured: 2026-11-05; method: openpyxl's workbook with A1 rewritten in the sheet XML, opened with alerts off and saved as a copy
+# A1 = 111 rewritten as the case says, B1 = A1*2; values as type:value from Excel's copy; refused = error -50
+case	outcome	error	A1	B1
+control	opened		n:111	n:222
+v 'nan'	refused	-50		
+v 'NaN'	refused	-50		
+v 'inf'	refused	-50		
+v 'INF'	refused	-50		
+v '-INF'	refused	-50		
+v 'Infinity'	refused	-50		
+v '1e400'	opened		e:#NULL!	e:#NULL!
+v '-1e400'	opened		e:#NULL!	e:#NULL!
+v '1e308'	opened		n:1E+308	e:#NUM!
+v '4.9e-324'	opened		n:0	n:0
+v '1_000'	refused	-50		
+v '0x10'	refused	-50		
+v ' 5'	opened		n:5	n:10
+v '5 '	opened		n:5	n:10
+v '+5'	refused	-50		
+v '5.'	opened		n:5	n:10
+v '.5'	opened		n:0.5	n:1
+v '1E+2'	opened		n:100	n:200
+v '1e'	refused	-50		
+v ''	opened		absent	n:0
+row 0	refused	-50		
+row 1048577	refused	-50		
+row 99999999999	opened		absent	n:0
+column XFE	opened		n:111	n:222
+row 0 without a cell reference	refused	-50		

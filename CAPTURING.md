@@ -37,6 +37,7 @@ people's workbooks are used.
 | `formula_bar_ranges` | 408 | the same for functions that need range arguments |
 | `prefixes` | 32 | functions written into a file with and without `_xlfn.`: the form Excel computes |
 | `whitespace` | 15 | whitespace at the ends of inline and shared strings without `xml:space="preserve"` ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §9.1) |
+| `value_forms` | 26 | number forms Excel never writes in `<v>` (`nan`, `INF`, `1e400`, `1_000`, `+5`...) and rows and columns off its grid: which files Excel refuses and how it reads the others (`capture/value_probe.py`) |
 | `circular`, `circular_alerts` | 16 each | circular references with iteration off: what Excel saves and shows, alerts off and on (the second interactive; [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §7.2) |
 
 All live in `tests/captures/` as TSV files with a header: suite, Excel build and locale, date

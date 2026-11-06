@@ -13,9 +13,11 @@ from __future__ import annotations
 import io
 import os
 import posixpath
+import struct
 import xml.etree.ElementTree as ET
 import xml.parsers.expat
 import zipfile
+import zlib
 from dataclasses import dataclass
 from typing import IO, BinaryIO
 
@@ -24,13 +26,17 @@ __all__ = ["LimitError", "Package", "PackageError", "ReadLimits"]
 _GIB = 1 << 30
 _PKG_REL = "{http://schemas.openxmlformats.org/package/2006/relationships}"
 _PROLOG_BOUND = 1 << 20
+_LOCAL_HEADER = struct.Struct("<4s22xHH")
+_CHUNK = 1 << 16
 
 
 class PackageError(ValueError):
     """The file is not a readable xlsx package.
 
-    Not a zip archive, no workbook part, a part that is not well-formed XML or declares a DTD,
-    a part named twice, or, when writing, a part in an encoding other than UTF-8. A subclass of
+    Not a zip archive, no workbook part, a part that is not well-formed XML or declares a DTD, a
+    part named twice, encrypted, compressed by a method an xlsx package does not use, damaged, or
+    not the size the archive states, content Excel refuses (a number it does not write, a row off
+    its grid), or, when writing, a part in an encoding other than UTF-8. A subclass of
     ``ValueError``.
     """
 
@@ -122,10 +128,87 @@ class _Prolog:
         return False
 
 
+class _Inflated(io.RawIOBase):
+    """One entry's bytes, inflated from the archive as a stream, held to what the archive states.
+
+    ``zipfile`` stops at the stated size, so a part larger than stated was cut short silently, and
+    a smaller one surfaced as ``BadZipFile`` or ``zlib.error``. Here a part must inflate to exactly
+    its stated size and CRC, else it is a ``PackageError``; the archive is read from this
+    stream's own position, so several parts can be open at once.
+    """
+
+    def __init__(self, fp: IO[bytes], info: zipfile.ZipInfo) -> None:
+        self._fp = fp
+        self._info = info
+        fp.seek(info.header_offset)
+        header = fp.read(_LOCAL_HEADER.size)
+        if len(header) != _LOCAL_HEADER.size or header[:4] != b"PK\x03\x04":
+            raise PackageError(f"{info.filename}: no local header where the directory says")
+        _, name_length, extra_length = _LOCAL_HEADER.unpack(header)
+        self._position = info.header_offset + _LOCAL_HEADER.size + name_length + extra_length
+        self._left = info.compress_size
+        deflated = info.compress_type == zipfile.ZIP_DEFLATED
+        self._inflate = zlib.decompressobj(-15) if deflated else None
+        self._pending = b""
+        self._produced = 0
+        self._crc = 0
+        self._done = False
+
+    def readable(self) -> bool:
+        return True
+
+    def readinto(self, buffer: memoryview) -> int:  # type: ignore[override]
+        while not self._done:
+            data = self._next(len(buffer))
+            if data:
+                buffer[: len(data)] = data
+                return len(data)
+        return 0
+
+    def _next(self, size: int) -> bytes:
+        if self._left and not self._pending:
+            self._fp.seek(self._position)
+            self._pending = self._fp.read(min(self._left, _CHUNK))
+            if not self._pending:
+                raise PackageError(f"{self._info.filename}: the archive ends inside this part")
+            self._position += len(self._pending)
+            self._left -= len(self._pending)
+        if self._inflate is None:
+            data, self._pending = self._pending[:size], self._pending[size:]
+            finished = not (self._left or self._pending)
+        else:
+            try:
+                data = self._inflate.decompress(self._pending, size)
+            except zlib.error as exc:
+                raise PackageError(f"{self._info.filename}: damaged: {exc}") from exc
+            self._pending = self._inflate.unconsumed_tail
+            # Input used up, zlib can still hold output: the part ends when nothing more comes.
+            finished = self._inflate.eof or not (data or self._pending or self._left)
+        self._produced += len(data)
+        if self._produced > self._info.file_size:
+            self._false_size()
+        self._crc = zlib.crc32(data, self._crc)
+        if finished:
+            self._done = True
+            if self._produced != self._info.file_size or (
+                self._inflate is not None and not self._inflate.eof and self._info.compress_size
+            ):
+                self._false_size()
+            if self._crc != self._info.CRC:
+                raise PackageError(f"{self._info.filename}: damaged: its CRC does not match")
+        return data
+
+    def _false_size(self) -> None:
+        raise PackageError(
+            f"{self._info.filename}: the archive states {self._info.file_size} bytes, which is "
+            "not this part's size"
+        )
+
+
 class _Guarded(io.RawIOBase):
     """A part's decompressed bytes, counted, with the DTD check on the prolog."""
 
-    def __init__(self, raw: IO[bytes], name: str, package: Package) -> None:
+    def __init__(self, raw: io.RawIOBase, name: str, package: Package) -> None:
         self._raw = raw
         self._name = name
         self._package = package
@@ -167,14 +250,28 @@ class Package:
             self._zip = zipfile.ZipFile(source)
         except (zipfile.BadZipFile, OSError) as exc:
             raise PackageError(f"not a zip package: {exc}") from exc
-        names = self._zip.namelist()
-        if len(names) > limits.max_parts:
+        try:
+            self._check_directory()
+        except BaseException:
             self._zip.close()
-            raise LimitError(f"more than {limits.max_parts} parts")
-        if len(set(names)) != len(names):
-            self._zip.close()
+            raise
+        self.names = frozenset(self._zip.namelist())
+
+    def _check_directory(self) -> None:
+        """What the central directory says, before anything is inflated."""
+        infos = self._zip.infolist()
+        if len(infos) > self.limits.max_parts:
+            raise LimitError(f"more than {self.limits.max_parts} parts")
+        if len({i.filename for i in infos}) != len(infos):
             raise PackageError("the package names a part twice")
-        self.names = frozenset(names)
+        for info in infos:
+            if info.compress_type not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED):
+                raise PackageError(
+                    f"{info.filename}: compression method {info.compress_type}, which an xlsx "
+                    "package does not use"
+                )
+            if info.flag_bits & 1:
+                raise PackageError(f"{info.filename}: encrypted")
 
     def close(self) -> None:
         self._zip.close()
@@ -197,7 +294,10 @@ class Package:
         """A part for streaming, buffered and bounded."""
         if name not in self.names:
             raise KeyError(name)
-        return io.BufferedReader(_Guarded(self._zip.open(name), name, self), 1 << 16)
+        fp = self._zip.fp
+        assert fp is not None
+        raw = _Inflated(fp, self._zip.getinfo(name))
+        return io.BufferedReader(_Guarded(raw, name, self), _CHUNK)
 
     def read(self, name: str) -> bytes:
         with self.part(name) as f:
