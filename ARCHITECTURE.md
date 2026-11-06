@@ -1100,7 +1100,7 @@ One workbook is used from one thread at a time.
 1. 0.2: Excel's iteration for `IRR`, `XIRR`, `RATE` and `YIELD` (its starting step, update
    rule and stopping test, inferred from capture sweeps), aiming to match the rows QUIRKS.md
    lists.
-2. A live openpyxl adapter: `xlrecalc.from_openpyxl(workbook)` would build an engine from an
+2. 0.2: a live openpyxl adapter: `xlrecalc.from_openpyxl(workbook)` would build an engine from an
    in-memory openpyxl `Workbook` through its public API only (`iter_rows`, `cell.value` and
    `cell.data_type`, `ArrayFormula`, `wb.defined_names`, `ws.tables`, `wb.epoch`), evaluate
    values on demand, and after the caller edits the workbook rebuild only the cells whose value
