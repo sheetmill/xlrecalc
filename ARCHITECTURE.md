@@ -1134,8 +1134,6 @@ One workbook is used from one thread at a time.
 
 | question | leaning |
 |---|---|
-| the functions that make arrays | `SEQUENCE`, `FILTER`, `SORT`, `UNIQUE`, `LAMBDA` and its helpers, with the `#CALC!` error they produce; spill, `#SPILL!`, `A1#` and `@` are in place (§7.7) |
-| iterative calculation | cells on or after a circular reference are the empty text, as Excel leaves them with iteration off, and are reported; the workbook's iteration settings are not read |
 | the `_xlsx` subpackage's future | extracted into its own package once a second user (sheetpeek) needs its API |
 | numpy | optional extra, never required |
 
@@ -1152,8 +1150,16 @@ One workbook is used from one thread at a time.
    It would answer code, not persist values: saving with values stays `recalculate`. openpyxl
    would be an optional extra, imported when the adapter is used. Beside it,
    `xlrecalc.evaluate(text)` for one formula outside a workbook.
-3. Then: a setting or capture for Excel for Windows' text order, the array-backed store and vectorized templates (numpy as an optional extra), the
-   array-making functions, iterative calculation with the workbook's settings, a setting for
+3. 0.2: the functions that make arrays: `FILTER`, `UNIQUE`, `SORT`, `SORTBY`, `SEQUENCE` and
+   `MMULT`, with the `#CALC!` error they produce. Spill, `#SPILL!`, `A1#` and `@` are in place
+   (§7.7).
+4. 0.2: unions of ranges together with arrays of references, which QUIRKS.md lists as not
+   computed.
+5. 0.2: iterative calculation with the workbook's settings (`<calcPr iterate iterateCount
+   iterateDelta>`), designed from captures of its calculation order, stopping test, starting
+   values and behavior on opening.
+6. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
+   vectorized templates (numpy as an optional extra), `LET`, `LAMBDA` and its helpers, a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,
    parallel evaluation of independent template columns on free-threaded Python, and a compiled
    core only if profiling demands it.
