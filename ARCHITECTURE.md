@@ -665,7 +665,7 @@ from exact and ulp matches, under the same guard.
 
 ### 8.2 Status
 
-Implemented, each against captures (suite `functions`, 1,174 rows): `SUM`, `IF`, `NOW`, `AVERAGE`,
+Implemented, each against captures (suite `functions`, 1,180 rows): `SUM`, `IF`, `NOW`, `AVERAGE`,
 `VLOOKUP`, `ROUND`, `TODAY`, `SUBTOTAL`, `MIN`, `MAX`, `SUMIF`, `MONTH`, `YEAR`, `AND`,
 `ISNUMBER`, `OR`, `CONCATENATE`, `MATCH`, `ABS`, `EOMONTH`, `WEEKDAY`, `INDEX`, `TEXT`,
 `HLOOKUP`, `NA`, `COUNTA`, `DATE`, `COUNTIF`, `SUMPRODUCT`, `COUNT`, `LEFT`, `ISNA`, `VALUE`,

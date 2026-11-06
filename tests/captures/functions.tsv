@@ -1184,3 +1184,9 @@ functions	sumif	1171	SUMIF($Z$1:$AA$6,">0",$XFD$1)	()	n	0.0
 functions	sumif	1172	SUMIF($Z$1:$AA$6,"<>z",$XFD$1)	()	n	0.0
 functions	sumif	1173	SUMIF($AC$1:$AD$5,"<>",$XFD$1048576)	()	n	0.0
 functions	sumif	1174	SUMIF($AC$1:$AD$5,">0",$AD$1048576)	()	n	0.0
+functions	vlookup	1175	VLOOKUP(1/0,$AC$1:$AD$5,NA())	()	e	#DIV/0!
+functions	vlookup	1176	VLOOKUP(1,$AC$1:$AD$5,NA())	()	e	#N/A
+functions	hlookup	1177	HLOOKUP(1/0,$AC$1:$AD$5,NA())	()	e	#DIV/0!
+functions	hlookup	1178	HLOOKUP(1,$AC$1:$AD$5,NA())	()	e	#N/A
+functions	match	1179	MATCH(1/0,$AC$1:$AC$5,NA())	()	e	#DIV/0!
+functions	match	1180	MATCH(1,$AC$1:$AC$5,NA())	()	e	#N/A

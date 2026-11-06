@@ -452,6 +452,13 @@ def functions() -> list[Case]:
     add(Case("sumif", 'SUMIF($Z$1:$AA$6,"<>z",$XFD$1)'))
     add(Case("sumif", 'SUMIF($AC$1:$AD$5,"<>",$XFD$1048576)'))
     add(Case("sumif", 'SUMIF($AC$1:$AD$5,">0",$AD$1048576)'))
+    # An error in the key and in a number argument: which one a lookup gives.
+    add(Case("vlookup", "VLOOKUP(1/0,$AC$1:$AD$5,NA())"))
+    add(Case("vlookup", "VLOOKUP(1,$AC$1:$AD$5,NA())"))
+    add(Case("hlookup", "HLOOKUP(1/0,$AC$1:$AD$5,NA())"))
+    add(Case("hlookup", "HLOOKUP(1,$AC$1:$AD$5,NA())"))
+    add(Case("match", "MATCH(1/0,$AC$1:$AC$5,NA())"))
+    add(Case("match", "MATCH(1,$AC$1:$AC$5,NA())"))
     return cases
 
 

@@ -226,7 +226,7 @@ library differs in the last bits; the rows that match either way do not.
 | `HEX2BIN` | | absent | | | | | | | |
 | `HEX2DEC` | | absent | | | | | | | |
 | `HEX2OCT` | | absent | | | | | | | |
-| `HLOOKUP` | lookup and reference | implemented | 15 | 15 | 0 | 0 | 0 |  |  |
+| `HLOOKUP` | lookup and reference | implemented | 17 | 17 | 0 | 0 | 0 |  |  |
 | `HOUR` | date and time | implemented | 25 | 25 | 0 | 0 | 0 |  |  |
 | `HSTACK` | | absent | | | | | | | |
 | `HYPERLINK` | | absent | | | | | | | |
@@ -309,7 +309,7 @@ library differs in the last bits; the rows that match either way do not.
 | `LOWER` | text | implemented | 16 | 16 | 0 | 0 | 0 |  |  |
 | `MAKEARRAY` | | absent | | | | | | | |
 | `MAP` | | absent | | | | | | | |
-| `MATCH` | lookup and reference | implemented | 55 | 55 | 0 | 0 | 0 |  |  |
+| `MATCH` | lookup and reference | implemented | 57 | 57 | 0 | 0 | 0 |  |  |
 | `MAX` | statistical | implemented | 6 | 6 | 0 | 0 | 0 |  |  |
 | `MAXA` | statistical | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
 | `MAXIFS` | | absent | | | | | | | |
@@ -334,7 +334,7 @@ library differs in the last bits; the rows that match either way do not.
 | `MULTINOMIAL` | | absent | | | | | | | |
 | `MUNIT` | | absent | | | | | | | |
 | `N` | lookup and reference | implemented | 16 | 16 | 0 | 0 | 0 |  |  |
-| `NA` | information | implemented | 7 | 7 | 0 | 0 | 0 |  |  |
+| `NA` | information | implemented | 13 | 13 | 0 | 0 | 0 |  |  |
 | `NEGBINOM.DIST` | | absent | | | | | | | |
 | `NEGBINOMDIST` | | absent | | | | | | | |
 | `NETWORKDAYS` | date and time | implemented | 135 | 135 | 0 | 0 | 0 |  |  |
@@ -515,7 +515,7 @@ library differs in the last bits; the rows that match either way do not.
 | `VARP` | statistical | implemented | 28 | 25 | 3 | 0 | 0 | 4 ulps |  |
 | `VARPA` | statistical | implemented | 28 | 24 | 4 | 0 | 0 | 4 ulps |  |
 | `VDB` | financial | implemented | 177 | 166 | 6 | 0 | 5 | 4 ulps |  |
-| `VLOOKUP` | lookup and reference | implemented | 47 | 47 | 0 | 0 | 0 |  |  |
+| `VLOOKUP` | lookup and reference | implemented | 49 | 49 | 0 | 0 | 0 |  |  |
 | `VSTACK` | | absent | | | | | | | |
 | `WEBSERVICE` | | absent | | | | | | | |
 | `WEEKDAY` | date and time | implemented | 72 | 72 | 0 | 0 | 0 |  |  |

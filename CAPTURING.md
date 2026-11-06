@@ -29,7 +29,7 @@ people's workbooks are used.
 | `textfmt` | 1,414 | `TEXT` over 24 values in 39 formats (sections, conditions, fills, `_x` spacing, fractions, dates and times, refused formats, the empty format) and argument kinds; `DOLLAR` and `FIXED` over signs, magnitudes, ties and decimals from -2.9 to 128 |
 | `rounding` | 1,836 | `ROUND`, `ROUNDUP`, `ROUNDDOWN` over ties, near-ties, 15- to 17-digit values and magnitudes from 1E-300 to 1E21 in both signs, digits -2 to 10 |
 | `literals` | 126 | number literals of 15 to 22 significant digits in formulas, in seven contexts |
-| `functions` | 1,174 | every implemented function across argument kinds; lookup tables as fixed cells |
+| `functions` | 1,180 | every implemented function across argument kinds; lookup tables as fixed cells |
 | `formula_forms` | 249 | how Excel writes formulas back to a file (§3) |
 | `repair` | 17 | what Excel's repair does to formulas it refuses in a file (interactive; [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §9.5) |
 | `repair_uncached` | 17 | the same for refused formulas without a cached value (interactive) |

@@ -88,13 +88,15 @@ def _lookup_value(lookup: Any, ctx: Context) -> Any:
 
 
 @function("MATCH", "value", "raw", "number", min_args=2, errors=True, category=L)
-def MATCH(ctx: Context, lookup: Any, ref: Any, kind: float = 1.0) -> float | ErrorValue:
+def MATCH(ctx: Context, lookup: Any, ref: Any, kind: Any = 1.0) -> float | ErrorValue:
     """Position of a value in a row or column: type 0 exact, 1 sorted ascending, -1 descending."""
     v = _lookup_value(lookup, ctx)
     if isinstance(v, ErrorValue):
         return v
     if isinstance(ref, ErrorValue):
         return ref
+    if isinstance(kind, ErrorValue):
+        return kind
     if isinstance(ref, tuple):
         values = [x for row in ref for x in row]
     elif isinstance(ref, Ref) and (ref.rows == 1 or ref.columns == 1):
@@ -107,13 +109,15 @@ def MATCH(ctx: Context, lookup: Any, ref: Any, kind: float = 1.0) -> float | Err
 
 
 def _table_lookup(
-    ctx: Context, lookup: Any, table: Any, index: float, approximate: Any, horizontal: bool
+    ctx: Context, lookup: Any, table: Any, index: Any, approximate: Any, horizontal: bool
 ) -> Any:
     v = _lookup_value(lookup, ctx)
     if isinstance(v, ErrorValue):
         return v
     if isinstance(table, ErrorValue):
         return table
+    if isinstance(index, ErrorValue):
+        return index
     if isinstance(table, tuple):
         table = _Grid(table)
     elif not isinstance(table, Ref):
