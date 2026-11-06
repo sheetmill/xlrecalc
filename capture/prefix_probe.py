@@ -40,6 +40,21 @@ CASES = [
     ("REGEXREPLACE", '{f}("abc","b","x")'),
     ("SUMIFS", '{f}(Z1:Z3,Z1:Z3,">1")'),
     ("AVERAGEIFS", '{f}(Z1:Z3,Z1:Z3,">1")'),
+    ("AVERAGEIF", '{f}(Z1:Z3,">1")'),
+    ("LARGE", "{f}(Z1:Z3,1)"),
+    ("SMALL", "{f}(Z1:Z3,1)"),
+    ("PERCENTILE", "{f}(Z1:Z3,0.5)"),
+    ("PERCENTILE.INC", "{f}(Z1:Z3,0.5)"),
+    ("QUARTILE", "{f}(Z1:Z3,1)"),
+    ("QUARTILE.INC", "{f}(Z1:Z3,1)"),
+    ("MODE", "{f}(1,1,2)"),
+    ("MODE.SNGL", "{f}(1,1,2)"),
+    ("IFS", "{f}(TRUE,1)"),
+    ("SWITCH", '{f}(1,1,"a")'),
+    ("TEXTJOIN", '{f}(",",TRUE,"a","b")'),
+    ("CONCAT", '{f}("a","b")'),
+    ("XLOOKUP", "{f}(1,Z1:Z3,Z1:Z3)"),
+    ("XMATCH", "{f}(1,Z1:Z3)"),
 ]
 
 

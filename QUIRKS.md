@@ -94,9 +94,12 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   `XIRR`, `XNPV` and the other database functions were not captured at that size.
 - A function given an array of references (`N(OFFSET(Z1,{0;1;2;3},0))`, `SUBTOTAL(9,OFFSET(...))`,
   `COUNTIF(INDIRECT({"Z1";"Z2"}),">0")`) is not computed: the formula keeps the value the file
-  holds and is reported (14 formulas of capture `array_refs`, listed in
+  holds and is reported (16 formulas of capture `array_refs`, listed in
   `tests/test_array_refs.py`). `OFFSET`, `INDIRECT` and `INDEX` given an array as the whole formula
   give Excel's value.
+- `XLOOKUP` and `XMATCH` with the regular-expression match mode (3) are not computed, and are
+  reported. A union of ranges as an argument (`LARGE((A1:A3,C1:C3),1)`) is `#VALUE!` (capture
+  `modern`).
 - A row off Excel's grid in a file (`r="99999999999"`): Excel opens the file and drops the cell
   (capture `value_forms`), though it refuses rows 0 and 1048577; the reader refuses every row
   off the grid with a `PackageError`.

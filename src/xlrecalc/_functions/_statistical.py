@@ -6,13 +6,13 @@ import math
 from typing import Any
 
 from xlrecalc._arrays import to_array
-from xlrecalc._coerce import Context, numbers
+from xlrecalc._coerce import Context, numbers, to_number
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._math import _total
 from xlrecalc._functions._registry import function
 from xlrecalc._values import BLANK, ErrorValue, Ref
 
-DIV0, NUM, VALUE = ErrorValue.DIV0, ErrorValue.NUM, ErrorValue.VALUE
+DIV0, NA, NUM, VALUE = ErrorValue.DIV0, ErrorValue.NA, ErrorValue.NUM, ErrorValue.VALUE
 S = "statistical"
 _VARIANCE = (
     "Excel's variance is not reproduced in the last bits (two-pass with plain or compensated "
@@ -480,3 +480,105 @@ def NORMINV(ctx: Context, p: float, mean: float, sd: float) -> Any:
     if not 0 < p < 1 or sd <= 0:
         return NUM
     return mean + sd * _ppnd(p)
+
+
+def _array_numbers(arg: Any, ctx: Context) -> list[float] | ErrorValue:
+    """The numbers of ``LARGE``'s and ``PERCENTILE``'s array: cells or elements (capture modern).
+
+    In a range or an array only numbers count, and an error stops; a single value is converted,
+    as an argument is, so ``"5"`` and TRUE count, and ``"a"`` is ``#VALUE!``.
+    """
+    if isinstance(arg, Ref):
+        elements: Any = arg.values()
+    elif isinstance(arg, tuple):
+        elements = (v for row in arg for v in row)
+    else:
+        v = to_number(arg, ctx)
+        return v if isinstance(v, ErrorValue) else [v]
+    out = []
+    for v in elements:
+        if isinstance(v, ErrorValue):
+            return v
+        if isinstance(v, float):
+            out.append(v)
+    return out
+
+
+def _at_rank(a: Any, k: float, ctx: Context, largest: bool) -> float | ErrorValue:
+    values = _array_numbers(a, ctx)
+    if isinstance(values, ErrorValue):
+        return values
+    n = math.ceil(k) if largest else math.floor(k)  # capture modern: LARGE up, SMALL down
+    if n < 1 or n > len(values):
+        return NUM
+    return sorted(values, reverse=largest)[n - 1]
+
+
+@function("LARGE", "raw", "number", category=S)
+def LARGE(ctx: Context, a: Any, k: float) -> float | ErrorValue:
+    """The ``k``th largest number, ``k`` rounded up."""
+    return _at_rank(a, k, ctx, True)
+
+
+@function("SMALL", "raw", "number", category=S)
+def SMALL(ctx: Context, a: Any, k: float) -> float | ErrorValue:
+    """The ``k``th smallest number, ``k`` rounded down."""
+    return _at_rank(a, k, ctx, False)
+
+
+def _percentile(a: Any, k: float, ctx: Context) -> float | ErrorValue:
+    values = _array_numbers(a, ctx)
+    if isinstance(values, ErrorValue):
+        return values
+    if not values or k < 0 or k > 1:
+        return NUM
+    values.sort()
+    rank = k * (len(values) - 1) + 1  # 1-based, as Excel takes it: the fraction's last bits show
+    low = math.floor(rank)
+    if low == rank:
+        return values[low - 1]
+    return values[low - 1] + (rank - low) * (values[low] - values[low - 1])
+
+
+@function("PERCENTILE", "raw", "number", category=S)
+@function("_xlfn.PERCENTILE.INC", "raw", "number", category=S)
+def PERCENTILE(ctx: Context, a: Any, k: float) -> float | ErrorValue:
+    """The value at fraction ``k`` of the sorted numbers, interpolating between neighbors."""
+    return _percentile(a, k, ctx)
+
+
+@function("QUARTILE", "raw", "number", category=S)
+@function("_xlfn.QUARTILE.INC", "raw", "number", category=S)
+def QUARTILE(ctx: Context, a: Any, q: float) -> float | ErrorValue:
+    """The ``q``th quartile, 0 to 4, ``q`` truncated."""
+    n = math.trunc(q)
+    return _percentile(a, n / 4, ctx) if 0 <= n <= 4 else NUM
+
+
+@function("MODE", "array", min_args=1, variadic=True, errors=True, category=S)
+@function("_xlfn.MODE.SNGL", "array", min_args=1, variadic=True, errors=True, category=S)
+def MODE(ctx: Context, *args: Any) -> float | ErrorValue:
+    """The number occurring most often, the first of those tied; ``#N/A`` if none repeats.
+
+    Text given directly is skipped, as in a range, and an omitted argument is ``#VALUE!``
+    (capture ``modern``).
+    """
+    counts: dict[float, int] = {}
+    for arg in args:
+        if arg is MISSING:
+            return VALUE
+        if isinstance(arg, Ref):
+            elements: Any = arg.values()
+        elif isinstance(arg, tuple):
+            elements = (v for row in arg for v in row)
+        else:
+            elements = (float(arg) if isinstance(arg, bool) else arg,)
+        for v in elements:
+            if isinstance(v, ErrorValue):
+                return v
+            if isinstance(v, float):
+                counts[v] = counts.get(v, 0) + 1
+    best = max(counts.values(), default=0)
+    if best < 2:
+        return NA
+    return next(v for v, n in counts.items() if n == best)

@@ -9,12 +9,12 @@ from typing import Any
 
 import xlformat
 
-from xlrecalc._coerce import Context, scalar, to_number, to_text
+from xlrecalc._coerce import Context, scalar, to_bool, to_number, to_text
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._math import _decimal
 from xlrecalc._functions._registry import function
 from xlrecalc._numtext import text_to_number
-from xlrecalc._values import BLANK, ErrorValue
+from xlrecalc._values import BLANK, ErrorValue, Ref
 
 VALUE = ErrorValue.VALUE
 T = "text"
@@ -220,3 +220,80 @@ def FIXED(ctx: Context, x: float, decimals: Any = 2.0, no_commas: bool = False) 
     if isinstance(d, ErrorValue):
         return d
     return _fixed_text(x, d, not no_commas)
+
+
+_MAX_TEXT = 32767  # Excel's longest text in a cell
+
+
+def _flat(arg: Any) -> Any:
+    """Values of an argument in order, as a range reads: non-blank cells, or an array's elements."""
+    if isinstance(arg, Ref):
+        return arg.values()
+    if isinstance(arg, tuple):
+        return [v for row in arg for v in row]
+    return [arg]
+
+
+@function("_xlfn.CONCAT", "raw", min_args=1, variadic=True, errors=True, category=T)
+def CONCAT(ctx: Context, *args: Any) -> str | ErrorValue:
+    """The texts of its arguments, ranges and arrays taken cell by cell."""
+    parts = []
+    size = 0
+    for arg in args:
+        for v in _flat(arg):
+            if v is MISSING or v is BLANK:
+                continue
+            text = to_text(v, ctx)
+            if isinstance(text, ErrorValue):
+                return text
+            parts.append(text)
+            size += len(text)
+    return VALUE if size > _MAX_TEXT else "".join(parts)
+
+
+def _joined(arg: Any, ignore: bool, delimiter_empty: bool) -> Any:
+    """An argument's values for ``TEXTJOIN``: blanks count only if empty texts are kept."""
+    if isinstance(arg, Ref) and not ignore and not delimiter_empty:
+        cells = arg.rows * arg.columns
+        if cells > _MAX_TEXT + 1:  # the delimiters alone pass the limit: no need to walk them
+            return None
+        return [arg.value(r, c) for r in range(arg.rows) for c in range(arg.columns)]
+    return _flat(arg)
+
+
+@function("_xlfn.TEXTJOIN", "raw", "raw", "raw", min_args=3, variadic=True, errors=True, category=T)
+def TEXTJOIN(ctx: Context, delimiter: Any, ignore: Any, *args: Any) -> str | ErrorValue:
+    """Texts joined by delimiters taken in turn, leaving out empty texts if ``ignore``."""
+    keep = to_bool(ignore[0][0] if isinstance(ignore, tuple) else ignore, ctx)
+    if isinstance(keep, ErrorValue):
+        return keep
+    delimiters = []
+    for v in _flat(delimiter) if delimiter is not MISSING else ():
+        text = to_text(v, ctx)
+        if isinstance(text, ErrorValue):
+            return text
+        delimiters.append(text)
+    empty_delimiter = not any(delimiters)
+    parts: list[str] = []
+    for arg in args:
+        values = _joined(arg, keep, empty_delimiter)
+        if values is None:
+            return VALUE
+        for v in values:
+            if v is MISSING or v is BLANK:
+                text = ""
+            else:
+                text = to_text(v, ctx)
+                if isinstance(text, ErrorValue):
+                    return text
+            if text or not keep:
+                parts.append(text)
+    if not parts:
+        return ""
+    out = [parts[0]]
+    for i, part in enumerate(parts[1:]):
+        if delimiters:
+            out.append(delimiters[i % len(delimiters)])
+        out.append(part)
+    joined = "".join(out)
+    return VALUE if len(joined) > _MAX_TEXT else joined

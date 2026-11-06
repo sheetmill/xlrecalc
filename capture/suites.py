@@ -1339,6 +1339,435 @@ def rounding() -> list[Case]:
     return cases
 
 
+MODERN_TABLE: dict[str, Input] = {
+    **{f"Z{i}": v for i, v in enumerate((3.0, 1.0, 2.0, 2.0, 5.0, 8.0, -1.0, 2.5), 1)},
+    **{f"AA{i}": v for i, v in enumerate((1.0, "x", True, None, 2.0, EMPTY_TEXT, 4.0, False), 1)},
+    **{f"AB{i}": v for i, v in enumerate((1.0, NA, 2.0, 3.0), 1)},
+    **{
+        f"AC{i}": v
+        for i, v in enumerate(("apple", "Banana", "cherry", "apple", EMPTY_TEXT, "date"), 1)
+    },
+    **{f"AD{i}": 10.0 * i for i in range(1, 7)},
+    **{f"AE{i}": "abcdef"[i - 1] for i in range(1, 7)},
+    **{f"AF{i}": 2.0 * i - 1 for i in range(1, 7)},
+    **{f"AG{i}": 13.0 - 2.0 * i for i in range(1, 7)},
+    "AI1": 1.0,
+    "AJ1": 2.0,
+    "AK1": 3.0,
+    "AI2": "one",
+    "AJ2": "two",
+    "AK2": "three",
+    "AL1": ",",
+    "AL2": ";",
+    "AD8": None,
+    "AC8": "blank return",
+    "AF8": 100.0,
+}
+_NUM, _MIX, _ERR, _TXT = "$Z$1:$Z$8", "$AA$1:$AA$8", "$AB$1:$AB$4", "$AC$1:$AC$6"
+_RET, _RET2, _ASC, _DESC, _NONE = (
+    "$AD$1:$AD$6",
+    "$AD$1:$AE$6",
+    "$AF$1:$AF$6",
+    "$AG$1:$AG$6",
+    "$AH$1:$AH$5",
+)
+_CONDS: list[Input] = [">2", "<=2", "<>1", "1", "", "=", "<>", "x", "a*", 1.0, 2.0, True, ">100"]
+_F = "_xlfn."
+
+
+def _criteria_rows(add: Callable[[Case], None]) -> None:
+    for c in _CONDS:
+        for r in (_NUM, _MIX, _TXT):
+            add(Case("averageif", f"AVERAGEIF({r},{{1}})", (c,)))
+            add(Case("averageifs", f"AVERAGEIFS({r},{r},{{1}})", (c,)))
+            add(Case("maxifs", f"{_F}MAXIFS({r},{r},{{1}})", (c,)))
+            add(Case("minifs", f"{_F}MINIFS({r},{r},{{1}})", (c,)))
+        add(Case("averageif", f"AVERAGEIF({_TXT},{{1}},{_RET})", (c,)))
+        add(Case("averageifs", f"AVERAGEIFS({_RET},{_TXT},{{1}})", (c,)))
+        add(Case("averageifs", f'AVERAGEIFS({_RET},{_TXT},{{1}},{_ASC},">3")', (c,)))
+        add(Case("maxifs", f"{_F}MAXIFS({_RET},{_TXT},{{1}})", (c,)))
+        add(Case("maxifs", f'{_F}MAXIFS({_RET},{_TXT},{{1}},{_ASC},">3")', (c,)))
+        add(Case("minifs", f"{_F}MINIFS({_RET},{_TXT},{{1}})", (c,)))
+        add(Case("minifs", f'{_F}MINIFS({_RET},{_TXT},{{1}},{_ASC},">3")', (c,)))
+    for name, f in (
+        ("averageifs", "AVERAGEIFS"),
+        ("maxifs", f"{_F}MAXIFS"),
+        ("minifs", f"{_F}MINIFS"),
+    ):
+        add(Case(name, f'{f}({_ERR},{_ERR},">0")'))
+        add(Case(name, f'{f}({_ERR},{_ERR},"<>")'))
+        add(Case(name, f'{f}({_ERR},{_ERR},"#N/A")'))
+        add(Case(name, f'{f}($AD$1:$AD$5,{_TXT},"a*")'))
+        add(Case(name, f'{f}({_NONE},{_NONE},"")'))
+        add(Case(name, f'{f}({_MIX},{_NUM},">0")'))
+    add(Case("averageif", f'AVERAGEIF({_ERR},">0")'))
+    add(Case("averageif", f'AVERAGEIF({_ERR},"<>")'))
+    add(Case("averageif", f'AVERAGEIF({_ERR},"#N/A")'))
+    add(Case("averageif", f'AVERAGEIF({_NONE},"")'))
+    add(Case("averageif", f'AVERAGEIF({_TXT},"a*",$AD$3)'))
+    add(Case("averageif", f'AVERAGEIF({_TXT},"a*",$XFD$1)'))
+    add(Case("averageif", f'AVERAGEIF({_NUM},">0",$AD$1:$AD$2)'))
+
+
+def _order_rows(add: Callable[[Case], None]) -> None:
+    ks: list[Input] = [1.0, 2.0, 8.0, 9.0, 0.0, -1.0, 1.5, 2.9, "2", True, None, "x", NA]
+    for fn in ("LARGE", "SMALL"):
+        for k in ks:
+            add(Case(fn.lower(), f"{fn}({_NUM},{{1}})", (k,)))
+        for arg in (
+            _MIX,
+            _ERR,
+            _NONE,
+            _TXT,
+            "{1,2,3}",
+            '{1,"a",TRUE,4}',
+            "{1;2;3}",
+            "5",
+            '"a"',
+            '"5"',
+            "TRUE",
+            "1/0",
+            "$Z$1",
+            "$AH$1",
+            f"({_NUM},{_ASC})",
+        ):
+            add(Case(fn.lower(), f"{fn}({arg},1)"))
+    ps: list[Input] = [
+        0.0,
+        0.1,
+        0.25,
+        1.0 / 3,
+        0.5,
+        0.75,
+        0.9,
+        0.99,
+        1.0,
+        -0.1,
+        1.1,
+        "0.5",
+        True,
+        False,
+        None,
+        "x",
+        NA,
+        1e-10,
+        0.123456789,
+    ]
+    for fn, name in (("PERCENTILE", "percentile"), (f"{_F}PERCENTILE.INC", "percentile.inc")):
+        for k in ps:
+            add(Case(name, f"{fn}({_NUM},{{1}})", (k,)))
+            add(Case(name, f"{fn}({_ASC},{{1}})", (k,)))
+        for arg in (
+            _MIX,
+            _ERR,
+            _NONE,
+            _TXT,
+            "{1,2,3,4}",
+            '{1,"a",TRUE,4}',
+            "5",
+            '"a"',
+            "TRUE",
+            "1/0",
+            "$Z$1",
+            "{0.1,0.2,0.3,0.7}",
+        ):
+            add(Case(name, f"{fn}({arg},0.3)"))
+    qs: list[Input] = [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, -1.0, 1.9, 0.5, "2", True, None, "x", NA]
+    for fn, name in (("QUARTILE", "quartile"), (f"{_F}QUARTILE.INC", "quartile.inc")):
+        for q in qs:
+            add(Case(name, f"{fn}({_NUM},{{1}})", (q,)))
+        for arg in (_MIX, _ERR, _NONE, "{1,2,3,4}", "5", '"a"', "1/0"):
+            add(Case(name, f"{fn}({arg},1)"))
+    for fn, name in (("MODE", "mode"), (f"{_F}MODE.SNGL", "mode.sngl")):
+        for args in (
+            _NUM,
+            _MIX,
+            _ERR,
+            _NONE,
+            _TXT,
+            _ASC,
+            "1,2,2,3",
+            "1,2,3",
+            "1,1,2,2",
+            "2,2,1,1",
+            "{1,2,2}",
+            "{1,2,3}",
+            '"a",1,1',
+            "TRUE,1,1",
+            '"1",1',
+            "1,,1",
+            ",1,1",
+            f"{_NUM},{_ASC}",
+            "1/0,1,1",
+            "1,1,1/0",
+            "5",
+            '"a"',
+            "TRUE",
+            '{1,"a",1}',
+            "2.5,2.5,0.1,0.1",
+            "$Z$3:$Z$4,$Z$3",
+        ):
+            add(Case(name, f"{fn}({args})"))
+
+
+def _branch_rows(add: Callable[[Case], None]) -> None:
+    f = f"{_F}IFS"
+    for args in (
+        "TRUE,1",
+        "FALSE,1",
+        "FALSE,1,TRUE,2",
+        "TRUE,1,TRUE,2",
+        '1>2,"a",1<2,"b"',
+        "FALSE,1/0,TRUE,2",
+        "TRUE,1/0,TRUE,2",
+        "1/0,1,TRUE,2",
+        "FALSE,1,1/0,2",
+        '"TRUE",1',
+        '"x",1',
+        '"false",1,TRUE,2',
+        "0,1,2,3",
+        "$AH$1,1,TRUE,2",
+        '"",1,TRUE,2',
+        f"TRUE,{_NUM}",
+        f"{_NUM}>2,1",
+        "TRUE,$AH$1",
+        'TRUE,""',
+        "{TRUE,FALSE},1",
+        "{FALSE,TRUE},1,TRUE,2",
+        "FALSE,1,TRUE,$Z$1",
+        "NA(),1",
+        "ISNA(NA()),NA()",
+    ):
+        add(Case("ifs", f"{f}({args})"))
+    f = f"{_F}SWITCH"
+    for args in (
+        '1,1,"a"',
+        '2,1,"a"',
+        '2,1,"a","d"',
+        '2,1,"a",2,"b"',
+        '"A","a",1',
+        '1,"1",1',
+        '"1",1,1',
+        'TRUE,1,"x"',
+        'TRUE,TRUE,"x"',
+        '$AH$1,0,"z","n"',
+        '$AH$1,"","e","n"',
+        '$AH$1,$AH$2,"b","n"',
+        '0,$AH$1,"b","n"',
+        "1/0,1,2,3",
+        "1,1/0,2,3",
+        "1,2,1/0,1,4",
+        "1,1,4,2,1/0",
+        "1,2,3,1/0",
+        "1,1,1/0",
+        "NA(),NA(),1,2",
+        f"$Z$2,{_NUM},1,2",
+        f"{_NUM},1,2,3",
+        '{1,2},1,"a","z"',
+        '1,{1,2},"a","z"',
+        "1,1,$Z$1",
+        "1,2,3,$Z$1",
+        '1.5,1.5,"y"',
+        '"a*","apple",1,2',
+        '"apple","a*",1,2',
+    ):
+        add(Case("switch", f"{f}({args})"))
+
+
+def _text_rows(add: Callable[[Case], None]) -> None:
+    tj, cc = f"{_F}TEXTJOIN", f"{_F}CONCAT"
+    values = [
+        '"a"',
+        '"a","b"',
+        "1.5",
+        "1E+20",
+        "0.1+0.2",
+        "TRUE",
+        "$AH$1",
+        '"",""',
+        "1/0",
+        _TXT,
+        _NUM,
+        _MIX,
+        _ERR,
+        _NONE,
+        "{1,2;3,4}",
+        '"a",$AH$1,"b"',
+        "$AI$1:$AK$2",
+        '"a",,"b"',
+        "1234567.891",
+        "-0.5",
+        "45720.5",
+        "NA()",
+    ]
+    for v in values:
+        add(Case("concat", f"{cc}({v})"))
+        for ignore in ("TRUE", "FALSE"):
+            add(Case("textjoin", f'{tj}(",",{ignore},{v})'))
+    for delim in (
+        '""',
+        '" - "',
+        "1",
+        "TRUE",
+        "$AH$1",
+        "1/0",
+        "$AL$1:$AL$2",
+        '{",",";"}',
+        "{1,2}",
+        "$AL$1",
+    ):
+        add(Case("textjoin", f'{tj}({delim},TRUE,"a","b","c")'))
+        add(Case("textjoin", f'{tj}({delim},FALSE,"a","","c","d")'))
+    for ignore in ("1", "0", '"x"', '"TRUE"', "$AH$1", "1/0", "$AL$1", "{TRUE,FALSE}"):
+        add(Case("textjoin", f'{tj}(",",{ignore},"a","","b")'))
+    for n in (32767, 32768):
+        add(Case("concat", f'LEN({cc}(REPT("a",{n - 1}),"b"))'))
+        add(Case("textjoin", f'LEN({tj}("",TRUE,REPT("a",{n - 1}),"b"))'))
+    add(Case("concat", f'{cc}(REPT("a",32767),REPT("a",32767))'))
+    add(Case("textjoin", f'{tj}(",",TRUE,REPT("a",32767),"b")'))
+
+
+def _lookup_rows(add: Callable[[Case], None]) -> None:
+    xl, xm = f"{_F}XLOOKUP", f"{_F}XMATCH"
+    keys: list[Input] = [
+        "apple",
+        "APPLE",
+        "banana",
+        "a*",
+        "?pple",
+        "zzz",
+        "",
+        None,
+        "~*",
+        1.0,
+        True,
+        NA,
+    ]
+    for k in keys:
+        add(Case("xlookup", f"{xl}({{1}},{_TXT},{_RET})", (k,)))
+        add(Case("xmatch", f"{xm}({{1}},{_TXT})", (k,)))
+        add(Case("xlookup", f'{xl}({{1}},{_TXT},{_RET},"none")', (k,)))
+        for mode in (2.0, -1.0, 1.0):
+            add(Case("xlookup", f"{xl}({{1}},{_TXT},{_RET},,{mode:g})", (k,)))
+            add(Case("xmatch", f"{xm}({{1}},{_TXT},{mode:g})", (k,)))
+        for search in (-1.0, 2.0, -2.0):
+            add(Case("xlookup", f"{xl}({{1}},{_TXT},{_RET},,0,{search:g})", (k,)))
+            add(Case("xmatch", f"{xm}({{1}},{_TXT},0,{search:g})", (k,)))
+    for k in (0.0, 1.0, 4.0, 5.0, 100.0, -1.0, 11.0, 12.0, "5", True, None):
+        for mode in (0.0, -1.0, 1.0, 2.0):
+            for search in (1.0, -1.0, 2.0, -2.0):
+                add(Case("xlookup", f"{xl}({{1}},{_ASC},{_RET},,{mode:g},{search:g})", (k,)))
+                add(Case("xmatch", f"{xm}({{1}},{_ASC},{mode:g},{search:g})", (k,)))
+                add(Case("xmatch", f"{xm}({{1}},{_DESC},{mode:g},{search:g})", (k,)))
+    for args in (
+        f"3,{_ASC},{_RET},,3",
+        f"3,{_ASC},{_RET},,0,0",
+        f"3,{_ASC},{_RET},,0,3",
+        f"3,{_ASC},$AD$1:$AD$5",
+        f"3,{_ASC},$AD$1:$AE$1",
+        f"99,{_ASC},{_RET},1/0",
+        f"3,{_ASC},{_RET},1/0",
+        f"1/0,{_ASC},{_RET}",
+        f"3,{_ASC},{_RET2}",
+        f"99,{_ASC},{_RET2}",
+        '99,{0},{1},""',
+        "2,$AI$1:$AK$1,$AI$2:$AK$2",
+        '9,$AI$1:$AK$1,$AI$2:$AK$2,"n"',
+        "2,$AI$1:$AK$1,$AI$1:$AK$2",
+        "2,{1,2,3},{4,5,6}",
+        "2,{1;2;3},{4;5;6}",
+        "2,{1,2,3},{4;5;6}",
+        '"blank return",$AC$8,$AD$8',
+        f'3,{_ASC},{_RET},,"x"',
+        f'3,{_ASC},{_RET},,0,"x"',
+        f"3,{_ASC},{_RET},,0.5",
+        f"3,{_ASC},{_RET},,1.9",
+        f"3,{_ASC},{_RET},,TRUE",
+        f"3,{_ASC},{_RET},,",
+        f"3,{_ASC},{_RET},,,",
+        f"99,{_ASC},{_RET},,,",
+        "3,5,5",
+        "5,5,6",
+        '"a","a","b"',
+        f"3,$AF$1:$AG$6,{_RET}",
+        f'{_NUM},{_ASC},{_RET},"n"',
+        f"$Z$1,{_ASC},{_RET}",
+        f'$AH$1,$AH$1:$AH$5,{_RET},"n"',
+    ):
+        add(Case("xlookup", f"{xl}({args})"))
+    for args in (
+        f"3,{_ASC},3",
+        f"3,{_ASC},0,0",
+        f"3,{_ASC},0,3",
+        "2,$AI$1:$AK$1",
+        "2,{1,2,3}",
+        "2,{1;2;3}",
+        "3,$AF$1:$AG$6",
+        "5,5",
+        '"a","a"',
+        f"{_NUM},{_ASC}",
+        "1/0,{1,2}",
+        f'3,{_ASC},"x"',
+        f"3,{_ASC},0.5",
+        f"3,{_ASC},1.9",
+        f"3,{_ASC},,",
+        f"3,{_ASC},,-1",
+        f"$AH$1,{_NONE}",
+        "1,$AA$1:$AA$8",
+        "#N/A,$AB$1:$AB$4",
+    ):
+        add(Case("xmatch", f"{xm}({args})"))
+    add(Case("xlookup", f"SUM({xl}(3,{_ASC},{_RET}):$AD$6)"))
+    add(Case("xlookup", f"{xl}(3,{_ASC},{_RET})+1"))
+    add(Case("xlookup", f"ROW({xl}(5,{_ASC},{_RET}))"))
+    add(Case("xlookup", f"SUM({xl}(3,{_ASC},{_RET2}))"))
+    add(Case("xlookup", f"INDEX({xl}(5,{_ASC},{_RET2}),1,2)"))
+    add(Case("xlookup", f"COUNTA({xl}(3,{_ASC},{_RET2}))"))
+
+
+def modern() -> list[Case]:
+    cases: list[Case] = []
+    _criteria_rows(cases.append)
+    _order_rows(cases.append)
+    _branch_rows(cases.append)
+    _text_rows(cases.append)
+    _lookup_rows(cases.append)
+    # How text compares: every pair of these characters, then words around the ones that sort oddly.
+    chars = list("~!_-'\"#$%&()*,./:;?@[\\]^`{|}+<=>09aAzZ ")
+    for i, x in enumerate(chars):
+        for y in chars[i + 1 :]:
+            cases.append(Case("compare_text", "{1}<{2}", (x, y)))
+    for x, y in (
+        ("a-b", "ab"),
+        ("a-b", "aa"),
+        ("a-b", "ac"),
+        ("a'b", "ab"),
+        ("a'b", "aa"),
+        ("a'b", "ac"),
+        ("ab", "a b"),
+        ("a b", "aa"),
+        ("a_b", "ab"),
+        ("a_b", "aa"),
+        ("a~", "ab"),
+        ("-a", "a"),
+        ("-a", "b"),
+        ("co-op", "coop"),
+        ("coop", "co-op"),
+        ("e", "é"),
+        ("é", "f"),
+        ("z", "é"),
+        ("ae", "æ"),
+        ("ß", "ss"),
+        ("10", "9"),
+        ("a10", "a9"),
+        ("", " "),
+        (" ", "!"),
+    ):
+        cases.append(Case("compare_text", "{1}<{2}", (x, y)))
+        cases.append(Case("compare_text", "{1}={2}", (x, y)))
+    return cases
+
+
 SUITES = {
     "number_text": Suite(number_text),
     "text_number": Suite(text_number),
@@ -1358,4 +1787,5 @@ SUITES = {
     "misc": Suite(misc, fixed=MISC_TABLE),
     "textfmt": Suite(textfmt),
     "rounding": Suite(rounding),
+    "modern": Suite(modern, fixed=MODERN_TABLE),
 }

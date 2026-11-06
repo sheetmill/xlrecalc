@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Functions: `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS`, `MINIFS`, `LARGE`, `SMALL`, `PERCENTILE`,
+  `PERCENTILE.INC`, `QUARTILE`, `QUARTILE.INC`, `MODE`, `MODE.SNGL`, `IFS`, `SWITCH`, `TEXTJOIN`, `CONCAT`,
+  `XLOOKUP` and `XMATCH` (not the regular-expression match mode). Each is captured from Excel.
 - `ReadLimits.max_array_cells` (default 10,485,760, ten full columns): no formula makes an array
   with more cells (a range an array formula fills, a reference taken as an array, the result of
   an operation between arrays); one that would keeps the value the file holds and is reported.
@@ -47,6 +50,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- Text compares in Excel's order: marks and symbols before digits, in the order of CLDR's root
+  collation, and accents after their base letter. `"a"<"~"` was TRUE and is FALSE, for the operators,
+  criteria such as `">=a"`, and sorted lookups.
 - A formula whose result is an array of references (`INDEX(r,{1;2})`, `OFFSET(A1,{0;1},0)`) stored a
   reference object as its value: the writer left the file's old cached value in place, and the
   report did not say. It now gives Excel's value. A function given such an array, which is not

@@ -217,9 +217,7 @@ def SUMIF(ctx: Context, ref: Any, crit: Any, sums: Any = MISSING) -> float | Err
         return VALUE
     target = ref
     if isinstance(sums, Ref):
-        target = Ref(sums.source, sums.sheet, sums.r1, sums.c1,
-                     min(sums.r1 + ref.rows - 1, MAX_ROW),
-                     min(sums.c1 + ref.columns - 1, MAX_COL))  # fmt: skip
+        target = _sized_like(ref, sums)
     elif sums is not MISSING:
         return VALUE
     test = criterion(scalar(crit, ctx), ctx.quirks)
@@ -275,6 +273,107 @@ def SUMIFS(ctx: Context, sums: Any, *pairs: Any) -> float | ErrorValue:
         if _numeric(v) and all(test(ref.value(r, c)) for ref, test in conditions)
     )
     return _total(picked, ctx)
+
+
+def _picked(sums: Ref, conditions: list[tuple[Ref, Callable[[Any], bool]]]) -> Any:
+    """The numbers and errors of ``sums`` where every condition holds, in order, cells only."""
+    return (
+        v
+        for r, c, v in sums.cells()
+        if _numeric(v) and all(test(ref.value(r, c)) for ref, test in conditions)
+    )
+
+
+def _sized_like(ref: Ref, sums: Ref) -> Ref:
+    """``sums`` given ``ref``'s shape from its top-left cell, cut off at the sheet's edge."""
+    return Ref(sums.source, sums.sheet, sums.r1, sums.c1,
+               min(sums.r1 + ref.rows - 1, MAX_ROW),
+               min(sums.c1 + ref.columns - 1, MAX_COL))  # fmt: skip
+
+
+def _mean(values: list[Any], ctx: Context) -> float | ErrorValue:
+    if not values:
+        return DIV0
+    total = _total(values, ctx)
+    return total if isinstance(total, ErrorValue) else total / len(values)
+
+
+def _ifs_values(ctx: Context, sums: Any, pairs: tuple[Any, ...]) -> list[Any] | ErrorValue:
+    """What ``SUMIFS``'s relatives read: ``sums`` where every range meets its criterion."""
+    if not isinstance(sums, Ref):
+        return VALUE
+    conditions = _conditions(ctx, pairs)
+    if isinstance(conditions, ErrorValue):
+        return conditions
+    if sums.rows != pairs[0].rows or sums.columns != pairs[0].columns:
+        return VALUE
+    return list(_picked(sums, conditions))
+
+
+@function("AVERAGEIF", "raw", "value", "raw", min_args=2, errors=True, category=C)
+def AVERAGEIF(ctx: Context, ref: Any, crit: Any, cells: Any = MISSING) -> float | ErrorValue:
+    """Mean of the cells of ``cells`` (or ``ref``) whose cell in ``ref`` meets the criterion."""
+    if not isinstance(ref, Ref):
+        return VALUE
+    target = ref
+    if isinstance(cells, Ref):
+        target = _sized_like(ref, cells)
+    elif cells is not MISSING:
+        return VALUE
+    test = criterion(scalar(crit, ctx), ctx.quirks)
+    ref.check()
+    return _mean(list(_picked(target, [(ref, test)])), ctx)
+
+
+@function(
+    "AVERAGEIFS", "raw", "raw", "value", min_args=3, variadic=True, errors=True, cycle=2, category=C
+)
+def AVERAGEIFS(ctx: Context, cells: Any, *pairs: Any) -> float | ErrorValue:
+    """Mean of ``cells`` where every range meets its criterion."""
+    values = _ifs_values(ctx, cells, pairs)
+    return values if isinstance(values, ErrorValue) else _mean(values, ctx)
+
+
+def _extreme(ctx: Context, cells: Any, pairs: tuple[Any, ...], pick: Any) -> float | ErrorValue:
+    values = _ifs_values(ctx, cells, pairs)
+    if isinstance(values, ErrorValue):
+        return values
+    for v in values:
+        if isinstance(v, ErrorValue):
+            return v
+    return pick(values) if values else 0.0
+
+
+@function(
+    "_xlfn.MAXIFS",
+    "raw",
+    "raw",
+    "value",
+    min_args=3,
+    variadic=True,
+    errors=True,
+    cycle=2,
+    category=C,
+)
+def MAXIFS(ctx: Context, cells: Any, *pairs: Any) -> float | ErrorValue:
+    """Largest of ``cells`` where every range meets its criterion; 0 when there is none."""
+    return _extreme(ctx, cells, pairs, max)
+
+
+@function(
+    "_xlfn.MINIFS",
+    "raw",
+    "raw",
+    "value",
+    min_args=3,
+    variadic=True,
+    errors=True,
+    cycle=2,
+    category=C,
+)
+def MINIFS(ctx: Context, cells: Any, *pairs: Any) -> float | ErrorValue:
+    """Smallest of ``cells`` where every range meets its criterion; 0 when there is none."""
+    return _extreme(ctx, cells, pairs, min)
 
 
 @function("COUNTIF", "raw", "value", errors=True, category=C)

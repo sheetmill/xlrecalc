@@ -49,6 +49,8 @@ _LAZY = {
     "IFERROR": "lazy_iferror",
     "_XLFN.IFNA": "lazy_ifna",
     "CHOOSE": "lazy_choose",
+    "_XLFN.IFS": "lazy_ifs",
+    "_XLFN.SWITCH": "lazy_switch",
 }
 _SCALAR = frozenset({"number", "text", "logical", "value"})
 

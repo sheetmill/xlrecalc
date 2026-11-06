@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from xlrecalc._coerce import Context, scalar
+from xlrecalc._coerce import Context, scalar, to_bool
+from xlrecalc._compare import switch_equal
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._registry import function
 from xlrecalc._values import BLANK, ErrorValue, Ref
@@ -148,3 +149,45 @@ def ISNA(ctx: Context, v: Any) -> bool:
 def NA_(ctx: Context) -> ErrorValue:
     """``#N/A``."""
     return NA
+
+
+@function(
+    "_xlfn.IFS", "value", "branch", min_args=2, variadic=True, errors=True, cycle=2, category=L
+)
+def IFS(ctx: Context, *args: Any) -> Any:
+    """The value after the first condition that holds; ``#N/A`` if none (element by element)."""
+    if len(args) % 2:
+        return VALUE
+    for k in range(0, len(args), 2):
+        t = to_bool(args[k], ctx)
+        if isinstance(t, ErrorValue):
+            return t
+        if t:
+            return args[k + 1]
+    return NA
+
+
+@function(
+    "_xlfn.SWITCH",
+    "value",
+    "value",
+    "branch",
+    min_args=3,
+    variadic=True,
+    errors=True,
+    cycle=2,
+    category=L,
+)
+def SWITCH(ctx: Context, expression: Any, *pairs: Any) -> Any:
+    """The result after the first value equal to ``expression``, or the default, or ``#N/A``."""
+    v = scalar(expression, ctx)
+    if isinstance(v, ErrorValue):
+        return v
+    n = len(pairs) - len(pairs) % 2
+    for k in range(0, n, 2):
+        candidate = scalar(pairs[k], ctx)
+        if isinstance(candidate, ErrorValue):
+            return candidate
+        if switch_equal(v, candidate):
+            return pairs[k + 1]
+    return pairs[-1] if len(pairs) % 2 else NA

@@ -163,7 +163,11 @@ _COMPUTED_CRITERIA = (
     "a computed criterion (a formula under a name the database lacks, evaluated for each "
     "record) is not supported; it matches no record"
 )
+_UNION = "a union of ranges as an argument is not implemented"
+_REGEX = "the regular-expression match mode (3) is not implemented, and the cell is reported"
 KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
+    **{("modern", case): _UNION for case in (300, 328)},
+    **{("modern", case): _REGEX for case in (1384, 1417)},
     **{("finance", case): _IPMT_TAIL for case in (359, 367, 368, 371, 373, 397)},
     **{("iterative", case): _ITER_NEAR_ZERO for case in _ITER_NEAR_ZERO_CASES},
     **{("iterative", case): _ITER_OUTCOME for case in _ITER_OUTCOME_CASES},
@@ -222,6 +226,7 @@ SUITES = [
     "misc",
     "textfmt",
     "rounding",
+    "modern",
 ]
 
 

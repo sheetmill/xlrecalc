@@ -72,17 +72,17 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
 
 ## What it computes, and what not yet
 
-- **Functions**: 156 of Excel's functions (8 of them partly), the most used ones first: math, statistics,
+- **Functions**: 174 of Excel's functions (10 of them partly): math, statistics,
   logic, text, dates, lookup (`VLOOKUP`, `INDEX`, `MATCH`, `OFFSET`, `INDIRECT`...), the
   financial and bond functions, the database functions. The
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 12,819 formulas computed by Excel and compared with xlrecalc's results: 12,699
+- **Evidence**: 15,049 formulas computed by Excel and compared with xlrecalc's results: 14,927
   match, bit for bit or within a small tolerance declared per function (a few units in the last
-  place, or a relative 1E-9 for the iterative functions), 118 known deviations, each listed
+  place, or a relative 1E-9 for the iterative functions), 122 known deviations, each listed
   with its reason in
-  [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md), and 2 not
-  evaluated (they call `XLOOKUP`, not implemented yet). The largest group of deviations is the
+  [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md), and 0 not
+  evaluated. The largest group of deviations is the
   iterative functions: from some starting guesses Excel's `IRR` and `RATE` reach another root
   than xlrecalc, or a rate where xlrecalc gives `#NUM!`, and `XIRR` stops about 1E-8 from the
   root; 73 of the 271 captured rows of `IRR`, `XIRR` and `RATE` differ that way.
@@ -91,7 +91,7 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
   intersection, circular references (left uncalculated, as Excel does with iteration off).
   Four quirks can be turned off (`Quirks`).
 - **Not yet**: iterative calculation of circular references; the array-making functions
-  (`SEQUENCE`, `FILTER`, `SORT`, `UNIQUE`, `LAMBDA` and its helpers) and `XLOOKUP`; structured
+  (`SEQUENCE`, `FILTER`, `SORT`, `UNIQUE`, `LAMBDA` and its helpers); structured
   (table) references and 3-D references; `CELL`'s formatting kinds; computed criteria in the
   database functions; `LINEST` with several regressors; inserting or deleting rows and
   columns. A formula xlrecalc cannot compute keeps the value the file holds, and the report

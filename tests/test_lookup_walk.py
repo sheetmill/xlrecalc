@@ -10,7 +10,8 @@ import pytest
 from tests.test_criteria_walk import Grid
 from tests.watchdog import bounded
 from xlrecalc._compare import compare, lookup_equal, wildcard
-from xlrecalc._functions._lookup import HLOOKUP, LOOKUP, MATCH, VLOOKUP
+from xlrecalc._formula import MISSING
+from xlrecalc._functions._lookup import HLOOKUP, LOOKUP, MATCH, VLOOKUP, XLOOKUP, XMATCH, _x_compare
 from xlrecalc._quirks import Quirks
 from xlrecalc._store import MAX_ROW
 from xlrecalc._values import BLANK, ErrorValue, Ref
@@ -145,3 +146,61 @@ def test_a_table_lookup_reads_what_it_holds():
     assert VLOOKUP(CTX, 2.0, table, 2.0, False) == 20.0
     assert VLOOKUP(CTX, 2.0, table, 2.0, True) == 20.0
     assert grid.reads <= 16
+
+
+def _x_full(key, line, match, search):
+    """``XMATCH`` by a walk of every position of the line, blanks included."""
+    order = list(enumerate(line))
+    if search < 0:
+        order.reverse()
+    if key is BLANK:
+        gap = next((i for i, v in order if v is BLANK), None)
+        if gap is not None:
+            return gap
+    if match == 2 and isinstance(key, str):
+        pattern = wildcard(key)
+        return next((i for i, v in order if isinstance(v, str) and pattern.fullmatch(v)), None)
+    best, best_value = None, None
+    for i, v in order:
+        c = _x_compare(key, v, CTX)
+        if c is None:
+            continue
+        if c == 0:
+            return i
+        if c == match and (best is None or _x_compare(best_value, v, CTX) == -match):
+            best, best_value = i, v
+    return best
+
+
+@pytest.mark.parametrize("density", [0.1, 0.5, 0.95])
+@pytest.mark.parametrize("seed", range(30))
+def test_xmatch_and_xlookup_match_a_walk_of_every_position(seed, density):
+    rng = random.Random(seed)
+    rows = rng.randint(1, 12)
+    grid = _grid(rng, rows, 2, density)
+    column = Ref(grid, 0, 0, 0, rows - 1, 0)
+    results = Ref(grid, 0, 0, 1, rows - 1, 1)
+    line = [grid.cells.get((r, 0), BLANK) for r in range(rows)]
+    for _ in range(12):
+        key = _key(rng, grid, rows)
+        if isinstance(key, ErrorValue):
+            continue
+        for match in (0.0, -1.0, 1.0, 2.0):
+            for search in (1.0, -1.0):
+                want = _x_full(key, line, int(match), int(search))
+                assert XMATCH(CTX, key, column, match, search) == _position(want)
+                got = XLOOKUP(CTX, key, column, results, MISSING, match, search)
+                if want is None:
+                    assert got == NA
+                else:
+                    assert (got.r1, got.c1) == (want, 1)
+
+
+@bounded
+def test_xlookup_reads_what_a_whole_column_holds():
+    for key in (2.0, "a*", 9.0):
+        for search in (1.0, -1.0, 2.0, -2.0):
+            grid = Grid({(0, 0): 1.0, (5, 0): 2.0, (900_000, 0): 3.0})
+            column = Ref(grid, 0, 0, 0, MAX_ROW, 0)
+            XMATCH(CTX, key, column, 0.0, search)
+            assert grid.reads <= 8, (key, search)

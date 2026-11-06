@@ -1,6 +1,6 @@
 # suite: array_refs
 # excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-05
+# captured: 2026-11-06
 # generator: capture/array_ref_probe.py
 # method: plain, legacy array and dynamic-array formulas over a data block; Excel
 #   calculates and saves a copy; every cell of the copy is recorded
@@ -2134,10 +2134,475 @@ input	legacy_row3	QX3	'INDEX(Z1:Z4,{1;2})'
 input	legacy_column	AA446	'INDEX(Z1:Z4,{1;2})'
 input	cse	C2150:E2153	'INDEX(Z1:Z4,{1;2})'
 input	dynamic	H3372	'INDEX(Z1:Z4,{1;2})'
-input	cse	C2155:C2156	'ROW(Z1:Z4)'
-input	cse	C2158:C2163	'ROW(Z1:Z4)'
-input	cse	C2165:D2168	'ROW(Z1:Z4)'
-input	cse	C2170:C2170	'ROW(Z1:Z4)'
+input	legacy	A447	'AVERAGEIF(Z1:Z4,Z1:Z4)'
+input	legacy_row3	QY3	'AVERAGEIF(Z1:Z4,Z1:Z4)'
+input	legacy_column	AA447	'AVERAGEIF(Z1:Z4,Z1:Z4)'
+input	cse	C2155:E2158	'AVERAGEIF(Z1:Z4,Z1:Z4)'
+input	dynamic	H3380	'AVERAGEIF(Z1:Z4,Z1:Z4)'
+input	legacy	A448	'AVERAGEIF(Z1:Z4,Z1:Z4,AA1:AA4)'
+input	legacy_row3	QZ3	'AVERAGEIF(Z1:Z4,Z1:Z4,AA1:AA4)'
+input	legacy_column	AA448	'AVERAGEIF(Z1:Z4,Z1:Z4,AA1:AA4)'
+input	cse	C2160:E2163	'AVERAGEIF(Z1:Z4,Z1:Z4,AA1:AA4)'
+input	dynamic	H3388	'AVERAGEIF(Z1:Z4,Z1:Z4,AA1:AA4)'
+input	legacy	A449	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	legacy_row3	RA3	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	legacy_column	AA449	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	cse	C2165:E2168	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	dynamic	H3396	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	legacy	A450	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	legacy_row3	RB3	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	legacy_column	AA450	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	cse	C2170:E2173	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	dynamic	H3404	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	legacy	A451	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	legacy_row3	RC3	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	legacy_column	AA451	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	cse	C2175:E2178	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	dynamic	H3412	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z1:Z4)'
+input	legacy	A452	'_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4)'
+input	legacy_row3	RD3	'_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4)'
+input	legacy_column	AA452	'_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4)'
+input	cse	C2180:E2183	'_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4)'
+input	dynamic	H3420	'_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4)'
+input	legacy	A453	'_xlfn.XMATCH(Z1:Z4,Z1:Z4)'
+input	legacy_row3	RE3	'_xlfn.XMATCH(Z1:Z4,Z1:Z4)'
+input	legacy_column	AA453	'_xlfn.XMATCH(Z1:Z4,Z1:Z4)'
+input	cse	C2185:E2188	'_xlfn.XMATCH(Z1:Z4,Z1:Z4)'
+input	dynamic	H3428	'_xlfn.XMATCH(Z1:Z4,Z1:Z4)'
+input	legacy	A454	'LARGE(Z1:Z4,Z1:Z4)'
+input	legacy_row3	RF3	'LARGE(Z1:Z4,Z1:Z4)'
+input	legacy_column	AA454	'LARGE(Z1:Z4,Z1:Z4)'
+input	cse	C2190:E2193	'LARGE(Z1:Z4,Z1:Z4)'
+input	dynamic	H3436	'LARGE(Z1:Z4,Z1:Z4)'
+input	legacy	A455	'SMALL(Z1:Z4,Z1:Z4)'
+input	legacy_row3	RG3	'SMALL(Z1:Z4,Z1:Z4)'
+input	legacy_column	AA455	'SMALL(Z1:Z4,Z1:Z4)'
+input	cse	C2195:E2198	'SMALL(Z1:Z4,Z1:Z4)'
+input	dynamic	H3444	'SMALL(Z1:Z4,Z1:Z4)'
+input	legacy	A456	'_xlfn.SWITCH(Z1:Z4,1,10,2,20,0)'
+input	legacy_row3	RH3	'_xlfn.SWITCH(Z1:Z4,1,10,2,20,0)'
+input	legacy_column	AA456	'_xlfn.SWITCH(Z1:Z4,1,10,2,20,0)'
+input	cse	C2200:E2203	'_xlfn.SWITCH(Z1:Z4,1,10,2,20,0)'
+input	dynamic	H3452	'_xlfn.SWITCH(Z1:Z4,1,10,2,20,0)'
+input	legacy	A457	'_xlfn.IFS(Z1:Z4>1,1,TRUE,0)'
+input	legacy_row3	RI3	'_xlfn.IFS(Z1:Z4>1,1,TRUE,0)'
+input	legacy_column	AA457	'_xlfn.IFS(Z1:Z4>1,1,TRUE,0)'
+input	cse	C2205:E2208	'_xlfn.IFS(Z1:Z4>1,1,TRUE,0)'
+input	dynamic	H3460	'_xlfn.IFS(Z1:Z4>1,1,TRUE,0)'
+input	legacy	A458	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4)'
+input	legacy_row3	RJ3	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4)'
+input	legacy_column	AA458	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4)'
+input	cse	C2210:E2213	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4)'
+input	dynamic	H3468	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4)'
+input	legacy	A459	'_xlfn.TEXTJOIN(Z1:Z4,TRUE,"a","b","c")'
+input	legacy_row3	RK3	'_xlfn.TEXTJOIN(Z1:Z4,TRUE,"a","b","c")'
+input	legacy_column	AA459	'_xlfn.TEXTJOIN(Z1:Z4,TRUE,"a","b","c")'
+input	cse	C2215:E2218	'_xlfn.TEXTJOIN(Z1:Z4,TRUE,"a","b","c")'
+input	dynamic	H3476	'_xlfn.TEXTJOIN(Z1:Z4,TRUE,"a","b","c")'
+input	legacy	A460	'_xlfn.CONCAT(Z1:Z4)'
+input	legacy_row3	RL3	'_xlfn.CONCAT(Z1:Z4)'
+input	legacy_column	AA460	'_xlfn.CONCAT(Z1:Z4)'
+input	cse	C2220:E2223	'_xlfn.CONCAT(Z1:Z4)'
+input	dynamic	H3484	'_xlfn.CONCAT(Z1:Z4)'
+input	legacy	A461	'AVERAGEIF(Z1:Z4,{1;2})'
+input	legacy_row3	RM3	'AVERAGEIF(Z1:Z4,{1;2})'
+input	legacy_column	AA461	'AVERAGEIF(Z1:Z4,{1;2})'
+input	cse	C2225:E2228	'AVERAGEIF(Z1:Z4,{1;2})'
+input	dynamic	H3492	'AVERAGEIF(Z1:Z4,{1;2})'
+input	legacy	A462	'AVERAGEIF(Z1:Z4,{1;2},AA1:AA4)'
+input	legacy_row3	RN3	'AVERAGEIF(Z1:Z4,{1;2},AA1:AA4)'
+input	legacy_column	AA462	'AVERAGEIF(Z1:Z4,{1;2},AA1:AA4)'
+input	cse	C2230:E2233	'AVERAGEIF(Z1:Z4,{1;2},AA1:AA4)'
+input	dynamic	H3500	'AVERAGEIF(Z1:Z4,{1;2},AA1:AA4)'
+input	legacy	A463	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	legacy_row3	RO3	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	legacy_column	AA463	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	cse	C2235:E2238	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	dynamic	H3508	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	legacy	A464	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	legacy_row3	RP3	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	legacy_column	AA464	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	cse	C2240:E2243	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	dynamic	H3516	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	legacy	A465	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	legacy_row3	RQ3	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	legacy_column	AA465	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	cse	C2245:E2248	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	dynamic	H3524	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1;2})'
+input	legacy	A466	'_xlfn.XLOOKUP({1;2},Z1:Z4,AA1:AA4)'
+input	legacy_row3	RR3	'_xlfn.XLOOKUP({1;2},Z1:Z4,AA1:AA4)'
+input	legacy_column	AA466	'_xlfn.XLOOKUP({1;2},Z1:Z4,AA1:AA4)'
+input	cse	C2250:E2253	'_xlfn.XLOOKUP({1;2},Z1:Z4,AA1:AA4)'
+input	dynamic	H3532	'_xlfn.XLOOKUP({1;2},Z1:Z4,AA1:AA4)'
+input	legacy	A467	'_xlfn.XMATCH({1;2},Z1:Z4)'
+input	legacy_row3	RS3	'_xlfn.XMATCH({1;2},Z1:Z4)'
+input	legacy_column	AA467	'_xlfn.XMATCH({1;2},Z1:Z4)'
+input	cse	C2255:E2258	'_xlfn.XMATCH({1;2},Z1:Z4)'
+input	dynamic	H3540	'_xlfn.XMATCH({1;2},Z1:Z4)'
+input	legacy	A468	'LARGE(Z1:Z4,{1;2})'
+input	legacy_row3	RT3	'LARGE(Z1:Z4,{1;2})'
+input	legacy_column	AA468	'LARGE(Z1:Z4,{1;2})'
+input	cse	C2260:E2263	'LARGE(Z1:Z4,{1;2})'
+input	dynamic	H3548	'LARGE(Z1:Z4,{1;2})'
+input	legacy	A469	'SMALL(Z1:Z4,{1;2})'
+input	legacy_row3	RU3	'SMALL(Z1:Z4,{1;2})'
+input	legacy_column	AA469	'SMALL(Z1:Z4,{1;2})'
+input	cse	C2265:E2268	'SMALL(Z1:Z4,{1;2})'
+input	dynamic	H3556	'SMALL(Z1:Z4,{1;2})'
+input	legacy	A470	'_xlfn.SWITCH({1;2},1,10,2,20,0)'
+input	legacy_row3	RV3	'_xlfn.SWITCH({1;2},1,10,2,20,0)'
+input	legacy_column	AA470	'_xlfn.SWITCH({1;2},1,10,2,20,0)'
+input	cse	C2270:E2273	'_xlfn.SWITCH({1;2},1,10,2,20,0)'
+input	dynamic	H3564	'_xlfn.SWITCH({1;2},1,10,2,20,0)'
+input	legacy	A471	'_xlfn.IFS({1;2}>1,1,TRUE,0)'
+input	legacy_row3	RW3	'_xlfn.IFS({1;2}>1,1,TRUE,0)'
+input	legacy_column	AA471	'_xlfn.IFS({1;2}>1,1,TRUE,0)'
+input	cse	C2275:E2278	'_xlfn.IFS({1;2}>1,1,TRUE,0)'
+input	dynamic	H3572	'_xlfn.IFS({1;2}>1,1,TRUE,0)'
+input	legacy	A472	'_xlfn.TEXTJOIN(",",TRUE,{1;2})'
+input	legacy_row3	RX3	'_xlfn.TEXTJOIN(",",TRUE,{1;2})'
+input	legacy_column	AA472	'_xlfn.TEXTJOIN(",",TRUE,{1;2})'
+input	cse	C2280:E2283	'_xlfn.TEXTJOIN(",",TRUE,{1;2})'
+input	dynamic	H3580	'_xlfn.TEXTJOIN(",",TRUE,{1;2})'
+input	legacy	A473	'_xlfn.TEXTJOIN({1;2},TRUE,"a","b","c")'
+input	legacy_row3	RY3	'_xlfn.TEXTJOIN({1;2},TRUE,"a","b","c")'
+input	legacy_column	AA473	'_xlfn.TEXTJOIN({1;2},TRUE,"a","b","c")'
+input	cse	C2285:E2288	'_xlfn.TEXTJOIN({1;2},TRUE,"a","b","c")'
+input	dynamic	H3588	'_xlfn.TEXTJOIN({1;2},TRUE,"a","b","c")'
+input	legacy	A474	'_xlfn.CONCAT({1;2})'
+input	legacy_row3	RZ3	'_xlfn.CONCAT({1;2})'
+input	legacy_column	AA474	'_xlfn.CONCAT({1;2})'
+input	cse	C2290:E2293	'_xlfn.CONCAT({1;2})'
+input	dynamic	H3596	'_xlfn.CONCAT({1;2})'
+input	legacy	A475	'AVERAGEIF(Z1:Z4,{1,2})'
+input	legacy_row3	SA3	'AVERAGEIF(Z1:Z4,{1,2})'
+input	legacy_column	AA475	'AVERAGEIF(Z1:Z4,{1,2})'
+input	cse	C2295:E2298	'AVERAGEIF(Z1:Z4,{1,2})'
+input	dynamic	H3604	'AVERAGEIF(Z1:Z4,{1,2})'
+input	legacy	A476	'AVERAGEIF(Z1:Z4,{1,2},AA1:AA4)'
+input	legacy_row3	SB3	'AVERAGEIF(Z1:Z4,{1,2},AA1:AA4)'
+input	legacy_column	AA476	'AVERAGEIF(Z1:Z4,{1,2},AA1:AA4)'
+input	cse	C2300:E2303	'AVERAGEIF(Z1:Z4,{1,2},AA1:AA4)'
+input	dynamic	H3612	'AVERAGEIF(Z1:Z4,{1,2},AA1:AA4)'
+input	legacy	A477	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	legacy_row3	SC3	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	legacy_column	AA477	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	cse	C2305:E2308	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	dynamic	H3620	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	legacy	A478	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	legacy_row3	SD3	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	legacy_column	AA478	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	cse	C2310:E2313	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	dynamic	H3628	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	legacy	A479	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	legacy_row3	SE3	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	legacy_column	AA479	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	cse	C2315:E2318	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	dynamic	H3636	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1,2})'
+input	legacy	A480	'_xlfn.XLOOKUP({1,2},Z1:Z4,AA1:AA4)'
+input	legacy_row3	SF3	'_xlfn.XLOOKUP({1,2},Z1:Z4,AA1:AA4)'
+input	legacy_column	AA480	'_xlfn.XLOOKUP({1,2},Z1:Z4,AA1:AA4)'
+input	cse	C2320:E2323	'_xlfn.XLOOKUP({1,2},Z1:Z4,AA1:AA4)'
+input	dynamic	H3644	'_xlfn.XLOOKUP({1,2},Z1:Z4,AA1:AA4)'
+input	legacy	A481	'_xlfn.XMATCH({1,2},Z1:Z4)'
+input	legacy_row3	SG3	'_xlfn.XMATCH({1,2},Z1:Z4)'
+input	legacy_column	AA481	'_xlfn.XMATCH({1,2},Z1:Z4)'
+input	cse	C2325:E2328	'_xlfn.XMATCH({1,2},Z1:Z4)'
+input	dynamic	H3652	'_xlfn.XMATCH({1,2},Z1:Z4)'
+input	legacy	A482	'LARGE(Z1:Z4,{1,2})'
+input	legacy_row3	SH3	'LARGE(Z1:Z4,{1,2})'
+input	legacy_column	AA482	'LARGE(Z1:Z4,{1,2})'
+input	cse	C2330:E2333	'LARGE(Z1:Z4,{1,2})'
+input	dynamic	H3660	'LARGE(Z1:Z4,{1,2})'
+input	legacy	A483	'SMALL(Z1:Z4,{1,2})'
+input	legacy_row3	SI3	'SMALL(Z1:Z4,{1,2})'
+input	legacy_column	AA483	'SMALL(Z1:Z4,{1,2})'
+input	cse	C2335:E2338	'SMALL(Z1:Z4,{1,2})'
+input	dynamic	H3668	'SMALL(Z1:Z4,{1,2})'
+input	legacy	A484	'_xlfn.SWITCH({1,2},1,10,2,20,0)'
+input	legacy_row3	SJ3	'_xlfn.SWITCH({1,2},1,10,2,20,0)'
+input	legacy_column	AA484	'_xlfn.SWITCH({1,2},1,10,2,20,0)'
+input	cse	C2340:E2343	'_xlfn.SWITCH({1,2},1,10,2,20,0)'
+input	dynamic	H3676	'_xlfn.SWITCH({1,2},1,10,2,20,0)'
+input	legacy	A485	'_xlfn.IFS({1,2}>1,1,TRUE,0)'
+input	legacy_row3	SK3	'_xlfn.IFS({1,2}>1,1,TRUE,0)'
+input	legacy_column	AA485	'_xlfn.IFS({1,2}>1,1,TRUE,0)'
+input	cse	C2345:E2348	'_xlfn.IFS({1,2}>1,1,TRUE,0)'
+input	dynamic	H3684	'_xlfn.IFS({1,2}>1,1,TRUE,0)'
+input	legacy	A486	'_xlfn.TEXTJOIN(",",TRUE,{1,2})'
+input	legacy_row3	SL3	'_xlfn.TEXTJOIN(",",TRUE,{1,2})'
+input	legacy_column	AA486	'_xlfn.TEXTJOIN(",",TRUE,{1,2})'
+input	cse	C2350:E2353	'_xlfn.TEXTJOIN(",",TRUE,{1,2})'
+input	dynamic	H3692	'_xlfn.TEXTJOIN(",",TRUE,{1,2})'
+input	legacy	A487	'_xlfn.TEXTJOIN({1,2},TRUE,"a","b","c")'
+input	legacy_row3	SM3	'_xlfn.TEXTJOIN({1,2},TRUE,"a","b","c")'
+input	legacy_column	AA487	'_xlfn.TEXTJOIN({1,2},TRUE,"a","b","c")'
+input	cse	C2355:E2358	'_xlfn.TEXTJOIN({1,2},TRUE,"a","b","c")'
+input	dynamic	H3700	'_xlfn.TEXTJOIN({1,2},TRUE,"a","b","c")'
+input	legacy	A488	'_xlfn.CONCAT({1,2})'
+input	legacy_row3	SN3	'_xlfn.CONCAT({1,2})'
+input	legacy_column	AA488	'_xlfn.CONCAT({1,2})'
+input	cse	C2360:E2363	'_xlfn.CONCAT({1,2})'
+input	dynamic	H3708	'_xlfn.CONCAT({1,2})'
+input	legacy	A489	'AVERAGEIF(Z1:Z4,Z2)'
+input	legacy_row3	SO3	'AVERAGEIF(Z1:Z4,Z2)'
+input	legacy_column	AA489	'AVERAGEIF(Z1:Z4,Z2)'
+input	cse	C2365:E2368	'AVERAGEIF(Z1:Z4,Z2)'
+input	dynamic	H3716	'AVERAGEIF(Z1:Z4,Z2)'
+input	legacy	A490	'AVERAGEIF(Z1:Z4,Z2,AA1:AA4)'
+input	legacy_row3	SP3	'AVERAGEIF(Z1:Z4,Z2,AA1:AA4)'
+input	legacy_column	AA490	'AVERAGEIF(Z1:Z4,Z2,AA1:AA4)'
+input	cse	C2370:E2373	'AVERAGEIF(Z1:Z4,Z2,AA1:AA4)'
+input	dynamic	H3724	'AVERAGEIF(Z1:Z4,Z2,AA1:AA4)'
+input	legacy	A491	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z2)'
+input	legacy_row3	SQ3	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z2)'
+input	legacy_column	AA491	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z2)'
+input	cse	C2375:E2378	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z2)'
+input	dynamic	H3732	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z2)'
+input	legacy	A492	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z2)'
+input	legacy_row3	SR3	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z2)'
+input	legacy_column	AA492	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z2)'
+input	cse	C2380:E2383	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z2)'
+input	dynamic	H3740	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z2)'
+input	legacy	A493	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z2)'
+input	legacy_row3	SS3	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z2)'
+input	legacy_column	AA493	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z2)'
+input	cse	C2385:E2388	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z2)'
+input	dynamic	H3748	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z2)'
+input	legacy	A494	'_xlfn.XLOOKUP(Z2,Z1:Z4,AA1:AA4)'
+input	legacy_row3	ST3	'_xlfn.XLOOKUP(Z2,Z1:Z4,AA1:AA4)'
+input	legacy_column	AA494	'_xlfn.XLOOKUP(Z2,Z1:Z4,AA1:AA4)'
+input	cse	C2390:E2393	'_xlfn.XLOOKUP(Z2,Z1:Z4,AA1:AA4)'
+input	dynamic	H3756	'_xlfn.XLOOKUP(Z2,Z1:Z4,AA1:AA4)'
+input	legacy	A495	'_xlfn.XMATCH(Z2,Z1:Z4)'
+input	legacy_row3	SU3	'_xlfn.XMATCH(Z2,Z1:Z4)'
+input	legacy_column	AA495	'_xlfn.XMATCH(Z2,Z1:Z4)'
+input	cse	C2395:E2398	'_xlfn.XMATCH(Z2,Z1:Z4)'
+input	dynamic	H3764	'_xlfn.XMATCH(Z2,Z1:Z4)'
+input	legacy	A496	'LARGE(Z1:Z4,Z2)'
+input	legacy_row3	SV3	'LARGE(Z1:Z4,Z2)'
+input	legacy_column	AA496	'LARGE(Z1:Z4,Z2)'
+input	cse	C2400:E2403	'LARGE(Z1:Z4,Z2)'
+input	dynamic	H3772	'LARGE(Z1:Z4,Z2)'
+input	legacy	A497	'SMALL(Z1:Z4,Z2)'
+input	legacy_row3	SW3	'SMALL(Z1:Z4,Z2)'
+input	legacy_column	AA497	'SMALL(Z1:Z4,Z2)'
+input	cse	C2405:E2408	'SMALL(Z1:Z4,Z2)'
+input	dynamic	H3780	'SMALL(Z1:Z4,Z2)'
+input	legacy	A498	'_xlfn.SWITCH(Z2,1,10,2,20,0)'
+input	legacy_row3	SX3	'_xlfn.SWITCH(Z2,1,10,2,20,0)'
+input	legacy_column	AA498	'_xlfn.SWITCH(Z2,1,10,2,20,0)'
+input	cse	C2410:E2413	'_xlfn.SWITCH(Z2,1,10,2,20,0)'
+input	dynamic	H3788	'_xlfn.SWITCH(Z2,1,10,2,20,0)'
+input	legacy	A499	'_xlfn.IFS(Z2>1,1,TRUE,0)'
+input	legacy_row3	SY3	'_xlfn.IFS(Z2>1,1,TRUE,0)'
+input	legacy_column	AA499	'_xlfn.IFS(Z2>1,1,TRUE,0)'
+input	cse	C2415:E2418	'_xlfn.IFS(Z2>1,1,TRUE,0)'
+input	dynamic	H3796	'_xlfn.IFS(Z2>1,1,TRUE,0)'
+input	legacy	A500	'_xlfn.TEXTJOIN(",",TRUE,Z2)'
+input	legacy_row3	SZ3	'_xlfn.TEXTJOIN(",",TRUE,Z2)'
+input	legacy_column	AA500	'_xlfn.TEXTJOIN(",",TRUE,Z2)'
+input	cse	C2420:E2423	'_xlfn.TEXTJOIN(",",TRUE,Z2)'
+input	dynamic	H3804	'_xlfn.TEXTJOIN(",",TRUE,Z2)'
+input	legacy	A501	'_xlfn.TEXTJOIN(Z2,TRUE,"a","b","c")'
+input	legacy_row3	TA3	'_xlfn.TEXTJOIN(Z2,TRUE,"a","b","c")'
+input	legacy_column	AA501	'_xlfn.TEXTJOIN(Z2,TRUE,"a","b","c")'
+input	cse	C2425:E2428	'_xlfn.TEXTJOIN(Z2,TRUE,"a","b","c")'
+input	dynamic	H3812	'_xlfn.TEXTJOIN(Z2,TRUE,"a","b","c")'
+input	legacy	A502	'_xlfn.CONCAT(Z2)'
+input	legacy_row3	TB3	'_xlfn.CONCAT(Z2)'
+input	legacy_column	AA502	'_xlfn.CONCAT(Z2)'
+input	cse	C2430:E2433	'_xlfn.CONCAT(Z2)'
+input	dynamic	H3820	'_xlfn.CONCAT(Z2)'
+input	legacy	A503	'PERCENTILE(Z1:Z4,0.5)'
+input	legacy_row3	TC3	'PERCENTILE(Z1:Z4,0.5)'
+input	legacy_column	AA503	'PERCENTILE(Z1:Z4,0.5)'
+input	cse	C2435:E2438	'PERCENTILE(Z1:Z4,0.5)'
+input	dynamic	H3828	'PERCENTILE(Z1:Z4,0.5)'
+input	legacy	A504	'_xlfn.PERCENTILE.INC(Z1:Z4,0.5)'
+input	legacy_row3	TD3	'_xlfn.PERCENTILE.INC(Z1:Z4,0.5)'
+input	legacy_column	AA504	'_xlfn.PERCENTILE.INC(Z1:Z4,0.5)'
+input	cse	C2440:E2443	'_xlfn.PERCENTILE.INC(Z1:Z4,0.5)'
+input	dynamic	H3836	'_xlfn.PERCENTILE.INC(Z1:Z4,0.5)'
+input	legacy	A505	'PERCENTILE(Z1:Z4,{0.25;0.75})'
+input	legacy_row3	TE3	'PERCENTILE(Z1:Z4,{0.25;0.75})'
+input	legacy_column	AA505	'PERCENTILE(Z1:Z4,{0.25;0.75})'
+input	cse	C2445:E2448	'PERCENTILE(Z1:Z4,{0.25;0.75})'
+input	dynamic	H3844	'PERCENTILE(Z1:Z4,{0.25;0.75})'
+input	legacy	A506	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25;0.75})'
+input	legacy_row3	TF3	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25;0.75})'
+input	legacy_column	AA506	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25;0.75})'
+input	cse	C2450:E2453	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25;0.75})'
+input	dynamic	H3852	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25;0.75})'
+input	legacy	A507	'PERCENTILE(Z1:Z4,{0.25,0.75})'
+input	legacy_row3	TG3	'PERCENTILE(Z1:Z4,{0.25,0.75})'
+input	legacy_column	AA507	'PERCENTILE(Z1:Z4,{0.25,0.75})'
+input	cse	C2455:E2458	'PERCENTILE(Z1:Z4,{0.25,0.75})'
+input	dynamic	H3860	'PERCENTILE(Z1:Z4,{0.25,0.75})'
+input	legacy	A508	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25,0.75})'
+input	legacy_row3	TH3	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25,0.75})'
+input	legacy_column	AA508	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25,0.75})'
+input	cse	C2460:E2463	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25,0.75})'
+input	dynamic	H3868	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25,0.75})'
+input	legacy	A509	'PERCENTILE(Z1:Z4,Z1:Z2/10)'
+input	legacy_row3	TI3	'PERCENTILE(Z1:Z4,Z1:Z2/10)'
+input	legacy_column	AA509	'PERCENTILE(Z1:Z4,Z1:Z2/10)'
+input	cse	C2465:E2468	'PERCENTILE(Z1:Z4,Z1:Z2/10)'
+input	dynamic	H3876	'PERCENTILE(Z1:Z4,Z1:Z2/10)'
+input	legacy	A510	'_xlfn.PERCENTILE.INC(Z1:Z4,Z1:Z2/10)'
+input	legacy_row3	TJ3	'_xlfn.PERCENTILE.INC(Z1:Z4,Z1:Z2/10)'
+input	legacy_column	AA510	'_xlfn.PERCENTILE.INC(Z1:Z4,Z1:Z2/10)'
+input	cse	C2470:E2473	'_xlfn.PERCENTILE.INC(Z1:Z4,Z1:Z2/10)'
+input	dynamic	H3884	'_xlfn.PERCENTILE.INC(Z1:Z4,Z1:Z2/10)'
+input	legacy	A511	'QUARTILE(Z1:Z4,1)'
+input	legacy_row3	TK3	'QUARTILE(Z1:Z4,1)'
+input	legacy_column	AA511	'QUARTILE(Z1:Z4,1)'
+input	cse	C2475:E2478	'QUARTILE(Z1:Z4,1)'
+input	dynamic	H3892	'QUARTILE(Z1:Z4,1)'
+input	legacy	A512	'_xlfn.QUARTILE.INC(Z1:Z4,1)'
+input	legacy_row3	TL3	'_xlfn.QUARTILE.INC(Z1:Z4,1)'
+input	legacy_column	AA512	'_xlfn.QUARTILE.INC(Z1:Z4,1)'
+input	cse	C2480:E2483	'_xlfn.QUARTILE.INC(Z1:Z4,1)'
+input	dynamic	H3900	'_xlfn.QUARTILE.INC(Z1:Z4,1)'
+input	legacy	A513	'QUARTILE(Z1:Z4,{1;3})'
+input	legacy_row3	TM3	'QUARTILE(Z1:Z4,{1;3})'
+input	legacy_column	AA513	'QUARTILE(Z1:Z4,{1;3})'
+input	cse	C2485:E2488	'QUARTILE(Z1:Z4,{1;3})'
+input	dynamic	H3908	'QUARTILE(Z1:Z4,{1;3})'
+input	legacy	A514	'_xlfn.QUARTILE.INC(Z1:Z4,{1;3})'
+input	legacy_row3	TN3	'_xlfn.QUARTILE.INC(Z1:Z4,{1;3})'
+input	legacy_column	AA514	'_xlfn.QUARTILE.INC(Z1:Z4,{1;3})'
+input	cse	C2490:E2493	'_xlfn.QUARTILE.INC(Z1:Z4,{1;3})'
+input	dynamic	H3916	'_xlfn.QUARTILE.INC(Z1:Z4,{1;3})'
+input	legacy	A515	'QUARTILE(Z1:Z4,Z1:Z2)'
+input	legacy_row3	TO3	'QUARTILE(Z1:Z4,Z1:Z2)'
+input	legacy_column	AA515	'QUARTILE(Z1:Z4,Z1:Z2)'
+input	cse	C2495:E2498	'QUARTILE(Z1:Z4,Z1:Z2)'
+input	dynamic	H3924	'QUARTILE(Z1:Z4,Z1:Z2)'
+input	legacy	A516	'_xlfn.QUARTILE.INC(Z1:Z4,Z1:Z2)'
+input	legacy_row3	TP3	'_xlfn.QUARTILE.INC(Z1:Z4,Z1:Z2)'
+input	legacy_column	AA516	'_xlfn.QUARTILE.INC(Z1:Z4,Z1:Z2)'
+input	cse	C2500:E2503	'_xlfn.QUARTILE.INC(Z1:Z4,Z1:Z2)'
+input	dynamic	H3932	'_xlfn.QUARTILE.INC(Z1:Z4,Z1:Z2)'
+input	legacy	A517	'MODE(Z1:Z4)'
+input	legacy_row3	TQ3	'MODE(Z1:Z4)'
+input	legacy_column	AA517	'MODE(Z1:Z4)'
+input	cse	C2505:E2508	'MODE(Z1:Z4)'
+input	dynamic	H3940	'MODE(Z1:Z4)'
+input	legacy	A518	'_xlfn.MODE.SNGL(Z1:Z4)'
+input	legacy_row3	TR3	'_xlfn.MODE.SNGL(Z1:Z4)'
+input	legacy_column	AA518	'_xlfn.MODE.SNGL(Z1:Z4)'
+input	cse	C2510:E2513	'_xlfn.MODE.SNGL(Z1:Z4)'
+input	dynamic	H3948	'_xlfn.MODE.SNGL(Z1:Z4)'
+input	legacy	A519	'MODE(Z1:Z4*1)'
+input	legacy_row3	TS3	'MODE(Z1:Z4*1)'
+input	legacy_column	AA519	'MODE(Z1:Z4*1)'
+input	cse	C2515:E2518	'MODE(Z1:Z4*1)'
+input	dynamic	H3956	'MODE(Z1:Z4*1)'
+input	legacy	A520	'LARGE(Z1:Z4*2,1)'
+input	legacy_row3	TT3	'LARGE(Z1:Z4*2,1)'
+input	legacy_column	AA520	'LARGE(Z1:Z4*2,1)'
+input	cse	C2520:E2523	'LARGE(Z1:Z4*2,1)'
+input	dynamic	H3964	'LARGE(Z1:Z4*2,1)'
+input	legacy	A521	'SMALL(Z1:Z4*2,1)'
+input	legacy_row3	TU3	'SMALL(Z1:Z4*2,1)'
+input	legacy_column	AA521	'SMALL(Z1:Z4*2,1)'
+input	cse	C2525:E2528	'SMALL(Z1:Z4*2,1)'
+input	dynamic	H3972	'SMALL(Z1:Z4*2,1)'
+input	legacy	A522	'PERCENTILE(Z1:Z4*2,0.5)'
+input	legacy_row3	TV3	'PERCENTILE(Z1:Z4*2,0.5)'
+input	legacy_column	AA522	'PERCENTILE(Z1:Z4*2,0.5)'
+input	cse	C2530:E2533	'PERCENTILE(Z1:Z4*2,0.5)'
+input	dynamic	H3980	'PERCENTILE(Z1:Z4*2,0.5)'
+input	legacy	A523	'QUARTILE(Z1:Z4*2,1)'
+input	legacy_row3	TW3	'QUARTILE(Z1:Z4*2,1)'
+input	legacy_column	AA523	'QUARTILE(Z1:Z4*2,1)'
+input	cse	C2535:E2538	'QUARTILE(Z1:Z4*2,1)'
+input	dynamic	H3988	'QUARTILE(Z1:Z4*2,1)'
+input	legacy	A524	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4)'
+input	legacy_row3	TX3	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4)'
+input	legacy_column	AA524	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4)'
+input	cse	C2540:E2543	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4)'
+input	dynamic	H3996	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4)'
+input	legacy	A525	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4)*2'
+input	legacy_row3	TY3	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4)*2'
+input	legacy_column	AA525	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4)*2'
+input	cse	C2545:E2548	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4)*2'
+input	dynamic	H4004	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4)*2'
+input	legacy	A526	'SUM(_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4))'
+input	legacy_row3	TZ3	'SUM(_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4))'
+input	legacy_column	AA526	'SUM(_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4))'
+input	cse	C2550:E2553	'SUM(_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4))'
+input	dynamic	H4012	'SUM(_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4))'
+input	legacy	A527	'SUMPRODUCT(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'
+input	legacy_row3	UA3	'SUMPRODUCT(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'
+input	legacy_column	AA527	'SUMPRODUCT(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'
+input	cse	C2555:E2558	'SUMPRODUCT(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'
+input	dynamic	H4020	'SUMPRODUCT(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'
+input	legacy	A528	'_xlfn.XLOOKUP(2,Z1:Z4*1,AA1:AA4)'
+input	legacy_row3	UB3	'_xlfn.XLOOKUP(2,Z1:Z4*1,AA1:AA4)'
+input	legacy_column	AA528	'_xlfn.XLOOKUP(2,Z1:Z4*1,AA1:AA4)'
+input	cse	C2560:E2563	'_xlfn.XLOOKUP(2,Z1:Z4*1,AA1:AA4)'
+input	dynamic	H4028	'_xlfn.XLOOKUP(2,Z1:Z4*1,AA1:AA4)'
+input	legacy	A529	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4*2)'
+input	legacy_row3	UC3	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4*2)'
+input	legacy_column	AA529	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4*2)'
+input	cse	C2565:E2568	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4*2)'
+input	dynamic	H4036	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4*2)'
+input	legacy	A530	'_xlfn.XMATCH(2,Z1:Z4*1)'
+input	legacy_row3	UD3	'_xlfn.XMATCH(2,Z1:Z4*1)'
+input	legacy_column	AA530	'_xlfn.XMATCH(2,Z1:Z4*1)'
+input	cse	C2570:E2573	'_xlfn.XMATCH(2,Z1:Z4*1)'
+input	dynamic	H4044	'_xlfn.XMATCH(2,Z1:Z4*1)'
+input	legacy	A531	'_xlfn.IFS(Z1:Z4>1,AA1:AA4,TRUE,0)'
+input	legacy_row3	UE3	'_xlfn.IFS(Z1:Z4>1,AA1:AA4,TRUE,0)'
+input	legacy_column	AA531	'_xlfn.IFS(Z1:Z4>1,AA1:AA4,TRUE,0)'
+input	cse	C2575:E2578	'_xlfn.IFS(Z1:Z4>1,AA1:AA4,TRUE,0)'
+input	dynamic	H4052	'_xlfn.IFS(Z1:Z4>1,AA1:AA4,TRUE,0)'
+input	legacy	A532	'_xlfn.SWITCH(Z1:Z4,1,AA1:AA4,0)'
+input	legacy_row3	UF3	'_xlfn.SWITCH(Z1:Z4,1,AA1:AA4,0)'
+input	legacy_column	AA532	'_xlfn.SWITCH(Z1:Z4,1,AA1:AA4,0)'
+input	cse	C2580:E2583	'_xlfn.SWITCH(Z1:Z4,1,AA1:AA4,0)'
+input	dynamic	H4060	'_xlfn.SWITCH(Z1:Z4,1,AA1:AA4,0)'
+input	legacy	A533	'_xlfn.CONCAT(Z1:Z4*2)'
+input	legacy_row3	UG3	'_xlfn.CONCAT(Z1:Z4*2)'
+input	legacy_column	AA533	'_xlfn.CONCAT(Z1:Z4*2)'
+input	cse	C2585:E2588	'_xlfn.CONCAT(Z1:Z4*2)'
+input	dynamic	H4068	'_xlfn.CONCAT(Z1:Z4*2)'
+input	legacy	A534	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4*2)'
+input	legacy_row3	UH3	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4*2)'
+input	legacy_column	AA534	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4*2)'
+input	cse	C2590:E2593	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4*2)'
+input	dynamic	H4076	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4*2)'
+input	legacy	A535	'SUM(LARGE(Z1:Z4,{1,2}))'
+input	legacy_row3	UI3	'SUM(LARGE(Z1:Z4,{1,2}))'
+input	legacy_column	AA535	'SUM(LARGE(Z1:Z4,{1,2}))'
+input	cse	C2595:E2598	'SUM(LARGE(Z1:Z4,{1,2}))'
+input	dynamic	H4084	'SUM(LARGE(Z1:Z4,{1,2}))'
+input	legacy	A536	'SUMPRODUCT(LARGE(Z1:Z4,ROW(Z1:Z2)))'
+input	legacy_row3	UJ3	'SUMPRODUCT(LARGE(Z1:Z4,ROW(Z1:Z2)))'
+input	legacy_column	AA536	'SUMPRODUCT(LARGE(Z1:Z4,ROW(Z1:Z2)))'
+input	cse	C2600:E2603	'SUMPRODUCT(LARGE(Z1:Z4,ROW(Z1:Z2)))'
+input	dynamic	H4092	'SUMPRODUCT(LARGE(Z1:Z4,ROW(Z1:Z2)))'
+input	legacy	A537	'SUMPRODUCT(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'
+input	legacy_row3	UK3	'SUMPRODUCT(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'
+input	legacy_column	AA537	'SUMPRODUCT(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'
+input	cse	C2605:E2608	'SUMPRODUCT(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'
+input	dynamic	H4100	'SUMPRODUCT(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'
+input	legacy	A538	'SUM(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'
+input	legacy_row3	UL3	'SUM(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'
+input	legacy_column	AA538	'SUM(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'
+input	cse	C2610:E2613	'SUM(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'
+input	dynamic	H4108	'SUM(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'
+input	legacy	A539	'SUM(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'
+input	legacy_row3	UM3	'SUM(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'
+input	legacy_column	AA539	'SUM(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'
+input	cse	C2615:E2618	'SUM(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'
+input	dynamic	H4116	'SUM(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'
+input	cse	C2620:C2621	'ROW(Z1:Z4)'
+input	cse	C2623:C2628	'ROW(Z1:Z4)'
+input	cse	C2630:D2633	'ROW(Z1:Z4)'
+input	cse	C2635:C2635	'ROW(Z1:Z4)'
 cell	Z1	n	'1'	None				
 cell	AA1	n	'10'	None				
 cell	AB1	s	'a'	None				
@@ -2574,6 +3039,99 @@ cell	QU3	str	'$A$2'	'ADDRESS(Z1:Z4,1)'	normal
 cell	QV3	n	'4'	'ROWS(Z1:Z4)'	normal			
 cell	QW3	n	'1'	'COLUMNS(Z1:Z4)'	normal			
 cell	QX3	n	'1'	'INDEX(Z1:Z4,{1;2})'	normal			
+cell	QY3	n	'2'	'AVERAGEIF(Z1:Z4,Z1:Z4)'	normal			
+cell	QZ3	n	'25'	'AVERAGEIF(Z1:Z4,Z1:Z4,AA1:AA4)'	normal			
+cell	RA3	n	'25'	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	normal			
+cell	RB3	n	'30'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	normal			
+cell	RC3	n	'20'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	normal			
+cell	RD3	n	'20'	'_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4)'	normal			
+cell	RE3	n	'2'	'_xlfn.XMATCH(Z1:Z4,Z1:Z4)'	normal			
+cell	RF3	n	'2'	'LARGE(Z1:Z4,Z1:Z4)'	normal			
+cell	RG3	n	'2'	'SMALL(Z1:Z4,Z1:Z4)'	normal			
+cell	RH3	n	'20'	'_xlfn.SWITCH(Z1:Z4,1,10,2,20,0)'	normal			
+cell	RI3	n	'1'	'_xlfn.IFS(Z1:Z4>1,1,TRUE,0)'	normal			
+cell	RJ3	str	'1,2,2,3'	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4)'	normal			
+cell	RK3	str	'a1b2c'	'_xlfn.TEXTJOIN(Z1:Z4,TRUE,"a","b","c")'	normal			
+cell	RL3	str	'1223'	'_xlfn.CONCAT(Z1:Z4)'	normal			
+cell	RM3	n	'1'	'AVERAGEIF(Z1:Z4,{1;2})'	normal			
+cell	RN3	n	'10'	'AVERAGEIF(Z1:Z4,{1;2},AA1:AA4)'	normal			
+cell	RO3	n	'10'	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1;2})'	normal			
+cell	RP3	n	'10'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1;2})'	normal			
+cell	RQ3	n	'10'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1;2})'	normal			
+cell	RR3	n	'10'	'_xlfn.XLOOKUP({1;2},Z1:Z4,AA1:AA4)'	normal			
+cell	RS3	n	'1'	'_xlfn.XMATCH({1;2},Z1:Z4)'	normal			
+cell	RT3	n	'3'	'LARGE(Z1:Z4,{1;2})'	normal			
+cell	RU3	n	'1'	'SMALL(Z1:Z4,{1;2})'	normal			
+cell	RV3	n	'10'	'_xlfn.SWITCH({1;2},1,10,2,20,0)'	normal			
+cell	RW3	n	'0'	'_xlfn.IFS({1;2}>1,1,TRUE,0)'	normal			
+cell	RX3	str	'1,2'	'_xlfn.TEXTJOIN(",",TRUE,{1;2})'	normal			
+cell	RY3	str	'a1b2c'	'_xlfn.TEXTJOIN({1;2},TRUE,"a","b","c")'	normal			
+cell	RZ3	str	'12'	'_xlfn.CONCAT({1;2})'	normal			
+cell	SA3	n	'1'	'AVERAGEIF(Z1:Z4,{1,2})'	normal			
+cell	SB3	n	'10'	'AVERAGEIF(Z1:Z4,{1,2},AA1:AA4)'	normal			
+cell	SC3	n	'10'	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1,2})'	normal			
+cell	SD3	n	'10'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1,2})'	normal			
+cell	SE3	n	'10'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1,2})'	normal			
+cell	SF3	n	'10'	'_xlfn.XLOOKUP({1,2},Z1:Z4,AA1:AA4)'	normal			
+cell	SG3	n	'1'	'_xlfn.XMATCH({1,2},Z1:Z4)'	normal			
+cell	SH3	n	'3'	'LARGE(Z1:Z4,{1,2})'	normal			
+cell	SI3	n	'1'	'SMALL(Z1:Z4,{1,2})'	normal			
+cell	SJ3	n	'10'	'_xlfn.SWITCH({1,2},1,10,2,20,0)'	normal			
+cell	SK3	n	'0'	'_xlfn.IFS({1,2}>1,1,TRUE,0)'	normal			
+cell	SL3	str	'1,2'	'_xlfn.TEXTJOIN(",",TRUE,{1,2})'	normal			
+cell	SM3	str	'a1b2c'	'_xlfn.TEXTJOIN({1,2},TRUE,"a","b","c")'	normal			
+cell	SN3	str	'12'	'_xlfn.CONCAT({1,2})'	normal			
+cell	SO3	n	'2'	'AVERAGEIF(Z1:Z4,Z2)'	normal			
+cell	SP3	n	'25'	'AVERAGEIF(Z1:Z4,Z2,AA1:AA4)'	normal			
+cell	SQ3	n	'25'	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z2)'	normal			
+cell	SR3	n	'30'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z2)'	normal			
+cell	SS3	n	'20'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z2)'	normal			
+cell	ST3	n	'20'	'_xlfn.XLOOKUP(Z2,Z1:Z4,AA1:AA4)'	normal			
+cell	SU3	n	'2'	'_xlfn.XMATCH(Z2,Z1:Z4)'	normal			
+cell	SV3	n	'2'	'LARGE(Z1:Z4,Z2)'	normal			
+cell	SW3	n	'2'	'SMALL(Z1:Z4,Z2)'	normal			
+cell	SX3	n	'20'	'_xlfn.SWITCH(Z2,1,10,2,20,0)'	normal			
+cell	SY3	n	'1'	'_xlfn.IFS(Z2>1,1,TRUE,0)'	normal			
+cell	SZ3	str	'2'	'_xlfn.TEXTJOIN(",",TRUE,Z2)'	normal			
+cell	TA3	str	'a2b2c'	'_xlfn.TEXTJOIN(Z2,TRUE,"a","b","c")'	normal			
+cell	TB3	str	'2'	'_xlfn.CONCAT(Z2)'	normal			
+cell	TC3	n	'2'	'PERCENTILE(Z1:Z4,0.5)'	normal			
+cell	TD3	n	'2'	'_xlfn.PERCENTILE.INC(Z1:Z4,0.5)'	normal			
+cell	TE3	n	'1.75'	'PERCENTILE(Z1:Z4,{0.25;0.75})'	normal			
+cell	TF3	n	'1.75'	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25;0.75})'	normal			
+cell	TG3	n	'1.75'	'PERCENTILE(Z1:Z4,{0.25,0.75})'	normal			
+cell	TH3	n	'1.75'	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25,0.75})'	normal			
+cell	TI3	e	'#VALUE!'	'PERCENTILE(Z1:Z4,Z1:Z2/10)'	normal			
+cell	TJ3	e	'#VALUE!'	'_xlfn.PERCENTILE.INC(Z1:Z4,Z1:Z2/10)'	normal			
+cell	TK3	n	'1.75'	'QUARTILE(Z1:Z4,1)'	normal			
+cell	TL3	n	'1.75'	'_xlfn.QUARTILE.INC(Z1:Z4,1)'	normal			
+cell	TM3	n	'1.75'	'QUARTILE(Z1:Z4,{1;3})'	normal			
+cell	TN3	n	'1.75'	'_xlfn.QUARTILE.INC(Z1:Z4,{1;3})'	normal			
+cell	TO3	e	'#VALUE!'	'QUARTILE(Z1:Z4,Z1:Z2)'	normal			
+cell	TP3	e	'#VALUE!'	'_xlfn.QUARTILE.INC(Z1:Z4,Z1:Z2)'	normal			
+cell	TQ3	n	'2'	'MODE(Z1:Z4)'	normal			
+cell	TR3	n	'2'	'_xlfn.MODE.SNGL(Z1:Z4)'	normal			
+cell	TS3	n	'2'	'MODE(Z1:Z4*1)'	normal			
+cell	TT3	n	'4'	'LARGE(Z1:Z4*2,1)'	normal			
+cell	TU3	n	'4'	'SMALL(Z1:Z4*2,1)'	normal			
+cell	TV3	n	'4'	'PERCENTILE(Z1:Z4*2,0.5)'	normal			
+cell	TW3	n	'4'	'QUARTILE(Z1:Z4*2,1)'	normal			
+cell	TX3	e	'#VALUE!'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4)'	normal			
+cell	TY3	n	'40'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4)*2'	normal			
+cell	TZ3	n	'20'	'SUM(_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4))'	normal			
+cell	UA3	n	'20'	'SUMPRODUCT(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'	normal			
+cell	UB3	n	'20'	'_xlfn.XLOOKUP(2,Z1:Z4*1,AA1:AA4)'	normal			
+cell	UC3	n	'40'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4*2)'	normal			
+cell	UD3	n	'2'	'_xlfn.XMATCH(2,Z1:Z4*1)'	normal			
+cell	UE3	n	'30'	'_xlfn.IFS(Z1:Z4>1,AA1:AA4,TRUE,0)'	normal			
+cell	UF3	n	'0'	'_xlfn.SWITCH(Z1:Z4,1,AA1:AA4,0)'	normal			
+cell	UG3	str	'4'	'_xlfn.CONCAT(Z1:Z4*2)'	normal			
+cell	UH3	str	'4'	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4*2)'	normal			
+cell	UI3	n	'5'	'SUM(LARGE(Z1:Z4,{1,2}))'	normal			
+cell	UJ3	n	'5'	'SUMPRODUCT(LARGE(Z1:Z4,ROW(Z1:Z2)))'	normal			
+cell	UK3	n	'9'	'SUMPRODUCT(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'	normal			
+cell	UL3	n	'2'	'SUM(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'	normal			
+cell	UM3	n	'20'	'SUM(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'	normal			
 cell	Z4	n	'3'	None				
 cell	AA4	n	'40'	None				
 cell	AB4	s	'd'	None				
@@ -4544,247 +5102,433 @@ cell	C446	n	'1048576'	None
 cell	D446	n	'1048576'	None				
 cell	E446	n	'1048576'	None				
 cell	AA446	n	'1'	'INDEX(Z1:Z4,{1;2})'	normal			
+cell	A447	e	'#DIV/0!'	'AVERAGEIF(Z1:Z4,Z1:Z4)'	normal			
 cell	C447	n	'1048576'	None				
 cell	D447	n	'1048576'	None				
 cell	E447	n	'1048576'	None				
+cell	AA447	e	'#DIV/0!'	'AVERAGEIF(Z1:Z4,Z1:Z4)'	normal			
+cell	A448	e	'#DIV/0!'	'AVERAGEIF(Z1:Z4,Z1:Z4,AA1:AA4)'	normal			
 cell	C448	n	'1048576'	None				
 cell	D448	n	'1048576'	None				
 cell	E448	n	'1048576'	None				
+cell	AA448	e	'#DIV/0!'	'AVERAGEIF(Z1:Z4,Z1:Z4,AA1:AA4)'	normal			
+cell	A449	e	'#DIV/0!'	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	normal			
+cell	AA449	e	'#DIV/0!'	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	normal			
+cell	A450	n	'0'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	normal			
 cell	C450	n	'1048576'	'COUNT(ROW(1:1048576))'	array	C450:E453		
 cell	D450	n	'1048576'	None				
 cell	E450	n	'1048576'	None				
+cell	AA450	n	'0'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	normal			
+cell	A451	n	'0'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	normal			
 cell	C451	n	'1048576'	None				
 cell	D451	n	'1048576'	None				
 cell	E451	n	'1048576'	None				
+cell	AA451	n	'0'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	normal			
+cell	A452	e	'#VALUE!'	'_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4)'	normal			
 cell	C452	n	'1048576'	None				
 cell	D452	n	'1048576'	None				
 cell	E452	n	'1048576'	None				
 cell	H452	n	'1'	'ROW(INDEX(Z1:Z4,0))'	array	H452:H455	1	
+cell	AA452	e	'#VALUE!'	'_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4)'	normal			
+cell	A453	e	'#VALUE!'	'_xlfn.XMATCH(Z1:Z4,Z1:Z4)'	normal			
 cell	C453	n	'1048576'	None				
 cell	D453	n	'1048576'	None				
 cell	E453	n	'1048576'	None				
 cell	H453	n	'2'	None				
+cell	AA453	e	'#VALUE!'	'_xlfn.XMATCH(Z1:Z4,Z1:Z4)'	normal			
+cell	A454	e	'#VALUE!'	'LARGE(Z1:Z4,Z1:Z4)'	normal			
 cell	H454	n	'3'	None				
+cell	AA454	e	'#VALUE!'	'LARGE(Z1:Z4,Z1:Z4)'	normal			
+cell	A455	e	'#VALUE!'	'SMALL(Z1:Z4,Z1:Z4)'	normal			
 cell	C455	n	'1048576'	'ROWS(ROW(1:1048576))'	array	C455:E458		
 cell	D455	n	'1048576'	None				
 cell	E455	n	'1048576'	None				
 cell	H455	n	'4'	None				
+cell	AA455	e	'#VALUE!'	'SMALL(Z1:Z4,Z1:Z4)'	normal			
+cell	A456	e	'#VALUE!'	'_xlfn.SWITCH(Z1:Z4,1,10,2,20,0)'	normal			
 cell	C456	n	'1048576'	None				
 cell	D456	n	'1048576'	None				
 cell	E456	n	'1048576'	None				
+cell	AA456	e	'#VALUE!'	'_xlfn.SWITCH(Z1:Z4,1,10,2,20,0)'	normal			
+cell	A457	e	'#VALUE!'	'_xlfn.IFS(Z1:Z4>1,1,TRUE,0)'	normal			
 cell	C457	n	'1048576'	None				
 cell	D457	n	'1048576'	None				
 cell	E457	n	'1048576'	None				
+cell	AA457	e	'#VALUE!'	'_xlfn.IFS(Z1:Z4>1,1,TRUE,0)'	normal			
+cell	A458	str	'1,2,2,3'	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4)'	normal			
 cell	C458	n	'1048576'	None				
 cell	D458	n	'1048576'	None				
 cell	E458	n	'1048576'	None				
+cell	AA458	str	'1,2,2,3'	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4)'	normal			
+cell	A459	str	'a1b2c'	'_xlfn.TEXTJOIN(Z1:Z4,TRUE,"a","b","c")'	normal			
+cell	AA459	str	'a1b2c'	'_xlfn.TEXTJOIN(Z1:Z4,TRUE,"a","b","c")'	normal			
+cell	A460	str	'1223'	'_xlfn.CONCAT(Z1:Z4)'	normal			
 cell	C460	n	'1'	'COLUMNS(ROW(1:1048576))'	array	C460:E463		
 cell	D460	n	'1'	None				
 cell	E460	n	'1'	None				
 cell	H460	n	'10'	'SUM(ROW(INDEX(Z1:Z4,0)))'	array	H460	1	
+cell	AA460	str	'1223'	'_xlfn.CONCAT(Z1:Z4)'	normal			
+cell	A461	n	'1'	'AVERAGEIF(Z1:Z4,{1;2})'	normal			
 cell	C461	n	'1'	None				
 cell	D461	n	'1'	None				
 cell	E461	n	'1'	None				
+cell	AA461	n	'1'	'AVERAGEIF(Z1:Z4,{1;2})'	normal			
+cell	A462	n	'10'	'AVERAGEIF(Z1:Z4,{1;2},AA1:AA4)'	normal			
 cell	C462	n	'1'	None				
 cell	D462	n	'1'	None				
 cell	E462	n	'1'	None				
+cell	AA462	n	'10'	'AVERAGEIF(Z1:Z4,{1;2},AA1:AA4)'	normal			
+cell	A463	n	'10'	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1;2})'	normal			
 cell	C463	n	'1'	None				
 cell	D463	n	'1'	None				
 cell	E463	n	'1'	None				
+cell	AA463	n	'10'	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1;2})'	normal			
+cell	A464	n	'10'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1;2})'	normal			
+cell	AA464	n	'10'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1;2})'	normal			
+cell	A465	n	'10'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1;2})'	normal			
 cell	C465	n	'1'	'ROW(1:1048576)'	array	C465:E468		
 cell	D465	n	'1'	None				
 cell	E465	n	'1'	None				
+cell	AA465	n	'10'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1;2})'	normal			
+cell	A466	n	'10'	'_xlfn.XLOOKUP({1;2},Z1:Z4,AA1:AA4)'	normal			
 cell	C466	n	'2'	None				
 cell	D466	n	'2'	None				
 cell	E466	n	'2'	None				
+cell	AA466	n	'10'	'_xlfn.XLOOKUP({1;2},Z1:Z4,AA1:AA4)'	normal			
+cell	A467	n	'1'	'_xlfn.XMATCH({1;2},Z1:Z4)'	normal			
 cell	C467	n	'3'	None				
 cell	D467	n	'3'	None				
 cell	E467	n	'3'	None				
+cell	AA467	n	'1'	'_xlfn.XMATCH({1;2},Z1:Z4)'	normal			
+cell	A468	n	'3'	'LARGE(Z1:Z4,{1;2})'	normal			
 cell	C468	n	'4'	None				
 cell	D468	n	'4'	None				
 cell	E468	n	'4'	None				
 cell	H468	n	'10'	'SUMPRODUCT(ROW(INDEX(Z1:Z4,0)))'	array	H468	1	
+cell	AA468	n	'3'	'LARGE(Z1:Z4,{1;2})'	normal			
+cell	A469	n	'1'	'SMALL(Z1:Z4,{1;2})'	normal			
+cell	AA469	n	'1'	'SMALL(Z1:Z4,{1;2})'	normal			
+cell	A470	n	'10'	'_xlfn.SWITCH({1;2},1,10,2,20,0)'	normal			
 cell	C470	n	'549756338176'	'SUM(ROW($1:$1048576))'	array	C470:E473		
 cell	D470	n	'549756338176'	None				
 cell	E470	n	'549756338176'	None				
+cell	AA470	n	'10'	'_xlfn.SWITCH({1;2},1,10,2,20,0)'	normal			
+cell	A471	n	'0'	'_xlfn.IFS({1;2}>1,1,TRUE,0)'	normal			
 cell	C471	n	'549756338176'	None				
 cell	D471	n	'549756338176'	None				
 cell	E471	n	'549756338176'	None				
+cell	AA471	n	'0'	'_xlfn.IFS({1;2}>1,1,TRUE,0)'	normal			
+cell	A472	str	'1,2'	'_xlfn.TEXTJOIN(",",TRUE,{1;2})'	normal			
 cell	C472	n	'549756338176'	None				
 cell	D472	n	'549756338176'	None				
 cell	E472	n	'549756338176'	None				
+cell	AA472	str	'1,2'	'_xlfn.TEXTJOIN(",",TRUE,{1;2})'	normal			
+cell	A473	str	'a1b2c'	'_xlfn.TEXTJOIN({1;2},TRUE,"a","b","c")'	normal			
 cell	C473	n	'549756338176'	None				
 cell	D473	n	'549756338176'	None				
 cell	E473	n	'549756338176'	None				
+cell	AA473	str	'a1b2c'	'_xlfn.TEXTJOIN({1;2},TRUE,"a","b","c")'	normal			
+cell	A474	str	'12'	'_xlfn.CONCAT({1;2})'	normal			
+cell	AA474	str	'12'	'_xlfn.CONCAT({1;2})'	normal			
+cell	A475	n	'1'	'AVERAGEIF(Z1:Z4,{1,2})'	normal			
 cell	C475	n	'549756338176'	'SUMPRODUCT(ROW($1:$1048576))'	array	C475:E478		
 cell	D475	n	'549756338176'	None				
 cell	E475	n	'549756338176'	None				
+cell	AA475	n	'1'	'AVERAGEIF(Z1:Z4,{1,2})'	normal			
+cell	A476	n	'10'	'AVERAGEIF(Z1:Z4,{1,2},AA1:AA4)'	normal			
 cell	C476	n	'549756338176'	None				
 cell	D476	n	'549756338176'	None				
 cell	E476	n	'549756338176'	None				
 cell	H476	n	'1'	'ROW(Z1:INDEX(Z1:Z4,3))'	array	H476:H478	1	
+cell	AA476	n	'10'	'AVERAGEIF(Z1:Z4,{1,2},AA1:AA4)'	normal			
+cell	A477	n	'10'	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1,2})'	normal			
 cell	C477	n	'549756338176'	None				
 cell	D477	n	'549756338176'	None				
 cell	E477	n	'549756338176'	None				
 cell	H477	n	'2'	None				
+cell	AA477	n	'10'	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1,2})'	normal			
+cell	A478	n	'10'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1,2})'	normal			
 cell	C478	n	'549756338176'	None				
 cell	D478	n	'549756338176'	None				
 cell	E478	n	'549756338176'	None				
 cell	H478	n	'3'	None				
+cell	AA478	n	'10'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1,2})'	normal			
+cell	A479	n	'10'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1,2})'	normal			
+cell	AA479	n	'10'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1,2})'	normal			
+cell	A480	n	'10'	'_xlfn.XLOOKUP({1,2},Z1:Z4,AA1:AA4)'	normal			
 cell	C480	n	'1048576'	'MAX(ROW($1:$1048576))'	array	C480:E483		
 cell	D480	n	'1048576'	None				
 cell	E480	n	'1048576'	None				
+cell	AA480	n	'10'	'_xlfn.XLOOKUP({1,2},Z1:Z4,AA1:AA4)'	normal			
+cell	A481	n	'1'	'_xlfn.XMATCH({1,2},Z1:Z4)'	normal			
 cell	C481	n	'1048576'	None				
 cell	D481	n	'1048576'	None				
 cell	E481	n	'1048576'	None				
+cell	AA481	n	'1'	'_xlfn.XMATCH({1,2},Z1:Z4)'	normal			
+cell	A482	n	'3'	'LARGE(Z1:Z4,{1,2})'	normal			
 cell	C482	n	'1048576'	None				
 cell	D482	n	'1048576'	None				
 cell	E482	n	'1048576'	None				
+cell	AA482	n	'3'	'LARGE(Z1:Z4,{1,2})'	normal			
+cell	A483	n	'1'	'SMALL(Z1:Z4,{1,2})'	normal			
 cell	C483	n	'1048576'	None				
 cell	D483	n	'1048576'	None				
 cell	E483	n	'1048576'	None				
+cell	AA483	n	'1'	'SMALL(Z1:Z4,{1,2})'	normal			
+cell	A484	n	'10'	'_xlfn.SWITCH({1,2},1,10,2,20,0)'	normal			
 cell	H484	n	'6'	'SUM(ROW(Z1:INDEX(Z1:Z4,3)))'	array	H484	1	
+cell	AA484	n	'10'	'_xlfn.SWITCH({1,2},1,10,2,20,0)'	normal			
+cell	A485	n	'0'	'_xlfn.IFS({1,2}>1,1,TRUE,0)'	normal			
 cell	C485	n	'1048576'	'COUNT(ROW($1:$1048576))'	array	C485:E488		
 cell	D485	n	'1048576'	None				
 cell	E485	n	'1048576'	None				
+cell	AA485	n	'0'	'_xlfn.IFS({1,2}>1,1,TRUE,0)'	normal			
+cell	A486	str	'1,2'	'_xlfn.TEXTJOIN(",",TRUE,{1,2})'	normal			
 cell	C486	n	'1048576'	None				
 cell	D486	n	'1048576'	None				
 cell	E486	n	'1048576'	None				
+cell	AA486	str	'1,2'	'_xlfn.TEXTJOIN(",",TRUE,{1,2})'	normal			
+cell	A487	str	'a1b2c'	'_xlfn.TEXTJOIN({1,2},TRUE,"a","b","c")'	normal			
 cell	C487	n	'1048576'	None				
 cell	D487	n	'1048576'	None				
 cell	E487	n	'1048576'	None				
+cell	AA487	str	'a1b2c'	'_xlfn.TEXTJOIN({1,2},TRUE,"a","b","c")'	normal			
+cell	A488	str	'12'	'_xlfn.CONCAT({1,2})'	normal			
 cell	C488	n	'1048576'	None				
 cell	D488	n	'1048576'	None				
 cell	E488	n	'1048576'	None				
+cell	AA488	str	'12'	'_xlfn.CONCAT({1,2})'	normal			
+cell	A489	n	'2'	'AVERAGEIF(Z1:Z4,Z2)'	normal			
+cell	AA489	n	'2'	'AVERAGEIF(Z1:Z4,Z2)'	normal			
+cell	A490	n	'25'	'AVERAGEIF(Z1:Z4,Z2,AA1:AA4)'	normal			
 cell	C490	n	'1048576'	'ROWS(ROW($1:$1048576))'	array	C490:E493		
 cell	D490	n	'1048576'	None				
 cell	E490	n	'1048576'	None				
+cell	AA490	n	'25'	'AVERAGEIF(Z1:Z4,Z2,AA1:AA4)'	normal			
+cell	A491	n	'25'	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z2)'	normal			
 cell	C491	n	'1048576'	None				
 cell	D491	n	'1048576'	None				
 cell	E491	n	'1048576'	None				
+cell	AA491	n	'25'	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z2)'	normal			
+cell	A492	n	'30'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z2)'	normal			
 cell	C492	n	'1048576'	None				
 cell	D492	n	'1048576'	None				
 cell	E492	n	'1048576'	None				
 cell	H492	n	'6'	'SUMPRODUCT(ROW(Z1:INDEX(Z1:Z4,3)))'	array	H492	1	
+cell	AA492	n	'30'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z2)'	normal			
+cell	A493	n	'20'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z2)'	normal			
 cell	C493	n	'1048576'	None				
 cell	D493	n	'1048576'	None				
 cell	E493	n	'1048576'	None				
+cell	AA493	n	'20'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z2)'	normal			
+cell	A494	n	'20'	'_xlfn.XLOOKUP(Z2,Z1:Z4,AA1:AA4)'	normal			
+cell	AA494	n	'20'	'_xlfn.XLOOKUP(Z2,Z1:Z4,AA1:AA4)'	normal			
+cell	A495	n	'2'	'_xlfn.XMATCH(Z2,Z1:Z4)'	normal			
 cell	C495	n	'1'	'COLUMNS(ROW($1:$1048576))'	array	C495:E498		
 cell	D495	n	'1'	None				
 cell	E495	n	'1'	None				
+cell	AA495	n	'2'	'_xlfn.XMATCH(Z2,Z1:Z4)'	normal			
+cell	A496	n	'2'	'LARGE(Z1:Z4,Z2)'	normal			
 cell	C496	n	'1'	None				
 cell	D496	n	'1'	None				
 cell	E496	n	'1'	None				
+cell	AA496	n	'2'	'LARGE(Z1:Z4,Z2)'	normal			
+cell	A497	n	'2'	'SMALL(Z1:Z4,Z2)'	normal			
 cell	C497	n	'1'	None				
 cell	D497	n	'1'	None				
 cell	E497	n	'1'	None				
+cell	AA497	n	'2'	'SMALL(Z1:Z4,Z2)'	normal			
+cell	A498	n	'20'	'_xlfn.SWITCH(Z2,1,10,2,20,0)'	normal			
 cell	C498	n	'1'	None				
 cell	D498	n	'1'	None				
 cell	E498	n	'1'	None				
+cell	AA498	n	'20'	'_xlfn.SWITCH(Z2,1,10,2,20,0)'	normal			
+cell	A499	n	'1'	'_xlfn.IFS(Z2>1,1,TRUE,0)'	normal			
+cell	AA499	n	'1'	'_xlfn.IFS(Z2>1,1,TRUE,0)'	normal			
+cell	A500	str	'2'	'_xlfn.TEXTJOIN(",",TRUE,Z2)'	normal			
 cell	C500	n	'1'	'ROW($1:$1048576)'	array	C500:E503		
 cell	D500	n	'1'	None				
 cell	E500	n	'1'	None				
 cell	H500	n	'1'	'ROW(Block)'	array	H500:H503	1	
+cell	AA500	str	'2'	'_xlfn.TEXTJOIN(",",TRUE,Z2)'	normal			
+cell	A501	str	'a2b2c'	'_xlfn.TEXTJOIN(Z2,TRUE,"a","b","c")'	normal			
 cell	C501	n	'2'	None				
 cell	D501	n	'2'	None				
 cell	E501	n	'2'	None				
 cell	H501	n	'2'	None				
+cell	AA501	str	'a2b2c'	'_xlfn.TEXTJOIN(Z2,TRUE,"a","b","c")'	normal			
+cell	A502	str	'2'	'_xlfn.CONCAT(Z2)'	normal			
 cell	C502	n	'3'	None				
 cell	D502	n	'3'	None				
 cell	E502	n	'3'	None				
 cell	H502	n	'3'	None				
+cell	AA502	str	'2'	'_xlfn.CONCAT(Z2)'	normal			
+cell	A503	n	'2'	'PERCENTILE(Z1:Z4,0.5)'	normal			
 cell	C503	n	'4'	None				
 cell	D503	n	'4'	None				
 cell	E503	n	'4'	None				
 cell	H503	n	'4'	None				
+cell	AA503	n	'2'	'PERCENTILE(Z1:Z4,0.5)'	normal			
+cell	A504	n	'2'	'_xlfn.PERCENTILE.INC(Z1:Z4,0.5)'	normal			
+cell	AA504	n	'2'	'_xlfn.PERCENTILE.INC(Z1:Z4,0.5)'	normal			
+cell	A505	n	'1.75'	'PERCENTILE(Z1:Z4,{0.25;0.75})'	normal			
 cell	C505	n	'549756338176'	'SUM(ROW(A:J))'	array	C505:E508		
 cell	D505	n	'549756338176'	None				
 cell	E505	n	'549756338176'	None				
+cell	AA505	n	'1.75'	'PERCENTILE(Z1:Z4,{0.25;0.75})'	normal			
+cell	A506	n	'1.75'	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25;0.75})'	normal			
 cell	C506	n	'549756338176'	None				
 cell	D506	n	'549756338176'	None				
 cell	E506	n	'549756338176'	None				
+cell	AA506	n	'1.75'	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25;0.75})'	normal			
+cell	A507	n	'1.75'	'PERCENTILE(Z1:Z4,{0.25,0.75})'	normal			
 cell	C507	n	'549756338176'	None				
 cell	D507	n	'549756338176'	None				
 cell	E507	n	'549756338176'	None				
+cell	AA507	n	'1.75'	'PERCENTILE(Z1:Z4,{0.25,0.75})'	normal			
+cell	A508	n	'1.75'	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25,0.75})'	normal			
 cell	C508	n	'549756338176'	None				
 cell	D508	n	'549756338176'	None				
 cell	E508	n	'549756338176'	None				
 cell	H508	n	'10'	'SUM(ROW(Block))'	array	H508	1	
+cell	AA508	n	'1.75'	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25,0.75})'	normal			
+cell	A509	e	'#VALUE!'	'PERCENTILE(Z1:Z4,Z1:Z2/10)'	normal			
+cell	AA509	e	'#VALUE!'	'PERCENTILE(Z1:Z4,Z1:Z2/10)'	normal			
+cell	A510	e	'#VALUE!'	'_xlfn.PERCENTILE.INC(Z1:Z4,Z1:Z2/10)'	normal			
 cell	C510	n	'549756338176'	'SUMPRODUCT(ROW(A:J))'	array	C510:E513		
 cell	D510	n	'549756338176'	None				
 cell	E510	n	'549756338176'	None				
+cell	AA510	e	'#VALUE!'	'_xlfn.PERCENTILE.INC(Z1:Z4,Z1:Z2/10)'	normal			
+cell	A511	n	'1.75'	'QUARTILE(Z1:Z4,1)'	normal			
 cell	C511	n	'549756338176'	None				
 cell	D511	n	'549756338176'	None				
 cell	E511	n	'549756338176'	None				
+cell	AA511	n	'1.75'	'QUARTILE(Z1:Z4,1)'	normal			
+cell	A512	n	'1.75'	'_xlfn.QUARTILE.INC(Z1:Z4,1)'	normal			
 cell	C512	n	'549756338176'	None				
 cell	D512	n	'549756338176'	None				
 cell	E512	n	'549756338176'	None				
+cell	AA512	n	'1.75'	'_xlfn.QUARTILE.INC(Z1:Z4,1)'	normal			
+cell	A513	n	'1.75'	'QUARTILE(Z1:Z4,{1;3})'	normal			
 cell	C513	n	'549756338176'	None				
 cell	D513	n	'549756338176'	None				
 cell	E513	n	'549756338176'	None				
+cell	AA513	n	'1.75'	'QUARTILE(Z1:Z4,{1;3})'	normal			
+cell	A514	n	'1.75'	'_xlfn.QUARTILE.INC(Z1:Z4,{1;3})'	normal			
+cell	AA514	n	'1.75'	'_xlfn.QUARTILE.INC(Z1:Z4,{1;3})'	normal			
+cell	A515	e	'#VALUE!'	'QUARTILE(Z1:Z4,Z1:Z2)'	normal			
 cell	C515	n	'1048576'	'MAX(ROW(A:J))'	array	C515:E518		
 cell	D515	n	'1048576'	None				
 cell	E515	n	'1048576'	None				
+cell	AA515	e	'#VALUE!'	'QUARTILE(Z1:Z4,Z1:Z2)'	normal			
+cell	A516	e	'#VALUE!'	'_xlfn.QUARTILE.INC(Z1:Z4,Z1:Z2)'	normal			
 cell	C516	n	'1048576'	None				
 cell	D516	n	'1048576'	None				
 cell	E516	n	'1048576'	None				
 cell	H516	n	'10'	'SUMPRODUCT(ROW(Block))'	array	H516	1	
+cell	AA516	e	'#VALUE!'	'_xlfn.QUARTILE.INC(Z1:Z4,Z1:Z2)'	normal			
+cell	A517	n	'2'	'MODE(Z1:Z4)'	normal			
 cell	C517	n	'1048576'	None				
 cell	D517	n	'1048576'	None				
 cell	E517	n	'1048576'	None				
+cell	AA517	n	'2'	'MODE(Z1:Z4)'	normal			
+cell	A518	n	'2'	'_xlfn.MODE.SNGL(Z1:Z4)'	normal			
 cell	C518	n	'1048576'	None				
 cell	D518	n	'1048576'	None				
 cell	E518	n	'1048576'	None				
+cell	AA518	n	'2'	'_xlfn.MODE.SNGL(Z1:Z4)'	normal			
+cell	A519	n	'2'	'MODE(Z1:Z4*1)'	normal			
+cell	AA519	n	'2'	'MODE(Z1:Z4*1)'	normal			
+cell	A520	e	'#VALUE!'	'LARGE(Z1:Z4*2,1)'	normal			
 cell	C520	n	'1048576'	'COUNT(ROW(A:J))'	array	C520:E523		
 cell	D520	n	'1048576'	None				
 cell	E520	n	'1048576'	None				
+cell	AA520	e	'#VALUE!'	'LARGE(Z1:Z4*2,1)'	normal			
+cell	A521	e	'#VALUE!'	'SMALL(Z1:Z4*2,1)'	normal			
 cell	C521	n	'1048576'	None				
 cell	D521	n	'1048576'	None				
 cell	E521	n	'1048576'	None				
+cell	AA521	e	'#VALUE!'	'SMALL(Z1:Z4*2,1)'	normal			
+cell	A522	e	'#VALUE!'	'PERCENTILE(Z1:Z4*2,0.5)'	normal			
 cell	C522	n	'1048576'	None				
 cell	D522	n	'1048576'	None				
 cell	E522	n	'1048576'	None				
+cell	AA522	e	'#VALUE!'	'PERCENTILE(Z1:Z4*2,0.5)'	normal			
+cell	A523	e	'#VALUE!'	'QUARTILE(Z1:Z4*2,1)'	normal			
 cell	C523	n	'1048576'	None				
 cell	D523	n	'1048576'	None				
 cell	E523	n	'1048576'	None				
+cell	AA523	e	'#VALUE!'	'QUARTILE(Z1:Z4*2,1)'	normal			
+cell	A524	e	'#VALUE!'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4)'	normal			
 cell	H524	e	'#REF!'	'ROW((Z1:Z2,AA1:AA2))'	array	H524	1	
+cell	AA524	n	'20'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4)'	normal			
+cell	A525	n	'40'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4)*2'	normal			
 cell	C525	n	'1048576'	'ROWS(ROW(A:J))'	array	C525:E528		
 cell	D525	n	'1048576'	None				
 cell	E525	n	'1048576'	None				
+cell	AA525	n	'40'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4)*2'	normal			
+cell	A526	n	'20'	'SUM(_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4))'	normal			
 cell	C526	n	'1048576'	None				
 cell	D526	n	'1048576'	None				
 cell	E526	n	'1048576'	None				
+cell	AA526	n	'20'	'SUM(_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4))'	normal			
+cell	A527	e	'#VALUE!'	'SUMPRODUCT(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'	normal			
 cell	C527	n	'1048576'	None				
 cell	D527	n	'1048576'	None				
 cell	E527	n	'1048576'	None				
+cell	AA527	e	'#VALUE!'	'SUMPRODUCT(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'	normal			
+cell	A528	n	'20'	'_xlfn.XLOOKUP(2,Z1:Z4*1,AA1:AA4)'	normal			
 cell	C528	n	'1048576'	None				
 cell	D528	n	'1048576'	None				
 cell	E528	n	'1048576'	None				
+cell	AA528	n	'20'	'_xlfn.XLOOKUP(2,Z1:Z4*1,AA1:AA4)'	normal			
+cell	A529	n	'40'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4*2)'	normal			
+cell	AA529	n	'40'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4*2)'	normal			
+cell	A530	n	'2'	'_xlfn.XMATCH(2,Z1:Z4*1)'	normal			
 cell	C530	n	'1'	'COLUMNS(ROW(A:J))'	array	C530:E533		
 cell	D530	n	'1'	None				
 cell	E530	n	'1'	None				
+cell	AA530	n	'2'	'_xlfn.XMATCH(2,Z1:Z4*1)'	normal			
+cell	A531	e	'#VALUE!'	'_xlfn.IFS(Z1:Z4>1,AA1:AA4,TRUE,0)'	normal			
 cell	C531	n	'1'	None				
 cell	D531	n	'1'	None				
 cell	E531	n	'1'	None				
+cell	AA531	e	'#VALUE!'	'_xlfn.IFS(Z1:Z4>1,AA1:AA4,TRUE,0)'	normal			
+cell	A532	e	'#VALUE!'	'_xlfn.SWITCH(Z1:Z4,1,AA1:AA4,0)'	normal			
 cell	C532	n	'1'	None				
 cell	D532	n	'1'	None				
 cell	E532	n	'1'	None				
 cell	H532	e	'#REF!'	'SUM(ROW((Z1:Z2,AA1:AA2)))'	array	H532	1	
+cell	AA532	e	'#VALUE!'	'_xlfn.SWITCH(Z1:Z4,1,AA1:AA4,0)'	normal			
+cell	A533	e	'#VALUE!'	'_xlfn.CONCAT(Z1:Z4*2)'	normal			
 cell	C533	n	'1'	None				
 cell	D533	n	'1'	None				
 cell	E533	n	'1'	None				
+cell	AA533	e	'#VALUE!'	'_xlfn.CONCAT(Z1:Z4*2)'	normal			
+cell	A534	e	'#VALUE!'	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4*2)'	normal			
+cell	AA534	e	'#VALUE!'	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4*2)'	normal			
+cell	A535	n	'5'	'SUM(LARGE(Z1:Z4,{1,2}))'	normal			
 cell	C535	n	'1'	'ROW(A:J)'	array	C535:E538		
 cell	D535	n	'1'	None				
 cell	E535	n	'1'	None				
+cell	AA535	n	'5'	'SUM(LARGE(Z1:Z4,{1,2}))'	normal			
+cell	A536	n	'5'	'SUMPRODUCT(LARGE(Z1:Z4,ROW(Z1:Z2)))'	normal			
 cell	C536	n	'2'	None				
 cell	D536	n	'2'	None				
 cell	E536	n	'2'	None				
+cell	AA536	n	'5'	'SUMPRODUCT(LARGE(Z1:Z4,ROW(Z1:Z2)))'	normal			
+cell	A537	n	'9'	'SUMPRODUCT(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'	normal			
 cell	C537	n	'3'	None				
 cell	D537	n	'3'	None				
 cell	E537	n	'3'	None				
+cell	AA537	n	'9'	'SUMPRODUCT(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'	normal			
+cell	A538	e	'#VALUE!'	'SUM(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'	normal			
 cell	C538	n	'4'	None				
 cell	D538	n	'4'	None				
 cell	E538	n	'4'	None				
+cell	AA538	e	'#VALUE!'	'SUM(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'	normal			
+cell	A539	e	'#VALUE!'	'SUM(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'	normal			
+cell	AA539	e	'#VALUE!'	'SUM(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'	normal			
 cell	C540	n	'26'	'COLUMN(Z1:Z4)'	array	C540:E543		
 cell	D540	n	'26'	None				
 cell	E540	n	'26'	None				
@@ -8924,119 +9668,1235 @@ cell	E2152	e	'#N/A'	None
 cell	C2153	e	'#N/A'	None				
 cell	D2153	e	'#N/A'	None				
 cell	E2153	e	'#N/A'	None				
-cell	C2155	n	'1'	'ROW(Z1:Z4)'	array	C2155:C2156		
+cell	C2155	n	'1'	'AVERAGEIF(Z1:Z4,Z1:Z4)'	array	C2155:E2158		
+cell	D2155	n	'1'	None				
+cell	E2155	n	'1'	None				
 cell	C2156	n	'2'	None				
+cell	D2156	n	'2'	None				
+cell	E2156	n	'2'	None				
 cell	H2156	n	'4'	'SUMPRODUCT(COUNTIF(OFFSET(Z1,{0;1;2;3},0),">0"))'	array	H2156	1	
-cell	C2158	n	'1'	'ROW(Z1:Z4)'	array	C2158:C2163		
-cell	C2159	n	'2'	None				
-cell	C2160	n	'3'	None				
-cell	C2161	n	'4'	None				
-cell	C2162	e	'#N/A'	None				
-cell	C2163	e	'#N/A'	None				
+cell	C2157	n	'2'	None				
+cell	D2157	n	'2'	None				
+cell	E2157	n	'2'	None				
+cell	C2158	n	'3'	None				
+cell	D2158	n	'3'	None				
+cell	E2158	n	'3'	None				
+cell	C2160	n	'10'	'AVERAGEIF(Z1:Z4,Z1:Z4,AA1:AA4)'	array	C2160:E2163		
+cell	D2160	n	'10'	None				
+cell	E2160	n	'10'	None				
+cell	C2161	n	'25'	None				
+cell	D2161	n	'25'	None				
+cell	E2161	n	'25'	None				
+cell	C2162	n	'25'	None				
+cell	D2162	n	'25'	None				
+cell	E2162	n	'25'	None				
+cell	C2163	n	'40'	None				
+cell	D2163	n	'40'	None				
+cell	E2163	n	'40'	None				
 cell	H2164	n	'8'	'SUM(OFFSET(Z1,{0;1;2;3},0))'	array	H2164	1	
-cell	C2165	n	'1'	'ROW(Z1:Z4)'	array	C2165:D2168		
-cell	D2165	n	'1'	None				
-cell	C2166	n	'2'	None				
-cell	D2166	n	'2'	None				
-cell	C2167	n	'3'	None				
-cell	D2167	n	'3'	None				
-cell	C2168	n	'4'	None				
-cell	D2168	n	'4'	None				
-cell	C2170	n	'1'	'ROW(Z1:Z4)'	array	C2170		
+cell	C2165	n	'10'	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	array	C2165:E2168		
+cell	D2165	n	'10'	None				
+cell	E2165	n	'10'	None				
+cell	C2166	n	'25'	None				
+cell	D2166	n	'25'	None				
+cell	E2166	n	'25'	None				
+cell	C2167	n	'25'	None				
+cell	D2167	n	'25'	None				
+cell	E2167	n	'25'	None				
+cell	C2168	n	'40'	None				
+cell	D2168	n	'40'	None				
+cell	E2168	n	'40'	None				
+cell	C2170	n	'10'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	array	C2170:E2173		
+cell	D2170	n	'10'	None				
+cell	E2170	n	'10'	None				
+cell	C2171	n	'30'	None				
+cell	D2171	n	'30'	None				
+cell	E2171	n	'30'	None				
+cell	C2172	n	'30'	None				
+cell	D2172	n	'30'	None				
+cell	E2172	n	'30'	None				
 cell	H2172	n	'1'	'ROW(OFFSET(Z1,{0;1;2;3},0))'	array	H2172:H2175	1	
+cell	C2173	n	'40'	None				
+cell	D2173	n	'40'	None				
+cell	E2173	n	'40'	None				
 cell	H2173	n	'2'	None	normal			
 cell	H2174	n	'3'	None	normal			
+cell	C2175	n	'10'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	array	C2175:E2178		
+cell	D2175	n	'10'	None				
+cell	E2175	n	'10'	None				
 cell	H2175	n	'4'	None	normal			
+cell	C2176	n	'20'	None				
+cell	D2176	n	'20'	None				
+cell	E2176	n	'20'	None				
+cell	C2177	n	'20'	None				
+cell	D2177	n	'20'	None				
+cell	E2177	n	'20'	None				
+cell	C2178	n	'40'	None				
+cell	D2178	n	'40'	None				
+cell	E2178	n	'40'	None				
+cell	C2180	n	'10'	'_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4)'	array	C2180:E2183		
+cell	D2180	n	'10'	None				
+cell	E2180	n	'10'	None				
 cell	H2180	e	'#VALUE!'	'OFFSET(Z1,{0;1;2;3},0)'	array	H2180:H2183	1	
+cell	C2181	n	'20'	None				
+cell	D2181	n	'20'	None				
+cell	E2181	n	'20'	None				
 cell	H2181	e	'#VALUE!'	None	normal			
+cell	C2182	n	'20'	None				
+cell	D2182	n	'20'	None				
+cell	E2182	n	'20'	None				
 cell	H2182	e	'#VALUE!'	None	normal			
+cell	C2183	n	'40'	None				
+cell	D2183	n	'40'	None				
+cell	E2183	n	'40'	None				
 cell	H2183	e	'#VALUE!'	None	normal			
+cell	C2185	n	'1'	'_xlfn.XMATCH(Z1:Z4,Z1:Z4)'	array	C2185:E2188		
+cell	D2185	n	'1'	None				
+cell	E2185	n	'1'	None				
+cell	C2186	n	'2'	None				
+cell	D2186	n	'2'	None				
+cell	E2186	n	'2'	None				
+cell	C2187	n	'2'	None				
+cell	D2187	n	'2'	None				
+cell	E2187	n	'2'	None				
+cell	C2188	n	'4'	None				
+cell	D2188	n	'4'	None				
+cell	E2188	n	'4'	None				
 cell	H2188	e	'#VALUE!'	'INDIRECT({"Z1";"Z2";"Z3";"Z4"})'	array	H2188:H2191	1	
 cell	H2189	e	'#VALUE!'	None	normal			
+cell	C2190	n	'3'	'LARGE(Z1:Z4,Z1:Z4)'	array	C2190:E2193		
+cell	D2190	n	'3'	None				
+cell	E2190	n	'3'	None				
 cell	H2190	e	'#VALUE!'	None	normal			
+cell	C2191	n	'2'	None				
+cell	D2191	n	'2'	None				
+cell	E2191	n	'2'	None				
 cell	H2191	e	'#VALUE!'	None	normal			
+cell	C2192	n	'2'	None				
+cell	D2192	n	'2'	None				
+cell	E2192	n	'2'	None				
+cell	C2193	n	'2'	None				
+cell	D2193	n	'2'	None				
+cell	E2193	n	'2'	None				
+cell	C2195	n	'1'	'SMALL(Z1:Z4,Z1:Z4)'	array	C2195:E2198		
+cell	D2195	n	'1'	None				
+cell	E2195	n	'1'	None				
+cell	C2196	n	'2'	None				
+cell	D2196	n	'2'	None				
+cell	E2196	n	'2'	None				
 cell	H2196	n	'1'	'N(INDIRECT({"Z1";"Z2";"Z3";"Z4"}))'	array	H2196:H2199	1	
+cell	C2197	n	'2'	None				
+cell	D2197	n	'2'	None				
+cell	E2197	n	'2'	None				
 cell	H2197	n	'2'	None	normal			
+cell	C2198	n	'2'	None				
+cell	D2198	n	'2'	None				
+cell	E2198	n	'2'	None				
 cell	H2198	n	'2'	None	normal			
 cell	H2199	n	'3'	None	normal			
+cell	C2200	n	'10'	'_xlfn.SWITCH(Z1:Z4,1,10,2,20,0)'	array	C2200:E2203		
+cell	D2200	n	'10'	None				
+cell	E2200	n	'10'	None				
+cell	C2201	n	'20'	None				
+cell	D2201	n	'20'	None				
+cell	E2201	n	'20'	None				
+cell	C2202	n	'20'	None				
+cell	D2202	n	'20'	None				
+cell	E2202	n	'20'	None				
+cell	C2203	n	'0'	None				
+cell	D2203	n	'0'	None				
+cell	E2203	n	'0'	None				
 cell	H2204	n	'8'	'SUMPRODUCT(N(INDIRECT({"Z1";"Z2";"Z3";"Z4"})))'	array	H2204	1	
+cell	C2205	n	'0'	'_xlfn.IFS(Z1:Z4>1,1,TRUE,0)'	array	C2205:E2208		
+cell	D2205	n	'0'	None				
+cell	E2205	n	'0'	None				
+cell	C2206	n	'1'	None				
+cell	D2206	n	'1'	None				
+cell	E2206	n	'1'	None				
+cell	C2207	n	'1'	None				
+cell	D2207	n	'1'	None				
+cell	E2207	n	'1'	None				
+cell	C2208	n	'1'	None				
+cell	D2208	n	'1'	None				
+cell	E2208	n	'1'	None				
+cell	C2210	str	'1,2,2,3'	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4)'	array	C2210:E2213		
+cell	D2210	str	'1,2,2,3'	None				
+cell	E2210	str	'1,2,2,3'	None				
+cell	C2211	str	'1,2,2,3'	None				
+cell	D2211	str	'1,2,2,3'	None				
+cell	E2211	str	'1,2,2,3'	None				
+cell	C2212	str	'1,2,2,3'	None				
+cell	D2212	str	'1,2,2,3'	None				
+cell	E2212	str	'1,2,2,3'	None				
 cell	H2212	n	'4'	'SUMPRODUCT(COUNTIF(INDIRECT({"Z1";"Z2";"Z3";"Z4"}),">0"))'	array	H2212	1	
+cell	C2213	str	'1,2,2,3'	None				
+cell	D2213	str	'1,2,2,3'	None				
+cell	E2213	str	'1,2,2,3'	None				
+cell	C2215	str	'a1b2c'	'_xlfn.TEXTJOIN(Z1:Z4,TRUE,"a","b","c")'	array	C2215:E2218		
+cell	D2215	str	'a1b2c'	None				
+cell	E2215	str	'a1b2c'	None				
+cell	C2216	str	'a1b2c'	None				
+cell	D2216	str	'a1b2c'	None				
+cell	E2216	str	'a1b2c'	None				
+cell	C2217	str	'a1b2c'	None				
+cell	D2217	str	'a1b2c'	None				
+cell	E2217	str	'a1b2c'	None				
+cell	C2218	str	'a1b2c'	None				
+cell	D2218	str	'a1b2c'	None				
+cell	E2218	str	'a1b2c'	None				
+cell	C2220	str	'1223'	'_xlfn.CONCAT(Z1:Z4)'	array	C2220:E2223		
+cell	D2220	str	'1223'	None				
+cell	E2220	str	'1223'	None				
 cell	H2220	n	'1'	'COUNTIF(Z1:Z4,Z1:Z4)'	array	H2220:H2223	1	
+cell	C2221	str	'1223'	None				
+cell	D2221	str	'1223'	None				
+cell	E2221	str	'1223'	None				
 cell	H2221	n	'2'	None				
+cell	C2222	str	'1223'	None				
+cell	D2222	str	'1223'	None				
+cell	E2222	str	'1223'	None				
 cell	H2222	n	'2'	None				
+cell	C2223	str	'1223'	None				
+cell	D2223	str	'1223'	None				
+cell	E2223	str	'1223'	None				
 cell	H2223	n	'1'	None				
+cell	C2225	n	'1'	'AVERAGEIF(Z1:Z4,{1;2})'	array	C2225:E2228		
+cell	D2225	n	'1'	None				
+cell	E2225	n	'1'	None				
+cell	C2226	n	'2'	None				
+cell	D2226	n	'2'	None				
+cell	E2226	n	'2'	None				
+cell	C2227	e	'#N/A'	None				
+cell	D2227	e	'#N/A'	None				
+cell	E2227	e	'#N/A'	None				
+cell	C2228	e	'#N/A'	None				
+cell	D2228	e	'#N/A'	None				
+cell	E2228	e	'#N/A'	None				
 cell	H2228	n	'6'	'SUM(COUNTIF(Z1:Z4,Z1:Z4))'	array	H2228	1	
+cell	C2230	n	'10'	'AVERAGEIF(Z1:Z4,{1;2},AA1:AA4)'	array	C2230:E2233		
+cell	D2230	n	'10'	None				
+cell	E2230	n	'10'	None				
+cell	C2231	n	'25'	None				
+cell	D2231	n	'25'	None				
+cell	E2231	n	'25'	None				
+cell	C2232	e	'#N/A'	None				
+cell	D2232	e	'#N/A'	None				
+cell	E2232	e	'#N/A'	None				
+cell	C2233	e	'#N/A'	None				
+cell	D2233	e	'#N/A'	None				
+cell	E2233	e	'#N/A'	None				
+cell	C2235	n	'10'	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1;2})'	array	C2235:E2238		
+cell	D2235	n	'10'	None				
+cell	E2235	n	'10'	None				
+cell	C2236	n	'25'	None				
+cell	D2236	n	'25'	None				
+cell	E2236	n	'25'	None				
 cell	H2236	n	'6'	'SUMPRODUCT(COUNTIF(Z1:Z4,Z1:Z4))'	array	H2236	1	
+cell	C2237	e	'#N/A'	None				
+cell	D2237	e	'#N/A'	None				
+cell	E2237	e	'#N/A'	None				
+cell	C2238	e	'#N/A'	None				
+cell	D2238	e	'#N/A'	None				
+cell	E2238	e	'#N/A'	None				
+cell	C2240	n	'10'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1;2})'	array	C2240:E2243		
+cell	D2240	n	'10'	None				
+cell	E2240	n	'10'	None				
+cell	C2241	n	'30'	None				
+cell	D2241	n	'30'	None				
+cell	E2241	n	'30'	None				
+cell	C2242	e	'#N/A'	None				
+cell	D2242	e	'#N/A'	None				
+cell	E2242	e	'#N/A'	None				
+cell	C2243	e	'#N/A'	None				
+cell	D2243	e	'#N/A'	None				
+cell	E2243	e	'#N/A'	None				
 cell	H2244	n	'1'	'COUNTIF(Z1:Z4,{1;2})'	array	H2244:H2245	1	
+cell	C2245	n	'10'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1;2})'	array	C2245:E2248		
+cell	D2245	n	'10'	None				
+cell	E2245	n	'10'	None				
 cell	H2245	n	'2'	None				
+cell	C2246	n	'20'	None				
+cell	D2246	n	'20'	None				
+cell	E2246	n	'20'	None				
+cell	C2247	e	'#N/A'	None				
+cell	D2247	e	'#N/A'	None				
+cell	E2247	e	'#N/A'	None				
+cell	C2248	e	'#N/A'	None				
+cell	D2248	e	'#N/A'	None				
+cell	E2248	e	'#N/A'	None				
+cell	C2250	n	'10'	'_xlfn.XLOOKUP({1;2},Z1:Z4,AA1:AA4)'	array	C2250:E2253		
+cell	D2250	n	'10'	None				
+cell	E2250	n	'10'	None				
+cell	C2251	n	'20'	None				
+cell	D2251	n	'20'	None				
+cell	E2251	n	'20'	None				
+cell	C2252	e	'#N/A'	None				
+cell	D2252	e	'#N/A'	None				
+cell	E2252	e	'#N/A'	None				
 cell	H2252	n	'3'	'SUM(COUNTIF(Z1:Z4,{1;2}))'	array	H2252	1	
+cell	C2253	e	'#N/A'	None				
+cell	D2253	e	'#N/A'	None				
+cell	E2253	e	'#N/A'	None				
+cell	C2255	n	'1'	'_xlfn.XMATCH({1;2},Z1:Z4)'	array	C2255:E2258		
+cell	D2255	n	'1'	None				
+cell	E2255	n	'1'	None				
+cell	C2256	n	'2'	None				
+cell	D2256	n	'2'	None				
+cell	E2256	n	'2'	None				
+cell	C2257	e	'#N/A'	None				
+cell	D2257	e	'#N/A'	None				
+cell	E2257	e	'#N/A'	None				
+cell	C2258	e	'#N/A'	None				
+cell	D2258	e	'#N/A'	None				
+cell	E2258	e	'#N/A'	None				
+cell	C2260	n	'3'	'LARGE(Z1:Z4,{1;2})'	array	C2260:E2263		
+cell	D2260	n	'3'	None				
+cell	E2260	n	'3'	None				
 cell	H2260	n	'3'	'SUMPRODUCT(COUNTIF(Z1:Z4,{1;2}))'	array	H2260	1	
+cell	C2261	n	'2'	None				
+cell	D2261	n	'2'	None				
+cell	E2261	n	'2'	None				
+cell	C2262	e	'#N/A'	None				
+cell	D2262	e	'#N/A'	None				
+cell	E2262	e	'#N/A'	None				
+cell	C2263	e	'#N/A'	None				
+cell	D2263	e	'#N/A'	None				
+cell	E2263	e	'#N/A'	None				
+cell	C2265	n	'1'	'SMALL(Z1:Z4,{1;2})'	array	C2265:E2268		
+cell	D2265	n	'1'	None				
+cell	E2265	n	'1'	None				
+cell	C2266	n	'2'	None				
+cell	D2266	n	'2'	None				
+cell	E2266	n	'2'	None				
+cell	C2267	e	'#N/A'	None				
+cell	D2267	e	'#N/A'	None				
+cell	E2267	e	'#N/A'	None				
+cell	C2268	e	'#N/A'	None				
+cell	D2268	e	'#N/A'	None				
+cell	E2268	e	'#N/A'	None				
 cell	H2268	n	'1'	'COUNTIF(Z1:Z4,{1,2})'	array	H2268:I2268	1	
 cell	I2268	n	'2'	None				
+cell	C2270	n	'10'	'_xlfn.SWITCH({1;2},1,10,2,20,0)'	array	C2270:E2273		
+cell	D2270	n	'10'	None				
+cell	E2270	n	'10'	None				
+cell	C2271	n	'20'	None				
+cell	D2271	n	'20'	None				
+cell	E2271	n	'20'	None				
+cell	C2272	e	'#N/A'	None				
+cell	D2272	e	'#N/A'	None				
+cell	E2272	e	'#N/A'	None				
+cell	C2273	e	'#N/A'	None				
+cell	D2273	e	'#N/A'	None				
+cell	E2273	e	'#N/A'	None				
+cell	C2275	n	'0'	'_xlfn.IFS({1;2}>1,1,TRUE,0)'	array	C2275:E2278		
+cell	D2275	n	'0'	None				
+cell	E2275	n	'0'	None				
+cell	C2276	n	'1'	None				
+cell	D2276	n	'1'	None				
+cell	E2276	n	'1'	None				
 cell	H2276	n	'3'	'SUM(COUNTIF(Z1:Z4,{1,2}))'	array	H2276	1	
+cell	C2277	e	'#N/A'	None				
+cell	D2277	e	'#N/A'	None				
+cell	E2277	e	'#N/A'	None				
+cell	C2278	e	'#N/A'	None				
+cell	D2278	e	'#N/A'	None				
+cell	E2278	e	'#N/A'	None				
+cell	C2280	str	'1,2'	'_xlfn.TEXTJOIN(",",TRUE,{1;2})'	array	C2280:E2283		
+cell	D2280	str	'1,2'	None				
+cell	E2280	str	'1,2'	None				
+cell	C2281	str	'1,2'	None				
+cell	D2281	str	'1,2'	None				
+cell	E2281	str	'1,2'	None				
+cell	C2282	str	'1,2'	None				
+cell	D2282	str	'1,2'	None				
+cell	E2282	str	'1,2'	None				
+cell	C2283	str	'1,2'	None				
+cell	D2283	str	'1,2'	None				
+cell	E2283	str	'1,2'	None				
 cell	H2284	n	'3'	'SUMPRODUCT(COUNTIF(Z1:Z4,{1,2}))'	array	H2284	1	
+cell	C2285	str	'a1b2c'	'_xlfn.TEXTJOIN({1;2},TRUE,"a","b","c")'	array	C2285:E2288		
+cell	D2285	str	'a1b2c'	None				
+cell	E2285	str	'a1b2c'	None				
+cell	C2286	str	'a1b2c'	None				
+cell	D2286	str	'a1b2c'	None				
+cell	E2286	str	'a1b2c'	None				
+cell	C2287	str	'a1b2c'	None				
+cell	D2287	str	'a1b2c'	None				
+cell	E2287	str	'a1b2c'	None				
+cell	C2288	str	'a1b2c'	None				
+cell	D2288	str	'a1b2c'	None				
+cell	E2288	str	'a1b2c'	None				
+cell	C2290	str	'12'	'_xlfn.CONCAT({1;2})'	array	C2290:E2293		
+cell	D2290	str	'12'	None				
+cell	E2290	str	'12'	None				
+cell	C2291	str	'12'	None				
+cell	D2291	str	'12'	None				
+cell	E2291	str	'12'	None				
+cell	C2292	str	'12'	None				
+cell	D2292	str	'12'	None				
+cell	E2292	str	'12'	None				
 cell	H2292	n	'2'	'COUNTIF(Z1:Z4,Z2)'	array	H2292	1	
+cell	C2293	str	'12'	None				
+cell	D2293	str	'12'	None				
+cell	E2293	str	'12'	None				
+cell	C2295	n	'1'	'AVERAGEIF(Z1:Z4,{1,2})'	array	C2295:E2298		
+cell	D2295	n	'2'	None				
+cell	E2295	e	'#N/A'	None				
+cell	C2296	n	'1'	None				
+cell	D2296	n	'2'	None				
+cell	E2296	e	'#N/A'	None				
+cell	C2297	n	'1'	None				
+cell	D2297	n	'2'	None				
+cell	E2297	e	'#N/A'	None				
+cell	C2298	n	'1'	None				
+cell	D2298	n	'2'	None				
+cell	E2298	e	'#N/A'	None				
+cell	C2300	n	'10'	'AVERAGEIF(Z1:Z4,{1,2},AA1:AA4)'	array	C2300:E2303		
+cell	D2300	n	'25'	None				
+cell	E2300	e	'#N/A'	None				
 cell	H2300	n	'2'	'SUM(COUNTIF(Z1:Z4,Z2))'	array	H2300	1	
+cell	C2301	n	'10'	None				
+cell	D2301	n	'25'	None				
+cell	E2301	e	'#N/A'	None				
+cell	C2302	n	'10'	None				
+cell	D2302	n	'25'	None				
+cell	E2302	e	'#N/A'	None				
+cell	C2303	n	'10'	None				
+cell	D2303	n	'25'	None				
+cell	E2303	e	'#N/A'	None				
+cell	C2305	n	'10'	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1,2})'	array	C2305:E2308		
+cell	D2305	n	'25'	None				
+cell	E2305	e	'#N/A'	None				
+cell	C2306	n	'10'	None				
+cell	D2306	n	'25'	None				
+cell	E2306	e	'#N/A'	None				
+cell	C2307	n	'10'	None				
+cell	D2307	n	'25'	None				
+cell	E2307	e	'#N/A'	None				
+cell	C2308	n	'10'	None				
+cell	D2308	n	'25'	None				
+cell	E2308	e	'#N/A'	None				
 cell	H2308	n	'2'	'SUMPRODUCT(COUNTIF(Z1:Z4,Z2))'	array	H2308	1	
+cell	C2310	n	'10'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1,2})'	array	C2310:E2313		
+cell	D2310	n	'30'	None				
+cell	E2310	e	'#N/A'	None				
+cell	C2311	n	'10'	None				
+cell	D2311	n	'30'	None				
+cell	E2311	e	'#N/A'	None				
+cell	C2312	n	'10'	None				
+cell	D2312	n	'30'	None				
+cell	E2312	e	'#N/A'	None				
+cell	C2313	n	'10'	None				
+cell	D2313	n	'30'	None				
+cell	E2313	e	'#N/A'	None				
+cell	C2315	n	'10'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1,2})'	array	C2315:E2318		
+cell	D2315	n	'20'	None				
+cell	E2315	e	'#N/A'	None				
+cell	C2316	n	'10'	None				
+cell	D2316	n	'20'	None				
+cell	E2316	e	'#N/A'	None				
 cell	H2316	n	'1'	'SUMIF(Z1:Z4,Z1:Z4)'	array	H2316:H2319	1	
+cell	C2317	n	'10'	None				
+cell	D2317	n	'20'	None				
+cell	E2317	e	'#N/A'	None				
 cell	H2317	n	'4'	None				
+cell	C2318	n	'10'	None				
+cell	D2318	n	'20'	None				
+cell	E2318	e	'#N/A'	None				
 cell	H2318	n	'4'	None				
 cell	H2319	n	'3'	None				
+cell	C2320	n	'10'	'_xlfn.XLOOKUP({1,2},Z1:Z4,AA1:AA4)'	array	C2320:E2323		
+cell	D2320	n	'20'	None				
+cell	E2320	e	'#N/A'	None				
+cell	C2321	n	'10'	None				
+cell	D2321	n	'20'	None				
+cell	E2321	e	'#N/A'	None				
+cell	C2322	n	'10'	None				
+cell	D2322	n	'20'	None				
+cell	E2322	e	'#N/A'	None				
+cell	C2323	n	'10'	None				
+cell	D2323	n	'20'	None				
+cell	E2323	e	'#N/A'	None				
 cell	H2324	n	'12'	'SUM(SUMIF(Z1:Z4,Z1:Z4))'	array	H2324	1	
+cell	C2325	n	'1'	'_xlfn.XMATCH({1,2},Z1:Z4)'	array	C2325:E2328		
+cell	D2325	n	'2'	None				
+cell	E2325	e	'#N/A'	None				
+cell	C2326	n	'1'	None				
+cell	D2326	n	'2'	None				
+cell	E2326	e	'#N/A'	None				
+cell	C2327	n	'1'	None				
+cell	D2327	n	'2'	None				
+cell	E2327	e	'#N/A'	None				
+cell	C2328	n	'1'	None				
+cell	D2328	n	'2'	None				
+cell	E2328	e	'#N/A'	None				
+cell	C2330	n	'3'	'LARGE(Z1:Z4,{1,2})'	array	C2330:E2333		
+cell	D2330	n	'2'	None				
+cell	E2330	e	'#N/A'	None				
+cell	C2331	n	'3'	None				
+cell	D2331	n	'2'	None				
+cell	E2331	e	'#N/A'	None				
+cell	C2332	n	'3'	None				
+cell	D2332	n	'2'	None				
+cell	E2332	e	'#N/A'	None				
 cell	H2332	n	'12'	'SUMPRODUCT(SUMIF(Z1:Z4,Z1:Z4))'	array	H2332	1	
+cell	C2333	n	'3'	None				
+cell	D2333	n	'2'	None				
+cell	E2333	e	'#N/A'	None				
+cell	C2335	n	'1'	'SMALL(Z1:Z4,{1,2})'	array	C2335:E2338		
+cell	D2335	n	'2'	None				
+cell	E2335	e	'#N/A'	None				
+cell	C2336	n	'1'	None				
+cell	D2336	n	'2'	None				
+cell	E2336	e	'#N/A'	None				
+cell	C2337	n	'1'	None				
+cell	D2337	n	'2'	None				
+cell	E2337	e	'#N/A'	None				
+cell	C2338	n	'1'	None				
+cell	D2338	n	'2'	None				
+cell	E2338	e	'#N/A'	None				
+cell	C2340	n	'10'	'_xlfn.SWITCH({1,2},1,10,2,20,0)'	array	C2340:E2343		
+cell	D2340	n	'20'	None				
+cell	E2340	e	'#N/A'	None				
 cell	H2340	n	'1'	'SUMIF(Z1:Z4,{1;2})'	array	H2340:H2341	1	
+cell	C2341	n	'10'	None				
+cell	D2341	n	'20'	None				
+cell	E2341	e	'#N/A'	None				
 cell	H2341	n	'4'	None				
+cell	C2342	n	'10'	None				
+cell	D2342	n	'20'	None				
+cell	E2342	e	'#N/A'	None				
+cell	C2343	n	'10'	None				
+cell	D2343	n	'20'	None				
+cell	E2343	e	'#N/A'	None				
+cell	C2345	n	'0'	'_xlfn.IFS({1,2}>1,1,TRUE,0)'	array	C2345:E2348		
+cell	D2345	n	'1'	None				
+cell	E2345	e	'#N/A'	None				
+cell	C2346	n	'0'	None				
+cell	D2346	n	'1'	None				
+cell	E2346	e	'#N/A'	None				
+cell	C2347	n	'0'	None				
+cell	D2347	n	'1'	None				
+cell	E2347	e	'#N/A'	None				
+cell	C2348	n	'0'	None				
+cell	D2348	n	'1'	None				
+cell	E2348	e	'#N/A'	None				
 cell	H2348	n	'5'	'SUM(SUMIF(Z1:Z4,{1;2}))'	array	H2348	1	
+cell	C2350	str	'1,2'	'_xlfn.TEXTJOIN(",",TRUE,{1,2})'	array	C2350:E2353		
+cell	D2350	str	'1,2'	None				
+cell	E2350	str	'1,2'	None				
+cell	C2351	str	'1,2'	None				
+cell	D2351	str	'1,2'	None				
+cell	E2351	str	'1,2'	None				
+cell	C2352	str	'1,2'	None				
+cell	D2352	str	'1,2'	None				
+cell	E2352	str	'1,2'	None				
+cell	C2353	str	'1,2'	None				
+cell	D2353	str	'1,2'	None				
+cell	E2353	str	'1,2'	None				
+cell	C2355	str	'a1b2c'	'_xlfn.TEXTJOIN({1,2},TRUE,"a","b","c")'	array	C2355:E2358		
+cell	D2355	str	'a1b2c'	None				
+cell	E2355	str	'a1b2c'	None				
+cell	C2356	str	'a1b2c'	None				
+cell	D2356	str	'a1b2c'	None				
+cell	E2356	str	'a1b2c'	None				
 cell	H2356	n	'5'	'SUMPRODUCT(SUMIF(Z1:Z4,{1;2}))'	array	H2356	1	
+cell	C2357	str	'a1b2c'	None				
+cell	D2357	str	'a1b2c'	None				
+cell	E2357	str	'a1b2c'	None				
+cell	C2358	str	'a1b2c'	None				
+cell	D2358	str	'a1b2c'	None				
+cell	E2358	str	'a1b2c'	None				
+cell	C2360	str	'12'	'_xlfn.CONCAT({1,2})'	array	C2360:E2363		
+cell	D2360	str	'12'	None				
+cell	E2360	str	'12'	None				
+cell	C2361	str	'12'	None				
+cell	D2361	str	'12'	None				
+cell	E2361	str	'12'	None				
+cell	C2362	str	'12'	None				
+cell	D2362	str	'12'	None				
+cell	E2362	str	'12'	None				
+cell	C2363	str	'12'	None				
+cell	D2363	str	'12'	None				
+cell	E2363	str	'12'	None				
 cell	H2364	n	'1'	'SUMIF(Z1:Z4,{1,2})'	array	H2364:I2364	1	
 cell	I2364	n	'4'	None				
+cell	C2365	n	'2'	'AVERAGEIF(Z1:Z4,Z2)'	array	C2365:E2368		
+cell	D2365	n	'2'	None				
+cell	E2365	n	'2'	None				
+cell	C2366	n	'2'	None				
+cell	D2366	n	'2'	None				
+cell	E2366	n	'2'	None				
+cell	C2367	n	'2'	None				
+cell	D2367	n	'2'	None				
+cell	E2367	n	'2'	None				
+cell	C2368	n	'2'	None				
+cell	D2368	n	'2'	None				
+cell	E2368	n	'2'	None				
+cell	C2370	n	'25'	'AVERAGEIF(Z1:Z4,Z2,AA1:AA4)'	array	C2370:E2373		
+cell	D2370	n	'25'	None				
+cell	E2370	n	'25'	None				
+cell	C2371	n	'25'	None				
+cell	D2371	n	'25'	None				
+cell	E2371	n	'25'	None				
+cell	C2372	n	'25'	None				
+cell	D2372	n	'25'	None				
+cell	E2372	n	'25'	None				
 cell	H2372	n	'5'	'SUM(SUMIF(Z1:Z4,{1,2}))'	array	H2372	1	
+cell	C2373	n	'25'	None				
+cell	D2373	n	'25'	None				
+cell	E2373	n	'25'	None				
+cell	C2375	n	'25'	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z2)'	array	C2375:E2378		
+cell	D2375	n	'25'	None				
+cell	E2375	n	'25'	None				
+cell	C2376	n	'25'	None				
+cell	D2376	n	'25'	None				
+cell	E2376	n	'25'	None				
+cell	C2377	n	'25'	None				
+cell	D2377	n	'25'	None				
+cell	E2377	n	'25'	None				
+cell	C2378	n	'25'	None				
+cell	D2378	n	'25'	None				
+cell	E2378	n	'25'	None				
+cell	C2380	n	'30'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z2)'	array	C2380:E2383		
+cell	D2380	n	'30'	None				
+cell	E2380	n	'30'	None				
 cell	H2380	n	'5'	'SUMPRODUCT(SUMIF(Z1:Z4,{1,2}))'	array	H2380	1	
+cell	C2381	n	'30'	None				
+cell	D2381	n	'30'	None				
+cell	E2381	n	'30'	None				
+cell	C2382	n	'30'	None				
+cell	D2382	n	'30'	None				
+cell	E2382	n	'30'	None				
+cell	C2383	n	'30'	None				
+cell	D2383	n	'30'	None				
+cell	E2383	n	'30'	None				
+cell	C2385	n	'20'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z2)'	array	C2385:E2388		
+cell	D2385	n	'20'	None				
+cell	E2385	n	'20'	None				
+cell	C2386	n	'20'	None				
+cell	D2386	n	'20'	None				
+cell	E2386	n	'20'	None				
+cell	C2387	n	'20'	None				
+cell	D2387	n	'20'	None				
+cell	E2387	n	'20'	None				
+cell	C2388	n	'20'	None				
+cell	D2388	n	'20'	None				
+cell	E2388	n	'20'	None				
 cell	H2388	n	'4'	'SUMIF(Z1:Z4,Z2)'	array	H2388	1	
+cell	C2390	n	'20'	'_xlfn.XLOOKUP(Z2,Z1:Z4,AA1:AA4)'	array	C2390:E2393		
+cell	D2390	n	'20'	None				
+cell	E2390	n	'20'	None				
+cell	C2391	n	'20'	None				
+cell	D2391	n	'20'	None				
+cell	E2391	n	'20'	None				
+cell	C2392	n	'20'	None				
+cell	D2392	n	'20'	None				
+cell	E2392	n	'20'	None				
+cell	C2393	n	'20'	None				
+cell	D2393	n	'20'	None				
+cell	E2393	n	'20'	None				
+cell	C2395	n	'2'	'_xlfn.XMATCH(Z2,Z1:Z4)'	array	C2395:E2398		
+cell	D2395	n	'2'	None				
+cell	E2395	n	'2'	None				
+cell	C2396	n	'2'	None				
+cell	D2396	n	'2'	None				
+cell	E2396	n	'2'	None				
 cell	H2396	n	'4'	'SUM(SUMIF(Z1:Z4,Z2))'	array	H2396	1	
+cell	C2397	n	'2'	None				
+cell	D2397	n	'2'	None				
+cell	E2397	n	'2'	None				
+cell	C2398	n	'2'	None				
+cell	D2398	n	'2'	None				
+cell	E2398	n	'2'	None				
+cell	C2400	n	'2'	'LARGE(Z1:Z4,Z2)'	array	C2400:E2403		
+cell	D2400	n	'2'	None				
+cell	E2400	n	'2'	None				
+cell	C2401	n	'2'	None				
+cell	D2401	n	'2'	None				
+cell	E2401	n	'2'	None				
+cell	C2402	n	'2'	None				
+cell	D2402	n	'2'	None				
+cell	E2402	n	'2'	None				
+cell	C2403	n	'2'	None				
+cell	D2403	n	'2'	None				
+cell	E2403	n	'2'	None				
 cell	H2404	n	'4'	'SUMPRODUCT(SUMIF(Z1:Z4,Z2))'	array	H2404	1	
+cell	C2405	n	'2'	'SMALL(Z1:Z4,Z2)'	array	C2405:E2408		
+cell	D2405	n	'2'	None				
+cell	E2405	n	'2'	None				
+cell	C2406	n	'2'	None				
+cell	D2406	n	'2'	None				
+cell	E2406	n	'2'	None				
+cell	C2407	n	'2'	None				
+cell	D2407	n	'2'	None				
+cell	E2407	n	'2'	None				
+cell	C2408	n	'2'	None				
+cell	D2408	n	'2'	None				
+cell	E2408	n	'2'	None				
+cell	C2410	n	'20'	'_xlfn.SWITCH(Z2,1,10,2,20,0)'	array	C2410:E2413		
+cell	D2410	n	'20'	None				
+cell	E2410	n	'20'	None				
+cell	C2411	n	'20'	None				
+cell	D2411	n	'20'	None				
+cell	E2411	n	'20'	None				
+cell	C2412	n	'20'	None				
+cell	D2412	n	'20'	None				
+cell	E2412	n	'20'	None				
 cell	H2412	n	'10'	'SUMIF(Z1:Z4,Z1:Z4,AA1:AA4)'	array	H2412:H2415	1	
+cell	C2413	n	'20'	None				
+cell	D2413	n	'20'	None				
+cell	E2413	n	'20'	None				
 cell	H2413	n	'50'	None				
 cell	H2414	n	'50'	None				
+cell	C2415	n	'1'	'_xlfn.IFS(Z2>1,1,TRUE,0)'	array	C2415:E2418		
+cell	D2415	n	'1'	None				
+cell	E2415	n	'1'	None				
 cell	H2415	n	'40'	None				
+cell	C2416	n	'1'	None				
+cell	D2416	n	'1'	None				
+cell	E2416	n	'1'	None				
+cell	C2417	n	'1'	None				
+cell	D2417	n	'1'	None				
+cell	E2417	n	'1'	None				
+cell	C2418	n	'1'	None				
+cell	D2418	n	'1'	None				
+cell	E2418	n	'1'	None				
+cell	C2420	str	'2'	'_xlfn.TEXTJOIN(",",TRUE,Z2)'	array	C2420:E2423		
+cell	D2420	str	'2'	None				
+cell	E2420	str	'2'	None				
 cell	H2420	n	'150'	'SUM(SUMIF(Z1:Z4,Z1:Z4,AA1:AA4))'	array	H2420	1	
+cell	C2421	str	'2'	None				
+cell	D2421	str	'2'	None				
+cell	E2421	str	'2'	None				
+cell	C2422	str	'2'	None				
+cell	D2422	str	'2'	None				
+cell	E2422	str	'2'	None				
+cell	C2423	str	'2'	None				
+cell	D2423	str	'2'	None				
+cell	E2423	str	'2'	None				
+cell	C2425	str	'a2b2c'	'_xlfn.TEXTJOIN(Z2,TRUE,"a","b","c")'	array	C2425:E2428		
+cell	D2425	str	'a2b2c'	None				
+cell	E2425	str	'a2b2c'	None				
+cell	C2426	str	'a2b2c'	None				
+cell	D2426	str	'a2b2c'	None				
+cell	E2426	str	'a2b2c'	None				
+cell	C2427	str	'a2b2c'	None				
+cell	D2427	str	'a2b2c'	None				
+cell	E2427	str	'a2b2c'	None				
+cell	C2428	str	'a2b2c'	None				
+cell	D2428	str	'a2b2c'	None				
+cell	E2428	str	'a2b2c'	None				
 cell	H2428	n	'150'	'SUMPRODUCT(SUMIF(Z1:Z4,Z1:Z4,AA1:AA4))'	array	H2428	1	
+cell	C2430	str	'2'	'_xlfn.CONCAT(Z2)'	array	C2430:E2433		
+cell	D2430	str	'2'	None				
+cell	E2430	str	'2'	None				
+cell	C2431	str	'2'	None				
+cell	D2431	str	'2'	None				
+cell	E2431	str	'2'	None				
+cell	C2432	str	'2'	None				
+cell	D2432	str	'2'	None				
+cell	E2432	str	'2'	None				
+cell	C2433	str	'2'	None				
+cell	D2433	str	'2'	None				
+cell	E2433	str	'2'	None				
+cell	C2435	n	'2'	'PERCENTILE(Z1:Z4,0.5)'	array	C2435:E2438		
+cell	D2435	n	'2'	None				
+cell	E2435	n	'2'	None				
+cell	C2436	n	'2'	None				
+cell	D2436	n	'2'	None				
+cell	E2436	n	'2'	None				
 cell	H2436	n	'10'	'SUMIF(Z1:Z4,{1;2},AA1:AA4)'	array	H2436:H2437	1	
+cell	C2437	n	'2'	None				
+cell	D2437	n	'2'	None				
+cell	E2437	n	'2'	None				
 cell	H2437	n	'50'	None				
+cell	C2438	n	'2'	None				
+cell	D2438	n	'2'	None				
+cell	E2438	n	'2'	None				
+cell	C2440	n	'2'	'_xlfn.PERCENTILE.INC(Z1:Z4,0.5)'	array	C2440:E2443		
+cell	D2440	n	'2'	None				
+cell	E2440	n	'2'	None				
+cell	C2441	n	'2'	None				
+cell	D2441	n	'2'	None				
+cell	E2441	n	'2'	None				
+cell	C2442	n	'2'	None				
+cell	D2442	n	'2'	None				
+cell	E2442	n	'2'	None				
+cell	C2443	n	'2'	None				
+cell	D2443	n	'2'	None				
+cell	E2443	n	'2'	None				
 cell	H2444	n	'60'	'SUM(SUMIF(Z1:Z4,{1;2},AA1:AA4))'	array	H2444	1	
+cell	C2445	n	'1.75'	'PERCENTILE(Z1:Z4,{0.25;0.75})'	array	C2445:E2448		
+cell	D2445	n	'1.75'	None				
+cell	E2445	n	'1.75'	None				
+cell	C2446	n	'2.25'	None				
+cell	D2446	n	'2.25'	None				
+cell	E2446	n	'2.25'	None				
+cell	C2447	e	'#N/A'	None				
+cell	D2447	e	'#N/A'	None				
+cell	E2447	e	'#N/A'	None				
+cell	C2448	e	'#N/A'	None				
+cell	D2448	e	'#N/A'	None				
+cell	E2448	e	'#N/A'	None				
+cell	C2450	n	'1.75'	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25;0.75})'	array	C2450:E2453		
+cell	D2450	n	'1.75'	None				
+cell	E2450	n	'1.75'	None				
+cell	C2451	n	'2.25'	None				
+cell	D2451	n	'2.25'	None				
+cell	E2451	n	'2.25'	None				
+cell	C2452	e	'#N/A'	None				
+cell	D2452	e	'#N/A'	None				
+cell	E2452	e	'#N/A'	None				
 cell	H2452	n	'60'	'SUMPRODUCT(SUMIF(Z1:Z4,{1;2},AA1:AA4))'	array	H2452	1	
+cell	C2453	e	'#N/A'	None				
+cell	D2453	e	'#N/A'	None				
+cell	E2453	e	'#N/A'	None				
+cell	C2455	n	'1.75'	'PERCENTILE(Z1:Z4,{0.25,0.75})'	array	C2455:E2458		
+cell	D2455	n	'2.25'	None				
+cell	E2455	e	'#N/A'	None				
+cell	C2456	n	'1.75'	None				
+cell	D2456	n	'2.25'	None				
+cell	E2456	e	'#N/A'	None				
+cell	C2457	n	'1.75'	None				
+cell	D2457	n	'2.25'	None				
+cell	E2457	e	'#N/A'	None				
+cell	C2458	n	'1.75'	None				
+cell	D2458	n	'2.25'	None				
+cell	E2458	e	'#N/A'	None				
+cell	C2460	n	'1.75'	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25,0.75})'	array	C2460:E2463		
+cell	D2460	n	'2.25'	None				
+cell	E2460	e	'#N/A'	None				
 cell	H2460	n	'10'	'SUMIF(Z1:Z4,{1,2},AA1:AA4)'	array	H2460:I2460	1	
 cell	I2460	n	'50'	None				
+cell	C2461	n	'1.75'	None				
+cell	D2461	n	'2.25'	None				
+cell	E2461	e	'#N/A'	None				
+cell	C2462	n	'1.75'	None				
+cell	D2462	n	'2.25'	None				
+cell	E2462	e	'#N/A'	None				
+cell	C2463	n	'1.75'	None				
+cell	D2463	n	'2.25'	None				
+cell	E2463	e	'#N/A'	None				
+cell	C2465	n	'1.3'	'PERCENTILE(Z1:Z4,Z1:Z2/10)'	array	C2465:E2468		
+cell	D2465	n	'1.3'	None				
+cell	E2465	n	'1.3'	None				
+cell	C2466	n	'1.6'	None				
+cell	D2466	n	'1.6'	None				
+cell	E2466	n	'1.6'	None				
+cell	C2467	e	'#N/A'	None				
+cell	D2467	e	'#N/A'	None				
+cell	E2467	e	'#N/A'	None				
+cell	C2468	e	'#N/A'	None				
+cell	D2468	e	'#N/A'	None				
+cell	E2468	e	'#N/A'	None				
 cell	H2468	n	'60'	'SUM(SUMIF(Z1:Z4,{1,2},AA1:AA4))'	array	H2468	1	
+cell	C2470	n	'1.3'	'_xlfn.PERCENTILE.INC(Z1:Z4,Z1:Z2/10)'	array	C2470:E2473		
+cell	D2470	n	'1.3'	None				
+cell	E2470	n	'1.3'	None				
+cell	C2471	n	'1.6'	None				
+cell	D2471	n	'1.6'	None				
+cell	E2471	n	'1.6'	None				
+cell	C2472	e	'#N/A'	None				
+cell	D2472	e	'#N/A'	None				
+cell	E2472	e	'#N/A'	None				
+cell	C2473	e	'#N/A'	None				
+cell	D2473	e	'#N/A'	None				
+cell	E2473	e	'#N/A'	None				
+cell	C2475	n	'1.75'	'QUARTILE(Z1:Z4,1)'	array	C2475:E2478		
+cell	D2475	n	'1.75'	None				
+cell	E2475	n	'1.75'	None				
+cell	C2476	n	'1.75'	None				
+cell	D2476	n	'1.75'	None				
+cell	E2476	n	'1.75'	None				
 cell	H2476	n	'60'	'SUMPRODUCT(SUMIF(Z1:Z4,{1,2},AA1:AA4))'	array	H2476	1	
+cell	C2477	n	'1.75'	None				
+cell	D2477	n	'1.75'	None				
+cell	E2477	n	'1.75'	None				
+cell	C2478	n	'1.75'	None				
+cell	D2478	n	'1.75'	None				
+cell	E2478	n	'1.75'	None				
+cell	C2480	n	'1.75'	'_xlfn.QUARTILE.INC(Z1:Z4,1)'	array	C2480:E2483		
+cell	D2480	n	'1.75'	None				
+cell	E2480	n	'1.75'	None				
+cell	C2481	n	'1.75'	None				
+cell	D2481	n	'1.75'	None				
+cell	E2481	n	'1.75'	None				
+cell	C2482	n	'1.75'	None				
+cell	D2482	n	'1.75'	None				
+cell	E2482	n	'1.75'	None				
+cell	C2483	n	'1.75'	None				
+cell	D2483	n	'1.75'	None				
+cell	E2483	n	'1.75'	None				
 cell	H2484	n	'50'	'SUMIF(Z1:Z4,Z2,AA1:AA4)'	array	H2484	1	
+cell	C2485	n	'1.75'	'QUARTILE(Z1:Z4,{1;3})'	array	C2485:E2488		
+cell	D2485	n	'1.75'	None				
+cell	E2485	n	'1.75'	None				
+cell	C2486	n	'2.25'	None				
+cell	D2486	n	'2.25'	None				
+cell	E2486	n	'2.25'	None				
+cell	C2487	e	'#N/A'	None				
+cell	D2487	e	'#N/A'	None				
+cell	E2487	e	'#N/A'	None				
+cell	C2488	e	'#N/A'	None				
+cell	D2488	e	'#N/A'	None				
+cell	E2488	e	'#N/A'	None				
+cell	C2490	n	'1.75'	'_xlfn.QUARTILE.INC(Z1:Z4,{1;3})'	array	C2490:E2493		
+cell	D2490	n	'1.75'	None				
+cell	E2490	n	'1.75'	None				
+cell	C2491	n	'2.25'	None				
+cell	D2491	n	'2.25'	None				
+cell	E2491	n	'2.25'	None				
+cell	C2492	e	'#N/A'	None				
+cell	D2492	e	'#N/A'	None				
+cell	E2492	e	'#N/A'	None				
 cell	H2492	n	'50'	'SUM(SUMIF(Z1:Z4,Z2,AA1:AA4))'	array	H2492	1	
+cell	C2493	e	'#N/A'	None				
+cell	D2493	e	'#N/A'	None				
+cell	E2493	e	'#N/A'	None				
+cell	C2495	n	'1.75'	'QUARTILE(Z1:Z4,Z1:Z2)'	array	C2495:E2498		
+cell	D2495	n	'1.75'	None				
+cell	E2495	n	'1.75'	None				
+cell	C2496	n	'2'	None				
+cell	D2496	n	'2'	None				
+cell	E2496	n	'2'	None				
+cell	C2497	e	'#N/A'	None				
+cell	D2497	e	'#N/A'	None				
+cell	E2497	e	'#N/A'	None				
+cell	C2498	e	'#N/A'	None				
+cell	D2498	e	'#N/A'	None				
+cell	E2498	e	'#N/A'	None				
+cell	C2500	n	'1.75'	'_xlfn.QUARTILE.INC(Z1:Z4,Z1:Z2)'	array	C2500:E2503		
+cell	D2500	n	'1.75'	None				
+cell	E2500	n	'1.75'	None				
 cell	H2500	n	'50'	'SUMPRODUCT(SUMIF(Z1:Z4,Z2,AA1:AA4))'	array	H2500	1	
+cell	C2501	n	'2'	None				
+cell	D2501	n	'2'	None				
+cell	E2501	n	'2'	None				
+cell	C2502	e	'#N/A'	None				
+cell	D2502	e	'#N/A'	None				
+cell	E2502	e	'#N/A'	None				
+cell	C2503	e	'#N/A'	None				
+cell	D2503	e	'#N/A'	None				
+cell	E2503	e	'#N/A'	None				
+cell	C2505	n	'2'	'MODE(Z1:Z4)'	array	C2505:E2508		
+cell	D2505	n	'2'	None				
+cell	E2505	n	'2'	None				
+cell	C2506	n	'2'	None				
+cell	D2506	n	'2'	None				
+cell	E2506	n	'2'	None				
+cell	C2507	n	'2'	None				
+cell	D2507	n	'2'	None				
+cell	E2507	n	'2'	None				
+cell	C2508	n	'2'	None				
+cell	D2508	n	'2'	None				
+cell	E2508	n	'2'	None				
 cell	H2508	n	'1'	'COUNTIFS(Z1:Z4,Z1:Z4)'	array	H2508:H2511	1	
 cell	H2509	n	'2'	None				
+cell	C2510	n	'2'	'_xlfn.MODE.SNGL(Z1:Z4)'	array	C2510:E2513		
+cell	D2510	n	'2'	None				
+cell	E2510	n	'2'	None				
 cell	H2510	n	'2'	None				
+cell	C2511	n	'2'	None				
+cell	D2511	n	'2'	None				
+cell	E2511	n	'2'	None				
 cell	H2511	n	'1'	None				
+cell	C2512	n	'2'	None				
+cell	D2512	n	'2'	None				
+cell	E2512	n	'2'	None				
+cell	C2513	n	'2'	None				
+cell	D2513	n	'2'	None				
+cell	E2513	n	'2'	None				
+cell	C2515	n	'2'	'MODE(Z1:Z4*1)'	array	C2515:E2518		
+cell	D2515	n	'2'	None				
+cell	E2515	n	'2'	None				
+cell	C2516	n	'2'	None				
+cell	D2516	n	'2'	None				
+cell	E2516	n	'2'	None				
 cell	H2516	n	'6'	'SUM(COUNTIFS(Z1:Z4,Z1:Z4))'	array	H2516	1	
+cell	C2517	n	'2'	None				
+cell	D2517	n	'2'	None				
+cell	E2517	n	'2'	None				
+cell	C2518	n	'2'	None				
+cell	D2518	n	'2'	None				
+cell	E2518	n	'2'	None				
+cell	C2520	n	'6'	'LARGE(Z1:Z4*2,1)'	array	C2520:E2523		
+cell	D2520	n	'6'	None				
+cell	E2520	n	'6'	None				
+cell	C2521	n	'6'	None				
+cell	D2521	n	'6'	None				
+cell	E2521	n	'6'	None				
+cell	C2522	n	'6'	None				
+cell	D2522	n	'6'	None				
+cell	E2522	n	'6'	None				
+cell	C2523	n	'6'	None				
+cell	D2523	n	'6'	None				
+cell	E2523	n	'6'	None				
 cell	H2524	n	'6'	'SUMPRODUCT(COUNTIFS(Z1:Z4,Z1:Z4))'	array	H2524	1	
+cell	C2525	n	'2'	'SMALL(Z1:Z4*2,1)'	array	C2525:E2528		
+cell	D2525	n	'2'	None				
+cell	E2525	n	'2'	None				
+cell	C2526	n	'2'	None				
+cell	D2526	n	'2'	None				
+cell	E2526	n	'2'	None				
+cell	C2527	n	'2'	None				
+cell	D2527	n	'2'	None				
+cell	E2527	n	'2'	None				
+cell	C2528	n	'2'	None				
+cell	D2528	n	'2'	None				
+cell	E2528	n	'2'	None				
+cell	C2530	n	'4'	'PERCENTILE(Z1:Z4*2,0.5)'	array	C2530:E2533		
+cell	D2530	n	'4'	None				
+cell	E2530	n	'4'	None				
+cell	C2531	n	'4'	None				
+cell	D2531	n	'4'	None				
+cell	E2531	n	'4'	None				
+cell	C2532	n	'4'	None				
+cell	D2532	n	'4'	None				
+cell	E2532	n	'4'	None				
 cell	H2532	n	'1'	'COUNTIFS(Z1:Z4,{1;2})'	array	H2532:H2533	1	
+cell	C2533	n	'4'	None				
+cell	D2533	n	'4'	None				
+cell	E2533	n	'4'	None				
 cell	H2533	n	'2'	None				
+cell	C2535	n	'3.5'	'QUARTILE(Z1:Z4*2,1)'	array	C2535:E2538		
+cell	D2535	n	'3.5'	None				
+cell	E2535	n	'3.5'	None				
+cell	C2536	n	'3.5'	None				
+cell	D2536	n	'3.5'	None				
+cell	E2536	n	'3.5'	None				
+cell	C2537	n	'3.5'	None				
+cell	D2537	n	'3.5'	None				
+cell	E2537	n	'3.5'	None				
+cell	C2538	n	'3.5'	None				
+cell	D2538	n	'3.5'	None				
+cell	E2538	n	'3.5'	None				
+cell	C2540	n	'20'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4)'	array	C2540:E2543		
+cell	D2540	str	'b'	None				
+cell	E2540	e	'#N/A'	None				
 cell	H2540	n	'3'	'SUM(COUNTIFS(Z1:Z4,{1;2}))'	array	H2540	1	
+cell	C2541	n	'20'	None				
+cell	D2541	str	'b'	None				
+cell	E2541	e	'#N/A'	None				
+cell	C2542	n	'20'	None				
+cell	D2542	str	'b'	None				
+cell	E2542	e	'#N/A'	None				
+cell	C2543	n	'20'	None				
+cell	D2543	str	'b'	None				
+cell	E2543	e	'#N/A'	None				
+cell	C2545	n	'40'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4)*2'	array	C2545:E2548		
+cell	D2545	n	'40'	None				
+cell	E2545	n	'40'	None				
+cell	C2546	n	'40'	None				
+cell	D2546	n	'40'	None				
+cell	E2546	n	'40'	None				
+cell	C2547	n	'40'	None				
+cell	D2547	n	'40'	None				
+cell	E2547	n	'40'	None				
+cell	C2548	n	'40'	None				
+cell	D2548	n	'40'	None				
+cell	E2548	n	'40'	None				
 cell	H2548	n	'3'	'SUMPRODUCT(COUNTIFS(Z1:Z4,{1;2}))'	array	H2548	1	
+cell	C2550	n	'20'	'SUM(_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4))'	array	C2550:E2553		
+cell	D2550	n	'20'	None				
+cell	E2550	n	'20'	None				
+cell	C2551	n	'20'	None				
+cell	D2551	n	'20'	None				
+cell	E2551	n	'20'	None				
+cell	C2552	n	'20'	None				
+cell	D2552	n	'20'	None				
+cell	E2552	n	'20'	None				
+cell	C2553	n	'20'	None				
+cell	D2553	n	'20'	None				
+cell	E2553	n	'20'	None				
+cell	C2555	n	'90'	'SUMPRODUCT(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'	array	C2555:E2558		
+cell	D2555	n	'90'	None				
+cell	E2555	n	'90'	None				
+cell	C2556	n	'90'	None				
+cell	D2556	n	'90'	None				
+cell	E2556	n	'90'	None				
 cell	H2556	n	'1'	'COUNTIFS(Z1:Z4,{1,2})'	array	H2556:I2556	1	
 cell	I2556	n	'2'	None				
+cell	C2557	n	'90'	None				
+cell	D2557	n	'90'	None				
+cell	E2557	n	'90'	None				
+cell	C2558	n	'90'	None				
+cell	D2558	n	'90'	None				
+cell	E2558	n	'90'	None				
+cell	C2560	n	'20'	'_xlfn.XLOOKUP(2,Z1:Z4*1,AA1:AA4)'	array	C2560:E2563		
+cell	D2560	n	'20'	None				
+cell	E2560	n	'20'	None				
+cell	C2561	n	'20'	None				
+cell	D2561	n	'20'	None				
+cell	E2561	n	'20'	None				
+cell	C2562	n	'20'	None				
+cell	D2562	n	'20'	None				
+cell	E2562	n	'20'	None				
+cell	C2563	n	'20'	None				
+cell	D2563	n	'20'	None				
+cell	E2563	n	'20'	None				
 cell	H2564	n	'3'	'SUM(COUNTIFS(Z1:Z4,{1,2}))'	array	H2564	1	
+cell	C2565	n	'40'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4*2)'	array	C2565:E2568		
+cell	D2565	n	'40'	None				
+cell	E2565	n	'40'	None				
+cell	C2566	n	'40'	None				
+cell	D2566	n	'40'	None				
+cell	E2566	n	'40'	None				
+cell	C2567	n	'40'	None				
+cell	D2567	n	'40'	None				
+cell	E2567	n	'40'	None				
+cell	C2568	n	'40'	None				
+cell	D2568	n	'40'	None				
+cell	E2568	n	'40'	None				
+cell	C2570	n	'2'	'_xlfn.XMATCH(2,Z1:Z4*1)'	array	C2570:E2573		
+cell	D2570	n	'2'	None				
+cell	E2570	n	'2'	None				
+cell	C2571	n	'2'	None				
+cell	D2571	n	'2'	None				
+cell	E2571	n	'2'	None				
+cell	C2572	n	'2'	None				
+cell	D2572	n	'2'	None				
+cell	E2572	n	'2'	None				
 cell	H2572	n	'3'	'SUMPRODUCT(COUNTIFS(Z1:Z4,{1,2}))'	array	H2572	1	
+cell	C2573	n	'2'	None				
+cell	D2573	n	'2'	None				
+cell	E2573	n	'2'	None				
+cell	C2575	n	'0'	'_xlfn.IFS(Z1:Z4>1,AA1:AA4,TRUE,0)'	array	C2575:E2578		
+cell	D2575	n	'0'	None				
+cell	E2575	n	'0'	None				
+cell	C2576	n	'20'	None				
+cell	D2576	n	'20'	None				
+cell	E2576	n	'20'	None				
+cell	C2577	n	'30'	None				
+cell	D2577	n	'30'	None				
+cell	E2577	n	'30'	None				
+cell	C2578	n	'40'	None				
+cell	D2578	n	'40'	None				
+cell	E2578	n	'40'	None				
+cell	C2580	n	'10'	'_xlfn.SWITCH(Z1:Z4,1,AA1:AA4,0)'	array	C2580:E2583		
+cell	D2580	n	'10'	None				
+cell	E2580	n	'10'	None				
 cell	H2580	n	'2'	'COUNTIFS(Z1:Z4,Z2)'	array	H2580	1	
+cell	C2581	n	'0'	None				
+cell	D2581	n	'0'	None				
+cell	E2581	n	'0'	None				
+cell	C2582	n	'0'	None				
+cell	D2582	n	'0'	None				
+cell	E2582	n	'0'	None				
+cell	C2583	n	'0'	None				
+cell	D2583	n	'0'	None				
+cell	E2583	n	'0'	None				
+cell	C2585	str	'2446'	'_xlfn.CONCAT(Z1:Z4*2)'	array	C2585:E2588		
+cell	D2585	str	'2446'	None				
+cell	E2585	str	'2446'	None				
+cell	C2586	str	'2446'	None				
+cell	D2586	str	'2446'	None				
+cell	E2586	str	'2446'	None				
+cell	C2587	str	'2446'	None				
+cell	D2587	str	'2446'	None				
+cell	E2587	str	'2446'	None				
+cell	C2588	str	'2446'	None				
+cell	D2588	str	'2446'	None				
+cell	E2588	str	'2446'	None				
 cell	H2588	n	'2'	'SUM(COUNTIFS(Z1:Z4,Z2))'	array	H2588	1	
+cell	C2590	str	'2,4,4,6'	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4*2)'	array	C2590:E2593		
+cell	D2590	str	'2,4,4,6'	None				
+cell	E2590	str	'2,4,4,6'	None				
+cell	C2591	str	'2,4,4,6'	None				
+cell	D2591	str	'2,4,4,6'	None				
+cell	E2591	str	'2,4,4,6'	None				
+cell	C2592	str	'2,4,4,6'	None				
+cell	D2592	str	'2,4,4,6'	None				
+cell	E2592	str	'2,4,4,6'	None				
+cell	C2593	str	'2,4,4,6'	None				
+cell	D2593	str	'2,4,4,6'	None				
+cell	E2593	str	'2,4,4,6'	None				
+cell	C2595	n	'5'	'SUM(LARGE(Z1:Z4,{1,2}))'	array	C2595:E2598		
+cell	D2595	n	'5'	None				
+cell	E2595	n	'5'	None				
+cell	C2596	n	'5'	None				
+cell	D2596	n	'5'	None				
+cell	E2596	n	'5'	None				
 cell	H2596	n	'2'	'SUMPRODUCT(COUNTIFS(Z1:Z4,Z2))'	array	H2596	1	
+cell	C2597	n	'5'	None				
+cell	D2597	n	'5'	None				
+cell	E2597	n	'5'	None				
+cell	C2598	n	'5'	None				
+cell	D2598	n	'5'	None				
+cell	E2598	n	'5'	None				
+cell	C2600	n	'5'	'SUMPRODUCT(LARGE(Z1:Z4,ROW(Z1:Z2)))'	array	C2600:E2603		
+cell	D2600	n	'5'	None				
+cell	E2600	n	'5'	None				
+cell	C2601	n	'5'	None				
+cell	D2601	n	'5'	None				
+cell	E2601	n	'5'	None				
+cell	C2602	n	'5'	None				
+cell	D2602	n	'5'	None				
+cell	E2602	n	'5'	None				
+cell	C2603	n	'5'	None				
+cell	D2603	n	'5'	None				
+cell	E2603	n	'5'	None				
 cell	H2604	n	'1'	'COUNTIFS(Z1:Z4,Z1:Z4,AA1:AA4,">0")'	array	H2604:H2607	1	
+cell	C2605	n	'9'	'SUMPRODUCT(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'	array	C2605:E2608		
+cell	D2605	n	'9'	None				
+cell	E2605	n	'9'	None				
 cell	H2605	n	'2'	None				
+cell	C2606	n	'9'	None				
+cell	D2606	n	'9'	None				
+cell	E2606	n	'9'	None				
 cell	H2606	n	'2'	None				
+cell	C2607	n	'9'	None				
+cell	D2607	n	'9'	None				
+cell	E2607	n	'9'	None				
 cell	H2607	n	'1'	None				
+cell	C2608	n	'9'	None				
+cell	D2608	n	'9'	None				
+cell	E2608	n	'9'	None				
+cell	C2610	n	'9'	'SUM(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'	array	C2610:E2613		
+cell	D2610	n	'9'	None				
+cell	E2610	n	'9'	None				
+cell	C2611	n	'9'	None				
+cell	D2611	n	'9'	None				
+cell	E2611	n	'9'	None				
+cell	C2612	n	'9'	None				
+cell	D2612	n	'9'	None				
+cell	E2612	n	'9'	None				
 cell	H2612	n	'6'	'SUM(COUNTIFS(Z1:Z4,Z1:Z4,AA1:AA4,">0"))'	array	H2612	1	
+cell	C2613	n	'9'	None				
+cell	D2613	n	'9'	None				
+cell	E2613	n	'9'	None				
+cell	C2615	n	'10'	'SUM(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'	array	C2615:E2618		
+cell	D2615	n	'10'	None				
+cell	E2615	n	'10'	None				
+cell	C2616	n	'20'	None				
+cell	D2616	n	'20'	None				
+cell	E2616	n	'20'	None				
+cell	C2617	n	'20'	None				
+cell	D2617	n	'20'	None				
+cell	E2617	n	'20'	None				
+cell	C2618	n	'40'	None				
+cell	D2618	n	'40'	None				
+cell	E2618	n	'40'	None				
+cell	C2620	n	'1'	'ROW(Z1:Z4)'	array	C2620:C2621		
 cell	H2620	n	'6'	'SUMPRODUCT(COUNTIFS(Z1:Z4,Z1:Z4,AA1:AA4,">0"))'	array	H2620	1	
+cell	C2621	n	'2'	None				
+cell	C2623	n	'1'	'ROW(Z1:Z4)'	array	C2623:C2628		
+cell	C2624	n	'2'	None				
+cell	C2625	n	'3'	None				
+cell	C2626	n	'4'	None				
+cell	C2627	e	'#N/A'	None				
+cell	C2628	e	'#N/A'	None				
 cell	H2628	n	'1'	'COUNTIFS(Z1:Z4,{1;2},AA1:AA4,">0")'	array	H2628:H2629	1	
 cell	H2629	n	'2'	None				
+cell	C2630	n	'1'	'ROW(Z1:Z4)'	array	C2630:D2633		
+cell	D2630	n	'1'	None				
+cell	C2631	n	'2'	None				
+cell	D2631	n	'2'	None				
+cell	C2632	n	'3'	None				
+cell	D2632	n	'3'	None				
+cell	C2633	n	'4'	None				
+cell	D2633	n	'4'	None				
+cell	C2635	n	'1'	'ROW(Z1:Z4)'	array	C2635		
 cell	H2636	n	'3'	'SUM(COUNTIFS(Z1:Z4,{1;2},AA1:AA4,">0"))'	array	H2636	1	
 cell	H2644	n	'3'	'SUMPRODUCT(COUNTIFS(Z1:Z4,{1;2},AA1:AA4,">0"))'	array	H2644	1	
 cell	H2652	n	'1'	'COUNTIFS(Z1:Z4,{1,2},AA1:AA4,">0")'	array	H2652:I2652	1	
@@ -9180,3 +11040,168 @@ cell	H3356	n	'4'	'ROWS(Z1:Z4)'	array	H3356	1
 cell	H3364	n	'1'	'COLUMNS(Z1:Z4)'	array	H3364	1	
 cell	H3372	n	'1'	'INDEX(Z1:Z4,{1;2})'	array	H3372:H3373	1	
 cell	H3373	n	'2'	None				
+cell	H3380	n	'1'	'AVERAGEIF(Z1:Z4,Z1:Z4)'	array	H3380:H3383	1	
+cell	H3381	n	'2'	None				
+cell	H3382	n	'2'	None				
+cell	H3383	n	'3'	None				
+cell	H3388	n	'10'	'AVERAGEIF(Z1:Z4,Z1:Z4,AA1:AA4)'	array	H3388:H3391	1	
+cell	H3389	n	'25'	None				
+cell	H3390	n	'25'	None				
+cell	H3391	n	'40'	None				
+cell	H3396	n	'10'	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	array	H3396:H3399	1	
+cell	H3397	n	'25'	None				
+cell	H3398	n	'25'	None				
+cell	H3399	n	'40'	None				
+cell	H3404	n	'10'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	array	H3404:H3407	1	
+cell	H3405	n	'30'	None				
+cell	H3406	n	'30'	None				
+cell	H3407	n	'40'	None				
+cell	H3412	n	'10'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z1:Z4)'	array	H3412:H3415	1	
+cell	H3413	n	'20'	None				
+cell	H3414	n	'20'	None				
+cell	H3415	n	'40'	None				
+cell	H3420	n	'10'	'_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4)'	array	H3420:H3423	1	
+cell	H3421	n	'20'	None				
+cell	H3422	n	'20'	None				
+cell	H3423	n	'40'	None				
+cell	H3428	n	'1'	'_xlfn.XMATCH(Z1:Z4,Z1:Z4)'	array	H3428:H3431	1	
+cell	H3429	n	'2'	None				
+cell	H3430	n	'2'	None				
+cell	H3431	n	'4'	None				
+cell	H3436	n	'3'	'LARGE(Z1:Z4,Z1:Z4)'	array	H3436:H3439	1	
+cell	H3437	n	'2'	None				
+cell	H3438	n	'2'	None				
+cell	H3439	n	'2'	None				
+cell	H3444	n	'1'	'SMALL(Z1:Z4,Z1:Z4)'	array	H3444:H3447	1	
+cell	H3445	n	'2'	None				
+cell	H3446	n	'2'	None				
+cell	H3447	n	'2'	None				
+cell	H3452	n	'10'	'_xlfn.SWITCH(Z1:Z4,1,10,2,20,0)'	array	H3452:H3455	1	
+cell	H3453	n	'20'	None				
+cell	H3454	n	'20'	None				
+cell	H3455	n	'0'	None				
+cell	H3460	n	'0'	'_xlfn.IFS(Z1:Z4>1,1,TRUE,0)'	array	H3460:H3463	1	
+cell	H3461	n	'1'	None				
+cell	H3462	n	'1'	None				
+cell	H3463	n	'1'	None				
+cell	H3468	str	'1,2,2,3'	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4)'	array	H3468	1	
+cell	H3476	str	'a1b2c'	'_xlfn.TEXTJOIN(Z1:Z4,TRUE,"a","b","c")'	array	H3476	1	
+cell	H3484	str	'1223'	'_xlfn.CONCAT(Z1:Z4)'	array	H3484	1	
+cell	H3492	n	'1'	'AVERAGEIF(Z1:Z4,{1;2})'	array	H3492:H3493	1	
+cell	H3493	n	'2'	None				
+cell	H3500	n	'10'	'AVERAGEIF(Z1:Z4,{1;2},AA1:AA4)'	array	H3500:H3501	1	
+cell	H3501	n	'25'	None				
+cell	H3508	n	'10'	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1;2})'	array	H3508:H3509	1	
+cell	H3509	n	'25'	None				
+cell	H3516	n	'10'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1;2})'	array	H3516:H3517	1	
+cell	H3517	n	'30'	None				
+cell	H3524	n	'10'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1;2})'	array	H3524:H3525	1	
+cell	H3525	n	'20'	None				
+cell	H3532	n	'10'	'_xlfn.XLOOKUP({1;2},Z1:Z4,AA1:AA4)'	array	H3532:H3533	1	
+cell	H3533	n	'20'	None				
+cell	H3540	n	'1'	'_xlfn.XMATCH({1;2},Z1:Z4)'	array	H3540:H3541	1	
+cell	H3541	n	'2'	None				
+cell	H3548	n	'3'	'LARGE(Z1:Z4,{1;2})'	array	H3548:H3549	1	
+cell	H3549	n	'2'	None				
+cell	H3556	n	'1'	'SMALL(Z1:Z4,{1;2})'	array	H3556:H3557	1	
+cell	H3557	n	'2'	None				
+cell	H3564	n	'10'	'_xlfn.SWITCH({1;2},1,10,2,20,0)'	array	H3564:H3565	1	
+cell	H3565	n	'20'	None				
+cell	H3572	n	'0'	'_xlfn.IFS({1;2}>1,1,TRUE,0)'	array	H3572:H3573	1	
+cell	H3573	n	'1'	None				
+cell	H3580	str	'1,2'	'_xlfn.TEXTJOIN(",",TRUE,{1;2})'	array	H3580	1	
+cell	H3588	str	'a1b2c'	'_xlfn.TEXTJOIN({1;2},TRUE,"a","b","c")'	array	H3588	1	
+cell	H3596	str	'12'	'_xlfn.CONCAT({1;2})'	array	H3596	1	
+cell	H3604	n	'1'	'AVERAGEIF(Z1:Z4,{1,2})'	array	H3604:I3604	1	
+cell	I3604	n	'2'	None				
+cell	H3612	n	'10'	'AVERAGEIF(Z1:Z4,{1,2},AA1:AA4)'	array	H3612:I3612	1	
+cell	I3612	n	'25'	None				
+cell	H3620	n	'10'	'AVERAGEIFS(AA1:AA4,Z1:Z4,{1,2})'	array	H3620:I3620	1	
+cell	I3620	n	'25'	None				
+cell	H3628	n	'10'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,{1,2})'	array	H3628:I3628	1	
+cell	I3628	n	'30'	None				
+cell	H3636	n	'10'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,{1,2})'	array	H3636:I3636	1	
+cell	I3636	n	'20'	None				
+cell	H3644	n	'10'	'_xlfn.XLOOKUP({1,2},Z1:Z4,AA1:AA4)'	array	H3644:I3644	1	
+cell	I3644	n	'20'	None				
+cell	H3652	n	'1'	'_xlfn.XMATCH({1,2},Z1:Z4)'	array	H3652:I3652	1	
+cell	I3652	n	'2'	None				
+cell	H3660	n	'3'	'LARGE(Z1:Z4,{1,2})'	array	H3660:I3660	1	
+cell	I3660	n	'2'	None				
+cell	H3668	n	'1'	'SMALL(Z1:Z4,{1,2})'	array	H3668:I3668	1	
+cell	I3668	n	'2'	None				
+cell	H3676	n	'10'	'_xlfn.SWITCH({1,2},1,10,2,20,0)'	array	H3676:I3676	1	
+cell	I3676	n	'20'	None				
+cell	H3684	n	'0'	'_xlfn.IFS({1,2}>1,1,TRUE,0)'	array	H3684:I3684	1	
+cell	I3684	n	'1'	None				
+cell	H3692	str	'1,2'	'_xlfn.TEXTJOIN(",",TRUE,{1,2})'	array	H3692	1	
+cell	H3700	str	'a1b2c'	'_xlfn.TEXTJOIN({1,2},TRUE,"a","b","c")'	array	H3700	1	
+cell	H3708	str	'12'	'_xlfn.CONCAT({1,2})'	array	H3708	1	
+cell	H3716	n	'2'	'AVERAGEIF(Z1:Z4,Z2)'	array	H3716	1	
+cell	H3724	n	'25'	'AVERAGEIF(Z1:Z4,Z2,AA1:AA4)'	array	H3724	1	
+cell	H3732	n	'25'	'AVERAGEIFS(AA1:AA4,Z1:Z4,Z2)'	array	H3732	1	
+cell	H3740	n	'30'	'_xlfn.MAXIFS(AA1:AA4,Z1:Z4,Z2)'	array	H3740	1	
+cell	H3748	n	'20'	'_xlfn.MINIFS(AA1:AA4,Z1:Z4,Z2)'	array	H3748	1	
+cell	H3756	n	'20'	'_xlfn.XLOOKUP(Z2,Z1:Z4,AA1:AA4)'	array	H3756	1	
+cell	H3764	n	'2'	'_xlfn.XMATCH(Z2,Z1:Z4)'	array	H3764	1	
+cell	H3772	n	'2'	'LARGE(Z1:Z4,Z2)'	array	H3772	1	
+cell	H3780	n	'2'	'SMALL(Z1:Z4,Z2)'	array	H3780	1	
+cell	H3788	n	'20'	'_xlfn.SWITCH(Z2,1,10,2,20,0)'	array	H3788	1	
+cell	H3796	n	'1'	'_xlfn.IFS(Z2>1,1,TRUE,0)'	array	H3796	1	
+cell	H3804	str	'2'	'_xlfn.TEXTJOIN(",",TRUE,Z2)'	array	H3804	1	
+cell	H3812	str	'a2b2c'	'_xlfn.TEXTJOIN(Z2,TRUE,"a","b","c")'	array	H3812	1	
+cell	H3820	str	'2'	'_xlfn.CONCAT(Z2)'	array	H3820	1	
+cell	H3828	n	'2'	'PERCENTILE(Z1:Z4,0.5)'	array	H3828	1	
+cell	H3836	n	'2'	'_xlfn.PERCENTILE.INC(Z1:Z4,0.5)'	array	H3836	1	
+cell	H3844	n	'1.75'	'PERCENTILE(Z1:Z4,{0.25;0.75})'	array	H3844:H3845	1	
+cell	H3845	n	'2.25'	None				
+cell	H3852	n	'1.75'	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25;0.75})'	array	H3852:H3853	1	
+cell	H3853	n	'2.25'	None				
+cell	H3860	n	'1.75'	'PERCENTILE(Z1:Z4,{0.25,0.75})'	array	H3860:I3860	1	
+cell	I3860	n	'2.25'	None				
+cell	H3868	n	'1.75'	'_xlfn.PERCENTILE.INC(Z1:Z4,{0.25,0.75})'	array	H3868:I3868	1	
+cell	I3868	n	'2.25'	None				
+cell	H3876	n	'1.3'	'PERCENTILE(Z1:Z4,Z1:Z2/10)'	array	H3876:H3877	1	
+cell	H3877	n	'1.6'	None				
+cell	H3884	n	'1.3'	'_xlfn.PERCENTILE.INC(Z1:Z4,Z1:Z2/10)'	array	H3884:H3885	1	
+cell	H3885	n	'1.6'	None				
+cell	H3892	n	'1.75'	'QUARTILE(Z1:Z4,1)'	array	H3892	1	
+cell	H3900	n	'1.75'	'_xlfn.QUARTILE.INC(Z1:Z4,1)'	array	H3900	1	
+cell	H3908	n	'1.75'	'QUARTILE(Z1:Z4,{1;3})'	array	H3908:H3909	1	
+cell	H3909	n	'2.25'	None				
+cell	H3916	n	'1.75'	'_xlfn.QUARTILE.INC(Z1:Z4,{1;3})'	array	H3916:H3917	1	
+cell	H3917	n	'2.25'	None				
+cell	H3924	n	'1.75'	'QUARTILE(Z1:Z4,Z1:Z2)'	array	H3924:H3925	1	
+cell	H3925	n	'2'	None				
+cell	H3932	n	'1.75'	'_xlfn.QUARTILE.INC(Z1:Z4,Z1:Z2)'	array	H3932:H3933	1	
+cell	H3933	n	'2'	None				
+cell	H3940	n	'2'	'MODE(Z1:Z4)'	array	H3940	1	
+cell	H3948	n	'2'	'_xlfn.MODE.SNGL(Z1:Z4)'	array	H3948	1	
+cell	H3956	n	'2'	'MODE(Z1:Z4*1)'	array	H3956	1	
+cell	H3964	n	'6'	'LARGE(Z1:Z4*2,1)'	array	H3964	1	
+cell	H3972	n	'2'	'SMALL(Z1:Z4*2,1)'	array	H3972	1	
+cell	H3980	n	'4'	'PERCENTILE(Z1:Z4*2,0.5)'	array	H3980	1	
+cell	H3988	n	'3.5'	'QUARTILE(Z1:Z4*2,1)'	array	H3988	1	
+cell	H3996	n	'20'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4)'	array	H3996:I3996	1	
+cell	I3996	str	'b'	None				
+cell	H4004	n	'40'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4)*2'	array	H4004	1	
+cell	H4012	n	'20'	'SUM(_xlfn.XLOOKUP(2,Z1:Z4,AA1:AB4))'	array	H4012	1	
+cell	H4020	n	'90'	'SUMPRODUCT(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'	array	H4020	1	
+cell	H4028	n	'20'	'_xlfn.XLOOKUP(2,Z1:Z4*1,AA1:AA4)'	array	H4028	1	
+cell	H4036	n	'40'	'_xlfn.XLOOKUP(2,Z1:Z4,AA1:AA4*2)'	array	H4036	1	
+cell	H4044	n	'2'	'_xlfn.XMATCH(2,Z1:Z4*1)'	array	H4044	1	
+cell	H4052	n	'0'	'_xlfn.IFS(Z1:Z4>1,AA1:AA4,TRUE,0)'	array	H4052:H4055	1	
+cell	H4053	n	'20'	None				
+cell	H4054	n	'30'	None				
+cell	H4055	n	'40'	None				
+cell	H4060	n	'10'	'_xlfn.SWITCH(Z1:Z4,1,AA1:AA4,0)'	array	H4060:H4063	1	
+cell	H4061	n	'0'	None				
+cell	H4062	n	'0'	None				
+cell	H4063	n	'0'	None				
+cell	H4068	str	'2446'	'_xlfn.CONCAT(Z1:Z4*2)'	array	H4068	1	
+cell	H4076	str	'2,4,4,6'	'_xlfn.TEXTJOIN(",",TRUE,Z1:Z4*2)'	array	H4076	1	
+cell	H4084	n	'5'	'SUM(LARGE(Z1:Z4,{1,2}))'	array	H4084	1	
+cell	H4092	n	'5'	'SUMPRODUCT(LARGE(Z1:Z4,ROW(Z1:Z2)))'	array	H4092	1	
+cell	H4100	n	'9'	'SUMPRODUCT(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'	array	H4100	1	
+cell	H4108	n	'9'	'SUM(_xlfn.XMATCH(Z1:Z4,Z1:Z4))'	array	H4108	1	
+cell	H4116	n	'90'	'SUM(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))'	array	H4116	1	

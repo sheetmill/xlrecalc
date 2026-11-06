@@ -1,6 +1,6 @@
 # suite: prefixes
 # excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-01
+# captured: 2026-11-06
 # generator: capture/prefix_probe.py
 # method: each call written by openpyxl with and without _xlfn.; Excel calculates and
 #   saves a copy; the value is its cached value (#NAME? for a form it does not know)
@@ -37,3 +37,33 @@ SUMIFS	'_xlfn.'	'_xlfn.SUMIFS(Z1:Z3,Z1:Z3,">1")'	n	5.0
 SUMIFS	''	'SUMIFS(Z1:Z3,Z1:Z3,">1")'	n	5.0
 AVERAGEIFS	'_xlfn.'	'_xlfn.AVERAGEIFS(Z1:Z3,Z1:Z3,">1")'	n	2.5
 AVERAGEIFS	''	'AVERAGEIFS(Z1:Z3,Z1:Z3,">1")'	n	2.5
+AVERAGEIF	'_xlfn.'	'_xlfn.AVERAGEIF(Z1:Z3,">1")'	n	2.5
+AVERAGEIF	''	'AVERAGEIF(Z1:Z3,">1")'	n	2.5
+LARGE	'_xlfn.'	'_xlfn.LARGE(Z1:Z3,1)'	n	3.0
+LARGE	''	'LARGE(Z1:Z3,1)'	n	3.0
+SMALL	'_xlfn.'	'_xlfn.SMALL(Z1:Z3,1)'	n	1.0
+SMALL	''	'SMALL(Z1:Z3,1)'	n	1.0
+PERCENTILE	'_xlfn.'	'_xlfn.PERCENTILE(Z1:Z3,0.5)'	n	2.0
+PERCENTILE	''	'PERCENTILE(Z1:Z3,0.5)'	n	2.0
+PERCENTILE.INC	'_xlfn.'	'_xlfn.PERCENTILE.INC(Z1:Z3,0.5)'	n	2.0
+PERCENTILE.INC	''	'PERCENTILE.INC(Z1:Z3,0.5)'	e	#NAME?
+QUARTILE	'_xlfn.'	'_xlfn.QUARTILE(Z1:Z3,1)'	n	1.5
+QUARTILE	''	'QUARTILE(Z1:Z3,1)'	n	1.5
+QUARTILE.INC	'_xlfn.'	'_xlfn.QUARTILE.INC(Z1:Z3,1)'	n	1.5
+QUARTILE.INC	''	'QUARTILE.INC(Z1:Z3,1)'	e	#NAME?
+MODE	'_xlfn.'	'_xlfn.MODE(1,1,2)'	n	1.0
+MODE	''	'MODE(1,1,2)'	n	1.0
+MODE.SNGL	'_xlfn.'	'_xlfn.MODE.SNGL(1,1,2)'	n	1.0
+MODE.SNGL	''	'MODE.SNGL(1,1,2)'	e	#NAME?
+IFS	'_xlfn.'	'_xlfn.IFS(TRUE,1)'	n	1.0
+IFS	''	'IFS(TRUE,1)'	e	#NAME?
+SWITCH	'_xlfn.'	'_xlfn.SWITCH(1,1,"a")'	str	'a'
+SWITCH	''	'SWITCH(1,1,"a")'	e	#NAME?
+TEXTJOIN	'_xlfn.'	'_xlfn.TEXTJOIN(",",TRUE,"a","b")'	str	'a,b'
+TEXTJOIN	''	'TEXTJOIN(",",TRUE,"a","b")'	e	#NAME?
+CONCAT	'_xlfn.'	'_xlfn.CONCAT("a","b")'	str	'ab'
+CONCAT	''	'CONCAT("a","b")'	e	#NAME?
+XLOOKUP	'_xlfn.'	'_xlfn.XLOOKUP(1,Z1:Z3,Z1:Z3)'	n	1.0
+XLOOKUP	''	'XLOOKUP(1,Z1:Z3,Z1:Z3)'	e	#NAME?
+XMATCH	'_xlfn.'	'_xlfn.XMATCH(1,Z1:Z3)'	n	1.0
+XMATCH	''	'XMATCH(1,Z1:Z3)'	e	#NAME?

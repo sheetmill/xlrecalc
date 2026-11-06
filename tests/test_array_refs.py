@@ -58,6 +58,8 @@ KNOWN: dict[str, str] = dict.fromkeys(
         f"SUMPRODUCT(N({TEXTS}))",
         f'SUMPRODUCT(COUNTIF({TEXTS},">0"))',
         "SUM(INDEX(Z1:Z4,ROW(Z1:Z2)))",
+        "SUMPRODUCT(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))",
+        "SUM(_xlfn.XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))",
         "SUMPRODUCT(INDEX(Z1:Z4,ROW(Z1:Z2)))",
     ),
     _REFS,

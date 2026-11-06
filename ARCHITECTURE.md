@@ -621,12 +621,13 @@ memory, and computes `SUMPRODUCT` over whole columns without making the array (c
 `array_size`).
 
 `SUMIF`, `SUMIFS` and `COUNTIFS` make no array and need no limit: they walk non-blank cells, as
-`COUNTIF` does. A blank adds nothing to a sum. In a count, a criterion that rejects a blank
+`COUNTIF` does, and so do `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS` and `MINIFS`. A blank adds nothing to a sum. In a count, a criterion that rejects a blank
 limits the matches to that range's non-blank cells; otherwise a position fails only where a
 non-blank cell fails its criterion, and every other position counts. Their cost follows the cells
 a sheet holds, and they give Excel's value over a whole sheet (capture `array_functions`).
 `MATCH`, `VLOOKUP`, `HLOOKUP` and `LOOKUP` read a range's non-blank cells likewise, since neither an
 exact match nor the bisection of cells of the key's type can land on a blank.
+`XLOOKUP` and `XMATCH` do too; a blank key, which finds a blank cell, looks for the first gap.
 `tests/test_function_sweep.py`, generated from the registry, runs every function over a whole
 sheet of two cells under the memory watchdog, so one that walks a range by position fails there.
 
@@ -654,8 +655,9 @@ passes it untouched but element by element when the call is; the last kind repea
 variadic functions. When an argument of a one-value kind is an array, the function is applied
 to each element (§7.7). The wrapper checks the argument count, converts, returns the first error among
 converted arguments unless the function inspects errors itself, and calls the core function,
-which contains only its own logic. One module per Excel category. Implementation order follows
-`tools/function_frequency.tsv` (§10), not the alphabet.
+which contains only its own logic. One module per Excel category. The first functions were chosen
+from `tools/function_frequency.tsv` (§10), whose counts come from workbooks of about 2001: it says
+nothing about how much functions newer than that are used.
 
 Results are compared with Excel's bit for bit. A function that stays a few units in the last
 place from Excel after a time-boxed attempt at bit-exactness declares a tolerance
@@ -679,7 +681,7 @@ Implemented, each against captures (suite `functions`, 1,180 rows): `SUM`, `IF`,
 `ISNUMBER`, `OR`, `CONCATENATE`, `MATCH`, `ABS`, `EOMONTH`, `WEEKDAY`, `INDEX`, `TEXT`,
 `HLOOKUP`, `NA`, `COUNTA`, `DATE`, `COUNTIF`, `SUMPRODUCT`, `COUNT`, `LEFT`, `ISNA`, `VALUE`,
 `SQRT`, `ISERROR`, `ROWS`, `DAY`, `CHOOSE`, `ISTEXT`, `MID`, `FIND`, `LN`, `DATEVALUE`, `INT`,
-`EDATE`, `EXP`, `LEN`, `ROW`, `TRIM` (the most used, in the ranking's order),
+`EDATE`, `EXP`, `LEN`, `ROW`, `TRIM`,
 then `IFERROR`, `SUMIFS`, `COUNTIFS` and `_xlfn.IFNA` from the newer functions, and `NOT`, `TRUE`,
 `FALSE`, `ISBLANK`, `ISERR`, `ISLOGICAL`, `ROUNDUP`, `ROUNDDOWN`, `MOD`, `POWER`, `PI`,
 `PRODUCT`, `RIGHT`, `UPPER`, `LOWER`, `COLUMN`, `COLUMNS`, `TIMEVALUE`, `COUNTBLANK`, and
@@ -736,6 +738,15 @@ Each registered function declares a status: `implemented`, or `partial` with a n
 is missing (`SUBTOTAL`, `CELL`, `LINEST`, the database functions); a function Excel has that is
 not registered is absent. Excel's function list (`capture/functions_list.py`, the names the
 `formula_bar` capture typed) lets the matrix list the absent ones too.
+
+Newer and criteria functions (capture `modern`, 2,230 rows, and the end of `array_refs`):
+`AVERAGEIF`, `AVERAGEIFS`, `MAXIFS`, `MINIFS` (walking non-blank cells, §7.7); `LARGE` (`k` rounded
+up), `SMALL` (`k` rounded down), `PERCENTILE`, `QUARTILE`, `MODE` and their names `PERCENTILE.INC`,
+`QUARTILE.INC`, `MODE.SNGL`; `IFS` and `SWITCH`, which evaluate only what they take; `TEXTJOIN` and
+`CONCAT`; `XLOOKUP` and `XMATCH`, with every search mode and the match modes but regular expressions
+(mode 3, reported). `XLOOKUP`'s result is a reference, so `XLOOKUP(...):A9` is a range. Their
+next-smaller and next-larger order numbers, text, logicals and a blank key last; a blank key finds
+a blank cell. `PERCENTILE.EXC`, `QUARTILE.EXC` and `MODE.MULT` are not implemented.
 
 ### 8.3 The xlformat seam
 

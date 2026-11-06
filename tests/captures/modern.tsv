@@ -1,0 +1,2242 @@
+# suite: modern
+# excel: 16.114.3 for Mac, locale en_US
+# date_system: 1900
+# captured: 2026-11-06
+# generator: capture/suites.py:modern
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# fixed: {'Z1': 3.0, 'Z2': 1.0, 'Z3': 2.0, 'Z4': 2.0, 'Z5': 5.0, 'Z6': 8.0, 'Z7': -1.0, 'Z8': 2.5, 'AA1': 1.0, 'AA2': 'x', 'AA3': True, 'AA4': None, 'AA5': 2.0, 'AA6': FormulaInput('=""'), 'AA7': 4.0, 'AA8': False, 'AB1': 1.0, 'AB2': ErrorValue('#N/A'), 'AB3': 2.0, 'AB4': 3.0, 'AC1': 'apple', 'AC2': 'Banana', 'AC3': 'cherry', 'AC4': 'apple', 'AC5': FormulaInput('=""'), 'AC6': 'date', 'AD1': 10.0, 'AD2': 20.0, 'AD3': 30.0, 'AD4': 40.0, 'AD5': 50.0, 'AD6': 60.0, 'AE1': 'a', 'AE2': 'b', 'AE3': 'c', 'AE4': 'd', 'AE5': 'e', 'AE6': 'f', 'AF1': 1.0, 'AF2': 3.0, 'AF3': 5.0, 'AF4': 7.0, 'AF5': 9.0, 'AF6': 11.0, 'AG1': 11.0, 'AG2': 9.0, 'AG3': 7.0, 'AG4': 5.0, 'AG5': 3.0, 'AG6': 1.0, 'AI1': 1.0, 'AJ1': 2.0, 'AK1': 3.0, 'AI2': 'one', 'AJ2': 'two', 'AK2': 'three', 'AL1': ',', 'AL2': ';', 'AD8': None, 'AC8': 'blank return', 'AF8': 100.0}
+# columns: suite tag case formula inputs expected_type expected_repr
+modern	averageif	1	AVERAGEIF($Z$1:$Z$8,{1})	('>2',)	n	4.625
+modern	averageifs	2	AVERAGEIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('>2',)	n	4.625
+modern	maxifs	3	_xlfn.MAXIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('>2',)	n	8.0
+modern	minifs	4	_xlfn.MINIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('>2',)	n	2.5
+modern	averageif	5	AVERAGEIF($AA$1:$AA$8,{1})	('>2',)	n	4.0
+modern	averageifs	6	AVERAGEIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('>2',)	n	4.0
+modern	maxifs	7	_xlfn.MAXIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('>2',)	n	4.0
+modern	minifs	8	_xlfn.MINIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('>2',)	n	4.0
+modern	averageif	9	AVERAGEIF($AC$1:$AC$6,{1})	('>2',)	e	#DIV/0!
+modern	averageifs	10	AVERAGEIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('>2',)	e	#DIV/0!
+modern	maxifs	11	_xlfn.MAXIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('>2',)	n	0.0
+modern	minifs	12	_xlfn.MINIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('>2',)	n	0.0
+modern	averageif	13	AVERAGEIF($AC$1:$AC$6,{1},$AD$1:$AD$6)	('>2',)	e	#DIV/0!
+modern	averageifs	14	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('>2',)	e	#DIV/0!
+modern	averageifs	15	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('>2',)	e	#DIV/0!
+modern	maxifs	16	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('>2',)	n	0.0
+modern	maxifs	17	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('>2',)	n	0.0
+modern	minifs	18	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('>2',)	n	0.0
+modern	minifs	19	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('>2',)	n	0.0
+modern	averageif	20	AVERAGEIF($Z$1:$Z$8,{1})	('<=2',)	n	1.0
+modern	averageifs	21	AVERAGEIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('<=2',)	n	1.0
+modern	maxifs	22	_xlfn.MAXIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('<=2',)	n	2.0
+modern	minifs	23	_xlfn.MINIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('<=2',)	n	-1.0
+modern	averageif	24	AVERAGEIF($AA$1:$AA$8,{1})	('<=2',)	n	1.5
+modern	averageifs	25	AVERAGEIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('<=2',)	n	1.5
+modern	maxifs	26	_xlfn.MAXIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('<=2',)	n	2.0
+modern	minifs	27	_xlfn.MINIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('<=2',)	n	1.0
+modern	averageif	28	AVERAGEIF($AC$1:$AC$6,{1})	('<=2',)	e	#DIV/0!
+modern	averageifs	29	AVERAGEIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('<=2',)	e	#DIV/0!
+modern	maxifs	30	_xlfn.MAXIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('<=2',)	n	0.0
+modern	minifs	31	_xlfn.MINIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('<=2',)	n	0.0
+modern	averageif	32	AVERAGEIF($AC$1:$AC$6,{1},$AD$1:$AD$6)	('<=2',)	e	#DIV/0!
+modern	averageifs	33	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('<=2',)	e	#DIV/0!
+modern	averageifs	34	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('<=2',)	e	#DIV/0!
+modern	maxifs	35	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('<=2',)	n	0.0
+modern	maxifs	36	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('<=2',)	n	0.0
+modern	minifs	37	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('<=2',)	n	0.0
+modern	minifs	38	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('<=2',)	n	0.0
+modern	averageif	39	AVERAGEIF($Z$1:$Z$8,{1})	('<>1',)	n	3.0714285714285716
+modern	averageifs	40	AVERAGEIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('<>1',)	n	3.0714285714285716
+modern	maxifs	41	_xlfn.MAXIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('<>1',)	n	8.0
+modern	minifs	42	_xlfn.MINIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('<>1',)	n	-1.0
+modern	averageif	43	AVERAGEIF($AA$1:$AA$8,{1})	('<>1',)	n	3.0
+modern	averageifs	44	AVERAGEIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('<>1',)	n	3.0
+modern	maxifs	45	_xlfn.MAXIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('<>1',)	n	4.0
+modern	minifs	46	_xlfn.MINIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('<>1',)	n	2.0
+modern	averageif	47	AVERAGEIF($AC$1:$AC$6,{1})	('<>1',)	e	#DIV/0!
+modern	averageifs	48	AVERAGEIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('<>1',)	e	#DIV/0!
+modern	maxifs	49	_xlfn.MAXIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('<>1',)	n	0.0
+modern	minifs	50	_xlfn.MINIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('<>1',)	n	0.0
+modern	averageif	51	AVERAGEIF($AC$1:$AC$6,{1},$AD$1:$AD$6)	('<>1',)	n	35.0
+modern	averageifs	52	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('<>1',)	n	35.0
+modern	averageifs	53	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('<>1',)	n	45.0
+modern	maxifs	54	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('<>1',)	n	60.0
+modern	maxifs	55	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('<>1',)	n	60.0
+modern	minifs	56	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('<>1',)	n	10.0
+modern	minifs	57	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('<>1',)	n	30.0
+modern	averageif	58	AVERAGEIF($Z$1:$Z$8,{1})	('1',)	n	1.0
+modern	averageifs	59	AVERAGEIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('1',)	n	1.0
+modern	maxifs	60	_xlfn.MAXIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('1',)	n	1.0
+modern	minifs	61	_xlfn.MINIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('1',)	n	1.0
+modern	averageif	62	AVERAGEIF($AA$1:$AA$8,{1})	('1',)	n	1.0
+modern	averageifs	63	AVERAGEIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('1',)	n	1.0
+modern	maxifs	64	_xlfn.MAXIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('1',)	n	1.0
+modern	minifs	65	_xlfn.MINIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('1',)	n	1.0
+modern	averageif	66	AVERAGEIF($AC$1:$AC$6,{1})	('1',)	e	#DIV/0!
+modern	averageifs	67	AVERAGEIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('1',)	e	#DIV/0!
+modern	maxifs	68	_xlfn.MAXIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('1',)	n	0.0
+modern	minifs	69	_xlfn.MINIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('1',)	n	0.0
+modern	averageif	70	AVERAGEIF($AC$1:$AC$6,{1},$AD$1:$AD$6)	('1',)	e	#DIV/0!
+modern	averageifs	71	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('1',)	e	#DIV/0!
+modern	averageifs	72	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('1',)	e	#DIV/0!
+modern	maxifs	73	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('1',)	n	0.0
+modern	maxifs	74	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('1',)	n	0.0
+modern	minifs	75	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('1',)	n	0.0
+modern	minifs	76	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('1',)	n	0.0
+modern	averageif	77	AVERAGEIF($Z$1:$Z$8,{1})	('',)	e	#DIV/0!
+modern	averageifs	78	AVERAGEIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('',)	e	#DIV/0!
+modern	maxifs	79	_xlfn.MAXIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('',)	n	0.0
+modern	minifs	80	_xlfn.MINIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('',)	n	0.0
+modern	averageif	81	AVERAGEIF($AA$1:$AA$8,{1})	('',)	e	#DIV/0!
+modern	averageifs	82	AVERAGEIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('',)	e	#DIV/0!
+modern	maxifs	83	_xlfn.MAXIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('',)	n	0.0
+modern	minifs	84	_xlfn.MINIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('',)	n	0.0
+modern	averageif	85	AVERAGEIF($AC$1:$AC$6,{1})	('',)	e	#DIV/0!
+modern	averageifs	86	AVERAGEIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('',)	e	#DIV/0!
+modern	maxifs	87	_xlfn.MAXIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('',)	n	0.0
+modern	minifs	88	_xlfn.MINIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('',)	n	0.0
+modern	averageif	89	AVERAGEIF($AC$1:$AC$6,{1},$AD$1:$AD$6)	('',)	n	50.0
+modern	averageifs	90	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('',)	n	50.0
+modern	averageifs	91	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('',)	n	50.0
+modern	maxifs	92	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('',)	n	50.0
+modern	maxifs	93	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('',)	n	50.0
+modern	minifs	94	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('',)	n	50.0
+modern	minifs	95	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('',)	n	50.0
+modern	averageif	96	AVERAGEIF($Z$1:$Z$8,{1})	('=',)	e	#DIV/0!
+modern	averageifs	97	AVERAGEIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('=',)	e	#DIV/0!
+modern	maxifs	98	_xlfn.MAXIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('=',)	n	0.0
+modern	minifs	99	_xlfn.MINIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('=',)	n	0.0
+modern	averageif	100	AVERAGEIF($AA$1:$AA$8,{1})	('=',)	e	#DIV/0!
+modern	averageifs	101	AVERAGEIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('=',)	e	#DIV/0!
+modern	maxifs	102	_xlfn.MAXIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('=',)	n	0.0
+modern	minifs	103	_xlfn.MINIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('=',)	n	0.0
+modern	averageif	104	AVERAGEIF($AC$1:$AC$6,{1})	('=',)	e	#DIV/0!
+modern	averageifs	105	AVERAGEIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('=',)	e	#DIV/0!
+modern	maxifs	106	_xlfn.MAXIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('=',)	n	0.0
+modern	minifs	107	_xlfn.MINIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('=',)	n	0.0
+modern	averageif	108	AVERAGEIF($AC$1:$AC$6,{1},$AD$1:$AD$6)	('=',)	e	#DIV/0!
+modern	averageifs	109	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('=',)	e	#DIV/0!
+modern	averageifs	110	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('=',)	e	#DIV/0!
+modern	maxifs	111	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('=',)	n	0.0
+modern	maxifs	112	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('=',)	n	0.0
+modern	minifs	113	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('=',)	n	0.0
+modern	minifs	114	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('=',)	n	0.0
+modern	averageif	115	AVERAGEIF($Z$1:$Z$8,{1})	('<>',)	n	2.8125
+modern	averageifs	116	AVERAGEIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('<>',)	n	2.8125
+modern	maxifs	117	_xlfn.MAXIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('<>',)	n	8.0
+modern	minifs	118	_xlfn.MINIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('<>',)	n	-1.0
+modern	averageif	119	AVERAGEIF($AA$1:$AA$8,{1})	('<>',)	n	2.3333333333333335
+modern	averageifs	120	AVERAGEIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('<>',)	n	2.3333333333333335
+modern	maxifs	121	_xlfn.MAXIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('<>',)	n	4.0
+modern	minifs	122	_xlfn.MINIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('<>',)	n	1.0
+modern	averageif	123	AVERAGEIF($AC$1:$AC$6,{1})	('<>',)	e	#DIV/0!
+modern	averageifs	124	AVERAGEIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('<>',)	e	#DIV/0!
+modern	maxifs	125	_xlfn.MAXIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('<>',)	n	0.0
+modern	minifs	126	_xlfn.MINIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('<>',)	n	0.0
+modern	averageif	127	AVERAGEIF($AC$1:$AC$6,{1},$AD$1:$AD$6)	('<>',)	n	35.0
+modern	averageifs	128	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('<>',)	n	35.0
+modern	averageifs	129	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('<>',)	n	45.0
+modern	maxifs	130	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('<>',)	n	60.0
+modern	maxifs	131	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('<>',)	n	60.0
+modern	minifs	132	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('<>',)	n	10.0
+modern	minifs	133	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('<>',)	n	30.0
+modern	averageif	134	AVERAGEIF($Z$1:$Z$8,{1})	('x',)	e	#DIV/0!
+modern	averageifs	135	AVERAGEIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('x',)	e	#DIV/0!
+modern	maxifs	136	_xlfn.MAXIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('x',)	n	0.0
+modern	minifs	137	_xlfn.MINIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('x',)	n	0.0
+modern	averageif	138	AVERAGEIF($AA$1:$AA$8,{1})	('x',)	e	#DIV/0!
+modern	averageifs	139	AVERAGEIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('x',)	e	#DIV/0!
+modern	maxifs	140	_xlfn.MAXIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('x',)	n	0.0
+modern	minifs	141	_xlfn.MINIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('x',)	n	0.0
+modern	averageif	142	AVERAGEIF($AC$1:$AC$6,{1})	('x',)	e	#DIV/0!
+modern	averageifs	143	AVERAGEIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('x',)	e	#DIV/0!
+modern	maxifs	144	_xlfn.MAXIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('x',)	n	0.0
+modern	minifs	145	_xlfn.MINIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('x',)	n	0.0
+modern	averageif	146	AVERAGEIF($AC$1:$AC$6,{1},$AD$1:$AD$6)	('x',)	e	#DIV/0!
+modern	averageifs	147	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('x',)	e	#DIV/0!
+modern	averageifs	148	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('x',)	e	#DIV/0!
+modern	maxifs	149	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('x',)	n	0.0
+modern	maxifs	150	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('x',)	n	0.0
+modern	minifs	151	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('x',)	n	0.0
+modern	minifs	152	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('x',)	n	0.0
+modern	averageif	153	AVERAGEIF($Z$1:$Z$8,{1})	('a*',)	e	#DIV/0!
+modern	averageifs	154	AVERAGEIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('a*',)	e	#DIV/0!
+modern	maxifs	155	_xlfn.MAXIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('a*',)	n	0.0
+modern	minifs	156	_xlfn.MINIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('a*',)	n	0.0
+modern	averageif	157	AVERAGEIF($AA$1:$AA$8,{1})	('a*',)	e	#DIV/0!
+modern	averageifs	158	AVERAGEIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('a*',)	e	#DIV/0!
+modern	maxifs	159	_xlfn.MAXIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('a*',)	n	0.0
+modern	minifs	160	_xlfn.MINIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('a*',)	n	0.0
+modern	averageif	161	AVERAGEIF($AC$1:$AC$6,{1})	('a*',)	e	#DIV/0!
+modern	averageifs	162	AVERAGEIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('a*',)	e	#DIV/0!
+modern	maxifs	163	_xlfn.MAXIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('a*',)	n	0.0
+modern	minifs	164	_xlfn.MINIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('a*',)	n	0.0
+modern	averageif	165	AVERAGEIF($AC$1:$AC$6,{1},$AD$1:$AD$6)	('a*',)	n	25.0
+modern	averageifs	166	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('a*',)	n	25.0
+modern	averageifs	167	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('a*',)	n	40.0
+modern	maxifs	168	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('a*',)	n	40.0
+modern	maxifs	169	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('a*',)	n	40.0
+modern	minifs	170	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('a*',)	n	10.0
+modern	minifs	171	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('a*',)	n	40.0
+modern	averageif	172	AVERAGEIF($Z$1:$Z$8,{1})	(1.0,)	n	1.0
+modern	averageifs	173	AVERAGEIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	(1.0,)	n	1.0
+modern	maxifs	174	_xlfn.MAXIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	(1.0,)	n	1.0
+modern	minifs	175	_xlfn.MINIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	(1.0,)	n	1.0
+modern	averageif	176	AVERAGEIF($AA$1:$AA$8,{1})	(1.0,)	n	1.0
+modern	averageifs	177	AVERAGEIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	(1.0,)	n	1.0
+modern	maxifs	178	_xlfn.MAXIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	(1.0,)	n	1.0
+modern	minifs	179	_xlfn.MINIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	(1.0,)	n	1.0
+modern	averageif	180	AVERAGEIF($AC$1:$AC$6,{1})	(1.0,)	e	#DIV/0!
+modern	averageifs	181	AVERAGEIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	(1.0,)	e	#DIV/0!
+modern	maxifs	182	_xlfn.MAXIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	(1.0,)	n	0.0
+modern	minifs	183	_xlfn.MINIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	(1.0,)	n	0.0
+modern	averageif	184	AVERAGEIF($AC$1:$AC$6,{1},$AD$1:$AD$6)	(1.0,)	e	#DIV/0!
+modern	averageifs	185	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	(1.0,)	e	#DIV/0!
+modern	averageifs	186	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	(1.0,)	e	#DIV/0!
+modern	maxifs	187	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	(1.0,)	n	0.0
+modern	maxifs	188	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	(1.0,)	n	0.0
+modern	minifs	189	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	(1.0,)	n	0.0
+modern	minifs	190	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	(1.0,)	n	0.0
+modern	averageif	191	AVERAGEIF($Z$1:$Z$8,{1})	(2.0,)	n	2.0
+modern	averageifs	192	AVERAGEIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	(2.0,)	n	2.0
+modern	maxifs	193	_xlfn.MAXIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	(2.0,)	n	2.0
+modern	minifs	194	_xlfn.MINIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	(2.0,)	n	2.0
+modern	averageif	195	AVERAGEIF($AA$1:$AA$8,{1})	(2.0,)	n	2.0
+modern	averageifs	196	AVERAGEIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	(2.0,)	n	2.0
+modern	maxifs	197	_xlfn.MAXIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	(2.0,)	n	2.0
+modern	minifs	198	_xlfn.MINIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	(2.0,)	n	2.0
+modern	averageif	199	AVERAGEIF($AC$1:$AC$6,{1})	(2.0,)	e	#DIV/0!
+modern	averageifs	200	AVERAGEIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	(2.0,)	e	#DIV/0!
+modern	maxifs	201	_xlfn.MAXIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	(2.0,)	n	0.0
+modern	minifs	202	_xlfn.MINIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	(2.0,)	n	0.0
+modern	averageif	203	AVERAGEIF($AC$1:$AC$6,{1},$AD$1:$AD$6)	(2.0,)	e	#DIV/0!
+modern	averageifs	204	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	(2.0,)	e	#DIV/0!
+modern	averageifs	205	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	(2.0,)	e	#DIV/0!
+modern	maxifs	206	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	(2.0,)	n	0.0
+modern	maxifs	207	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	(2.0,)	n	0.0
+modern	minifs	208	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	(2.0,)	n	0.0
+modern	minifs	209	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	(2.0,)	n	0.0
+modern	averageif	210	AVERAGEIF($Z$1:$Z$8,{1})	(True,)	e	#DIV/0!
+modern	averageifs	211	AVERAGEIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	(True,)	e	#DIV/0!
+modern	maxifs	212	_xlfn.MAXIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	(True,)	n	0.0
+modern	minifs	213	_xlfn.MINIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	(True,)	n	0.0
+modern	averageif	214	AVERAGEIF($AA$1:$AA$8,{1})	(True,)	e	#DIV/0!
+modern	averageifs	215	AVERAGEIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	(True,)	e	#DIV/0!
+modern	maxifs	216	_xlfn.MAXIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	(True,)	n	0.0
+modern	minifs	217	_xlfn.MINIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	(True,)	n	0.0
+modern	averageif	218	AVERAGEIF($AC$1:$AC$6,{1})	(True,)	e	#DIV/0!
+modern	averageifs	219	AVERAGEIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	(True,)	e	#DIV/0!
+modern	maxifs	220	_xlfn.MAXIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	(True,)	n	0.0
+modern	minifs	221	_xlfn.MINIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	(True,)	n	0.0
+modern	averageif	222	AVERAGEIF($AC$1:$AC$6,{1},$AD$1:$AD$6)	(True,)	e	#DIV/0!
+modern	averageifs	223	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	(True,)	e	#DIV/0!
+modern	averageifs	224	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	(True,)	e	#DIV/0!
+modern	maxifs	225	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	(True,)	n	0.0
+modern	maxifs	226	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	(True,)	n	0.0
+modern	minifs	227	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	(True,)	n	0.0
+modern	minifs	228	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	(True,)	n	0.0
+modern	averageif	229	AVERAGEIF($Z$1:$Z$8,{1})	('>100',)	e	#DIV/0!
+modern	averageifs	230	AVERAGEIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('>100',)	e	#DIV/0!
+modern	maxifs	231	_xlfn.MAXIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('>100',)	n	0.0
+modern	minifs	232	_xlfn.MINIFS($Z$1:$Z$8,$Z$1:$Z$8,{1})	('>100',)	n	0.0
+modern	averageif	233	AVERAGEIF($AA$1:$AA$8,{1})	('>100',)	e	#DIV/0!
+modern	averageifs	234	AVERAGEIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('>100',)	e	#DIV/0!
+modern	maxifs	235	_xlfn.MAXIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('>100',)	n	0.0
+modern	minifs	236	_xlfn.MINIFS($AA$1:$AA$8,$AA$1:$AA$8,{1})	('>100',)	n	0.0
+modern	averageif	237	AVERAGEIF($AC$1:$AC$6,{1})	('>100',)	e	#DIV/0!
+modern	averageifs	238	AVERAGEIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('>100',)	e	#DIV/0!
+modern	maxifs	239	_xlfn.MAXIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('>100',)	n	0.0
+modern	minifs	240	_xlfn.MINIFS($AC$1:$AC$6,$AC$1:$AC$6,{1})	('>100',)	n	0.0
+modern	averageif	241	AVERAGEIF($AC$1:$AC$6,{1},$AD$1:$AD$6)	('>100',)	e	#DIV/0!
+modern	averageifs	242	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('>100',)	e	#DIV/0!
+modern	averageifs	243	AVERAGEIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('>100',)	e	#DIV/0!
+modern	maxifs	244	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('>100',)	n	0.0
+modern	maxifs	245	_xlfn.MAXIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('>100',)	n	0.0
+modern	minifs	246	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1})	('>100',)	n	0.0
+modern	minifs	247	_xlfn.MINIFS($AD$1:$AD$6,$AC$1:$AC$6,{1},$AF$1:$AF$6,">3")	('>100',)	n	0.0
+modern	averageifs	248	AVERAGEIFS($AB$1:$AB$4,$AB$1:$AB$4,">0")	()	n	2.0
+modern	averageifs	249	AVERAGEIFS($AB$1:$AB$4,$AB$1:$AB$4,"<>")	()	e	#N/A
+modern	averageifs	250	AVERAGEIFS($AB$1:$AB$4,$AB$1:$AB$4,"#N/A")	()	e	#N/A
+modern	averageifs	251	AVERAGEIFS($AD$1:$AD$5,$AC$1:$AC$6,"a*")	()	e	#VALUE!
+modern	averageifs	252	AVERAGEIFS($AH$1:$AH$5,$AH$1:$AH$5,"")	()	e	#DIV/0!
+modern	averageifs	253	AVERAGEIFS($AA$1:$AA$8,$Z$1:$Z$8,">0")	()	n	1.5
+modern	maxifs	254	_xlfn.MAXIFS($AB$1:$AB$4,$AB$1:$AB$4,">0")	()	n	3.0
+modern	maxifs	255	_xlfn.MAXIFS($AB$1:$AB$4,$AB$1:$AB$4,"<>")	()	e	#N/A
+modern	maxifs	256	_xlfn.MAXIFS($AB$1:$AB$4,$AB$1:$AB$4,"#N/A")	()	e	#N/A
+modern	maxifs	257	_xlfn.MAXIFS($AD$1:$AD$5,$AC$1:$AC$6,"a*")	()	e	#VALUE!
+modern	maxifs	258	_xlfn.MAXIFS($AH$1:$AH$5,$AH$1:$AH$5,"")	()	n	0.0
+modern	maxifs	259	_xlfn.MAXIFS($AA$1:$AA$8,$Z$1:$Z$8,">0")	()	n	2.0
+modern	minifs	260	_xlfn.MINIFS($AB$1:$AB$4,$AB$1:$AB$4,">0")	()	n	1.0
+modern	minifs	261	_xlfn.MINIFS($AB$1:$AB$4,$AB$1:$AB$4,"<>")	()	e	#N/A
+modern	minifs	262	_xlfn.MINIFS($AB$1:$AB$4,$AB$1:$AB$4,"#N/A")	()	e	#N/A
+modern	minifs	263	_xlfn.MINIFS($AD$1:$AD$5,$AC$1:$AC$6,"a*")	()	e	#VALUE!
+modern	minifs	264	_xlfn.MINIFS($AH$1:$AH$5,$AH$1:$AH$5,"")	()	n	0.0
+modern	minifs	265	_xlfn.MINIFS($AA$1:$AA$8,$Z$1:$Z$8,">0")	()	n	1.0
+modern	averageif	266	AVERAGEIF($AB$1:$AB$4,">0")	()	n	2.0
+modern	averageif	267	AVERAGEIF($AB$1:$AB$4,"<>")	()	e	#N/A
+modern	averageif	268	AVERAGEIF($AB$1:$AB$4,"#N/A")	()	e	#N/A
+modern	averageif	269	AVERAGEIF($AH$1:$AH$5,"")	()	e	#DIV/0!
+modern	averageif	270	AVERAGEIF($AC$1:$AC$6,"a*",$AD$3)	()	n	45.0
+modern	averageif	271	AVERAGEIF($AC$1:$AC$6,"a*",$XFD$1)	()	e	#DIV/0!
+modern	averageif	272	AVERAGEIF($Z$1:$Z$8,">0",$AD$1:$AD$2)	()	n	35.0
+modern	large	273	LARGE($Z$1:$Z$8,{1})	(1.0,)	n	8.0
+modern	large	274	LARGE($Z$1:$Z$8,{1})	(2.0,)	n	5.0
+modern	large	275	LARGE($Z$1:$Z$8,{1})	(8.0,)	n	-1.0
+modern	large	276	LARGE($Z$1:$Z$8,{1})	(9.0,)	e	#NUM!
+modern	large	277	LARGE($Z$1:$Z$8,{1})	(0.0,)	e	#NUM!
+modern	large	278	LARGE($Z$1:$Z$8,{1})	(-1.0,)	e	#NUM!
+modern	large	279	LARGE($Z$1:$Z$8,{1})	(1.5,)	n	5.0
+modern	large	280	LARGE($Z$1:$Z$8,{1})	(2.9,)	n	3.0
+modern	large	281	LARGE($Z$1:$Z$8,{1})	('2',)	n	5.0
+modern	large	282	LARGE($Z$1:$Z$8,{1})	(True,)	n	8.0
+modern	large	283	LARGE($Z$1:$Z$8,{1})	(None,)	e	#NUM!
+modern	large	284	LARGE($Z$1:$Z$8,{1})	('x',)	e	#VALUE!
+modern	large	285	LARGE($Z$1:$Z$8,{1})	(ErrorValue('#N/A'),)	e	#N/A
+modern	large	286	LARGE($AA$1:$AA$8,1)	()	n	4.0
+modern	large	287	LARGE($AB$1:$AB$4,1)	()	e	#N/A
+modern	large	288	LARGE($AH$1:$AH$5,1)	()	e	#NUM!
+modern	large	289	LARGE($AC$1:$AC$6,1)	()	e	#NUM!
+modern	large	290	LARGE({1,2,3},1)	()	n	3.0
+modern	large	291	LARGE({1,"a",TRUE,4},1)	()	n	4.0
+modern	large	292	LARGE({1;2;3},1)	()	n	3.0
+modern	large	293	LARGE(5,1)	()	n	5.0
+modern	large	294	LARGE("a",1)	()	e	#VALUE!
+modern	large	295	LARGE("5",1)	()	n	5.0
+modern	large	296	LARGE(TRUE,1)	()	n	1.0
+modern	large	297	LARGE(1/0,1)	()	e	#DIV/0!
+modern	large	298	LARGE($Z$1,1)	()	n	3.0
+modern	large	299	LARGE($AH$1,1)	()	e	#NUM!
+modern	large	300	LARGE(($Z$1:$Z$8,$AF$1:$AF$6),1)	()	n	11.0
+modern	small	301	SMALL($Z$1:$Z$8,{1})	(1.0,)	n	-1.0
+modern	small	302	SMALL($Z$1:$Z$8,{1})	(2.0,)	n	1.0
+modern	small	303	SMALL($Z$1:$Z$8,{1})	(8.0,)	n	8.0
+modern	small	304	SMALL($Z$1:$Z$8,{1})	(9.0,)	e	#NUM!
+modern	small	305	SMALL($Z$1:$Z$8,{1})	(0.0,)	e	#NUM!
+modern	small	306	SMALL($Z$1:$Z$8,{1})	(-1.0,)	e	#NUM!
+modern	small	307	SMALL($Z$1:$Z$8,{1})	(1.5,)	n	-1.0
+modern	small	308	SMALL($Z$1:$Z$8,{1})	(2.9,)	n	1.0
+modern	small	309	SMALL($Z$1:$Z$8,{1})	('2',)	n	1.0
+modern	small	310	SMALL($Z$1:$Z$8,{1})	(True,)	n	-1.0
+modern	small	311	SMALL($Z$1:$Z$8,{1})	(None,)	e	#NUM!
+modern	small	312	SMALL($Z$1:$Z$8,{1})	('x',)	e	#VALUE!
+modern	small	313	SMALL($Z$1:$Z$8,{1})	(ErrorValue('#N/A'),)	e	#N/A
+modern	small	314	SMALL($AA$1:$AA$8,1)	()	n	1.0
+modern	small	315	SMALL($AB$1:$AB$4,1)	()	e	#N/A
+modern	small	316	SMALL($AH$1:$AH$5,1)	()	e	#NUM!
+modern	small	317	SMALL($AC$1:$AC$6,1)	()	e	#NUM!
+modern	small	318	SMALL({1,2,3},1)	()	n	1.0
+modern	small	319	SMALL({1,"a",TRUE,4},1)	()	n	1.0
+modern	small	320	SMALL({1;2;3},1)	()	n	1.0
+modern	small	321	SMALL(5,1)	()	n	5.0
+modern	small	322	SMALL("a",1)	()	e	#VALUE!
+modern	small	323	SMALL("5",1)	()	n	5.0
+modern	small	324	SMALL(TRUE,1)	()	n	1.0
+modern	small	325	SMALL(1/0,1)	()	e	#DIV/0!
+modern	small	326	SMALL($Z$1,1)	()	n	3.0
+modern	small	327	SMALL($AH$1,1)	()	e	#NUM!
+modern	small	328	SMALL(($Z$1:$Z$8,$AF$1:$AF$6),1)	()	n	-1.0
+modern	percentile	329	PERCENTILE($Z$1:$Z$8,{1})	(0.0,)	n	-1.0
+modern	percentile	330	PERCENTILE($AF$1:$AF$6,{1})	(0.0,)	n	1.0
+modern	percentile	331	PERCENTILE($Z$1:$Z$8,{1})	(0.1,)	n	0.40000000000000036
+modern	percentile	332	PERCENTILE($AF$1:$AF$6,{1})	(0.1,)	n	2.0
+modern	percentile	333	PERCENTILE($Z$1:$Z$8,{1})	(0.25,)	n	1.75
+modern	percentile	334	PERCENTILE($AF$1:$AF$6,{1})	(0.25,)	n	3.5
+modern	percentile	335	PERCENTILE($Z$1:$Z$8,{1})	(0.3333333333333333,)	n	2.0
+modern	percentile	336	PERCENTILE($AF$1:$AF$6,{1})	(0.3333333333333333,)	n	4.333333333333333
+modern	percentile	337	PERCENTILE($Z$1:$Z$8,{1})	(0.5,)	n	2.25
+modern	percentile	338	PERCENTILE($AF$1:$AF$6,{1})	(0.5,)	n	6.0
+modern	percentile	339	PERCENTILE($Z$1:$Z$8,{1})	(0.75,)	n	3.5
+modern	percentile	340	PERCENTILE($AF$1:$AF$6,{1})	(0.75,)	n	8.5
+modern	percentile	341	PERCENTILE($Z$1:$Z$8,{1})	(0.9,)	n	5.8999999999999995
+modern	percentile	342	PERCENTILE($AF$1:$AF$6,{1})	(0.9,)	n	10.0
+modern	percentile	343	PERCENTILE($Z$1:$Z$8,{1})	(0.99,)	n	7.789999999999999
+modern	percentile	344	PERCENTILE($AF$1:$AF$6,{1})	(0.99,)	n	10.9
+modern	percentile	345	PERCENTILE($Z$1:$Z$8,{1})	(1.0,)	n	8.0
+modern	percentile	346	PERCENTILE($AF$1:$AF$6,{1})	(1.0,)	n	11.0
+modern	percentile	347	PERCENTILE($Z$1:$Z$8,{1})	(-0.1,)	e	#NUM!
+modern	percentile	348	PERCENTILE($AF$1:$AF$6,{1})	(-0.1,)	e	#NUM!
+modern	percentile	349	PERCENTILE($Z$1:$Z$8,{1})	(1.1,)	e	#NUM!
+modern	percentile	350	PERCENTILE($AF$1:$AF$6,{1})	(1.1,)	e	#NUM!
+modern	percentile	351	PERCENTILE($Z$1:$Z$8,{1})	('0.5',)	n	2.25
+modern	percentile	352	PERCENTILE($AF$1:$AF$6,{1})	('0.5',)	n	6.0
+modern	percentile	353	PERCENTILE($Z$1:$Z$8,{1})	(True,)	n	8.0
+modern	percentile	354	PERCENTILE($AF$1:$AF$6,{1})	(True,)	n	11.0
+modern	percentile	355	PERCENTILE($Z$1:$Z$8,{1})	(False,)	n	-1.0
+modern	percentile	356	PERCENTILE($AF$1:$AF$6,{1})	(False,)	n	1.0
+modern	percentile	357	PERCENTILE($Z$1:$Z$8,{1})	(None,)	n	-1.0
+modern	percentile	358	PERCENTILE($AF$1:$AF$6,{1})	(None,)	n	1.0
+modern	percentile	359	PERCENTILE($Z$1:$Z$8,{1})	('x',)	e	#VALUE!
+modern	percentile	360	PERCENTILE($AF$1:$AF$6,{1})	('x',)	e	#VALUE!
+modern	percentile	361	PERCENTILE($Z$1:$Z$8,{1})	(ErrorValue('#N/A'),)	e	#N/A
+modern	percentile	362	PERCENTILE($AF$1:$AF$6,{1})	(ErrorValue('#N/A'),)	e	#N/A
+modern	percentile	363	PERCENTILE($Z$1:$Z$8,{1})	(1e-10,)	n	-0.9999999985999999
+modern	percentile	364	PERCENTILE($AF$1:$AF$6,{1})	(1e-10,)	n	1.000000001
+modern	percentile	365	PERCENTILE($Z$1:$Z$8,{1})	(0.123456789,)	n	0.7283950460000002
+modern	percentile	366	PERCENTILE($AF$1:$AF$6,{1})	(0.123456789,)	n	2.23456789
+modern	percentile	367	PERCENTILE($AA$1:$AA$8,0.3)	()	n	1.6
+modern	percentile	368	PERCENTILE($AB$1:$AB$4,0.3)	()	e	#N/A
+modern	percentile	369	PERCENTILE($AH$1:$AH$5,0.3)	()	e	#NUM!
+modern	percentile	370	PERCENTILE($AC$1:$AC$6,0.3)	()	e	#NUM!
+modern	percentile	371	PERCENTILE({1,2,3,4},0.3)	()	n	1.9
+modern	percentile	372	PERCENTILE({1,"a",TRUE,4},0.3)	()	n	1.9000000000000001
+modern	percentile	373	PERCENTILE(5,0.3)	()	n	5.0
+modern	percentile	374	PERCENTILE("a",0.3)	()	e	#VALUE!
+modern	percentile	375	PERCENTILE(TRUE,0.3)	()	n	1.0
+modern	percentile	376	PERCENTILE(1/0,0.3)	()	e	#DIV/0!
+modern	percentile	377	PERCENTILE($Z$1,0.3)	()	n	3.0
+modern	percentile	378	PERCENTILE({0.1,0.2,0.3,0.7},0.3)	()	n	0.19
+modern	percentile.inc	379	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(0.0,)	n	-1.0
+modern	percentile.inc	380	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(0.0,)	n	1.0
+modern	percentile.inc	381	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(0.1,)	n	0.40000000000000036
+modern	percentile.inc	382	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(0.1,)	n	2.0
+modern	percentile.inc	383	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(0.25,)	n	1.75
+modern	percentile.inc	384	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(0.25,)	n	3.5
+modern	percentile.inc	385	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(0.3333333333333333,)	n	2.0
+modern	percentile.inc	386	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(0.3333333333333333,)	n	4.333333333333333
+modern	percentile.inc	387	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(0.5,)	n	2.25
+modern	percentile.inc	388	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(0.5,)	n	6.0
+modern	percentile.inc	389	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(0.75,)	n	3.5
+modern	percentile.inc	390	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(0.75,)	n	8.5
+modern	percentile.inc	391	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(0.9,)	n	5.8999999999999995
+modern	percentile.inc	392	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(0.9,)	n	10.0
+modern	percentile.inc	393	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(0.99,)	n	7.789999999999999
+modern	percentile.inc	394	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(0.99,)	n	10.9
+modern	percentile.inc	395	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(1.0,)	n	8.0
+modern	percentile.inc	396	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(1.0,)	n	11.0
+modern	percentile.inc	397	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(-0.1,)	e	#NUM!
+modern	percentile.inc	398	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(-0.1,)	e	#NUM!
+modern	percentile.inc	399	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(1.1,)	e	#NUM!
+modern	percentile.inc	400	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(1.1,)	e	#NUM!
+modern	percentile.inc	401	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	('0.5',)	n	2.25
+modern	percentile.inc	402	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	('0.5',)	n	6.0
+modern	percentile.inc	403	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(True,)	n	8.0
+modern	percentile.inc	404	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(True,)	n	11.0
+modern	percentile.inc	405	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(False,)	n	-1.0
+modern	percentile.inc	406	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(False,)	n	1.0
+modern	percentile.inc	407	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(None,)	n	-1.0
+modern	percentile.inc	408	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(None,)	n	1.0
+modern	percentile.inc	409	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	('x',)	e	#VALUE!
+modern	percentile.inc	410	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	('x',)	e	#VALUE!
+modern	percentile.inc	411	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(ErrorValue('#N/A'),)	e	#N/A
+modern	percentile.inc	412	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(ErrorValue('#N/A'),)	e	#N/A
+modern	percentile.inc	413	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(1e-10,)	n	-0.9999999985999999
+modern	percentile.inc	414	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(1e-10,)	n	1.000000001
+modern	percentile.inc	415	_xlfn.PERCENTILE.INC($Z$1:$Z$8,{1})	(0.123456789,)	n	0.7283950460000002
+modern	percentile.inc	416	_xlfn.PERCENTILE.INC($AF$1:$AF$6,{1})	(0.123456789,)	n	2.23456789
+modern	percentile.inc	417	_xlfn.PERCENTILE.INC($AA$1:$AA$8,0.3)	()	n	1.6
+modern	percentile.inc	418	_xlfn.PERCENTILE.INC($AB$1:$AB$4,0.3)	()	e	#N/A
+modern	percentile.inc	419	_xlfn.PERCENTILE.INC($AH$1:$AH$5,0.3)	()	e	#NUM!
+modern	percentile.inc	420	_xlfn.PERCENTILE.INC($AC$1:$AC$6,0.3)	()	e	#NUM!
+modern	percentile.inc	421	_xlfn.PERCENTILE.INC({1,2,3,4},0.3)	()	n	1.9
+modern	percentile.inc	422	_xlfn.PERCENTILE.INC({1,"a",TRUE,4},0.3)	()	n	1.9000000000000001
+modern	percentile.inc	423	_xlfn.PERCENTILE.INC(5,0.3)	()	n	5.0
+modern	percentile.inc	424	_xlfn.PERCENTILE.INC("a",0.3)	()	e	#VALUE!
+modern	percentile.inc	425	_xlfn.PERCENTILE.INC(TRUE,0.3)	()	n	1.0
+modern	percentile.inc	426	_xlfn.PERCENTILE.INC(1/0,0.3)	()	e	#DIV/0!
+modern	percentile.inc	427	_xlfn.PERCENTILE.INC($Z$1,0.3)	()	n	3.0
+modern	percentile.inc	428	_xlfn.PERCENTILE.INC({0.1,0.2,0.3,0.7},0.3)	()	n	0.19
+modern	quartile	429	QUARTILE($Z$1:$Z$8,{1})	(0.0,)	n	-1.0
+modern	quartile	430	QUARTILE($Z$1:$Z$8,{1})	(1.0,)	n	1.75
+modern	quartile	431	QUARTILE($Z$1:$Z$8,{1})	(2.0,)	n	2.25
+modern	quartile	432	QUARTILE($Z$1:$Z$8,{1})	(3.0,)	n	3.5
+modern	quartile	433	QUARTILE($Z$1:$Z$8,{1})	(4.0,)	n	8.0
+modern	quartile	434	QUARTILE($Z$1:$Z$8,{1})	(5.0,)	e	#NUM!
+modern	quartile	435	QUARTILE($Z$1:$Z$8,{1})	(-1.0,)	e	#NUM!
+modern	quartile	436	QUARTILE($Z$1:$Z$8,{1})	(1.9,)	n	1.75
+modern	quartile	437	QUARTILE($Z$1:$Z$8,{1})	(0.5,)	n	-1.0
+modern	quartile	438	QUARTILE($Z$1:$Z$8,{1})	('2',)	n	2.25
+modern	quartile	439	QUARTILE($Z$1:$Z$8,{1})	(True,)	n	1.75
+modern	quartile	440	QUARTILE($Z$1:$Z$8,{1})	(None,)	n	-1.0
+modern	quartile	441	QUARTILE($Z$1:$Z$8,{1})	('x',)	e	#VALUE!
+modern	quartile	442	QUARTILE($Z$1:$Z$8,{1})	(ErrorValue('#N/A'),)	e	#N/A
+modern	quartile	443	QUARTILE($AA$1:$AA$8,1)	()	n	1.5
+modern	quartile	444	QUARTILE($AB$1:$AB$4,1)	()	e	#N/A
+modern	quartile	445	QUARTILE($AH$1:$AH$5,1)	()	e	#NUM!
+modern	quartile	446	QUARTILE({1,2,3,4},1)	()	n	1.75
+modern	quartile	447	QUARTILE(5,1)	()	n	5.0
+modern	quartile	448	QUARTILE("a",1)	()	e	#VALUE!
+modern	quartile	449	QUARTILE(1/0,1)	()	e	#DIV/0!
+modern	quartile.inc	450	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	(0.0,)	n	-1.0
+modern	quartile.inc	451	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	(1.0,)	n	1.75
+modern	quartile.inc	452	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	(2.0,)	n	2.25
+modern	quartile.inc	453	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	(3.0,)	n	3.5
+modern	quartile.inc	454	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	(4.0,)	n	8.0
+modern	quartile.inc	455	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	(5.0,)	e	#NUM!
+modern	quartile.inc	456	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	(-1.0,)	e	#NUM!
+modern	quartile.inc	457	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	(1.9,)	n	1.75
+modern	quartile.inc	458	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	(0.5,)	n	-1.0
+modern	quartile.inc	459	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	('2',)	n	2.25
+modern	quartile.inc	460	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	(True,)	n	1.75
+modern	quartile.inc	461	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	(None,)	n	-1.0
+modern	quartile.inc	462	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	('x',)	e	#VALUE!
+modern	quartile.inc	463	_xlfn.QUARTILE.INC($Z$1:$Z$8,{1})	(ErrorValue('#N/A'),)	e	#N/A
+modern	quartile.inc	464	_xlfn.QUARTILE.INC($AA$1:$AA$8,1)	()	n	1.5
+modern	quartile.inc	465	_xlfn.QUARTILE.INC($AB$1:$AB$4,1)	()	e	#N/A
+modern	quartile.inc	466	_xlfn.QUARTILE.INC($AH$1:$AH$5,1)	()	e	#NUM!
+modern	quartile.inc	467	_xlfn.QUARTILE.INC({1,2,3,4},1)	()	n	1.75
+modern	quartile.inc	468	_xlfn.QUARTILE.INC(5,1)	()	n	5.0
+modern	quartile.inc	469	_xlfn.QUARTILE.INC("a",1)	()	e	#VALUE!
+modern	quartile.inc	470	_xlfn.QUARTILE.INC(1/0,1)	()	e	#DIV/0!
+modern	mode	471	MODE($Z$1:$Z$8)	()	n	2.0
+modern	mode	472	MODE($AA$1:$AA$8)	()	e	#N/A
+modern	mode	473	MODE($AB$1:$AB$4)	()	e	#N/A
+modern	mode	474	MODE($AH$1:$AH$5)	()	e	#N/A
+modern	mode	475	MODE($AC$1:$AC$6)	()	e	#N/A
+modern	mode	476	MODE($AF$1:$AF$6)	()	e	#N/A
+modern	mode	477	MODE(1,2,2,3)	()	n	2.0
+modern	mode	478	MODE(1,2,3)	()	e	#N/A
+modern	mode	479	MODE(1,1,2,2)	()	n	1.0
+modern	mode	480	MODE(2,2,1,1)	()	n	2.0
+modern	mode	481	MODE({1,2,2})	()	n	2.0
+modern	mode	482	MODE({1,2,3})	()	e	#N/A
+modern	mode	483	MODE("a",1,1)	()	n	1.0
+modern	mode	484	MODE(TRUE,1,1)	()	n	1.0
+modern	mode	485	MODE("1",1)	()	e	#N/A
+modern	mode	486	MODE(1,,1)	()	e	#VALUE!
+modern	mode	487	MODE(,1,1)	()	e	#VALUE!
+modern	mode	488	MODE($Z$1:$Z$8,$AF$1:$AF$6)	()	n	3.0
+modern	mode	489	MODE(1/0,1,1)	()	e	#DIV/0!
+modern	mode	490	MODE(1,1,1/0)	()	e	#DIV/0!
+modern	mode	491	MODE(5)	()	e	#N/A
+modern	mode	492	MODE("a")	()	e	#N/A
+modern	mode	493	MODE(TRUE)	()	e	#N/A
+modern	mode	494	MODE({1,"a",1})	()	n	1.0
+modern	mode	495	MODE(2.5,2.5,0.1,0.1)	()	n	2.5
+modern	mode	496	MODE($Z$3:$Z$4,$Z$3)	()	n	2.0
+modern	mode.sngl	497	_xlfn.MODE.SNGL($Z$1:$Z$8)	()	n	2.0
+modern	mode.sngl	498	_xlfn.MODE.SNGL($AA$1:$AA$8)	()	e	#N/A
+modern	mode.sngl	499	_xlfn.MODE.SNGL($AB$1:$AB$4)	()	e	#N/A
+modern	mode.sngl	500	_xlfn.MODE.SNGL($AH$1:$AH$5)	()	e	#N/A
+modern	mode.sngl	501	_xlfn.MODE.SNGL($AC$1:$AC$6)	()	e	#N/A
+modern	mode.sngl	502	_xlfn.MODE.SNGL($AF$1:$AF$6)	()	e	#N/A
+modern	mode.sngl	503	_xlfn.MODE.SNGL(1,2,2,3)	()	n	2.0
+modern	mode.sngl	504	_xlfn.MODE.SNGL(1,2,3)	()	e	#N/A
+modern	mode.sngl	505	_xlfn.MODE.SNGL(1,1,2,2)	()	n	1.0
+modern	mode.sngl	506	_xlfn.MODE.SNGL(2,2,1,1)	()	n	2.0
+modern	mode.sngl	507	_xlfn.MODE.SNGL({1,2,2})	()	n	2.0
+modern	mode.sngl	508	_xlfn.MODE.SNGL({1,2,3})	()	e	#N/A
+modern	mode.sngl	509	_xlfn.MODE.SNGL("a",1,1)	()	n	1.0
+modern	mode.sngl	510	_xlfn.MODE.SNGL(TRUE,1,1)	()	n	1.0
+modern	mode.sngl	511	_xlfn.MODE.SNGL("1",1)	()	e	#N/A
+modern	mode.sngl	512	_xlfn.MODE.SNGL(1,,1)	()	e	#VALUE!
+modern	mode.sngl	513	_xlfn.MODE.SNGL(,1,1)	()	e	#VALUE!
+modern	mode.sngl	514	_xlfn.MODE.SNGL($Z$1:$Z$8,$AF$1:$AF$6)	()	n	3.0
+modern	mode.sngl	515	_xlfn.MODE.SNGL(1/0,1,1)	()	e	#DIV/0!
+modern	mode.sngl	516	_xlfn.MODE.SNGL(1,1,1/0)	()	e	#DIV/0!
+modern	mode.sngl	517	_xlfn.MODE.SNGL(5)	()	e	#N/A
+modern	mode.sngl	518	_xlfn.MODE.SNGL("a")	()	e	#N/A
+modern	mode.sngl	519	_xlfn.MODE.SNGL(TRUE)	()	e	#N/A
+modern	mode.sngl	520	_xlfn.MODE.SNGL({1,"a",1})	()	n	1.0
+modern	mode.sngl	521	_xlfn.MODE.SNGL(2.5,2.5,0.1,0.1)	()	n	2.5
+modern	mode.sngl	522	_xlfn.MODE.SNGL($Z$3:$Z$4,$Z$3)	()	n	2.0
+modern	ifs	523	_xlfn.IFS(TRUE,1)	()	n	1.0
+modern	ifs	524	_xlfn.IFS(FALSE,1)	()	e	#N/A
+modern	ifs	525	_xlfn.IFS(FALSE,1,TRUE,2)	()	n	2.0
+modern	ifs	526	_xlfn.IFS(TRUE,1,TRUE,2)	()	n	1.0
+modern	ifs	527	_xlfn.IFS(1>2,"a",1<2,"b")	()	str	'b'
+modern	ifs	528	_xlfn.IFS(FALSE,1/0,TRUE,2)	()	n	2.0
+modern	ifs	529	_xlfn.IFS(TRUE,1/0,TRUE,2)	()	e	#DIV/0!
+modern	ifs	530	_xlfn.IFS(1/0,1,TRUE,2)	()	e	#DIV/0!
+modern	ifs	531	_xlfn.IFS(FALSE,1,1/0,2)	()	e	#DIV/0!
+modern	ifs	532	_xlfn.IFS("TRUE",1)	()	n	1.0
+modern	ifs	533	_xlfn.IFS("x",1)	()	e	#VALUE!
+modern	ifs	534	_xlfn.IFS("false",1,TRUE,2)	()	n	2.0
+modern	ifs	535	_xlfn.IFS(0,1,2,3)	()	n	3.0
+modern	ifs	536	_xlfn.IFS($AH$1,1,TRUE,2)	()	n	2.0
+modern	ifs	537	_xlfn.IFS("",1,TRUE,2)	()	e	#VALUE!
+modern	ifs	538	_xlfn.IFS(TRUE,$Z$1:$Z$8)	()	e	#VALUE!
+modern	ifs	539	_xlfn.IFS($Z$1:$Z$8>2,1)	()	e	#VALUE!
+modern	ifs	540	_xlfn.IFS(TRUE,$AH$1)	()	n	0.0
+modern	ifs	541	_xlfn.IFS(TRUE,"")	()	str	''
+modern	ifs	542	_xlfn.IFS({TRUE,FALSE},1)	()	n	1.0
+modern	ifs	543	_xlfn.IFS({FALSE,TRUE},1,TRUE,2)	()	n	2.0
+modern	ifs	544	_xlfn.IFS(FALSE,1,TRUE,$Z$1)	()	n	3.0
+modern	ifs	545	_xlfn.IFS(NA(),1)	()	e	#N/A
+modern	ifs	546	_xlfn.IFS(ISNA(NA()),NA())	()	e	#N/A
+modern	switch	547	_xlfn.SWITCH(1,1,"a")	()	str	'a'
+modern	switch	548	_xlfn.SWITCH(2,1,"a")	()	e	#N/A
+modern	switch	549	_xlfn.SWITCH(2,1,"a","d")	()	str	'd'
+modern	switch	550	_xlfn.SWITCH(2,1,"a",2,"b")	()	str	'b'
+modern	switch	551	_xlfn.SWITCH("A","a",1)	()	n	1.0
+modern	switch	552	_xlfn.SWITCH(1,"1",1)	()	e	#N/A
+modern	switch	553	_xlfn.SWITCH("1",1,1)	()	e	#N/A
+modern	switch	554	_xlfn.SWITCH(TRUE,1,"x")	()	e	#N/A
+modern	switch	555	_xlfn.SWITCH(TRUE,TRUE,"x")	()	str	'x'
+modern	switch	556	_xlfn.SWITCH($AH$1,0,"z","n")	()	str	'z'
+modern	switch	557	_xlfn.SWITCH($AH$1,"","e","n")	()	str	'n'
+modern	switch	558	_xlfn.SWITCH($AH$1,$AH$2,"b","n")	()	str	'b'
+modern	switch	559	_xlfn.SWITCH(0,$AH$1,"b","n")	()	str	'b'
+modern	switch	560	_xlfn.SWITCH(1/0,1,2,3)	()	e	#DIV/0!
+modern	switch	561	_xlfn.SWITCH(1,1/0,2,3)	()	e	#DIV/0!
+modern	switch	562	_xlfn.SWITCH(1,2,1/0,1,4)	()	n	4.0
+modern	switch	563	_xlfn.SWITCH(1,1,4,2,1/0)	()	n	4.0
+modern	switch	564	_xlfn.SWITCH(1,2,3,1/0)	()	e	#DIV/0!
+modern	switch	565	_xlfn.SWITCH(1,1,1/0)	()	e	#DIV/0!
+modern	switch	566	_xlfn.SWITCH(NA(),NA(),1,2)	()	e	#N/A
+modern	switch	567	_xlfn.SWITCH($Z$2,$Z$1:$Z$8,1,2)	()	e	#VALUE!
+modern	switch	568	_xlfn.SWITCH($Z$1:$Z$8,1,2,3)	()	e	#VALUE!
+modern	switch	569	_xlfn.SWITCH({1,2},1,"a","z")	()	str	'a'
+modern	switch	570	_xlfn.SWITCH(1,{1,2},"a","z")	()	str	'a'
+modern	switch	571	_xlfn.SWITCH(1,1,$Z$1)	()	n	3.0
+modern	switch	572	_xlfn.SWITCH(1,2,3,$Z$1)	()	n	3.0
+modern	switch	573	_xlfn.SWITCH(1.5,1.5,"y")	()	str	'y'
+modern	switch	574	_xlfn.SWITCH("a*","apple",1,2)	()	n	2.0
+modern	switch	575	_xlfn.SWITCH("apple","a*",1,2)	()	n	2.0
+modern	concat	576	_xlfn.CONCAT("a")	()	str	'a'
+modern	textjoin	577	_xlfn.TEXTJOIN(",",TRUE,"a")	()	str	'a'
+modern	textjoin	578	_xlfn.TEXTJOIN(",",FALSE,"a")	()	str	'a'
+modern	concat	579	_xlfn.CONCAT("a","b")	()	str	'ab'
+modern	textjoin	580	_xlfn.TEXTJOIN(",",TRUE,"a","b")	()	str	'a,b'
+modern	textjoin	581	_xlfn.TEXTJOIN(",",FALSE,"a","b")	()	str	'a,b'
+modern	concat	582	_xlfn.CONCAT(1.5)	()	str	'1.5'
+modern	textjoin	583	_xlfn.TEXTJOIN(",",TRUE,1.5)	()	str	'1.5'
+modern	textjoin	584	_xlfn.TEXTJOIN(",",FALSE,1.5)	()	str	'1.5'
+modern	concat	585	_xlfn.CONCAT(1E+20)	()	str	'1E+20'
+modern	textjoin	586	_xlfn.TEXTJOIN(",",TRUE,1E+20)	()	str	'1E+20'
+modern	textjoin	587	_xlfn.TEXTJOIN(",",FALSE,1E+20)	()	str	'1E+20'
+modern	concat	588	_xlfn.CONCAT(0.1+0.2)	()	str	'0.3'
+modern	textjoin	589	_xlfn.TEXTJOIN(",",TRUE,0.1+0.2)	()	str	'0.3'
+modern	textjoin	590	_xlfn.TEXTJOIN(",",FALSE,0.1+0.2)	()	str	'0.3'
+modern	concat	591	_xlfn.CONCAT(TRUE)	()	str	'TRUE'
+modern	textjoin	592	_xlfn.TEXTJOIN(",",TRUE,TRUE)	()	str	'TRUE'
+modern	textjoin	593	_xlfn.TEXTJOIN(",",FALSE,TRUE)	()	str	'TRUE'
+modern	concat	594	_xlfn.CONCAT($AH$1)	()	str	''
+modern	textjoin	595	_xlfn.TEXTJOIN(",",TRUE,$AH$1)	()	str	''
+modern	textjoin	596	_xlfn.TEXTJOIN(",",FALSE,$AH$1)	()	str	''
+modern	concat	597	_xlfn.CONCAT("","")	()	str	''
+modern	textjoin	598	_xlfn.TEXTJOIN(",",TRUE,"","")	()	str	''
+modern	textjoin	599	_xlfn.TEXTJOIN(",",FALSE,"","")	()	str	','
+modern	concat	600	_xlfn.CONCAT(1/0)	()	e	#DIV/0!
+modern	textjoin	601	_xlfn.TEXTJOIN(",",TRUE,1/0)	()	e	#DIV/0!
+modern	textjoin	602	_xlfn.TEXTJOIN(",",FALSE,1/0)	()	e	#DIV/0!
+modern	concat	603	_xlfn.CONCAT($AC$1:$AC$6)	()	str	'appleBananacherryappledate'
+modern	textjoin	604	_xlfn.TEXTJOIN(",",TRUE,$AC$1:$AC$6)	()	str	'apple,Banana,cherry,apple,date'
+modern	textjoin	605	_xlfn.TEXTJOIN(",",FALSE,$AC$1:$AC$6)	()	str	'apple,Banana,cherry,apple,,date'
+modern	concat	606	_xlfn.CONCAT($Z$1:$Z$8)	()	str	'312258-12.5'
+modern	textjoin	607	_xlfn.TEXTJOIN(",",TRUE,$Z$1:$Z$8)	()	str	'3,1,2,2,5,8,-1,2.5'
+modern	textjoin	608	_xlfn.TEXTJOIN(",",FALSE,$Z$1:$Z$8)	()	str	'3,1,2,2,5,8,-1,2.5'
+modern	concat	609	_xlfn.CONCAT($AA$1:$AA$8)	()	str	'1xTRUE24FALSE'
+modern	textjoin	610	_xlfn.TEXTJOIN(",",TRUE,$AA$1:$AA$8)	()	str	'1,x,TRUE,2,4,FALSE'
+modern	textjoin	611	_xlfn.TEXTJOIN(",",FALSE,$AA$1:$AA$8)	()	str	'1,x,TRUE,,2,,4,FALSE'
+modern	concat	612	_xlfn.CONCAT($AB$1:$AB$4)	()	e	#N/A
+modern	textjoin	613	_xlfn.TEXTJOIN(",",TRUE,$AB$1:$AB$4)	()	e	#N/A
+modern	textjoin	614	_xlfn.TEXTJOIN(",",FALSE,$AB$1:$AB$4)	()	e	#N/A
+modern	concat	615	_xlfn.CONCAT($AH$1:$AH$5)	()	str	''
+modern	textjoin	616	_xlfn.TEXTJOIN(",",TRUE,$AH$1:$AH$5)	()	str	''
+modern	textjoin	617	_xlfn.TEXTJOIN(",",FALSE,$AH$1:$AH$5)	()	str	',,,,'
+modern	concat	618	_xlfn.CONCAT({1,2;3,4})	()	str	'1234'
+modern	textjoin	619	_xlfn.TEXTJOIN(",",TRUE,{1,2;3,4})	()	str	'1,2,3,4'
+modern	textjoin	620	_xlfn.TEXTJOIN(",",FALSE,{1,2;3,4})	()	str	'1,2,3,4'
+modern	concat	621	_xlfn.CONCAT("a",$AH$1,"b")	()	str	'ab'
+modern	textjoin	622	_xlfn.TEXTJOIN(",",TRUE,"a",$AH$1,"b")	()	str	'a,b'
+modern	textjoin	623	_xlfn.TEXTJOIN(",",FALSE,"a",$AH$1,"b")	()	str	'a,,b'
+modern	concat	624	_xlfn.CONCAT($AI$1:$AK$2)	()	str	'123onetwothree'
+modern	textjoin	625	_xlfn.TEXTJOIN(",",TRUE,$AI$1:$AK$2)	()	str	'1,2,3,one,two,three'
+modern	textjoin	626	_xlfn.TEXTJOIN(",",FALSE,$AI$1:$AK$2)	()	str	'1,2,3,one,two,three'
+modern	concat	627	_xlfn.CONCAT("a",,"b")	()	str	'ab'
+modern	textjoin	628	_xlfn.TEXTJOIN(",",TRUE,"a",,"b")	()	str	'a,b'
+modern	textjoin	629	_xlfn.TEXTJOIN(",",FALSE,"a",,"b")	()	str	'a,,b'
+modern	concat	630	_xlfn.CONCAT(1234567.891)	()	str	'1234567.891'
+modern	textjoin	631	_xlfn.TEXTJOIN(",",TRUE,1234567.891)	()	str	'1234567.891'
+modern	textjoin	632	_xlfn.TEXTJOIN(",",FALSE,1234567.891)	()	str	'1234567.891'
+modern	concat	633	_xlfn.CONCAT(-0.5)	()	str	'-0.5'
+modern	textjoin	634	_xlfn.TEXTJOIN(",",TRUE,-0.5)	()	str	'-0.5'
+modern	textjoin	635	_xlfn.TEXTJOIN(",",FALSE,-0.5)	()	str	'-0.5'
+modern	concat	636	_xlfn.CONCAT(45720.5)	()	str	'45720.5'
+modern	textjoin	637	_xlfn.TEXTJOIN(",",TRUE,45720.5)	()	str	'45720.5'
+modern	textjoin	638	_xlfn.TEXTJOIN(",",FALSE,45720.5)	()	str	'45720.5'
+modern	concat	639	_xlfn.CONCAT(NA())	()	e	#N/A
+modern	textjoin	640	_xlfn.TEXTJOIN(",",TRUE,NA())	()	e	#N/A
+modern	textjoin	641	_xlfn.TEXTJOIN(",",FALSE,NA())	()	e	#N/A
+modern	textjoin	642	_xlfn.TEXTJOIN("",TRUE,"a","b","c")	()	str	'abc'
+modern	textjoin	643	_xlfn.TEXTJOIN("",FALSE,"a","","c","d")	()	str	'acd'
+modern	textjoin	644	_xlfn.TEXTJOIN(" - ",TRUE,"a","b","c")	()	str	'a - b - c'
+modern	textjoin	645	_xlfn.TEXTJOIN(" - ",FALSE,"a","","c","d")	()	str	'a -  - c - d'
+modern	textjoin	646	_xlfn.TEXTJOIN(1,TRUE,"a","b","c")	()	str	'a1b1c'
+modern	textjoin	647	_xlfn.TEXTJOIN(1,FALSE,"a","","c","d")	()	str	'a11c1d'
+modern	textjoin	648	_xlfn.TEXTJOIN(TRUE,TRUE,"a","b","c")	()	str	'aTRUEbTRUEc'
+modern	textjoin	649	_xlfn.TEXTJOIN(TRUE,FALSE,"a","","c","d")	()	str	'aTRUETRUEcTRUEd'
+modern	textjoin	650	_xlfn.TEXTJOIN($AH$1,TRUE,"a","b","c")	()	str	'abc'
+modern	textjoin	651	_xlfn.TEXTJOIN($AH$1,FALSE,"a","","c","d")	()	str	'acd'
+modern	textjoin	652	_xlfn.TEXTJOIN(1/0,TRUE,"a","b","c")	()	e	#DIV/0!
+modern	textjoin	653	_xlfn.TEXTJOIN(1/0,FALSE,"a","","c","d")	()	e	#DIV/0!
+modern	textjoin	654	_xlfn.TEXTJOIN($AL$1:$AL$2,TRUE,"a","b","c")	()	str	'a,b;c'
+modern	textjoin	655	_xlfn.TEXTJOIN($AL$1:$AL$2,FALSE,"a","","c","d")	()	str	'a,;c,d'
+modern	textjoin	656	_xlfn.TEXTJOIN({",",";"},TRUE,"a","b","c")	()	str	'a,b;c'
+modern	textjoin	657	_xlfn.TEXTJOIN({",",";"},FALSE,"a","","c","d")	()	str	'a,;c,d'
+modern	textjoin	658	_xlfn.TEXTJOIN({1,2},TRUE,"a","b","c")	()	str	'a1b2c'
+modern	textjoin	659	_xlfn.TEXTJOIN({1,2},FALSE,"a","","c","d")	()	str	'a12c1d'
+modern	textjoin	660	_xlfn.TEXTJOIN($AL$1,TRUE,"a","b","c")	()	str	'a,b,c'
+modern	textjoin	661	_xlfn.TEXTJOIN($AL$1,FALSE,"a","","c","d")	()	str	'a,,c,d'
+modern	textjoin	662	_xlfn.TEXTJOIN(",",1,"a","","b")	()	str	'a,b'
+modern	textjoin	663	_xlfn.TEXTJOIN(",",0,"a","","b")	()	str	'a,,b'
+modern	textjoin	664	_xlfn.TEXTJOIN(",","x","a","","b")	()	e	#VALUE!
+modern	textjoin	665	_xlfn.TEXTJOIN(",","TRUE","a","","b")	()	str	'a,b'
+modern	textjoin	666	_xlfn.TEXTJOIN(",",$AH$1,"a","","b")	()	str	'a,,b'
+modern	textjoin	667	_xlfn.TEXTJOIN(",",1/0,"a","","b")	()	e	#DIV/0!
+modern	textjoin	668	_xlfn.TEXTJOIN(",",$AL$1,"a","","b")	()	e	#VALUE!
+modern	textjoin	669	_xlfn.TEXTJOIN(",",{TRUE,FALSE},"a","","b")	()	str	'a,b'
+modern	concat	670	LEN(_xlfn.CONCAT(REPT("a",32766),"b"))	()	n	32767.0
+modern	textjoin	671	LEN(_xlfn.TEXTJOIN("",TRUE,REPT("a",32766),"b"))	()	n	32767.0
+modern	concat	672	LEN(_xlfn.CONCAT(REPT("a",32767),"b"))	()	e	#VALUE!
+modern	textjoin	673	LEN(_xlfn.TEXTJOIN("",TRUE,REPT("a",32767),"b"))	()	e	#VALUE!
+modern	concat	674	_xlfn.CONCAT(REPT("a",32767),REPT("a",32767))	()	e	#VALUE!
+modern	textjoin	675	_xlfn.TEXTJOIN(",",TRUE,REPT("a",32767),"b")	()	e	#VALUE!
+modern	xlookup	676	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6)	('apple',)	n	10.0
+modern	xmatch	677	_xlfn.XMATCH({1},$AC$1:$AC$6)	('apple',)	n	1.0
+modern	xlookup	678	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,"none")	('apple',)	n	10.0
+modern	xlookup	679	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,2)	('apple',)	n	10.0
+modern	xmatch	680	_xlfn.XMATCH({1},$AC$1:$AC$6,2)	('apple',)	n	1.0
+modern	xlookup	681	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,-1)	('apple',)	n	10.0
+modern	xmatch	682	_xlfn.XMATCH({1},$AC$1:$AC$6,-1)	('apple',)	n	1.0
+modern	xlookup	683	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,1)	('apple',)	n	10.0
+modern	xmatch	684	_xlfn.XMATCH({1},$AC$1:$AC$6,1)	('apple',)	n	1.0
+modern	xlookup	685	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-1)	('apple',)	n	40.0
+modern	xmatch	686	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-1)	('apple',)	n	4.0
+modern	xlookup	687	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,2)	('apple',)	n	10.0
+modern	xmatch	688	_xlfn.XMATCH({1},$AC$1:$AC$6,0,2)	('apple',)	n	1.0
+modern	xlookup	689	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-2)	('apple',)	n	40.0
+modern	xmatch	690	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-2)	('apple',)	n	4.0
+modern	xlookup	691	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6)	('APPLE',)	n	10.0
+modern	xmatch	692	_xlfn.XMATCH({1},$AC$1:$AC$6)	('APPLE',)	n	1.0
+modern	xlookup	693	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,"none")	('APPLE',)	n	10.0
+modern	xlookup	694	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,2)	('APPLE',)	n	10.0
+modern	xmatch	695	_xlfn.XMATCH({1},$AC$1:$AC$6,2)	('APPLE',)	n	1.0
+modern	xlookup	696	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,-1)	('APPLE',)	n	10.0
+modern	xmatch	697	_xlfn.XMATCH({1},$AC$1:$AC$6,-1)	('APPLE',)	n	1.0
+modern	xlookup	698	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,1)	('APPLE',)	n	10.0
+modern	xmatch	699	_xlfn.XMATCH({1},$AC$1:$AC$6,1)	('APPLE',)	n	1.0
+modern	xlookup	700	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-1)	('APPLE',)	n	40.0
+modern	xmatch	701	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-1)	('APPLE',)	n	4.0
+modern	xlookup	702	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,2)	('APPLE',)	n	10.0
+modern	xmatch	703	_xlfn.XMATCH({1},$AC$1:$AC$6,0,2)	('APPLE',)	n	1.0
+modern	xlookup	704	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-2)	('APPLE',)	n	40.0
+modern	xmatch	705	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-2)	('APPLE',)	n	4.0
+modern	xlookup	706	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6)	('banana',)	n	20.0
+modern	xmatch	707	_xlfn.XMATCH({1},$AC$1:$AC$6)	('banana',)	n	2.0
+modern	xlookup	708	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,"none")	('banana',)	n	20.0
+modern	xlookup	709	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,2)	('banana',)	n	20.0
+modern	xmatch	710	_xlfn.XMATCH({1},$AC$1:$AC$6,2)	('banana',)	n	2.0
+modern	xlookup	711	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,-1)	('banana',)	n	20.0
+modern	xmatch	712	_xlfn.XMATCH({1},$AC$1:$AC$6,-1)	('banana',)	n	2.0
+modern	xlookup	713	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,1)	('banana',)	n	20.0
+modern	xmatch	714	_xlfn.XMATCH({1},$AC$1:$AC$6,1)	('banana',)	n	2.0
+modern	xlookup	715	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-1)	('banana',)	n	20.0
+modern	xmatch	716	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-1)	('banana',)	n	2.0
+modern	xlookup	717	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,2)	('banana',)	n	20.0
+modern	xmatch	718	_xlfn.XMATCH({1},$AC$1:$AC$6,0,2)	('banana',)	n	2.0
+modern	xlookup	719	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-2)	('banana',)	e	#N/A
+modern	xmatch	720	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-2)	('banana',)	e	#N/A
+modern	xlookup	721	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6)	('a*',)	e	#N/A
+modern	xmatch	722	_xlfn.XMATCH({1},$AC$1:$AC$6)	('a*',)	e	#N/A
+modern	xlookup	723	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,"none")	('a*',)	str	'none'
+modern	xlookup	724	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,2)	('a*',)	n	10.0
+modern	xmatch	725	_xlfn.XMATCH({1},$AC$1:$AC$6,2)	('a*',)	n	1.0
+modern	xlookup	726	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,-1)	('a*',)	n	50.0
+modern	xmatch	727	_xlfn.XMATCH({1},$AC$1:$AC$6,-1)	('a*',)	n	5.0
+modern	xlookup	728	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,1)	('a*',)	n	10.0
+modern	xmatch	729	_xlfn.XMATCH({1},$AC$1:$AC$6,1)	('a*',)	n	1.0
+modern	xlookup	730	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-1)	('a*',)	e	#N/A
+modern	xmatch	731	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-1)	('a*',)	e	#N/A
+modern	xlookup	732	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,2)	('a*',)	e	#N/A
+modern	xmatch	733	_xlfn.XMATCH({1},$AC$1:$AC$6,0,2)	('a*',)	e	#N/A
+modern	xlookup	734	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-2)	('a*',)	e	#N/A
+modern	xmatch	735	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-2)	('a*',)	e	#N/A
+modern	xlookup	736	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6)	('?pple',)	e	#N/A
+modern	xmatch	737	_xlfn.XMATCH({1},$AC$1:$AC$6)	('?pple',)	e	#N/A
+modern	xlookup	738	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,"none")	('?pple',)	str	'none'
+modern	xlookup	739	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,2)	('?pple',)	n	10.0
+modern	xmatch	740	_xlfn.XMATCH({1},$AC$1:$AC$6,2)	('?pple',)	n	1.0
+modern	xlookup	741	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,-1)	('?pple',)	n	50.0
+modern	xmatch	742	_xlfn.XMATCH({1},$AC$1:$AC$6,-1)	('?pple',)	n	5.0
+modern	xlookup	743	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,1)	('?pple',)	n	10.0
+modern	xmatch	744	_xlfn.XMATCH({1},$AC$1:$AC$6,1)	('?pple',)	n	1.0
+modern	xlookup	745	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-1)	('?pple',)	e	#N/A
+modern	xmatch	746	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-1)	('?pple',)	e	#N/A
+modern	xlookup	747	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,2)	('?pple',)	e	#N/A
+modern	xmatch	748	_xlfn.XMATCH({1},$AC$1:$AC$6,0,2)	('?pple',)	e	#N/A
+modern	xlookup	749	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-2)	('?pple',)	e	#N/A
+modern	xmatch	750	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-2)	('?pple',)	e	#N/A
+modern	xlookup	751	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6)	('zzz',)	e	#N/A
+modern	xmatch	752	_xlfn.XMATCH({1},$AC$1:$AC$6)	('zzz',)	e	#N/A
+modern	xlookup	753	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,"none")	('zzz',)	str	'none'
+modern	xlookup	754	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,2)	('zzz',)	e	#N/A
+modern	xmatch	755	_xlfn.XMATCH({1},$AC$1:$AC$6,2)	('zzz',)	e	#N/A
+modern	xlookup	756	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,-1)	('zzz',)	n	60.0
+modern	xmatch	757	_xlfn.XMATCH({1},$AC$1:$AC$6,-1)	('zzz',)	n	6.0
+modern	xlookup	758	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,1)	('zzz',)	e	#N/A
+modern	xmatch	759	_xlfn.XMATCH({1},$AC$1:$AC$6,1)	('zzz',)	e	#N/A
+modern	xlookup	760	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-1)	('zzz',)	e	#N/A
+modern	xmatch	761	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-1)	('zzz',)	e	#N/A
+modern	xlookup	762	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,2)	('zzz',)	e	#N/A
+modern	xmatch	763	_xlfn.XMATCH({1},$AC$1:$AC$6,0,2)	('zzz',)	e	#N/A
+modern	xlookup	764	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-2)	('zzz',)	e	#N/A
+modern	xmatch	765	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-2)	('zzz',)	e	#N/A
+modern	xlookup	766	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6)	('',)	n	50.0
+modern	xmatch	767	_xlfn.XMATCH({1},$AC$1:$AC$6)	('',)	n	5.0
+modern	xlookup	768	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,"none")	('',)	n	50.0
+modern	xlookup	769	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,2)	('',)	n	50.0
+modern	xmatch	770	_xlfn.XMATCH({1},$AC$1:$AC$6,2)	('',)	n	5.0
+modern	xlookup	771	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,-1)	('',)	n	50.0
+modern	xmatch	772	_xlfn.XMATCH({1},$AC$1:$AC$6,-1)	('',)	n	5.0
+modern	xlookup	773	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,1)	('',)	n	50.0
+modern	xmatch	774	_xlfn.XMATCH({1},$AC$1:$AC$6,1)	('',)	n	5.0
+modern	xlookup	775	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-1)	('',)	n	50.0
+modern	xmatch	776	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-1)	('',)	n	5.0
+modern	xlookup	777	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,2)	('',)	e	#N/A
+modern	xmatch	778	_xlfn.XMATCH({1},$AC$1:$AC$6,0,2)	('',)	e	#N/A
+modern	xlookup	779	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-2)	('',)	n	50.0
+modern	xmatch	780	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-2)	('',)	n	5.0
+modern	xlookup	781	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6)	(None,)	e	#N/A
+modern	xmatch	782	_xlfn.XMATCH({1},$AC$1:$AC$6)	(None,)	e	#N/A
+modern	xlookup	783	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,"none")	(None,)	str	'none'
+modern	xlookup	784	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,2)	(None,)	e	#N/A
+modern	xmatch	785	_xlfn.XMATCH({1},$AC$1:$AC$6,2)	(None,)	e	#N/A
+modern	xlookup	786	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,-1)	(None,)	n	60.0
+modern	xmatch	787	_xlfn.XMATCH({1},$AC$1:$AC$6,-1)	(None,)	n	6.0
+modern	xlookup	788	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,1)	(None,)	e	#N/A
+modern	xmatch	789	_xlfn.XMATCH({1},$AC$1:$AC$6,1)	(None,)	e	#N/A
+modern	xlookup	790	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-1)	(None,)	e	#N/A
+modern	xmatch	791	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-1)	(None,)	e	#N/A
+modern	xlookup	792	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,2)	(None,)	e	#N/A
+modern	xmatch	793	_xlfn.XMATCH({1},$AC$1:$AC$6,0,2)	(None,)	e	#N/A
+modern	xlookup	794	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-2)	(None,)	e	#N/A
+modern	xmatch	795	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-2)	(None,)	e	#N/A
+modern	xlookup	796	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6)	('~*',)	e	#N/A
+modern	xmatch	797	_xlfn.XMATCH({1},$AC$1:$AC$6)	('~*',)	e	#N/A
+modern	xlookup	798	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,"none")	('~*',)	str	'none'
+modern	xlookup	799	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,2)	('~*',)	e	#N/A
+modern	xmatch	800	_xlfn.XMATCH({1},$AC$1:$AC$6,2)	('~*',)	e	#N/A
+modern	xlookup	801	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,-1)	('~*',)	n	50.0
+modern	xmatch	802	_xlfn.XMATCH({1},$AC$1:$AC$6,-1)	('~*',)	n	5.0
+modern	xlookup	803	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,1)	('~*',)	n	10.0
+modern	xmatch	804	_xlfn.XMATCH({1},$AC$1:$AC$6,1)	('~*',)	n	1.0
+modern	xlookup	805	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-1)	('~*',)	e	#N/A
+modern	xmatch	806	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-1)	('~*',)	e	#N/A
+modern	xlookup	807	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,2)	('~*',)	e	#N/A
+modern	xmatch	808	_xlfn.XMATCH({1},$AC$1:$AC$6,0,2)	('~*',)	e	#N/A
+modern	xlookup	809	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-2)	('~*',)	e	#N/A
+modern	xmatch	810	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-2)	('~*',)	e	#N/A
+modern	xlookup	811	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6)	(1.0,)	e	#N/A
+modern	xmatch	812	_xlfn.XMATCH({1},$AC$1:$AC$6)	(1.0,)	e	#N/A
+modern	xlookup	813	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,"none")	(1.0,)	str	'none'
+modern	xlookup	814	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,2)	(1.0,)	e	#N/A
+modern	xmatch	815	_xlfn.XMATCH({1},$AC$1:$AC$6,2)	(1.0,)	e	#N/A
+modern	xlookup	816	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,-1)	(1.0,)	e	#N/A
+modern	xmatch	817	_xlfn.XMATCH({1},$AC$1:$AC$6,-1)	(1.0,)	e	#N/A
+modern	xlookup	818	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,1)	(1.0,)	n	50.0
+modern	xmatch	819	_xlfn.XMATCH({1},$AC$1:$AC$6,1)	(1.0,)	n	5.0
+modern	xlookup	820	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-1)	(1.0,)	e	#N/A
+modern	xmatch	821	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-1)	(1.0,)	e	#N/A
+modern	xlookup	822	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,2)	(1.0,)	e	#N/A
+modern	xmatch	823	_xlfn.XMATCH({1},$AC$1:$AC$6,0,2)	(1.0,)	e	#N/A
+modern	xlookup	824	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-2)	(1.0,)	e	#N/A
+modern	xmatch	825	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-2)	(1.0,)	e	#N/A
+modern	xlookup	826	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6)	(True,)	e	#N/A
+modern	xmatch	827	_xlfn.XMATCH({1},$AC$1:$AC$6)	(True,)	e	#N/A
+modern	xlookup	828	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,"none")	(True,)	str	'none'
+modern	xlookup	829	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,2)	(True,)	e	#N/A
+modern	xmatch	830	_xlfn.XMATCH({1},$AC$1:$AC$6,2)	(True,)	e	#N/A
+modern	xlookup	831	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,-1)	(True,)	n	60.0
+modern	xmatch	832	_xlfn.XMATCH({1},$AC$1:$AC$6,-1)	(True,)	n	6.0
+modern	xlookup	833	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,1)	(True,)	e	#N/A
+modern	xmatch	834	_xlfn.XMATCH({1},$AC$1:$AC$6,1)	(True,)	e	#N/A
+modern	xlookup	835	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-1)	(True,)	e	#N/A
+modern	xmatch	836	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-1)	(True,)	e	#N/A
+modern	xlookup	837	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,2)	(True,)	e	#N/A
+modern	xmatch	838	_xlfn.XMATCH({1},$AC$1:$AC$6,0,2)	(True,)	e	#N/A
+modern	xlookup	839	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-2)	(True,)	e	#N/A
+modern	xmatch	840	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-2)	(True,)	e	#N/A
+modern	xlookup	841	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xmatch	842	_xlfn.XMATCH({1},$AC$1:$AC$6)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xlookup	843	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,"none")	(ErrorValue('#N/A'),)	e	#N/A
+modern	xlookup	844	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,2)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xmatch	845	_xlfn.XMATCH({1},$AC$1:$AC$6,2)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xlookup	846	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,-1)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xmatch	847	_xlfn.XMATCH({1},$AC$1:$AC$6,-1)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xlookup	848	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,1)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xmatch	849	_xlfn.XMATCH({1},$AC$1:$AC$6,1)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xlookup	850	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-1)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xmatch	851	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-1)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xlookup	852	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,2)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xmatch	853	_xlfn.XMATCH({1},$AC$1:$AC$6,0,2)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xlookup	854	_xlfn.XLOOKUP({1},$AC$1:$AC$6,$AD$1:$AD$6,,0,-2)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xmatch	855	_xlfn.XMATCH({1},$AC$1:$AC$6,0,-2)	(ErrorValue('#N/A'),)	e	#N/A
+modern	xlookup	856	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,1)	(0.0,)	e	#N/A
+modern	xmatch	857	_xlfn.XMATCH({1},$AF$1:$AF$6,0,1)	(0.0,)	e	#N/A
+modern	xmatch	858	_xlfn.XMATCH({1},$AG$1:$AG$6,0,1)	(0.0,)	e	#N/A
+modern	xlookup	859	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-1)	(0.0,)	e	#N/A
+modern	xmatch	860	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-1)	(0.0,)	e	#N/A
+modern	xmatch	861	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-1)	(0.0,)	e	#N/A
+modern	xlookup	862	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,2)	(0.0,)	e	#N/A
+modern	xmatch	863	_xlfn.XMATCH({1},$AF$1:$AF$6,0,2)	(0.0,)	e	#N/A
+modern	xmatch	864	_xlfn.XMATCH({1},$AG$1:$AG$6,0,2)	(0.0,)	e	#N/A
+modern	xlookup	865	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-2)	(0.0,)	e	#N/A
+modern	xmatch	866	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-2)	(0.0,)	e	#N/A
+modern	xmatch	867	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-2)	(0.0,)	e	#N/A
+modern	xlookup	868	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,1)	(0.0,)	e	#N/A
+modern	xmatch	869	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,1)	(0.0,)	e	#N/A
+modern	xmatch	870	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,1)	(0.0,)	e	#N/A
+modern	xlookup	871	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-1)	(0.0,)	e	#N/A
+modern	xmatch	872	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-1)	(0.0,)	e	#N/A
+modern	xmatch	873	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-1)	(0.0,)	e	#N/A
+modern	xlookup	874	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,2)	(0.0,)	e	#N/A
+modern	xmatch	875	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,2)	(0.0,)	e	#N/A
+modern	xmatch	876	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,2)	(0.0,)	e	#N/A
+modern	xlookup	877	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-2)	(0.0,)	e	#N/A
+modern	xmatch	878	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-2)	(0.0,)	e	#N/A
+modern	xmatch	879	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-2)	(0.0,)	e	#N/A
+modern	xlookup	880	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,1)	(0.0,)	n	10.0
+modern	xmatch	881	_xlfn.XMATCH({1},$AF$1:$AF$6,1,1)	(0.0,)	n	1.0
+modern	xmatch	882	_xlfn.XMATCH({1},$AG$1:$AG$6,1,1)	(0.0,)	n	6.0
+modern	xlookup	883	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-1)	(0.0,)	n	10.0
+modern	xmatch	884	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-1)	(0.0,)	n	1.0
+modern	xmatch	885	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-1)	(0.0,)	n	6.0
+modern	xlookup	886	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,2)	(0.0,)	n	10.0
+modern	xmatch	887	_xlfn.XMATCH({1},$AF$1:$AF$6,1,2)	(0.0,)	n	1.0
+modern	xmatch	888	_xlfn.XMATCH({1},$AG$1:$AG$6,1,2)	(0.0,)	n	1.0
+modern	xlookup	889	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-2)	(0.0,)	n	60.0
+modern	xmatch	890	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-2)	(0.0,)	n	6.0
+modern	xmatch	891	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-2)	(0.0,)	n	6.0
+modern	xlookup	892	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,1)	(0.0,)	e	#N/A
+modern	xmatch	893	_xlfn.XMATCH({1},$AF$1:$AF$6,2,1)	(0.0,)	e	#N/A
+modern	xmatch	894	_xlfn.XMATCH({1},$AG$1:$AG$6,2,1)	(0.0,)	e	#N/A
+modern	xlookup	895	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-1)	(0.0,)	e	#N/A
+modern	xmatch	896	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-1)	(0.0,)	e	#N/A
+modern	xmatch	897	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-1)	(0.0,)	e	#N/A
+modern	xlookup	898	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,2)	(0.0,)	e	#VALUE!
+modern	xmatch	899	_xlfn.XMATCH({1},$AF$1:$AF$6,2,2)	(0.0,)	e	#VALUE!
+modern	xmatch	900	_xlfn.XMATCH({1},$AG$1:$AG$6,2,2)	(0.0,)	e	#VALUE!
+modern	xlookup	901	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-2)	(0.0,)	e	#VALUE!
+modern	xmatch	902	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-2)	(0.0,)	e	#VALUE!
+modern	xmatch	903	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-2)	(0.0,)	e	#VALUE!
+modern	xlookup	904	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,1)	(1.0,)	n	10.0
+modern	xmatch	905	_xlfn.XMATCH({1},$AF$1:$AF$6,0,1)	(1.0,)	n	1.0
+modern	xmatch	906	_xlfn.XMATCH({1},$AG$1:$AG$6,0,1)	(1.0,)	n	6.0
+modern	xlookup	907	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-1)	(1.0,)	n	10.0
+modern	xmatch	908	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-1)	(1.0,)	n	1.0
+modern	xmatch	909	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-1)	(1.0,)	n	6.0
+modern	xlookup	910	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,2)	(1.0,)	n	10.0
+modern	xmatch	911	_xlfn.XMATCH({1},$AF$1:$AF$6,0,2)	(1.0,)	n	1.0
+modern	xmatch	912	_xlfn.XMATCH({1},$AG$1:$AG$6,0,2)	(1.0,)	e	#N/A
+modern	xlookup	913	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-2)	(1.0,)	e	#N/A
+modern	xmatch	914	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-2)	(1.0,)	e	#N/A
+modern	xmatch	915	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-2)	(1.0,)	n	6.0
+modern	xlookup	916	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,1)	(1.0,)	n	10.0
+modern	xmatch	917	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,1)	(1.0,)	n	1.0
+modern	xmatch	918	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,1)	(1.0,)	n	6.0
+modern	xlookup	919	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-1)	(1.0,)	n	10.0
+modern	xmatch	920	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-1)	(1.0,)	n	1.0
+modern	xmatch	921	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-1)	(1.0,)	n	6.0
+modern	xlookup	922	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,2)	(1.0,)	n	10.0
+modern	xmatch	923	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,2)	(1.0,)	n	1.0
+modern	xmatch	924	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,2)	(1.0,)	e	#N/A
+modern	xlookup	925	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-2)	(1.0,)	e	#N/A
+modern	xmatch	926	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-2)	(1.0,)	e	#N/A
+modern	xmatch	927	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-2)	(1.0,)	n	6.0
+modern	xlookup	928	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,1)	(1.0,)	n	10.0
+modern	xmatch	929	_xlfn.XMATCH({1},$AF$1:$AF$6,1,1)	(1.0,)	n	1.0
+modern	xmatch	930	_xlfn.XMATCH({1},$AG$1:$AG$6,1,1)	(1.0,)	n	6.0
+modern	xlookup	931	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-1)	(1.0,)	n	10.0
+modern	xmatch	932	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-1)	(1.0,)	n	1.0
+modern	xmatch	933	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-1)	(1.0,)	n	6.0
+modern	xlookup	934	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,2)	(1.0,)	n	10.0
+modern	xmatch	935	_xlfn.XMATCH({1},$AF$1:$AF$6,1,2)	(1.0,)	n	1.0
+modern	xmatch	936	_xlfn.XMATCH({1},$AG$1:$AG$6,1,2)	(1.0,)	n	1.0
+modern	xlookup	937	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-2)	(1.0,)	n	60.0
+modern	xmatch	938	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-2)	(1.0,)	n	6.0
+modern	xmatch	939	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-2)	(1.0,)	n	6.0
+modern	xlookup	940	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,1)	(1.0,)	n	10.0
+modern	xmatch	941	_xlfn.XMATCH({1},$AF$1:$AF$6,2,1)	(1.0,)	n	1.0
+modern	xmatch	942	_xlfn.XMATCH({1},$AG$1:$AG$6,2,1)	(1.0,)	n	6.0
+modern	xlookup	943	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-1)	(1.0,)	n	10.0
+modern	xmatch	944	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-1)	(1.0,)	n	1.0
+modern	xmatch	945	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-1)	(1.0,)	n	6.0
+modern	xlookup	946	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,2)	(1.0,)	e	#VALUE!
+modern	xmatch	947	_xlfn.XMATCH({1},$AF$1:$AF$6,2,2)	(1.0,)	e	#VALUE!
+modern	xmatch	948	_xlfn.XMATCH({1},$AG$1:$AG$6,2,2)	(1.0,)	e	#VALUE!
+modern	xlookup	949	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-2)	(1.0,)	e	#VALUE!
+modern	xmatch	950	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-2)	(1.0,)	e	#VALUE!
+modern	xmatch	951	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-2)	(1.0,)	e	#VALUE!
+modern	xlookup	952	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,1)	(4.0,)	e	#N/A
+modern	xmatch	953	_xlfn.XMATCH({1},$AF$1:$AF$6,0,1)	(4.0,)	e	#N/A
+modern	xmatch	954	_xlfn.XMATCH({1},$AG$1:$AG$6,0,1)	(4.0,)	e	#N/A
+modern	xlookup	955	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-1)	(4.0,)	e	#N/A
+modern	xmatch	956	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-1)	(4.0,)	e	#N/A
+modern	xmatch	957	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-1)	(4.0,)	e	#N/A
+modern	xlookup	958	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,2)	(4.0,)	e	#N/A
+modern	xmatch	959	_xlfn.XMATCH({1},$AF$1:$AF$6,0,2)	(4.0,)	e	#N/A
+modern	xmatch	960	_xlfn.XMATCH({1},$AG$1:$AG$6,0,2)	(4.0,)	e	#N/A
+modern	xlookup	961	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-2)	(4.0,)	e	#N/A
+modern	xmatch	962	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-2)	(4.0,)	e	#N/A
+modern	xmatch	963	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-2)	(4.0,)	e	#N/A
+modern	xlookup	964	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,1)	(4.0,)	n	20.0
+modern	xmatch	965	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,1)	(4.0,)	n	2.0
+modern	xmatch	966	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,1)	(4.0,)	n	5.0
+modern	xlookup	967	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-1)	(4.0,)	n	20.0
+modern	xmatch	968	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-1)	(4.0,)	n	2.0
+modern	xmatch	969	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-1)	(4.0,)	n	5.0
+modern	xlookup	970	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,2)	(4.0,)	n	20.0
+modern	xmatch	971	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,2)	(4.0,)	n	2.0
+modern	xmatch	972	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,2)	(4.0,)	e	#N/A
+modern	xlookup	973	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-2)	(4.0,)	e	#N/A
+modern	xmatch	974	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-2)	(4.0,)	e	#N/A
+modern	xmatch	975	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-2)	(4.0,)	n	5.0
+modern	xlookup	976	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,1)	(4.0,)	n	30.0
+modern	xmatch	977	_xlfn.XMATCH({1},$AF$1:$AF$6,1,1)	(4.0,)	n	3.0
+modern	xmatch	978	_xlfn.XMATCH({1},$AG$1:$AG$6,1,1)	(4.0,)	n	4.0
+modern	xlookup	979	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-1)	(4.0,)	n	30.0
+modern	xmatch	980	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-1)	(4.0,)	n	3.0
+modern	xmatch	981	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-1)	(4.0,)	n	4.0
+modern	xlookup	982	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,2)	(4.0,)	n	30.0
+modern	xmatch	983	_xlfn.XMATCH({1},$AF$1:$AF$6,1,2)	(4.0,)	n	3.0
+modern	xmatch	984	_xlfn.XMATCH({1},$AG$1:$AG$6,1,2)	(4.0,)	n	1.0
+modern	xlookup	985	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-2)	(4.0,)	n	60.0
+modern	xmatch	986	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-2)	(4.0,)	n	6.0
+modern	xmatch	987	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-2)	(4.0,)	n	4.0
+modern	xlookup	988	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,1)	(4.0,)	e	#N/A
+modern	xmatch	989	_xlfn.XMATCH({1},$AF$1:$AF$6,2,1)	(4.0,)	e	#N/A
+modern	xmatch	990	_xlfn.XMATCH({1},$AG$1:$AG$6,2,1)	(4.0,)	e	#N/A
+modern	xlookup	991	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-1)	(4.0,)	e	#N/A
+modern	xmatch	992	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-1)	(4.0,)	e	#N/A
+modern	xmatch	993	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-1)	(4.0,)	e	#N/A
+modern	xlookup	994	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,2)	(4.0,)	e	#VALUE!
+modern	xmatch	995	_xlfn.XMATCH({1},$AF$1:$AF$6,2,2)	(4.0,)	e	#VALUE!
+modern	xmatch	996	_xlfn.XMATCH({1},$AG$1:$AG$6,2,2)	(4.0,)	e	#VALUE!
+modern	xlookup	997	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-2)	(4.0,)	e	#VALUE!
+modern	xmatch	998	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-2)	(4.0,)	e	#VALUE!
+modern	xmatch	999	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-2)	(4.0,)	e	#VALUE!
+modern	xlookup	1000	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,1)	(5.0,)	n	30.0
+modern	xmatch	1001	_xlfn.XMATCH({1},$AF$1:$AF$6,0,1)	(5.0,)	n	3.0
+modern	xmatch	1002	_xlfn.XMATCH({1},$AG$1:$AG$6,0,1)	(5.0,)	n	4.0
+modern	xlookup	1003	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-1)	(5.0,)	n	30.0
+modern	xmatch	1004	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-1)	(5.0,)	n	3.0
+modern	xmatch	1005	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-1)	(5.0,)	n	4.0
+modern	xlookup	1006	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,2)	(5.0,)	n	30.0
+modern	xmatch	1007	_xlfn.XMATCH({1},$AF$1:$AF$6,0,2)	(5.0,)	n	3.0
+modern	xmatch	1008	_xlfn.XMATCH({1},$AG$1:$AG$6,0,2)	(5.0,)	e	#N/A
+modern	xlookup	1009	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-2)	(5.0,)	n	30.0
+modern	xmatch	1010	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-2)	(5.0,)	n	3.0
+modern	xmatch	1011	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-2)	(5.0,)	n	4.0
+modern	xlookup	1012	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,1)	(5.0,)	n	30.0
+modern	xmatch	1013	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,1)	(5.0,)	n	3.0
+modern	xmatch	1014	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,1)	(5.0,)	n	4.0
+modern	xlookup	1015	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-1)	(5.0,)	n	30.0
+modern	xmatch	1016	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-1)	(5.0,)	n	3.0
+modern	xmatch	1017	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-1)	(5.0,)	n	4.0
+modern	xlookup	1018	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,2)	(5.0,)	n	30.0
+modern	xmatch	1019	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,2)	(5.0,)	n	3.0
+modern	xmatch	1020	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,2)	(5.0,)	e	#N/A
+modern	xlookup	1021	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-2)	(5.0,)	n	30.0
+modern	xmatch	1022	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-2)	(5.0,)	n	3.0
+modern	xmatch	1023	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-2)	(5.0,)	n	4.0
+modern	xlookup	1024	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,1)	(5.0,)	n	30.0
+modern	xmatch	1025	_xlfn.XMATCH({1},$AF$1:$AF$6,1,1)	(5.0,)	n	3.0
+modern	xmatch	1026	_xlfn.XMATCH({1},$AG$1:$AG$6,1,1)	(5.0,)	n	4.0
+modern	xlookup	1027	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-1)	(5.0,)	n	30.0
+modern	xmatch	1028	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-1)	(5.0,)	n	3.0
+modern	xmatch	1029	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-1)	(5.0,)	n	4.0
+modern	xlookup	1030	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,2)	(5.0,)	n	30.0
+modern	xmatch	1031	_xlfn.XMATCH({1},$AF$1:$AF$6,1,2)	(5.0,)	n	3.0
+modern	xmatch	1032	_xlfn.XMATCH({1},$AG$1:$AG$6,1,2)	(5.0,)	n	1.0
+modern	xlookup	1033	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-2)	(5.0,)	n	30.0
+modern	xmatch	1034	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-2)	(5.0,)	n	3.0
+modern	xmatch	1035	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-2)	(5.0,)	n	4.0
+modern	xlookup	1036	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,1)	(5.0,)	n	30.0
+modern	xmatch	1037	_xlfn.XMATCH({1},$AF$1:$AF$6,2,1)	(5.0,)	n	3.0
+modern	xmatch	1038	_xlfn.XMATCH({1},$AG$1:$AG$6,2,1)	(5.0,)	n	4.0
+modern	xlookup	1039	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-1)	(5.0,)	n	30.0
+modern	xmatch	1040	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-1)	(5.0,)	n	3.0
+modern	xmatch	1041	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-1)	(5.0,)	n	4.0
+modern	xlookup	1042	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,2)	(5.0,)	e	#VALUE!
+modern	xmatch	1043	_xlfn.XMATCH({1},$AF$1:$AF$6,2,2)	(5.0,)	e	#VALUE!
+modern	xmatch	1044	_xlfn.XMATCH({1},$AG$1:$AG$6,2,2)	(5.0,)	e	#VALUE!
+modern	xlookup	1045	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-2)	(5.0,)	e	#VALUE!
+modern	xmatch	1046	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-2)	(5.0,)	e	#VALUE!
+modern	xmatch	1047	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-2)	(5.0,)	e	#VALUE!
+modern	xlookup	1048	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,1)	(100.0,)	e	#N/A
+modern	xmatch	1049	_xlfn.XMATCH({1},$AF$1:$AF$6,0,1)	(100.0,)	e	#N/A
+modern	xmatch	1050	_xlfn.XMATCH({1},$AG$1:$AG$6,0,1)	(100.0,)	e	#N/A
+modern	xlookup	1051	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-1)	(100.0,)	e	#N/A
+modern	xmatch	1052	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-1)	(100.0,)	e	#N/A
+modern	xmatch	1053	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-1)	(100.0,)	e	#N/A
+modern	xlookup	1054	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,2)	(100.0,)	e	#N/A
+modern	xmatch	1055	_xlfn.XMATCH({1},$AF$1:$AF$6,0,2)	(100.0,)	e	#N/A
+modern	xmatch	1056	_xlfn.XMATCH({1},$AG$1:$AG$6,0,2)	(100.0,)	e	#N/A
+modern	xlookup	1057	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-2)	(100.0,)	e	#N/A
+modern	xmatch	1058	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-2)	(100.0,)	e	#N/A
+modern	xmatch	1059	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-2)	(100.0,)	e	#N/A
+modern	xlookup	1060	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,1)	(100.0,)	n	60.0
+modern	xmatch	1061	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,1)	(100.0,)	n	6.0
+modern	xmatch	1062	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,1)	(100.0,)	n	1.0
+modern	xlookup	1063	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-1)	(100.0,)	n	60.0
+modern	xmatch	1064	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-1)	(100.0,)	n	6.0
+modern	xmatch	1065	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-1)	(100.0,)	n	1.0
+modern	xlookup	1066	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,2)	(100.0,)	n	60.0
+modern	xmatch	1067	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,2)	(100.0,)	n	6.0
+modern	xmatch	1068	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,2)	(100.0,)	n	6.0
+modern	xlookup	1069	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-2)	(100.0,)	n	10.0
+modern	xmatch	1070	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-2)	(100.0,)	n	1.0
+modern	xmatch	1071	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-2)	(100.0,)	n	1.0
+modern	xlookup	1072	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,1)	(100.0,)	e	#N/A
+modern	xmatch	1073	_xlfn.XMATCH({1},$AF$1:$AF$6,1,1)	(100.0,)	e	#N/A
+modern	xmatch	1074	_xlfn.XMATCH({1},$AG$1:$AG$6,1,1)	(100.0,)	e	#N/A
+modern	xlookup	1075	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-1)	(100.0,)	e	#N/A
+modern	xmatch	1076	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-1)	(100.0,)	e	#N/A
+modern	xmatch	1077	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-1)	(100.0,)	e	#N/A
+modern	xlookup	1078	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,2)	(100.0,)	e	#N/A
+modern	xmatch	1079	_xlfn.XMATCH({1},$AF$1:$AF$6,1,2)	(100.0,)	e	#N/A
+modern	xmatch	1080	_xlfn.XMATCH({1},$AG$1:$AG$6,1,2)	(100.0,)	e	#N/A
+modern	xlookup	1081	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-2)	(100.0,)	e	#N/A
+modern	xmatch	1082	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-2)	(100.0,)	e	#N/A
+modern	xmatch	1083	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-2)	(100.0,)	e	#N/A
+modern	xlookup	1084	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,1)	(100.0,)	e	#N/A
+modern	xmatch	1085	_xlfn.XMATCH({1},$AF$1:$AF$6,2,1)	(100.0,)	e	#N/A
+modern	xmatch	1086	_xlfn.XMATCH({1},$AG$1:$AG$6,2,1)	(100.0,)	e	#N/A
+modern	xlookup	1087	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-1)	(100.0,)	e	#N/A
+modern	xmatch	1088	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-1)	(100.0,)	e	#N/A
+modern	xmatch	1089	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-1)	(100.0,)	e	#N/A
+modern	xlookup	1090	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,2)	(100.0,)	e	#VALUE!
+modern	xmatch	1091	_xlfn.XMATCH({1},$AF$1:$AF$6,2,2)	(100.0,)	e	#VALUE!
+modern	xmatch	1092	_xlfn.XMATCH({1},$AG$1:$AG$6,2,2)	(100.0,)	e	#VALUE!
+modern	xlookup	1093	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-2)	(100.0,)	e	#VALUE!
+modern	xmatch	1094	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-2)	(100.0,)	e	#VALUE!
+modern	xmatch	1095	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-2)	(100.0,)	e	#VALUE!
+modern	xlookup	1096	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,1)	(-1.0,)	e	#N/A
+modern	xmatch	1097	_xlfn.XMATCH({1},$AF$1:$AF$6,0,1)	(-1.0,)	e	#N/A
+modern	xmatch	1098	_xlfn.XMATCH({1},$AG$1:$AG$6,0,1)	(-1.0,)	e	#N/A
+modern	xlookup	1099	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-1)	(-1.0,)	e	#N/A
+modern	xmatch	1100	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-1)	(-1.0,)	e	#N/A
+modern	xmatch	1101	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-1)	(-1.0,)	e	#N/A
+modern	xlookup	1102	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,2)	(-1.0,)	e	#N/A
+modern	xmatch	1103	_xlfn.XMATCH({1},$AF$1:$AF$6,0,2)	(-1.0,)	e	#N/A
+modern	xmatch	1104	_xlfn.XMATCH({1},$AG$1:$AG$6,0,2)	(-1.0,)	e	#N/A
+modern	xlookup	1105	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-2)	(-1.0,)	e	#N/A
+modern	xmatch	1106	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-2)	(-1.0,)	e	#N/A
+modern	xmatch	1107	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-2)	(-1.0,)	e	#N/A
+modern	xlookup	1108	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,1)	(-1.0,)	e	#N/A
+modern	xmatch	1109	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,1)	(-1.0,)	e	#N/A
+modern	xmatch	1110	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,1)	(-1.0,)	e	#N/A
+modern	xlookup	1111	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-1)	(-1.0,)	e	#N/A
+modern	xmatch	1112	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-1)	(-1.0,)	e	#N/A
+modern	xmatch	1113	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-1)	(-1.0,)	e	#N/A
+modern	xlookup	1114	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,2)	(-1.0,)	e	#N/A
+modern	xmatch	1115	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,2)	(-1.0,)	e	#N/A
+modern	xmatch	1116	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,2)	(-1.0,)	e	#N/A
+modern	xlookup	1117	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-2)	(-1.0,)	e	#N/A
+modern	xmatch	1118	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-2)	(-1.0,)	e	#N/A
+modern	xmatch	1119	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-2)	(-1.0,)	e	#N/A
+modern	xlookup	1120	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,1)	(-1.0,)	n	10.0
+modern	xmatch	1121	_xlfn.XMATCH({1},$AF$1:$AF$6,1,1)	(-1.0,)	n	1.0
+modern	xmatch	1122	_xlfn.XMATCH({1},$AG$1:$AG$6,1,1)	(-1.0,)	n	6.0
+modern	xlookup	1123	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-1)	(-1.0,)	n	10.0
+modern	xmatch	1124	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-1)	(-1.0,)	n	1.0
+modern	xmatch	1125	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-1)	(-1.0,)	n	6.0
+modern	xlookup	1126	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,2)	(-1.0,)	n	10.0
+modern	xmatch	1127	_xlfn.XMATCH({1},$AF$1:$AF$6,1,2)	(-1.0,)	n	1.0
+modern	xmatch	1128	_xlfn.XMATCH({1},$AG$1:$AG$6,1,2)	(-1.0,)	n	1.0
+modern	xlookup	1129	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-2)	(-1.0,)	n	60.0
+modern	xmatch	1130	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-2)	(-1.0,)	n	6.0
+modern	xmatch	1131	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-2)	(-1.0,)	n	6.0
+modern	xlookup	1132	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,1)	(-1.0,)	e	#N/A
+modern	xmatch	1133	_xlfn.XMATCH({1},$AF$1:$AF$6,2,1)	(-1.0,)	e	#N/A
+modern	xmatch	1134	_xlfn.XMATCH({1},$AG$1:$AG$6,2,1)	(-1.0,)	e	#N/A
+modern	xlookup	1135	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-1)	(-1.0,)	e	#N/A
+modern	xmatch	1136	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-1)	(-1.0,)	e	#N/A
+modern	xmatch	1137	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-1)	(-1.0,)	e	#N/A
+modern	xlookup	1138	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,2)	(-1.0,)	e	#VALUE!
+modern	xmatch	1139	_xlfn.XMATCH({1},$AF$1:$AF$6,2,2)	(-1.0,)	e	#VALUE!
+modern	xmatch	1140	_xlfn.XMATCH({1},$AG$1:$AG$6,2,2)	(-1.0,)	e	#VALUE!
+modern	xlookup	1141	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-2)	(-1.0,)	e	#VALUE!
+modern	xmatch	1142	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-2)	(-1.0,)	e	#VALUE!
+modern	xmatch	1143	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-2)	(-1.0,)	e	#VALUE!
+modern	xlookup	1144	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,1)	(11.0,)	n	60.0
+modern	xmatch	1145	_xlfn.XMATCH({1},$AF$1:$AF$6,0,1)	(11.0,)	n	6.0
+modern	xmatch	1146	_xlfn.XMATCH({1},$AG$1:$AG$6,0,1)	(11.0,)	n	1.0
+modern	xlookup	1147	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-1)	(11.0,)	n	60.0
+modern	xmatch	1148	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-1)	(11.0,)	n	6.0
+modern	xmatch	1149	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-1)	(11.0,)	n	1.0
+modern	xlookup	1150	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,2)	(11.0,)	n	60.0
+modern	xmatch	1151	_xlfn.XMATCH({1},$AF$1:$AF$6,0,2)	(11.0,)	n	6.0
+modern	xmatch	1152	_xlfn.XMATCH({1},$AG$1:$AG$6,0,2)	(11.0,)	e	#N/A
+modern	xlookup	1153	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-2)	(11.0,)	e	#N/A
+modern	xmatch	1154	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-2)	(11.0,)	e	#N/A
+modern	xmatch	1155	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-2)	(11.0,)	n	1.0
+modern	xlookup	1156	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,1)	(11.0,)	n	60.0
+modern	xmatch	1157	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,1)	(11.0,)	n	6.0
+modern	xmatch	1158	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,1)	(11.0,)	n	1.0
+modern	xlookup	1159	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-1)	(11.0,)	n	60.0
+modern	xmatch	1160	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-1)	(11.0,)	n	6.0
+modern	xmatch	1161	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-1)	(11.0,)	n	1.0
+modern	xlookup	1162	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,2)	(11.0,)	n	60.0
+modern	xmatch	1163	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,2)	(11.0,)	n	6.0
+modern	xmatch	1164	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,2)	(11.0,)	n	6.0
+modern	xlookup	1165	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-2)	(11.0,)	n	10.0
+modern	xmatch	1166	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-2)	(11.0,)	n	1.0
+modern	xmatch	1167	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-2)	(11.0,)	n	1.0
+modern	xlookup	1168	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,1)	(11.0,)	n	60.0
+modern	xmatch	1169	_xlfn.XMATCH({1},$AF$1:$AF$6,1,1)	(11.0,)	n	6.0
+modern	xmatch	1170	_xlfn.XMATCH({1},$AG$1:$AG$6,1,1)	(11.0,)	n	1.0
+modern	xlookup	1171	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-1)	(11.0,)	n	60.0
+modern	xmatch	1172	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-1)	(11.0,)	n	6.0
+modern	xmatch	1173	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-1)	(11.0,)	n	1.0
+modern	xlookup	1174	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,2)	(11.0,)	n	60.0
+modern	xmatch	1175	_xlfn.XMATCH({1},$AF$1:$AF$6,1,2)	(11.0,)	n	6.0
+modern	xmatch	1176	_xlfn.XMATCH({1},$AG$1:$AG$6,1,2)	(11.0,)	e	#N/A
+modern	xlookup	1177	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-2)	(11.0,)	e	#N/A
+modern	xmatch	1178	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-2)	(11.0,)	e	#N/A
+modern	xmatch	1179	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-2)	(11.0,)	n	1.0
+modern	xlookup	1180	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,1)	(11.0,)	n	60.0
+modern	xmatch	1181	_xlfn.XMATCH({1},$AF$1:$AF$6,2,1)	(11.0,)	n	6.0
+modern	xmatch	1182	_xlfn.XMATCH({1},$AG$1:$AG$6,2,1)	(11.0,)	n	1.0
+modern	xlookup	1183	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-1)	(11.0,)	n	60.0
+modern	xmatch	1184	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-1)	(11.0,)	n	6.0
+modern	xmatch	1185	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-1)	(11.0,)	n	1.0
+modern	xlookup	1186	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,2)	(11.0,)	e	#VALUE!
+modern	xmatch	1187	_xlfn.XMATCH({1},$AF$1:$AF$6,2,2)	(11.0,)	e	#VALUE!
+modern	xmatch	1188	_xlfn.XMATCH({1},$AG$1:$AG$6,2,2)	(11.0,)	e	#VALUE!
+modern	xlookup	1189	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-2)	(11.0,)	e	#VALUE!
+modern	xmatch	1190	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-2)	(11.0,)	e	#VALUE!
+modern	xmatch	1191	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-2)	(11.0,)	e	#VALUE!
+modern	xlookup	1192	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,1)	(12.0,)	e	#N/A
+modern	xmatch	1193	_xlfn.XMATCH({1},$AF$1:$AF$6,0,1)	(12.0,)	e	#N/A
+modern	xmatch	1194	_xlfn.XMATCH({1},$AG$1:$AG$6,0,1)	(12.0,)	e	#N/A
+modern	xlookup	1195	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-1)	(12.0,)	e	#N/A
+modern	xmatch	1196	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-1)	(12.0,)	e	#N/A
+modern	xmatch	1197	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-1)	(12.0,)	e	#N/A
+modern	xlookup	1198	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,2)	(12.0,)	e	#N/A
+modern	xmatch	1199	_xlfn.XMATCH({1},$AF$1:$AF$6,0,2)	(12.0,)	e	#N/A
+modern	xmatch	1200	_xlfn.XMATCH({1},$AG$1:$AG$6,0,2)	(12.0,)	e	#N/A
+modern	xlookup	1201	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-2)	(12.0,)	e	#N/A
+modern	xmatch	1202	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-2)	(12.0,)	e	#N/A
+modern	xmatch	1203	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-2)	(12.0,)	e	#N/A
+modern	xlookup	1204	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,1)	(12.0,)	n	60.0
+modern	xmatch	1205	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,1)	(12.0,)	n	6.0
+modern	xmatch	1206	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,1)	(12.0,)	n	1.0
+modern	xlookup	1207	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-1)	(12.0,)	n	60.0
+modern	xmatch	1208	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-1)	(12.0,)	n	6.0
+modern	xmatch	1209	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-1)	(12.0,)	n	1.0
+modern	xlookup	1210	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,2)	(12.0,)	n	60.0
+modern	xmatch	1211	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,2)	(12.0,)	n	6.0
+modern	xmatch	1212	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,2)	(12.0,)	n	6.0
+modern	xlookup	1213	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-2)	(12.0,)	n	10.0
+modern	xmatch	1214	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-2)	(12.0,)	n	1.0
+modern	xmatch	1215	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-2)	(12.0,)	n	1.0
+modern	xlookup	1216	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,1)	(12.0,)	e	#N/A
+modern	xmatch	1217	_xlfn.XMATCH({1},$AF$1:$AF$6,1,1)	(12.0,)	e	#N/A
+modern	xmatch	1218	_xlfn.XMATCH({1},$AG$1:$AG$6,1,1)	(12.0,)	e	#N/A
+modern	xlookup	1219	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-1)	(12.0,)	e	#N/A
+modern	xmatch	1220	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-1)	(12.0,)	e	#N/A
+modern	xmatch	1221	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-1)	(12.0,)	e	#N/A
+modern	xlookup	1222	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,2)	(12.0,)	e	#N/A
+modern	xmatch	1223	_xlfn.XMATCH({1},$AF$1:$AF$6,1,2)	(12.0,)	e	#N/A
+modern	xmatch	1224	_xlfn.XMATCH({1},$AG$1:$AG$6,1,2)	(12.0,)	e	#N/A
+modern	xlookup	1225	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-2)	(12.0,)	e	#N/A
+modern	xmatch	1226	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-2)	(12.0,)	e	#N/A
+modern	xmatch	1227	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-2)	(12.0,)	e	#N/A
+modern	xlookup	1228	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,1)	(12.0,)	e	#N/A
+modern	xmatch	1229	_xlfn.XMATCH({1},$AF$1:$AF$6,2,1)	(12.0,)	e	#N/A
+modern	xmatch	1230	_xlfn.XMATCH({1},$AG$1:$AG$6,2,1)	(12.0,)	e	#N/A
+modern	xlookup	1231	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-1)	(12.0,)	e	#N/A
+modern	xmatch	1232	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-1)	(12.0,)	e	#N/A
+modern	xmatch	1233	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-1)	(12.0,)	e	#N/A
+modern	xlookup	1234	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,2)	(12.0,)	e	#VALUE!
+modern	xmatch	1235	_xlfn.XMATCH({1},$AF$1:$AF$6,2,2)	(12.0,)	e	#VALUE!
+modern	xmatch	1236	_xlfn.XMATCH({1},$AG$1:$AG$6,2,2)	(12.0,)	e	#VALUE!
+modern	xlookup	1237	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-2)	(12.0,)	e	#VALUE!
+modern	xmatch	1238	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-2)	(12.0,)	e	#VALUE!
+modern	xmatch	1239	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-2)	(12.0,)	e	#VALUE!
+modern	xlookup	1240	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,1)	('5',)	e	#N/A
+modern	xmatch	1241	_xlfn.XMATCH({1},$AF$1:$AF$6,0,1)	('5',)	e	#N/A
+modern	xmatch	1242	_xlfn.XMATCH({1},$AG$1:$AG$6,0,1)	('5',)	e	#N/A
+modern	xlookup	1243	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-1)	('5',)	e	#N/A
+modern	xmatch	1244	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-1)	('5',)	e	#N/A
+modern	xmatch	1245	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-1)	('5',)	e	#N/A
+modern	xlookup	1246	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,2)	('5',)	e	#N/A
+modern	xmatch	1247	_xlfn.XMATCH({1},$AF$1:$AF$6,0,2)	('5',)	e	#N/A
+modern	xmatch	1248	_xlfn.XMATCH({1},$AG$1:$AG$6,0,2)	('5',)	e	#N/A
+modern	xlookup	1249	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-2)	('5',)	e	#N/A
+modern	xmatch	1250	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-2)	('5',)	e	#N/A
+modern	xmatch	1251	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-2)	('5',)	e	#N/A
+modern	xlookup	1252	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,1)	('5',)	n	60.0
+modern	xmatch	1253	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,1)	('5',)	n	6.0
+modern	xmatch	1254	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,1)	('5',)	n	1.0
+modern	xlookup	1255	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-1)	('5',)	n	60.0
+modern	xmatch	1256	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-1)	('5',)	n	6.0
+modern	xmatch	1257	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-1)	('5',)	n	1.0
+modern	xlookup	1258	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,2)	('5',)	n	60.0
+modern	xmatch	1259	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,2)	('5',)	n	6.0
+modern	xmatch	1260	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,2)	('5',)	n	6.0
+modern	xlookup	1261	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-2)	('5',)	n	10.0
+modern	xmatch	1262	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-2)	('5',)	n	1.0
+modern	xmatch	1263	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-2)	('5',)	n	1.0
+modern	xlookup	1264	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,1)	('5',)	e	#N/A
+modern	xmatch	1265	_xlfn.XMATCH({1},$AF$1:$AF$6,1,1)	('5',)	e	#N/A
+modern	xmatch	1266	_xlfn.XMATCH({1},$AG$1:$AG$6,1,1)	('5',)	e	#N/A
+modern	xlookup	1267	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-1)	('5',)	e	#N/A
+modern	xmatch	1268	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-1)	('5',)	e	#N/A
+modern	xmatch	1269	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-1)	('5',)	e	#N/A
+modern	xlookup	1270	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,2)	('5',)	e	#N/A
+modern	xmatch	1271	_xlfn.XMATCH({1},$AF$1:$AF$6,1,2)	('5',)	e	#N/A
+modern	xmatch	1272	_xlfn.XMATCH({1},$AG$1:$AG$6,1,2)	('5',)	e	#N/A
+modern	xlookup	1273	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-2)	('5',)	e	#N/A
+modern	xmatch	1274	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-2)	('5',)	e	#N/A
+modern	xmatch	1275	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-2)	('5',)	e	#N/A
+modern	xlookup	1276	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,1)	('5',)	e	#N/A
+modern	xmatch	1277	_xlfn.XMATCH({1},$AF$1:$AF$6,2,1)	('5',)	e	#N/A
+modern	xmatch	1278	_xlfn.XMATCH({1},$AG$1:$AG$6,2,1)	('5',)	e	#N/A
+modern	xlookup	1279	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-1)	('5',)	e	#N/A
+modern	xmatch	1280	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-1)	('5',)	e	#N/A
+modern	xmatch	1281	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-1)	('5',)	e	#N/A
+modern	xlookup	1282	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,2)	('5',)	e	#VALUE!
+modern	xmatch	1283	_xlfn.XMATCH({1},$AF$1:$AF$6,2,2)	('5',)	e	#VALUE!
+modern	xmatch	1284	_xlfn.XMATCH({1},$AG$1:$AG$6,2,2)	('5',)	e	#VALUE!
+modern	xlookup	1285	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-2)	('5',)	e	#VALUE!
+modern	xmatch	1286	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-2)	('5',)	e	#VALUE!
+modern	xmatch	1287	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-2)	('5',)	e	#VALUE!
+modern	xlookup	1288	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,1)	(True,)	e	#N/A
+modern	xmatch	1289	_xlfn.XMATCH({1},$AF$1:$AF$6,0,1)	(True,)	e	#N/A
+modern	xmatch	1290	_xlfn.XMATCH({1},$AG$1:$AG$6,0,1)	(True,)	e	#N/A
+modern	xlookup	1291	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-1)	(True,)	e	#N/A
+modern	xmatch	1292	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-1)	(True,)	e	#N/A
+modern	xmatch	1293	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-1)	(True,)	e	#N/A
+modern	xlookup	1294	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,2)	(True,)	e	#N/A
+modern	xmatch	1295	_xlfn.XMATCH({1},$AF$1:$AF$6,0,2)	(True,)	e	#N/A
+modern	xmatch	1296	_xlfn.XMATCH({1},$AG$1:$AG$6,0,2)	(True,)	e	#N/A
+modern	xlookup	1297	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-2)	(True,)	e	#N/A
+modern	xmatch	1298	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-2)	(True,)	e	#N/A
+modern	xmatch	1299	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-2)	(True,)	e	#N/A
+modern	xlookup	1300	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,1)	(True,)	n	60.0
+modern	xmatch	1301	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,1)	(True,)	n	6.0
+modern	xmatch	1302	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,1)	(True,)	n	1.0
+modern	xlookup	1303	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-1)	(True,)	n	60.0
+modern	xmatch	1304	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-1)	(True,)	n	6.0
+modern	xmatch	1305	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-1)	(True,)	n	1.0
+modern	xlookup	1306	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,2)	(True,)	n	60.0
+modern	xmatch	1307	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,2)	(True,)	n	6.0
+modern	xmatch	1308	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,2)	(True,)	n	6.0
+modern	xlookup	1309	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-2)	(True,)	n	10.0
+modern	xmatch	1310	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-2)	(True,)	n	1.0
+modern	xmatch	1311	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-2)	(True,)	n	1.0
+modern	xlookup	1312	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,1)	(True,)	e	#N/A
+modern	xmatch	1313	_xlfn.XMATCH({1},$AF$1:$AF$6,1,1)	(True,)	e	#N/A
+modern	xmatch	1314	_xlfn.XMATCH({1},$AG$1:$AG$6,1,1)	(True,)	e	#N/A
+modern	xlookup	1315	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-1)	(True,)	e	#N/A
+modern	xmatch	1316	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-1)	(True,)	e	#N/A
+modern	xmatch	1317	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-1)	(True,)	e	#N/A
+modern	xlookup	1318	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,2)	(True,)	e	#N/A
+modern	xmatch	1319	_xlfn.XMATCH({1},$AF$1:$AF$6,1,2)	(True,)	e	#N/A
+modern	xmatch	1320	_xlfn.XMATCH({1},$AG$1:$AG$6,1,2)	(True,)	e	#N/A
+modern	xlookup	1321	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-2)	(True,)	e	#N/A
+modern	xmatch	1322	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-2)	(True,)	e	#N/A
+modern	xmatch	1323	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-2)	(True,)	e	#N/A
+modern	xlookup	1324	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,1)	(True,)	e	#N/A
+modern	xmatch	1325	_xlfn.XMATCH({1},$AF$1:$AF$6,2,1)	(True,)	e	#N/A
+modern	xmatch	1326	_xlfn.XMATCH({1},$AG$1:$AG$6,2,1)	(True,)	e	#N/A
+modern	xlookup	1327	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-1)	(True,)	e	#N/A
+modern	xmatch	1328	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-1)	(True,)	e	#N/A
+modern	xmatch	1329	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-1)	(True,)	e	#N/A
+modern	xlookup	1330	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,2)	(True,)	e	#VALUE!
+modern	xmatch	1331	_xlfn.XMATCH({1},$AF$1:$AF$6,2,2)	(True,)	e	#VALUE!
+modern	xmatch	1332	_xlfn.XMATCH({1},$AG$1:$AG$6,2,2)	(True,)	e	#VALUE!
+modern	xlookup	1333	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-2)	(True,)	e	#VALUE!
+modern	xmatch	1334	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-2)	(True,)	e	#VALUE!
+modern	xmatch	1335	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-2)	(True,)	e	#VALUE!
+modern	xlookup	1336	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,1)	(None,)	e	#N/A
+modern	xmatch	1337	_xlfn.XMATCH({1},$AF$1:$AF$6,0,1)	(None,)	e	#N/A
+modern	xmatch	1338	_xlfn.XMATCH({1},$AG$1:$AG$6,0,1)	(None,)	e	#N/A
+modern	xlookup	1339	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-1)	(None,)	e	#N/A
+modern	xmatch	1340	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-1)	(None,)	e	#N/A
+modern	xmatch	1341	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-1)	(None,)	e	#N/A
+modern	xlookup	1342	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,2)	(None,)	e	#N/A
+modern	xmatch	1343	_xlfn.XMATCH({1},$AF$1:$AF$6,0,2)	(None,)	e	#N/A
+modern	xmatch	1344	_xlfn.XMATCH({1},$AG$1:$AG$6,0,2)	(None,)	e	#N/A
+modern	xlookup	1345	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,0,-2)	(None,)	e	#N/A
+modern	xmatch	1346	_xlfn.XMATCH({1},$AF$1:$AF$6,0,-2)	(None,)	e	#N/A
+modern	xmatch	1347	_xlfn.XMATCH({1},$AG$1:$AG$6,0,-2)	(None,)	e	#N/A
+modern	xlookup	1348	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,1)	(None,)	n	60.0
+modern	xmatch	1349	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,1)	(None,)	n	6.0
+modern	xmatch	1350	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,1)	(None,)	n	1.0
+modern	xlookup	1351	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-1)	(None,)	n	60.0
+modern	xmatch	1352	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-1)	(None,)	n	6.0
+modern	xmatch	1353	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-1)	(None,)	n	1.0
+modern	xlookup	1354	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,2)	(None,)	n	60.0
+modern	xmatch	1355	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,2)	(None,)	n	6.0
+modern	xmatch	1356	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,2)	(None,)	n	6.0
+modern	xlookup	1357	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,-1,-2)	(None,)	n	10.0
+modern	xmatch	1358	_xlfn.XMATCH({1},$AF$1:$AF$6,-1,-2)	(None,)	n	1.0
+modern	xmatch	1359	_xlfn.XMATCH({1},$AG$1:$AG$6,-1,-2)	(None,)	n	1.0
+modern	xlookup	1360	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,1)	(None,)	e	#N/A
+modern	xmatch	1361	_xlfn.XMATCH({1},$AF$1:$AF$6,1,1)	(None,)	e	#N/A
+modern	xmatch	1362	_xlfn.XMATCH({1},$AG$1:$AG$6,1,1)	(None,)	e	#N/A
+modern	xlookup	1363	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-1)	(None,)	e	#N/A
+modern	xmatch	1364	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-1)	(None,)	e	#N/A
+modern	xmatch	1365	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-1)	(None,)	e	#N/A
+modern	xlookup	1366	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,2)	(None,)	e	#N/A
+modern	xmatch	1367	_xlfn.XMATCH({1},$AF$1:$AF$6,1,2)	(None,)	e	#N/A
+modern	xmatch	1368	_xlfn.XMATCH({1},$AG$1:$AG$6,1,2)	(None,)	e	#N/A
+modern	xlookup	1369	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,1,-2)	(None,)	e	#N/A
+modern	xmatch	1370	_xlfn.XMATCH({1},$AF$1:$AF$6,1,-2)	(None,)	e	#N/A
+modern	xmatch	1371	_xlfn.XMATCH({1},$AG$1:$AG$6,1,-2)	(None,)	e	#N/A
+modern	xlookup	1372	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,1)	(None,)	e	#N/A
+modern	xmatch	1373	_xlfn.XMATCH({1},$AF$1:$AF$6,2,1)	(None,)	e	#N/A
+modern	xmatch	1374	_xlfn.XMATCH({1},$AG$1:$AG$6,2,1)	(None,)	e	#N/A
+modern	xlookup	1375	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-1)	(None,)	e	#N/A
+modern	xmatch	1376	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-1)	(None,)	e	#N/A
+modern	xmatch	1377	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-1)	(None,)	e	#N/A
+modern	xlookup	1378	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,2)	(None,)	e	#VALUE!
+modern	xmatch	1379	_xlfn.XMATCH({1},$AF$1:$AF$6,2,2)	(None,)	e	#VALUE!
+modern	xmatch	1380	_xlfn.XMATCH({1},$AG$1:$AG$6,2,2)	(None,)	e	#VALUE!
+modern	xlookup	1381	_xlfn.XLOOKUP({1},$AF$1:$AF$6,$AD$1:$AD$6,,2,-2)	(None,)	e	#VALUE!
+modern	xmatch	1382	_xlfn.XMATCH({1},$AF$1:$AF$6,2,-2)	(None,)	e	#VALUE!
+modern	xmatch	1383	_xlfn.XMATCH({1},$AG$1:$AG$6,2,-2)	(None,)	e	#VALUE!
+modern	xlookup	1384	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$6,,3)	()	n	20.0
+modern	xlookup	1385	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$6,,0,0)	()	e	#VALUE!
+modern	xlookup	1386	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$6,,0,3)	()	e	#VALUE!
+modern	xlookup	1387	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$5)	()	e	#VALUE!
+modern	xlookup	1388	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AE$1)	()	e	#VALUE!
+modern	xlookup	1389	_xlfn.XLOOKUP(99,$AF$1:$AF$6,$AD$1:$AD$6,1/0)	()	e	#DIV/0!
+modern	xlookup	1390	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$6,1/0)	()	n	20.0
+modern	xlookup	1391	_xlfn.XLOOKUP(1/0,$AF$1:$AF$6,$AD$1:$AD$6)	()	e	#DIV/0!
+modern	xlookup	1392	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AE$6)	()	e	#VALUE!
+modern	xlookup	1393	_xlfn.XLOOKUP(99,$AF$1:$AF$6,$AD$1:$AE$6)	()	e	#N/A
+modern	xlookup	1394	_xlfn.XLOOKUP(99,{0},{1},"")	()	str	''
+modern	xlookup	1395	_xlfn.XLOOKUP(2,$AI$1:$AK$1,$AI$2:$AK$2)	()	str	'two'
+modern	xlookup	1396	_xlfn.XLOOKUP(9,$AI$1:$AK$1,$AI$2:$AK$2,"n")	()	str	'n'
+modern	xlookup	1397	_xlfn.XLOOKUP(2,$AI$1:$AK$1,$AI$1:$AK$2)	()	e	#VALUE!
+modern	xlookup	1398	_xlfn.XLOOKUP(2,{1,2,3},{4,5,6})	()	n	5.0
+modern	xlookup	1399	_xlfn.XLOOKUP(2,{1;2;3},{4;5;6})	()	n	5.0
+modern	xlookup	1400	_xlfn.XLOOKUP(2,{1,2,3},{4;5;6})	()	e	#VALUE!
+modern	xlookup	1401	_xlfn.XLOOKUP("blank return",$AC$8,$AD$8)	()	n	0.0
+modern	xlookup	1402	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$6,,"x")	()	e	#VALUE!
+modern	xlookup	1403	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$6,,0,"x")	()	e	#VALUE!
+modern	xlookup	1404	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$6,,0.5)	()	n	20.0
+modern	xlookup	1405	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$6,,1.9)	()	n	20.0
+modern	xlookup	1406	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$6,,TRUE)	()	n	20.0
+modern	xlookup	1407	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$6,,)	()	n	20.0
+modern	xlookup	1408	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$6,,,)	()	n	20.0
+modern	xlookup	1409	_xlfn.XLOOKUP(99,$AF$1:$AF$6,$AD$1:$AD$6,,,)	()	e	#N/A
+modern	xlookup	1410	_xlfn.XLOOKUP(3,5,5)	()	e	#N/A
+modern	xlookup	1411	_xlfn.XLOOKUP(5,5,6)	()	n	6.0
+modern	xlookup	1412	_xlfn.XLOOKUP("a","a","b")	()	str	'b'
+modern	xlookup	1413	_xlfn.XLOOKUP(3,$AF$1:$AG$6,$AD$1:$AD$6)	()	e	#VALUE!
+modern	xlookup	1414	_xlfn.XLOOKUP($Z$1:$Z$8,$AF$1:$AF$6,$AD$1:$AD$6,"n")	()	e	#VALUE!
+modern	xlookup	1415	_xlfn.XLOOKUP($Z$1,$AF$1:$AF$6,$AD$1:$AD$6)	()	n	20.0
+modern	xlookup	1416	_xlfn.XLOOKUP($AH$1,$AH$1:$AH$5,$AD$1:$AD$6,"n")	()	e	#VALUE!
+modern	xmatch	1417	_xlfn.XMATCH(3,$AF$1:$AF$6,3)	()	n	2.0
+modern	xmatch	1418	_xlfn.XMATCH(3,$AF$1:$AF$6,0,0)	()	e	#VALUE!
+modern	xmatch	1419	_xlfn.XMATCH(3,$AF$1:$AF$6,0,3)	()	e	#VALUE!
+modern	xmatch	1420	_xlfn.XMATCH(2,$AI$1:$AK$1)	()	n	2.0
+modern	xmatch	1421	_xlfn.XMATCH(2,{1,2,3})	()	n	2.0
+modern	xmatch	1422	_xlfn.XMATCH(2,{1;2;3})	()	n	2.0
+modern	xmatch	1423	_xlfn.XMATCH(3,$AF$1:$AG$6)	()	e	#VALUE!
+modern	xmatch	1424	_xlfn.XMATCH(5,5)	()	n	1.0
+modern	xmatch	1425	_xlfn.XMATCH("a","a")	()	n	1.0
+modern	xmatch	1426	_xlfn.XMATCH($Z$1:$Z$8,$AF$1:$AF$6)	()	e	#VALUE!
+modern	xmatch	1427	_xlfn.XMATCH(1/0,{1,2})	()	e	#DIV/0!
+modern	xmatch	1428	_xlfn.XMATCH(3,$AF$1:$AF$6,"x")	()	e	#VALUE!
+modern	xmatch	1429	_xlfn.XMATCH(3,$AF$1:$AF$6,0.5)	()	n	2.0
+modern	xmatch	1430	_xlfn.XMATCH(3,$AF$1:$AF$6,1.9)	()	n	2.0
+modern	xmatch	1431	_xlfn.XMATCH(3,$AF$1:$AF$6,,)	()	n	2.0
+modern	xmatch	1432	_xlfn.XMATCH(3,$AF$1:$AF$6,,-1)	()	n	2.0
+modern	xmatch	1433	_xlfn.XMATCH($AH$1,$AH$1:$AH$5)	()	n	1.0
+modern	xmatch	1434	_xlfn.XMATCH(1,$AA$1:$AA$8)	()	n	1.0
+modern	xmatch	1435	_xlfn.XMATCH(#N/A,$AB$1:$AB$4)	()	e	#N/A
+modern	xlookup	1436	SUM(_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$6):$AD$6)	()	n	200.0
+modern	xlookup	1437	_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AD$6)+1	()	n	21.0
+modern	xlookup	1438	ROW(_xlfn.XLOOKUP(5,$AF$1:$AF$6,$AD$1:$AD$6))	()	n	3.0
+modern	xlookup	1439	SUM(_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AE$6))	()	n	20.0
+modern	xlookup	1440	INDEX(_xlfn.XLOOKUP(5,$AF$1:$AF$6,$AD$1:$AE$6),1,2)	()	str	'c'
+modern	xlookup	1441	COUNTA(_xlfn.XLOOKUP(3,$AF$1:$AF$6,$AD$1:$AE$6))	()	n	2.0
+modern	compare_text	1442	{1}<{2}	('~', '!')	b	False
+modern	compare_text	1443	{1}<{2}	('~', '_')	b	False
+modern	compare_text	1444	{1}<{2}	('~', '-')	b	False
+modern	compare_text	1445	{1}<{2}	('~', "'")	b	False
+modern	compare_text	1446	{1}<{2}	('~', '"')	b	False
+modern	compare_text	1447	{1}<{2}	('~', '#')	b	False
+modern	compare_text	1448	{1}<{2}	('~', '$')	b	True
+modern	compare_text	1449	{1}<{2}	('~', '%')	b	False
+modern	compare_text	1450	{1}<{2}	('~', '&')	b	False
+modern	compare_text	1451	{1}<{2}	('~', '(')	b	False
+modern	compare_text	1452	{1}<{2}	('~', ')')	b	False
+modern	compare_text	1453	{1}<{2}	('~', '*')	b	False
+modern	compare_text	1454	{1}<{2}	('~', ',')	b	False
+modern	compare_text	1455	{1}<{2}	('~', '.')	b	False
+modern	compare_text	1456	{1}<{2}	('~', '/')	b	False
+modern	compare_text	1457	{1}<{2}	('~', ':')	b	False
+modern	compare_text	1458	{1}<{2}	('~', ';')	b	False
+modern	compare_text	1459	{1}<{2}	('~', '?')	b	False
+modern	compare_text	1460	{1}<{2}	('~', '@')	b	False
+modern	compare_text	1461	{1}<{2}	('~', '[')	b	False
+modern	compare_text	1462	{1}<{2}	('~', '\\')	b	False
+modern	compare_text	1463	{1}<{2}	('~', ']')	b	False
+modern	compare_text	1464	{1}<{2}	('~', '^')	b	False
+modern	compare_text	1465	{1}<{2}	('~', '`')	b	False
+modern	compare_text	1466	{1}<{2}	('~', '{')	b	False
+modern	compare_text	1467	{1}<{2}	('~', '|')	b	False
+modern	compare_text	1468	{1}<{2}	('~', '}')	b	False
+modern	compare_text	1469	{1}<{2}	('~', '+')	b	False
+modern	compare_text	1470	{1}<{2}	('~', '<')	b	False
+modern	compare_text	1471	{1}<{2}	('~', '=')	b	False
+modern	compare_text	1472	{1}<{2}	('~', '>')	b	False
+modern	compare_text	1473	{1}<{2}	('~', '0')	b	True
+modern	compare_text	1474	{1}<{2}	('~', '9')	b	True
+modern	compare_text	1475	{1}<{2}	('~', 'a')	b	True
+modern	compare_text	1476	{1}<{2}	('~', 'A')	b	True
+modern	compare_text	1477	{1}<{2}	('~', 'z')	b	True
+modern	compare_text	1478	{1}<{2}	('~', 'Z')	b	True
+modern	compare_text	1479	{1}<{2}	('~', ' ')	b	False
+modern	compare_text	1480	{1}<{2}	('!', '_')	b	False
+modern	compare_text	1481	{1}<{2}	('!', '-')	b	False
+modern	compare_text	1482	{1}<{2}	('!', "'")	b	True
+modern	compare_text	1483	{1}<{2}	('!', '"')	b	True
+modern	compare_text	1484	{1}<{2}	('!', '#')	b	True
+modern	compare_text	1485	{1}<{2}	('!', '$')	b	True
+modern	compare_text	1486	{1}<{2}	('!', '%')	b	True
+modern	compare_text	1487	{1}<{2}	('!', '&')	b	True
+modern	compare_text	1488	{1}<{2}	('!', '(')	b	True
+modern	compare_text	1489	{1}<{2}	('!', ')')	b	True
+modern	compare_text	1490	{1}<{2}	('!', '*')	b	True
+modern	compare_text	1491	{1}<{2}	('!', ',')	b	False
+modern	compare_text	1492	{1}<{2}	('!', '.')	b	True
+modern	compare_text	1493	{1}<{2}	('!', '/')	b	True
+modern	compare_text	1494	{1}<{2}	('!', ':')	b	False
+modern	compare_text	1495	{1}<{2}	('!', ';')	b	False
+modern	compare_text	1496	{1}<{2}	('!', '?')	b	True
+modern	compare_text	1497	{1}<{2}	('!', '@')	b	True
+modern	compare_text	1498	{1}<{2}	('!', '[')	b	True
+modern	compare_text	1499	{1}<{2}	('!', '\\')	b	True
+modern	compare_text	1500	{1}<{2}	('!', ']')	b	True
+modern	compare_text	1501	{1}<{2}	('!', '^')	b	True
+modern	compare_text	1502	{1}<{2}	('!', '`')	b	True
+modern	compare_text	1503	{1}<{2}	('!', '{')	b	True
+modern	compare_text	1504	{1}<{2}	('!', '|')	b	True
+modern	compare_text	1505	{1}<{2}	('!', '}')	b	True
+modern	compare_text	1506	{1}<{2}	('!', '+')	b	True
+modern	compare_text	1507	{1}<{2}	('!', '<')	b	True
+modern	compare_text	1508	{1}<{2}	('!', '=')	b	True
+modern	compare_text	1509	{1}<{2}	('!', '>')	b	True
+modern	compare_text	1510	{1}<{2}	('!', '0')	b	True
+modern	compare_text	1511	{1}<{2}	('!', '9')	b	True
+modern	compare_text	1512	{1}<{2}	('!', 'a')	b	True
+modern	compare_text	1513	{1}<{2}	('!', 'A')	b	True
+modern	compare_text	1514	{1}<{2}	('!', 'z')	b	True
+modern	compare_text	1515	{1}<{2}	('!', 'Z')	b	True
+modern	compare_text	1516	{1}<{2}	('!', ' ')	b	False
+modern	compare_text	1517	{1}<{2}	('_', '-')	b	True
+modern	compare_text	1518	{1}<{2}	('_', "'")	b	True
+modern	compare_text	1519	{1}<{2}	('_', '"')	b	True
+modern	compare_text	1520	{1}<{2}	('_', '#')	b	True
+modern	compare_text	1521	{1}<{2}	('_', '$')	b	True
+modern	compare_text	1522	{1}<{2}	('_', '%')	b	True
+modern	compare_text	1523	{1}<{2}	('_', '&')	b	True
+modern	compare_text	1524	{1}<{2}	('_', '(')	b	True
+modern	compare_text	1525	{1}<{2}	('_', ')')	b	True
+modern	compare_text	1526	{1}<{2}	('_', '*')	b	True
+modern	compare_text	1527	{1}<{2}	('_', ',')	b	True
+modern	compare_text	1528	{1}<{2}	('_', '.')	b	True
+modern	compare_text	1529	{1}<{2}	('_', '/')	b	True
+modern	compare_text	1530	{1}<{2}	('_', ':')	b	True
+modern	compare_text	1531	{1}<{2}	('_', ';')	b	True
+modern	compare_text	1532	{1}<{2}	('_', '?')	b	True
+modern	compare_text	1533	{1}<{2}	('_', '@')	b	True
+modern	compare_text	1534	{1}<{2}	('_', '[')	b	True
+modern	compare_text	1535	{1}<{2}	('_', '\\')	b	True
+modern	compare_text	1536	{1}<{2}	('_', ']')	b	True
+modern	compare_text	1537	{1}<{2}	('_', '^')	b	True
+modern	compare_text	1538	{1}<{2}	('_', '`')	b	True
+modern	compare_text	1539	{1}<{2}	('_', '{')	b	True
+modern	compare_text	1540	{1}<{2}	('_', '|')	b	True
+modern	compare_text	1541	{1}<{2}	('_', '}')	b	True
+modern	compare_text	1542	{1}<{2}	('_', '+')	b	True
+modern	compare_text	1543	{1}<{2}	('_', '<')	b	True
+modern	compare_text	1544	{1}<{2}	('_', '=')	b	True
+modern	compare_text	1545	{1}<{2}	('_', '>')	b	True
+modern	compare_text	1546	{1}<{2}	('_', '0')	b	True
+modern	compare_text	1547	{1}<{2}	('_', '9')	b	True
+modern	compare_text	1548	{1}<{2}	('_', 'a')	b	True
+modern	compare_text	1549	{1}<{2}	('_', 'A')	b	True
+modern	compare_text	1550	{1}<{2}	('_', 'z')	b	True
+modern	compare_text	1551	{1}<{2}	('_', 'Z')	b	True
+modern	compare_text	1552	{1}<{2}	('_', ' ')	b	False
+modern	compare_text	1553	{1}<{2}	('-', "'")	b	True
+modern	compare_text	1554	{1}<{2}	('-', '"')	b	True
+modern	compare_text	1555	{1}<{2}	('-', '#')	b	True
+modern	compare_text	1556	{1}<{2}	('-', '$')	b	True
+modern	compare_text	1557	{1}<{2}	('-', '%')	b	True
+modern	compare_text	1558	{1}<{2}	('-', '&')	b	True
+modern	compare_text	1559	{1}<{2}	('-', '(')	b	True
+modern	compare_text	1560	{1}<{2}	('-', ')')	b	True
+modern	compare_text	1561	{1}<{2}	('-', '*')	b	True
+modern	compare_text	1562	{1}<{2}	('-', ',')	b	True
+modern	compare_text	1563	{1}<{2}	('-', '.')	b	True
+modern	compare_text	1564	{1}<{2}	('-', '/')	b	True
+modern	compare_text	1565	{1}<{2}	('-', ':')	b	True
+modern	compare_text	1566	{1}<{2}	('-', ';')	b	True
+modern	compare_text	1567	{1}<{2}	('-', '?')	b	True
+modern	compare_text	1568	{1}<{2}	('-', '@')	b	True
+modern	compare_text	1569	{1}<{2}	('-', '[')	b	True
+modern	compare_text	1570	{1}<{2}	('-', '\\')	b	True
+modern	compare_text	1571	{1}<{2}	('-', ']')	b	True
+modern	compare_text	1572	{1}<{2}	('-', '^')	b	True
+modern	compare_text	1573	{1}<{2}	('-', '`')	b	True
+modern	compare_text	1574	{1}<{2}	('-', '{')	b	True
+modern	compare_text	1575	{1}<{2}	('-', '|')	b	True
+modern	compare_text	1576	{1}<{2}	('-', '}')	b	True
+modern	compare_text	1577	{1}<{2}	('-', '+')	b	True
+modern	compare_text	1578	{1}<{2}	('-', '<')	b	True
+modern	compare_text	1579	{1}<{2}	('-', '=')	b	True
+modern	compare_text	1580	{1}<{2}	('-', '>')	b	True
+modern	compare_text	1581	{1}<{2}	('-', '0')	b	True
+modern	compare_text	1582	{1}<{2}	('-', '9')	b	True
+modern	compare_text	1583	{1}<{2}	('-', 'a')	b	True
+modern	compare_text	1584	{1}<{2}	('-', 'A')	b	True
+modern	compare_text	1585	{1}<{2}	('-', 'z')	b	True
+modern	compare_text	1586	{1}<{2}	('-', 'Z')	b	True
+modern	compare_text	1587	{1}<{2}	('-', ' ')	b	False
+modern	compare_text	1588	{1}<{2}	("'", '"')	b	True
+modern	compare_text	1589	{1}<{2}	("'", '#')	b	True
+modern	compare_text	1590	{1}<{2}	("'", '$')	b	True
+modern	compare_text	1591	{1}<{2}	("'", '%')	b	True
+modern	compare_text	1592	{1}<{2}	("'", '&')	b	True
+modern	compare_text	1593	{1}<{2}	("'", '(')	b	True
+modern	compare_text	1594	{1}<{2}	("'", ')')	b	True
+modern	compare_text	1595	{1}<{2}	("'", '*')	b	True
+modern	compare_text	1596	{1}<{2}	("'", ',')	b	False
+modern	compare_text	1597	{1}<{2}	("'", '.')	b	False
+modern	compare_text	1598	{1}<{2}	("'", '/')	b	True
+modern	compare_text	1599	{1}<{2}	("'", ':')	b	False
+modern	compare_text	1600	{1}<{2}	("'", ';')	b	False
+modern	compare_text	1601	{1}<{2}	("'", '?')	b	False
+modern	compare_text	1602	{1}<{2}	("'", '@')	b	True
+modern	compare_text	1603	{1}<{2}	("'", '[')	b	True
+modern	compare_text	1604	{1}<{2}	("'", '\\')	b	True
+modern	compare_text	1605	{1}<{2}	("'", ']')	b	True
+modern	compare_text	1606	{1}<{2}	("'", '^')	b	True
+modern	compare_text	1607	{1}<{2}	("'", '`')	b	True
+modern	compare_text	1608	{1}<{2}	("'", '{')	b	True
+modern	compare_text	1609	{1}<{2}	("'", '|')	b	True
+modern	compare_text	1610	{1}<{2}	("'", '}')	b	True
+modern	compare_text	1611	{1}<{2}	("'", '+')	b	True
+modern	compare_text	1612	{1}<{2}	("'", '<')	b	True
+modern	compare_text	1613	{1}<{2}	("'", '=')	b	True
+modern	compare_text	1614	{1}<{2}	("'", '>')	b	True
+modern	compare_text	1615	{1}<{2}	("'", '0')	b	True
+modern	compare_text	1616	{1}<{2}	("'", '9')	b	True
+modern	compare_text	1617	{1}<{2}	("'", 'a')	b	True
+modern	compare_text	1618	{1}<{2}	("'", 'A')	b	True
+modern	compare_text	1619	{1}<{2}	("'", 'z')	b	True
+modern	compare_text	1620	{1}<{2}	("'", 'Z')	b	True
+modern	compare_text	1621	{1}<{2}	("'", ' ')	b	False
+modern	compare_text	1622	{1}<{2}	('"', '#')	b	True
+modern	compare_text	1623	{1}<{2}	('"', '$')	b	True
+modern	compare_text	1624	{1}<{2}	('"', '%')	b	True
+modern	compare_text	1625	{1}<{2}	('"', '&')	b	True
+modern	compare_text	1626	{1}<{2}	('"', '(')	b	True
+modern	compare_text	1627	{1}<{2}	('"', ')')	b	True
+modern	compare_text	1628	{1}<{2}	('"', '*')	b	True
+modern	compare_text	1629	{1}<{2}	('"', ',')	b	False
+modern	compare_text	1630	{1}<{2}	('"', '.')	b	False
+modern	compare_text	1631	{1}<{2}	('"', '/')	b	True
+modern	compare_text	1632	{1}<{2}	('"', ':')	b	False
+modern	compare_text	1633	{1}<{2}	('"', ';')	b	False
+modern	compare_text	1634	{1}<{2}	('"', '?')	b	False
+modern	compare_text	1635	{1}<{2}	('"', '@')	b	True
+modern	compare_text	1636	{1}<{2}	('"', '[')	b	True
+modern	compare_text	1637	{1}<{2}	('"', '\\')	b	True
+modern	compare_text	1638	{1}<{2}	('"', ']')	b	True
+modern	compare_text	1639	{1}<{2}	('"', '^')	b	True
+modern	compare_text	1640	{1}<{2}	('"', '`')	b	True
+modern	compare_text	1641	{1}<{2}	('"', '{')	b	True
+modern	compare_text	1642	{1}<{2}	('"', '|')	b	True
+modern	compare_text	1643	{1}<{2}	('"', '}')	b	True
+modern	compare_text	1644	{1}<{2}	('"', '+')	b	True
+modern	compare_text	1645	{1}<{2}	('"', '<')	b	True
+modern	compare_text	1646	{1}<{2}	('"', '=')	b	True
+modern	compare_text	1647	{1}<{2}	('"', '>')	b	True
+modern	compare_text	1648	{1}<{2}	('"', '0')	b	True
+modern	compare_text	1649	{1}<{2}	('"', '9')	b	True
+modern	compare_text	1650	{1}<{2}	('"', 'a')	b	True
+modern	compare_text	1651	{1}<{2}	('"', 'A')	b	True
+modern	compare_text	1652	{1}<{2}	('"', 'z')	b	True
+modern	compare_text	1653	{1}<{2}	('"', 'Z')	b	True
+modern	compare_text	1654	{1}<{2}	('"', ' ')	b	False
+modern	compare_text	1655	{1}<{2}	('#', '$')	b	True
+modern	compare_text	1656	{1}<{2}	('#', '%')	b	True
+modern	compare_text	1657	{1}<{2}	('#', '&')	b	False
+modern	compare_text	1658	{1}<{2}	('#', '(')	b	False
+modern	compare_text	1659	{1}<{2}	('#', ')')	b	False
+modern	compare_text	1660	{1}<{2}	('#', '*')	b	False
+modern	compare_text	1661	{1}<{2}	('#', ',')	b	False
+modern	compare_text	1662	{1}<{2}	('#', '.')	b	False
+modern	compare_text	1663	{1}<{2}	('#', '/')	b	False
+modern	compare_text	1664	{1}<{2}	('#', ':')	b	False
+modern	compare_text	1665	{1}<{2}	('#', ';')	b	False
+modern	compare_text	1666	{1}<{2}	('#', '?')	b	False
+modern	compare_text	1667	{1}<{2}	('#', '@')	b	False
+modern	compare_text	1668	{1}<{2}	('#', '[')	b	False
+modern	compare_text	1669	{1}<{2}	('#', '\\')	b	False
+modern	compare_text	1670	{1}<{2}	('#', ']')	b	False
+modern	compare_text	1671	{1}<{2}	('#', '^')	b	True
+modern	compare_text	1672	{1}<{2}	('#', '`')	b	True
+modern	compare_text	1673	{1}<{2}	('#', '{')	b	False
+modern	compare_text	1674	{1}<{2}	('#', '|')	b	True
+modern	compare_text	1675	{1}<{2}	('#', '}')	b	False
+modern	compare_text	1676	{1}<{2}	('#', '+')	b	True
+modern	compare_text	1677	{1}<{2}	('#', '<')	b	True
+modern	compare_text	1678	{1}<{2}	('#', '=')	b	True
+modern	compare_text	1679	{1}<{2}	('#', '>')	b	True
+modern	compare_text	1680	{1}<{2}	('#', '0')	b	True
+modern	compare_text	1681	{1}<{2}	('#', '9')	b	True
+modern	compare_text	1682	{1}<{2}	('#', 'a')	b	True
+modern	compare_text	1683	{1}<{2}	('#', 'A')	b	True
+modern	compare_text	1684	{1}<{2}	('#', 'z')	b	True
+modern	compare_text	1685	{1}<{2}	('#', 'Z')	b	True
+modern	compare_text	1686	{1}<{2}	('#', ' ')	b	False
+modern	compare_text	1687	{1}<{2}	('$', '%')	b	False
+modern	compare_text	1688	{1}<{2}	('$', '&')	b	False
+modern	compare_text	1689	{1}<{2}	('$', '(')	b	False
+modern	compare_text	1690	{1}<{2}	('$', ')')	b	False
+modern	compare_text	1691	{1}<{2}	('$', '*')	b	False
+modern	compare_text	1692	{1}<{2}	('$', ',')	b	False
+modern	compare_text	1693	{1}<{2}	('$', '.')	b	False
+modern	compare_text	1694	{1}<{2}	('$', '/')	b	False
+modern	compare_text	1695	{1}<{2}	('$', ':')	b	False
+modern	compare_text	1696	{1}<{2}	('$', ';')	b	False
+modern	compare_text	1697	{1}<{2}	('$', '?')	b	False
+modern	compare_text	1698	{1}<{2}	('$', '@')	b	False
+modern	compare_text	1699	{1}<{2}	('$', '[')	b	False
+modern	compare_text	1700	{1}<{2}	('$', '\\')	b	False
+modern	compare_text	1701	{1}<{2}	('$', ']')	b	False
+modern	compare_text	1702	{1}<{2}	('$', '^')	b	False
+modern	compare_text	1703	{1}<{2}	('$', '`')	b	False
+modern	compare_text	1704	{1}<{2}	('$', '{')	b	False
+modern	compare_text	1705	{1}<{2}	('$', '|')	b	False
+modern	compare_text	1706	{1}<{2}	('$', '}')	b	False
+modern	compare_text	1707	{1}<{2}	('$', '+')	b	False
+modern	compare_text	1708	{1}<{2}	('$', '<')	b	False
+modern	compare_text	1709	{1}<{2}	('$', '=')	b	False
+modern	compare_text	1710	{1}<{2}	('$', '>')	b	False
+modern	compare_text	1711	{1}<{2}	('$', '0')	b	True
+modern	compare_text	1712	{1}<{2}	('$', '9')	b	True
+modern	compare_text	1713	{1}<{2}	('$', 'a')	b	True
+modern	compare_text	1714	{1}<{2}	('$', 'A')	b	True
+modern	compare_text	1715	{1}<{2}	('$', 'z')	b	True
+modern	compare_text	1716	{1}<{2}	('$', 'Z')	b	True
+modern	compare_text	1717	{1}<{2}	('$', ' ')	b	False
+modern	compare_text	1718	{1}<{2}	('%', '&')	b	False
+modern	compare_text	1719	{1}<{2}	('%', '(')	b	False
+modern	compare_text	1720	{1}<{2}	('%', ')')	b	False
+modern	compare_text	1721	{1}<{2}	('%', '*')	b	False
+modern	compare_text	1722	{1}<{2}	('%', ',')	b	False
+modern	compare_text	1723	{1}<{2}	('%', '.')	b	False
+modern	compare_text	1724	{1}<{2}	('%', '/')	b	False
+modern	compare_text	1725	{1}<{2}	('%', ':')	b	False
+modern	compare_text	1726	{1}<{2}	('%', ';')	b	False
+modern	compare_text	1727	{1}<{2}	('%', '?')	b	False
+modern	compare_text	1728	{1}<{2}	('%', '@')	b	False
+modern	compare_text	1729	{1}<{2}	('%', '[')	b	False
+modern	compare_text	1730	{1}<{2}	('%', '\\')	b	False
+modern	compare_text	1731	{1}<{2}	('%', ']')	b	False
+modern	compare_text	1732	{1}<{2}	('%', '^')	b	True
+modern	compare_text	1733	{1}<{2}	('%', '`')	b	True
+modern	compare_text	1734	{1}<{2}	('%', '{')	b	False
+modern	compare_text	1735	{1}<{2}	('%', '|')	b	True
+modern	compare_text	1736	{1}<{2}	('%', '}')	b	False
+modern	compare_text	1737	{1}<{2}	('%', '+')	b	True
+modern	compare_text	1738	{1}<{2}	('%', '<')	b	True
+modern	compare_text	1739	{1}<{2}	('%', '=')	b	True
+modern	compare_text	1740	{1}<{2}	('%', '>')	b	True
+modern	compare_text	1741	{1}<{2}	('%', '0')	b	True
+modern	compare_text	1742	{1}<{2}	('%', '9')	b	True
+modern	compare_text	1743	{1}<{2}	('%', 'a')	b	True
+modern	compare_text	1744	{1}<{2}	('%', 'A')	b	True
+modern	compare_text	1745	{1}<{2}	('%', 'z')	b	True
+modern	compare_text	1746	{1}<{2}	('%', 'Z')	b	True
+modern	compare_text	1747	{1}<{2}	('%', ' ')	b	False
+modern	compare_text	1748	{1}<{2}	('&', '(')	b	False
+modern	compare_text	1749	{1}<{2}	('&', ')')	b	False
+modern	compare_text	1750	{1}<{2}	('&', '*')	b	False
+modern	compare_text	1751	{1}<{2}	('&', ',')	b	False
+modern	compare_text	1752	{1}<{2}	('&', '.')	b	False
+modern	compare_text	1753	{1}<{2}	('&', '/')	b	False
+modern	compare_text	1754	{1}<{2}	('&', ':')	b	False
+modern	compare_text	1755	{1}<{2}	('&', ';')	b	False
+modern	compare_text	1756	{1}<{2}	('&', '?')	b	False
+modern	compare_text	1757	{1}<{2}	('&', '@')	b	False
+modern	compare_text	1758	{1}<{2}	('&', '[')	b	False
+modern	compare_text	1759	{1}<{2}	('&', '\\')	b	False
+modern	compare_text	1760	{1}<{2}	('&', ']')	b	False
+modern	compare_text	1761	{1}<{2}	('&', '^')	b	True
+modern	compare_text	1762	{1}<{2}	('&', '`')	b	True
+modern	compare_text	1763	{1}<{2}	('&', '{')	b	False
+modern	compare_text	1764	{1}<{2}	('&', '|')	b	True
+modern	compare_text	1765	{1}<{2}	('&', '}')	b	False
+modern	compare_text	1766	{1}<{2}	('&', '+')	b	True
+modern	compare_text	1767	{1}<{2}	('&', '<')	b	True
+modern	compare_text	1768	{1}<{2}	('&', '=')	b	True
+modern	compare_text	1769	{1}<{2}	('&', '>')	b	True
+modern	compare_text	1770	{1}<{2}	('&', '0')	b	True
+modern	compare_text	1771	{1}<{2}	('&', '9')	b	True
+modern	compare_text	1772	{1}<{2}	('&', 'a')	b	True
+modern	compare_text	1773	{1}<{2}	('&', 'A')	b	True
+modern	compare_text	1774	{1}<{2}	('&', 'z')	b	True
+modern	compare_text	1775	{1}<{2}	('&', 'Z')	b	True
+modern	compare_text	1776	{1}<{2}	('&', ' ')	b	False
+modern	compare_text	1777	{1}<{2}	('(', ')')	b	True
+modern	compare_text	1778	{1}<{2}	('(', '*')	b	True
+modern	compare_text	1779	{1}<{2}	('(', ',')	b	False
+modern	compare_text	1780	{1}<{2}	('(', '.')	b	False
+modern	compare_text	1781	{1}<{2}	('(', '/')	b	True
+modern	compare_text	1782	{1}<{2}	('(', ':')	b	False
+modern	compare_text	1783	{1}<{2}	('(', ';')	b	False
+modern	compare_text	1784	{1}<{2}	('(', '?')	b	False
+modern	compare_text	1785	{1}<{2}	('(', '@')	b	True
+modern	compare_text	1786	{1}<{2}	('(', '[')	b	True
+modern	compare_text	1787	{1}<{2}	('(', '\\')	b	True
+modern	compare_text	1788	{1}<{2}	('(', ']')	b	True
+modern	compare_text	1789	{1}<{2}	('(', '^')	b	True
+modern	compare_text	1790	{1}<{2}	('(', '`')	b	True
+modern	compare_text	1791	{1}<{2}	('(', '{')	b	True
+modern	compare_text	1792	{1}<{2}	('(', '|')	b	True
+modern	compare_text	1793	{1}<{2}	('(', '}')	b	True
+modern	compare_text	1794	{1}<{2}	('(', '+')	b	True
+modern	compare_text	1795	{1}<{2}	('(', '<')	b	True
+modern	compare_text	1796	{1}<{2}	('(', '=')	b	True
+modern	compare_text	1797	{1}<{2}	('(', '>')	b	True
+modern	compare_text	1798	{1}<{2}	('(', '0')	b	True
+modern	compare_text	1799	{1}<{2}	('(', '9')	b	True
+modern	compare_text	1800	{1}<{2}	('(', 'a')	b	True
+modern	compare_text	1801	{1}<{2}	('(', 'A')	b	True
+modern	compare_text	1802	{1}<{2}	('(', 'z')	b	True
+modern	compare_text	1803	{1}<{2}	('(', 'Z')	b	True
+modern	compare_text	1804	{1}<{2}	('(', ' ')	b	False
+modern	compare_text	1805	{1}<{2}	(')', '*')	b	True
+modern	compare_text	1806	{1}<{2}	(')', ',')	b	False
+modern	compare_text	1807	{1}<{2}	(')', '.')	b	False
+modern	compare_text	1808	{1}<{2}	(')', '/')	b	True
+modern	compare_text	1809	{1}<{2}	(')', ':')	b	False
+modern	compare_text	1810	{1}<{2}	(')', ';')	b	False
+modern	compare_text	1811	{1}<{2}	(')', '?')	b	False
+modern	compare_text	1812	{1}<{2}	(')', '@')	b	True
+modern	compare_text	1813	{1}<{2}	(')', '[')	b	True
+modern	compare_text	1814	{1}<{2}	(')', '\\')	b	True
+modern	compare_text	1815	{1}<{2}	(')', ']')	b	True
+modern	compare_text	1816	{1}<{2}	(')', '^')	b	True
+modern	compare_text	1817	{1}<{2}	(')', '`')	b	True
+modern	compare_text	1818	{1}<{2}	(')', '{')	b	True
+modern	compare_text	1819	{1}<{2}	(')', '|')	b	True
+modern	compare_text	1820	{1}<{2}	(')', '}')	b	True
+modern	compare_text	1821	{1}<{2}	(')', '+')	b	True
+modern	compare_text	1822	{1}<{2}	(')', '<')	b	True
+modern	compare_text	1823	{1}<{2}	(')', '=')	b	True
+modern	compare_text	1824	{1}<{2}	(')', '>')	b	True
+modern	compare_text	1825	{1}<{2}	(')', '0')	b	True
+modern	compare_text	1826	{1}<{2}	(')', '9')	b	True
+modern	compare_text	1827	{1}<{2}	(')', 'a')	b	True
+modern	compare_text	1828	{1}<{2}	(')', 'A')	b	True
+modern	compare_text	1829	{1}<{2}	(')', 'z')	b	True
+modern	compare_text	1830	{1}<{2}	(')', 'Z')	b	True
+modern	compare_text	1831	{1}<{2}	(')', ' ')	b	False
+modern	compare_text	1832	{1}<{2}	('*', ',')	b	False
+modern	compare_text	1833	{1}<{2}	('*', '.')	b	False
+modern	compare_text	1834	{1}<{2}	('*', '/')	b	True
+modern	compare_text	1835	{1}<{2}	('*', ':')	b	False
+modern	compare_text	1836	{1}<{2}	('*', ';')	b	False
+modern	compare_text	1837	{1}<{2}	('*', '?')	b	False
+modern	compare_text	1838	{1}<{2}	('*', '@')	b	False
+modern	compare_text	1839	{1}<{2}	('*', '[')	b	False
+modern	compare_text	1840	{1}<{2}	('*', '\\')	b	True
+modern	compare_text	1841	{1}<{2}	('*', ']')	b	False
+modern	compare_text	1842	{1}<{2}	('*', '^')	b	True
+modern	compare_text	1843	{1}<{2}	('*', '`')	b	True
+modern	compare_text	1844	{1}<{2}	('*', '{')	b	False
+modern	compare_text	1845	{1}<{2}	('*', '|')	b	True
+modern	compare_text	1846	{1}<{2}	('*', '}')	b	False
+modern	compare_text	1847	{1}<{2}	('*', '+')	b	True
+modern	compare_text	1848	{1}<{2}	('*', '<')	b	True
+modern	compare_text	1849	{1}<{2}	('*', '=')	b	True
+modern	compare_text	1850	{1}<{2}	('*', '>')	b	True
+modern	compare_text	1851	{1}<{2}	('*', '0')	b	True
+modern	compare_text	1852	{1}<{2}	('*', '9')	b	True
+modern	compare_text	1853	{1}<{2}	('*', 'a')	b	True
+modern	compare_text	1854	{1}<{2}	('*', 'A')	b	True
+modern	compare_text	1855	{1}<{2}	('*', 'z')	b	True
+modern	compare_text	1856	{1}<{2}	('*', 'Z')	b	True
+modern	compare_text	1857	{1}<{2}	('*', ' ')	b	False
+modern	compare_text	1858	{1}<{2}	(',', '.')	b	True
+modern	compare_text	1859	{1}<{2}	(',', '/')	b	True
+modern	compare_text	1860	{1}<{2}	(',', ':')	b	True
+modern	compare_text	1861	{1}<{2}	(',', ';')	b	True
+modern	compare_text	1862	{1}<{2}	(',', '?')	b	True
+modern	compare_text	1863	{1}<{2}	(',', '@')	b	True
+modern	compare_text	1864	{1}<{2}	(',', '[')	b	True
+modern	compare_text	1865	{1}<{2}	(',', '\\')	b	True
+modern	compare_text	1866	{1}<{2}	(',', ']')	b	True
+modern	compare_text	1867	{1}<{2}	(',', '^')	b	True
+modern	compare_text	1868	{1}<{2}	(',', '`')	b	True
+modern	compare_text	1869	{1}<{2}	(',', '{')	b	True
+modern	compare_text	1870	{1}<{2}	(',', '|')	b	True
+modern	compare_text	1871	{1}<{2}	(',', '}')	b	True
+modern	compare_text	1872	{1}<{2}	(',', '+')	b	True
+modern	compare_text	1873	{1}<{2}	(',', '<')	b	True
+modern	compare_text	1874	{1}<{2}	(',', '=')	b	True
+modern	compare_text	1875	{1}<{2}	(',', '>')	b	True
+modern	compare_text	1876	{1}<{2}	(',', '0')	b	True
+modern	compare_text	1877	{1}<{2}	(',', '9')	b	True
+modern	compare_text	1878	{1}<{2}	(',', 'a')	b	True
+modern	compare_text	1879	{1}<{2}	(',', 'A')	b	True
+modern	compare_text	1880	{1}<{2}	(',', 'z')	b	True
+modern	compare_text	1881	{1}<{2}	(',', 'Z')	b	True
+modern	compare_text	1882	{1}<{2}	(',', ' ')	b	False
+modern	compare_text	1883	{1}<{2}	('.', '/')	b	True
+modern	compare_text	1884	{1}<{2}	('.', ':')	b	False
+modern	compare_text	1885	{1}<{2}	('.', ';')	b	False
+modern	compare_text	1886	{1}<{2}	('.', '?')	b	False
+modern	compare_text	1887	{1}<{2}	('.', '@')	b	True
+modern	compare_text	1888	{1}<{2}	('.', '[')	b	True
+modern	compare_text	1889	{1}<{2}	('.', '\\')	b	True
+modern	compare_text	1890	{1}<{2}	('.', ']')	b	True
+modern	compare_text	1891	{1}<{2}	('.', '^')	b	True
+modern	compare_text	1892	{1}<{2}	('.', '`')	b	True
+modern	compare_text	1893	{1}<{2}	('.', '{')	b	True
+modern	compare_text	1894	{1}<{2}	('.', '|')	b	True
+modern	compare_text	1895	{1}<{2}	('.', '}')	b	True
+modern	compare_text	1896	{1}<{2}	('.', '+')	b	True
+modern	compare_text	1897	{1}<{2}	('.', '<')	b	True
+modern	compare_text	1898	{1}<{2}	('.', '=')	b	True
+modern	compare_text	1899	{1}<{2}	('.', '>')	b	True
+modern	compare_text	1900	{1}<{2}	('.', '0')	b	True
+modern	compare_text	1901	{1}<{2}	('.', '9')	b	True
+modern	compare_text	1902	{1}<{2}	('.', 'a')	b	True
+modern	compare_text	1903	{1}<{2}	('.', 'A')	b	True
+modern	compare_text	1904	{1}<{2}	('.', 'z')	b	True
+modern	compare_text	1905	{1}<{2}	('.', 'Z')	b	True
+modern	compare_text	1906	{1}<{2}	('.', ' ')	b	False
+modern	compare_text	1907	{1}<{2}	('/', ':')	b	False
+modern	compare_text	1908	{1}<{2}	('/', ';')	b	False
+modern	compare_text	1909	{1}<{2}	('/', '?')	b	False
+modern	compare_text	1910	{1}<{2}	('/', '@')	b	False
+modern	compare_text	1911	{1}<{2}	('/', '[')	b	False
+modern	compare_text	1912	{1}<{2}	('/', '\\')	b	True
+modern	compare_text	1913	{1}<{2}	('/', ']')	b	False
+modern	compare_text	1914	{1}<{2}	('/', '^')	b	True
+modern	compare_text	1915	{1}<{2}	('/', '`')	b	True
+modern	compare_text	1916	{1}<{2}	('/', '{')	b	False
+modern	compare_text	1917	{1}<{2}	('/', '|')	b	True
+modern	compare_text	1918	{1}<{2}	('/', '}')	b	False
+modern	compare_text	1919	{1}<{2}	('/', '+')	b	True
+modern	compare_text	1920	{1}<{2}	('/', '<')	b	True
+modern	compare_text	1921	{1}<{2}	('/', '=')	b	True
+modern	compare_text	1922	{1}<{2}	('/', '>')	b	True
+modern	compare_text	1923	{1}<{2}	('/', '0')	b	True
+modern	compare_text	1924	{1}<{2}	('/', '9')	b	True
+modern	compare_text	1925	{1}<{2}	('/', 'a')	b	True
+modern	compare_text	1926	{1}<{2}	('/', 'A')	b	True
+modern	compare_text	1927	{1}<{2}	('/', 'z')	b	True
+modern	compare_text	1928	{1}<{2}	('/', 'Z')	b	True
+modern	compare_text	1929	{1}<{2}	('/', ' ')	b	False
+modern	compare_text	1930	{1}<{2}	(':', ';')	b	False
+modern	compare_text	1931	{1}<{2}	(':', '?')	b	True
+modern	compare_text	1932	{1}<{2}	(':', '@')	b	True
+modern	compare_text	1933	{1}<{2}	(':', '[')	b	True
+modern	compare_text	1934	{1}<{2}	(':', '\\')	b	True
+modern	compare_text	1935	{1}<{2}	(':', ']')	b	True
+modern	compare_text	1936	{1}<{2}	(':', '^')	b	True
+modern	compare_text	1937	{1}<{2}	(':', '`')	b	True
+modern	compare_text	1938	{1}<{2}	(':', '{')	b	True
+modern	compare_text	1939	{1}<{2}	(':', '|')	b	True
+modern	compare_text	1940	{1}<{2}	(':', '}')	b	True
+modern	compare_text	1941	{1}<{2}	(':', '+')	b	True
+modern	compare_text	1942	{1}<{2}	(':', '<')	b	True
+modern	compare_text	1943	{1}<{2}	(':', '=')	b	True
+modern	compare_text	1944	{1}<{2}	(':', '>')	b	True
+modern	compare_text	1945	{1}<{2}	(':', '0')	b	True
+modern	compare_text	1946	{1}<{2}	(':', '9')	b	True
+modern	compare_text	1947	{1}<{2}	(':', 'a')	b	True
+modern	compare_text	1948	{1}<{2}	(':', 'A')	b	True
+modern	compare_text	1949	{1}<{2}	(':', 'z')	b	True
+modern	compare_text	1950	{1}<{2}	(':', 'Z')	b	True
+modern	compare_text	1951	{1}<{2}	(':', ' ')	b	False
+modern	compare_text	1952	{1}<{2}	(';', '?')	b	True
+modern	compare_text	1953	{1}<{2}	(';', '@')	b	True
+modern	compare_text	1954	{1}<{2}	(';', '[')	b	True
+modern	compare_text	1955	{1}<{2}	(';', '\\')	b	True
+modern	compare_text	1956	{1}<{2}	(';', ']')	b	True
+modern	compare_text	1957	{1}<{2}	(';', '^')	b	True
+modern	compare_text	1958	{1}<{2}	(';', '`')	b	True
+modern	compare_text	1959	{1}<{2}	(';', '{')	b	True
+modern	compare_text	1960	{1}<{2}	(';', '|')	b	True
+modern	compare_text	1961	{1}<{2}	(';', '}')	b	True
+modern	compare_text	1962	{1}<{2}	(';', '+')	b	True
+modern	compare_text	1963	{1}<{2}	(';', '<')	b	True
+modern	compare_text	1964	{1}<{2}	(';', '=')	b	True
+modern	compare_text	1965	{1}<{2}	(';', '>')	b	True
+modern	compare_text	1966	{1}<{2}	(';', '0')	b	True
+modern	compare_text	1967	{1}<{2}	(';', '9')	b	True
+modern	compare_text	1968	{1}<{2}	(';', 'a')	b	True
+modern	compare_text	1969	{1}<{2}	(';', 'A')	b	True
+modern	compare_text	1970	{1}<{2}	(';', 'z')	b	True
+modern	compare_text	1971	{1}<{2}	(';', 'Z')	b	True
+modern	compare_text	1972	{1}<{2}	(';', ' ')	b	False
+modern	compare_text	1973	{1}<{2}	('?', '@')	b	True
+modern	compare_text	1974	{1}<{2}	('?', '[')	b	True
+modern	compare_text	1975	{1}<{2}	('?', '\\')	b	True
+modern	compare_text	1976	{1}<{2}	('?', ']')	b	True
+modern	compare_text	1977	{1}<{2}	('?', '^')	b	True
+modern	compare_text	1978	{1}<{2}	('?', '`')	b	True
+modern	compare_text	1979	{1}<{2}	('?', '{')	b	True
+modern	compare_text	1980	{1}<{2}	('?', '|')	b	True
+modern	compare_text	1981	{1}<{2}	('?', '}')	b	True
+modern	compare_text	1982	{1}<{2}	('?', '+')	b	True
+modern	compare_text	1983	{1}<{2}	('?', '<')	b	True
+modern	compare_text	1984	{1}<{2}	('?', '=')	b	True
+modern	compare_text	1985	{1}<{2}	('?', '>')	b	True
+modern	compare_text	1986	{1}<{2}	('?', '0')	b	True
+modern	compare_text	1987	{1}<{2}	('?', '9')	b	True
+modern	compare_text	1988	{1}<{2}	('?', 'a')	b	True
+modern	compare_text	1989	{1}<{2}	('?', 'A')	b	True
+modern	compare_text	1990	{1}<{2}	('?', 'z')	b	True
+modern	compare_text	1991	{1}<{2}	('?', 'Z')	b	True
+modern	compare_text	1992	{1}<{2}	('?', ' ')	b	False
+modern	compare_text	1993	{1}<{2}	('@', '[')	b	False
+modern	compare_text	1994	{1}<{2}	('@', '\\')	b	True
+modern	compare_text	1995	{1}<{2}	('@', ']')	b	False
+modern	compare_text	1996	{1}<{2}	('@', '^')	b	True
+modern	compare_text	1997	{1}<{2}	('@', '`')	b	True
+modern	compare_text	1998	{1}<{2}	('@', '{')	b	False
+modern	compare_text	1999	{1}<{2}	('@', '|')	b	True
+modern	compare_text	2000	{1}<{2}	('@', '}')	b	False
+modern	compare_text	2001	{1}<{2}	('@', '+')	b	True
+modern	compare_text	2002	{1}<{2}	('@', '<')	b	True
+modern	compare_text	2003	{1}<{2}	('@', '=')	b	True
+modern	compare_text	2004	{1}<{2}	('@', '>')	b	True
+modern	compare_text	2005	{1}<{2}	('@', '0')	b	True
+modern	compare_text	2006	{1}<{2}	('@', '9')	b	True
+modern	compare_text	2007	{1}<{2}	('@', 'a')	b	True
+modern	compare_text	2008	{1}<{2}	('@', 'A')	b	True
+modern	compare_text	2009	{1}<{2}	('@', 'z')	b	True
+modern	compare_text	2010	{1}<{2}	('@', 'Z')	b	True
+modern	compare_text	2011	{1}<{2}	('@', ' ')	b	False
+modern	compare_text	2012	{1}<{2}	('[', '\\')	b	True
+modern	compare_text	2013	{1}<{2}	('[', ']')	b	True
+modern	compare_text	2014	{1}<{2}	('[', '^')	b	True
+modern	compare_text	2015	{1}<{2}	('[', '`')	b	True
+modern	compare_text	2016	{1}<{2}	('[', '{')	b	True
+modern	compare_text	2017	{1}<{2}	('[', '|')	b	True
+modern	compare_text	2018	{1}<{2}	('[', '}')	b	True
+modern	compare_text	2019	{1}<{2}	('[', '+')	b	True
+modern	compare_text	2020	{1}<{2}	('[', '<')	b	True
+modern	compare_text	2021	{1}<{2}	('[', '=')	b	True
+modern	compare_text	2022	{1}<{2}	('[', '>')	b	True
+modern	compare_text	2023	{1}<{2}	('[', '0')	b	True
+modern	compare_text	2024	{1}<{2}	('[', '9')	b	True
+modern	compare_text	2025	{1}<{2}	('[', 'a')	b	True
+modern	compare_text	2026	{1}<{2}	('[', 'A')	b	True
+modern	compare_text	2027	{1}<{2}	('[', 'z')	b	True
+modern	compare_text	2028	{1}<{2}	('[', 'Z')	b	True
+modern	compare_text	2029	{1}<{2}	('[', ' ')	b	False
+modern	compare_text	2030	{1}<{2}	('\\', ']')	b	False
+modern	compare_text	2031	{1}<{2}	('\\', '^')	b	True
+modern	compare_text	2032	{1}<{2}	('\\', '`')	b	True
+modern	compare_text	2033	{1}<{2}	('\\', '{')	b	False
+modern	compare_text	2034	{1}<{2}	('\\', '|')	b	True
+modern	compare_text	2035	{1}<{2}	('\\', '}')	b	False
+modern	compare_text	2036	{1}<{2}	('\\', '+')	b	True
+modern	compare_text	2037	{1}<{2}	('\\', '<')	b	True
+modern	compare_text	2038	{1}<{2}	('\\', '=')	b	True
+modern	compare_text	2039	{1}<{2}	('\\', '>')	b	True
+modern	compare_text	2040	{1}<{2}	('\\', '0')	b	True
+modern	compare_text	2041	{1}<{2}	('\\', '9')	b	True
+modern	compare_text	2042	{1}<{2}	('\\', 'a')	b	True
+modern	compare_text	2043	{1}<{2}	('\\', 'A')	b	True
+modern	compare_text	2044	{1}<{2}	('\\', 'z')	b	True
+modern	compare_text	2045	{1}<{2}	('\\', 'Z')	b	True
+modern	compare_text	2046	{1}<{2}	('\\', ' ')	b	False
+modern	compare_text	2047	{1}<{2}	(']', '^')	b	True
+modern	compare_text	2048	{1}<{2}	(']', '`')	b	True
+modern	compare_text	2049	{1}<{2}	(']', '{')	b	True
+modern	compare_text	2050	{1}<{2}	(']', '|')	b	True
+modern	compare_text	2051	{1}<{2}	(']', '}')	b	True
+modern	compare_text	2052	{1}<{2}	(']', '+')	b	True
+modern	compare_text	2053	{1}<{2}	(']', '<')	b	True
+modern	compare_text	2054	{1}<{2}	(']', '=')	b	True
+modern	compare_text	2055	{1}<{2}	(']', '>')	b	True
+modern	compare_text	2056	{1}<{2}	(']', '0')	b	True
+modern	compare_text	2057	{1}<{2}	(']', '9')	b	True
+modern	compare_text	2058	{1}<{2}	(']', 'a')	b	True
+modern	compare_text	2059	{1}<{2}	(']', 'A')	b	True
+modern	compare_text	2060	{1}<{2}	(']', 'z')	b	True
+modern	compare_text	2061	{1}<{2}	(']', 'Z')	b	True
+modern	compare_text	2062	{1}<{2}	(']', ' ')	b	False
+modern	compare_text	2063	{1}<{2}	('^', '`')	b	False
+modern	compare_text	2064	{1}<{2}	('^', '{')	b	False
+modern	compare_text	2065	{1}<{2}	('^', '|')	b	True
+modern	compare_text	2066	{1}<{2}	('^', '}')	b	False
+modern	compare_text	2067	{1}<{2}	('^', '+')	b	True
+modern	compare_text	2068	{1}<{2}	('^', '<')	b	True
+modern	compare_text	2069	{1}<{2}	('^', '=')	b	True
+modern	compare_text	2070	{1}<{2}	('^', '>')	b	True
+modern	compare_text	2071	{1}<{2}	('^', '0')	b	True
+modern	compare_text	2072	{1}<{2}	('^', '9')	b	True
+modern	compare_text	2073	{1}<{2}	('^', 'a')	b	True
+modern	compare_text	2074	{1}<{2}	('^', 'A')	b	True
+modern	compare_text	2075	{1}<{2}	('^', 'z')	b	True
+modern	compare_text	2076	{1}<{2}	('^', 'Z')	b	True
+modern	compare_text	2077	{1}<{2}	('^', ' ')	b	False
+modern	compare_text	2078	{1}<{2}	('`', '{')	b	False
+modern	compare_text	2079	{1}<{2}	('`', '|')	b	True
+modern	compare_text	2080	{1}<{2}	('`', '}')	b	False
+modern	compare_text	2081	{1}<{2}	('`', '+')	b	True
+modern	compare_text	2082	{1}<{2}	('`', '<')	b	True
+modern	compare_text	2083	{1}<{2}	('`', '=')	b	True
+modern	compare_text	2084	{1}<{2}	('`', '>')	b	True
+modern	compare_text	2085	{1}<{2}	('`', '0')	b	True
+modern	compare_text	2086	{1}<{2}	('`', '9')	b	True
+modern	compare_text	2087	{1}<{2}	('`', 'a')	b	True
+modern	compare_text	2088	{1}<{2}	('`', 'A')	b	True
+modern	compare_text	2089	{1}<{2}	('`', 'z')	b	True
+modern	compare_text	2090	{1}<{2}	('`', 'Z')	b	True
+modern	compare_text	2091	{1}<{2}	('`', ' ')	b	False
+modern	compare_text	2092	{1}<{2}	('{', '|')	b	True
+modern	compare_text	2093	{1}<{2}	('{', '}')	b	True
+modern	compare_text	2094	{1}<{2}	('{', '+')	b	True
+modern	compare_text	2095	{1}<{2}	('{', '<')	b	True
+modern	compare_text	2096	{1}<{2}	('{', '=')	b	True
+modern	compare_text	2097	{1}<{2}	('{', '>')	b	True
+modern	compare_text	2098	{1}<{2}	('{', '0')	b	True
+modern	compare_text	2099	{1}<{2}	('{', '9')	b	True
+modern	compare_text	2100	{1}<{2}	('{', 'a')	b	True
+modern	compare_text	2101	{1}<{2}	('{', 'A')	b	True
+modern	compare_text	2102	{1}<{2}	('{', 'z')	b	True
+modern	compare_text	2103	{1}<{2}	('{', 'Z')	b	True
+modern	compare_text	2104	{1}<{2}	('{', ' ')	b	False
+modern	compare_text	2105	{1}<{2}	('|', '}')	b	False
+modern	compare_text	2106	{1}<{2}	('|', '+')	b	False
+modern	compare_text	2107	{1}<{2}	('|', '<')	b	False
+modern	compare_text	2108	{1}<{2}	('|', '=')	b	False
+modern	compare_text	2109	{1}<{2}	('|', '>')	b	False
+modern	compare_text	2110	{1}<{2}	('|', '0')	b	True
+modern	compare_text	2111	{1}<{2}	('|', '9')	b	True
+modern	compare_text	2112	{1}<{2}	('|', 'a')	b	True
+modern	compare_text	2113	{1}<{2}	('|', 'A')	b	True
+modern	compare_text	2114	{1}<{2}	('|', 'z')	b	True
+modern	compare_text	2115	{1}<{2}	('|', 'Z')	b	True
+modern	compare_text	2116	{1}<{2}	('|', ' ')	b	False
+modern	compare_text	2117	{1}<{2}	('}', '+')	b	True
+modern	compare_text	2118	{1}<{2}	('}', '<')	b	True
+modern	compare_text	2119	{1}<{2}	('}', '=')	b	True
+modern	compare_text	2120	{1}<{2}	('}', '>')	b	True
+modern	compare_text	2121	{1}<{2}	('}', '0')	b	True
+modern	compare_text	2122	{1}<{2}	('}', '9')	b	True
+modern	compare_text	2123	{1}<{2}	('}', 'a')	b	True
+modern	compare_text	2124	{1}<{2}	('}', 'A')	b	True
+modern	compare_text	2125	{1}<{2}	('}', 'z')	b	True
+modern	compare_text	2126	{1}<{2}	('}', 'Z')	b	True
+modern	compare_text	2127	{1}<{2}	('}', ' ')	b	False
+modern	compare_text	2128	{1}<{2}	('+', '<')	b	True
+modern	compare_text	2129	{1}<{2}	('+', '=')	b	True
+modern	compare_text	2130	{1}<{2}	('+', '>')	b	True
+modern	compare_text	2131	{1}<{2}	('+', '0')	b	True
+modern	compare_text	2132	{1}<{2}	('+', '9')	b	True
+modern	compare_text	2133	{1}<{2}	('+', 'a')	b	True
+modern	compare_text	2134	{1}<{2}	('+', 'A')	b	True
+modern	compare_text	2135	{1}<{2}	('+', 'z')	b	True
+modern	compare_text	2136	{1}<{2}	('+', 'Z')	b	True
+modern	compare_text	2137	{1}<{2}	('+', ' ')	b	False
+modern	compare_text	2138	{1}<{2}	('<', '=')	b	True
+modern	compare_text	2139	{1}<{2}	('<', '>')	b	True
+modern	compare_text	2140	{1}<{2}	('<', '0')	b	True
+modern	compare_text	2141	{1}<{2}	('<', '9')	b	True
+modern	compare_text	2142	{1}<{2}	('<', 'a')	b	True
+modern	compare_text	2143	{1}<{2}	('<', 'A')	b	True
+modern	compare_text	2144	{1}<{2}	('<', 'z')	b	True
+modern	compare_text	2145	{1}<{2}	('<', 'Z')	b	True
+modern	compare_text	2146	{1}<{2}	('<', ' ')	b	False
+modern	compare_text	2147	{1}<{2}	('=', '>')	b	True
+modern	compare_text	2148	{1}<{2}	('=', '0')	b	True
+modern	compare_text	2149	{1}<{2}	('=', '9')	b	True
+modern	compare_text	2150	{1}<{2}	('=', 'a')	b	True
+modern	compare_text	2151	{1}<{2}	('=', 'A')	b	True
+modern	compare_text	2152	{1}<{2}	('=', 'z')	b	True
+modern	compare_text	2153	{1}<{2}	('=', 'Z')	b	True
+modern	compare_text	2154	{1}<{2}	('=', ' ')	b	False
+modern	compare_text	2155	{1}<{2}	('>', '0')	b	True
+modern	compare_text	2156	{1}<{2}	('>', '9')	b	True
+modern	compare_text	2157	{1}<{2}	('>', 'a')	b	True
+modern	compare_text	2158	{1}<{2}	('>', 'A')	b	True
+modern	compare_text	2159	{1}<{2}	('>', 'z')	b	True
+modern	compare_text	2160	{1}<{2}	('>', 'Z')	b	True
+modern	compare_text	2161	{1}<{2}	('>', ' ')	b	False
+modern	compare_text	2162	{1}<{2}	('0', '9')	b	True
+modern	compare_text	2163	{1}<{2}	('0', 'a')	b	True
+modern	compare_text	2164	{1}<{2}	('0', 'A')	b	True
+modern	compare_text	2165	{1}<{2}	('0', 'z')	b	True
+modern	compare_text	2166	{1}<{2}	('0', 'Z')	b	True
+modern	compare_text	2167	{1}<{2}	('0', ' ')	b	False
+modern	compare_text	2168	{1}<{2}	('9', 'a')	b	True
+modern	compare_text	2169	{1}<{2}	('9', 'A')	b	True
+modern	compare_text	2170	{1}<{2}	('9', 'z')	b	True
+modern	compare_text	2171	{1}<{2}	('9', 'Z')	b	True
+modern	compare_text	2172	{1}<{2}	('9', ' ')	b	False
+modern	compare_text	2173	{1}<{2}	('a', 'A')	b	False
+modern	compare_text	2174	{1}<{2}	('a', 'z')	b	True
+modern	compare_text	2175	{1}<{2}	('a', 'Z')	b	True
+modern	compare_text	2176	{1}<{2}	('a', ' ')	b	False
+modern	compare_text	2177	{1}<{2}	('A', 'z')	b	True
+modern	compare_text	2178	{1}<{2}	('A', 'Z')	b	True
+modern	compare_text	2179	{1}<{2}	('A', ' ')	b	False
+modern	compare_text	2180	{1}<{2}	('z', 'Z')	b	False
+modern	compare_text	2181	{1}<{2}	('z', ' ')	b	False
+modern	compare_text	2182	{1}<{2}	('Z', ' ')	b	False
+modern	compare_text	2183	{1}<{2}	('a-b', 'ab')	b	True
+modern	compare_text	2184	{1}={2}	('a-b', 'ab')	b	False
+modern	compare_text	2185	{1}<{2}	('a-b', 'aa')	b	True
+modern	compare_text	2186	{1}={2}	('a-b', 'aa')	b	False
+modern	compare_text	2187	{1}<{2}	('a-b', 'ac')	b	True
+modern	compare_text	2188	{1}={2}	('a-b', 'ac')	b	False
+modern	compare_text	2189	{1}<{2}	("a'b", 'ab')	b	True
+modern	compare_text	2190	{1}={2}	("a'b", 'ab')	b	False
+modern	compare_text	2191	{1}<{2}	("a'b", 'aa')	b	True
+modern	compare_text	2192	{1}={2}	("a'b", 'aa')	b	False
+modern	compare_text	2193	{1}<{2}	("a'b", 'ac')	b	True
+modern	compare_text	2194	{1}={2}	("a'b", 'ac')	b	False
+modern	compare_text	2195	{1}<{2}	('ab', 'a b')	b	False
+modern	compare_text	2196	{1}={2}	('ab', 'a b')	b	False
+modern	compare_text	2197	{1}<{2}	('a b', 'aa')	b	True
+modern	compare_text	2198	{1}={2}	('a b', 'aa')	b	False
+modern	compare_text	2199	{1}<{2}	('a_b', 'ab')	b	True
+modern	compare_text	2200	{1}={2}	('a_b', 'ab')	b	False
+modern	compare_text	2201	{1}<{2}	('a_b', 'aa')	b	True
+modern	compare_text	2202	{1}={2}	('a_b', 'aa')	b	False
+modern	compare_text	2203	{1}<{2}	('a~', 'ab')	b	True
+modern	compare_text	2204	{1}={2}	('a~', 'ab')	b	False
+modern	compare_text	2205	{1}<{2}	('-a', 'a')	b	True
+modern	compare_text	2206	{1}={2}	('-a', 'a')	b	False
+modern	compare_text	2207	{1}<{2}	('-a', 'b')	b	True
+modern	compare_text	2208	{1}={2}	('-a', 'b')	b	False
+modern	compare_text	2209	{1}<{2}	('co-op', 'coop')	b	True
+modern	compare_text	2210	{1}={2}	('co-op', 'coop')	b	False
+modern	compare_text	2211	{1}<{2}	('coop', 'co-op')	b	False
+modern	compare_text	2212	{1}={2}	('coop', 'co-op')	b	False
+modern	compare_text	2213	{1}<{2}	('e', 'é')	b	True
+modern	compare_text	2214	{1}={2}	('e', 'é')	b	False
+modern	compare_text	2215	{1}<{2}	('é', 'f')	b	True
+modern	compare_text	2216	{1}={2}	('é', 'f')	b	False
+modern	compare_text	2217	{1}<{2}	('z', 'é')	b	False
+modern	compare_text	2218	{1}={2}	('z', 'é')	b	False
+modern	compare_text	2219	{1}<{2}	('ae', 'æ')	b	True
+modern	compare_text	2220	{1}={2}	('ae', 'æ')	b	False
+modern	compare_text	2221	{1}<{2}	('ß', 'ss')	b	False
+modern	compare_text	2222	{1}={2}	('ß', 'ss')	b	True
+modern	compare_text	2223	{1}<{2}	('10', '9')	b	True
+modern	compare_text	2224	{1}={2}	('10', '9')	b	False
+modern	compare_text	2225	{1}<{2}	('a10', 'a9')	b	True
+modern	compare_text	2226	{1}={2}	('a10', 'a9')	b	False
+modern	compare_text	2227	{1}<{2}	('', ' ')	b	True
+modern	compare_text	2228	{1}={2}	('', ' ')	b	False
+modern	compare_text	2229	{1}<{2}	(' ', '!')	b	True
+modern	compare_text	2230	{1}={2}	(' ', '!')	b	False

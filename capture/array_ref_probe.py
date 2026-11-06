@@ -166,7 +166,60 @@ def formulas() -> list[tuple[str, bool]]:
         "INDEX(Z1:Z4,{1;2})",
     ):
         out.append((control, False))
-    return list(dict.fromkeys(out))
+    return list(dict.fromkeys(out + _newer_functions()))
+
+
+def _newer_functions() -> list[tuple[str, bool]]:
+    """The functions added since the first capture, each with a range or array where it may lift."""
+    x = "_xlfn."
+    rows = []
+    for k in KEYS:
+        rows += [
+            f"AVERAGEIF(Z1:Z4,{k})",
+            f"AVERAGEIF(Z1:Z4,{k},AA1:AA4)",
+            f"AVERAGEIFS(AA1:AA4,Z1:Z4,{k})",
+            f"{x}MAXIFS(AA1:AA4,Z1:Z4,{k})",
+            f"{x}MINIFS(AA1:AA4,Z1:Z4,{k})",
+            f"{x}XLOOKUP({k},Z1:Z4,AA1:AA4)",
+            f"{x}XMATCH({k},Z1:Z4)",
+            f"LARGE(Z1:Z4,{k})",
+            f"SMALL(Z1:Z4,{k})",
+            f"{x}SWITCH({k},1,10,2,20,0)",
+            f"{x}IFS({k}>1,1,TRUE,0)",
+            f'{x}TEXTJOIN(",",TRUE,{k})',
+            f'{x}TEXTJOIN({k},TRUE,"a","b","c")',
+            f"{x}CONCAT({k})",
+        ]
+    for p in ("0.5", "{0.25;0.75}", "{0.25,0.75}", "Z1:Z2/10"):
+        rows += [f"PERCENTILE(Z1:Z4,{p})", f"{x}PERCENTILE.INC(Z1:Z4,{p})"]
+    for q in ("1", "{1;3}", "Z1:Z2"):
+        rows += [f"QUARTILE(Z1:Z4,{q})", f"{x}QUARTILE.INC(Z1:Z4,{q})"]
+    rows += [
+        "MODE(Z1:Z4)",
+        f"{x}MODE.SNGL(Z1:Z4)",
+        "MODE(Z1:Z4*1)",
+        "LARGE(Z1:Z4*2,1)",
+        "SMALL(Z1:Z4*2,1)",
+        "PERCENTILE(Z1:Z4*2,0.5)",
+        "QUARTILE(Z1:Z4*2,1)",
+        f"{x}XLOOKUP(2,Z1:Z4,AA1:AB4)",
+        f"{x}XLOOKUP(2,Z1:Z4,AA1:AA4)*2",
+        f"SUM({x}XLOOKUP(2,Z1:Z4,AA1:AB4))",
+        f"SUMPRODUCT({x}XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))",
+        f"{x}XLOOKUP(2,Z1:Z4*1,AA1:AA4)",
+        f"{x}XLOOKUP(2,Z1:Z4,AA1:AA4*2)",
+        f"{x}XMATCH(2,Z1:Z4*1)",
+        f"{x}IFS(Z1:Z4>1,AA1:AA4,TRUE,0)",
+        f"{x}SWITCH(Z1:Z4,1,AA1:AA4,0)",
+        f"{x}CONCAT(Z1:Z4*2)",
+        f'{x}TEXTJOIN(",",TRUE,Z1:Z4*2)',
+        "SUM(LARGE(Z1:Z4,{1,2}))",
+        "SUMPRODUCT(LARGE(Z1:Z4,ROW(Z1:Z2)))",
+        f"SUMPRODUCT({x}XMATCH(Z1:Z4,Z1:Z4))",
+        f"SUM({x}XMATCH(Z1:Z4,Z1:Z4))",
+        f"SUM({x}XLOOKUP(Z1:Z4,Z1:Z4,AA1:AA4))",
+    ]
+    return [(r, False) for r in rows]
 
 
 def layout() -> list[tuple[str, str, str]]:

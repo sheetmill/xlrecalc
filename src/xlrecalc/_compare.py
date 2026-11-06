@@ -6,7 +6,8 @@ though ``ErrorValue`` equals its text for interoperation (§4.2). Captured in
 ``tests/captures/compare.tsv``:
 
 - operators order numbers < text < logicals; text compares without case (``casefold``, so
-  ``"straße"="STRASSE"``); a blank is 0, ``""`` or FALSE by what it meets; an error operand
+  ``"straße"="STRASSE"``), marks before digits before letters (capture ``modern``); a blank
+  is 0, ``""`` or FALSE by what it meets; an error operand
   gives that error;
 - with ``comparison_rounding``, numbers that agree to 15 significant digits are equal, for the
   operators and for criteria; exact lookups (``MATCH``, ``VLOOKUP``) compare exactly;
@@ -19,6 +20,7 @@ though ``ErrorValue`` equals its text for interoperation (§4.2). Captured in
 from __future__ import annotations
 
 import re
+import unicodedata
 from collections.abc import Callable
 from decimal import ROUND_HALF_DOWN, Decimal
 from typing import Literal
@@ -27,7 +29,15 @@ from xlrecalc._numtext import text_to_number
 from xlrecalc._quirks import Quirks
 from xlrecalc._values import BLANK, ErrorValue, Value
 
-__all__ = ["compare", "criterion", "lookup_equal", "lookup_key", "numbers_equal", "wildcard"]
+__all__ = [
+    "compare",
+    "criterion",
+    "lookup_equal",
+    "lookup_key",
+    "numbers_equal",
+    "switch_equal",
+    "wildcard",
+]
 
 Op = Literal["=", "<>", "<", ">", "<=", ">="]
 _CODE = re.compile(r"#[A-Za-z0-9_/]+[!?]?")
@@ -65,6 +75,28 @@ def _resolve_blank(v: Value, other: Value) -> Value:
     return 0.0
 
 
+# Excel's order of the ASCII marks and symbols (capture ``modern``, every pair): CLDR's root
+# collation, none of them ignored. Digits and letters follow them.
+_MARKS = {ch: i for i, ch in enumerate(" _-,;:!?.'\"()[]{}@*/\\&#%`^+<=>|~$", 1)}
+
+
+def _collation_key(text: str) -> tuple[list[int], list[int]]:
+    """A folded text's sort key: base characters, then accents for ties (``e`` < ``é`` < ``f``).
+
+    Control characters sort first and other characters after the letters, by code point.
+    """
+    bases: list[int] = []
+    accents: list[int] = []
+    for ch in unicodedata.normalize("NFD", text):
+        if unicodedata.combining(ch):
+            accents.append(ord(ch))
+            continue
+        mark = _MARKS.get(ch)
+        code = ord(ch)
+        bases.append(mark if mark is not None else (code - 0x20 if code < 0x20 else code + 0x40))
+    return bases, accents
+
+
 def compare(a: Value, b: Value, op: Op, quirks: Quirks = Quirks.EXCEL) -> bool | ErrorValue:
     """``a op b`` as Excel's comparison operators compute it."""
     if isinstance(a, ErrorValue):
@@ -79,7 +111,13 @@ def compare(a: Value, b: Value, op: Op, quirks: Quirks = Quirks.EXCEL) -> bool |
         order = -1 if ra < rb else 1
     elif ra == 1:
         x, y = str(a).casefold(), str(b).casefold()
-        order = (x > y) - (x < y)
+        if x == y:
+            order = 0
+        elif x.isalnum() and y.isalnum() and x.isascii() and y.isascii():
+            order = 1 if x > y else -1  # digits before letters, as the code points are
+        else:
+            kx, ky = _collation_key(x), _collation_key(y)
+            order = 0 if kx == ky else (1 if kx > ky else -1)
     elif ra == 2:
         order = int(bool(a)) - int(bool(b))
     else:
@@ -111,6 +149,17 @@ def lookup_equal(lookup: Value, cell: Value) -> bool:
             and (lookup.casefold() == cell.casefold())
         )
     return float(lookup) == float(cell)  # type: ignore[arg-type]
+
+
+def switch_equal(a: Value, b: Value) -> bool:
+    """``SWITCH``'s test: a blank is 0, no text meets a number, and text ignores case."""
+    a = 0.0 if a is BLANK else a
+    b = 0.0 if b is BLANK else b
+    if isinstance(a, bool) or isinstance(b, bool):
+        return isinstance(a, bool) and isinstance(b, bool) and a == b
+    if isinstance(a, str) or isinstance(b, str):
+        return isinstance(a, str) and isinstance(b, str) and a.casefold() == b.casefold()
+    return a == b
 
 
 def lookup_key(value: Value) -> tuple[str, object]:

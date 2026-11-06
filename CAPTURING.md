@@ -39,7 +39,8 @@ people's workbooks are used.
 | `whitespace` | 15 | whitespace at the ends of inline and shared strings without `xml:space="preserve"` ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §9.1) |
 | `value_forms` | 26 | number forms Excel never writes in `<v>` (`nan`, `INF`, `1e400`, `1_000`, `+5`...) and rows and columns off its grid: which files Excel refuses and how it reads the others (`capture/value_probe.py`) |
 | `array_size` | 6 | declared arrays over one, ten and every column, and `SUMPRODUCT` over another sheet's whole columns: whether Excel opens and recalculates them, how long it takes and what memory it uses (`capture/array_size_probe.py`; it ends Excel past 8 GB) |
-| `array_refs` | 7,042 cells | `ROW`, `COLUMN`, `CELL`, ranges and arrays as a criterion or a lookup key, and arrays of references, each as a legacy formula, a legacy array formula and a dynamic array |
+| `modern` | 2,230 | `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS`, `MINIFS`, `LARGE`, `SMALL`, `PERCENTILE`, `QUARTILE`, `MODE`, `IFS`, `SWITCH`, `TEXTJOIN`, `CONCAT`, `XLOOKUP`, `XMATCH` across argument kinds, edges and modes; how text compares, every pair of 40 characters |
+| `array_refs` | 8,954 cells | `ROW`, `COLUMN`, `CELL`, ranges and arrays as a criterion or a lookup key, and arrays of references, each as a legacy formula, a legacy array formula and a dynamic array |
 | `array_functions` | 41 | the `SUMIF` family, `DSUM`, `CORREL` and `ROW` times `COLUMN` over one column, ten and every column of another sheet, with Excel's memory: Excel's value, or the file's value kept |
 | `circular`, `circular_alerts` | 16 each | circular references with iteration off: what Excel saves and shows, alerts off and on (the second interactive; [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §7.2) |
 
@@ -159,7 +160,8 @@ Sources analyzed: the Enron spreadsheet corpus (Hermans and Murphy-Hill, MSR 201
 15,871 workbooks, 2.1 million distinct formulas) and the test workbooks of xlcalculator (MIT).
 They are used locally, to find the formula forms the project's own corpus must cover and to
 rank functions by use; nothing from them is committed except the aggregate ranking in
-`tools/function_frequency.tsv`, with its attribution. Rules:
+`tools/function_frequency.tsv`, with its attribution. Those workbooks date from about 2001, so
+they cannot contain a newer function, and a count of zero says nothing about one. Rules:
 
 - Expected values never come from another program or from another file's cached values: a
   formula worth capturing is put into a fresh workbook and Excel computes it.

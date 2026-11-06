@@ -12,7 +12,7 @@ import re
 from typing import Any
 
 from xlrecalc._arrays import check_area
-from xlrecalc._coerce import Context, scalar
+from xlrecalc._coerce import Context, scalar, to_number
 from xlrecalc._compare import compare, lookup_equal, wildcard
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._registry import function
@@ -387,3 +387,231 @@ def LOOKUP(ctx: Context, value: Any, lookup: Any, result: Any = MISSING) -> Any:
             return NA
         found = line[i]
     return 0.0 if found is BLANK else found
+
+
+def _mode(arg: Any, default: int, allowed: tuple[int, ...], ctx: Context) -> int | ErrorValue:
+    """A match or search mode: truncated, an omitted one its default."""
+    if arg is MISSING:
+        return default
+    n = to_number(arg, ctx)
+    if isinstance(n, ErrorValue):
+        return n
+    k = math.trunc(n)
+    return k if k in allowed else VALUE
+
+
+def _x_cells(array: Any) -> list[tuple[int, Any]] | ErrorValue:
+    """A one-line range or array as (position, value), blanks left out."""
+    if isinstance(array, ErrorValue):
+        return array
+    if isinstance(array, tuple):
+        if len(array) > 1 and len(array[0]) > 1:
+            return VALUE
+        return list(enumerate(x for row in array for x in row))
+    if isinstance(array, Ref):
+        if array.rows > 1 and array.columns > 1:
+            return VALUE
+        return _line(array, array.rows == 1)
+    return [(0, array)]
+
+
+def _x_size(array: Any) -> int:
+    """The number of positions in a one-line range or array."""
+    if isinstance(array, Ref):
+        return array.rows * array.columns
+    if isinstance(array, tuple):
+        return len(array) * len(array[0])
+    return 1
+
+
+def _x_rank(v: Any) -> int:
+    """Excel's order across types: numbers, text, logicals, and a blank key after them."""
+    if isinstance(v, bool):
+        return 2
+    if isinstance(v, str):
+        return 1
+    return 0 if isinstance(v, float) else 3
+
+
+def _x_compare(key: Any, v: Any, ctx: Context) -> int | None:
+    """-1, 0 or 1 for a cell against the key; ``None`` for an error, which no search takes."""
+    if isinstance(v, ErrorValue) or v is BLANK:
+        return None
+    if key is BLANK:
+        return -1
+    a, b = _x_rank(v), _x_rank(key)
+    if a != b:
+        return -1 if a < b else 1
+    if lookup_equal(key, v):
+        return 0
+    return -1 if compare(v, key, "<", ctx.quirks) is True else 1
+
+
+def _x_gap(cells: list[tuple[int, Any]], size: int, search: int) -> int | None:
+    """The first blank position of a line of ``size``, or the last when searching back."""
+    held = {i for i, _ in cells}
+    if len(held) >= size:
+        return None
+    positions = range(size) if search > 0 else range(size - 1, -1, -1)
+    return next(i for i in positions if i not in held)
+
+
+def _x_search(
+    key: Any, cells: list[tuple[int, Any]], size: int, match: int, search: int, ctx: Context
+) -> int | None:
+    """The position ``XLOOKUP`` and ``XMATCH`` find, or ``None``.
+
+    A blank key finds a blank cell; otherwise blanks are never found, so only cells are read.
+    """
+    if key is BLANK:
+        gap = _x_gap(cells, size, search)
+        if gap is not None:
+            return gap
+    if search in (2, -2):
+        return _x_binary(key, cells, match, search, ctx)
+    order = cells if search == 1 else reversed(cells)
+    if match == 2 and isinstance(key, str):
+        pattern = wildcard(key)
+        return next((i for i, v in order if isinstance(v, str) and pattern.fullmatch(v)), None)
+    best = None
+    best_value: Any = None
+    for i, v in order:
+        c = _x_compare(key, v, ctx)
+        if c is None:
+            continue
+        if c == 0:
+            return i
+        if c == match and (best is None or _x_compare(best_value, v, ctx) == -match):
+            best, best_value = i, v
+    return best
+
+
+def _x_binary(
+    key: Any, cells: list[tuple[int, Any]], match: int, search: int, ctx: Context
+) -> int | None:
+    """Bisection over the cells, sorted ascending (``search`` 2) or descending (-2)."""
+    lo, hi = 0, len(cells) - 1
+    below = above = None
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        i, v = cells[mid]
+        c = _x_compare(key, v, ctx)
+        if c == 0:
+            return i
+        step_up = (c is None or c < 0) if search == 2 else (c is not None and c > 0)
+        if c is not None:
+            if c < 0:
+                below = i if below is None or search == 2 else below
+                below = i
+            else:
+                above = i
+        if step_up:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return below if match == -1 else above if match == 1 else None
+
+
+@function(
+    "_xlfn.XMATCH",
+    "value",
+    "array",
+    "raw",
+    "raw",
+    min_args=2,
+    errors=True,
+    status="partial",
+    note="the regular-expression match mode is not implemented",
+    category=L,
+)
+def XMATCH(ctx: Context, key: Any, array: Any, match: Any = MISSING, search: Any = MISSING) -> Any:
+    """The position of a value in a row or column, by match and search mode."""
+    v = scalar(key, ctx)
+    if isinstance(v, ErrorValue):
+        return v
+    m = _mode(match, 0, (0, -1, 1, 2, 3), ctx)
+    if isinstance(m, ErrorValue):
+        return m
+    if m == 3:
+        return ctx.unsupported("the regular-expression match mode")  # type: ignore[attr-defined]
+    s = _mode(search, 1, (1, -1, 2, -2), ctx)
+    if isinstance(s, ErrorValue):
+        return s
+    if m == 2 and s in (2, -2):
+        return VALUE  # wildcards cannot be bisected (capture modern)
+    cells = _x_cells(array)
+    if isinstance(cells, ErrorValue):
+        return cells
+    found = _x_search(v, cells, _x_size(array), m, s, ctx)
+    return NA if found is None else float(found + 1)
+
+
+@function(
+    "_xlfn.XLOOKUP",
+    "key",
+    "array",
+    "array",
+    "raw",
+    "raw",
+    "raw",
+    min_args=3,
+    errors=True,
+    reference=True,
+    status="partial",
+    note="the regular-expression match mode is not implemented",
+    category=L,
+)
+def XLOOKUP(
+    ctx: Context,
+    key: Any,
+    array: Any,
+    results: Any,
+    not_found: Any = MISSING,
+    match: Any = MISSING,
+    search: Any = MISSING,
+) -> Any:
+    """The result at the position found: a cell, or the row or column of a wider range."""
+    v = scalar(key, ctx)
+    if isinstance(v, ErrorValue):
+        return v
+    m = _mode(match, 0, (0, -1, 1, 2, 3), ctx)
+    if isinstance(m, ErrorValue):
+        return m
+    if m == 3:
+        return ctx.unsupported("the regular-expression match mode")  # type: ignore[attr-defined]
+    s = _mode(search, 1, (1, -1, 2, -2), ctx)
+    if isinstance(s, ErrorValue):
+        return s
+    if m == 2 and s in (2, -2):
+        return VALUE  # wildcards cannot be bisected (capture modern)
+    cells = _x_cells(array)
+    if isinstance(cells, ErrorValue):
+        return cells
+    if isinstance(results, ErrorValue):
+        return results
+    across = isinstance(array, Ref) and array.rows == 1 and array.columns > 1
+    if isinstance(array, tuple):
+        across = len(array) == 1 and len(array[0]) > 1
+    size = _x_size(array)
+    if isinstance(results, Ref):
+        if (results.columns if across else results.rows) != size:
+            return VALUE
+    elif isinstance(results, tuple):
+        if (len(results[0]) if across else len(results)) != size:
+            return VALUE
+    elif size != 1:
+        return VALUE
+    found = _x_search(v, cells, size, m, s, ctx)
+    if found is None:
+        return NA if not_found is MISSING else not_found
+    if isinstance(results, Ref):
+        if across:
+            return Ref(results.source, results.sheet, results.r1, results.c1 + found,
+                       results.r2, results.c1 + found)  # fmt: skip
+        return Ref(results.source, results.sheet, results.r1 + found, results.c1,
+                   results.r1 + found, results.c2)  # fmt: skip
+    if isinstance(results, tuple):
+        if across:
+            return tuple((row[found],) for row in results)
+        return (results[found],)
+    return results

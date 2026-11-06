@@ -13,7 +13,7 @@ from typing import Any
 from xlrecalc._arith import flush, snap
 from xlrecalc._arrays import broadcast
 from xlrecalc._coerce import Context, Raw, scalar, to_bool, to_number, to_text
-from xlrecalc._compare import compare
+from xlrecalc._compare import compare, switch_equal
 from xlrecalc._formula import MISSING
 from xlrecalc._numtext import DBL_MIN
 from xlrecalc._values import BLANK, ErrorValue, Ref, Value
@@ -214,6 +214,44 @@ class Ops:
 
     def lazy_ifna(self, fn: Any, value: Raw, r: int, c: int, alt: Any) -> Value:
         return self._lazy_error(fn, value, r, c, alt, True)
+
+    def lazy_ifs(self, fn: Any, first: Raw, r: int, c: int, *rest: Any) -> Value:
+        """``IFS``: conditions in turn, and only the value after the one that holds."""
+        ctx = self.context
+        condition = first
+        k = 0
+        while True:
+            if type(condition) is tuple:  # an array: every argument, element by element
+                done = [first, *(b(ctx, r, c) for b in rest)]
+                return fn(ctx, *done)  # type: ignore[no-any-return]
+            t = to_bool(condition, ctx)
+            if isinstance(t, ErrorValue):
+                return t
+            if t:
+                return rest[k](ctx, r, c) if k < len(rest) else VALUE
+            if k + 1 >= len(rest):
+                return NA if k < len(rest) else VALUE
+            condition = rest[k + 1](ctx, r, c)
+            k += 2
+
+    def lazy_switch(self, fn: Any, first: Raw, r: int, c: int, *rest: Any) -> Value:
+        """``SWITCH``: values in turn, and only the result after the one that matches."""
+        ctx = self.context
+        if type(first) is tuple:
+            return fn(ctx, first, *(b(ctx, r, c) for b in rest))  # type: ignore[no-any-return]
+        v = scalar(first, ctx)
+        if isinstance(v, ErrorValue):
+            return v
+        for k in range(0, len(rest) - len(rest) % 2, 2):
+            candidate = rest[k](ctx, r, c)
+            if type(candidate) is tuple:  # an array: every argument, element by element
+                return fn(ctx, first, *(b(ctx, r, c) for b in rest))  # type: ignore[no-any-return]
+            value = scalar(candidate, ctx)
+            if isinstance(value, ErrorValue):
+                return value
+            if switch_equal(v, value):
+                return rest[k + 1](ctx, r, c)  # type: ignore[no-any-return]
+        return rest[-1](ctx, r, c) if len(rest) % 2 else NA
 
     def lazy_choose(self, fn: Any, index: Raw, r: int, c: int, *choices: Any) -> Value:
         ctx = self.context
