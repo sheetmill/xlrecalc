@@ -187,3 +187,7 @@ Local checks, which do nothing when the corpus is absent:
 with the standard library and round-trips each distinct formula through the parser and printer
 (on the Enron corpus: 2,126,806 of 2,126,809, the other three being text that is not a formula);
 `tools/formula_census.py` compares forms; `tools/function_frequency.py` writes the ranking.
+`tools/corpus_compare.py` evaluates every workbook against the values Excel cached in it, each
+formula alone and in a full recalculation, so that a formula differing for itself is told from one
+that inherits a difference. It finds questions and answers none: a cache may be stale, so a
+difference found there is settled by a capture, and its output stays local.
