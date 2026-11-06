@@ -110,6 +110,7 @@ testpaths = ["tests"]
 pythonpath = ["."]
 addopts = "-ra --strict-markers"
 markers = [
+    "slow: costly cases, with cheap equivalents in the default run; run with --tier slow",
     "excel: rows captured from Excel",
     "excel_app: drives Excel 16 for Mac (run with --tier excel)",
 ]

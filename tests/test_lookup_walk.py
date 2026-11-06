@@ -129,13 +129,13 @@ LOOKUPS = {
 }
 
 
-@pytest.mark.parametrize("case", sorted(LOOKUPS))
-@pytest.mark.parametrize("key", [2.0, "", "a*", 0.0])
 @bounded
-def test_reads_follow_the_cells_held_not_the_column(case, key):
-    grid = Grid({(0, 0): 1.0, (5, 0): 2.0, (900_000, 0): 3.0})
-    LOOKUPS[case](key, Ref(grid, 0, 0, 0, MAX_ROW, 0))
-    assert grid.reads <= 8
+def test_reads_follow_the_cells_held_not_the_column():
+    for case, lookup in LOOKUPS.items():
+        for key in (2.0, "", "a*", 0.0):
+            grid = Grid({(0, 0): 1.0, (5, 0): 2.0, (900_000, 0): 3.0})
+            lookup(key, Ref(grid, 0, 0, 0, MAX_ROW, 0))
+            assert grid.reads <= 8, (case, key)
 
 
 @bounded

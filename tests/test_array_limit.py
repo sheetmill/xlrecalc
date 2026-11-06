@@ -96,6 +96,13 @@ def test_a_dynamic_array_past_the_limit_is_reported():
     assert any(str(c) == "S!C1" for c in book.report.uncomputed)
 
 
+def test_an_array_within_the_limit_is_computed():
+    book = recalculated(two_sheets("SUMPRODUCT(D!A1:J1000*1)", cached="0"))
+    assert book.value("S!A1") == 3.0
+    assert not book.report.uncomputed
+
+
+@pytest.mark.slow
 @bounded(limit=2 * GIB)
 def test_ten_full_columns_are_computed():
     book = recalculated(two_sheets("SUMPRODUCT(D!A:J*1)", cached="0"))
@@ -121,21 +128,21 @@ def excel_results() -> dict[str, float]:
     return results
 
 
-@pytest.mark.parametrize(("formula", "excel"), sorted(excel_results().items()))
 @bounded
-def test_the_sumif_family_gives_excels_value_at_any_size(formula, excel):
-    book = recalculated(two_sheets(xml_escape(formula)))
-    assert book.value("S!A1") == excel
-    assert not book.report.uncomputed
+def test_the_sumif_family_gives_excels_value_at_any_size():
+    got = {}
+    for formula in excel_results():
+        book = recalculated(two_sheets(xml_escape(formula)))
+        assert not book.report.uncomputed, formula
+        got[formula] = book.value("S!A1")
+    assert got == excel_results()
 
 
-@pytest.mark.parametrize(
-    "formula", ['SUMIFS(D!A:XFD,D!A:XFD,"")', 'COUNTIFS(D!A:XFD,"")', 'SUMIF(D!A:XFD,"")']
-)
 @bounded
-def test_the_sumif_family_makes_no_array(formula):
-    book = recalculated(two_sheets(formula), ReadLimits(max_array_cells=4))
-    assert not book.report.uncomputed
+def test_the_sumif_family_makes_no_array():
+    for formula in ('SUMIFS(D!A:XFD,D!A:XFD,"")', 'COUNTIFS(D!A:XFD,"")', 'SUMIF(D!A:XFD,"")'):
+        book = recalculated(two_sheets(formula), ReadLimits(max_array_cells=4))
+        assert not book.report.uncomputed, formula
 
 
 @bounded

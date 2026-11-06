@@ -11,6 +11,8 @@ from __future__ import annotations
 from concurrent.futures import ThreadPoolExecutor
 from xml.sax.saxutils import escape
 
+import pytest
+
 from tests.test_array_limit import recalculated, two_sheets
 from tests.watchdog import GIB, in_child
 from xlrecalc._functions._registry import SPECS, Spec
@@ -75,7 +77,19 @@ def outcome(name: str) -> str:
     return "\n".join(f"{formula}: {why}" for formula, why in results if why)
 
 
-def test_every_function_over_a_whole_sheet():
-    assert len(NAMES) > 100
+def _sweep(names: list[str]) -> None:
     with ThreadPoolExecutor(4) as pool:  # at most 4 GiB together, past which the session stops
-        assert [line for line in pool.map(outcome, NAMES) if line] == []
+        assert [line for line in pool.map(outcome, names) if line] == []
+
+
+def test_functions_taking_a_reference_over_a_whole_sheet():
+    names = [n for n in NAMES if set(SPECS[n].kinds) & set(REFERENCE_KINDS)]
+    assert len(names) > 50
+    _sweep(names)
+
+
+@pytest.mark.slow
+def test_the_other_functions_over_a_whole_sheet():
+    names = [n for n in NAMES if not set(SPECS[n].kinds) & set(REFERENCE_KINDS)]
+    assert len(names) > 50
+    _sweep(names)

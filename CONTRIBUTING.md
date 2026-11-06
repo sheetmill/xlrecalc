@@ -53,7 +53,7 @@ sphinx-build -n -W docs docs/_build/html # the strict documentation build
 The examples in `README.md` and `docs/*.md` run as doctests, so a change of behavior shows up
 there too.
 
-On a Mac with Excel 16, `pytest --tier excel` also runs the tests that drive Excel: it opens
+`pytest --tier slow`, as CI runs it, adds the costly cases. On a Mac with Excel 16, `pytest --tier excel` also runs the tests that drive Excel: it opens
 the files the writer produces, which must open without a repair and hold Excel's values
 (`tests/test_excel_live.py`, `CAPTURING.md`). The default run never starts Excel.
 

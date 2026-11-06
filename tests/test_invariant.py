@@ -17,6 +17,7 @@ import pytest
 import xlrecalc
 from tests import test_array_refs, test_arrays
 from tests.captures import Formula, load
+from tests.test_array_limit import two_sheets
 from tests.test_captures import SUITES, column_letters, formula_text
 from tests.test_xlsx import MAIN, package
 from xlrecalc._formula._template import cell_axes
@@ -109,11 +110,18 @@ def test_a_capture_suite_leaves_no_old_value_unreported(name):
     assert stale[:10] == []
 
 
+def test_an_array_of_references_read_by_a_function_is_reported():
+    data = two_sheets("N(OFFSET(D!A1,{0;1},0))", cached=str(SENTINEL))
+    stale, kept = stale_and_unreported(data)
+    assert (stale, kept) == ([], 1)
+
+
 def test_arrays_leave_no_old_value_unreported():
     stale, _ = stale_and_unreported(test_arrays.workbook(cached=str(SENTINEL)))
     assert stale[:10] == []
 
 
+@pytest.mark.slow
 def test_array_refs_leave_no_old_value_unreported():
     stale, kept = stale_and_unreported(test_array_refs.workbook(cached=str(SENTINEL)))
     assert stale[:10] == []

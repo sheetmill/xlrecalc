@@ -11,20 +11,25 @@ def pytest_sessionstart(session: pytest.Session) -> None:
 def pytest_addoption(parser: pytest.Parser) -> None:
     parser.addoption(
         "--tier",
-        choices=["fast", "full", "excel"],
+        choices=["fast", "full", "slow", "excel"],
         default="full",
-        help="Capture tier: 'full' (default, every captured row), 'fast' (a sample), or 'excel'"
-        " (full, plus the tests that drive Excel 16 for Mac).",
+        help="Capture tier: 'full' (default, every captured row), 'fast' (a sample), 'slow' (full,"
+        " plus the costly cases, as CI runs it), or 'excel' (slow, plus the tests that drive"
+        " Excel 16 for Mac).",
     )
 
 
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
-    if config.getoption("--tier") == "excel":
+    tier = config.getoption("--tier")
+    if tier == "excel":
         return
-    skip = pytest.mark.skip(reason="drives Excel: run with --tier excel")
+    skip_excel = pytest.mark.skip(reason="drives Excel: run with --tier excel")
+    skip_slow = pytest.mark.skip(reason="costly: run with --tier slow")
     for item in items:
         if "excel_app" in item.keywords:
-            item.add_marker(skip)
+            item.add_marker(skip_excel)
+        elif "slow" in item.keywords and tier != "slow":
+            item.add_marker(skip_slow)
 
 
 @pytest.fixture(scope="session")

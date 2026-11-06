@@ -106,13 +106,12 @@ WHOLE_SHEET = {
 }
 
 
-@pytest.mark.parametrize("case", sorted(WHOLE_SHEET))
 @bounded
-def test_reads_follow_the_cells_held_not_the_range(case):
-    call, expected = WHOLE_SHEET[case]
-    grid = Grid({(0, 0): 1.0, (1, 1): 2.0})
-    assert call(Ref(grid, 0, 0, 0, MAX_ROW, MAX_COL)) == expected
-    assert grid.reads <= 16
+def test_reads_follow_the_cells_held_not_the_range():
+    for case, (call, expected) in WHOLE_SHEET.items():
+        grid = Grid({(0, 0): 1.0, (1, 1): 2.0})
+        assert call(Ref(grid, 0, 0, 0, MAX_ROW, MAX_COL)) == expected, case
+        assert grid.reads <= 16, case
 
 
 def test_a_sum_range_is_cut_off_at_the_edge_of_the_sheet():

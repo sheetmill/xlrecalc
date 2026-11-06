@@ -10,6 +10,7 @@ of them run in every test run, under the memory watchdog.
 from __future__ import annotations
 
 import ast
+import functools
 import io
 import re
 import zipfile
@@ -22,7 +23,7 @@ from tests.test_array_limit import two_sheets
 from tests.test_captures import column_letters, same
 from tests.test_xlsx import MAIN, PKG, package
 from tests.watchdog import GIB, bounded, in_child
-from xlrecalc._engine import node
+from xlrecalc._engine import Engine, node
 from xlrecalc._formula._tokens import column_number
 from xlrecalc._load import load
 from xlrecalc._values import BLANK, ErrorValue
@@ -183,10 +184,16 @@ def _not_implemented(formula: str) -> bool:
     return any(name in formula for name in NOT_IMPLEMENTED)
 
 
-def differences(large: bool = False) -> dict[str, list[str]]:
-    """Formula to the cells where the engine differs from Excel."""
+@functools.cache
+def _engine(large: bool) -> Engine:
     engine = load(io.BytesIO(workbook(large)))
     engine.recalculate()
+    return engine
+
+
+def differences(large: bool = False) -> dict[str, list[str]]:
+    """Formula to the cells where the engine differs from Excel."""
+    engine = _engine(large)
     owners = _owners()
     out: dict[str, list[str]] = {}
     for address, cell in CELLS.items():
@@ -234,8 +241,7 @@ def test_a_million_rows_in_an_array_context(formula, array):
 
 @pytest.mark.excel
 def test_spill_ranges_match_excel():
-    engine = load(io.BytesIO(workbook()))
-    engine.recalculate()
+    engine = _engine(False)
     wrong = []
     for kind, anchor, formula in INPUTS:
         if kind != "dynamic" or formula in KNOWN or _not_implemented(formula) or _large(formula):
