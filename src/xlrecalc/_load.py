@@ -132,7 +132,7 @@ def load(
 ) -> Engine:
     """Read a workbook into an engine; formulas whose cached values are trusted stay unevaluated."""
     with Book(source, limits) as book:
-        engine = Engine(quirks, book.date1904, today)
+        engine = Engine(quirks, book.date1904, today, (limits or ReadLimits()).max_array_cells)
         if isinstance(source, (str, os.PathLike)):
             engine.path = os.path.abspath(os.fspath(source))
         for sheet in book.sheets:

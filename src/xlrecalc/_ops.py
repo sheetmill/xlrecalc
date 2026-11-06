@@ -41,6 +41,9 @@ class Ops:
     def __init__(self, context: Context) -> None:
         self.context = context
 
+    def _limit(self) -> int | None:
+        return getattr(self.context, "max_array_cells", None)
+
     def _pair(self, a: Raw, b: Raw) -> tuple[float, float] | ErrorValue:
         x = to_number(a, self.context)
         if isinstance(x, ErrorValue):
@@ -128,7 +131,7 @@ class Ops:
 
     def neg(self, a: Raw) -> Value:
         if type(a) is tuple:
-            return broadcast(self.neg, (a,), (True,))  # type: ignore[return-value]
+            return broadcast(self.neg, (a,), (True,), self._limit())  # type: ignore[return-value]
         x = to_number(a, self.context)
         return x if isinstance(x, ErrorValue) else -x if x else 0.0
 
@@ -137,7 +140,7 @@ class Ops:
 
     def percent(self, a: Raw) -> Value:
         if type(a) is tuple:
-            return broadcast(self.percent, (a,), (True,))  # type: ignore[return-value]
+            return broadcast(self.percent, (a,), (True,), self._limit())  # type: ignore[return-value]
         x = to_number(a, self.context)
         return x if isinstance(x, ErrorValue) else flush(x / 100)
 
@@ -227,7 +230,7 @@ class Ops:
         """A binary operation over arrays, element by element (§7.7)."""
         x = a if type(a) is tuple else scalar(a, self.context)
         y = b if type(b) is tuple else scalar(b, self.context)
-        return broadcast(op, (x, y), (True, True))  # type: ignore[return-value]
+        return broadcast(op, (x, y), (True, True), self._limit())  # type: ignore[return-value]
 
     def range(self, a: Raw, b: Raw) -> Value:
         # A range between computed references (A1:INDEX(...)) needs functions that return

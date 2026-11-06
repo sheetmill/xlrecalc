@@ -10,6 +10,7 @@ from fractions import Fraction
 from typing import Any
 
 from xlrecalc._arith import flush, snap
+from xlrecalc._arrays import check_area
 from xlrecalc._coerce import Context, numbers, scalar
 from xlrecalc._compare import criterion
 from xlrecalc._formula import MISSING
@@ -213,6 +214,7 @@ def SUMIF(ctx: Context, ref: Any, crit: Any, sums: Any = MISSING) -> float | Err
         return VALUE
     test = criterion(scalar(crit, ctx), ctx.quirks)
     if test(BLANK):  # blank cells match: every position counts
+        check_area(ref.rows, ref.columns, getattr(ctx, "max_array_cells", None))
         positions: Any = ((r, c) for r in range(ref.rows) for c in range(ref.columns))
         picked = (target.value(r, c) for r, c in positions if test(ref.value(r, c)))
     else:  # only non-blank cells can match: visit those
@@ -285,6 +287,7 @@ def SUMPRODUCT(ctx: Context, *arrays: Any) -> float | ErrorValue:
     grids = []
     for a in arrays:
         if isinstance(a, Ref):
+            check_area(a.rows, a.columns, getattr(ctx, "max_array_cells", None))
             grids.append([[a.value(r, c) for c in range(a.columns)] for r in range(a.rows)])
         elif isinstance(a, tuple):
             grids.append([list(row) for row in a])

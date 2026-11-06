@@ -585,10 +585,22 @@ the dynamic array at A1 spills into; `@x` (`_xlfn.SINGLE(x)`) is the implicit in
 readers see such a cell.
 
 **In the engine** a formula that fills more than its cell is an *anchor* (`Engine.anchors`) with
-its range; the cells it fills are *members* (`Engine.members`), which a formula reading them
-orders after the anchor, and whose dependents become stale with the anchor. A spill that changes
-size makes the dependents of the cells it reached or left stale, and evaluation repeats until
-nothing moves (at most 100 rounds).
+its range; the cells it fills are *members*, found from the anchors' ranges (an index of row
+spans per column, `Engine.member_of`) rather than stored per cell. A formula reading a member
+orders after the anchor, and a member's dependents become stale with the anchor. A spill that
+changes size makes the dependents of the cells it reached or left stale, and evaluation repeats
+until nothing moves (at most 100 rounds). An anchor writes its result into the store element by
+element, and the writer generates the cells of its range as it writes them (`Fill`), so a
+legacy array over ten full columns (10,485,760 cells) is computed and written in about 1.8 GiB.
+
+**Size.** Every array a formula makes is checked against `ReadLimits.max_array_cells` (default
+10,485,760, ten full columns) before anything is allocated: a range an array formula fills, a
+reference taken as an array, the result of an operation between arrays (a column times a row
+makes every pair), and the ranges `SUMPRODUCT` and `SUMIF` walk position by position. A formula
+that would pass it keeps its cached value and is reported (§7.6). Excel itself refuses a file
+declaring an array over the whole sheet, opens one over ten full columns at a cost of about 3 GB
+of its own memory, and computes `SUMPRODUCT` over whole columns without making the array
+(capture `array_size`).
 
 **Formulas set through the API** are dynamic arrays, as Excel 365 takes a typed formula: `=A1:A5*2`
 spills. Capture `marker_typed` (ten formulas a person typed into Excel's formula bar and saved;
@@ -821,6 +833,8 @@ fetches anything a file names:
   one, are refused (capture `value_forms`); a column reference off the grid places the cell by
   position, as Excel does. Calculation settings, styles and metadata indexes that lead nowhere
   are ignored.
+- *Array sizes*: no formula makes an array past `ReadLimits.max_array_cells` (§7.7), so a
+  small file cannot ask for an array of 17 billion cells.
 - *No DTDs*, protection against XML entity attacks: Open Packaging Conventions parts never
   declare a DTD, so a part that declares one is refused before it is parsed. The check is expat
   reading the part's prolog, with a handler that refuses a doctype declaration and stops at the

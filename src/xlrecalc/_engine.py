@@ -10,6 +10,7 @@ from ``DependencyIndex`` (``_deps.py``), built when first needed after formulas 
 
 from __future__ import annotations
 
+import bisect
 import datetime as dt
 import math
 import traceback
@@ -18,7 +19,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from xlrecalc._arith import flush
-from xlrecalc._arrays import fill, is_array, shape, to_array
+from xlrecalc._arrays import ArrayLimitError, check_area, element, is_array, shape, to_array
 from xlrecalc._coerce import intersect
 from xlrecalc._deps import DependencyIndex
 from xlrecalc._formula import MISSING, FormulaSyntaxError, TokenizeError, compile_formula, parse
@@ -86,12 +87,16 @@ class Anchor:
 
 
 class _Cells:
-    """What a ``Ref`` reads through: the store, without evaluating anything."""
+    """What a ``Ref`` reads through: the store, without evaluating anything.
 
-    __slots__ = ("sheets",)
+    ``limit`` is the largest array a reference may be made into (``ReadLimits.max_array_cells``).
+    """
 
-    def __init__(self, sheets: list[Sheet]) -> None:
+    __slots__ = ("limit", "sheets")
+
+    def __init__(self, sheets: list[Sheet], limit: int | None = None) -> None:
         self.sheets = sheets
+        self.limit = limit
 
     def get(self, sheet: int, row: int, col: int) -> Value:
         return self.sheets[sheet].values.get(row * COLS + col, BLANK)
@@ -119,7 +124,7 @@ class _CheckedCells(_Cells):
     __slots__ = ("engine",)
 
     def __init__(self, engine: Engine) -> None:
-        super().__init__(engine.sheets)
+        super().__init__(engine.sheets, engine.max_array_cells)
         self.engine = engine
 
     def get(self, sheet: int, row: int, col: int) -> Value:
@@ -145,8 +150,11 @@ class Engine:
         quirks: Quirks | None = None,
         date1904: bool = False,
         today: dt.date | None = None,
+        max_array_cells: int | None = 10_485_760,
     ) -> None:
         self.quirks = quirks or Quirks.EXCEL
+        self.max_array_cells = max_array_cells
+        """The largest array a formula may make (``ReadLimits.max_array_cells``)."""
         self.date1904 = date1904
         self.today = today or dt.date.today()
         self.sheets: list[Sheet] = []
@@ -162,7 +170,7 @@ class Engine:
         # through set_value adds its dependents at once.
         self._unclosed: list[int] = []
         self.report = Report()
-        self.cells = _Cells(self.sheets)
+        self.cells = _Cells(self.sheets, max_array_cells)
         self.checked = _CheckedCells(self)
         self._strict = False  # every read checked (a formula on a static cycle, §6.3)
         self._volatile: set[int] = set()  # formula cells of volatile templates
@@ -178,9 +186,12 @@ class Engine:
         self._index: DependencyIndex | None = None
         self.anchors: dict[int, Anchor] = {}
         """Formula cells that fill a range (§7.7), by node."""
-        self.members: dict[int, int] = {}
-        """Cells an anchor fills (its own excluded) -> the anchor's node."""
+        # Per sheet, rebuilt when first needed after anchors change: the ranges anchors fill or
+        # want, (r1, c1, r2, c2, anchor); and per column the row spans they fill, sorted, for
+        # member_of. A cell an anchor fills is found from its range, not stored per cell.
         self._anchor_boxes: dict[int, list[tuple[int, int, int, int, int]]] = {}
+        self._member_spans: dict[int, dict[int, tuple[list[int], list[tuple[int, int, int]]]]] = {}
+        self._anchors_dirty: set[int] = set()
         self._moved: list[tuple[int, int, int, int, int]] = []
         self.evaluated_anchors: set[int] = set()
         """Anchors evaluated since loading: the writer rewrites their ranges."""
@@ -350,42 +361,89 @@ class Engine:
 
     def set_member(self, sheet: int, row: int, col: int, anchor: int, value: Value | None) -> None:
         """A cell an anchor fills, holding the value the file caches for it."""
-        n = node(sheet, row, col)
-        self.members[n] = anchor
         self.sheets[sheet].set(row, col, BLANK if value is None else value)
 
     # Arrays (§7.7) ----------------------------------------------------------------------------
 
     def _index_anchors(self, sheet: int) -> None:
-        self._anchor_boxes[sheet] = [
-            (*box, n)
-            for n, a in self.anchors.items()
-            if unpack(n)[0] == sheet
-            for box in (a.box, a.wanted)
-            if box is not None
-        ]
+        self._anchors_dirty.add(sheet)
+
+    def _anchor_list(self, sheet: int) -> list[tuple[int, int, int, int, int]]:
+        """The ranges the sheet's anchors fill or want, as (r1, c1, r2, c2, anchor)."""
+        if sheet in self._anchors_dirty:
+            self._rebuild_anchors(sheet)
+        return self._anchor_boxes.get(sheet, [])
+
+    def _rebuild_anchors(self, sheet: int) -> None:
+        self._anchors_dirty.discard(sheet)
+        boxes: list[tuple[int, int, int, int, int]] = []
+        columns: dict[int, list[tuple[int, int, int]]] = {}
+        for n, a in self.anchors.items():
+            if n >> SHEET_SHIFT != sheet:
+                continue
+            boxes.append((*a.box, n))
+            if a.wanted is not None:
+                boxes.append((*a.wanted, n))
+            r1, c1, r2, c2 = a.box
+            for c in range(c1, c2 + 1):
+                columns.setdefault(c, []).append((r1, r2, n))
+        spans = {}
+        for c, found in columns.items():
+            found.sort()
+            spans[c] = ([f[0] for f in found], found)
+        self._anchor_boxes[sheet] = boxes
+        self._member_spans[sheet] = spans
+
+    def member_of(self, n: int) -> int | None:
+        """The anchor whose range holds this cell (the anchor itself excluded), or ``None``."""
+        if not self.anchors:
+            return None
+        sheet, row, col = unpack(n)
+        if sheet in self._anchors_dirty:
+            self._rebuild_anchors(sheet)
+        found = self._member_spans.get(sheet, {}).get(col)
+        if not found:
+            return None
+        starts, spans = found
+        i = bisect.bisect_right(starts, row) - 1
+        if i < 0:
+            return None
+        _, last, anchor = spans[i]
+        return anchor if row <= last and anchor != n else None
+
+    def _release(
+        self, sheet: int, box: tuple[int, int, int, int], keep: tuple[int, ...]
+    ) -> list[tuple[int, int, int, int]]:
+        """Clear the cells of ``box`` outside ``keep`` (r1, c1, r2, c2) that hold a value.
+
+        Returns the changed runs, (sheet, col, first row, last row), for their dependents.
+        """
+        s = self.sheets[sheet]
+        values = s.values
+        for c in range(box[1], box[3] + 1):
+            rows = s.columns.get(c)
+            if not rows:
+                continue
+            lo, hi = bisect.bisect_left(rows, box[0]), bisect.bisect_right(rows, box[2])
+            for r in list(rows[lo:hi]):
+                inside = bool(keep) and keep[0] <= r <= keep[2] and keep[1] <= c <= keep[3]
+                if not inside and r * COLS + c in values:
+                    s.set(r, c, BLANK)
+                    self.released.add(node(sheet, r, c))
+        return [(sheet, c, box[0], box[2]) for c in range(box[1], box[3] + 1)]
 
     def _drop_anchor(self, n: int) -> None:
         anchor = self.anchors.pop(n)
-        sheet, _, _ = unpack(n)
-        s = self.sheets[sheet]
-        r1, c1, r2, c2 = anchor.box
-        for r in range(r1, r2 + 1):
-            for c in range(c1, c2 + 1):
-                m = node(sheet, r, c)
-                if self.members.get(m) == n:
-                    del self.members[m]
-                    s.set(r, c, BLANK)
-                    self.released.add(m)
-                    self.stale |= self.dependents([m])
+        sheet, row, col = unpack(n)
+        changed = self._release(sheet, anchor.box, (row, col, row, col))
         self._index_anchors(sheet)
+        self.stale |= self.dependents([], changed)
 
     def _touch_spill(self, sheet: int, row: int, col: int) -> None:
         """A cell set by hand: a dynamic array spilling there, or wanting to, is evaluated again."""
-        for r1, c1, r2, c2, a in self._anchor_boxes.get(sheet, ()):
+        for r1, c1, r2, c2, a in self._anchor_list(sheet):
             inside = r1 <= row <= r2 and c1 <= col <= c2 and node(sheet, row, col) != a
             if inside and self.anchors[a].dynamic:
-                self.members.pop(node(sheet, row, col), None)
                 self.stale.add(a)
                 self._unclosed.append(a)
 
@@ -398,9 +456,12 @@ class Engine:
             for c in range(c1, c2 + 1):
                 key = r * COLS + c
                 m = node(sheet, r, c)
-                if m == anchor or self.members.get(m) == anchor:
+                if m == anchor:
                     continue
-                if key in s.templates or s.values.get(key, BLANK) is not BLANK or m in self.members:
+                owner = self.member_of(m)
+                if owner == anchor:
+                    continue
+                if key in s.templates or s.values.get(key, BLANK) is not BLANK or owner is not None:
                     return True
         return False
 
@@ -411,35 +472,27 @@ class Engine:
         s = self.sheets[sheet]
         self.evaluated_anchors.add(n)
         old = anchor.box
-        if not anchor.dynamic:
-            r1, c1, r2, c2 = old
-            grid = fill(value, r2 - r1 + 1, c2 - c1 + 1)
+        grid = value if is_array(value) else ((value,),)
+        rows, cols = shape(grid)
+        if not anchor.dynamic:  # a legacy array fills its declared range from the result
             box = old
+            check_area(box[2] - box[0] + 1, box[3] - box[1] + 1, self.max_array_cells)
         else:
-            grid = value if is_array(value) else ((value,),)
-            rows, cols = shape(grid)
             box = (row, col, row + rows - 1, col + cols - 1)
             anchor.wanted = None
             if box != (row, col, row, col) and self._blocked(sheet, box, n):
                 anchor.wanted = box
-                grid, box = ((SPILL,),), (row, col, row, col)
-        for r in range(old[0], old[2] + 1):  # cells no longer filled
-            for c in range(old[1], old[3] + 1):
-                inside = box[0] <= r <= box[2] and box[1] <= c <= box[3]
-                m = node(sheet, r, c)
-                if not inside and self.members.get(m) == n:
-                    del self.members[m]
-                    s.set(r, c, BLANK)
-                    self.released.add(m)
-        for i, cells in enumerate(grid):
-            for j, v in enumerate(cells):
-                r, c = box[0] + i, box[1] + j
-                result = self._result(v)
-                if (i, j) != (0, 0):
-                    m = node(sheet, r, c)
-                    self.members[m] = n
-                    self.released.discard(m)
-                s.set(r, c, result)  # through the store, which indexes occupied cells
+                grid, rows, cols, box = ((SPILL,),), 1, 1, (row, col, row, col)
+        if box != old:  # cells no longer filled
+            self._release(sheet, old, box)
+        released = self.released
+        for i in range(box[2] - box[0] + 1):  # element by element: no grid of the range
+            r = box[0] + i
+            for j in range(box[3] - box[1] + 1):
+                c = box[1] + j
+                s.set(r, c, self._result(element(grid, rows, cols, i, j)))
+                if released:
+                    released.discard(node(sheet, r, c))
         if box != old or anchor.wanted is not None:
             anchor.box = box
             self._index_anchors(sheet)
@@ -478,13 +531,10 @@ class Engine:
             if not self._moved:
                 return
             moved, self._moved = self._moved, []
-            cells = [
-                node(sheet, r, c)
-                for sheet, r1, c1, r2, c2 in moved
-                for r in range(r1, r2 + 1)
-                for c in range(c1, c2 + 1)
+            ranges = [
+                (sheet, c, r1, r2) for sheet, r1, c1, r2, c2 in moved for c in range(c1, c2 + 1)
             ]
-            self.stale |= self.dependents(cells)
+            self.stale |= self.dependents([], ranges)
             self._evaluate(list(self.stale))
 
     # Values -----------------------------------------------------------------------------------
@@ -494,7 +544,7 @@ class Engine:
         n = node(sheet, row, col)
         if self._unclosed or self._changed:
             self._close()
-        anchor = self.members.get(n)
+        anchor = self.member_of(n)
         if anchor is not None and anchor in self.stale:
             self.recalculate(targets=[anchor])
         if n in self.stale:
@@ -613,7 +663,7 @@ class Engine:
         stale = self.stale
         if n in stale and self.sheets[sheet].templates.at(row, col) is not None:
             raise _NotEvaluatedError(n)
-        anchor = self.members.get(n)
+        anchor = self.member_of(n)
         if anchor is not None and anchor in stale:
             raise _NotEvaluatedError(anchor)
 
@@ -622,7 +672,7 @@ class Engine:
         for r, c in self.sheets[sheet].formulas_in(r1, c1, r2, c2):
             if node(sheet, r, c) in stale:
                 raise _NotEvaluatedError(node(sheet, r, c))
-        for a1, b1, a2, b2, anchor in self._anchor_boxes.get(sheet, ()):
+        for a1, b1, a2, b2, anchor in self._anchor_list(sheet):
             if anchor in stale and a1 <= r2 and r1 <= a2 and b1 <= c2 and c1 <= b2:
                 raise _NotEvaluatedError(anchor)
 
@@ -663,17 +713,24 @@ class Engine:
         self.sheet, self.row, self.col = sheet, row, col
         try:
             value = template.fn(self, row, col)
+            if n in self.anchors:
+                self._fill(n, value)
+                return
         except _NotEvaluatedError:
             raise
+        except ArrayLimitError as exc:  # keep the cached value, as for a function not supported
+            self.report.unsupported[f"an array of more than {exc.limit:,} cells"] += 1
+            self.report.uncomputed.add(where)
+            return
         except Exception as exc:  # a bug in a function must not stop the recalculation
             value = VALUE
             self.report.exceptions[where] = "".join(
                 traceback.format_exception_only(type(exc), exc)
             ).strip()
             self.report.uncomputed.add(where)
-        if n in self.anchors:
-            self._fill(n, value)
-            return
+            if n in self.anchors:
+                self._fill(n, value)
+                return
         value = self._result(value)
         if value is BLANK:
             s.values.pop(key, None)
@@ -747,7 +804,7 @@ class Engine:
             else:
                 for r, c in s.formulas_in(r1, c1, r2, c2):
                     yield node(sheet, r, c)
-            for a1, b1, a2, b2, anchor in self._anchor_boxes.get(sheet, ()):
+            for a1, b1, a2, b2, anchor in self._anchor_list(sheet) if self.anchors else ():
                 if anchor != n and a1 <= r2 and r1 <= a2 and b1 <= c2 and c1 <= b2:
                     yield anchor
 
@@ -757,24 +814,28 @@ class Engine:
             self._index = DependencyIndex(self)
         return self._index
 
-    def dirty_runs(self, cells: Iterable[int]) -> dict[tuple[int, int], list[tuple[int, int]]]:
+    def dirty_runs(
+        self, cells: Iterable[int], ranges: Iterable[tuple[int, int, int, int]] = ()
+    ) -> dict[tuple[int, int], list[tuple[int, int]]]:
         """Every formula cell depending on the cells, as row runs per (sheet, col)."""
-        return self.index().dirty(cells)
+        return self.index().dirty(cells, ranges)
 
-    def dependents(self, cells: Iterable[int]) -> set[int]:
-        """Every formula cell that depends, directly or not, on the cells.
+    def dependents(
+        self, cells: Iterable[int], ranges: Iterable[tuple[int, int, int, int]] = ()
+    ) -> set[int]:
+        """Every formula cell that depends, directly or not, on the cells and the ranges.
 
-        An anchor that depends on them changes the cells it fills, so their dependents count
-        too (§7.7).
+        ``ranges`` are runs of changed cells, as (sheet, col, first row, last row). An anchor
+        that depends on them changes the cells it fills, so their dependents count too (§7.7).
         """
         seeds = list(cells)
-        found = self._dependents(seeds)
+        found = self._dependents(seeds, ranges)
         if not self.anchors:
             return found
         expanded: set[int] = set()
         frontier = set(seeds) | found
         while True:
-            extra = []
+            extra: list[tuple[int, int, int, int]] = []
             for a in frontier & self.anchors.keys():
                 if a in expanded:
                     continue
@@ -783,20 +844,18 @@ class Engine:
                 anchor = self.anchors[a]
                 for box in (anchor.box, anchor.wanted):
                     if box is not None:
-                        extra += [
-                            node(sheet, r, c)
-                            for r in range(box[0], box[2] + 1)
-                            for c in range(box[1], box[3] + 1)
-                        ]
+                        extra += [(sheet, c, box[0], box[2]) for c in range(box[1], box[3] + 1)]
             if not extra:
                 return found
-            more = self._dependents(extra) - found
+            more = self._dependents([], extra) - found
             found |= more
             frontier = more
 
-    def _dependents(self, cells: Iterable[int]) -> set[int]:
+    def _dependents(
+        self, cells: Iterable[int], ranges: Iterable[tuple[int, int, int, int]] = ()
+    ) -> set[int]:
         found: set[int] = set()
-        for (sheet, col), runs in self.dirty_runs(cells).items():
+        for (sheet, col), runs in self.dirty_runs(cells, ranges).items():
             base = sheet << SHEET_SHIFT
             for first, last in runs:
                 found.update(base | (r * COLS + col) for r in range(first, last + 1))

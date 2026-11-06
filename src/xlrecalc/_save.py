@@ -8,11 +8,13 @@ formula, kept as its cached value), or uncomputed (§7.6).
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from xlrecalc._engine import Engine, unpack
 from xlrecalc._report import column_letters
-from xlrecalc._store import COLS, TemplateIds
+from xlrecalc._store import COLS, Sheet, TemplateIds
 from xlrecalc._values import BLANK, ErrorValue, Value
-from xlrecalc._xlsx._write import Edit, FileValue, Lookup
+from xlrecalc._xlsx._write import Edit, FileValue, Fill, Lookup
 
 __all__ = ["array_edits", "file_value", "lookups"]
 
@@ -60,13 +62,17 @@ def _a1(row: int, col: int) -> str:
     return f"{column_letters(col + 1)}{row + 1}"
 
 
-def array_edits(engine: Engine) -> dict[str, dict[tuple[int, int], Edit]]:
-    """The cells array formulas evaluated here fill, as edits (§7.7, §9.2).
+def array_edits(
+    engine: Engine,
+) -> tuple[dict[str, dict[tuple[int, int], Edit]], dict[str, list[Fill]]]:
+    """The cells array formulas evaluated here fill, as edits and fills (§7.7, §9.2).
 
-    For each anchor evaluated since loading: the anchor with its range (``ref``) and value,
-    every cell it fills, and every cell it filled before and fills no more (cleared).
+    For each anchor evaluated since loading: the anchor with its range (``ref``) and value as an
+    edit, the other cells of its range as a fill (each value read from the store when written),
+    and every cell it filled before and fills no more as an edit that clears it.
     """
     out: dict[str, dict[tuple[int, int], Edit]] = {}
+    fills: dict[str, list[Fill]] = {}
     uncomputed = {(c.sheet.casefold(), c.row, c.col) for c in engine.report.uncomputed}
     for n in engine.evaluated_anchors:
         anchor = engine.anchors.get(n)
@@ -86,16 +92,22 @@ def array_edits(engine: Engine) -> dict[str, dict[tuple[int, int], Edit]]:
         cells[row + 1, col + 1] = Edit(
             text, file_value(s.values.get(row * COLS + col, BLANK)), ref, anchor.dynamic
         )
-        for r in range(r1, r2 + 1):
-            for c in range(c1, c2 + 1):
-                if (r, c) != (row, col):
-                    value = file_value(s.values.get(r * COLS + c, BLANK))
-                    cells[r + 1, c + 1] = Edit(None, value)
+        if (r1, c1, r2, c2) != (row, col, row, col):
+            fills.setdefault(s.name, []).append(Fill(r1 + 1, c1 + 1, r2 + 1, c2 + 1, _reader(s)))
     for m in engine.released:
-        if m in engine.members:
+        if engine.member_of(m) is not None:
             continue
         sheet, row, col = unpack(m)
         s = engine.sheets[sheet]
         if row * COLS + col not in s.templates:
             out.setdefault(s.name, {}).setdefault((row + 1, col + 1), Edit(None, None))
-    return out
+    return out, fills
+
+
+def _reader(sheet: Sheet) -> Callable[[int, int], FileValue | None]:
+    values = sheet.values
+
+    def value_at(row: int, col: int) -> FileValue | None:
+        return file_value(values.get((row - 1) * COLS + col - 1, BLANK))
+
+    return value_at

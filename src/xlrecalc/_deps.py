@@ -206,10 +206,13 @@ class DependencyIndex:
             for s in formula_sheets:
                 yield from self._template_runs(e.template, s, row_span, col_span)
 
-    def dirty(self, cells: Iterable[int]) -> Runs:
-        """Every formula cell depending, directly or not, on the cells, as runs."""
+    def dirty(self, cells: Iterable[int], ranges: Iterable[tuple[int, int, int, int]] = ()) -> Runs:
+        """Every formula cell depending, directly or not, on the cells, as runs.
+
+        ``ranges`` adds whole runs of changed cells, as (sheet, col, first row, last row).
+        """
         found: Runs = defaultdict(list)
-        queue: list[tuple[int, int, int, int]] = []
+        queue: list[tuple[int, int, int, int]] = list(ranges)
         for n in cells:
             sheet = n >> SHEET_SHIFT
             row, col = divmod(n & ((1 << SHEET_SHIFT) - 1), COLS)

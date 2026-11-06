@@ -7,7 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `ReadLimits.max_array_cells` (default 10,485,760, ten full columns): no formula makes an array
+  with more cells (a range an array formula fills, a reference taken as an array, the result of
+  an operation between arrays); one that would keeps the value the file holds and is reported.
+  `ReadLimits` now bounds computing as well as reading.
+
 ### Security
+- A small file could make the engine allocate without bound: a legacy array formula declared
+  over the whole sheet, or `SUMPRODUCT(D!A:XFD*1)` over a sheet of two cells, made arrays of 17
+  billion cells. See `max_array_cells` above.
 - The refusal of a DTD in a package part could be bypassed: it matched the prolog's bytes, so a
   `<!DOCTYPE>` after a long comment (200 KB) or processing instruction (900 KB), in UTF-16, or in
   a worksheet part whose name does not end in `.xml` (`data.bin`) was accepted. expat now reads
@@ -28,6 +37,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- Writing an evaluated array formula took time quadratic in its rows and about 1.5 KB per cell;
+  a declared array costs about 180 bytes a cell from reading to writing, and one over ten full
+  columns takes about 18 s and 1.8 GiB.
 - `TEXT` with a format holding `b` reads it as the Buddhist-era year (`TEXT(12.5,"abc")` is
   `a43c`), and `TEXT(x,"General")` with a three-digit exponent keeps what fits 11 characters
   (`2.2251E-308`), as Excel does (xlformat 0.3); both were known deviations.

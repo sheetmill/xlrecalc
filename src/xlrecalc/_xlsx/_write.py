@@ -14,6 +14,8 @@ Values come in file terms, as the reader gives them: ``("n", float)``, ``("str",
 
 from __future__ import annotations
 
+import heapq
+import itertools
 import os
 import posixpath
 import re
@@ -22,7 +24,7 @@ import tempfile
 import time
 import xml.parsers.expat
 import zipfile
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from contextlib import ExitStack
 from pathlib import Path
 from typing import BinaryIO, NamedTuple
@@ -210,6 +212,94 @@ def _edit_xml(
     return b"<" + p + b"c" + attrs + t + b">" + _value_element(p, value) + b"</" + p + b"c>"
 
 
+class Fill(NamedTuple):
+    """A range of constant cells to write, as an array formula fills them (1-based, inclusive).
+
+    ``value_at(row, col)`` gives each cell's value when it is written, so the range's cells are
+    never held at once; an edit of the same cell takes precedence.
+    """
+
+    r1: int
+    c1: int
+    r2: int
+    c2: int
+    value_at: Callable[[int, int], FileValue | None]
+
+
+class _Pending:
+    """The cells still to write into a sheet, row by row and column by column: edits and fills."""
+
+    def __init__(self, edits: Mapping[tuple[int, int], Edit], fills: Sequence[Fill]) -> None:
+        self.edits = dict(edits)
+        self.columns: dict[int, list[int]] = {}
+        for r, c in sorted(self.edits):
+            self.columns.setdefault(r, []).append(c)
+        self.fills = list(fills)
+        self._next = [(0, 0)] * len(self.fills)  # per fill: (row, next column not written)
+        merged = heapq.merge(self.columns, *(range(f.r1, f.r2 + 1) for f in self.fills))
+        self._rows = (r for r, _ in itertools.groupby(merged))
+        self._row: int | None = next(self._rows, None)
+
+    def next_row(self) -> int | None:
+        """The first row not yet reached that has cells to write."""
+        return self._row
+
+    def reach_row(self) -> int | None:
+        """Pass that row (its cells are written as the row is copied or inserted)."""
+        row, self._row = self._row, next(self._rows, None)
+        return row
+
+    def _cursor(self, k: int, row: int) -> int:
+        at, column = self._next[k]
+        return column if at == row else self.fills[k].c1
+
+    def has(self, row: int) -> bool:
+        """Whether row ``row`` has cells left to write."""
+        if self.columns.get(row):
+            return True
+        return any(
+            f.r1 <= row <= f.r2 and self._cursor(k, row) <= f.c2 for k, f in enumerate(self.fills)
+        )
+
+    def take(self, row: int, below: int | None) -> list[tuple[int, Edit]]:
+        """The cells of ``row`` left to write with a column below ``below`` (all for ``None``)."""
+        limit = 1 << 30 if below is None else below
+        out: dict[int, Edit] = {}
+        columns = self.columns.get(row)
+        while columns and columns[0] < limit:
+            c = columns.pop(0)
+            edit = self.edits.pop((row, c), None)
+            if edit is not None:
+                out[c] = edit
+        for k, f in enumerate(self.fills):
+            if not f.r1 <= row <= f.r2:
+                continue
+            start = self._cursor(k, row)
+            stop = min(f.c2, limit - 1)
+            for c in range(start, stop + 1):
+                if c not in out and (row, c) not in self.edits:
+                    out[c] = Edit(None, f.value_at(row, c))
+            self._next[k] = (row, max(start, stop + 1))
+        return sorted(out.items())
+
+    def pop(self, row: int, col: int) -> Edit | None:
+        """The edit for a cell the sheet holds, if any, now written."""
+        edit = self.edits.pop((row, col), None)
+        if edit is not None:
+            columns = self.columns.get(row)
+            if columns and col in columns:
+                columns.remove(col)
+        for k, f in enumerate(self.fills):
+            if f.r1 <= row <= f.r2 and f.c1 <= col <= f.c2:
+                if edit is None and self._cursor(k, row) <= col:
+                    edit = Edit(None, f.value_at(row, col))
+                self._next[k] = (row, max(self._cursor(k, row), col + 1))
+        return edit
+
+    def __bool__(self) -> bool:
+        return bool(self.edits) or self._row is not None
+
+
 def patch_cells(
     source: BinaryIO,
     write: Callable[[bytes], object],
@@ -218,19 +308,16 @@ def patch_cells(
     edits: Mapping[tuple[int, int], Edit] | None = None,
     translate: Translate | None = None,
     cm: str | None = None,
+    fills: Sequence[Fill] = (),
 ) -> int:
     """Copy a worksheet part, replacing the cached values of formula cells that changed.
 
-    ``edits`` replace or add cells, keyed ``(row, col)`` (1-based); a cell or row the part does
-    not hold is inserted in order. When the master of a shared formula is edited, its other
-    cells get their own formula text, through ``translate``. Returns the number of cells
-    changed.
+    ``edits`` replace or add cells, keyed ``(row, col)`` (1-based), and ``fills`` add ranges of
+    constant cells, each value made when it is written; a cell or row the part does not hold is
+    inserted in order. When the master of a shared formula is edited, its other cells get their
+    own formula text, through ``translate``. Returns the number of cells changed.
     """
-    remaining = dict(edits or {})
-    by_row: dict[int, list[int]] = {}
-    for r, c in sorted(remaining):
-        by_row.setdefault(r, []).append(c)
-    pending_rows = sorted(by_row)  # rows with edits not yet reached
+    remaining = _Pending(edits or {}, fills)
     dissolved: dict[str, tuple[int, int, str]] = {}  # shared index -> master (row, col, text)
     buf = bytearray()
     base = 0  # absolute offset of buf[0]; everything before it has been written out
@@ -259,25 +346,21 @@ def patch_cells(
     def new_cells(r: int, below: int | None) -> bytes:
         """The edited cells of row ``r`` not yet written, with columns below ``below``."""
         nonlocal count
-        out = b""
-        columns = by_row.get(r, [])
-        while columns and (below is None or columns[0] < below):
-            c = columns.pop(0)
-            edit = remaining.pop((r, c), None)
-            if edit is not None:
-                out += _edit_xml(prefix, r, c, edit, cm=cm)
-                count += 1
-        return out
+        out = bytearray()  # appended in place: a bytes += would copy all of it each time
+        for c, edit in remaining.take(r, below):
+            out += _edit_xml(prefix, r, c, edit, cm=cm)
+            count += 1
+        return bytes(out)
 
     def new_rows(below: int | None) -> bytes:
-        out = b""
-        while pending_rows and (below is None or pending_rows[0] < below):
-            r = pending_rows.pop(0)
+        out = bytearray()
+        while (r := remaining.next_row()) is not None and (below is None or r < below):
+            remaining.reach_row()
             cells = new_cells(r, None)
             if cells:
                 out += b"<" + prefix + b'row r="' + str(r).encode() + b'">' + cells
                 out += b"</" + prefix + b"row>"
-        return out
+        return bytes(out)
 
     empties: list[bool] = []
 
@@ -301,7 +384,7 @@ def patch_cells(
                 col = ref_col if 1 <= ref_col <= 16_384 else col + 1
             else:
                 col += 1
-            if by_row.get(row):
+            if remaining.has(row):
                 cells = new_cells(row, col)
                 if cells:
                     patches.append((index, index, cells))
@@ -316,8 +399,8 @@ def patch_cells(
             rows = new_rows(row)
             if rows:
                 patches.append((index, index, rows))
-            if pending_rows and pending_rows[0] == row:
-                pending_rows.pop(0)
+            if remaining.next_row() == row:
+                remaining.reach_row()
                 tag = _DROP_ATTRS.sub(b"", bytes(buf[index - base : end - base]))
                 if empty:  # <row r="5"/>: the row's new cells go inside it
                     tag = tag[:-2].rstrip() + b">" + new_cells(row, None)
@@ -326,7 +409,7 @@ def patch_cells(
         elif n == "sheetData":
             prefix = qname.rpartition(":")[0].encode()
             prefix = prefix + b":" if prefix else b""
-            if empty and pending_rows:
+            if empty and remaining.next_row() is not None:
                 tag = bytes(buf[index - base : end - 2 - base]).rstrip() + b">"
                 patches.append((index, end, tag + new_rows(None) + b"</" + qname.encode() + b">"))
         elif in_c and n == "f":
@@ -367,7 +450,7 @@ def patch_cells(
             safe = c_end
             shared = f_attrs is not None and f_attrs.get("t") == "shared"
             si = f_attrs.get("si") if f_attrs is not None else None
-            edit = remaining.pop((row, col), None)
+            edit = remaining.pop(row, col)
             if edit is not None:
                 if shared and si is not None and f_attrs is not None and f_attrs.get("ref"):
                     dissolved[si] = (row, col, "".join(f_text or ()))
@@ -529,6 +612,7 @@ def write(
     values: Mapping[str, Lookup],
     *,
     edits: Mapping[str, Mapping[tuple[int, int], Edit]] | None = None,
+    fills: Mapping[str, Sequence[Fill]] | None = None,
     translate: Translate | None = None,
     drop_calc_chain: bool = False,
     full_calc_on_load: bool = True,
@@ -537,20 +621,23 @@ def write(
     """Write ``source`` to ``target`` with new cached values, atomically; may be the same file.
 
     ``values`` maps sheet names to lookups for formula results; ``edits`` maps sheet names to
-    the cells changed through the API. ``drop_calc_chain`` removes the calculation chain (its
-    part, relationship and content type), which Excel needs when a formula cell was removed.
+    the cells changed through the API, and ``fills`` to the ranges array formulas fill.
+    ``drop_calc_chain`` removes the calculation chain (its part, relationship and content type),
+    which Excel needs when a formula cell was removed.
     With ``full_calc_on_load`` the workbook asks Excel to recalculate when it opens the file;
     without it the setting stays as it was. Returns the number of cells changed.
     """
     target = Path(target)
     count = 0
     edits = edits or {}
+    fills = fills or {}
     with Book(source, limits) as book:
         package = book.package
-        names = set(values) | set(edits)
+        names = set(values) | set(edits) | set(fills)
         parts = {book.sheet(n).part: n for n in names}
         part_values = {book.sheet(n).part: values.get(n) for n in names}
         part_edits = {book.sheet(n).part: edits.get(n) for n in names}
+        part_fills = {book.sheet(n).part: fills.get(n, ()) for n in names}
         workbook_part = book.workbook_part
         replaced: dict[str, bytes] = {}
         if full_calc_on_load:
@@ -639,6 +726,7 @@ def write(
                                 part_edits[name],
                                 translate,
                                 cm,
+                                part_fills[name],
                             )
                         if changed:
                             zw.finish()

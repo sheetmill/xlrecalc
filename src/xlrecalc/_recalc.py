@@ -59,11 +59,13 @@ def recalculate(
     engine = load(source, quirks=quirks, limits=limits, trust_cached=not full)
     engine.recalculate(full=full)
     target = source if destination is None else destination
+    edits, fills = array_edits(engine)
     write(
         source,
         target,
         lookups(engine),
-        edits=array_edits(engine),
+        edits=edits,
+        fills=fills,
         translate=translate,
         full_calc_on_load=full_calc_on_load,
         limits=limits,

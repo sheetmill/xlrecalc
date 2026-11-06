@@ -85,6 +85,9 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 
 ## Known deviations
 
+- An array past `ReadLimits.max_array_cells` (ten full columns by default) is not made: the
+  formula keeps the value the file holds and is reported. Excel computes some of these without
+  making the array, `SUMPRODUCT` over whole columns among them (capture `array_size`).
 - A row off Excel's grid in a file (`r="99999999999"`): Excel opens the file and drops the cell
   (capture `value_forms`), though it refuses rows 0 and 1048577; the reader refuses every row
   off the grid with a `PackageError`.

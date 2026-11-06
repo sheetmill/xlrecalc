@@ -294,7 +294,8 @@ class Workbook:
                     out[row, col] = Edit(text, None)
                 else:
                     out[row, col] = Edit(text, file_value(value))
-        for name, filled in array_edits(engine).items():
+        filled_edits, fills = array_edits(engine)
+        for name, filled in filled_edits.items():
             index = self._sheet(name)
             target = edits.setdefault(name, {})
             for (row, col), edit in filled.items():
@@ -311,6 +312,7 @@ class Workbook:
             path,
             lookups(engine),
             edits=edits,
+            fills=fills,
             translate=translate,
             drop_calc_chain=self._formula_removed,
             full_calc_on_load=full_calc_on_load,

@@ -18,10 +18,37 @@ from typing import Any
 
 from xlrecalc._values import BLANK, ErrorValue, Ref
 
-__all__ = ["broadcast", "fill", "is_array", "shape", "to_array"]
+__all__ = [
+    "ArrayLimitError",
+    "broadcast",
+    "check_area",
+    "element",
+    "fill",
+    "is_array",
+    "shape",
+    "to_array",
+]
 
 Array = tuple[tuple[Any, ...], ...]
 NA = ErrorValue.NA
+
+
+class ArrayLimitError(Exception):
+    """An array a formula would make has more cells than ``ReadLimits.max_array_cells``.
+
+    Not an Excel error value: the engine catches it per cell, keeps the cell's cached value and
+    reports it.
+    """
+
+    def __init__(self, cells: int, limit: int) -> None:
+        super().__init__(f"an array of {cells:,} cells, more than the limit of {limit:,}")
+        self.limit = limit
+
+
+def check_area(rows: int, cols: int, limit: int | None) -> None:
+    """Refuse an array of ``rows`` by ``cols`` past ``limit``, before anything is allocated."""
+    if limit is not None and rows * cols > limit:
+        raise ArrayLimitError(rows * cols, limit)
 
 
 def is_array(v: object) -> bool:
@@ -29,12 +56,21 @@ def is_array(v: object) -> bool:
 
 
 def to_array(ref: Ref) -> Array:
-    """A reference's values as an array (blanks stay blank)."""
+    """A reference's values as an array (blanks stay blank), within the engine's array limit."""
+    check_area(ref.rows, ref.columns, getattr(ref.source, "limit", None))
     return tuple(tuple(ref.value(r, c) for c in range(ref.columns)) for r in range(ref.rows))
 
 
 def shape(a: Array) -> tuple[int, int]:
     return len(a), len(a[0]) if a else 0
+
+
+def element(a: Array, rows: int, cols: int, i: int, j: int) -> Any:
+    """Element (i, j) of a ``rows`` by ``cols`` array spread over a larger range.
+
+    A dimension of 1 repeats; a position past the end is ``#N/A``.
+    """
+    return _at(a, rows, cols, i, j)
 
 
 def _at(a: Array, rows: int, cols: int, i: int, j: int) -> Any:
@@ -45,16 +81,23 @@ def _at(a: Array, rows: int, cols: int, i: int, j: int) -> Any:
     return a[ri][cj]
 
 
-def broadcast(fn: Callable[..., Any], args: Sequence[Any], lifted: Sequence[bool]) -> Array:
+def broadcast(
+    fn: Callable[..., Any],
+    args: Sequence[Any],
+    lifted: Sequence[bool],
+    limit: int | None = None,
+) -> Array:
     """``fn`` applied element by element over the arguments marked in ``lifted``.
 
     Each lifted argument is an array (or a value, taken as a 1 by 1 array); the others are
-    passed to every call as they are.
+    passed to every call as they are. A row and a column make an array of every pair, so the
+    result's size is checked against ``limit`` first.
     """
     arrays = [a if lifted[k] and is_array(a) else None for k, a in enumerate(args)]
     shapes = [shape(a) for a in arrays if a is not None]
     rows = max((s[0] for s in shapes), default=1)
     cols = max((s[1] for s in shapes), default=1)
+    check_area(rows, cols, limit)
     out = []
     for i in range(rows):
         row = []

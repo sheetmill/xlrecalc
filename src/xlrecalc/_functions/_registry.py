@@ -124,7 +124,8 @@ def function(
                     to_array(a) if lifted[i] and isinstance(a, Ref) and not a.is_cell() else a
                     for i, a in enumerate(args)
                 ]
-                return broadcast(lambda *xs: call(ctx, *xs), spread, lifted)
+                limit = getattr(ctx, "max_array_cells", None)
+                return broadcast(lambda *xs: call(ctx, *xs), spread, lifted, limit)
             coerced = []
             for i, arg in enumerate(args):
                 convert = converters[i] if i < len(converters) else last
