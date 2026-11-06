@@ -581,6 +581,13 @@ of the `SUMIF` family and `MATCH`'s key are one-value arguments, intersected in 
 and taken element by element in an array context, so `=SUMPRODUCT(1/COUNTIF(Z1:Z4,Z1:Z4))` counts
 distinct values; `VLOOKUP`'s and `HLOOKUP`'s key are one value in a legacy formula, inside
 `SUMPRODUCT` too, and element by element only in an array formula (registry kind `key`, §8.1).
+`OFFSET`, `INDIRECT` and `INDEX` given an array make an array of references. As a whole formula
+it gives Excel's value (the first reference's cell in a legacy formula; in an array formula
+`#VALUE!` from `OFFSET` and `INDIRECT`, the cells from `INDEX`). Passed to another function it is
+not implemented: the formula keeps its cached value and is reported.
+
+After a full recalculation every formula cell either has a newly computed value or is reported:
+`tests/test_invariant.py` plants a sentinel in the cached value of every captured formula.
 
 **Legacy array formulas** are evaluated as arrays and fill their declared range: an array of one
 row or column repeats across the range, a position past the end of the result is `#N/A`. Their

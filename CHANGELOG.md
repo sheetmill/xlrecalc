@@ -42,6 +42,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- A formula whose result is an array of references (`INDEX(r,{1;2})`, `OFFSET(A1,{0;1},0)`) stored a
+  reference object as its value: the writer left the file's old cached value in place, and the
+  report did not say. It now gives Excel's value. A function given such an array, which is not
+  implemented, gave a wrong value (`N(OFFSET(...))` was 0); the formula now keeps the value the
+  file holds and is reported.
 - `ROW` and `COLUMN` of a range make an array in an array context, as Excel does: `ROW(A1:A4)` over
   a legacy array fills 1, 2, 3, 4, not 1, 1, 1, 1, and `SUMPRODUCT(ROW(A1:A4))` is 10, not 1.
 - A range or array as a criterion (`COUNTIF`, `SUMIF`, `COUNTIFS`, `SUMIFS`) or a lookup key (`MATCH`,

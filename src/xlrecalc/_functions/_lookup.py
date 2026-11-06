@@ -184,7 +184,7 @@ def _whole(ref: Any, r: int, c: int) -> Any:
     return (ref[r - 1],)
 
 
-@function("INDEX", "array", "number", "number", min_args=2, category=L)
+@function("INDEX", "array", "number", "number", min_args=2, reference=True, category=L)
 def INDEX(ctx: Context, ref: Any, row: float, col: float = 0.0) -> Any:
     """The value at ``row``, ``col`` (1-based) of a range; one index for a single row or column.
 

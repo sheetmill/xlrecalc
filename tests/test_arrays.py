@@ -41,9 +41,13 @@ def _cell(ref: str) -> tuple[int, int]:
     return int(m[2]), column_number(m[1])
 
 
-def workbook() -> bytes:
-    """The probe's workbook: data, the in-the-way constant, and every input formula."""
+def workbook(cached: str | None = None) -> bytes:
+    """The probe's workbook: data, the in-the-way constant, and every input formula.
+
+    With ``cached``, every formula holds that as its value.
+    """
     cells: dict[tuple[int, int], str] = {}
+    v = f"<v>{cached}</v>" if cached else ""
     for r in range(1, 6):
         cells[r, 26] = f'<c r="Z{r}"><v>{r}</v></c>'
         cells[r, 27] = f'<c r="AA{r}"><v>{10 * r}</v></c>'
@@ -54,11 +58,11 @@ def workbook() -> bytes:
         first = where.split(":")[0]
         r, c = _cell(first)
         if kind == "cse":
-            cells[r, c] = f'<c r="{first}"><f t="array" ref="{where}">{text}</f></c>'
+            cells[r, c] = f'<c r="{first}"><f t="array" ref="{where}">{text}</f>{v}</c>'
         elif kind == "dynamic":
-            cells[r, c] = f'<c r="{first}" cm="1"><f t="array" ref="{first}">{text}</f></c>'
+            cells[r, c] = f'<c r="{first}" cm="1"><f t="array" ref="{first}">{text}</f>{v}</c>'
         else:
-            cells[r, c] = f'<c r="{first}"><f>{text}</f></c>'
+            cells[r, c] = f'<c r="{first}"><f>{text}</f>{v}</c>'
     rows: dict[int, list[str]] = {}
     for (r, _c), xml in sorted(cells.items()):
         rows.setdefault(r, []).append(xml)

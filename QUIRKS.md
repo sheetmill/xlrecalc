@@ -92,10 +92,11 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   array; given `CORREL` over the whole sheet it too keeps the value the file holds, though it
   computes `CORREL` over ten columns (captures `array_size`, `array_functions`). `LINEST`,
   `XIRR`, `XNPV` and the other database functions were not captured at that size.
-- A reference function given an array (`OFFSET(Z1,{0;1;2;3},0)`, `INDIRECT({"Z1";"Z2"})`,
-  `INDEX(Z1:Z4,{1;2})`) makes no array of references, so what reads one (`N`, `SUBTOTAL`, `COUNTIF`,
-  `ROW`, a cell) does not get Excel's result (17 formulas of capture `array_refs`, listed in
-  `tests/test_array_refs.py`).
+- A function given an array of references (`N(OFFSET(Z1,{0;1;2;3},0))`, `SUBTOTAL(9,OFFSET(...))`,
+  `COUNTIF(INDIRECT({"Z1";"Z2"}),">0")`) is not computed: the formula keeps the value the file
+  holds and is reported (14 formulas of capture `array_refs`, listed in
+  `tests/test_array_refs.py`). `OFFSET`, `INDIRECT` and `INDEX` given an array as the whole formula
+  give Excel's value.
 - A row off Excel's grid in a file (`r="99999999999"`): Excel opens the file and drops the cell
   (capture `value_forms`), though it refuses rows 0 and 1048577; the reader refuses every row
   off the grid with a `PackageError`.

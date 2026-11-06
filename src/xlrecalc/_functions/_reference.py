@@ -39,7 +39,18 @@ def _span(start: int, size: int) -> tuple[int, int]:
     return (start, start + size - 1) if size > 0 else (start + size + 1, start)
 
 
-@function("OFFSET", "raw", "number", "number", "raw", "raw", min_args=3, volatile=True, category=L)
+@function(
+    "OFFSET",
+    "raw",
+    "number",
+    "number",
+    "raw",
+    "raw",
+    min_args=3,
+    volatile=True,
+    reference=True,
+    category=L,
+)
 def OFFSET(
     ctx: Any, ref: Any, rows: float, cols: float, height: Any = MISSING, width: Any = MISSING
 ) -> Any:
@@ -119,7 +130,7 @@ def _parse(text: str, a1: bool, row: int, col: int) -> tuple[str | None, tuple[i
     return ""
 
 
-@function("INDIRECT", "text", "logical", min_args=1, volatile=True, category=L)
+@function("INDIRECT", "text", "logical", min_args=1, volatile=True, reference=True, category=L)
 def INDIRECT(ctx: Any, text: str, a1: bool = True) -> Any:
     """The reference a text names: A1 (``"Sheet2!A1"``), R1C1 with ``a1`` false, or a name.
 

@@ -19,7 +19,7 @@ import pytest
 
 import xlrecalc
 from tests.test_array_limit import two_sheets
-from tests.test_captures import same
+from tests.test_captures import column_letters, same
 from tests.test_xlsx import MAIN, PKG, package
 from tests.watchdog import GIB, bounded, in_child
 from xlrecalc._engine import node
@@ -39,13 +39,11 @@ INPUTS = [(r[1], r[2], ast.literal_eval(r[3])) for r in ROWS if r[0] == "input"]
 CELLS = {r[1]: r[2:] for r in ROWS if r[0] == "cell"}
 NOT_IMPLEMENTED = ("_xlfn.ISFORMULA", "_xlfn.FORMULATEXT", "_xlfn.SHEET", "ISREF", "AREAS")
 
-_REFS = "an array of references (a reference function given an array): not implemented"
+_REFS = "an array of references read by a function: not implemented, and the cell is reported"
 OFFSETS = "OFFSET(Z1,{0;1;2;3},0)"
 TEXTS = 'INDIRECT({"Z1";"Z2";"Z3";"Z4"})'
 KNOWN: dict[str, str] = dict.fromkeys(
     (
-        OFFSETS,
-        TEXTS,
         f"N({OFFSETS})",
         f"SUM(N({OFFSETS}))",
         f"SUMPRODUCT(N({OFFSETS}))",
@@ -58,7 +56,6 @@ KNOWN: dict[str, str] = dict.fromkeys(
         f"N({TEXTS})",
         f"SUMPRODUCT(N({TEXTS}))",
         f'SUMPRODUCT(COUNTIF({TEXTS},">0"))',
-        "INDEX(Z1:Z4,{1;2})",
         "SUM(INDEX(Z1:Z4,ROW(Z1:Z2)))",
         "SUMPRODUCT(INDEX(Z1:Z4,ROW(Z1:Z2)))",
     ),
@@ -97,9 +94,13 @@ def _large(formula: str) -> bool:
     )
 
 
-def workbook(large: bool = False) -> bytes:
-    """The probe's workbook: the data on two sheets, the name, and the input formulas."""
+def workbook(large: bool = False, cached: str | None = None) -> bytes:
+    """The probe's workbook: the data on two sheets, the name, and the input formulas.
+
+    With ``cached``, every formula and every cell of a declared array holds that as its value.
+    """
     cells = _data()
+    v = f"<v>{cached}</v>" if cached else ""
     for kind, where, formula in INPUTS:
         if _large(formula) and not large:
             continue
@@ -107,11 +108,16 @@ def workbook(large: bool = False) -> bytes:
         first = where.split(":")[0]
         r, c = _cell(first)
         if kind == "cse":
-            cells[r, c] = f'<c r="{first}"><f t="array" ref="{where}">{text}</f></c>'
+            r1, c1, r2, c2 = _span(where)
+            for member_row in range(r1, r2 + 1):
+                for member_col in range(c1, c2 + 1):
+                    address = f"{column_letters(member_col)}{member_row}"
+                    cells[member_row, member_col] = f'<c r="{address}">{v}</c>'
+            cells[r, c] = f'<c r="{first}"><f t="array" ref="{where}">{text}</f>{v}</c>'
         elif kind == "dynamic":
-            cells[r, c] = f'<c r="{first}" cm="1"><f t="array" ref="{first}">{text}</f></c>'
+            cells[r, c] = f'<c r="{first}" cm="1"><f t="array" ref="{first}">{text}</f>{v}</c>'
         else:
-            cells[r, c] = f'<c r="{first}"><f>{text}</f></c>'
+            cells[r, c] = f'<c r="{first}"><f>{text}</f>{v}</c>'
     rels = (
         f'<Relationships xmlns="{PKG}">'
         f'<Relationship Id="rId1" Type="{DOC}/worksheet" Target="worksheets/sheet1.xml"/>'

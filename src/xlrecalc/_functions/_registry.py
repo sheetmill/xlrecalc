@@ -25,7 +25,9 @@ When an argument of a one-value kind (or a ``branch``) is an array, the function
 each element and returns an array (§7.7).
 
 The last kind repeats for variadic functions, or the last ``cycle`` kinds (``SUMIFS``'s range and
-criterion). A function may have another core for an array context (``in_array``): ``ROW`` of a
+criterion). A function returning a reference (``reference``), given an array, makes an array of
+references; a formula passing one to another function is reported, not computed (§7.7). A
+function may have another core for an array context (``in_array``): ``ROW`` of a
 range is its first row in a legacy formula, and all of them in an array context. Names are the
 file form, upper case, with ``_xlfn.`` for functions newer than Excel 2007.
 
@@ -103,6 +105,7 @@ def function(
     rel_reason: str = "",
     cycle: int = 1,
     in_array: Callable[..., Any] | None = None,
+    reference: bool = False,
 ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """Register a function under its file-form name."""
     if (ulps and not ulps_reason) or (rel and not rel_reason):
@@ -129,7 +132,10 @@ def function(
                     for i, a in enumerate(args)
                 ]
                 limit = getattr(ctx, "max_array_cells", None)
-                return broadcast(lambda *xs: call(ctx, *xs), spread, lifted, limit)
+                result = broadcast(lambda *xs: call(ctx, *xs), spread, lifted, limit)
+                if reference:  # an array of references: only the cell itself may take one
+                    ctx.reference_array = result  # type: ignore[attr-defined]
+                return result
             coerced = []
             for i, arg in enumerate(args):
                 convert = _CONVERT.get(kind_at(kinds, i, cycle))

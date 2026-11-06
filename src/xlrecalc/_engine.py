@@ -110,6 +110,10 @@ class _Cells:
         return self.sheets[sheet].box_values(r1, c1, r2, c2)
 
 
+class _ReferenceArrayError(Exception):
+    """A function was given an array of references, which none implements yet (§7.7)."""
+
+
 class _NotEvaluatedError(Exception):
     """A formula read a formula cell not evaluated yet (§6.3): evaluate that one first."""
 
@@ -154,6 +158,8 @@ class Engine:
     ) -> None:
         self.quirks = quirks or Quirks.EXCEL
         self.max_array_cells = max_array_cells
+        self.reference_array: Any = None
+        """An array of references made while the current cell is evaluated."""
         """The largest array a formula may make (``ReadLimits.max_array_cells``)."""
         self.date1904 = date1904
         self.today = today or dt.date.today()
@@ -490,7 +496,10 @@ class Engine:
             r = box[0] + i
             for j in range(box[3] - box[1] + 1):
                 c = box[1] + j
-                s.set(r, c, self._result(element(grid, rows, cols, i, j)))
+                v = element(grid, rows, cols, i, j)
+                if isinstance(v, Ref) and v.source is self.checked:
+                    v = ErrorValue.VALUE  # OFFSET or INDIRECT of an array (capture array_refs)
+                s.set(r, c, self._result(v))
                 if released:
                     released.discard(node(sheet, r, c))
         if box != old or anchor.wanted is not None:
@@ -711,8 +720,11 @@ class Engine:
                 self.report.uncomputed.add(where)
             return
         self.sheet, self.row, self.col = sheet, row, col
+        self.reference_array = None
         try:
             value = template.fn(self, row, col)
+            if self.reference_array is not None and value is not self.reference_array:
+                raise _ReferenceArrayError  # read by another function: not implemented
             if n in self.anchors:
                 self._fill(n, value)
                 return
@@ -720,6 +732,10 @@ class Engine:
             raise
         except ArrayLimitError as exc:  # keep the cached value, as for a function not supported
             self.report.unsupported[f"an array of more than {exc.limit:,} cells"] += 1
+            self.report.uncomputed.add(where)
+            return
+        except _ReferenceArrayError:  # keep the cached value, as for a function not supported
+            self.report.unsupported["an array of references read by a function"] += 1
             self.report.uncomputed.add(where)
             return
         except Exception as exc:  # a bug in a function must not stop the recalculation
@@ -739,10 +755,10 @@ class Engine:
 
     def _result(self, value: Any) -> Value:
         """A formula's result as a cell holds it: references intersected, blanks as 0."""
-        if isinstance(value, Ref):
-            value = intersect(value, self)
-        elif isinstance(value, tuple):  # an array in one cell shows its first element
+        if isinstance(value, tuple):  # an array in one cell shows its first element
             value = value[0][0]
+        if isinstance(value, Ref):  # the first of an array of references too
+            value = intersect(value, self)
         if value is BLANK or value is MISSING:
             return 0.0
         if isinstance(value, float):

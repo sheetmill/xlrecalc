@@ -73,7 +73,8 @@ class Report:
             constant holding that value when it opens the file.
         uncomputed: Cells whose value could not be computed (an unsupported function or
             feature without a cached value, a caught internal error, or an uncomputed
-            precedent). A written file keeps their cached values as they were.
+            precedent). A written file keeps their cached values as they were. An array formula
+            is named by its first cell, and the cells of its range keep their values with it.
     """
 
     unsupported: Counter[str] = field(default_factory=Counter)
