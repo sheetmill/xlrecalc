@@ -30,7 +30,8 @@ Categories, the first that applies to a formula cell:
   a value, so the cache is older than the cycle or the engine calls circular what Excel does not.
 - ``stopped_own``, by label: an absent function or a form not implemented.
 - ``exception_own``: an internal error, alone.
-- ``stopped_inherited``: computes alone, but reads a stopped cell in the full recalculation.
+- ``stopped_inherited``: computes alone, but reads a cell with no value to go on in the full
+  recalculation.
 - ``differ_own``: differs alone.
 - ``differ_inherited``: matches alone, differs in the full recalculation.
 - ``match_exact``, ``match_15_digits`` (relative 1E-14), ``match_close`` (relative 1E-9),
@@ -317,6 +318,7 @@ def compare_workbook(path: str) -> dict[str, Any]:
         "exceptions": dict(exceptions),
         "after_own": after_own,
         "refused": len(report.refused),
+        "from_kept": len(report.from_kept),
         "data_tables": tables,
         "calc_mode": calc.calc_mode,
         "flag": calc.full_calc_on_load,
@@ -557,6 +559,7 @@ def summarize(out: Path, paths: set[str] | None = None) -> None:
         for name in SET_ASIDE
     ]
     lines.append(f"{'refused formulas':26} {sum(r['refused'] for r in good):>12,}")
+    lines.append(f"{'named in from_kept':26} {sum(r.get('from_kept', 0) for r in good):>12,}")
     lines.append(f"{'data tables':26} {sum(r['data_tables'] for r in good):>12,}")
     lines.append("")
 

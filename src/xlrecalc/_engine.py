@@ -215,6 +215,18 @@ class Engine:
         self._kept_runs: Runs = defaultdict(list)
         self.entered: set[int] = set()
         """Formula cells set through the API, not read from a file (§7.2)."""
+        # Formula cells the engine cannot evaluate, which keep the value the file holds (§7.6):
+        # those an edit reached, whose kept value is out of date; what depends on those, which is
+        # not evaluated; the ones an evaluation reached; every cell evaluated, and the boxes it
+        # read through OFFSET or INDIRECT, which no static edge shows. All empty, and nothing
+        # recorded, in a workbook with no such formula.
+        self._absent: set[int] = set()
+        self._outdated: set[int] = set()
+        self._held_back: set[int] = set()
+        self._held_refs: set[CellRef] = set()
+        self._reached: set[int] = set()
+        self._evaluated: set[int] = set()
+        self._dynamic_reads: dict[int, list[tuple[int, int, int, int, int]]] = {}
         self.active = (0, 0, 0)
         """The active sheet and its active cell, 0-based: what ``CELL`` without a reference
         reads (capture ``cell_noref``)."""
@@ -357,6 +369,9 @@ class Engine:
         if row * COLS + col in s.templates:
             s.set_template(row, col, None)
             self._index = None
+        if self._absent:
+            self._absent.discard(n)
+            self._outdated.discard(n)
         self._touch_spill(sheet, row, col)
         s.set(row, col, value)
         self._volatile.discard(n)
@@ -396,10 +411,17 @@ class Engine:
         s.set_template(row, col, tid)
         self._index = None
         self._changed = True
-        if self.templates[tid].volatile:
+        compiled = self.templates[tid]
+        if compiled.volatile:
             self._volatile.add(n)
         else:
             self._volatile.discard(n)
+        if compiled.unsupported:
+            self._absent.add(n)
+            self._outdated.discard(n)
+        elif self._absent:
+            self._absent.discard(n)
+            self._outdated.discard(n)
         if array is not None:
             self.anchors[n] = Anchor(array[0], array[1])
             self._index_anchors(sheet)
@@ -623,7 +645,9 @@ class Engine:
         else:
             self._evaluate(list(targets))
         self._settle()
+        self._report_held_back()
         self._taint()
+        self._report_from_kept()
         if not self.stale:
             self.stale.clear()  # a set keeps its table when emptied; clearing frees it
         return self.report
@@ -654,6 +678,8 @@ class Engine:
             self._unclosed.extend(self._volatile)
         if self._changed and self._kept:
             self._reconsider_kept()
+        if self._changed and (self._absent or self._held_back):
+            self._held_back = self._out_of_date()
         self._changed = False
         if self._unclosed and len(self.stale) < self.formula_count():
             self.stale |= self.dependents(self._unclosed)
@@ -763,6 +789,9 @@ class Engine:
 
     def dynamic_ref(self, sheet: int, r1: int, c1: int, r2: int, c2: int) -> Ref:
         """A reference made during evaluation (``OFFSET``, ``INDIRECT``): its reads are checked."""
+        if self._absent:
+            where = node(self.sheet, self.row, self.col)
+            self._dynamic_reads.setdefault(where, []).append((sheet, r1, c1, r2, c2))
         return Ref(self.checked, sheet, r1, c1, r2, c2)
 
     def _keep_cycle(self, chain: set[int]) -> None:
@@ -856,10 +885,20 @@ class Engine:
         where = CellRef(s.name, row + 1, col + 1)
         if template.unsupported:
             self.report.unsupported.update(template.unsupported)
+        if self._held_back and n in self._held_back:  # rests on a value out of date (§7.6)
+            if key not in s.values:
+                s.values[key] = NAME
+            return
+        if template.unsupported:
             if key not in s.values:  # no cached value: a formula cell is never blank otherwise
                 s.values[key] = NAME
                 self.report.uncomputed.add(where)
+            else:
+                self._reached.add(n)
             return
+        if self._absent:
+            self._evaluated.add(n)
+            self._dynamic_reads.pop(n, None)
         self.sheet, self.row, self.col = sheet, row, col
         self.reference_array = None
         try:
@@ -905,6 +944,107 @@ class Engine:
         if isinstance(value, float):
             return flush(value) if math.isfinite(value) else ErrorValue.NUM
         return value  # type: ignore[no-any-return]
+
+    def edited(self, n: int) -> None:
+        """A change through the API: what it reaches among the formulas keeping a value (§7.6).
+
+        Their kept values are out of date from here on. A formula using ``OFFSET`` or ``INDIRECT``
+        is never evaluated, so what it reads is not known: any change may reach it.
+        """
+        if self._absent:
+            self._outdated |= self._absent & self.dependents([n])
+            self._outdated |= self._absent & self._volatile
+
+    def _closure(self, seeds: set[int]) -> set[int]:
+        """Formula cells depending on the seeds, through static edges and the reads recorded."""
+        found = self.dependents(seeds)
+        reads = self._dynamic_reads
+        while reads:
+            more = [
+                reader
+                for reader, boxes in reads.items()
+                if reader not in found and self._reads_any(boxes, seeds, found)
+            ]
+            if not more:
+                break
+            found.update(more)
+            found |= self.dependents(more)
+        return found
+
+    def _reads_any(
+        self, boxes: list[tuple[int, int, int, int, int]], seeds: set[int], found: set[int]
+    ) -> bool:
+        for sheet, r1, c1, r2, c2 in boxes:
+            for r, c in self.sheets[sheet].formulas_in(r1, c1, r2, c2):
+                cell = node(sheet, r, c)
+                if cell in seeds or cell in found:
+                    return True
+        return False
+
+    def _out_of_date(self) -> set[int]:
+        return self._outdated | self._closure(self._outdated) if self._outdated else set()
+
+    def _report_held_back(self) -> None:
+        """Cells resting on a kept value an edit put out of date are uncomputed, and only they."""
+        report = self.report
+        report.uncomputed -= self._held_refs
+        refs: set[CellRef] = set()
+        if self._outdated:
+            for n in self._out_of_date():
+                sheet, row, col = unpack(n)
+                s = self.sheets[sheet]
+                if row * COLS + col in s.templates:
+                    refs.add(CellRef(s.name, row + 1, col + 1))
+        self._held_refs = refs
+        report.uncomputed |= refs
+
+    def _report_from_kept(self) -> None:
+        """Name what rests on a kept value: it, and every cell evaluated from it (§7.6)."""
+        names = self.report.from_kept
+        names.clear()
+        if not self._absent:
+            return
+        kept = self._absent - self._outdated
+        rest = self._closure(kept) & self._evaluated if kept else set()
+        behind = kept & self._reached
+        if rest and not kept <= behind:
+            behind |= self._kept_behind(rest, kept)
+        for n in behind | rest:
+            sheet, row, col = unpack(n)
+            s = self.sheets[sheet]
+            if row * COLS + col in s.templates:
+                names.add(CellRef(s.name, row + 1, col + 1))
+        names -= self.report.uncomputed
+        names -= self.report.circular
+
+    def _kept_behind(self, rest: set[int], kept: set[int]) -> set[int]:
+        """The formulas keeping a value that the evaluated cells read, walking back from them."""
+        seen: set[int] = set(rest)
+        queue = list(rest)
+        behind: set[int] = set()
+        while queue:
+            n = queue.pop()
+            before = list(self.precedents(n))
+            for sheet, r1, c1, r2, c2 in self._dynamic_reads.get(n, ()):
+                before += [
+                    node(sheet, r, c) for r, c in self.sheets[sheet].formulas_in(r1, c1, r2, c2)
+                ]
+            for p in before:
+                if p in seen:
+                    continue
+                seen.add(p)
+                if p in kept:
+                    behind.add(p)
+                queue.append(p)
+        return behind
+
+    def kept_values(self) -> Iterator[tuple[str, int, int]]:
+        """Formulas keeping the file's value, for the writer to leave: (sheet, row, col)."""
+        for n in self._absent:
+            sheet, row, col = unpack(n)
+            s = self.sheets[sheet]
+            if s.values.get(row * COLS + col) is not NAME:
+                yield s.name, row + 1, col + 1
 
     def _taint(self) -> None:
         """Cells depending on an uncomputed cell are uncomputed too."""

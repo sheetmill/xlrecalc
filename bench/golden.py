@@ -92,6 +92,7 @@ def report(engine: Engine) -> Iterator[str]:
     r = engine.report
     yield f"circular {sorted(map(str, r.circular))}"
     yield f"uncomputed {sorted(map(str, r.uncomputed))}"
+    yield f"from_kept {sorted(map(str, r.from_kept))}"
     yield f"refused {sorted((str(k), v) for k, v in r.refused.items())}"
     yield f"exceptions {sorted((str(k), v) for k, v in r.exceptions.items())}"
     yield f"unsupported {sorted(r.unsupported.items())}"

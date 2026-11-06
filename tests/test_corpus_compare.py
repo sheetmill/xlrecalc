@@ -70,7 +70,8 @@ def test_a_cell_that_only_inherits_a_difference(tmp_path: Path) -> None:
 def test_an_absent_function_is_one_label_with_its_cells_downstream(tmp_path: Path) -> None:
     cells = cell("A1", "NOSUCHFN(1)", "5") + cell("B1", "A1*2", "10") + cell("C1", "B1+1", "11")
     row = counts(tmp_path, cells)
-    assert row["counts"] == {"stopped_own": 1, "stopped_inherited": 2}
+    assert row["counts"] == {"stopped_own": 1, "match_exact": 2}
+    assert row["from_kept"] == 3
     assert row["labels"] == {"NOSUCHFN": 1}
     assert row["downstream"] == {"NOSUCHFN": 2}
     assert not row["mismatches"]

@@ -208,6 +208,7 @@ class Workbook:
         if row * COLS + col in self._engine.sheets[sheet].templates:
             self._formula_removed = True
         self._engine.set_value(sheet, row, col, constant)
+        self._engine.edited(node(sheet, row, col))
         self._edits.setdefault(sheet, {})[row + 1, col + 1] = False
 
     def set_formula(self, ref: str | CellRef, formula: str) -> None:
@@ -236,6 +237,7 @@ class Workbook:
         except (FormulaSyntaxError, TokenizeError) as exc:
             raise FormulaError(f"{formula!r}: {exc}") from exc
         engine.entered.add(node(sheet, row, col))
+        engine.edited(node(sheet, row, col))
         self._edits.setdefault(sheet, {})[row + 1, col + 1] = True
         self._marked[sheet, row, col] = (intersects, legacy)
 

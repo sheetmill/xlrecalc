@@ -71,6 +71,11 @@ class Report:
         circular: Cells on a circular reference or depending on one, with iterative calculation
             off. Excel leaves them uncalculated: they keep the value the file holds, and one
             without a value is the empty text (0 for a formula set through the API).
+        from_kept: A cell holding the cached value of a function or feature not implemented, and
+            every cell computed from one. Such a value is right if the file's value is. After a
+            change upstream of that formula, the file's value is out of date: the cells leave this
+            set for ``uncomputed``. A change that removes the reliance takes them out altogether.
+            The two sets never overlap.
         refused: Cells whose formula Excel refuses in a file, with the reason. They keep their
             cached value and are written as they were; Excel's repair turns each into a
             constant holding that value when it opens the file.
@@ -84,5 +89,6 @@ class Report:
     unsupported: Counter[str] = field(default_factory=Counter)
     exceptions: dict[CellRef, str] = field(default_factory=dict)
     circular: set[CellRef] = field(default_factory=set)
+    from_kept: set[CellRef] = field(default_factory=set)
     refused: dict[CellRef, str] = field(default_factory=dict)
     uncomputed: set[CellRef] = field(default_factory=set)

@@ -558,9 +558,18 @@ numbers and template ids, side dicts for text and errors) are planned for a late
 Errors propagate through operators and most functions; `IFERROR`, `ISERROR`, `IFNA`, `AGGREGATE`
 and the `IS` functions inspect them. An internal exception in a function is caught per cell,
 becomes `#VALUE!`, and is recorded in the report with the exception, so one bug never aborts a
-recalculation. An unsupported function evaluates to `#NAME?` and is listed in the report; a
-cell using one keeps its cached value when the file holds one, since Excel computed it. Cells
-without a computable value (an unsupported function and no cached value, a caught exception),
+recalculation. An unsupported function is listed in the report. A cell using one keeps its cached value when the file
+holds one, since Excel computed it, in a full load too, and what depends on it is computed from that.
+`Report.from_kept` names them all, so "which values rest on something not computed here?" has one
+answer. A change upstream of the formula puts its kept value out of date: it and what depends on it
+are not evaluated, keep the values they hold, and move to `uncomputed`. A formula using `OFFSET` or
+`INDIRECT` is never evaluated, so what it reads is not known, and any change counts as upstream of it.
+A change that removes the reliance (the formula replaced) takes the cells out of both. A read through
+`OFFSET` or `INDIRECT` of such a cell has no static edge, so each evaluation records its boxes, in a
+workbook holding such a formula only. A run that trusts cached values and evaluates nothing names
+nothing; one that evaluates a cell names it and the formula it rests on.
+
+Cells without a computable value (an unsupported function and no cached value, a caught exception),
 and every cell depending on them, are **uncomputed**: the report lists them, and the writer
 leaves their cached values as they were (§9.2). The report (`Report`) also lists circular
 references, formulas Excel refuses in a file, and unsupported features by name and count.

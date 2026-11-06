@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `Report.from_kept`: a cell holding the cached value of a function or feature not implemented, and every
+  cell computed from one. After a change upstream of the formula they move to `uncomputed` and keep the
+  values they hold; a change that removes the reliance takes them out.
 - Functions: `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS`, `MINIFS`, `LARGE`, `SMALL`, `PERCENTILE`,
   `PERCENTILE.INC`, `QUARTILE`, `QUARTILE.INC`, `MODE`, `MODE.SNGL`, `IFS`, `SWITCH`, `TEXTJOIN`, `CONCAT`,
   `XLOOKUP` and `XMATCH` (not the regular-expression match mode). Each is captured from Excel.
@@ -40,6 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   placed by position, as Excel places it.
 
 ### Changed
+- A cell naming a function not implemented keeps its cached value in a full recalculation too, as it
+  did when cached values were trusted, and what depends on it is computed from that, not `#NAME?`.
+  `Workbook.value` gives the kept value. Without a cached value it is `#NAME?`, as before.
 - Evaluation lists fewer precedents (about 10% faster on the benchmark, and a workbook of whole-
   column references from 445 s to about 12 s), and writing values alone skips the code that inserts
   cells (about 7% faster).
