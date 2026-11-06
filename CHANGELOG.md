@@ -37,6 +37,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   placed by position, as Excel places it.
 
 ### Changed
+- Evaluation lists fewer precedents (about 10% faster on the benchmark, and a workbook of whole-
+  column references from 445 s to about 23 s), and writing values alone skips the code that inserts
+  cells (about 7% faster).
 - `MATCH`, `VLOOKUP`, `HLOOKUP` and `LOOKUP` over a whole column read its non-blank cells, not its
   million rows: a workbook of 31,912 such lookups went from more than 15 minutes to under 3 s.
 - Requires xlformat 0.3 or later (`xlformat>=0.3,<1`): `TEXT` is xlformat's `text_function`,

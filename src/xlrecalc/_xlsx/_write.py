@@ -318,6 +318,7 @@ def patch_cells(
     own formula text, through ``translate``. Returns the number of cells changed.
     """
     remaining = _Pending(edits or {}, fills)
+    editing = bool(edits or fills)  # a write of values alone skips what inserts cells and rows
     dissolved: dict[str, tuple[int, int, str]] = {}  # shared index -> master (row, col, text)
     buf = bytearray()
     base = 0  # absolute offset of buf[0]; everything before it has been written out
@@ -384,7 +385,7 @@ def patch_cells(
                 col = ref_col if 1 <= ref_col <= 16_384 else col + 1
             else:
                 col += 1
-            if remaining.has(row):
+            if editing and remaining.has(row):
                 cells = new_cells(row, col)
                 if cells:
                     patches.append((index, index, cells))
@@ -396,10 +397,10 @@ def patch_cells(
             r = attrs.get("r")
             row = int(r) if r else row + 1
             col = 0
-            rows = new_rows(row)
+            rows = new_rows(row) if editing else b""
             if rows:
                 patches.append((index, index, rows))
-            if remaining.next_row() == row:
+            if editing and remaining.next_row() == row:
                 remaining.reach_row()
                 tag = _DROP_ATTRS.sub(b"", bytes(buf[index - base : end - base]))
                 if empty:  # <row r="5"/>: the row's new cells go inside it
@@ -428,7 +429,9 @@ def patch_cells(
         empty = empties.pop()
         n = qname.rpartition(":")[2]
         if not in_c:
-            if n == "row":
+            if not editing:
+                pass
+            elif n == "row":
                 cells = new_cells(row, None)
                 if cells and not empty:
                     patches.append((index, index, cells))
@@ -450,7 +453,7 @@ def patch_cells(
             safe = c_end
             shared = f_attrs is not None and f_attrs.get("t") == "shared"
             si = f_attrs.get("si") if f_attrs is not None else None
-            edit = remaining.pop(row, col)
+            edit = remaining.pop(row, col) if editing else None
             if edit is not None:
                 if shared and si is not None and f_attrs is not None and f_attrs.get("ref"):
                     dissolved[si] = (row, col, "".join(f_text or ()))
