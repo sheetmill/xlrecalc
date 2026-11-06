@@ -42,6 +42,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- `ROW` and `COLUMN` of a range make an array in an array context, as Excel does: `ROW(A1:A4)` over
+  a legacy array fills 1, 2, 3, 4, not 1, 1, 1, 1, and `SUMPRODUCT(ROW(A1:A4))` is 10, not 1.
+- A range or array as a criterion (`COUNTIF`, `SUMIF`, `COUNTIFS`, `SUMIFS`) or a lookup key (`MATCH`,
+  `VLOOKUP`, `HLOOKUP`) is taken element by element where Excel takes it so:
+  `SUMPRODUCT(1/COUNTIF(A1:A4,A1:A4))` counts distinct values, and was `#DIV/0!`.
+- `INDEX(A1:A4,0)` is the whole range, where it was `#VALUE!`, and `ROW` or `COLUMN` of a union is
+  `#REF!`.
 - `SUMIF` with a sum range that runs past the sheet's edge read cells from the next row; it stops
   at the edge, as Excel does.
 - Writing an evaluated array formula took time quadratic in its rows and about 1.5 KB per cell;

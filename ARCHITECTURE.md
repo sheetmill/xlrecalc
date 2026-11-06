@@ -571,6 +571,17 @@ Array constants are arrays everywhere. The code generator compiles these rules: 
 context (an `array` argument, or an array formula) it turns ranges into arrays (`ctx.arr`); and it
 records whether a legacy formula intersects anywhere (`Template.intersects`).
 
+**Functions of a reference.** In an array context `ROW` of a range is one column, a number for
+each row, and `COLUMN` one row (capture `array_refs`): `ROW(Z1:AA3)` is `{1;2;3}`, and
+`ROW(1:1048576)` a million numbers, not a whole sheet. Outside one each gives its first number:
+`=SUM(ROW(Z1:Z4))` is 1 in a legacy formula and 10 in an array formula, and
+`=SUMPRODUCT(ROW(Z1:Z4))` is 10 in both. The registry gives such a function another core for an
+array context (`in_array`). `CELL` and `N` take a range's top-left cell in every form. A criterion
+of the `SUMIF` family and `MATCH`'s key are one-value arguments, intersected in a legacy formula
+and taken element by element in an array context, so `=SUMPRODUCT(1/COUNTIF(Z1:Z4,Z1:Z4))` counts
+distinct values; `VLOOKUP`'s and `HLOOKUP`'s key are one value in a legacy formula, inside
+`SUMPRODUCT` too, and element by element only in an array formula (registry kind `key`, §8.1).
+
 **Legacy array formulas** are evaluated as arrays and fill their declared range: an array of one
 row or column repeats across the range, a position past the end of the result is `#N/A`. Their
 cells cannot be changed one by one.

@@ -17,12 +17,17 @@ core function receives the evaluation context first, then the coerced arguments:
 - ``matrix``: a whole array, never taken element by element; a reference in a legacy formula
   is intersected, as for ``value``, and in an array context it arrives as an array
   (``TRANSPOSE``: capture ``misc``).
+- ``key``: one value in a legacy formula, inside ``SUMPRODUCT`` too (an array's first element, a
+  reference intersected), and taken element by element in an array formula (``VLOOKUP``'s key:
+  capture ``array_refs``).
 
 When an argument of a one-value kind (or a ``branch``) is an array, the function is applied to
 each element and returns an array (§7.7).
 
-The last kind repeats for variadic functions. Names are the file form, upper case, with
-``_xlfn.`` for functions newer than Excel 2007.
+The last kind repeats for variadic functions, or the last ``cycle`` kinds (``SUMIFS``'s range and
+criterion). A function may have another core for an array context (``in_array``): ``ROW`` of a
+range is its first row in a legacy formula, and all of them in an array context. Names are the
+file form, upper case, with ``_xlfn.`` for functions newer than Excel 2007.
 
 Results are compared with Excel's bit for bit. A function whose results could not be made
 bit-exact within a time-boxed attempt declares a small tolerance in units in the last place
@@ -41,18 +46,20 @@ from typing import Any
 
 from xlrecalc._arrays import broadcast, to_array
 from xlrecalc._coerce import Context, scalar, to_bool, to_number, to_text
+from xlrecalc._formula._codegen import kind_at
 from xlrecalc._values import ErrorValue, Ref
 
 __all__ = ["REGISTRY", "SPECS", "Spec", "function"]
 
 VALUE = ErrorValue.VALUE
 
-_LIFTED = frozenset({"number", "text", "logical", "value", "branch"})
+_LIFTED = frozenset({"number", "text", "logical", "value", "branch", "key"})
 _CONVERT: dict[str, Callable[[Any, Context], Any]] = {
     "number": to_number,
     "text": to_text,
     "logical": to_bool,
     "value": scalar,
+    "key": scalar,
     "matrix": lambda a, ctx: scalar(a, ctx) if isinstance(a, Ref) else a,
 }
 
@@ -94,6 +101,8 @@ def function(
     note: str = "",
     rel: float = 0.0,
     rel_reason: str = "",
+    cycle: int = 1,
+    in_array: Callable[..., Any] | None = None,
 ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """Register a function under its file-form name."""
     if (ulps and not ulps_reason) or (rel and not rel_reason):
@@ -103,14 +112,9 @@ def function(
     lo = len(kinds) if min_args is None else min_args
     hi = None if variadic else len(kinds)
 
-    def register(core: Callable[..., Any]) -> Callable[..., Any]:
-        converters = [_CONVERT.get(k) for k in kinds]
-        last = converters[-1] if converters else None
-
+    def wrap(core: Callable[..., Any]) -> Callable[..., Any]:
         lifted_kinds = [k in _LIFTED for k in kinds]
-        last_lifted = lifted_kinds[-1] if lifted_kinds else False
-
-        plain = not any(lifted_kinds) and all(c is None for c in converters)
+        plain = not any(lifted_kinds) and all(_CONVERT.get(k) is None for k in kinds)
 
         def call(ctx: Context, *args: Any) -> Any:
             n = len(args)
@@ -118,7 +122,7 @@ def function(
                 return VALUE
             if plain:  # every argument passed as it is (SUM, COUNT, ...): nothing to coerce
                 return core(ctx, *args)
-            lifted = [(lifted_kinds[i] if i < len(lifted_kinds) else last_lifted) for i in range(n)]
+            lifted = [kind_at(kinds, i, cycle) in _LIFTED for i in range(n)]
             if any(lifted[i] and type(a) is tuple for i, a in enumerate(args)):
                 spread = [
                     to_array(a) if lifted[i] and isinstance(a, Ref) and not a.is_cell() else a
@@ -128,7 +132,7 @@ def function(
                 return broadcast(lambda *xs: call(ctx, *xs), spread, lifted, limit)
             coerced = []
             for i, arg in enumerate(args):
-                convert = converters[i] if i < len(converters) else last
+                convert = _CONVERT.get(kind_at(kinds, i, cycle))
                 if convert is None:
                     coerced.append(arg)
                     continue
@@ -139,8 +143,15 @@ def function(
             return core(ctx, *coerced)
 
         call.kinds = kinds  # type: ignore[attr-defined]
+        call.cycle = cycle  # type: ignore[attr-defined]
         call.__name__ = core.__name__
         call.__doc__ = core.__doc__
+        return call
+
+    def register(core: Callable[..., Any]) -> Callable[..., Any]:
+        call = wrap(core)
+        if in_array is not None:
+            call.in_array = wrap(in_array)  # type: ignore[attr-defined]
         upper = name.upper()
         REGISTRY[upper] = call
         SPECS[upper] = Spec(

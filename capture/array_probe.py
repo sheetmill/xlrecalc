@@ -188,6 +188,11 @@ def build(path: Path) -> None:
     for _, anchor, _ in dynamic:
         ws[anchor] = "=0"  # a placeholder cell, replaced below
     wb.save(path)
+    add_dynamic(path, dynamic)
+
+
+def add_dynamic(path: Path, dynamic: list[tuple[str, str, str]]) -> None:
+    """Replace placeholder cells by dynamic-array formulas, and add the metadata part."""
     with zipfile.ZipFile(path) as z:
         parts = {name: z.read(name) for name in z.namelist()}
     sheet = parts["xl/worksheets/sheet1.xml"].decode()

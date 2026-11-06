@@ -11,6 +11,7 @@ import math
 import re
 from typing import Any
 
+from xlrecalc._arrays import check_area
 from xlrecalc._coerce import Context, scalar
 from xlrecalc._compare import compare, lookup_equal, wildcard
 from xlrecalc._formula import MISSING
@@ -86,7 +87,7 @@ def _lookup_value(lookup: Any, ctx: Context) -> Any:
     return 0.0 if v is BLANK else v
 
 
-@function("MATCH", "raw", "raw", "number", min_args=2, category=L)
+@function("MATCH", "value", "raw", "number", min_args=2, errors=True, category=L)
 def MATCH(ctx: Context, lookup: Any, ref: Any, kind: float = 1.0) -> float | ErrorValue:
     """Position of a value in a row or column: type 0 exact, 1 sorted ascending, -1 descending."""
     v = _lookup_value(lookup, ctx)
@@ -137,7 +138,7 @@ def _table_lookup(
     return 0.0 if result is BLANK else result
 
 
-@function("VLOOKUP", "raw", "raw", "number", "raw", min_args=3, category=L)
+@function("VLOOKUP", "key", "raw", "number", "raw", min_args=3, errors=True, category=L)
 def VLOOKUP(ctx: Context, lookup: Any, table: Any, col: float, approximate: Any = None) -> Any:
     """Find in the first column, return from column ``col``; sorted unless the last is FALSE.
 
@@ -148,7 +149,7 @@ def VLOOKUP(ctx: Context, lookup: Any, table: Any, col: float, approximate: Any 
     return _table_lookup(ctx, lookup, table, col, approximate, horizontal=False)
 
 
-@function("HLOOKUP", "raw", "raw", "number", "raw", min_args=3, category=L)
+@function("HLOOKUP", "key", "raw", "number", "raw", min_args=3, errors=True, category=L)
 def HLOOKUP(ctx: Context, lookup: Any, table: Any, row: float, approximate: Any = None) -> Any:
     """Find in the first row, return from row ``row``."""
     if approximate is MISSING:
@@ -164,10 +165,10 @@ def _whole(ref: Any, r: int, c: int) -> Any:
         rows, cols = len(ref), len(ref[0])
     else:
         return None
-    if rows == 1 or cols == 1 or (r != 0 and c != 0) or r < 0 or c < 0:
-        return None
     if r == 0 and c == 0:
         return ref
+    if rows == 1 or cols == 1 or (r != 0 and c != 0) or r < 0 or c < 0:
+        return None
     if (r == 0 and c > cols) or (c == 0 and r > rows):
         return REF
     if isinstance(ref, Ref):
@@ -252,20 +253,41 @@ def COLUMNS(ctx: Context, ref: Any) -> float | ErrorValue:
     return 1.0 if not isinstance(scalar(ref, ctx), ErrorValue) else scalar(ref, ctx)  # type: ignore[return-value]
 
 
-@function("ROW", "raw", min_args=0, category=L)
+def _not_one_area(ref: Any) -> ErrorValue:
+    """``ROW`` of what is not one area: a union is ``#REF!`` (capture ``array_refs``)."""
+    return ref if isinstance(ref, ErrorValue) and ref is not VALUE else REF
+
+
+def _rows_array(ctx: Context, ref: Any = MISSING) -> Any:
+    """``ROW`` in an array context: one column, a row number for each row of a range (§7.7)."""
+    if not isinstance(ref, Ref) or ref.rows == 1:
+        return ROW(ctx, ref)
+    check_area(ref.rows, 1, getattr(ctx, "max_array_cells", None))
+    return tuple((float(r + 1),) for r in range(ref.r1, ref.r2 + 1))
+
+
+def _columns_array(ctx: Context, ref: Any = MISSING) -> Any:
+    """``COLUMN`` in an array context: one row, a column number for each column of a range."""
+    if not isinstance(ref, Ref) or ref.columns == 1:
+        return COLUMN(ctx, ref)
+    check_area(1, ref.columns, getattr(ctx, "max_array_cells", None))
+    return (tuple(float(c + 1) for c in range(ref.c1, ref.c2 + 1)),)
+
+
+@function("ROW", "raw", min_args=0, category=L, in_array=_rows_array)
 def ROW(ctx: Context, ref: Any = MISSING) -> float | ErrorValue:
     """Row number of a reference's first cell, or of the formula's cell."""
     if ref is MISSING:
         return float(ctx.row + 1)
-    return float(ref.r1 + 1) if isinstance(ref, Ref) else VALUE
+    return float(ref.r1 + 1) if isinstance(ref, Ref) else _not_one_area(ref)
 
 
-@function("COLUMN", "raw", min_args=0, category=L)
+@function("COLUMN", "raw", min_args=0, category=L, in_array=_columns_array)
 def COLUMN(ctx: Context, ref: Any = MISSING) -> float | ErrorValue:
     """Column number of a reference's first cell, or of the formula's cell."""
     if ref is MISSING:
         return float(ctx.col + 1)
-    return float(ref.c1 + 1) if isinstance(ref, Ref) else VALUE
+    return float(ref.c1 + 1) if isinstance(ref, Ref) else _not_one_area(ref)
 
 
 @function("_XLFN.ANCHORARRAY", "raw", category=L)

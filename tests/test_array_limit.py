@@ -80,6 +80,7 @@ def test_a_declared_range_past_the_limit_keeps_its_value(array):
         "SUMPRODUCT(D!A:XFD*1)",  # a reference made into an array
         "SUMPRODUCT(D!A:XFD)",  # SUMPRODUCT's own grids
         "SUMPRODUCT((D!A1:A1048576+0)*(D!A1:XFD1+0))",  # a column times a row: every pair
+        "SUMPRODUCT(ROW(D!A1:A1048576)*COLUMN(D!A1:XFD1))",  # the same from positions
     ],
 )
 @bounded

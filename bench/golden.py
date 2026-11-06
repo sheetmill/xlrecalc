@@ -5,8 +5,8 @@
 Runs in the package's own environment, from the repository root. Evaluates:
 
 - every capture suite of ``tests/test_captures.py`` laid out as that test lays it out, and the
-  captures that ``tests/test_arrays.py``, ``tests/test_dynrefs.py`` and
-  ``tests/test_circular.py`` evaluate as workbooks;
+  captures that ``tests/test_arrays.py``, ``tests/test_array_refs.py``, ``tests/test_dynrefs.py``
+  and ``tests/test_circular.py`` evaluate as workbooks;
 - the bench table (``bench/data/bench_<N>.pkl``, and ``bench_<N>.xlsx`` through the package's
   reader) at 1,000, 10,000 and 100,000 rows, after a full recalculation, after changing A1 and
   after changing the last row's A, as ``bench/engine_bench.py`` does; with ``--large``, at
@@ -47,7 +47,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from tests import test_arrays, test_circular, test_dynrefs  # noqa: E402
+from tests import test_array_refs, test_arrays, test_circular, test_dynrefs  # noqa: E402
 from tests.captures import load as load_suite  # noqa: E402
 from tests.test_captures import SUITES, run  # noqa: E402
 
@@ -106,6 +106,7 @@ def captures() -> Iterator[str]:
         yield from report(engine)
     workbooks = {
         "arrays": lambda: load(io.BytesIO(test_arrays.workbook())),
+        "array_refs": lambda: load(io.BytesIO(test_array_refs.workbook())),
         "dynrefs": lambda: _with_path(load(io.BytesIO(test_dynrefs.workbook()))),
         "circular": _circular,
     }

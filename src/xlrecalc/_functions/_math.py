@@ -205,7 +205,7 @@ def _numeric(v: Any) -> bool:
     return isinstance(v, float | ErrorValue) and not isinstance(v, bool)
 
 
-@function("SUMIF", "raw", "raw", "raw", min_args=2, category=C)
+@function("SUMIF", "raw", "value", "raw", min_args=2, errors=True, category=C)
 def SUMIF(ctx: Context, ref: Any, crit: Any, sums: Any = MISSING) -> float | ErrorValue:
     """Sum of the cells of ``sums`` (or ``ref``) whose cell in ``ref`` meets the criterion.
 
@@ -254,7 +254,9 @@ def _conditions(
     return conditions
 
 
-@function("SUMIFS", "raw", "raw", "raw", min_args=3, variadic=True, category=C)
+@function(
+    "SUMIFS", "raw", "raw", "value", min_args=3, variadic=True, errors=True, cycle=2, category=C
+)
 def SUMIFS(ctx: Context, sums: Any, *pairs: Any) -> float | ErrorValue:
     """Sum of ``sums`` where every range meets its criterion.
 
@@ -275,7 +277,7 @@ def SUMIFS(ctx: Context, sums: Any, *pairs: Any) -> float | ErrorValue:
     return _total(picked, ctx)
 
 
-@function("COUNTIF", "raw", "raw", category=C)
+@function("COUNTIF", "raw", "value", errors=True, category=C)
 def COUNTIF(ctx: Context, ref: Any, crit: Any) -> float | ErrorValue:
     """Cells meeting the criterion."""
     if not isinstance(ref, Ref):
@@ -291,7 +293,7 @@ def COUNTIF(ctx: Context, ref: Any, crit: Any) -> float | ErrorValue:
     return float(count)
 
 
-@function("COUNTIFS", "raw", "raw", min_args=2, variadic=True, category=C)
+@function("COUNTIFS", "raw", "value", min_args=2, variadic=True, errors=True, cycle=2, category=C)
 def COUNTIFS(ctx: Context, *pairs: Any) -> float | ErrorValue:
     """Positions where every range meets its criterion.
 

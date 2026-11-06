@@ -422,10 +422,13 @@ class _Generator:
         if fn is not None and name.text.upper() in _LAZY and args:
             self.calls.add(name.text.upper())
             return self.lazy(fn, name.text.upper(), args)
+        if self.arrays:
+            fn = getattr(fn, "in_array", fn)
         kinds: tuple[str, ...] = getattr(fn, "kinds", ())
+        cycle: int = getattr(fn, "cycle", 1)
         parts = []
         for i, arg in enumerate(args):
-            kind = kinds[min(i, len(kinds) - 1)] if kinds else "raw"
+            kind = kind_at(kinds, i, cycle) if kinds else "raw"
             if kind == "matrix":  # follows the formula's own mode, not an array argument's
                 saved, self.arrays = self.arrays, int(self.array_formula)
                 code = self.argument(arg)
@@ -433,6 +436,17 @@ class _Generator:
                     code = self.emit(f"ctx.arr({code})")
                 elif not self.arrays and _is_range(arg, ranges_only=True):
                     self.intersects = True
+                self.arrays = saved
+                parts.append(code)
+                continue
+            if kind == "key":  # follows the formula's own mode, and is one value outside it
+                saved, self.arrays = self.arrays, int(self.array_formula)
+                code = self.argument(arg)
+                if self.arrays:
+                    code = code if isinstance(arg, Leaf) else self.emit(f"ctx.arr({code})")
+                else:
+                    self.intersects = self.intersects or _is_range(arg, ranges_only=True)
+                    code = code if isinstance(arg, Leaf) else self.emit(f"ops.single({code})")
                 self.arrays = saved
                 parts.append(code)
                 continue
@@ -463,6 +477,12 @@ class _Generator:
             self.refs.append(RefSpec("box", where, r, c, r, c))
             return self.emit(f"ctx.cref({sheet}, {self.axis(r, 'r')}, {self.axis(c, 'c')})")
         return self.expr(node)
+
+
+def kind_at(kinds: tuple[str, ...], i: int, cycle: int = 1) -> str:
+    """The kind of argument ``i``: past the declared ones, the last ``cycle`` kinds repeat."""
+    n = len(kinds)
+    return kinds[i] if i < n else kinds[n - cycle + (i - n) % cycle]
 
 
 def _is_range(node: Node, ranges_only: bool = False) -> bool:
