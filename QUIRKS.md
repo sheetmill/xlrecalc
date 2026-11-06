@@ -101,6 +101,12 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   reported. Nor is a union of ranges (`LARGE((A1:A3,C1:C3),1)`, `SUM((A1,B2))`): the formula keeps
   the value the file holds and is reported (capture `modern`). `ROW` and `COLUMN` of a union are
   `#REF!`, as in Excel.
+- How text orders is captured only in part: every pair of 40 ASCII characters and 24 pairs of words,
+  on Excel 16 for Mac (capture `modern`). Those give one consistent order, marks and symbols before
+  digits before letters, with accents after their base letter. The rest is approximated: other
+  ASCII controls sort first and other characters after the letters, by code point, so another
+  script or a symbol outside ASCII may not sort as Excel sorts it. Excel for Windows' order has not
+  been captured and may differ.
 - A row off Excel's grid in a file (`r="99999999999"`): Excel opens the file and drops the cell
   (capture `value_forms`), though it refuses rows 0 and 1048577; the reader refuses every row
   off the grid with a `PackageError`.

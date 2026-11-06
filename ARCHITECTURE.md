@@ -1151,7 +1151,7 @@ One workbook is used from one thread at a time.
    It would answer code, not persist values: saving with values stays `recalculate`. openpyxl
    would be an optional extra, imported when the adapter is used. Beside it,
    `xlrecalc.evaluate(text)` for one formula outside a workbook.
-3. Then: the array-backed store and vectorized templates (numpy as an optional extra), the
+3. Then: a setting or capture for Excel for Windows' text order, the array-backed store and vectorized templates (numpy as an optional extra), the
    array-making functions, iterative calculation with the workbook's settings, a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,
    parallel evaluation of independent template columns on free-threaded Python, and a compiled

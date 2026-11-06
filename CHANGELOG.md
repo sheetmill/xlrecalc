@@ -57,9 +57,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A union of ranges as an argument gave a wrong value with no report: `SUM((A1,B2))` and
   `LARGE((A1,B2),1)` were `#VALUE!`, `COUNT((A1,B2))` was 0. Unions are not implemented; such a
   formula now keeps the value the file holds and is reported.
-- Text compares in Excel's order: marks and symbols before digits, in the order of CLDR's root
-  collation, and accents after their base letter. `"a"<"~"` was TRUE and is FALSE, for the operators,
-  criteria such as `">=a"`, and sorted lookups.
+- Text no longer compares in code-point order, so `"a"<"~"` is FALSE, as in Excel, for the operators,
+  criteria such as `">=a"`, and sorted lookups. Captured on Excel for Mac: every pair of 40 ASCII
+  characters and 24 pairs of words. Marks and symbols sort before digits and letters, and accents
+  after their base letter. Other characters are approximated (`QUIRKS.md`).
 - A formula whose result is an array of references (`INDEX(r,{1;2})`, `OFFSET(A1,{0;1},0)`) stored a
   reference object as its value: the writer left the file's old cached value in place, and the
   report did not say. It now gives Excel's value. A function given such an array, which is not
