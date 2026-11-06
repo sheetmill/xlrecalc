@@ -97,6 +97,9 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   holds and is reported (16 formulas of capture `array_refs`, listed in
   `tests/test_array_refs.py`). `OFFSET`, `INDIRECT` and `INDEX` given an array as the whole formula
   give Excel's value.
+- A formula set through the API that reads a cycle in a workbook whose cached values are trusted, before
+  any evaluation has reached the cycle, is computed from the cycle's cached value; Excel gives 0 (capture
+  `circular_cached`). Once evaluation has met the cycle, the formula is 0, as in Excel.
 - Iterative calculation is not implemented. In a workbook with iteration on, cells on a circular
   reference and cells depending on one keep the values the file holds and are reported under
   `iterative calculation`, once evaluation reaches them (ARCHITECTURE.md §7.2).

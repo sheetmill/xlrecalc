@@ -229,16 +229,6 @@ def test_a_loop_through_a_branch_not_taken_is_computed(tmp_path: Path) -> None:
     assert LABEL not in wb.report.unsupported
 
 
-def test_with_iteration_off_the_cells_are_empty_as_excel_saves_them(tmp_path: Path) -> None:
-    source = book(tmp_path, OFF)
-    out = tmp_path / "out.xlsx"
-    report = xlrecalc.recalculate(source, out)
-    assert report.circular == REPORTED
-    assert not report.uncomputed
-    assert LABEL not in report.unsupported
-    assert [written(out)[a] for a in LOOP] == ["", "", ""]
-
-
 def test_a_file_written_by_openpyxl_with_cached_values_added(tmp_path: Path) -> None:
     """openpyxl sets ``fullCalcOnLoad`` on every file, which is what made the default path wipe."""
     openpyxl = pytest.importorskip("openpyxl")

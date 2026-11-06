@@ -14,6 +14,7 @@ import bisect
 import datetime as dt
 import math
 import traceback
+from collections import defaultdict
 from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
 from typing import Any
@@ -29,7 +30,7 @@ from xlrecalc._arrays import (
     to_array,
 )
 from xlrecalc._coerce import intersect
-from xlrecalc._deps import DependencyIndex
+from xlrecalc._deps import DependencyIndex, Runs
 from xlrecalc._formula import MISSING, FormulaSyntaxError, TokenizeError, compile_formula, parse
 from xlrecalc._formula import template_key as _template_key
 from xlrecalc._formula._codegen import RefSpec
@@ -127,16 +128,6 @@ class _Cells:
 _LARGE_BOX = 256  # cells: smaller boxes are listed again rather than remembered
 
 
-@dataclass(slots=True)
-class _Before:
-    """What a formula cell held before it was evaluated (only with iteration on, §7.2)."""
-
-    value: Value | None
-    box: tuple[int, int, int, int] | None = None  # an anchor's range, and the values in it
-    members: dict[int, Value] | None = None
-    evaluated: bool = False  # an anchor already evaluated since loading
-
-
 class _NotEvaluatedError(Exception):
     """A formula read a formula cell not evaluated yet (§6.3): evaluate that one first."""
 
@@ -218,10 +209,12 @@ class Engine:
         self._strict = False  # every read checked (a formula on a static cycle, §6.3)
         self._volatile: set[int] = set()  # formula cells of volatile templates
         self._changed = False  # a cell changed since volatile cells were last made stale
-        # With iteration on (§7.2): what each cell evaluated held before it, until the end of
-        # the recalculation; and the cells kept, each with whether it had a cached value.
-        self._before: dict[int, _Before] = {}
+        # Cells on a cycle or depending on one (§7.2), each with whether it holds a cached value,
+        # and the runs of rows they make, so that many cycles walk each dependent once.
         self._kept: dict[int, bool] = {}
+        self._kept_runs: Runs = defaultdict(list)
+        self.entered: set[int] = set()
+        """Formula cells set through the API, not read from a file (§7.2)."""
         self.active = (0, 0, 0)
         """The active sheet and its active cell, 0-based: what ``CELL`` without a reference
         reads (capture ``cell_noref``)."""
@@ -376,7 +369,7 @@ class Engine:
         """A formula (file form) or an existing template; ``cached`` is its trusted value.
 
         With ``stale`` the cell is evaluated all the same, and ``cached`` is only what it holds
-        until then (iteration on, §7.2).
+        until then: it stays if the cell turns out to be on a cycle (§7.2).
 
         ``array`` makes it an array formula: ``(dynamic, box)``, a dynamic array with its
         current spill range or a legacy array formula with its declared range (0-based).
@@ -621,7 +614,6 @@ class Engine:
             self._evaluate(list(targets))
         self._settle()
         self._taint()
-        self._before.clear()
         if not self.stale:
             self.stale.clear()  # a set keeps its table when emptied; clearing frees it
         return self.report
@@ -674,7 +666,6 @@ class Engine:
         pending = self.stale
         on_stack: dict[int, int] = {}  # node -> its position on the current path
         path: list[int] = []
-        cyclic: set[int] = set()
         suspects: set[int] = set()  # on a static cycle: evaluated with every read checked
         marked_from = marked_to = 0  # path[marked_from:marked_to] is all in suspects
         clean: set[tuple[int, int, int, int, int]] = set()  # large boxes with nothing stale left
@@ -687,6 +678,8 @@ class Engine:
             while stack:
                 n, expanded = stack.pop()
                 if n not in pending:
+                    if expanded:  # kept while it was on the path, by a cycle closing
+                        on_stack.pop(n, None)
                     continue
                 if expanded:
                     self._strict = n in suspects
@@ -708,7 +701,7 @@ class Engine:
                             else:
                                 stack.append((t, False))
                             continue
-                        cyclic.update(chain)
+                        self._keep_cycle(chain)
                     finally:
                         self._strict = False
                     waits.pop(n, None)
@@ -734,11 +727,6 @@ class Engine:
                     else:
                         suspects.update(path[marked_to:last])
                     marked_to = last
-        if cyclic:
-            if self.iterate:
-                self._keep_iterating(cyclic)
-            else:
-                self._circular(cyclic)
 
     def _check(self, sheet: int, row: int, col: int) -> None:
         """Stop the formula being evaluated if this cell is not evaluated yet (§6.3)."""
@@ -767,102 +755,83 @@ class Engine:
         """A reference made during evaluation (``OFFSET``, ``INDIRECT``): its reads are checked."""
         return Ref(self.checked, sheet, r1, c1, r2, c2)
 
-    def _circular(self, cyclic: set[int]) -> None:
-        """Cells on a cycle and every cell depending on one: Excel leaves them uncalculated.
+    def _keep_cycle(self, chain: set[int]) -> None:
+        """A cycle closed: its cells and every cell depending on them keep what they hold (§7.2).
 
-        With iteration off, Excel calculates none of them and saves each as the empty text
-        (``t="str"`` with an empty ``<v/>``; capture ``circular``), so that is their value.
+        They leave the stale set at once, so evaluation replaces nothing and never reaches a
+        cell depending on them. With iteration off that is what Excel does (capture
+        ``circular_cached``), and the cells are ``circular``; with it on, iterative calculation is
+        not implemented, and they are uncomputed.
         """
-        for n in cyclic | self.dependents(cyclic):
-            sheet, row, col = unpack(n)
-            s = self.sheets[sheet]
-            if row * COLS + col not in s.templates:
-                continue
-            s.values[row * COLS + col] = ""
-            self.stale.discard(n)  # final: a later read must not compute it again
-            self.report.circular.add(CellRef(s.name, row + 1, col + 1))
+        index = self.index()
+        cells: Iterable[int] = chain
+        seeds: Iterable[int] = chain
+        ranges: list[tuple[int, int, int, int]] = []
+        while True:
+            for n in cells:
+                anchor = self.anchors.get(n)
+                if anchor is not None:  # its range changes with it: what reads that follows
+                    sheet = n >> SHEET_SHIFT
+                    for box in (anchor.box, anchor.wanted):
+                        if box is not None:
+                            ranges += [
+                                (sheet, c, box[0], box[2]) for c in range(box[1], box[3] + 1)
+                            ]
+                self._keep(n)
+            found = index.spread(seeds, ranges, self._kept_runs)
+            if not found:
+                return
+            seeds, ranges = (), []
+            cells = [
+                (sheet << SHEET_SHIFT) | (row * COLS + col)
+                for sheet, col, first, last in found
+                for row in range(first, last + 1)
+            ]
 
-    def _keep_iterating(self, cyclic: set[int]) -> None:
-        """Cells on a cycle or depending on one keep their cached values (iteration on, §7.2).
-
-        Iterative calculation is not implemented, so they are reported as uncomputed. A cell
-        without a cached value holds the empty text, and the written file leaves it without
-        one. Evaluation may already have replaced what a cell held, so that comes back.
-        """
-        report = self.report
-        for n in cyclic | self.dependents(cyclic):
-            sheet, row, col = unpack(n)
-            s = self.sheets[sheet]
-            key = row * COLS + col
-            if key not in s.templates:
-                continue
-            before = self._before.get(n)
-            if before is not None:
-                self._restore(n, before)
-            if n not in self._kept:
-                report.unsupported[ITERATIVE] += 1
-            if s.values.get(key) is None:
-                self._kept.setdefault(n, False)
-                s.values[key] = ""
-            else:
-                self._kept.setdefault(n, True)
-            self.stale.discard(n)  # final: a later read must not compute it again
-            report.uncomputed.add(CellRef(s.name, row + 1, col + 1))
-
-    def _remember(self, n: int, sheet: int, row: int, col: int) -> None:
-        """What the cell holds before its evaluation replaces it (iteration on, §7.2)."""
-        s = self.sheets[sheet]
-        before = _Before(s.values.get(row * COLS + col))
-        anchor = self.anchors.get(n)
-        if anchor is not None:
-            r1, c1, r2, c2 = anchor.box
-            before.box = anchor.box
-            before.evaluated = n in self.evaluated_anchors
-            before.members = {r * COLS + c: value for r, c, value in s.box(r1, c1, r2, c2)}
-        self._before[n] = before
-
-    def _restore(self, n: int, before: _Before) -> None:
+    def _keep(self, n: int) -> None:
         sheet, row, col = unpack(n)
         s = self.sheets[sheet]
         key = row * COLS + col
-        if before.members is not None:
-            assert before.box is not None
-            anchor = self.anchors[n]
-            r1, c1, r2, c2 = anchor.box
-            for r, c, _ in list(s.box(r1, c1, r2, c2)):
-                if r * COLS + c != key:
-                    s.set(r, c, BLANK)
-            for k, value in before.members.items():
-                s.values[k] = value
-            self.released.difference_update(
-                node(sheet, r, c)
-                for r in range(before.box[0], before.box[2] + 1)
-                for c in range(before.box[1], before.box[3] + 1)
-            )
-            if anchor.box != before.box:
-                anchor.box = before.box
-                self._index_anchors(sheet)
-            if not before.evaluated:
-                self.evaluated_anchors.discard(n)
-        if before.value is None:
-            s.values.pop(key, None)
+        if key not in s.templates or n in self._kept:
+            return
+        held = s.values.get(key) is not None
+        self._kept[n] = held
+        where = CellRef(s.name, row + 1, col + 1)
+        self.stale.discard(n)  # final: a later read must not compute it again
+        if self.iterate:
+            if not held:
+                s.values[key] = ""
+            self.report.unsupported[ITERATIVE] += 1
+            self.report.uncomputed.add(where)
         else:
-            s.values[key] = before.value
+            if not held:  # from a file, the empty text; entered, 0 (capture circular_cached)
+                s.values[key] = 0.0 if n in self.entered else ""
+            self.report.circular.add(where)
 
     def _reconsider_kept(self) -> None:
         """After a change, kept cells are evaluated again: an edit may have broken the loop."""
         report = self.report
-        for n, had_value in self._kept.items():
+        for n, held in self._kept.items():
             sheet, row, col = unpack(n)
             s = self.sheets[sheet]
             key = row * COLS + col
-            report.uncomputed.discard(CellRef(s.name, row + 1, col + 1))
+            where = CellRef(s.name, row + 1, col + 1)
+            report.uncomputed.discard(where)
+            report.circular.discard(where)
             if key in s.templates:
                 self.stale.add(n)
-                if not had_value:
+                if not held:
                     s.values.pop(key, None)
         del report.unsupported[ITERATIVE]
         self._kept.clear()
+        self._kept_runs.clear()
+
+    def kept_with_values(self) -> Iterator[tuple[str, int, int]]:
+        """Cells on a cycle or after one holding the file's value, as (sheet, row, col), 1-based."""
+        for n, held in self._kept.items():
+            if held:
+                sheet, row, col = unpack(n)
+                yield self.sheets[sheet].name, row + 1, col + 1
 
     def _compute(self, n: int) -> None:
         sheet, row, col = unpack(n)
@@ -871,11 +840,8 @@ class Engine:
         tid = s.templates.at(row, col)
         if tid is None:
             return
-        if self.iterate:
-            if n in self._kept:  # until a change makes it stale again
-                return
-            if n not in self._before:
-                self._remember(n, sheet, row, col)
+        if self._kept and n in self._kept:  # until a change makes it stale again
+            return
         template = self.templates[tid]
         where = CellRef(s.name, row + 1, col + 1)
         if template.unsupported:

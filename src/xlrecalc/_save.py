@@ -38,6 +38,8 @@ def lookups(engine: Engine) -> dict[str, Lookup]:
     uncomputed: dict[str, set[tuple[int, int]]] = {}
     for cell in engine.report.uncomputed:
         uncomputed.setdefault(cell.sheet.casefold(), set()).add((cell.row, cell.col))
+    for name, row, col in engine.kept_with_values():  # the file holds it already (§7.2)
+        uncomputed.setdefault(name.casefold(), set()).add((row, col))
     for sheet in engine.sheets:
         if not sheet.templates:
             continue

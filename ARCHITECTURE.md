@@ -471,25 +471,28 @@ correct for any graph, and what `_engine.py` does.
 
 Detected during evaluation: a chain of cells, each stopped by reading the next, that closes on
 itself (capture `static_cycle`). A loop of references through a branch not taken is none, wherever
-its cells sit. With iterative calculation off, as Excel's default, Excel calculates
-no cell on a cycle and no cell depending on one: it shows each as empty and saves it as the empty
-text (`t="str"` with an empty `<v/>`), with alerts on or off (captures `circular` and
-`circular_alerts`, `capture/circular_probe.py`). The engine gives those cells the empty text and
-the report lists them. A file whose calculation settings let Excel trust its cached values shows
-the cached values of cycle cells as written. Excel finds cycles through the references a formula
-evaluates, so `=IF(FALSE,A13,5)` in A13 is 5, and so does the engine: a static cycle is a
-suspect, evaluated with every read checked, and only a read of a cell on the current path is
-circular (§6.3).
+its cells sit: Excel finds cycles through the references a formula evaluates, so `=IF(FALSE,A13,5)`
+in A13 is 5, and so does the engine. A static cycle is a suspect, evaluated with every read checked,
+and only a read of a cell on the current path is circular (§6.3).
 
-With iterative calculation on (`<calcPr iterate="1">`), which is not implemented, whenever
-evaluation reaches a cycle, by any path, its cells and every cell depending on one keep their
-cached values, and the report lists them as uncomputed under the label `iterative calculation`,
-not as circular. The store holds a file's cached values during a full evaluation in such a
-workbook, and what a cell held before its evaluation comes back when a cycle closes, so
-`Workbook.value` and the written file agree. A cycle cell without a cached value is the empty
-text and the file leaves it without one. After a change, these cells are evaluated again, since
-an edit may have broken the loop. A run that trusts cached values evaluates nothing, so it changes
-nothing and reports nothing, whether or not the workbook holds a cycle.
+With iterative calculation off, as Excel's default, Excel calculates no cell on a cycle and no cell
+depending on one. It keeps the value the file holds, on opening, with `fullCalcOnLoad`, after a full
+recalculation and after saving (capture `circular_cached`), and a cell with no value is the empty text
+(`t="str"` with an empty `<v/>`; captures `circular` and `circular_alerts`). So does the engine, and
+the report lists them as circular. After an edit, Excel keeps the values of a loop when a constant
+it reads changes, and calculates its cells when the loop is broken; a formula entered on a loop or
+reading one is 0, not the empty text (capture `circular_cached`).
+
+With iterative calculation on (`<calcPr iterate="1">`), which is not implemented, the cells are kept
+in the same way, and the report lists them as uncomputed under the label `iterative calculation`,
+not as circular. A cell without a cached value is the empty text, and the file leaves it without one.
+
+When a cycle closes, its cells and every cell depending on them leave the stale set at once, so
+evaluation replaces none of their values and `Workbook.value` and the written file agree. They share
+one walk (`DependencyIndex.spread`), so that many cycles reading into one chain visit it once. A full
+evaluation holds a file's cached values in the store for this. After a change, these cells are
+evaluated again, since an edit may have broken the loop. A run that trusts cached values evaluates
+nothing, so it changes nothing and reports nothing, whether or not the workbook holds a cycle.
 
 Excel recalculates a workbook with iteration on every time it opens it, whatever
 `fullCalcOnLoad` says, starting from the cached values (capture `iterate_open`): a cell adding 1

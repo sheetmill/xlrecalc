@@ -235,6 +235,7 @@ class Workbook:
             engine.set_formula(sheet, row, col, text, array=(True, (row, col, row, col)))
         except (FormulaSyntaxError, TokenizeError) as exc:
             raise FormulaError(f"{formula!r}: {exc}") from exc
+        engine.entered.add(node(sheet, row, col))
         self._edits.setdefault(sheet, {})[row + 1, col + 1] = True
         self._marked[sheet, row, col] = (intersects, legacy)
 

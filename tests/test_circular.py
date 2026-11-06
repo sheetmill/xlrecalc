@@ -2,14 +2,21 @@
 
 Captures ``circular`` (alerts off) and ``circular_alerts`` (alerts on, the warning dismissed by a
 person), from ``capture/circular_probe.py``: Excel calculates no cell on a cycle or depending on
-one, and saves each as the empty text.
+one, and saves each without a cached value as the empty text. Capture ``circular_cached``, from
+``capture/circular_cached_probe.py``: one with a cached value keeps it, on opening, with
+``fullCalcOnLoad``, after a full recalculation and after saving.
 """
 
 import ast
+import re
+import zipfile
 from pathlib import Path
+from xml.sax.saxutils import escape
 
 import pytest
 
+import xlrecalc
+from tests.test_xlsx import package
 from xlrecalc._engine import Engine
 from xlrecalc._formula._tokens import column_number
 
@@ -121,3 +128,138 @@ def test_only_references_evaluated_make_a_cycle(group):
             assert engine.get(0, r - 1, column_number(column) - 1) == ast.literal_eval(value), (
                 address
             )
+
+
+CACHED = rows("circular_cached")
+HELD = [r for r in CACHED if not r[0].startswith("excel_edited")]
+EDITED = [r for r in CACHED if r[0].startswith("excel_edited")]
+
+
+def shown(row: list[str]) -> object:
+    """What Excel showed, as the engine holds it."""
+    value = row[6].split("|")[0]
+    try:
+        return float(value)
+    except ValueError:
+        return value
+
+
+@pytest.mark.excel
+@pytest.mark.parametrize("row", HELD, ids=lambda r: f"{r[0]}:{r[1]}:{r[2]}")
+def test_excel_keeps_the_cached_values_of_a_cycle(row):
+    _variant, _action, _number, tag, _formula, cached, _shown, saved = row
+    if tag == "control":
+        return
+    if cached == "None":
+        assert shown(row) == ""
+        assert "<v />" in saved
+    else:
+        value = ast.literal_eval(cached)
+        assert str(shown(row)).removesuffix(".0") == value
+        assert f"<v>{value}</v>" in saved
+
+
+def book(tmp_path: Path, cells: list[tuple[str, str, str | None, str | None]], calc: str) -> Path:
+    """A workbook of column A's rows as the capture has them, with the constants it reads."""
+    xml = []
+    for number, (_tag, formula, cached, kind) in enumerate(cells, 1):
+        t = f' t="{kind}"' if kind else ""
+        v = "<v/>" if cached is None else f"<v>{cached}</v>"
+        constant = '<c r="B1"><v>1</v></c>' if number == 1 else ""
+        constant = '<c r="B6"><v>2</v></c>' if number == 6 else constant
+        xml.append(
+            f'<row r="{number}"><c r="A{number}"{t}><f>{escape(formula)}</f>{v}</c>{constant}</row>'
+        )
+    path = tmp_path / "book.xlsx"
+    path.write_bytes(package("".join(xml), workbook_extra=calc))
+    return path
+
+
+def capture_cells(variant: str) -> list[tuple[str, str, str | None, str | None]]:
+    out = []
+    for r in CACHED:
+        if r[0] == variant and r[1] == "none":
+            cached = ast.literal_eval(r[5])
+            kind = "str" if isinstance(cached, str) and not cached.isdigit() else None
+            out.append((r[3], r[4], cached, kind))
+    return out
+
+
+@pytest.mark.parametrize("variant", ["excel_both_flag", "excel_held_flag"])
+@pytest.mark.parametrize("full", [False, True])
+def test_the_engine_keeps_them_as_excel_does(tmp_path, variant, full):
+    cells = capture_cells(variant)
+    source = book(tmp_path, cells, '<calcPr fullCalcOnLoad="1"/>')
+    out = tmp_path / "out.xlsx"
+    report = xlrecalc.recalculate(source, out, full=full)
+    wb = xlrecalc.load(source, trust_cached=not full)
+    wb.recalculate()
+    with zipfile.ZipFile(out) as z:
+        sheet = z.read("xl/worksheets/sheet1.xml").decode()
+    excel = [r for r in CACHED if r[0] == variant and r[1] == "full"]
+    assert len(excel) == len(cells)
+    for row in excel:
+        number = int(row[2])
+        assert wb.value(f"A{number}") == shown(row), number
+        found = re.search(rf'<c r="A{number}"[^>]*>(.*?)</c>', sheet)
+        assert found is not None
+        cached = ast.literal_eval(row[5])
+        if row[3] != "control" and cached is not None:
+            assert f"<v>{cached}</v>" in found[1]
+    assert len(report.circular) == len(cells) - 1
+    assert not report.uncomputed
+
+
+def _edited_engine(tmp_path) -> xlrecalc.Workbook:
+    cells = capture_cells("excel_edited")
+    if not cells:
+        cells = [
+            ("pair", "A2+B1", "901", None),
+            ("pair", "A1+1", "902", None),
+            ("dependent", "A1*2", "903", None),
+            ("control", "B1*2", "904", None),
+        ]
+    return xlrecalc.load(book(tmp_path, cells, "<calcPr/>"))
+
+
+@pytest.mark.parametrize(
+    "action", ["set_input", "set_formula", "break", "new_cycle", "new_dependent"]
+)
+def test_an_edit_does_what_it_does_in_excel(tmp_path, action):
+    wb = _edited_engine(tmp_path)
+    wb.recalculate(full=True)  # the engine has met the cycle, as Excel has
+    if action == "set_input":
+        wb.set("B1", 5.0)
+    elif action == "set_formula":
+        wb.set_formula("A2", "=A1+2")
+    elif action == "break":
+        wb.set_formula("A2", "=7")
+    elif action == "new_cycle":
+        wb.set_formula("A5", "=A5+1")
+    else:
+        wb.set_formula("A6", "=A1*3")
+    wb.recalculate()
+    for row in [r for r in EDITED if r[1] == action]:
+        if row[3] == "control" and action != "set_input":  # the full recalculation above reached it
+            continue
+        expected = shown(row)
+        expected = None if expected == "" else expected
+        assert wb.value(f"A{row[2]}") == expected, row
+
+
+def test_a_new_formula_reading_a_cycle_no_evaluation_has_reached(tmp_path):
+    """QUIRKS.md: a trusting load has not met the cycle, so this reads its cached value."""
+    wb = _edited_engine(tmp_path)
+    wb.set_formula("A6", "=A1*3")
+    assert wb.value("A6") == 2703.0
+    assert not wb.report.circular
+
+
+def test_many_cycles_feeding_one_chain_walk_it_once(tmp_path):
+    """A hundred thousand loops all read by one long chain: not a walk of the chain per loop."""
+    cells: dict[str, object] = {f"A{r}": f"=A{r}+1" for r in range(1, 50_001)}
+    cells["B1"] = "=SUM(A1:A50000)"
+    cells.update({f"B{r}": f"=B{r - 1}+1" for r in range(2, 50_001)})
+    engine = Engine.from_cells({"probe": cells})
+    engine.recalculate()
+    assert len(engine.report.circular) == 100_000

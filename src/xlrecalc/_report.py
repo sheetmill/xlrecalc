@@ -69,8 +69,8 @@ class Report:
         exceptions: Cells where an internal error was caught, with the error; such a cell is
             ``#VALUE!`` and uncomputed.
         circular: Cells on a circular reference or depending on one, with iterative calculation
-            off. Excel leaves them uncalculated, and their value is the empty text, as Excel saves
-            them.
+            off. Excel leaves them uncalculated: they keep the value the file holds, and one
+            without a value is the empty text (0 for a formula set through the API).
         refused: Cells whose formula Excel refuses in a file, with the reason. They keep their
             cached value and are written as they were; Excel's repair turns each into a
             constant holding that value when it opens the file.

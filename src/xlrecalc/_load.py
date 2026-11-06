@@ -161,7 +161,13 @@ def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
     refusals: dict[str, object] = {}
     dependents: list[tuple[int, int, int, Value | None]] = []
     report = engine.report
-    hold = not full or engine.iterate  # a cycle keeps its cached value with iteration on (§7.2)
+
+    def held(tid: int, value: Value | None) -> Value | None:
+        """What a formula holds until evaluated: its cached value, which a cycle keeps (§7.2)."""
+        if full and not engine.iterate and engine.templates[tid].unsupported:
+            return None
+        return value
+
     boxes: list[tuple[int, int, int, int, int]] = []  # ranges array formulas fill (§7.7)
     for cell in book.cells(book.sheets[index]):
         row, col = cell.row - 1, cell.column - 1
@@ -202,7 +208,7 @@ def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
                 row,
                 col,
                 template=tid,
-                cached=cached if hold else None,
+                cached=held(tid, cached),
                 stale=full,
                 array=(dynamic, box),
             )
@@ -226,9 +232,7 @@ def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
             continue
         if f.kind == "shared" and f.si is not None:
             masters[f.si] = tid
-        engine.set_formula(
-            index, row, col, template=tid, cached=cached if hold else None, stale=full
-        )
+        engine.set_formula(index, row, col, template=tid, cached=held(tid, cached), stale=full)
     for row, col, si, cached in dependents:
         master = masters.get(si)
         if master is None:  # no master in the file: keep the value, as there is no formula
@@ -236,7 +240,7 @@ def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
                 s.set(row, col, cached)
             continue
         engine.set_formula(
-            index, row, col, template=master, cached=cached if hold else None, stale=full
+            index, row, col, template=master, cached=held(master, cached), stale=full
         )
 
 

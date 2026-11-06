@@ -60,6 +60,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   cells now keep their cached values and are reported as uncomputed, under `iterative calculation`
   in `Report.unsupported`, and not in `Report.circular`. A file already run through 0.1.0 has lost
   those values until Excel calculates it again.
+- **A circular reference with iteration off lost its values too.** A file holding values for cells on a
+  loop, or depending on one, had them replaced with the empty text, whenever those cells were
+  evaluated: the same paths as above. The rule came from captures of files with no cached values. Excel
+  keeps the values, on opening, with `fullCalcOnLoad`, after a full recalculation and after saving
+  (capture `circular_cached`), and so does the package; a cell with no value is still the empty text,
+  and one set through the API is 0, as Excel gives. They stay in `Report.circular`.
 - A loop of references through a branch not taken was called circular, depending on the order of
   its cells: `A1` as `=IF(TRUE,1,B1)` and `B1` as `=A1+1` were both empty, and are 1 and 2 (capture
   `static_cycle`). Only references that evaluation follows make a cycle.

@@ -196,7 +196,7 @@ def compare_workbook(path: str) -> dict[str, Any]:
     report = engine.report
     circular = {node(_index(engine, c), c.row - 1, c.col - 1) for c in report.circular}
     uncomputed = {node(_index(engine, c), c.row - 1, c.col - 1) for c in report.uncomputed}
-    kept = set(engine._kept)
+    kept = set(engine._kept) if engine.iterate else set()
     full: dict[int, Any] = {}
     for n in formulas:
         sheet, row, col = unpack(n)

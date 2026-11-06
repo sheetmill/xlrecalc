@@ -212,6 +212,21 @@ class DependencyIndex:
         ``ranges`` adds whole runs of changed cells, as (sheet, col, first row, last row).
         """
         found: Runs = defaultdict(list)
+        self.spread(cells, ranges, found)
+        return found
+
+    def spread(
+        self,
+        cells: Iterable[int],
+        ranges: Iterable[tuple[int, int, int, int]],
+        found: Runs,
+    ) -> list[tuple[int, int, int, int]]:
+        """Add to ``found`` what depends on the cells; returns the runs it did not hold yet.
+
+        What ``found`` already holds is not walked again, so that many calls sharing one
+        ``found`` cost what one walk over all their cells costs.
+        """
+        new: list[tuple[int, int, int, int]] = []
         queue: list[tuple[int, int, int, int]] = list(ranges)
         for n in cells:
             sheet = n >> SHEET_SHIFT
@@ -221,8 +236,10 @@ class DependencyIndex:
             sheet, col, first, last = queue.pop()
             for s, c, a, b in self.direct(sheet, col, first, last):
                 for lo, hi in _add(found[(s, c)], a, b):
-                    queue.append((s, c, lo, hi))
-        return found
+                    run = (s, c, lo, hi)
+                    new.append(run)
+                    queue.append(run)
+        return new
 
 
 def _make(tid: int, target: int | None, spec: RefSpec, absolute: bool) -> _Edge:
