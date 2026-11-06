@@ -62,6 +62,16 @@ file Excel saved, not AppleScript's values, gives the exact double (Excel writes
 digits) and the real error code (AppleScript returns `missing value` for an error). New cases
 go at the end of their suite so earlier case numbers stay stable; a recapture that changes any expected result is reviewed as a change of evidence.
 
+**Crafted and extreme input.** A test or script that feeds the package crafted or extreme input
+(hostile packages, huge ranges, extreme numbers) runs in a child process under the memory watchdog
+of `tests/watchdog.py`, which kills it at 4 GB: `bounded` for a test, `uv run python -m
+tests.watchdog -- COMMAND` for anything else. A time limit alone does not bound memory, and
+`ulimit -v` is no limit on macOS; a sweep without the watchdog once used 82 GB on a 24 GB Mac,
+and macOS paused every application, Excel included. A killed run (return code 137, or a missing
+result) is a finding: find out why before running it again. No such sweep runs while Excel
+captures, and a capture starts only once Excel answers (for example `osascript -e 'tell
+application "Microsoft Excel" to get version'`).
+
 **Adding a function or a family of functions.** Write its cases at the end of a suite in
 `capture/suites.py`, or as a suite of its own (each case a formula with `{1}`, `{2}`... for its
 inputs; fixed lookup tables through a suite's `fixed` cells), across argument kinds, edges and

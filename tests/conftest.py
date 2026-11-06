@@ -1,5 +1,12 @@
 import pytest
 
+from tests.watchdog import watch_session
+
+
+def pytest_sessionstart(session: pytest.Session) -> None:
+    """A guard that regresses must cost a failed run, not the machine's memory."""
+    watch_session()
+
 
 def pytest_addoption(parser: pytest.Parser) -> None:
     parser.addoption(
