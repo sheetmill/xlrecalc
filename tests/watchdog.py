@@ -6,11 +6,19 @@ limit. ``watch_session`` covers every other test, by stopping the whole run. Bot
 of the process group with ``ps``: a thread could not do this, since one huge allocation holds the
 interpreter's lock, and ``ulimit -v`` is not a limit on macOS.
 
+What the watchdog runs dies with it. The command runs in a session of its own, so that the whole
+group can be killed; if the watchdog were killed in turn (a time limit around it, say), the command
+would live on with no limit at all. A guardian process holds the read end of a pipe whose only
+writer is the watchdog: when the watchdog dies, by any signal, SIGKILL included, the kernel closes
+the pipe, and the guardian kills the command's group. A watchdog that ends normally first writes a
+byte, and the guardian leaves the group alone.
+
     uv run python -m tests.watchdog -- uv run pytest   # anything else, under the same limit
 """
 
 from __future__ import annotations
 
+import contextlib
 import functools
 import importlib
 import os
@@ -61,7 +69,11 @@ class Result:
 def run(
     command: list[str], *, limit: int = LIMIT, seconds: float = 3600.0, capture: bool = True
 ) -> Result:
-    """Run a command in its own process group, and kill the group past ``limit`` or ``seconds``."""
+    """Run a command in its own process group, and kill the group past ``limit`` or ``seconds``.
+
+    The group is killed too if this process dies before the command ends (see the module's
+    docstring).
+    """
     start = time.monotonic()
     with tempfile.TemporaryFile("w+", encoding="utf-8", errors="replace") as log:
         process = subprocess.Popen(
@@ -71,21 +83,57 @@ def run(
             start_new_session=True,
             cwd=_ROOT,
         )
-        peak = 0
-        killed = None
-        while process.poll() is None:
-            peak = max(peak, _group_size(process.pid))
-            if peak > limit:
-                killed = f"used {peak / GIB:.1f} GiB, past the limit of {limit / GIB:.1f} GiB"
-            elif time.monotonic() - start > seconds:
-                killed = f"still running after {seconds:.0f} s"
-            if killed:
+        alive = _guard(process.pid)
+        try:
+            peak = 0
+            killed = None
+            while process.poll() is None:
+                peak = max(peak, _group_size(process.pid))
+                if peak > limit:
+                    killed = f"used {peak / GIB:.1f} GiB, past the limit of {limit / GIB:.1f} GiB"
+                elif time.monotonic() - start > seconds:
+                    killed = f"still running after {seconds:.0f} s"
+                if killed:
+                    os.killpg(process.pid, signal.SIGKILL)
+                    break
+                time.sleep(_SAMPLE)
+            process.wait()
+        except BaseException:  # interrupted here: the group must not outlive the watchdog
+            with contextlib.suppress(ProcessLookupError):
                 os.killpg(process.pid, signal.SIGKILL)
-                break
-            time.sleep(_SAMPLE)
-        process.wait()
+            os.close(alive)
+            raise
+        os.write(alive, b"x")  # finished: the guardian leaves the group alone
+        os.close(alive)
         log.seek(0)
         return Result(process.returncode, log.read(), peak, killed)
+
+
+def _guard(group: int) -> int:
+    """Start a guardian that kills ``group`` when this process dies; the pipe end to hold.
+
+    The guardian has a session of its own, so a signal to this process or its group does not
+    reach it, and it inherits only the read end: the pipe closes exactly when this process does.
+    """
+    read, write = os.pipe()
+    subprocess.Popen(
+        [sys.executable, str(Path(__file__)), "--guard", str(group), str(read)],
+        pass_fds=(read,),
+        start_new_session=True,
+    )
+    os.close(read)
+    return write
+
+
+def _guardian(group: int, fd: int) -> None:
+    """Wait for the watchdog: a byte means it finished, end of file means it died."""
+    try:
+        finished = os.read(fd, 1) == b"x"
+    except OSError:
+        finished = False
+    if not finished:
+        with contextlib.suppress(ProcessLookupError, PermissionError):
+            os.killpg(group, signal.SIGKILL)
 
 
 def bounded(
@@ -134,7 +182,11 @@ def in_child(
 
 
 def watch_session(limit: int = LIMIT) -> None:
-    """Stop this process, the whole test run, if its memory passes ``limit``."""
+    """Stop this process, the whole test run, if its memory passes ``limit``.
+
+    The watcher ends when this process does. A test's child under ``bounded`` runs in a session
+    of its own, so killing this process does not reach it; its guardian ends it instead.
+    """
     subprocess.Popen(
         [sys.executable, str(Path(__file__)), "--session", str(os.getpid()), str(limit)],
         start_new_session=True,
@@ -172,6 +224,9 @@ def main(arguments: list[str]) -> int:
     """The command line: ``-- COMMAND`` runs a command under :data:`LIMIT`."""
     if arguments[:1] == ["--call"]:
         _call(*arguments[1:5])
+        return 0
+    if arguments[:1] == ["--guard"]:
+        _guardian(int(arguments[1]), int(arguments[2]))
         return 0
     if arguments[:1] == ["--session"]:
         _watch_process(int(arguments[1]), int(arguments[2]))
