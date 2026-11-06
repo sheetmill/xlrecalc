@@ -1283,6 +1283,8 @@ def textfmt() -> list[Case]:
     for v in KINDS_ARG:
         add(Case("fixed", "FIXED(1234.5,1,{1})", (v,)))
     cases += [Case("fixed", "FIXED(1234.5,,TRUE)"), Case("dollar", "DOLLAR(1234.5,)")]
+    # A format of a quoted "#" alone: literal text, not a run of # (xlformat 0.3's TEXT).
+    cases += [Case("text", 'TEXT(1,"""#""")'), Case("text", 'TEXT(-1,"""#""")')]
     return cases
 
 

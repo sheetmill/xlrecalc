@@ -102,12 +102,11 @@ def VALUE_(ctx: Context, v: Any) -> float | ErrorValue:
 
 @function("TEXT", "value", "value", category=T)
 def TEXT(ctx: Context, v: Any, fmt: Any) -> str | ErrorValue:
-    """A value formatted with a number format, by xlformat (§8.3).
+    """A value formatted with a number format, by ``xlformat.text_function`` (§8.3).
 
-    Text that reads as a number or a date is formatted as that number; an empty format gives
-    the empty text for a number (``-`` for a negative one) and leaves text and logicals as
-    text; a logical format is ``#VALUE!``
-    (capture ``textfmt``).
+    Text that reads as a number or a date is formatted as that number, and a logical format is
+    ``#VALUE!`` (capture ``textfmt``); xlformat does the rest as ``TEXT`` does it: the empty
+    format, a format Excel refuses, a value the format cannot show.
     """
     if v is BLANK or v is MISSING:
         v = 0.0
@@ -122,18 +121,9 @@ def TEXT(ctx: Context, v: Any, fmt: Any) -> str | ErrorValue:
     fmt = to_text(fmt, ctx)
     if isinstance(fmt, ErrorValue):
         return fmt
-    if fmt == "":  # a number becomes empty (its sign stays); text and logicals stay as text
-        if isinstance(v, float) and not isinstance(v, bool):
-            return "-" if v < 0 else ""
-        return to_text(v, ctx)
-    try:
-        text = xlformat.format_value(v, fmt, date1904=ctx.date1904, quirks=ctx.quirks.to_xlformat())
-    except xlformat.FormatError:
-        return VALUE
-    # A cell shows a run of "#" for a value its date format cannot show (a negative date);
-    # TEXT gives #VALUE! instead (captured).
-    if text and set(text) == {"#"}:
-        return VALUE
+    text = xlformat.text_function(v, fmt, date1904=ctx.date1904, quirks=ctx.quirks.to_xlformat())
+    if isinstance(text, xlformat.ExcelError):
+        return ErrorValue(str(text))
     return text
 
 

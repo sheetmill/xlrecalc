@@ -22,7 +22,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A cell reference to a column past XFD gave a key that collided with another cell; the cell is
   placed by position, as Excel places it.
 
+### Changed
+- Requires xlformat 0.3 or later (`xlformat>=0.3,<1`): `TEXT` is xlformat's `text_function`,
+  which does what `TEXT` does differently from a cell's display (a blank is 0, the empty format,
+  a format Excel refuses, a value the format cannot show).
+
 ### Fixed
+- `TEXT(1,"""#""")`, a format of a quoted `#` alone, gave `#VALUE!` where Excel gives `#`
+  (`-#` for -1): any result made only of `#` was taken for a run Excel shows when a value does
+  not fit.
 - A part that is not well-formed XML (a worksheet or the shared strings) raised expat's
   `ExpatError`; it is a `PackageError`, as documented. So do damaged data and false sizes
   (`zipfile.BadZipFile`, `zlib.error`), a row number off the sheet (`OverflowError`), a number,

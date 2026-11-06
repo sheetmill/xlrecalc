@@ -382,9 +382,11 @@ def _figure(text: str) -> int:
     return int(text.replace(",", ""))
 
 
-@pytest.mark.parametrize("page", ["README.md", "CHANGELOG.md"])
+@pytest.mark.parametrize("page", ["README.md"])
 def test_stated_evidence_is_the_capture_run(page):
-    """The evidence figures the README and the changelog state, from the capture run.
+    """The evidence figures the README states, from the capture run.
+
+    The changelog's figures are those of their release, and stay as they were.
 
     Only counts that hold on every platform are published: a row within its declared tolerance
     on one platform may be identical on another, whose math library differs in the last bits.

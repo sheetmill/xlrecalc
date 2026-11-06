@@ -703,7 +703,7 @@ xlformat is a required dependency, imported normally.
 
 | function | how |
 |---|---|
-| `TEXT(value, format)` | `xlformat.format_value` with the shared quirks and the workbook's date system; a format xlformat refuses (`FormatError`) gives `#VALUE!` |
+| `TEXT(value, format)` | `xlformat.text_function` with the shared quirks and the workbook's date system; the `ExcelError` it returns (a format Excel refuses, a value the format cannot show) becomes the `ErrorValue` |
 | `DOLLAR`, `FIXED` | built in |
 | `&`, text coercion of numbers | built in: Excel's text form of a number is not a cell format (§4.3) |
 | `VALUE`, `DATEVALUE`, `TIMEVALUE`, implicit text to number | built in: parsing is not formatting, and xlformat has no parser (§4.3) |
@@ -719,8 +719,10 @@ a negative that rounds to zero when its decimals are 0 or more (`DOLLAR(-0.004)`
 space), and a format Excel refuses in a file (`0.00e+00`) gives `#VALUE!`; text that reads as
 a number or a date is formatted as that number (`TEXT("12","0.00")` is `12.00`), an empty
 format gives the empty text for a number (`-` for a negative one) and leaves text and logicals
-as text, and a logical format is `#VALUE!`. The seam asks xlformat for width-less output and
-maps those cases; capture `textfmt` (24 values in 39 formats and argument kinds) covers them,
+as text, a logical format is `#VALUE!`, and a format of a quoted `#` alone is that text
+(`TEXT(1,"""#""")` is `#`, `-#` for -1). The seam converts text that reads as a number
+and refuses a logical format; xlformat's `text_function` does the rest as `TEXT` does it.
+Capture `textfmt` (24 values in 39 formats and argument kinds) covers them,
 every row but one matching: Excel reads `b` as the Buddhist-era year (`TEXT(12.5,"abc")` is
 `a43c`), which xlformat does not know yet. `TEXT(x,"General")` matches xlformat's `General`
 on every captured row but two: with a three-digit exponent Excel keeps what fits 11

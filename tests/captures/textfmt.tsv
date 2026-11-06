@@ -1,7 +1,7 @@
 # suite: textfmt
 # excel: 16.114.3 for Mac, locale en_US
 # date_system: 1900
-# captured: 2026-11-02
+# captured: 2026-11-05
 # generator: capture/suites.py:textfmt
 # method: openpyxl writes the formula in column A and the inputs in B onward (floats as
 #   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
@@ -1423,3 +1423,5 @@ textfmt	fixed	1411	FIXED(1234.5,1,{1})	(FormulaInput('=""'),)	e	#VALUE!
 textfmt	fixed	1412	FIXED(1234.5,1,{1})	(ErrorValue('#N/A'),)	e	#N/A
 textfmt	fixed	1413	FIXED(1234.5,,TRUE)	()	str	'1234.50'
 textfmt	dollar	1414	DOLLAR(1234.5,)	()	str	'$1,235'
+textfmt	text	1415	TEXT(1,"""#""")	()	str	'#'
+textfmt	text	1416	TEXT(-1,"""#""")	()	str	'-#'

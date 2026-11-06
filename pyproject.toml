@@ -11,7 +11,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "Ethan Post" }]
 requires-python = ">=3.11"
-dependencies = ["xlformat>=0.2,<1"]
+dependencies = ["xlformat>=0.3,<1"]
 keywords = ["excel", "xlsx", "formula", "spreadsheet", "recalculate", "openpyxl"]
 classifiers = [
   "Development Status :: 3 - Alpha",

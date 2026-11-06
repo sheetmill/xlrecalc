@@ -480,7 +480,7 @@ library differs in the last bits; the rows that match either way do not.
 | `TBILLPRICE` | | absent | | | | | | | |
 | `TBILLYIELD` | | absent | | | | | | | |
 | `TDIST` | | absent | | | | | | | |
-| `TEXT` | text | implemented | 1167 | 1164 | 0 | 0 | 3 |  |  |
+| `TEXT` | text | implemented | 1169 | 1166 | 0 | 0 | 3 |  |  |
 | `TEXTAFTER` | | absent | | | | | | | |
 | `TEXTBEFORE` | | absent | | | | | | | |
 | `TEXTJOIN` | | absent | | | | | | | |
