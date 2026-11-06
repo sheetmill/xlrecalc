@@ -1768,6 +1768,90 @@ def modern() -> list[Case]:
     return cases
 
 
+_GUESSES: list[float] = [-0.99, -0.9, -0.5, -0.2, -0.1, -0.01, 0.0, 0.001, 0.01, 0.05,
+                         0.1, 0.2, 0.3, 0.5, 1.0, 2.0, 5.0, 10.0, 100.0, 1000.0]  # fmt: skip
+_FLOW_SHAPES: list[tuple[float, ...]] = [
+    (-100.0, 110.0),
+    (-100.0, 200.0),
+    (-100.0, 50.0),
+    (-100.0, 60.0, 60.0),
+    (-1000.0, 100.0, 100.0, 100.0, 1100.0),
+    (-1000.0, 300.0, 400.0, 500.0, 200.0, 100.0),
+    (-100.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 110.0),
+    (-1.0, 2.5, -1.5),  # two roots, 0 and 0.5
+    (-1000.0, 5000.0, -6000.0, 2000.0),  # several roots
+    (-100.0, 230.0, -132.0),  # two roots, 0.1 and 0.2
+    (1.0, 1.0, 1.0),  # no root
+    (-1.0, -1.0, -1.0),  # no root
+    (-1e6, 3e5, 3e5, 3e5, 3e5),
+    (-1e-6, 3e-7, 3e-7, 3e-7, 3e-7),
+    (-100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 200.0),
+]
+_RATE_SHAPES: list[tuple[float, float, float, float, float]] = [
+    (12.0, -100.0, 1000.0, 0.0, 0.0),
+    (12.0, -100.0, 1000.0, 0.0, 1.0),
+    (360.0, -500.0, 100000.0, 0.0, 0.0),
+    (10.0, 0.0, -100.0, 200.0, 0.0),
+    (5.0, -100.0, 0.0, 600.0, 0.0),
+    (2.0, -60.0, 100.0, 0.0, 0.0),
+    (1.0, 0.0, -100.0, 110.0, 0.0),
+    (24.0, -50.0, 1000.0, -200.0, 0.0),
+    (12.0, 100.0, 1000.0, 0.0, 0.0),  # no root
+    (0.5, -10.0, 100.0, 0.0, 0.0),
+    (120.0, -1.0, 100.0, 0.0, 0.0),
+    (3.0, -1e6, 2.5e6, 0.0, 0.0),
+]
+_XIRR_DATES = [39814.0 + 365.0 * k for k in range(5)]  # 2009 on: no leap day until 2012
+_XIRR_SHAPES: list[tuple[tuple[float, ...], tuple[float, ...]]] = [
+    ((-100.0, 110.0), (39814.0, 40179.0)),
+    ((-100.0, 200.0), (39814.0, 40179.0)),
+    ((-100.0, 50.0), (39814.0, 40179.0)),
+    ((-100.0, 60.0, 60.0), (39814.0, 40179.0, 40544.0)),
+    ((-1000.0, 300.0, 400.0, 500.0), (39814.0, 39900.0, 40100.0, 40400.0)),
+    ((-1.0, 2.5, -1.5), (39814.0, 40179.0, 40544.0)),
+    ((-100.0, 230.0, -132.0), (39814.0, 40179.0, 40544.0)),
+    ((1.0, 1.0), (39814.0, 40179.0)),
+    ((-100.0, 110.0), (39814.0, 39815.0)),
+    ((-100.0, 110.0), (39814.0, 43000.0)),
+]
+# Flows with a double root at 0.1: Newton halves the error each step, so where a guess 2^k away
+# turns into #NUM! shows the number of iterations and the stopping test.
+_DOUBLE_ROOT = (-1.0, 2.2, -1.21)
+
+
+def iteration() -> list[Case]:
+    cases: list[Case] = []
+    add = cases.append
+    for flows in _FLOW_SHAPES:
+        n = len(flows)
+        for g in _GUESSES:
+            add(Case("irr", f"IRR({{1}}:{{{n}}},{{{n + 1}}})", (*flows, g)))
+    for nper, pmt, pv, fv, when in _RATE_SHAPES:
+        for g in _GUESSES:
+            add(Case("rate", "RATE({1},{2},{3},{4},{5},{6})", (nper, pmt, pv, fv, when, g)))
+    for flows, dates in _XIRR_SHAPES:
+        n = len(flows)
+        f = f"XIRR({{1}}:{{{n}}},{{{n + 1}}}:{{{2 * n}}},{{{2 * n + 1}}})"
+        for g in _GUESSES:
+            add(Case("xirr", f, (*flows, *dates, g)))
+    for k in range(-44, 5):
+        for sign in (1.0, -1.0):
+            g = 0.1 + sign * 2.0**k
+            if g > -1:
+                add(Case("irr double root", "IRR({1}:{3},{4})", (*_DOUBLE_ROOT, g)))
+                add(Case("xirr double root", "XIRR({1}:{3},{4}:{6},{7})",
+                         (*_DOUBLE_ROOT, *_XIRR_DATES[:3], g)))  # fmt: skip
+                add(Case("rate double root", "RATE(2,2.2,-1,-1.21,0,{1})", (g,)))
+    settle, maturity = 39814.0, 43466.0  # 2009-01-01 to 2019-01-01
+    for frequency in (1.0, 2.0, 4.0):
+        for basis in (0.0, 1.0, 3.0):
+            for coupon in (0.0, 0.01, 0.05, 0.1, 0.5):
+                for price in (10.0, 50.0, 90.0, 100.0, 110.0, 200.0, 1000.0):
+                    add(Case("yield", "YIELD({1},{2},{3},{4},100,{5},{6})",
+                             (settle, maturity, coupon, price, frequency, basis)))  # fmt: skip
+    return cases
+
+
 SUITES = {
     "number_text": Suite(number_text),
     "text_number": Suite(text_number),
@@ -1788,4 +1872,5 @@ SUITES = {
     "textfmt": Suite(textfmt),
     "rounding": Suite(rounding),
     "modern": Suite(modern, fixed=MODERN_TABLE),
+    "iteration": Suite(iteration),
 }
