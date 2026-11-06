@@ -596,11 +596,17 @@ legacy array over ten full columns (10,485,760 cells) is computed and written in
 **Size.** Every array a formula makes is checked against `ReadLimits.max_array_cells` (default
 10,485,760, ten full columns) before anything is allocated: a range an array formula fills, a
 reference taken as an array, the result of an operation between arrays (a column times a row
-makes every pair), and the ranges `SUMPRODUCT` and `SUMIF` walk position by position. A formula
-that would pass it keeps its cached value and is reported (§7.6). Excel itself refuses a file
-declaring an array over the whole sheet, opens one over ten full columns at a cost of about 3 GB
-of its own memory, and computes `SUMPRODUCT` over whole columns without making the array
-(capture `array_size`).
+makes every pair), and the ranges `SUMPRODUCT` walks position by position. A formula that would
+pass it keeps its cached value and is reported (§7.6). Excel itself refuses a file declaring an
+array over the whole sheet, opens one over ten full columns at a cost of about 3 GB of its own
+memory, and computes `SUMPRODUCT` over whole columns without making the array (capture
+`array_size`).
+
+`SUMIF`, `SUMIFS` and `COUNTIFS` make no array and need no limit: they walk non-blank cells, as
+`COUNTIF` does. A blank adds nothing to a sum. In a count, a criterion that rejects a blank
+limits the matches to that range's non-blank cells; otherwise a position fails only where a
+non-blank cell fails its criterion, and every other position counts. Their cost follows the cells
+a sheet holds, and they give Excel's value over a whole sheet (capture `array_functions`).
 
 **Formulas set through the API** are dynamic arrays, as Excel 365 takes a typed formula: `=A1:A5*2`
 spills. Capture `marker_typed` (ten formulas a person typed into Excel's formula bar and saved;
@@ -646,7 +652,7 @@ from exact and ulp matches, under the same guard.
 
 ### 8.2 Status
 
-Implemented, each against captures (suite `functions`, 1,094 rows): `SUM`, `IF`, `NOW`, `AVERAGE`,
+Implemented, each against captures (suite `functions`, 1,174 rows): `SUM`, `IF`, `NOW`, `AVERAGE`,
 `VLOOKUP`, `ROUND`, `TODAY`, `SUBTOTAL`, `MIN`, `MAX`, `SUMIF`, `MONTH`, `YEAR`, `AND`,
 `ISNUMBER`, `OR`, `CONCATENATE`, `MATCH`, `ABS`, `EOMONTH`, `WEEKDAY`, `INDEX`, `TEXT`,
 `HLOOKUP`, `NA`, `COUNTA`, `DATE`, `COUNTIF`, `SUMPRODUCT`, `COUNT`, `LEFT`, `ISNA`, `VALUE`,
@@ -833,8 +839,9 @@ fetches anything a file names:
   one, are refused (capture `value_forms`); a column reference off the grid places the cell by
   position, as Excel does. Calculation settings, styles and metadata indexes that lead nowhere
   are ignored.
-- *Array sizes*: no formula makes an array past `ReadLimits.max_array_cells` (§7.7), so a
-  small file cannot ask for an array of 17 billion cells.
+- *Array sizes*: no formula makes an array past `ReadLimits.max_array_cells`, and the functions
+  that walk a range over a whole sheet visit only its non-blank cells (§7.7), so a small file
+  cannot ask for an array, or a list of positions, of 17 billion cells.
 - *No DTDs*, protection against XML entity attacks: Open Packaging Conventions parts never
   declare a DTD, so a part that declares one is refused before it is parsed. The check is expat
   reading the part's prolog, with a handler that refuses a doctype declaration and stops at the

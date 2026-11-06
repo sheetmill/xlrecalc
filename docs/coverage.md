@@ -105,7 +105,7 @@ library differs in the last bits; the rows that match either way do not.
 | `COUNTA` | statistical | implemented | 6 | 6 | 0 | 0 | 0 |  |  |
 | `COUNTBLANK` | statistical | implemented | 5 | 5 | 0 | 0 | 0 |  |  |
 | `COUNTIF` | math | implemented | 59 | 59 | 0 | 0 | 0 |  |  |
-| `COUNTIFS` | math | implemented | 1 | 1 | 0 | 0 | 0 |  |  |
+| `COUNTIFS` | math | implemented | 34 | 34 | 0 | 0 | 0 |  |  |
 | `COUPDAYBS` | financial | implemented | 90 | 90 | 0 | 0 | 0 |  |  |
 | `COUPDAYS` | financial | implemented | 101 | 100 | 0 | 0 | 1 |  |  |
 | `COUPDAYSNC` | financial | implemented | 90 | 90 | 0 | 0 | 0 |  |  |
@@ -457,8 +457,8 @@ library differs in the last bits; the rows that match either way do not.
 | `SUBSTITUTE` | | absent | | | | | | | |
 | `SUBTOTAL` | math | partial | 14 | 14 | 0 | 0 | 0 |  | codes 101 to 111 act as 1 to 11: row visibility is not read |
 | `SUM` | math | implemented | 64 | 63 | 1 | 0 | 0 |  |  |
-| `SUMIF` | math | implemented | 42 | 42 | 0 | 0 | 0 |  |  |
-| `SUMIFS` | math | implemented | 2 | 2 | 0 | 0 | 0 |  |  |
+| `SUMIF` | math | implemented | 63 | 63 | 0 | 0 | 0 |  |  |
+| `SUMIFS` | math | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
 | `SUMPRODUCT` | math | implemented | 7 | 7 | 0 | 0 | 0 |  |  |
 | `SUMSQ` | statistical | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
 | `SUMX2MY2` | | absent | | | | | | | |

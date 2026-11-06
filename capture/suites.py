@@ -432,6 +432,26 @@ def functions() -> list[Case]:
     add(Case("subtotal", "SUBTOTAL(9,{1}:{2})", (1.0, FormulaInput("=SUBTOTAL(9,C1:C1)"))))
     add(Case("na", "NA()"))
     add(Case("true", "TRUE()"))
+    # The SUMIF family over blanks, errors and the sheet's edge: which cells a walk may skip.
+    for c in ("", "=", "<>", "<>1", "<>abc", "<=2", ">0"):
+        add(Case("countifs", "COUNTIFS({1}:{10},{11})", (*MIXED, c)))
+        add(Case("countifs", "COUNTIFS({1}:{10},{11},{1}:{10},{11})", (*MIXED, c)))
+        add(Case("countifs", 'COUNTIFS({1}:{10},{11},{1}:{10},"<>2")', (*MIXED, c)))
+        add(Case("countifs", 'COUNTIFS({1}:{9},{11},{2}:{10},">0")', (*MIXED, c)))
+        add(Case("sumifs", "SUMIFS({1}:{10},{1}:{10},{11})", (*MIXED, c)))
+        add(Case("sumifs", "SUMIFS({2}:{10},{1}:{9},{11})", (*MIXED, c)))
+        add(Case("sumifs", 'SUMIFS({2}:{10},{1}:{9},{11},{2}:{10},"<>2")', (*MIXED, c)))
+        add(Case("sumif", "SUMIF({1}:{9},{11},{2}:{10})", (*MIXED, c)))
+    errors: tuple[Input, ...] = (1.0, NA, None, FormulaInput("=1/0"), 2.0)
+    for c in ("<>1", ">0", "", "#N/A", "<>"):
+        add(Case("sumif", "SUMIF({1}:{5},{6})", (*errors, c)))
+        add(Case("sumif", "SUMIF({1}:{5},{6},{1}:{5})", (*errors, c)))
+        add(Case("sumifs", "SUMIFS({1}:{5},{1}:{5},{6})", (*errors, c)))
+        add(Case("countifs", "COUNTIFS({1}:{5},{6})", (*errors, c)))
+    add(Case("sumif", 'SUMIF($Z$1:$AA$6,">0",$XFD$1)'))
+    add(Case("sumif", 'SUMIF($Z$1:$AA$6,"<>z",$XFD$1)'))
+    add(Case("sumif", 'SUMIF($AC$1:$AD$5,"<>",$XFD$1048576)'))
+    add(Case("sumif", 'SUMIF($AC$1:$AD$5,">0",$AD$1048576)'))
     return cases
 
 

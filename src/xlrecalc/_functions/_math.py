@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 import random
 import statistics
+from collections.abc import Callable
 from decimal import ROUND_DOWN, ROUND_HALF_DOWN, ROUND_HALF_UP, ROUND_UP, Decimal
 from fractions import Fraction
 from typing import Any
@@ -16,6 +17,7 @@ from xlrecalc._compare import criterion
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._registry import function
 from xlrecalc._numtext import DBL_MIN
+from xlrecalc._store import MAX_COL, MAX_ROW
 from xlrecalc._values import BLANK, ErrorValue, Ref
 
 NUM, DIV0, VALUE = ErrorValue.NUM, ErrorValue.DIV0, ErrorValue.VALUE
@@ -198,64 +200,79 @@ def PI(ctx: Context) -> float:
     return math.pi
 
 
+def _numeric(v: Any) -> bool:
+    """What the ``SUMIF`` family adds: numbers and errors, not text or logicals."""
+    return isinstance(v, float | ErrorValue) and not isinstance(v, bool)
+
+
 @function("SUMIF", "raw", "raw", "raw", min_args=2, category=C)
 def SUMIF(ctx: Context, ref: Any, crit: Any, sums: Any = MISSING) -> float | ErrorValue:
     """Sum of the cells of ``sums`` (or ``ref``) whose cell in ``ref`` meets the criterion.
 
-    ``sums`` takes the shape of ``ref`` from its top-left cell, as Excel does.
+    ``sums`` takes the shape of ``ref`` from its top-left cell, as Excel does, cut off at the
+    sheet's edge. Only non-blank cells are visited, so the cost follows the cells a sheet holds,
+    not a range's size (§7.7).
     """
     if not isinstance(ref, Ref):
         return VALUE
     target = ref
     if isinstance(sums, Ref):
         target = Ref(sums.source, sums.sheet, sums.r1, sums.c1,
-                     sums.r1 + ref.rows - 1, sums.c1 + ref.columns - 1)  # fmt: skip
+                     min(sums.r1 + ref.rows - 1, MAX_ROW),
+                     min(sums.c1 + ref.columns - 1, MAX_COL))  # fmt: skip
     elif sums is not MISSING:
         return VALUE
     test = criterion(scalar(crit, ctx), ctx.quirks)
-    if test(BLANK):  # blank cells match: every position counts
-        check_area(ref.rows, ref.columns, getattr(ctx, "max_array_cells", None))
-        positions: Any = ((r, c) for r in range(ref.rows) for c in range(ref.columns))
-        picked = (target.value(r, c) for r, c in positions if test(ref.value(r, c)))
-    else:  # only non-blank cells can match: visit those
-        picked = (target.value(r, c) for r, c, v in ref.cells() if test(v))
-    return _total(
-        (v for v in picked if isinstance(v, float | ErrorValue) and not isinstance(v, bool)), ctx
-    )
+    if test(BLANK):  # a blank cell of ref matches, and a blank cell of target adds nothing
+        ref.check()
+        picked = (v for r, c, v in target.cells() if _numeric(v) and test(ref.value(r, c)))
+    else:  # only non-blank cells of ref can match
+        rows, cols = target.rows, target.columns
+        cells = ref.cells()
+        picked = (target.value(r, c) for r, c, v in cells if r < rows and c < cols and test(v))
+    return _total((v for v in picked if _numeric(v)), ctx)
 
 
-def _multi(ctx: Context, pairs: tuple[Any, ...]) -> list[tuple[int, int]] | ErrorValue:
-    """Positions meeting every (range, criterion) pair."""
-    if not pairs or len(pairs) % 2:
+def _conditions(
+    ctx: Context, pairs: tuple[Any, ...]
+) -> list[tuple[Ref, Callable[[Any], bool]]] | ErrorValue:
+    """The (range, test) of every (range, criterion) pair, all of one shape, or ``#VALUE!``.
+
+    The ranges are checked as a read of all their cells would check them (§6.3), though the walks
+    below read only some of those cells.
+    """
+    if not pairs or len(pairs) % 2 or not isinstance(pairs[0], Ref):
         return VALUE
-    first = pairs[0]
-    if not isinstance(first, Ref):
-        return VALUE
-    rows, cols = first.rows, first.columns
-    keep = [(r, c) for r in range(rows) for c in range(cols)]
+    rows, cols = pairs[0].rows, pairs[0].columns
+    conditions = []
     for k in range(0, len(pairs), 2):
         ref = pairs[k]
         if not isinstance(ref, Ref) or ref.rows != rows or ref.columns != cols:
             return VALUE
-        test = criterion(scalar(pairs[k + 1], ctx), ctx.quirks)
-        keep = [(r, c) for r, c in keep if test(ref.value(r, c))]
-    return keep
+        ref.check()
+        conditions.append((ref, criterion(scalar(pairs[k + 1], ctx), ctx.quirks)))
+    return conditions
 
 
 @function("SUMIFS", "raw", "raw", "raw", min_args=3, variadic=True, category=C)
 def SUMIFS(ctx: Context, sums: Any, *pairs: Any) -> float | ErrorValue:
-    """Sum of ``sums`` where every range meets its criterion."""
+    """Sum of ``sums`` where every range meets its criterion.
+
+    Only the non-blank cells of ``sums`` are visited: a blank one adds nothing (§7.7).
+    """
     if not isinstance(sums, Ref):
         return VALUE
-    keep = _multi(ctx, pairs)
-    if isinstance(keep, ErrorValue):
-        return keep
+    conditions = _conditions(ctx, pairs)
+    if isinstance(conditions, ErrorValue):
+        return conditions
     if sums.rows != pairs[0].rows or sums.columns != pairs[0].columns:
         return VALUE
-    values = (sums.value(r, c) for r, c in keep)
-    return _total(
-        (v for v in values if isinstance(v, float | ErrorValue) and not isinstance(v, bool)), ctx
+    picked = (
+        v
+        for r, c, v in sums.cells()
+        if _numeric(v) and all(test(ref.value(r, c)) for ref, test in conditions)
     )
+    return _total(picked, ctx)
 
 
 @function("COUNTIF", "raw", "raw", category=C)
@@ -276,9 +293,24 @@ def COUNTIF(ctx: Context, ref: Any, crit: Any) -> float | ErrorValue:
 
 @function("COUNTIFS", "raw", "raw", min_args=2, variadic=True, category=C)
 def COUNTIFS(ctx: Context, *pairs: Any) -> float | ErrorValue:
-    """Positions where every range meets its criterion."""
-    keep = _multi(ctx, pairs)
-    return keep if isinstance(keep, ErrorValue) else float(len(keep))
+    """Positions where every range meets its criterion.
+
+    Only non-blank cells are visited (§7.7). When a criterion rejects a blank, only that range's
+    non-blank cells can count; otherwise every position counts but those where a non-blank cell
+    fails its criterion.
+    """
+    conditions = _conditions(ctx, pairs)
+    if isinstance(conditions, ErrorValue):
+        return conditions
+    for lead, lead_test in conditions:
+        if not lead_test(BLANK):
+            count = 0
+            for r, c, v in lead.cells():
+                count += lead_test(v) and all(test(ref.value(r, c)) for ref, test in conditions)
+            return float(count)
+    rows, cols = pairs[0].rows, pairs[0].columns
+    failed = {r * cols + c for ref, test in conditions for r, c, v in ref.cells() if not test(v)}
+    return float(rows * cols - len(failed))
 
 
 @function("SUMPRODUCT", "array", min_args=1, variadic=True, category=C)

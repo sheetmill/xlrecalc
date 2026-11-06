@@ -167,6 +167,10 @@ class Ref:
         """The non-blank values, row-major, as ``cells`` yields them, in one list."""
         return self.source.values(self.sheet, self.r1, self.c1, self.r2, self.c2)  # type: ignore[attr-defined, no-any-return]
 
+    def check(self) -> None:
+        """Check the box as reading all of it would, without reading it (``OFFSET``, §6.3)."""
+        self.source.box(self.sheet, self.r1, self.c1, self.r2, self.c2)  # type: ignore[attr-defined]
+
     def is_cell(self) -> bool:
         return self.r1 == self.r2 and self.c1 == self.c2
 

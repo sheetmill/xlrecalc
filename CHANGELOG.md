@@ -12,11 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   with more cells (a range an array formula fills, a reference taken as an array, the result of
   an operation between arrays); one that would keeps the value the file holds and is reported.
   `ReadLimits` now bounds computing as well as reading.
+- `SUMIF`, `SUMIFS` and `COUNTIFS` visit only a range's non-blank cells, so they are computed over
+  any range, whole sheets included (capture `array_functions`).
 
 ### Security
 - A small file could make the engine allocate without bound: a legacy array formula declared
   over the whole sheet, or `SUMPRODUCT(D!A:XFD*1)` over a sheet of two cells, made arrays of 17
   billion cells. See `max_array_cells` above.
+- `SUMIFS` and `COUNTIFS` listed every position of their ranges before testing a criterion, so a
+  small file with `SUMIFS(D!A:XFD,D!A:XFD,">0")` used memory without bound, past any limit. They
+  now make no such list; nor does `SUMIF`, which refused such a range when blank cells matched.
 - The refusal of a DTD in a package part could be bypassed: it matched the prolog's bytes, so a
   `<!DOCTYPE>` after a long comment (200 KB) or processing instruction (900 KB), in UTF-16, or in
   a worksheet part whose name does not end in `.xml` (`data.bin`) was accepted. expat now reads
@@ -37,6 +42,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- `SUMIF` with a sum range that runs past the sheet's edge read cells from the next row; it stops
+  at the edge, as Excel does.
 - Writing an evaluated array formula took time quadratic in its rows and about 1.5 KB per cell;
   a declared array costs about 180 bytes a cell from reading to writing, and one over ten full
   columns takes about 18 s and 1.8 GiB.

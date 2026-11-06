@@ -1,8 +1,10 @@
 """``ReadLimits.max_array_cells``: every route by which a formula makes an array is bounded.
 
 Over the limit, a formula keeps the value the file holds and is reported; within it, the array
-is computed. Capture ``array_size`` has what Excel does with such arrays. Each test runs under
-the memory watchdog: if a check regresses, the test fails instead of the machine running out.
+is computed. ``SUMIF``, ``SUMIFS`` and ``COUNTIFS`` make no array: they visit non-blank cells, and
+are computed at any size. Captures ``array_size`` and ``array_functions`` have what Excel does.
+Each test runs under the memory watchdog: if a check regresses, the test fails instead of the
+machine running out.
 """
 
 from __future__ import annotations
@@ -10,6 +12,7 @@ from __future__ import annotations
 import io
 import tempfile
 from pathlib import Path
+from xml.sax.saxutils import escape as xml_escape
 
 import pytest
 
@@ -19,6 +22,7 @@ from tests.watchdog import GIB, bounded
 from xlrecalc import ReadLimits
 from xlrecalc._xlsx import Book
 
+CAPTURES = Path(__file__).with_name("captures")
 LIMIT_LABEL = "an array of more than"
 
 
@@ -76,7 +80,6 @@ def test_a_declared_range_past_the_limit_keeps_its_value(array):
         "SUMPRODUCT(D!A:XFD*1)",  # a reference made into an array
         "SUMPRODUCT(D!A:XFD)",  # SUMPRODUCT's own grids
         "SUMPRODUCT((D!A1:A1048576+0)*(D!A1:XFD1+0))",  # a column times a row: every pair
-        'SUMIF(D!A:XFD,"")',  # every position of a range, blank cells matching
     ],
 )
 @bounded
@@ -104,6 +107,34 @@ def test_the_limit_can_be_lowered():
     assert_kept(recalculated(two_sheets("1", array="A1:A5"), limits))
     book = recalculated(two_sheets("D!A1:A4*1", array="A1:A4"), limits)
     assert [book.value(f"S!A{r}") for r in range(1, 5)] == [1.0, 0.0, 0.0, 0.0]
+
+
+def excel_results() -> dict[str, float]:
+    """The ``SUMIF`` family in capture ``array_functions``: each formula's last value read."""
+    results = {}
+    lines = (CAPTURES / "array_functions.tsv").read_text(encoding="utf-8").splitlines()
+    for line in lines:
+        reads = [f for f in line.split("\t") if f.startswith("read: ") and " | " in f]
+        if reads and line.startswith(("SUMIF", "COUNTIF")):
+            results[line.split("\t")[0]] = float(reads[-1][6:].split(" | ")[0])
+    return results
+
+
+@pytest.mark.parametrize(("formula", "excel"), sorted(excel_results().items()))
+@bounded
+def test_the_sumif_family_gives_excels_value_at_any_size(formula, excel):
+    book = recalculated(two_sheets(xml_escape(formula)))
+    assert book.value("S!A1") == excel
+    assert not book.report.uncomputed
+
+
+@pytest.mark.parametrize(
+    "formula", ['SUMIFS(D!A:XFD,D!A:XFD,"")', 'COUNTIFS(D!A:XFD,"")', 'SUMIF(D!A:XFD,"")']
+)
+@bounded
+def test_the_sumif_family_makes_no_array(formula):
+    book = recalculated(two_sheets(formula), ReadLimits(max_array_cells=4))
+    assert not book.report.uncomputed
 
 
 @bounded

@@ -1,7 +1,7 @@
 # suite: functions
 # excel: 16.114.3 for Mac, locale en_US
 # date_system: 1900
-# captured: 2026-11-01
+# captured: 2026-11-05
 # generator: capture/suites.py:functions
 # method: openpyxl writes the formula in column A and the inputs in B onward (floats as
 #   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
@@ -1104,3 +1104,83 @@ functions	subtotal	1091	SUBTOTAL({11},{1}:{10})	(1.0, 2.0, '3', True, None, 'abc
 functions	subtotal	1092	SUBTOTAL(9,{1}:{2})	(1.0, FormulaInput('=SUBTOTAL(9,C1:C1)'))	n	1.0
 functions	na	1093	NA()	()	e	#N/A
 functions	true	1094	TRUE()	()	b	True
+functions	countifs	1095	COUNTIFS({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '')	n	2.0
+functions	countifs	1096	COUNTIFS({1}:{10},{11},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '')	n	2.0
+functions	countifs	1097	COUNTIFS({1}:{10},{11},{1}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '')	n	2.0
+functions	countifs	1098	COUNTIFS({1}:{9},{11},{2}:{10},">0")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '')	n	0.0
+functions	sumifs	1099	SUMIFS({1}:{10},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '')	n	0.0
+functions	sumifs	1100	SUMIFS({2}:{10},{1}:{9},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '')	n	0.0
+functions	sumifs	1101	SUMIFS({2}:{10},{1}:{9},{11},{2}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '')	n	0.0
+functions	sumif	1102	SUMIF({1}:{9},{11},{2}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '')	n	0.0
+functions	countifs	1103	COUNTIFS({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '=')	n	1.0
+functions	countifs	1104	COUNTIFS({1}:{10},{11},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '=')	n	1.0
+functions	countifs	1105	COUNTIFS({1}:{10},{11},{1}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '=')	n	1.0
+functions	countifs	1106	COUNTIFS({1}:{9},{11},{2}:{10},">0")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '=')	n	0.0
+functions	sumifs	1107	SUMIFS({1}:{10},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '=')	n	0.0
+functions	sumifs	1108	SUMIFS({2}:{10},{1}:{9},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '=')	n	0.0
+functions	sumifs	1109	SUMIFS({2}:{10},{1}:{9},{11},{2}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '=')	n	0.0
+functions	sumif	1110	SUMIF({1}:{9},{11},{2}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '=')	n	0.0
+functions	countifs	1111	COUNTIFS({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>')	n	9.0
+functions	countifs	1112	COUNTIFS({1}:{10},{11},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>')	n	9.0
+functions	countifs	1113	COUNTIFS({1}:{10},{11},{1}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>')	n	8.0
+functions	countifs	1114	COUNTIFS({1}:{9},{11},{2}:{10},">0")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>')	n	2.0
+functions	sumifs	1115	SUMIFS({1}:{10},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>')	n	6.0
+functions	sumifs	1116	SUMIFS({2}:{10},{1}:{9},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>')	n	5.0
+functions	sumifs	1117	SUMIFS({2}:{10},{1}:{9},{11},{2}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>')	n	3.0
+functions	sumif	1118	SUMIF({1}:{9},{11},{2}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>')	n	5.0
+functions	countifs	1119	COUNTIFS({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>1')	n	9.0
+functions	countifs	1120	COUNTIFS({1}:{10},{11},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>1')	n	9.0
+functions	countifs	1121	COUNTIFS({1}:{10},{11},{1}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>1')	n	8.0
+functions	countifs	1122	COUNTIFS({1}:{9},{11},{2}:{10},">0")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>1')	n	1.0
+functions	sumifs	1123	SUMIFS({1}:{10},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>1')	n	5.0
+functions	sumifs	1124	SUMIFS({2}:{10},{1}:{9},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>1')	n	3.0
+functions	sumifs	1125	SUMIFS({2}:{10},{1}:{9},{11},{2}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>1')	n	3.0
+functions	sumif	1126	SUMIF({1}:{9},{11},{2}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>1')	n	3.0
+functions	countifs	1127	COUNTIFS({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>abc')	n	9.0
+functions	countifs	1128	COUNTIFS({1}:{10},{11},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>abc')	n	9.0
+functions	countifs	1129	COUNTIFS({1}:{10},{11},{1}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>abc')	n	8.0
+functions	countifs	1130	COUNTIFS({1}:{9},{11},{2}:{10},">0")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>abc')	n	1.0
+functions	sumifs	1131	SUMIFS({1}:{10},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>abc')	n	6.0
+functions	sumifs	1132	SUMIFS({2}:{10},{1}:{9},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>abc')	n	0.5
+functions	sumifs	1133	SUMIFS({2}:{10},{1}:{9},{11},{2}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>abc')	n	-1.5
+functions	sumif	1134	SUMIF({1}:{9},{11},{2}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<>abc')	n	0.5
+functions	countifs	1135	COUNTIFS({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<=2')	n	4.0
+functions	countifs	1136	COUNTIFS({1}:{10},{11},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<=2')	n	4.0
+functions	countifs	1137	COUNTIFS({1}:{10},{11},{1}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<=2')	n	3.0
+functions	countifs	1138	COUNTIFS({1}:{9},{11},{2}:{10},">0")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<=2')	n	1.0
+functions	sumifs	1139	SUMIFS({1}:{10},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<=2')	n	1.5
+functions	sumifs	1140	SUMIFS({2}:{10},{1}:{9},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<=2')	n	0.5
+functions	sumifs	1141	SUMIFS({2}:{10},{1}:{9},{11},{2}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<=2')	n	-1.5
+functions	sumif	1142	SUMIF({1}:{9},{11},{2}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '<=2')	n	0.5
+functions	countifs	1143	COUNTIFS({1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>0')	n	3.0
+functions	countifs	1144	COUNTIFS({1}:{10},{11},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>0')	n	3.0
+functions	countifs	1145	COUNTIFS({1}:{10},{11},{1}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>0')	n	2.0
+functions	countifs	1146	COUNTIFS({1}:{9},{11},{2}:{10},">0")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>0')	n	1.0
+functions	sumifs	1147	SUMIFS({1}:{10},{1}:{10},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>0')	n	7.5
+functions	sumifs	1148	SUMIFS({2}:{10},{1}:{9},{11})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>0')	n	2.0
+functions	sumifs	1149	SUMIFS({2}:{10},{1}:{9},{11},{2}:{10},"<>2")	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>0')	n	0.0
+functions	sumif	1150	SUMIF({1}:{9},{11},{2}:{10})	(1.0, 2.0, '3', True, None, 'abc', 4.5, FormulaInput('=""'), 0.0, -1.5, '>0')	n	2.0
+functions	sumif	1151	SUMIF({1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '<>1')	e	#N/A
+functions	sumif	1152	SUMIF({1}:{5},{6},{1}:{5})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '<>1')	e	#N/A
+functions	sumifs	1153	SUMIFS({1}:{5},{1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '<>1')	e	#N/A
+functions	countifs	1154	COUNTIFS({1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '<>1')	n	4.0
+functions	sumif	1155	SUMIF({1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '>0')	n	3.0
+functions	sumif	1156	SUMIF({1}:{5},{6},{1}:{5})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '>0')	n	3.0
+functions	sumifs	1157	SUMIFS({1}:{5},{1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '>0')	n	3.0
+functions	countifs	1158	COUNTIFS({1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '>0')	n	2.0
+functions	sumif	1159	SUMIF({1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '')	n	0.0
+functions	sumif	1160	SUMIF({1}:{5},{6},{1}:{5})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '')	n	0.0
+functions	sumifs	1161	SUMIFS({1}:{5},{1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '')	n	0.0
+functions	countifs	1162	COUNTIFS({1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '')	n	1.0
+functions	sumif	1163	SUMIF({1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '#N/A')	e	#N/A
+functions	sumif	1164	SUMIF({1}:{5},{6},{1}:{5})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '#N/A')	e	#N/A
+functions	sumifs	1165	SUMIFS({1}:{5},{1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '#N/A')	e	#N/A
+functions	countifs	1166	COUNTIFS({1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '#N/A')	n	1.0
+functions	sumif	1167	SUMIF({1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '<>')	e	#N/A
+functions	sumif	1168	SUMIF({1}:{5},{6},{1}:{5})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '<>')	e	#N/A
+functions	sumifs	1169	SUMIFS({1}:{5},{1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '<>')	e	#N/A
+functions	countifs	1170	COUNTIFS({1}:{5},{6})	(1.0, ErrorValue('#N/A'), None, FormulaInput('=1/0'), 2.0, '<>')	n	4.0
+functions	sumif	1171	SUMIF($Z$1:$AA$6,">0",$XFD$1)	()	n	0.0
+functions	sumif	1172	SUMIF($Z$1:$AA$6,"<>z",$XFD$1)	()	n	0.0
+functions	sumif	1173	SUMIF($AC$1:$AD$5,"<>",$XFD$1048576)	()	n	0.0
+functions	sumif	1174	SUMIF($AC$1:$AD$5,">0",$AD$1048576)	()	n	0.0
