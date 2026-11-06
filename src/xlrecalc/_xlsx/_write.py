@@ -439,14 +439,17 @@ def patch_cells(
     p.buffer_text = True
     p.StartElementHandler, p.EndElementHandler, p.CharacterDataHandler = start, end, text
     first = True
-    while chunk := source.read(_CHUNK):
-        if first:
-            _check_encoding(chunk[:200], name)
-            first = False
-        buf += chunk
-        p.Parse(chunk, False)
-        flush(max(safe, base))
-    p.Parse(b"", True)
+    try:
+        while chunk := source.read(_CHUNK):
+            if first:
+                _check_encoding(chunk[:200], name)
+                first = False
+            buf += chunk
+            p.Parse(chunk, False)
+            flush(max(safe, base))
+        p.Parse(b"", True)
+    except xml.parsers.expat.ExpatError as exc:
+        raise PackageError(f"{name}: {exc}") from exc
     flush(base + len(buf))
     if remaining:
         raise PackageError(f"{name}: no sheetData to hold the edited cells")

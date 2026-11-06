@@ -274,7 +274,10 @@ class Book:
                 self._strings = []
             else:
                 with self._package.part(part) as f:
-                    self._strings = read_shared_strings(f)
+                    try:
+                        self._strings = read_shared_strings(f)
+                    except xml.parsers.expat.ExpatError as exc:
+                        raise PackageError(f"{part}: {exc}") from exc
         return self._strings
 
     def sheet(self, name: str) -> SheetInfo:
@@ -292,7 +295,10 @@ class Book:
             raise ValueError(f"{info.name!r} is a {info.kind}, not a worksheet")
         strings = self.shared_strings
         with self._package.part(info.part) as f:
-            yield from read_cells(f, strings)
+            try:
+                yield from read_cells(f, strings)
+            except xml.parsers.expat.ExpatError as exc:
+                raise PackageError(f"{info.part}: {exc}") from exc
 
     def active_cell(self, sheet: str | SheetInfo) -> tuple[int, int]:
         """A worksheet's active cell (``sheetView`` ``selection activeCell``), 1-based (row, col).

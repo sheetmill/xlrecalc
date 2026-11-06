@@ -813,9 +813,12 @@ fetches anything a file names:
   compress about 5:1, but a legitimately repetitive one reaches 400:1, close to deflate's
   limit. Duplicate part names are refused.
 - *No DTDs*, protection against XML entity attacks: Open Packaging Conventions parts never
-  declare a DTD, so a part whose prolog holds `<!DOCTYPE` (after an optional byte-order mark,
-  XML declaration and comments) is refused before it is parsed. This makes entity expansion impossible whatever
-  expat the Python build links. The bundled expat (2.7 and 2.9 in Python 3.11 to 3.14) already
+  declare a DTD, so a part that declares one is refused before it is parsed. The check is expat
+  reading the part's prolog, with a handler that refuses a doctype declaration and stops at the
+  first element, so no encoding (UTF-16 included), comment or processing instruction hides one,
+  and it applies to every part read, whatever its name; a prolog longer than 1 MiB is refused.
+  This makes entity expansion impossible whatever expat the Python build links. A part that is
+  not well-formed is a `PackageError`. The bundled expat (2.7 and 2.9 in Python 3.11 to 3.14) already
   refuses the billion-laughs and quadratic-blowup documents ("limit on input amplification
   factor") and undefined external entities, but ignores an external parameter entity rather
   than refusing it, and distribution builds may link an older system expat. Tests feed each of

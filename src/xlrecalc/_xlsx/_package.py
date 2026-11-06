@@ -1,9 +1,11 @@
 """The zip package: bounded, checked access to its parts (ARCHITECTURE.md §9.1).
 
 Every part is read through a reader that counts decompressed bytes against ``ReadLimits`` (the
-archive's own size fields are never trusted) and refuses a part whose XML declares a DTD before
+archive's own size fields are never trusted) and refuses a part that declares a DTD before
 anything parses it: Open Packaging Conventions parts never declare one, so refusing it rules
-out entity expansion whatever expat the Python build links.
+out entity expansion whatever expat the Python build links. The check is expat's own reading of
+the prolog, so no encoding, comment or processing instruction hides a DTD from it, and it
+applies to every part, whatever its name.
 """
 
 from __future__ import annotations
@@ -11,8 +13,8 @@ from __future__ import annotations
 import io
 import os
 import posixpath
-import re
 import xml.etree.ElementTree as ET
+import xml.parsers.expat
 import zipfile
 from dataclasses import dataclass
 from typing import IO, BinaryIO
@@ -21,7 +23,7 @@ __all__ = ["LimitError", "Package", "PackageError", "ReadLimits"]
 
 _GIB = 1 << 30
 _PKG_REL = "{http://schemas.openxmlformats.org/package/2006/relationships}"
-_PROLOG = re.compile(rb"(?:\xef\xbb\xbf)?\s*(?:<\?.*?\?>|<!--.*?-->)?", re.S)
+_PROLOG_BOUND = 1 << 20
 
 
 class PackageError(ValueError):
@@ -60,6 +62,66 @@ class ReadLimits:
     max_total_bytes: int = 64 * _GIB
 
 
+class _RootReachedError(Exception):
+    pass
+
+
+class _DoctypeFoundError(Exception):
+    pass
+
+
+def _root_reached(*_: object) -> None:
+    raise _RootReachedError
+
+
+def _doctype_found(*_: object) -> None:
+    raise _DoctypeFoundError
+
+
+class _Prolog:
+    """A part's first bytes through expat, up to its root element.
+
+    expat reads the prolog as the parsers that come later do, whatever the encoding and however
+    long the comments and processing instructions before a DTD. A DTD can only come before the
+    root, so nothing past it is looked at; past it, the parsers themselves reject one. A part
+    expat cannot read at all (an image, say) is not XML to any parser, and passes.
+    """
+
+    def __init__(self, name: str) -> None:
+        self.name = name
+        self.fed = 0
+        self.parser = xml.parsers.expat.ParserCreate()
+        self.parser.StartDoctypeDeclHandler = _doctype_found
+        self.parser.StartElementHandler = _root_reached
+
+    def feed(self, data: bytes) -> bool:
+        """Whether the part is settled; raises if it is refused."""
+        self.fed += len(data)
+        settled = self._parse(data, final=False)
+        if not settled and self.fed >= _PROLOG_BOUND:
+            raise PackageError(f"{self.name}: no root element in the first {_PROLOG_BOUND} bytes")
+        return settled
+
+    def finish(self) -> None:
+        """The part ended before its root: an empty part, or not XML."""
+        self._parse(b"", final=True)
+
+    def _parse(self, data: bytes, *, final: bool) -> bool:
+        try:
+            self.parser.Parse(data, final)
+        except _RootReachedError:
+            return True
+        except xml.parsers.expat.ExpatError:
+            return True
+        except _DoctypeFoundError:
+            raise PackageError(
+                f"{self.name}: declares a DTD, which a package part never does"
+            ) from None
+        except (ValueError, LookupError) as exc:  # a declared encoding expat cannot read
+            raise PackageError(f"{self.name}: {exc}") from exc
+        return False
+
+
 class _Guarded(io.RawIOBase):
     """A part's decompressed bytes, counted, with the DTD check on the prolog."""
 
@@ -68,8 +130,7 @@ class _Guarded(io.RawIOBase):
         self._name = name
         self._package = package
         self._count = 0
-        self._head = b""
-        self._checked = not name.endswith((".xml", ".rels"))
+        self._prolog: _Prolog | None = _Prolog(name)
 
     def readable(self) -> bool:
         return True
@@ -83,29 +144,13 @@ class _Guarded(io.RawIOBase):
             if self._count > limits.max_part_bytes:
                 raise LimitError(f"{self._name}: more than {limits.max_part_bytes} bytes")
             self._package.add_bytes(n)
-            if not self._checked:
-                self._check(data)
+            if self._prolog is not None and self._prolog.feed(data):
+                self._prolog = None
+        elif self._prolog is not None:
+            self._prolog.finish()
+            self._prolog = None
         buffer[:n] = data
         return n
-
-    def _check(self, data: bytes) -> None:
-        self._head += data
-        head = self._head
-        position = 0
-        while True:
-            m = _PROLOG.match(head, position)
-            assert m is not None
-            if m.end() == position:
-                break
-            position = m.end()
-        rest = head[position:]
-        if rest.startswith(b"<!DOCTYPE") or rest.startswith(b"<!doctype"):
-            raise PackageError(f"{self._name}: declares a DTD, which a package part never does")
-        if len(rest) >= 9 or (rest and not rest.startswith(b"<")):
-            self._checked = True
-            self._head = b""
-        elif len(head) > 1 << 20:
-            raise PackageError(f"{self._name}: no root element in the first megabyte")
 
     def close(self) -> None:
         self._raw.close()

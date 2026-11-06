@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+- The refusal of a DTD in a package part could be bypassed: it matched the prolog's bytes, so a
+  `<!DOCTYPE>` after a long comment (200 KB) or processing instruction (900 KB), in UTF-16, or in
+  a worksheet part whose name does not end in `.xml` (`data.bin`) was accepted. expat now reads
+  each part's prolog with a handler that refuses a doctype declaration and stops at the first
+  element, for every part read, whatever its name. An entity expansion that got through was
+  stopped only by expat's amplification limit, a ratio that depends on expat's version.
+
+### Fixed
+- A part that is not well-formed XML (a worksheet or the shared strings) raised expat's
+  `ExpatError`; it is a `PackageError`, as documented.
+
 ## [0.1.0] - 2026-11-02
 
 First release.

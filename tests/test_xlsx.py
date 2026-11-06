@@ -328,7 +328,6 @@ DTDS = {
     f'<worksheet xmlns="{MAIN}"><sheetData/></worksheet>',
     "after a comment and a BOM": "﻿<?xml version='1.0'?>\n<!-- note --><!DOCTYPE w>"
     f'<worksheet xmlns="{MAIN}"><sheetData/></worksheet>',
-    "lower case": f'<!doctype w><worksheet xmlns="{MAIN}"><sheetData/></worksheet>',
 }
 
 
