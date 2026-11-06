@@ -189,8 +189,8 @@ def criterion(value: Value, quirks: Quirks = Quirks.EXCEL) -> Callable[[Value], 
     if isinstance(value, ErrorValue):
         code = value.code
         return lambda cell: isinstance(cell, ErrorValue) and cell.code == code
-    if value is BLANK:
-        value = ""
+    if value is BLANK:  # a blank cell as the criterion is 0 (capture criteria)
+        value = 0.0
     if not isinstance(value, str):
         return _equal_to(value, quirks)
     m = _CRITERION.fullmatch(value)

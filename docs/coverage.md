@@ -40,8 +40,8 @@ library differs in the last bits; the rows that match either way do not.
 | `AVEDEV` | | absent | | | | | | | |
 | `AVERAGE` | statistical | implemented | 14 | 14 | 0 | 0 | 0 |  |  |
 | `AVERAGEA` | statistical | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
-| `AVERAGEIF` | math | implemented | 59 | 59 | 0 | 0 | 0 |  |  |
-| `AVERAGEIFS` | math | implemented | 71 | 71 | 0 | 0 | 0 |  |  |
+| `AVERAGEIF` | math | implemented | 69 | 69 | 0 | 0 | 0 |  |  |
+| `AVERAGEIFS` | math | implemented | 81 | 81 | 0 | 0 | 0 |  |  |
 | `BAHTTEXT` | | absent | | | | | | | |
 | `BASE` | | absent | | | | | | | |
 | `BESSELI` | | absent | | | | | | | |
@@ -104,8 +104,8 @@ library differs in the last bits; the rows that match either way do not.
 | `COUNT` | statistical | implemented | 6 | 6 | 0 | 0 | 0 |  |  |
 | `COUNTA` | statistical | implemented | 7 | 7 | 0 | 0 | 0 |  |  |
 | `COUNTBLANK` | statistical | implemented | 5 | 5 | 0 | 0 | 0 |  |  |
-| `COUNTIF` | math | implemented | 59 | 59 | 0 | 0 | 0 |  |  |
-| `COUNTIFS` | math | implemented | 34 | 34 | 0 | 0 | 0 |  |  |
+| `COUNTIF` | math | implemented | 74 | 74 | 0 | 0 | 0 |  |  |
+| `COUNTIFS` | math | implemented | 45 | 45 | 0 | 0 | 0 |  |  |
 | `COUPDAYBS` | financial | implemented | 90 | 90 | 0 | 0 | 0 |  |  |
 | `COUPDAYS` | financial | implemented | 101 | 100 | 0 | 0 | 1 |  |  |
 | `COUPDAYSNC` | financial | implemented | 90 | 90 | 0 | 0 | 0 |  |  |
@@ -226,13 +226,13 @@ library differs in the last bits; the rows that match either way do not.
 | `HEX2BIN` | | absent | | | | | | | |
 | `HEX2DEC` | | absent | | | | | | | |
 | `HEX2OCT` | | absent | | | | | | | |
-| `HLOOKUP` | lookup and reference | implemented | 17 | 17 | 0 | 0 | 0 |  |  |
+| `HLOOKUP` | lookup and reference | implemented | 18 | 18 | 0 | 0 | 0 |  |  |
 | `HOUR` | date and time | implemented | 25 | 25 | 0 | 0 | 0 |  |  |
 | `HSTACK` | | absent | | | | | | | |
 | `HYPERLINK` | | absent | | | | | | | |
 | `HYPGEOM.DIST` | | absent | | | | | | | |
 | `HYPGEOMDIST` | | absent | | | | | | | |
-| `IF` | logical | implemented | 36 | 36 | 0 | 0 | 0 |  |  |
+| `IF` | logical | implemented | 37 | 37 | 0 | 0 | 0 |  |  |
 | `IFERROR` | logical | implemented | 11 | 11 | 0 | 0 | 0 |  |  |
 | `IFNA` | logical | implemented | 11 | 11 | 0 | 0 | 0 |  |  |
 | `IFS` | logical | implemented | 24 | 24 | 0 | 0 | 0 |  |  |
@@ -262,7 +262,7 @@ library differs in the last bits; the rows that match either way do not.
 | `IMSUB` | | absent | | | | | | | |
 | `IMSUM` | | absent | | | | | | | |
 | `IMTAN` | | absent | | | | | | | |
-| `INDEX` | lookup and reference | implemented | 70 | 58 | 2 | 0 | 10 |  |  |
+| `INDEX` | lookup and reference | implemented | 71 | 59 | 2 | 0 | 10 |  |  |
 | `INDIRECT` | lookup and reference | implemented | 0 | 0 | 0 | 0 | 0 |  |  |
 | `INFO` | | absent | | | | | | | |
 | `INT` | math | implemented | 17 | 16 | 0 | 0 | 1 |  |  |
@@ -309,10 +309,10 @@ library differs in the last bits; the rows that match either way do not.
 | `LOWER` | text | implemented | 16 | 16 | 0 | 0 | 0 |  |  |
 | `MAKEARRAY` | | absent | | | | | | | |
 | `MAP` | | absent | | | | | | | |
-| `MATCH` | lookup and reference | implemented | 57 | 57 | 0 | 0 | 0 |  |  |
+| `MATCH` | lookup and reference | implemented | 59 | 59 | 0 | 0 | 0 |  |  |
 | `MAX` | statistical | implemented | 6 | 6 | 0 | 0 | 0 |  |  |
 | `MAXA` | statistical | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
-| `MAXIFS` | math | implemented | 71 | 71 | 0 | 0 | 0 |  |  |
+| `MAXIFS` | math | implemented | 81 | 81 | 0 | 0 | 0 |  |  |
 | `MDETERM` | | absent | | | | | | | |
 | `MDURATION` | financial | implemented | 104 | 49 | 54 | 0 | 1 | 4 ulps |  |
 | `MEDIAN` | statistical | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
@@ -320,7 +320,7 @@ library differs in the last bits; the rows that match either way do not.
 | `MIDB` | | absent | | | | | | | |
 | `MIN` | statistical | implemented | 6 | 6 | 0 | 0 | 0 |  |  |
 | `MINA` | statistical | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
-| `MINIFS` | math | implemented | 71 | 71 | 0 | 0 | 0 |  |  |
+| `MINIFS` | math | implemented | 81 | 81 | 0 | 0 | 0 |  |  |
 | `MINUTE` | date and time | implemented | 25 | 25 | 0 | 0 | 0 |  |  |
 | `MINVERSE` | | absent | | | | | | | |
 | `MIRR` | | absent | | | | | | | |
@@ -361,7 +361,7 @@ library differs in the last bits; the rows that match either way do not.
 | `ODDFYIELD` | | absent | | | | | | | |
 | `ODDLPRICE` | | absent | | | | | | | |
 | `ODDLYIELD` | | absent | | | | | | | |
-| `OFFSET` | lookup and reference | implemented | 0 | 0 | 0 | 0 | 0 |  |  |
+| `OFFSET` | lookup and reference | implemented | 1 | 1 | 0 | 0 | 0 |  |  |
 | `OR` | logical | implemented | 16 | 16 | 0 | 0 | 0 |  |  |
 | `PDURATION` | | absent | | | | | | | |
 | `PEARSON` | | absent | | | | | | | |
@@ -457,8 +457,8 @@ library differs in the last bits; the rows that match either way do not.
 | `SUBSTITUTE` | | absent | | | | | | | |
 | `SUBTOTAL` | math | partial | 14 | 14 | 0 | 0 | 0 |  | codes 101 to 111 act as 1 to 11: row visibility is not read |
 | `SUM` | math | implemented | 66 | 65 | 1 | 0 | 0 |  |  |
-| `SUMIF` | math | implemented | 63 | 63 | 0 | 0 | 0 |  |  |
-| `SUMIFS` | math | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
+| `SUMIF` | math | implemented | 84 | 84 | 0 | 0 | 0 |  |  |
+| `SUMIFS` | math | implemented | 38 | 38 | 0 | 0 | 0 |  |  |
 | `SUMPRODUCT` | math | implemented | 7 | 7 | 0 | 0 | 0 |  |  |
 | `SUMSQ` | statistical | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
 | `SUMX2MY2` | | absent | | | | | | | |
@@ -515,7 +515,7 @@ library differs in the last bits; the rows that match either way do not.
 | `VARP` | statistical | implemented | 28 | 25 | 3 | 0 | 0 | 4 ulps |  |
 | `VARPA` | statistical | implemented | 28 | 24 | 4 | 0 | 0 | 4 ulps |  |
 | `VDB` | financial | implemented | 177 | 166 | 6 | 0 | 5 | 4 ulps |  |
-| `VLOOKUP` | lookup and reference | implemented | 49 | 49 | 0 | 0 | 0 |  |  |
+| `VLOOKUP` | lookup and reference | implemented | 50 | 50 | 0 | 0 | 0 |  |  |
 | `VSTACK` | | absent | | | | | | | |
 | `WEBSERVICE` | | absent | | | | | | | |
 | `WEEKDAY` | date and time | implemented | 72 | 72 | 0 | 0 | 0 |  |  |
@@ -527,8 +527,8 @@ library differs in the last bits; the rows that match either way do not.
 | `WRAPCOLS` | | absent | | | | | | | |
 | `WRAPROWS` | | absent | | | | | | | |
 | `XIRR` | financial | implemented | 55 | 25 | 0 | 3 | 27 | 1e-09 relative |  |
-| `XLOOKUP` | lookup and reference | partial | 313 | 312 | 0 | 0 | 1 |  | the regular-expression match mode is not implemented |
-| `XMATCH` | lookup and reference | partial | 455 | 454 | 0 | 0 | 1 |  | the regular-expression match mode is not implemented |
+| `XLOOKUP` | lookup and reference | partial | 314 | 313 | 0 | 0 | 1 |  | the regular-expression match mode is not implemented |
+| `XMATCH` | lookup and reference | partial | 456 | 455 | 0 | 0 | 1 |  | the regular-expression match mode is not implemented |
 | `XNPV` | financial | implemented | 27 | 27 | 0 | 0 | 0 |  |  |
 | `XOR` | | absent | | | | | | | |
 | `YEAR` | date and time | implemented | 36 | 36 | 0 | 0 | 0 |  |  |

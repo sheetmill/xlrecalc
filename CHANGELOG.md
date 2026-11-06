@@ -66,6 +66,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   keeps the values, on opening, with `fullCalcOnLoad`, after a full recalculation and after saving
   (capture `circular_cached`), and so does the package; a cell with no value is still the empty text,
   and one set through the API is 0, as Excel gives. They stay in `Report.circular`.
+- A blank cell as the criterion of `COUNTIF`, `SUMIF`, `AVERAGEIF`, `COUNTIFS`, `SUMIFS`, `AVERAGEIFS`,
+  `MAXIFS` and `MINIFS` matched blank cells; it is 0, as in Excel (capture `criteria`):
+  `COUNTIF(T1:T9000,A5)` with `A5` empty gave the number of blank cells, and `0` is the answer when no
+  cell holds 0.
 - A defined name for one cell gave that cell's value, not a reference, so `OFFSET(Name,1,0)`,
   `SUMIF(OFFSET(Name,1,0),">0")`, `ROW(Name)`, `Name:OFFSET(...)` and ranges defined through such a name
   (`Sheet!$C$2:Name`) were `#VALUE!` or `#REF!` (capture `names`). An error in the range operator is now

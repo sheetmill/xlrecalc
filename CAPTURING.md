@@ -44,6 +44,7 @@ people's workbooks are used.
 | `iterate_open` | 55 | what Excel does on opening a file with iterative calculation on: a counter, a loop that converges, a dependent, a control and a loop with no cached values, across settings, a file `recalculate` wrote and a copy Excel saved (`capture/iterate_open_probe.py`) |
 | `circular_cached` | 410 | a real loop, iteration off, in a file holding sentinel cached values: in a file openpyxl built or Excel saved, with and without `fullCalcOnLoad`, on opening, after a recalculation, a full one and a rebuild, in what Excel shows and what it saves; edits of the loop (`capture/circular_cached_probe.py`) |
 | `names` | 75 | defined names as references: one cell, a range, built from other names or `OFFSET`, on another sheet, a value, `#REF!`; through `OFFSET`, `ROW`, `SUMIF` and the range operator (`capture/name_probe.py`) |
+| `criteria` | 103 | criteria and lookup keys that are blank: a blank cell, an empty text, `""`, `"="`, `"<>"`, 0, across the `COUNTIF` family; whole columns, computed blanks, `MATCH`, `VLOOKUP`, `HLOOKUP`, `XLOOKUP`, `XMATCH` |
 | `index_range` | 38 | ranges built with `INDEX`, lookups and aggregates over a formula's own column: which Excel calls circular |
 | `static_cycle` | 37 | loops of references through a branch not taken, and real loops as controls: which Excel calls circular |
 | `array_refs` | 8,954 cells | `ROW`, `COLUMN`, `CELL`, ranges and arrays as a criterion or a lookup key, and arrays of references, each as a legacy formula, a legacy array formula and a dynamic array |

@@ -227,6 +227,7 @@ SUITES = [
     "textfmt",
     "rounding",
     "modern",
+    "criteria",
 ]
 
 

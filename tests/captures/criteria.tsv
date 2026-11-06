@@ -1,0 +1,115 @@
+# suite: criteria
+# excel: 16.114.3 for Mac, locale en_US
+# date_system: 1900
+# captured: 2026-11-06
+# generator: capture/suites.py:criteria
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# fixed: {'T1': 0.0, 'T2': 5.0, 'T4': '', 'T5': 'a', 'T6': 0.0, 'T7': True, 'T8': ErrorValue('#N/A'), 'U1': 1.0, 'U2': 2.0, 'U3': 4.0, 'U4': 8.0, 'U5': 16.0, 'U6': 32.0, 'U7': 64.0, 'U8': 128.0, 'X1': '', 'X2': 0.0, 'W1': 'a'}
+# columns: suite tag case formula inputs expected_type expected_repr
+criteria	countif	1	COUNTIF($T$1:$T$8,$Y$1)	()	n	2.0
+criteria	sumif	2	SUMIF($T$1:$T$8,$Y$1,$U$1:$U$8)	()	n	33.0
+criteria	sumif_own	3	SUMIF($U$1:$U$8,$Y$1)	()	n	0.0
+criteria	averageif	4	AVERAGEIF($T$1:$T$8,$Y$1,$U$1:$U$8)	()	n	16.5
+criteria	countifs	5	COUNTIFS($T$1:$T$8,$Y$1)	()	n	2.0
+criteria	sumifs	6	SUMIFS($U$1:$U$8,$T$1:$T$8,$Y$1)	()	n	33.0
+criteria	averageifs	7	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,$Y$1)	()	n	16.5
+criteria	maxifs	8	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,$Y$1)	()	n	32.0
+criteria	minifs	9	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,$Y$1)	()	n	1.0
+criteria	countif	10	COUNTIF($T$1:$T$8,$X$1)	()	n	2.0
+criteria	sumif	11	SUMIF($T$1:$T$8,$X$1,$U$1:$U$8)	()	n	12.0
+criteria	sumif_own	12	SUMIF($U$1:$U$8,$X$1)	()	n	0.0
+criteria	averageif	13	AVERAGEIF($T$1:$T$8,$X$1,$U$1:$U$8)	()	n	6.0
+criteria	countifs	14	COUNTIFS($T$1:$T$8,$X$1)	()	n	2.0
+criteria	sumifs	15	SUMIFS($U$1:$U$8,$T$1:$T$8,$X$1)	()	n	12.0
+criteria	averageifs	16	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,$X$1)	()	n	6.0
+criteria	maxifs	17	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,$X$1)	()	n	8.0
+criteria	minifs	18	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,$X$1)	()	n	4.0
+criteria	countif	19	COUNTIF($T$1:$T$8,$X$2)	()	n	2.0
+criteria	sumif	20	SUMIF($T$1:$T$8,$X$2,$U$1:$U$8)	()	n	33.0
+criteria	sumif_own	21	SUMIF($U$1:$U$8,$X$2)	()	n	0.0
+criteria	averageif	22	AVERAGEIF($T$1:$T$8,$X$2,$U$1:$U$8)	()	n	16.5
+criteria	countifs	23	COUNTIFS($T$1:$T$8,$X$2)	()	n	2.0
+criteria	sumifs	24	SUMIFS($U$1:$U$8,$T$1:$T$8,$X$2)	()	n	33.0
+criteria	averageifs	25	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,$X$2)	()	n	16.5
+criteria	maxifs	26	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,$X$2)	()	n	32.0
+criteria	minifs	27	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,$X$2)	()	n	1.0
+criteria	countif	28	COUNTIF($T$1:$T$8,"")	()	n	2.0
+criteria	sumif	29	SUMIF($T$1:$T$8,"",$U$1:$U$8)	()	n	12.0
+criteria	sumif_own	30	SUMIF($U$1:$U$8,"")	()	n	0.0
+criteria	averageif	31	AVERAGEIF($T$1:$T$8,"",$U$1:$U$8)	()	n	6.0
+criteria	countifs	32	COUNTIFS($T$1:$T$8,"")	()	n	2.0
+criteria	sumifs	33	SUMIFS($U$1:$U$8,$T$1:$T$8,"")	()	n	12.0
+criteria	averageifs	34	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,"")	()	n	6.0
+criteria	maxifs	35	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,"")	()	n	8.0
+criteria	minifs	36	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,"")	()	n	4.0
+criteria	countif	37	COUNTIF($T$1:$T$8,"=")	()	n	1.0
+criteria	sumif	38	SUMIF($T$1:$T$8,"=",$U$1:$U$8)	()	n	4.0
+criteria	sumif_own	39	SUMIF($U$1:$U$8,"=")	()	n	0.0
+criteria	averageif	40	AVERAGEIF($T$1:$T$8,"=",$U$1:$U$8)	()	n	4.0
+criteria	countifs	41	COUNTIFS($T$1:$T$8,"=")	()	n	1.0
+criteria	sumifs	42	SUMIFS($U$1:$U$8,$T$1:$T$8,"=")	()	n	4.0
+criteria	averageifs	43	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,"=")	()	n	4.0
+criteria	maxifs	44	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,"=")	()	n	4.0
+criteria	minifs	45	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,"=")	()	n	4.0
+criteria	countif	46	COUNTIF($T$1:$T$8,"<>")	()	n	7.0
+criteria	sumif	47	SUMIF($T$1:$T$8,"<>",$U$1:$U$8)	()	n	251.0
+criteria	sumif_own	48	SUMIF($U$1:$U$8,"<>")	()	n	255.0
+criteria	averageif	49	AVERAGEIF($T$1:$T$8,"<>",$U$1:$U$8)	()	n	35.857142857142854
+criteria	countifs	50	COUNTIFS($T$1:$T$8,"<>")	()	n	7.0
+criteria	sumifs	51	SUMIFS($U$1:$U$8,$T$1:$T$8,"<>")	()	n	251.0
+criteria	averageifs	52	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,"<>")	()	n	35.857142857142854
+criteria	maxifs	53	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,"<>")	()	n	128.0
+criteria	minifs	54	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,"<>")	()	n	1.0
+criteria	countif	55	COUNTIF($T$1:$T$8,0)	()	n	2.0
+criteria	sumif	56	SUMIF($T$1:$T$8,0,$U$1:$U$8)	()	n	33.0
+criteria	sumif_own	57	SUMIF($U$1:$U$8,0)	()	n	0.0
+criteria	averageif	58	AVERAGEIF($T$1:$T$8,0,$U$1:$U$8)	()	n	16.5
+criteria	countifs	59	COUNTIFS($T$1:$T$8,0)	()	n	2.0
+criteria	sumifs	60	SUMIFS($U$1:$U$8,$T$1:$T$8,0)	()	n	33.0
+criteria	averageifs	61	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,0)	()	n	16.5
+criteria	maxifs	62	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,0)	()	n	32.0
+criteria	minifs	63	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,0)	()	n	1.0
+criteria	countif	64	COUNTIF($T$1:$T$8,"0")	()	n	2.0
+criteria	sumif	65	SUMIF($T$1:$T$8,"0",$U$1:$U$8)	()	n	33.0
+criteria	sumif_own	66	SUMIF($U$1:$U$8,"0")	()	n	0.0
+criteria	averageif	67	AVERAGEIF($T$1:$T$8,"0",$U$1:$U$8)	()	n	16.5
+criteria	countifs	68	COUNTIFS($T$1:$T$8,"0")	()	n	2.0
+criteria	sumifs	69	SUMIFS($U$1:$U$8,$T$1:$T$8,"0")	()	n	33.0
+criteria	averageifs	70	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,"0")	()	n	16.5
+criteria	maxifs	71	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,"0")	()	n	32.0
+criteria	minifs	72	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,"0")	()	n	1.0
+criteria	countif	73	COUNTIF($T$1:$T$8,"=0")	()	n	2.0
+criteria	sumif	74	SUMIF($T$1:$T$8,"=0",$U$1:$U$8)	()	n	33.0
+criteria	sumif_own	75	SUMIF($U$1:$U$8,"=0")	()	n	0.0
+criteria	averageif	76	AVERAGEIF($T$1:$T$8,"=0",$U$1:$U$8)	()	n	16.5
+criteria	countifs	77	COUNTIFS($T$1:$T$8,"=0")	()	n	2.0
+criteria	sumifs	78	SUMIFS($U$1:$U$8,$T$1:$T$8,"=0")	()	n	33.0
+criteria	averageifs	79	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,"=0")	()	n	16.5
+criteria	maxifs	80	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,"=0")	()	n	32.0
+criteria	minifs	81	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,"=0")	()	n	1.0
+criteria	countif	82	COUNTIF($T$1:$T$8,$W$1)	()	n	1.0
+criteria	sumif	83	SUMIF($T$1:$T$8,$W$1,$U$1:$U$8)	()	n	16.0
+criteria	sumif_own	84	SUMIF($U$1:$U$8,$W$1)	()	n	0.0
+criteria	averageif	85	AVERAGEIF($T$1:$T$8,$W$1,$U$1:$U$8)	()	n	16.0
+criteria	countifs	86	COUNTIFS($T$1:$T$8,$W$1)	()	n	1.0
+criteria	sumifs	87	SUMIFS($U$1:$U$8,$T$1:$T$8,$W$1)	()	n	16.0
+criteria	averageifs	88	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,$W$1)	()	n	16.0
+criteria	maxifs	89	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,$W$1)	()	n	16.0
+criteria	minifs	90	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,$W$1)	()	n	16.0
+criteria	whole_column	91	COUNTIF($T:$T,$Y$1)	()	n	2.0
+criteria	all_blank	92	COUNTIF($Z$1:$Z$9,$Y$1)	()	n	0.0
+criteria	all_blank_sum	93	SUMIF($Z$1:$Z$9,$Y$1,$U$1:$U$8)	()	n	0.0
+criteria	second_criterion	94	COUNTIFS($T$1:$T$8,$Y$1,$U$1:$U$8,">0")	()	n	2.0
+criteria	an_offset	95	COUNTIF($T$1:$T$8,OFFSET($Y$1,0,0))	()	n	2.0
+criteria	an_index	96	COUNTIF($T$1:$T$8,INDEX($Y$1:$Y$2,1))	()	n	2.0
+criteria	computed_blank	97	COUNTIF($T$1:$T$8,IF(TRUE,$Y$1))	()	n	2.0
+criteria	match_exact	98	MATCH($Y$1,$T$1:$T$8,0)	()	n	1.0
+criteria	match_sorted	99	MATCH($Y$1,$T$1:$T$2,1)	()	n	1.0
+criteria	vlookup	100	VLOOKUP($Y$1,$T$1:$U$8,2,FALSE)	()	n	1.0
+criteria	hlookup	101	HLOOKUP($Y$1,$T$1:$U$1,1,FALSE)	()	n	0.0
+criteria	xlookup	102	_xlfn.XLOOKUP($Y$1,$T$1:$T$8,$U$1:$U$8)	()	n	4.0
+criteria	xmatch	103	_xlfn.XMATCH($Y$1,$T$1:$T$8)	()	n	3.0

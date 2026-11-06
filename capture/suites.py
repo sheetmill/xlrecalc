@@ -1852,6 +1852,51 @@ def iteration() -> list[Case]:
     return cases
 
 
+# Criteria and lookup keys that are blank, as a cell or as an empty text --------------------------
+
+# T holds 0, 5, a blank, the empty text, text, 0 again, a logical and an error; U is what sums.
+CRITERIA_TABLE: dict[str, Input] = {
+    "T1": 0.0, "T2": 5.0, "T4": "", "T5": "a", "T6": 0.0, "T7": True, "T8": ErrorValue.NA,
+    "U1": 1.0, "U2": 2.0, "U3": 4.0, "U4": 8.0, "U5": 16.0, "U6": 32.0, "U7": 64.0, "U8": 128.0,
+    "X1": "", "X2": 0.0, "W1": "a",
+}  # fmt: skip
+
+
+def criteria() -> list[Case]:
+    # Y1 is never written: a blank cell. X1 is the empty text, X2 is 0.
+    range_t, range_u = "$T$1:$T$8", "$U$1:$U$8"
+    keys = ["$Y$1", "$X$1", "$X$2", '""', '"="', '"<>"', "0", '"0"', '"=0"', "$W$1"]
+    cases: list[Case] = []
+    for key in keys:
+        cases += [
+            Case("countif", f"COUNTIF({range_t},{key})"),
+            Case("sumif", f"SUMIF({range_t},{key},{range_u})"),
+            Case("sumif_own", f"SUMIF($U$1:$U$8,{key})"),
+            Case("averageif", f"AVERAGEIF({range_t},{key},{range_u})"),
+            Case("countifs", f"COUNTIFS({range_t},{key})"),
+            Case("sumifs", f"SUMIFS({range_u},{range_t},{key})"),
+            Case("averageifs", f"AVERAGEIFS({range_u},{range_t},{key})"),
+            Case("maxifs", f"_xlfn.MAXIFS({range_u},{range_t},{key})"),
+            Case("minifs", f"_xlfn.MINIFS({range_u},{range_t},{key})"),
+        ]
+    cases += [
+        Case("whole_column", "COUNTIF($T:$T,$Y$1)"),
+        Case("all_blank", "COUNTIF($Z$1:$Z$9,$Y$1)"),
+        Case("all_blank_sum", "SUMIF($Z$1:$Z$9,$Y$1,$U$1:$U$8)"),
+        Case("second_criterion", 'COUNTIFS($T$1:$T$8,$Y$1,$U$1:$U$8,">0")'),
+        Case("an_offset", "COUNTIF($T$1:$T$8,OFFSET($Y$1,0,0))"),
+        Case("an_index", "COUNTIF($T$1:$T$8,INDEX($Y$1:$Y$2,1))"),
+        Case("computed_blank", "COUNTIF($T$1:$T$8,IF(TRUE,$Y$1))"),
+        Case("match_exact", "MATCH($Y$1,$T$1:$T$8,0)"),
+        Case("match_sorted", "MATCH($Y$1,$T$1:$T$2,1)"),
+        Case("vlookup", "VLOOKUP($Y$1,$T$1:$U$8,2,FALSE)"),
+        Case("hlookup", "HLOOKUP($Y$1,$T$1:$U$1,1,FALSE)"),
+        Case("xlookup", "_xlfn.XLOOKUP($Y$1,$T$1:$T$8,$U$1:$U$8)"),
+        Case("xmatch", "_xlfn.XMATCH($Y$1,$T$1:$T$8)"),
+    ]
+    return cases
+
+
 SUITES = {
     "number_text": Suite(number_text),
     "text_number": Suite(text_number),
@@ -1872,5 +1917,6 @@ SUITES = {
     "textfmt": Suite(textfmt),
     "rounding": Suite(rounding),
     "modern": Suite(modern, fixed=MODERN_TABLE),
+    "criteria": Suite(criteria, fixed=CRITERIA_TABLE),
     "iteration": Suite(iteration),
 }
