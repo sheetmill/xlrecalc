@@ -134,6 +134,8 @@ person typed formulas into and saved (AppleScript can only enter legacy formulas
 
 Files the package writes are opened by Excel in `tests/test_excel_live.py`, which runs only with
 `pytest --tier excel`, under the same rules as the captures.
+Each Excel step there has a time limit (`tests/excel_steps.py`); when Excel then does not answer, the
+run ends with a message naming the test, and Excel is left for the person using it to look at.
 
 The probes behind the design (`capture/writeback_probe.py`, `capture/semantics_probe.py`,
 `capture/formula_forms.py`) use the same conventions; their results are in [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md)

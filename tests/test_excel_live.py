@@ -22,13 +22,13 @@ with error -50, which fails the test.
 from __future__ import annotations
 
 import shutil
-import subprocess
 import zipfile
 from pathlib import Path
 
 import pytest
 
 import xlrecalc
+from tests.excel_steps import answers, step, stop_the_run
 from tests.test_captures import (
     KNOWN_DEVIATIONS,
     relative,
@@ -51,6 +51,13 @@ ROOT = Path(__file__).resolve().parents[1]
 VOLATILE = ("NOW(", "RAND(", "RANDBETWEEN(")
 
 
+@pytest.fixture(autouse=True)
+def excel_answers() -> None:
+    """Before each test: a test must not wait on an Excel that an earlier one left stuck."""
+    if not answers():
+        stop_the_run("before the test started")
+
+
 @pytest.fixture(scope="module")
 def container() -> Path:
     from capture.pipeline import CONTAINER
@@ -62,11 +69,7 @@ def container() -> Path:
 def save_copy(src: Path, copy: Path) -> None:
     """Have Excel open ``src`` (alerts off) and save it as ``copy``; fail on a repair."""
     copy.unlink(missing_ok=True)
-    result = subprocess.run(
-        ["osascript", str(ROOT / "capture" / "save_copy.applescript"), str(src), str(copy)],
-        capture_output=True,
-        text=True,
-    )
+    result = step(str(ROOT / "capture" / "save_copy.applescript"), str(src), str(copy))
     assert result.returncode == 0, f"Excel did not open {src.name}: {result.stderr.strip()}"
 
 
@@ -220,11 +223,7 @@ def _printed_workbook(container: Path, formulas: list[str], tag: str) -> Path:
 def _opens(container: Path, path: Path) -> bool:
     copy = container / (path.stem + "_saved.xlsx")
     copy.unlink(missing_ok=True)
-    result = subprocess.run(
-        ["osascript", str(ROOT / "capture" / "save_copy.applescript"), str(path), str(copy)],
-        capture_output=True,
-        text=True,
-    )
+    result = step(str(ROOT / "capture" / "save_copy.applescript"), str(path), str(copy))
     copy.unlink(missing_ok=True)
     if result.returncode and "-50" not in result.stderr:
         raise RuntimeError(result.stderr.strip())
