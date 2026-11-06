@@ -38,6 +38,7 @@ people's workbooks are used.
 | `prefixes` | 32 | functions written into a file with and without `_xlfn.`: the form Excel computes |
 | `whitespace` | 15 | whitespace at the ends of inline and shared strings without `xml:space="preserve"` ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §9.1) |
 | `value_forms` | 26 | number forms Excel never writes in `<v>` (`nan`, `INF`, `1e400`, `1_000`, `+5`...) and rows and columns off its grid: which files Excel refuses and how it reads the others (`capture/value_probe.py`) |
+| `array_size` | 6 | declared arrays over one, ten and every column, and `SUMPRODUCT` over another sheet's whole columns: whether Excel opens and recalculates them, how long it takes and what memory it uses (`capture/array_size_probe.py`; it ends Excel past 8 GB) |
 | `circular`, `circular_alerts` | 16 each | circular references with iteration off: what Excel saves and shows, alerts off and on (the second interactive; [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §7.2) |
 
 All live in `tests/captures/` as TSV files with a header: suite, Excel build and locale, date

@@ -1,0 +1,9 @@
+# suite: array_size (capture.array_size_probe); Excel 16.114.3 for Mac, en_US
+# captured: 2026-11-05; each step: result (seconds, Excel's peak physical footprint during the step); smallest case first, the run ends at a step past its time limit or Excel past 8 GB
+case	steps
+sumproduct A:A	open: opened (0.6 s, 0.22 GB)	read: 1.0 | =SUMPRODUCT(D!A:A*1) (0.2 s, 0.84 GB)	calc: calculated (0.2 s, 0.83 GB)	read: 1.0 | =SUMPRODUCT(D!A:A*1) (0.2 s, 0.94 GB)	close: closed (0.3 s, 0.89 GB)
+array A1:A1048576	open: opened (0.7 s, 0.89 GB)	read: 1.0 | =D!A:A*1 (0.2 s, 1.24 GB)	calc: calculated (0.2 s, 1.22 GB)	read: 1.0 | =D!A:A*1 (0.1 s, 1.30 GB)	close: closed (0.8 s, 1.28 GB)
+sumproduct A:J	open: opened (0.6 s, 1.57 GB)	read: 3.0 | =SUMPRODUCT(D!A:J*1) (0.2 s, 1.86 GB)	calc: calculated (0.3 s, 1.86 GB)	read: 3.0 | =SUMPRODUCT(D!A:J*1) (0.2 s, 1.94 GB)	close: closed (0.2 s, 1.89 GB)
+array A1:J1048576	open: opened (3.9 s, 4.79 GB)	read: 1.0 | =D!A:J*1 (0.2 s, 5.20 GB)	calc: calculated (0.7 s, 5.73 GB)	read: 1.0 | =D!A:J*1 (0.2 s, 5.79 GB)	close: closed (1.8 s, 5.74 GB)
+sumproduct A:XFD	open: opened (0.3 s, 2.04 GB)	read: 3.0 | =SUMPRODUCT(D!$1:$1048576*1) (0.1 s, 2.57 GB)	calc: calculated (0.1 s, 2.57 GB)	read: 3.0 | =SUMPRODUCT(D!$1:$1048576*1) (0.2 s, 2.68 GB)	close: closed (0.2 s, 2.63 GB)
+array A1:XFD1048576	open: error -50 (0.4 s, 2.52 GB)
