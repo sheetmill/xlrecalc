@@ -46,6 +46,8 @@ people's workbooks are used.
 | `names` | 92 | defined names as references: one cell, a range, built from other names or `OFFSET`, on another sheet, a value, `#REF!`; through `OFFSET`, `ROW`, `SUMIF` and the range operator; a name for a row, a column or a block taken where one cell is meant (`capture/name_probe.py`) |
 | `criteria` | 144 | criteria and lookup keys that are blank: a blank cell, an empty text, `""`, `"="`, `"<>"`, 0, across the `COUNTIF` family; whole columns, computed blanks, `MATCH`, `VLOOKUP`, `HLOOKUP`, `XLOOKUP`, `XMATCH`; what a lookup gives when it finds a blank cell; the range operator given errors; intersection of single cells |
 | `hidden_rows` | 98 | `SUBTOTAL` of every function number over rows a filter hid and rows hidden by hand, a filter's range without a filter, hidden columns, with controls (`capture/hidden_probe.py`) |
+| `math_trig` | 2,076 | trigonometry, hyperbolics, logarithms, `SIGN`, `TRUNC`, `EXACT` and `TIME` over edge inputs: zero, tiny and huge numbers, text, blanks, logicals, errors |
+| `math_integers` | 4,457 | rounding to a multiple, `QUOTIENT`, factorials, combinations, `GCD`, `LCM`, `MULTINOMIAL`, `ROMAN`, `ARABIC`, `BASE`, `DECIMAL`, `SERIESSUM`, `SUMX2MY2` and its family, over the same inputs |
 | `index_range` | 38 | ranges built with `INDEX`, lookups and aggregates over a formula's own column: which Excel calls circular |
 | `static_cycle` | 37 | loops of references through a branch not taken, and real loops as controls: which Excel calls circular |
 | `array_refs` | 8,954 cells | `ROW`, `COLUMN`, `CELL`, ranges and arrays as a criterion or a lookup key, and arrays of references, each as a legacy formula, a legacy array formula and a dynamic array |

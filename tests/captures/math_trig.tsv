@@ -1,0 +1,2087 @@
+# suite: math_trig
+# excel: 16.114.3 for Mac, locale en_US
+# date_system: 1900
+# captured: 2026-11-06
+# generator: capture/suites.py:math_trig
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# columns: suite tag case formula inputs expected_type expected_repr
+math_trig	acos	1	ACOS({1})	(0.0,)	n	1.5707963267948966
+math_trig	acos	2	ACOS({1})	(1.0,)	n	0.0
+math_trig	acos	3	ACOS({1})	(-1.0,)	n	3.141592653589793
+math_trig	acos	4	ACOS({1})	(0.5,)	n	1.0471975511965976
+math_trig	acos	5	ACOS({1})	(-0.5,)	n	2.0943951023931957
+math_trig	acos	6	ACOS({1})	(2.0,)	e	#NUM!
+math_trig	acos	7	ACOS({1})	(-2.0,)	e	#NUM!
+math_trig	acos	8	ACOS({1})	(0.1,)	n	1.4706289056333368
+math_trig	acos	9	ACOS({1})	(3.7,)	e	#NUM!
+math_trig	acos	10	ACOS({1})	(-3.7,)	e	#NUM!
+math_trig	acos	11	ACOS({1})	(10.0,)	e	#NUM!
+math_trig	acos	12	ACOS({1})	(100.0,)	e	#NUM!
+math_trig	acos	13	ACOS({1})	(1e-10,)	n	1.5707963266948965
+math_trig	acos	14	ACOS({1})	(1e-300,)	n	1.5707963267948966
+math_trig	acos	15	ACOS({1})	(1000000.0,)	e	#NUM!
+math_trig	acos	16	ACOS({1})	(1000000000000000.0,)	e	#NUM!
+math_trig	acos	17	ACOS({1})	(1e+100,)	e	#NUM!
+math_trig	acos	18	ACOS({1})	(1e+308,)	e	#NUM!
+math_trig	acos	19	ACOS({1})	(0.7853981633974483,)	n	0.6674572160283838
+math_trig	acos	20	ACOS({1})	(1.5707963267948966,)	e	#NUM!
+math_trig	acos	21	ACOS({1})	(3.141592653589793,)	e	#NUM!
+math_trig	acos	22	ACOS({1})	(6.283185307179586,)	e	#NUM!
+math_trig	acos	23	ACOS({1})	('3',)	e	#NUM!
+math_trig	acos	24	ACOS({1})	('abc',)	e	#VALUE!
+math_trig	acos	25	ACOS({1})	('',)	e	#VALUE!
+math_trig	acos	26	ACOS({1})	(None,)	n	1.5707963267948966
+math_trig	acos	27	ACOS({1})	(True,)	n	0.0
+math_trig	acos	28	ACOS({1})	(False,)	n	1.5707963267948966
+math_trig	acos	29	ACOS({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	acosh	30	ACOSH({1})	(0.0,)	e	#NUM!
+math_trig	acosh	31	ACOSH({1})	(1.0,)	n	0.0
+math_trig	acosh	32	ACOSH({1})	(-1.0,)	e	#NUM!
+math_trig	acosh	33	ACOSH({1})	(0.5,)	e	#NUM!
+math_trig	acosh	34	ACOSH({1})	(-0.5,)	e	#NUM!
+math_trig	acosh	35	ACOSH({1})	(2.0,)	n	1.3169578969248166
+math_trig	acosh	36	ACOSH({1})	(-2.0,)	e	#NUM!
+math_trig	acosh	37	ACOSH({1})	(0.1,)	e	#NUM!
+math_trig	acosh	38	ACOSH({1})	(3.7,)	n	1.9826969446812035
+math_trig	acosh	39	ACOSH({1})	(-3.7,)	e	#NUM!
+math_trig	acosh	40	ACOSH({1})	(10.0,)	n	2.993222846126381
+math_trig	acosh	41	ACOSH({1})	(100.0,)	n	5.298292365610485
+math_trig	acosh	42	ACOSH({1})	(1e-10,)	e	#NUM!
+math_trig	acosh	43	ACOSH({1})	(1e-300,)	e	#NUM!
+math_trig	acosh	44	ACOSH({1})	(1000000.0,)	n	14.508657738523969
+math_trig	acosh	45	ACOSH({1})	(1000000000000000.0,)	n	35.23192357547063
+math_trig	acosh	46	ACOSH({1})	(1e+100,)	n	230.95165647996453
+math_trig	acosh	47	ACOSH({1})	(1e+308,)	e	#NUM!
+math_trig	acosh	48	ACOSH({1})	(0.7853981633974483,)	e	#NUM!
+math_trig	acosh	49	ACOSH({1})	(1.5707963267948966,)	n	1.0232274785475506
+math_trig	acosh	50	ACOSH({1})	(3.141592653589793,)	n	1.8115262724608532
+math_trig	acosh	51	ACOSH({1})	(6.283185307179586,)	n	2.524630659933467
+math_trig	acosh	52	ACOSH({1})	('3',)	n	1.762747174039086
+math_trig	acosh	53	ACOSH({1})	('abc',)	e	#VALUE!
+math_trig	acosh	54	ACOSH({1})	('',)	e	#VALUE!
+math_trig	acosh	55	ACOSH({1})	(None,)	e	#NUM!
+math_trig	acosh	56	ACOSH({1})	(True,)	n	0.0
+math_trig	acosh	57	ACOSH({1})	(False,)	e	#NUM!
+math_trig	acosh	58	ACOSH({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	acot	59	_xlfn.ACOT({1})	(0.0,)	n	1.5707963267948966
+math_trig	acot	60	_xlfn.ACOT({1})	(1.0,)	n	0.7853981633974483
+math_trig	acot	61	_xlfn.ACOT({1})	(-1.0,)	n	2.356194490192345
+math_trig	acot	62	_xlfn.ACOT({1})	(0.5,)	n	1.1071487177940906
+math_trig	acot	63	_xlfn.ACOT({1})	(-0.5,)	n	2.0344439357957027
+math_trig	acot	64	_xlfn.ACOT({1})	(2.0,)	n	0.46364760900080615
+math_trig	acot	65	_xlfn.ACOT({1})	(-2.0,)	n	2.677945044588987
+math_trig	acot	66	_xlfn.ACOT({1})	(0.1,)	n	1.4711276743037345
+math_trig	acot	67	_xlfn.ACOT({1})	(3.7,)	n	0.2639637236257045
+math_trig	acot	68	_xlfn.ACOT({1})	(-3.7,)	n	2.8776289299640885
+math_trig	acot	69	_xlfn.ACOT({1})	(10.0,)	n	0.09966865249116204
+math_trig	acot	70	_xlfn.ACOT({1})	(100.0,)	n	0.009999666686665238
+math_trig	acot	71	_xlfn.ACOT({1})	(1e-10,)	n	1.5707963266948965
+math_trig	acot	72	_xlfn.ACOT({1})	(1e-300,)	n	1.5707963267948966
+math_trig	acot	73	_xlfn.ACOT({1})	(1000000.0,)	n	9.999999999996666e-07
+math_trig	acot	74	_xlfn.ACOT({1})	(1000000000000000.0,)	n	1e-15
+math_trig	acot	75	_xlfn.ACOT({1})	(1e+100,)	n	1e-100
+math_trig	acot	76	_xlfn.ACOT({1})	(1e+308,)	n	0.0
+math_trig	acot	77	_xlfn.ACOT({1})	(0.7853981633974483,)	n	0.9050225767665427
+math_trig	acot	78	_xlfn.ACOT({1})	(1.5707963267948966,)	n	0.5669115049410094
+math_trig	acot	79	_xlfn.ACOT({1})	(3.141592653589793,)	n	0.30816907111598496
+math_trig	acot	80	_xlfn.ACOT({1})	(6.283185307179586,)	n	0.15783119028815887
+math_trig	acot	81	_xlfn.ACOT({1})	('3',)	n	0.3217505543966422
+math_trig	acot	82	_xlfn.ACOT({1})	('abc',)	e	#VALUE!
+math_trig	acot	83	_xlfn.ACOT({1})	('',)	e	#VALUE!
+math_trig	acot	84	_xlfn.ACOT({1})	(None,)	n	1.5707963267948966
+math_trig	acot	85	_xlfn.ACOT({1})	(True,)	n	0.7853981633974483
+math_trig	acot	86	_xlfn.ACOT({1})	(False,)	n	1.5707963267948966
+math_trig	acot	87	_xlfn.ACOT({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	acoth	88	_xlfn.ACOTH({1})	(0.0,)	e	#NUM!
+math_trig	acoth	89	_xlfn.ACOTH({1})	(1.0,)	e	#NUM!
+math_trig	acoth	90	_xlfn.ACOTH({1})	(-1.0,)	e	#NUM!
+math_trig	acoth	91	_xlfn.ACOTH({1})	(0.5,)	e	#NUM!
+math_trig	acoth	92	_xlfn.ACOTH({1})	(-0.5,)	e	#NUM!
+math_trig	acoth	93	_xlfn.ACOTH({1})	(2.0,)	n	0.5493061443340549
+math_trig	acoth	94	_xlfn.ACOTH({1})	(-2.0,)	n	-0.5493061443340549
+math_trig	acoth	95	_xlfn.ACOTH({1})	(0.1,)	e	#NUM!
+math_trig	acoth	96	_xlfn.ACOTH({1})	(3.7,)	n	0.27715536785286465
+math_trig	acoth	97	_xlfn.ACOTH({1})	(-3.7,)	n	-0.27715536785286465
+math_trig	acoth	98	_xlfn.ACOTH({1})	(10.0,)	n	0.1003353477310756
+math_trig	acoth	99	_xlfn.ACOTH({1})	(100.0,)	n	0.010000333353334763
+math_trig	acoth	100	_xlfn.ACOTH({1})	(1e-10,)	e	#NUM!
+math_trig	acoth	101	_xlfn.ACOTH({1})	(1e-300,)	e	#NUM!
+math_trig	acoth	102	_xlfn.ACOTH({1})	(1000000.0,)	n	1.0000000000003333e-06
+math_trig	acoth	103	_xlfn.ACOTH({1})	(1000000000000000.0,)	n	1e-15
+math_trig	acoth	104	_xlfn.ACOTH({1})	(1e+100,)	n	1e-100
+math_trig	acoth	105	_xlfn.ACOTH({1})	(1e+308,)	n	0.0
+math_trig	acoth	106	_xlfn.ACOTH({1})	(0.7853981633974483,)	e	#NUM!
+math_trig	acoth	107	_xlfn.ACOTH({1})	(1.5707963267948966,)	n	0.7524692671419272
+math_trig	acoth	108	_xlfn.ACOTH({1})	(3.141592653589793,)	n	0.32976531495669914
+math_trig	acoth	109	_xlfn.ACOTH({1})	(6.283185307179586,)	n	0.16051955750788544
+math_trig	acoth	110	_xlfn.ACOTH({1})	('3',)	n	0.34657359027997264
+math_trig	acoth	111	_xlfn.ACOTH({1})	('abc',)	e	#VALUE!
+math_trig	acoth	112	_xlfn.ACOTH({1})	('',)	e	#VALUE!
+math_trig	acoth	113	_xlfn.ACOTH({1})	(None,)	e	#NUM!
+math_trig	acoth	114	_xlfn.ACOTH({1})	(True,)	e	#NUM!
+math_trig	acoth	115	_xlfn.ACOTH({1})	(False,)	e	#NUM!
+math_trig	acoth	116	_xlfn.ACOTH({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	asin	117	ASIN({1})	(0.0,)	n	0.0
+math_trig	asin	118	ASIN({1})	(1.0,)	n	1.5707963267948966
+math_trig	asin	119	ASIN({1})	(-1.0,)	n	-1.5707963267948966
+math_trig	asin	120	ASIN({1})	(0.5,)	n	0.5235987755982989
+math_trig	asin	121	ASIN({1})	(-0.5,)	n	-0.5235987755982989
+math_trig	asin	122	ASIN({1})	(2.0,)	e	#NUM!
+math_trig	asin	123	ASIN({1})	(-2.0,)	e	#NUM!
+math_trig	asin	124	ASIN({1})	(0.1,)	n	0.1001674211615598
+math_trig	asin	125	ASIN({1})	(3.7,)	e	#NUM!
+math_trig	asin	126	ASIN({1})	(-3.7,)	e	#NUM!
+math_trig	asin	127	ASIN({1})	(10.0,)	e	#NUM!
+math_trig	asin	128	ASIN({1})	(100.0,)	e	#NUM!
+math_trig	asin	129	ASIN({1})	(1e-10,)	n	1e-10
+math_trig	asin	130	ASIN({1})	(1e-300,)	n	1e-300
+math_trig	asin	131	ASIN({1})	(1000000.0,)	e	#NUM!
+math_trig	asin	132	ASIN({1})	(1000000000000000.0,)	e	#NUM!
+math_trig	asin	133	ASIN({1})	(1e+100,)	e	#NUM!
+math_trig	asin	134	ASIN({1})	(1e+308,)	e	#NUM!
+math_trig	asin	135	ASIN({1})	(0.7853981633974483,)	n	0.9033391107665127
+math_trig	asin	136	ASIN({1})	(1.5707963267948966,)	e	#NUM!
+math_trig	asin	137	ASIN({1})	(3.141592653589793,)	e	#NUM!
+math_trig	asin	138	ASIN({1})	(6.283185307179586,)	e	#NUM!
+math_trig	asin	139	ASIN({1})	('3',)	e	#NUM!
+math_trig	asin	140	ASIN({1})	('abc',)	e	#VALUE!
+math_trig	asin	141	ASIN({1})	('',)	e	#VALUE!
+math_trig	asin	142	ASIN({1})	(None,)	n	0.0
+math_trig	asin	143	ASIN({1})	(True,)	n	1.5707963267948966
+math_trig	asin	144	ASIN({1})	(False,)	n	0.0
+math_trig	asin	145	ASIN({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	asinh	146	ASINH({1})	(0.0,)	n	0.0
+math_trig	asinh	147	ASINH({1})	(1.0,)	n	0.8813735870195429
+math_trig	asinh	148	ASINH({1})	(-1.0,)	n	-0.8813735870195429
+math_trig	asinh	149	ASINH({1})	(0.5,)	n	0.48121182505960347
+math_trig	asinh	150	ASINH({1})	(-0.5,)	n	-0.48121182505960347
+math_trig	asinh	151	ASINH({1})	(2.0,)	n	1.4436354751788103
+math_trig	asinh	152	ASINH({1})	(-2.0,)	n	-1.4436354751788103
+math_trig	asinh	153	ASINH({1})	(0.1,)	n	0.09983407889920758
+math_trig	asinh	154	ASINH({1})	(3.7,)	n	2.0192606561549606
+math_trig	asinh	155	ASINH({1})	(-3.7,)	n	-2.0192606561549606
+math_trig	asinh	156	ASINH({1})	(10.0,)	n	2.99822295029797
+math_trig	asinh	157	ASINH({1})	(100.0,)	n	5.298342365610589
+math_trig	asinh	158	ASINH({1})	(1e-10,)	n	1.000000082690371e-10
+math_trig	asinh	159	ASINH({1})	(1e-300,)	n	0.0
+math_trig	asinh	160	ASINH({1})	(1000000.0,)	n	14.50865773852447
+math_trig	asinh	161	ASINH({1})	(1000000000000000.0,)	n	35.23192357547063
+math_trig	asinh	162	ASINH({1})	(1e+100,)	n	230.95165647996453
+math_trig	asinh	163	ASINH({1})	(1e+308,)	e	#NUM!
+math_trig	asinh	164	ASINH({1})	(0.7853981633974483,)	n	0.7212254887267799
+math_trig	asinh	165	ASINH({1})	(1.5707963267948966,)	n	1.233403117511217
+math_trig	asinh	166	ASINH({1})	(3.141592653589793,)	n	1.8622957433108482
+math_trig	asinh	167	ASINH({1})	(6.283185307179586,)	n	2.537297501373361
+math_trig	asinh	168	ASINH({1})	('3',)	n	1.8184464592320668
+math_trig	asinh	169	ASINH({1})	('abc',)	e	#VALUE!
+math_trig	asinh	170	ASINH({1})	('',)	e	#VALUE!
+math_trig	asinh	171	ASINH({1})	(None,)	n	0.0
+math_trig	asinh	172	ASINH({1})	(True,)	n	0.8813735870195429
+math_trig	asinh	173	ASINH({1})	(False,)	n	0.0
+math_trig	asinh	174	ASINH({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	atan	175	ATAN({1})	(0.0,)	n	0.0
+math_trig	atan	176	ATAN({1})	(1.0,)	n	0.7853981633974483
+math_trig	atan	177	ATAN({1})	(-1.0,)	n	-0.7853981633974483
+math_trig	atan	178	ATAN({1})	(0.5,)	n	0.46364760900080615
+math_trig	atan	179	ATAN({1})	(-0.5,)	n	-0.46364760900080615
+math_trig	atan	180	ATAN({1})	(2.0,)	n	1.1071487177940906
+math_trig	atan	181	ATAN({1})	(-2.0,)	n	-1.1071487177940906
+math_trig	atan	182	ATAN({1})	(0.1,)	n	0.09966865249116204
+math_trig	atan	183	ATAN({1})	(3.7,)	n	1.3068326031691921
+math_trig	atan	184	ATAN({1})	(-3.7,)	n	-1.3068326031691921
+math_trig	atan	185	ATAN({1})	(10.0,)	n	1.4711276743037345
+math_trig	atan	186	ATAN({1})	(100.0,)	n	1.5607966601082315
+math_trig	atan	187	ATAN({1})	(1e-10,)	n	1e-10
+math_trig	atan	188	ATAN({1})	(1e-300,)	n	1e-300
+math_trig	atan	189	ATAN({1})	(1000000.0,)	n	1.5707953267948966
+math_trig	atan	190	ATAN({1})	(1000000000000000.0,)	n	1.5707963267948957
+math_trig	atan	191	ATAN({1})	(1e+100,)	n	1.5707963267948966
+math_trig	atan	192	ATAN({1})	(1e+308,)	n	1.5707963267948966
+math_trig	atan	193	ATAN({1})	(0.7853981633974483,)	n	0.6657737500283538
+math_trig	atan	194	ATAN({1})	(1.5707963267948966,)	n	1.0038848218538872
+math_trig	atan	195	ATAN({1})	(3.141592653589793,)	n	1.2626272556789115
+math_trig	atan	196	ATAN({1})	(6.283185307179586,)	n	1.4129651365067377
+math_trig	atan	197	ATAN({1})	('3',)	n	1.2490457723982544
+math_trig	atan	198	ATAN({1})	('abc',)	e	#VALUE!
+math_trig	atan	199	ATAN({1})	('',)	e	#VALUE!
+math_trig	atan	200	ATAN({1})	(None,)	n	0.0
+math_trig	atan	201	ATAN({1})	(True,)	n	0.7853981633974483
+math_trig	atan	202	ATAN({1})	(False,)	n	0.0
+math_trig	atan	203	ATAN({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	atanh	204	ATANH({1})	(0.0,)	n	0.0
+math_trig	atanh	205	ATANH({1})	(1.0,)	e	#NUM!
+math_trig	atanh	206	ATANH({1})	(-1.0,)	e	#NUM!
+math_trig	atanh	207	ATANH({1})	(0.5,)	n	0.5493061443340549
+math_trig	atanh	208	ATANH({1})	(-0.5,)	n	-0.5493061443340549
+math_trig	atanh	209	ATANH({1})	(2.0,)	e	#NUM!
+math_trig	atanh	210	ATANH({1})	(-2.0,)	e	#NUM!
+math_trig	atanh	211	ATANH({1})	(0.1,)	n	0.10033534773107562
+math_trig	atanh	212	ATANH({1})	(3.7,)	e	#NUM!
+math_trig	atanh	213	ATANH({1})	(-3.7,)	e	#NUM!
+math_trig	atanh	214	ATANH({1})	(10.0,)	e	#NUM!
+math_trig	atanh	215	ATANH({1})	(100.0,)	e	#NUM!
+math_trig	atanh	216	ATANH({1})	(1e-10,)	n	1e-10
+math_trig	atanh	217	ATANH({1})	(1e-300,)	n	1e-300
+math_trig	atanh	218	ATANH({1})	(1000000.0,)	e	#NUM!
+math_trig	atanh	219	ATANH({1})	(1000000000000000.0,)	e	#NUM!
+math_trig	atanh	220	ATANH({1})	(1e+100,)	e	#NUM!
+math_trig	atanh	221	ATANH({1})	(1e+308,)	e	#NUM!
+math_trig	atanh	222	ATANH({1})	(0.7853981633974483,)	n	1.059306170823243
+math_trig	atanh	223	ATANH({1})	(1.5707963267948966,)	e	#NUM!
+math_trig	atanh	224	ATANH({1})	(3.141592653589793,)	e	#NUM!
+math_trig	atanh	225	ATANH({1})	(6.283185307179586,)	e	#NUM!
+math_trig	atanh	226	ATANH({1})	('3',)	e	#NUM!
+math_trig	atanh	227	ATANH({1})	('abc',)	e	#VALUE!
+math_trig	atanh	228	ATANH({1})	('',)	e	#VALUE!
+math_trig	atanh	229	ATANH({1})	(None,)	n	0.0
+math_trig	atanh	230	ATANH({1})	(True,)	e	#NUM!
+math_trig	atanh	231	ATANH({1})	(False,)	n	0.0
+math_trig	atanh	232	ATANH({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	cos	233	COS({1})	(0.0,)	n	1.0
+math_trig	cos	234	COS({1})	(1.0,)	n	0.5403023058681398
+math_trig	cos	235	COS({1})	(-1.0,)	n	0.5403023058681398
+math_trig	cos	236	COS({1})	(0.5,)	n	0.8775825618903728
+math_trig	cos	237	COS({1})	(-0.5,)	n	0.8775825618903728
+math_trig	cos	238	COS({1})	(2.0,)	n	-0.4161468365471424
+math_trig	cos	239	COS({1})	(-2.0,)	n	-0.4161468365471424
+math_trig	cos	240	COS({1})	(0.1,)	n	0.9950041652780258
+math_trig	cos	241	COS({1})	(3.7,)	n	-0.848100031710408
+math_trig	cos	242	COS({1})	(-3.7,)	n	-0.848100031710408
+math_trig	cos	243	COS({1})	(10.0,)	n	-0.8390715290764524
+math_trig	cos	244	COS({1})	(100.0,)	n	0.8623188722876839
+math_trig	cos	245	COS({1})	(1e-10,)	n	1.0
+math_trig	cos	246	COS({1})	(1e-300,)	n	1.0
+math_trig	cos	247	COS({1})	(1000000.0,)	n	0.9367521275331447
+math_trig	cos	248	COS({1})	(1000000000000000.0,)	e	#NUM!
+math_trig	cos	249	COS({1})	(1e+100,)	e	#NUM!
+math_trig	cos	250	COS({1})	(1e+308,)	e	#NUM!
+math_trig	cos	251	COS({1})	(0.7853981633974483,)	n	0.7071067811865476
+math_trig	cos	252	COS({1})	(1.5707963267948966,)	n	6.123233995736766e-17
+math_trig	cos	253	COS({1})	(3.141592653589793,)	n	-1.0
+math_trig	cos	254	COS({1})	(6.283185307179586,)	n	1.0
+math_trig	cos	255	COS({1})	('3',)	n	-0.9899924966004454
+math_trig	cos	256	COS({1})	('abc',)	e	#VALUE!
+math_trig	cos	257	COS({1})	('',)	e	#VALUE!
+math_trig	cos	258	COS({1})	(None,)	n	1.0
+math_trig	cos	259	COS({1})	(True,)	n	0.5403023058681398
+math_trig	cos	260	COS({1})	(False,)	n	1.0
+math_trig	cos	261	COS({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	cosh	262	COSH({1})	(0.0,)	n	1.0
+math_trig	cosh	263	COSH({1})	(1.0,)	n	1.5430806348152437
+math_trig	cosh	264	COSH({1})	(-1.0,)	n	1.5430806348152437
+math_trig	cosh	265	COSH({1})	(0.5,)	n	1.1276259652063807
+math_trig	cosh	266	COSH({1})	(-0.5,)	n	1.1276259652063807
+math_trig	cosh	267	COSH({1})	(2.0,)	n	3.7621956910836314
+math_trig	cosh	268	COSH({1})	(-2.0,)	n	3.7621956910836314
+math_trig	cosh	269	COSH({1})	(0.1,)	n	1.0050041680558035
+math_trig	cosh	270	COSH({1})	(3.7,)	n	20.23601394326887
+math_trig	cosh	271	COSH({1})	(-3.7,)	n	20.23601394326887
+math_trig	cosh	272	COSH({1})	(10.0,)	n	11013.232920103324
+math_trig	cosh	273	COSH({1})	(100.0,)	n	1.3440585709080678e+43
+math_trig	cosh	274	COSH({1})	(1e-10,)	n	1.0
+math_trig	cosh	275	COSH({1})	(1e-300,)	n	1.0
+math_trig	cosh	276	COSH({1})	(1000000.0,)	e	#NUM!
+math_trig	cosh	277	COSH({1})	(1000000000000000.0,)	e	#NUM!
+math_trig	cosh	278	COSH({1})	(1e+100,)	e	#NUM!
+math_trig	cosh	279	COSH({1})	(1e+308,)	e	#NUM!
+math_trig	cosh	280	COSH({1})	(0.7853981633974483,)	n	1.3246090892520057
+math_trig	cosh	281	COSH({1})	(1.5707963267948966,)	n	2.5091784786580567
+math_trig	cosh	282	COSH({1})	(3.141592653589793,)	n	11.591953275521519
+math_trig	cosh	283	COSH({1})	(6.283185307179586,)	n	267.7467614837482
+math_trig	cosh	284	COSH({1})	('3',)	n	10.067661995777765
+math_trig	cosh	285	COSH({1})	('abc',)	e	#VALUE!
+math_trig	cosh	286	COSH({1})	('',)	e	#VALUE!
+math_trig	cosh	287	COSH({1})	(None,)	n	1.0
+math_trig	cosh	288	COSH({1})	(True,)	n	1.5430806348152437
+math_trig	cosh	289	COSH({1})	(False,)	n	1.0
+math_trig	cosh	290	COSH({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	cot	291	_xlfn.COT({1})	(0.0,)	e	#DIV/0!
+math_trig	cot	292	_xlfn.COT({1})	(1.0,)	n	0.6420926159343308
+math_trig	cot	293	_xlfn.COT({1})	(-1.0,)	n	-0.6420926159343308
+math_trig	cot	294	_xlfn.COT({1})	(0.5,)	n	1.830487721712452
+math_trig	cot	295	_xlfn.COT({1})	(-0.5,)	n	-1.830487721712452
+math_trig	cot	296	_xlfn.COT({1})	(2.0,)	n	-0.45765755436028577
+math_trig	cot	297	_xlfn.COT({1})	(-2.0,)	n	0.45765755436028577
+math_trig	cot	298	_xlfn.COT({1})	(0.1,)	n	9.96664442325924
+math_trig	cot	299	_xlfn.COT({1})	(3.7,)	n	1.6006836193850378
+math_trig	cot	300	_xlfn.COT({1})	(-3.7,)	n	-1.6006836193850378
+math_trig	cot	301	_xlfn.COT({1})	(10.0,)	n	1.5423510453569198
+math_trig	cot	302	_xlfn.COT({1})	(100.0,)	n	-1.702956919426469
+math_trig	cot	303	_xlfn.COT({1})	(1e-10,)	n	10000000000.0
+math_trig	cot	304	_xlfn.COT({1})	(1e-300,)	n	9.999999999999999e+299
+math_trig	cot	305	_xlfn.COT({1})	(1000000.0,)	n	-2.6764843396283453
+math_trig	cot	306	_xlfn.COT({1})	(1000000000000000.0,)	e	#NUM!
+math_trig	cot	307	_xlfn.COT({1})	(1e+100,)	e	#NUM!
+math_trig	cot	308	_xlfn.COT({1})	(1e+308,)	e	#NUM!
+math_trig	cot	309	_xlfn.COT({1})	(0.7853981633974483,)	n	1.0000000000000002
+math_trig	cot	310	_xlfn.COT({1})	(1.5707963267948966,)	n	6.123233995736766e-17
+math_trig	cot	311	_xlfn.COT({1})	(3.141592653589793,)	n	-8165619676597685.0
+math_trig	cot	312	_xlfn.COT({1})	(6.283185307179586,)	n	-4082809838298842.5
+math_trig	cot	313	_xlfn.COT({1})	('3',)	n	-7.015252551434534
+math_trig	cot	314	_xlfn.COT({1})	('abc',)	e	#VALUE!
+math_trig	cot	315	_xlfn.COT({1})	('',)	e	#VALUE!
+math_trig	cot	316	_xlfn.COT({1})	(None,)	e	#DIV/0!
+math_trig	cot	317	_xlfn.COT({1})	(True,)	n	0.6420926159343308
+math_trig	cot	318	_xlfn.COT({1})	(False,)	e	#DIV/0!
+math_trig	cot	319	_xlfn.COT({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	coth	320	_xlfn.COTH({1})	(0.0,)	e	#DIV/0!
+math_trig	coth	321	_xlfn.COTH({1})	(1.0,)	n	1.3130352854993315
+math_trig	coth	322	_xlfn.COTH({1})	(-1.0,)	n	-1.3130352854993315
+math_trig	coth	323	_xlfn.COTH({1})	(0.5,)	n	2.163953413738653
+math_trig	coth	324	_xlfn.COTH({1})	(-0.5,)	n	-2.163953413738653
+math_trig	coth	325	_xlfn.COTH({1})	(2.0,)	n	1.037314720727548
+math_trig	coth	326	_xlfn.COTH({1})	(-2.0,)	n	-1.037314720727548
+math_trig	coth	327	_xlfn.COTH({1})	(0.1,)	n	10.033311132253989
+math_trig	coth	328	_xlfn.COTH({1})	(3.7,)	n	1.0012232532391792
+math_trig	coth	329	_xlfn.COTH({1})	(-3.7,)	n	-1.0012232532391792
+math_trig	coth	330	_xlfn.COTH({1})	(10.0,)	n	1.0000000041223074
+math_trig	coth	331	_xlfn.COTH({1})	(100.0,)	n	1.0
+math_trig	coth	332	_xlfn.COTH({1})	(1e-10,)	n	10000000000.0
+math_trig	coth	333	_xlfn.COTH({1})	(1e-300,)	n	9.999999999999999e+299
+math_trig	coth	334	_xlfn.COTH({1})	(1000000.0,)	n	1.0
+math_trig	coth	335	_xlfn.COTH({1})	(1000000000000000.0,)	n	1.0
+math_trig	coth	336	_xlfn.COTH({1})	(1e+100,)	n	1.0
+math_trig	coth	337	_xlfn.COTH({1})	(1e+308,)	n	1.0
+math_trig	coth	338	_xlfn.COTH({1})	(0.7853981633974483,)	n	1.5248686188220641
+math_trig	coth	339	_xlfn.COTH({1})	(1.5707963267948966,)	n	1.0903314107273683
+math_trig	coth	340	_xlfn.COTH({1})	(3.141592653589793,)	n	1.003741873197321
+math_trig	coth	341	_xlfn.COTH({1})	(6.283185307179586,)	n	1.0000069747090357
+math_trig	coth	342	_xlfn.COTH({1})	('3',)	n	1.004969823313689
+math_trig	coth	343	_xlfn.COTH({1})	('abc',)	e	#VALUE!
+math_trig	coth	344	_xlfn.COTH({1})	('',)	e	#VALUE!
+math_trig	coth	345	_xlfn.COTH({1})	(None,)	e	#DIV/0!
+math_trig	coth	346	_xlfn.COTH({1})	(True,)	n	1.3130352854993315
+math_trig	coth	347	_xlfn.COTH({1})	(False,)	e	#DIV/0!
+math_trig	coth	348	_xlfn.COTH({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	csc	349	_xlfn.CSC({1})	(0.0,)	e	#DIV/0!
+math_trig	csc	350	_xlfn.CSC({1})	(1.0,)	n	1.1883951057781212
+math_trig	csc	351	_xlfn.CSC({1})	(-1.0,)	n	-1.1883951057781212
+math_trig	csc	352	_xlfn.CSC({1})	(0.5,)	n	2.085829642933488
+math_trig	csc	353	_xlfn.CSC({1})	(-0.5,)	n	-2.085829642933488
+math_trig	csc	354	_xlfn.CSC({1})	(2.0,)	n	1.0997501702946164
+math_trig	csc	355	_xlfn.CSC({1})	(-2.0,)	n	-1.0997501702946164
+math_trig	csc	356	_xlfn.CSC({1})	(0.1,)	n	10.016686131634776
+math_trig	csc	357	_xlfn.CSC({1})	(3.7,)	n	-1.8873759692672745
+math_trig	csc	358	_xlfn.CSC({1})	(-3.7,)	n	1.8873759692672745
+math_trig	csc	359	_xlfn.CSC({1})	(10.0,)	n	-1.8381639608896658
+math_trig	csc	360	_xlfn.CSC({1})	(100.0,)	n	-1.9748575314241
+math_trig	csc	361	_xlfn.CSC({1})	(1e-10,)	n	10000000000.0
+math_trig	csc	362	_xlfn.CSC({1})	(1e-300,)	n	9.999999999999999e+299
+math_trig	csc	363	_xlfn.CSC({1})	(1000000.0,)	n	-2.8571959016272896
+math_trig	csc	364	_xlfn.CSC({1})	(1000000000000000.0,)	e	#NUM!
+math_trig	csc	365	_xlfn.CSC({1})	(1e+100,)	e	#NUM!
+math_trig	csc	366	_xlfn.CSC({1})	(1e+308,)	e	#NUM!
+math_trig	csc	367	_xlfn.CSC({1})	(0.7853981633974483,)	n	1.4142135623730951
+math_trig	csc	368	_xlfn.CSC({1})	(1.5707963267948966,)	n	1.0
+math_trig	csc	369	_xlfn.CSC({1})	(3.141592653589793,)	n	8165619676597685.0
+math_trig	csc	370	_xlfn.CSC({1})	(6.283185307179586,)	n	-4082809838298842.5
+math_trig	csc	371	_xlfn.CSC({1})	('3',)	n	7.086167395737187
+math_trig	csc	372	_xlfn.CSC({1})	('abc',)	e	#VALUE!
+math_trig	csc	373	_xlfn.CSC({1})	('',)	e	#VALUE!
+math_trig	csc	374	_xlfn.CSC({1})	(None,)	e	#DIV/0!
+math_trig	csc	375	_xlfn.CSC({1})	(True,)	n	1.1883951057781212
+math_trig	csc	376	_xlfn.CSC({1})	(False,)	e	#DIV/0!
+math_trig	csc	377	_xlfn.CSC({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	csch	378	_xlfn.CSCH({1})	(0.0,)	e	#DIV/0!
+math_trig	csch	379	_xlfn.CSCH({1})	(1.0,)	n	0.8509181282393216
+math_trig	csch	380	_xlfn.CSCH({1})	(-1.0,)	n	-0.8509181282393216
+math_trig	csch	381	_xlfn.CSCH({1})	(0.5,)	n	1.9190347513349437
+math_trig	csch	382	_xlfn.CSCH({1})	(-0.5,)	n	-1.9190347513349437
+math_trig	csch	383	_xlfn.CSCH({1})	(2.0,)	n	0.2757205647717832
+math_trig	csch	384	_xlfn.CSCH({1})	(-2.0,)	n	-0.2757205647717832
+math_trig	csch	385	_xlfn.CSCH({1})	(0.1,)	n	9.98335275729611
+math_trig	csch	386	_xlfn.CSCH({1})	(3.7,)	n	0.04947729607451755
+math_trig	csch	387	_xlfn.CSCH({1})	(-3.7,)	n	-0.04947729607451755
+math_trig	csch	388	_xlfn.CSCH({1})	(10.0,)	n	9.079985971212217e-05
+math_trig	csch	389	_xlfn.CSCH({1})	(100.0,)	n	7.440151952041671e-44
+math_trig	csch	390	_xlfn.CSCH({1})	(1e-10,)	n	10000000000.0
+math_trig	csch	391	_xlfn.CSCH({1})	(1e-300,)	n	9.999999999999999e+299
+math_trig	csch	392	_xlfn.CSCH({1})	(1000000.0,)	n	0.0
+math_trig	csch	393	_xlfn.CSCH({1})	(1000000000000000.0,)	n	0.0
+math_trig	csch	394	_xlfn.CSCH({1})	(1e+100,)	n	0.0
+math_trig	csch	395	_xlfn.CSCH({1})	(1e+308,)	n	0.0
+math_trig	csch	396	_xlfn.CSCH({1})	(0.7853981633974483,)	n	1.1511838709208486
+math_trig	csch	397	_xlfn.CSCH({1})	(1.5707963267948966,)	n	0.4345372080946958
+math_trig	csch	398	_xlfn.CSCH({1})	(3.141592653589793,)	n	0.08658953753004694
+math_trig	csch	399	_xlfn.CSCH({1})	(6.283185307179586,)	n	0.003734898488285673
+math_trig	csch	400	_xlfn.CSCH({1})	('3',)	n	0.09982156966882273
+math_trig	csch	401	_xlfn.CSCH({1})	('abc',)	e	#VALUE!
+math_trig	csch	402	_xlfn.CSCH({1})	('',)	e	#VALUE!
+math_trig	csch	403	_xlfn.CSCH({1})	(None,)	e	#DIV/0!
+math_trig	csch	404	_xlfn.CSCH({1})	(True,)	n	0.8509181282393216
+math_trig	csch	405	_xlfn.CSCH({1})	(False,)	e	#DIV/0!
+math_trig	csch	406	_xlfn.CSCH({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	sec	407	_xlfn.SEC({1})	(0.0,)	n	1.0
+math_trig	sec	408	_xlfn.SEC({1})	(1.0,)	n	1.8508157176809255
+math_trig	sec	409	_xlfn.SEC({1})	(-1.0,)	n	1.8508157176809255
+math_trig	sec	410	_xlfn.SEC({1})	(0.5,)	n	1.139493927324549
+math_trig	sec	411	_xlfn.SEC({1})	(-0.5,)	n	1.139493927324549
+math_trig	sec	412	_xlfn.SEC({1})	(2.0,)	n	-2.402997961722381
+math_trig	sec	413	_xlfn.SEC({1})	(-2.0,)	n	-2.402997961722381
+math_trig	sec	414	_xlfn.SEC({1})	(0.1,)	n	1.0050209184004553
+math_trig	sec	415	_xlfn.SEC({1})	(3.7,)	n	-1.1791061933852864
+math_trig	sec	416	_xlfn.SEC({1})	(-3.7,)	n	-1.1791061933852864
+math_trig	sec	417	_xlfn.SEC({1})	(10.0,)	n	-1.1917935066878957
+math_trig	sec	418	_xlfn.SEC({1})	(100.0,)	n	1.1596638229046938
+math_trig	sec	419	_xlfn.SEC({1})	(1e-10,)	n	1.0
+math_trig	sec	420	_xlfn.SEC({1})	(1e-300,)	n	1.0
+math_trig	sec	421	_xlfn.SEC({1})	(1000000.0,)	n	1.0675182586811016
+math_trig	sec	422	_xlfn.SEC({1})	(1000000000000000.0,)	e	#NUM!
+math_trig	sec	423	_xlfn.SEC({1})	(1e+100,)	e	#NUM!
+math_trig	sec	424	_xlfn.SEC({1})	(1e+308,)	e	#NUM!
+math_trig	sec	425	_xlfn.SEC({1})	(0.7853981633974483,)	n	1.414213562373095
+math_trig	sec	426	_xlfn.SEC({1})	(1.5707963267948966,)	n	1.633123935319537e+16
+math_trig	sec	427	_xlfn.SEC({1})	(3.141592653589793,)	n	-1.0
+math_trig	sec	428	_xlfn.SEC({1})	(6.283185307179586,)	n	1.0
+math_trig	sec	429	_xlfn.SEC({1})	('3',)	n	-1.0101086659079939
+math_trig	sec	430	_xlfn.SEC({1})	('abc',)	e	#VALUE!
+math_trig	sec	431	_xlfn.SEC({1})	('',)	e	#VALUE!
+math_trig	sec	432	_xlfn.SEC({1})	(None,)	n	1.0
+math_trig	sec	433	_xlfn.SEC({1})	(True,)	n	1.8508157176809255
+math_trig	sec	434	_xlfn.SEC({1})	(False,)	n	1.0
+math_trig	sec	435	_xlfn.SEC({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	sech	436	_xlfn.SECH({1})	(0.0,)	n	1.0
+math_trig	sech	437	_xlfn.SECH({1})	(1.0,)	n	0.6480542736638855
+math_trig	sech	438	_xlfn.SECH({1})	(-1.0,)	n	0.6480542736638855
+math_trig	sech	439	_xlfn.SECH({1})	(0.5,)	n	0.886818883970074
+math_trig	sech	440	_xlfn.SECH({1})	(-0.5,)	n	0.886818883970074
+math_trig	sech	441	_xlfn.SECH({1})	(2.0,)	n	0.2658022288340797
+math_trig	sech	442	_xlfn.SECH({1})	(-2.0,)	n	0.2658022288340797
+math_trig	sech	443	_xlfn.SECH({1})	(0.1,)	n	0.9950207489532266
+math_trig	sech	444	_xlfn.SECH({1})	(3.7,)	n	0.04941684675665245
+math_trig	sech	445	_xlfn.SECH({1})	(-3.7,)	n	0.04941684675665245
+math_trig	sech	446	_xlfn.SECH({1})	(10.0,)	n	9.079985933781724e-05
+math_trig	sech	447	_xlfn.SECH({1})	(100.0,)	n	7.440151952041671e-44
+math_trig	sech	448	_xlfn.SECH({1})	(1e-10,)	n	1.0
+math_trig	sech	449	_xlfn.SECH({1})	(1e-300,)	n	1.0
+math_trig	sech	450	_xlfn.SECH({1})	(1000000.0,)	n	0.0
+math_trig	sech	451	_xlfn.SECH({1})	(1000000000000000.0,)	n	0.0
+math_trig	sech	452	_xlfn.SECH({1})	(1e+100,)	n	0.0
+math_trig	sech	453	_xlfn.SECH({1})	(1e+308,)	n	0.0
+math_trig	sech	454	_xlfn.SECH({1})	(0.7853981633974483,)	n	0.7549397087141313
+math_trig	sech	455	_xlfn.SECH({1})	(1.5707963267948966,)	n	0.3985368153383867
+math_trig	sech	456	_xlfn.SECH({1})	(3.141592653589793,)	n	0.08626673833405443
+math_trig	sech	457	_xlfn.SECH({1})	(6.283185307179586,)	n	0.003734872438637128
+math_trig	sech	458	_xlfn.SECH({1})	('3',)	n	0.0993279274194332
+math_trig	sech	459	_xlfn.SECH({1})	('abc',)	e	#VALUE!
+math_trig	sech	460	_xlfn.SECH({1})	('',)	e	#VALUE!
+math_trig	sech	461	_xlfn.SECH({1})	(None,)	n	1.0
+math_trig	sech	462	_xlfn.SECH({1})	(True,)	n	0.6480542736638855
+math_trig	sech	463	_xlfn.SECH({1})	(False,)	n	1.0
+math_trig	sech	464	_xlfn.SECH({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	sin	465	SIN({1})	(0.0,)	n	0.0
+math_trig	sin	466	SIN({1})	(1.0,)	n	0.8414709848078965
+math_trig	sin	467	SIN({1})	(-1.0,)	n	-0.8414709848078965
+math_trig	sin	468	SIN({1})	(0.5,)	n	0.479425538604203
+math_trig	sin	469	SIN({1})	(-0.5,)	n	-0.479425538604203
+math_trig	sin	470	SIN({1})	(2.0,)	n	0.9092974268256817
+math_trig	sin	471	SIN({1})	(-2.0,)	n	-0.9092974268256817
+math_trig	sin	472	SIN({1})	(0.1,)	n	0.09983341664682815
+math_trig	sin	473	SIN({1})	(3.7,)	n	-0.5298361409084934
+math_trig	sin	474	SIN({1})	(-3.7,)	n	0.5298361409084934
+math_trig	sin	475	SIN({1})	(10.0,)	n	-0.5440211108893698
+math_trig	sin	476	SIN({1})	(100.0,)	n	-0.5063656411097588
+math_trig	sin	477	SIN({1})	(1e-10,)	n	1e-10
+math_trig	sin	478	SIN({1})	(1e-300,)	n	1e-300
+math_trig	sin	479	SIN({1})	(1000000.0,)	n	-0.34999350217129294
+math_trig	sin	480	SIN({1})	(1000000000000000.0,)	e	#NUM!
+math_trig	sin	481	SIN({1})	(1e+100,)	e	#NUM!
+math_trig	sin	482	SIN({1})	(1e+308,)	e	#NUM!
+math_trig	sin	483	SIN({1})	(0.7853981633974483,)	n	0.7071067811865475
+math_trig	sin	484	SIN({1})	(1.5707963267948966,)	n	1.0
+math_trig	sin	485	SIN({1})	(3.141592653589793,)	n	1.2246467991473532e-16
+math_trig	sin	486	SIN({1})	(6.283185307179586,)	n	-2.4492935982947064e-16
+math_trig	sin	487	SIN({1})	('3',)	n	0.1411200080598672
+math_trig	sin	488	SIN({1})	('abc',)	e	#VALUE!
+math_trig	sin	489	SIN({1})	('',)	e	#VALUE!
+math_trig	sin	490	SIN({1})	(None,)	n	0.0
+math_trig	sin	491	SIN({1})	(True,)	n	0.8414709848078965
+math_trig	sin	492	SIN({1})	(False,)	n	0.0
+math_trig	sin	493	SIN({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	sinh	494	SINH({1})	(0.0,)	n	0.0
+math_trig	sinh	495	SINH({1})	(1.0,)	n	1.1752011936438014
+math_trig	sinh	496	SINH({1})	(-1.0,)	n	-1.1752011936438014
+math_trig	sinh	497	SINH({1})	(0.5,)	n	0.5210953054937474
+math_trig	sinh	498	SINH({1})	(-0.5,)	n	-0.5210953054937474
+math_trig	sinh	499	SINH({1})	(2.0,)	n	3.626860407847019
+math_trig	sinh	500	SINH({1})	(-2.0,)	n	-3.626860407847019
+math_trig	sinh	501	SINH({1})	(0.1,)	n	0.10016675001984403
+math_trig	sinh	502	SINH({1})	(3.7,)	n	20.21129041679853
+math_trig	sinh	503	SINH({1})	(-3.7,)	n	-20.21129041679853
+math_trig	sinh	504	SINH({1})	(10.0,)	n	11013.232874703393
+math_trig	sinh	505	SINH({1})	(100.0,)	n	1.3440585709080678e+43
+math_trig	sinh	506	SINH({1})	(1e-10,)	n	1e-10
+math_trig	sinh	507	SINH({1})	(1e-300,)	n	1e-300
+math_trig	sinh	508	SINH({1})	(1000000.0,)	e	#NUM!
+math_trig	sinh	509	SINH({1})	(1000000000000000.0,)	e	#NUM!
+math_trig	sinh	510	SINH({1})	(1e+100,)	e	#NUM!
+math_trig	sinh	511	SINH({1})	(1e+308,)	e	#NUM!
+math_trig	sinh	512	SINH({1})	(0.7853981633974483,)	n	0.8686709614860096
+math_trig	sinh	513	SINH({1})	(1.5707963267948966,)	n	2.3012989023072947
+math_trig	sinh	514	SINH({1})	(3.141592653589793,)	n	11.548739357257748
+math_trig	sinh	515	SINH({1})	(6.283185307179586,)	n	267.74489404101644
+math_trig	sinh	516	SINH({1})	('3',)	n	10.017874927409903
+math_trig	sinh	517	SINH({1})	('abc',)	e	#VALUE!
+math_trig	sinh	518	SINH({1})	('',)	e	#VALUE!
+math_trig	sinh	519	SINH({1})	(None,)	n	0.0
+math_trig	sinh	520	SINH({1})	(True,)	n	1.1752011936438014
+math_trig	sinh	521	SINH({1})	(False,)	n	0.0
+math_trig	sinh	522	SINH({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	tan	523	TAN({1})	(0.0,)	n	0.0
+math_trig	tan	524	TAN({1})	(1.0,)	n	1.557407724654902
+math_trig	tan	525	TAN({1})	(-1.0,)	n	-1.557407724654902
+math_trig	tan	526	TAN({1})	(0.5,)	n	0.5463024898437905
+math_trig	tan	527	TAN({1})	(-0.5,)	n	-0.5463024898437905
+math_trig	tan	528	TAN({1})	(2.0,)	n	-2.185039863261519
+math_trig	tan	529	TAN({1})	(-2.0,)	n	2.185039863261519
+math_trig	tan	530	TAN({1})	(0.1,)	n	0.10033467208545054
+math_trig	tan	531	TAN({1})	(3.7,)	n	0.6247330752245639
+math_trig	tan	532	TAN({1})	(-3.7,)	n	-0.6247330752245639
+math_trig	tan	533	TAN({1})	(10.0,)	n	0.6483608274590867
+math_trig	tan	534	TAN({1})	(100.0,)	n	-0.5872139151569291
+math_trig	tan	535	TAN({1})	(1e-10,)	n	1e-10
+math_trig	tan	536	TAN({1})	(1e-300,)	n	1e-300
+math_trig	tan	537	TAN({1})	(1000000.0,)	n	-0.373624453987599
+math_trig	tan	538	TAN({1})	(1000000000000000.0,)	e	#NUM!
+math_trig	tan	539	TAN({1})	(1e+100,)	e	#NUM!
+math_trig	tan	540	TAN({1})	(1e+308,)	e	#NUM!
+math_trig	tan	541	TAN({1})	(0.7853981633974483,)	n	0.9999999999999999
+math_trig	tan	542	TAN({1})	(1.5707963267948966,)	n	1.633123935319537e+16
+math_trig	tan	543	TAN({1})	(3.141592653589793,)	n	-1.2246467991473532e-16
+math_trig	tan	544	TAN({1})	(6.283185307179586,)	n	-2.4492935982947064e-16
+math_trig	tan	545	TAN({1})	('3',)	n	-0.1425465430742778
+math_trig	tan	546	TAN({1})	('abc',)	e	#VALUE!
+math_trig	tan	547	TAN({1})	('',)	e	#VALUE!
+math_trig	tan	548	TAN({1})	(None,)	n	0.0
+math_trig	tan	549	TAN({1})	(True,)	n	1.557407724654902
+math_trig	tan	550	TAN({1})	(False,)	n	0.0
+math_trig	tan	551	TAN({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	tanh	552	TANH({1})	(0.0,)	n	0.0
+math_trig	tanh	553	TANH({1})	(1.0,)	n	0.7615941559557649
+math_trig	tanh	554	TANH({1})	(-1.0,)	n	-0.7615941559557649
+math_trig	tanh	555	TANH({1})	(0.5,)	n	0.4621171572600098
+math_trig	tanh	556	TANH({1})	(-0.5,)	n	-0.4621171572600098
+math_trig	tanh	557	TANH({1})	(2.0,)	n	0.964027580075817
+math_trig	tanh	558	TANH({1})	(-2.0,)	n	-0.964027580075817
+math_trig	tanh	559	TANH({1})	(0.1,)	n	0.09966799462495583
+math_trig	tanh	560	TANH({1})	(3.7,)	n	0.9987782412811312
+math_trig	tanh	561	TANH({1})	(-3.7,)	n	-0.9987782412811312
+math_trig	tanh	562	TANH({1})	(10.0,)	n	0.9999999958776926
+math_trig	tanh	563	TANH({1})	(100.0,)	n	1.0
+math_trig	tanh	564	TANH({1})	(1e-10,)	n	1e-10
+math_trig	tanh	565	TANH({1})	(1e-300,)	n	1e-300
+math_trig	tanh	566	TANH({1})	(1000000.0,)	n	1.0
+math_trig	tanh	567	TANH({1})	(1000000000000000.0,)	n	1.0
+math_trig	tanh	568	TANH({1})	(1e+100,)	n	1.0
+math_trig	tanh	569	TANH({1})	(1e+308,)	n	1.0
+math_trig	tanh	570	TANH({1})	(0.7853981633974483,)	n	0.6557942026326724
+math_trig	tanh	571	TANH({1})	(1.5707963267948966,)	n	0.9171523356672744
+math_trig	tanh	572	TANH({1})	(3.141592653589793,)	n	0.9962720762207501
+math_trig	tanh	573	TANH({1})	(6.283185307179586,)	n	0.9999930253396105
+math_trig	tanh	574	TANH({1})	('3',)	n	0.9950547536867306
+math_trig	tanh	575	TANH({1})	('abc',)	e	#VALUE!
+math_trig	tanh	576	TANH({1})	('',)	e	#VALUE!
+math_trig	tanh	577	TANH({1})	(None,)	n	0.0
+math_trig	tanh	578	TANH({1})	(True,)	n	0.7615941559557649
+math_trig	tanh	579	TANH({1})	(False,)	n	0.0
+math_trig	tanh	580	TANH({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	degrees	581	DEGREES({1})	(0.0,)	n	0.0
+math_trig	degrees	582	DEGREES({1})	(1.0,)	n	57.29577951308232
+math_trig	degrees	583	DEGREES({1})	(-1.0,)	n	-57.29577951308232
+math_trig	degrees	584	DEGREES({1})	(0.5,)	n	28.64788975654116
+math_trig	degrees	585	DEGREES({1})	(-0.5,)	n	-28.64788975654116
+math_trig	degrees	586	DEGREES({1})	(2.0,)	n	114.59155902616465
+math_trig	degrees	587	DEGREES({1})	(-2.0,)	n	-114.59155902616465
+math_trig	degrees	588	DEGREES({1})	(0.1,)	n	5.729577951308233
+math_trig	degrees	589	DEGREES({1})	(3.7,)	n	211.99438419840462
+math_trig	degrees	590	DEGREES({1})	(-3.7,)	n	-211.99438419840462
+math_trig	degrees	591	DEGREES({1})	(10.0,)	n	572.9577951308232
+math_trig	degrees	592	DEGREES({1})	(100.0,)	n	5729.5779513082325
+math_trig	degrees	593	DEGREES({1})	(1e-10,)	n	5.729577951308233e-09
+math_trig	degrees	594	DEGREES({1})	(1e-300,)	n	5.729577951308232e-299
+math_trig	degrees	595	DEGREES({1})	(1000000.0,)	n	57295779.513082325
+math_trig	degrees	596	DEGREES({1})	(1000000000000000.0,)	n	5.729577951308232e+16
+math_trig	degrees	597	DEGREES({1})	(1e+100,)	n	5.729577951308232e+101
+math_trig	degrees	598	DEGREES({1})	(1e+308,)	e	#NUM!
+math_trig	degrees	599	DEGREES({1})	(0.7853981633974483,)	n	45.0
+math_trig	degrees	600	DEGREES({1})	(1.5707963267948966,)	n	90.0
+math_trig	degrees	601	DEGREES({1})	(3.141592653589793,)	n	180.0
+math_trig	degrees	602	DEGREES({1})	(6.283185307179586,)	n	360.0
+math_trig	degrees	603	DEGREES({1})	('3',)	n	171.88733853924697
+math_trig	degrees	604	DEGREES({1})	('abc',)	e	#VALUE!
+math_trig	degrees	605	DEGREES({1})	('',)	e	#VALUE!
+math_trig	degrees	606	DEGREES({1})	(None,)	n	0.0
+math_trig	degrees	607	DEGREES({1})	(True,)	n	57.29577951308232
+math_trig	degrees	608	DEGREES({1})	(False,)	n	0.0
+math_trig	degrees	609	DEGREES({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	radians	610	RADIANS({1})	(0.0,)	n	0.0
+math_trig	radians	611	RADIANS({1})	(1.0,)	n	0.017453292519943295
+math_trig	radians	612	RADIANS({1})	(-1.0,)	n	-0.017453292519943295
+math_trig	radians	613	RADIANS({1})	(0.5,)	n	0.008726646259971648
+math_trig	radians	614	RADIANS({1})	(-0.5,)	n	-0.008726646259971648
+math_trig	radians	615	RADIANS({1})	(2.0,)	n	0.03490658503988659
+math_trig	radians	616	RADIANS({1})	(-2.0,)	n	-0.03490658503988659
+math_trig	radians	617	RADIANS({1})	(0.1,)	n	0.0017453292519943296
+math_trig	radians	618	RADIANS({1})	(3.7,)	n	0.0645771823237902
+math_trig	radians	619	RADIANS({1})	(-3.7,)	n	-0.0645771823237902
+math_trig	radians	620	RADIANS({1})	(10.0,)	n	0.17453292519943295
+math_trig	radians	621	RADIANS({1})	(100.0,)	n	1.7453292519943295
+math_trig	radians	622	RADIANS({1})	(1e-10,)	n	1.7453292519943296e-12
+math_trig	radians	623	RADIANS({1})	(1e-300,)	n	1.7453292519943295e-302
+math_trig	radians	624	RADIANS({1})	(1000000.0,)	n	17453.292519943294
+math_trig	radians	625	RADIANS({1})	(1000000000000000.0,)	n	17453292519943.295
+math_trig	radians	626	RADIANS({1})	(1e+100,)	n	1.7453292519943295e+98
+math_trig	radians	627	RADIANS({1})	(1e+308,)	n	1.7453292519943295e+306
+math_trig	radians	628	RADIANS({1})	(0.7853981633974483,)	n	0.013707783890401887
+math_trig	radians	629	RADIANS({1})	(1.5707963267948966,)	n	0.027415567780803774
+math_trig	radians	630	RADIANS({1})	(3.141592653589793,)	n	0.05483113556160755
+math_trig	radians	631	RADIANS({1})	(6.283185307179586,)	n	0.1096622711232151
+math_trig	radians	632	RADIANS({1})	('3',)	n	0.05235987755982989
+math_trig	radians	633	RADIANS({1})	('abc',)	e	#VALUE!
+math_trig	radians	634	RADIANS({1})	('',)	e	#VALUE!
+math_trig	radians	635	RADIANS({1})	(None,)	n	0.0
+math_trig	radians	636	RADIANS({1})	(True,)	n	0.017453292519943295
+math_trig	radians	637	RADIANS({1})	(False,)	n	0.0
+math_trig	radians	638	RADIANS({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	sign	639	SIGN({1})	(0.0,)	n	0.0
+math_trig	sign	640	SIGN({1})	(1.0,)	n	1.0
+math_trig	sign	641	SIGN({1})	(-1.0,)	n	-1.0
+math_trig	sign	642	SIGN({1})	(0.5,)	n	1.0
+math_trig	sign	643	SIGN({1})	(-0.5,)	n	-1.0
+math_trig	sign	644	SIGN({1})	(2.0,)	n	1.0
+math_trig	sign	645	SIGN({1})	(-2.0,)	n	-1.0
+math_trig	sign	646	SIGN({1})	(0.1,)	n	1.0
+math_trig	sign	647	SIGN({1})	(3.7,)	n	1.0
+math_trig	sign	648	SIGN({1})	(-3.7,)	n	-1.0
+math_trig	sign	649	SIGN({1})	(10.0,)	n	1.0
+math_trig	sign	650	SIGN({1})	(100.0,)	n	1.0
+math_trig	sign	651	SIGN({1})	(1e-10,)	n	1.0
+math_trig	sign	652	SIGN({1})	(1e-300,)	n	1.0
+math_trig	sign	653	SIGN({1})	(1000000.0,)	n	1.0
+math_trig	sign	654	SIGN({1})	(1000000000000000.0,)	n	1.0
+math_trig	sign	655	SIGN({1})	(1e+100,)	n	1.0
+math_trig	sign	656	SIGN({1})	(1e+308,)	n	1.0
+math_trig	sign	657	SIGN({1})	(0.7853981633974483,)	n	1.0
+math_trig	sign	658	SIGN({1})	(1.5707963267948966,)	n	1.0
+math_trig	sign	659	SIGN({1})	(3.141592653589793,)	n	1.0
+math_trig	sign	660	SIGN({1})	(6.283185307179586,)	n	1.0
+math_trig	sign	661	SIGN({1})	('3',)	n	1.0
+math_trig	sign	662	SIGN({1})	('abc',)	e	#VALUE!
+math_trig	sign	663	SIGN({1})	('',)	e	#VALUE!
+math_trig	sign	664	SIGN({1})	(None,)	n	0.0
+math_trig	sign	665	SIGN({1})	(True,)	n	1.0
+math_trig	sign	666	SIGN({1})	(False,)	n	0.0
+math_trig	sign	667	SIGN({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	trunc	668	TRUNC({1})	(0.0,)	n	0.0
+math_trig	trunc	669	TRUNC({1})	(1.0,)	n	1.0
+math_trig	trunc	670	TRUNC({1})	(-1.0,)	n	-1.0
+math_trig	trunc	671	TRUNC({1})	(0.5,)	n	0.0
+math_trig	trunc	672	TRUNC({1})	(-0.5,)	n	0.0
+math_trig	trunc	673	TRUNC({1})	(2.0,)	n	2.0
+math_trig	trunc	674	TRUNC({1})	(-2.0,)	n	-2.0
+math_trig	trunc	675	TRUNC({1})	(0.1,)	n	0.0
+math_trig	trunc	676	TRUNC({1})	(3.7,)	n	3.0
+math_trig	trunc	677	TRUNC({1})	(-3.7,)	n	-3.0
+math_trig	trunc	678	TRUNC({1})	(10.0,)	n	10.0
+math_trig	trunc	679	TRUNC({1})	(100.0,)	n	100.0
+math_trig	trunc	680	TRUNC({1})	(1e-10,)	n	0.0
+math_trig	trunc	681	TRUNC({1})	(1e-300,)	n	0.0
+math_trig	trunc	682	TRUNC({1})	(1000000.0,)	n	1000000.0
+math_trig	trunc	683	TRUNC({1})	(1000000000000000.0,)	n	1000000000000000.0
+math_trig	trunc	684	TRUNC({1})	(1e+100,)	n	1e+100
+math_trig	trunc	685	TRUNC({1})	(1e+308,)	n	1e+308
+math_trig	trunc	686	TRUNC({1})	(0.7853981633974483,)	n	0.0
+math_trig	trunc	687	TRUNC({1})	(1.5707963267948966,)	n	1.0
+math_trig	trunc	688	TRUNC({1})	(3.141592653589793,)	n	3.0
+math_trig	trunc	689	TRUNC({1})	(6.283185307179586,)	n	6.0
+math_trig	trunc	690	TRUNC({1})	('3',)	n	3.0
+math_trig	trunc	691	TRUNC({1})	('abc',)	e	#VALUE!
+math_trig	trunc	692	TRUNC({1})	('',)	e	#VALUE!
+math_trig	trunc	693	TRUNC({1})	(None,)	n	0.0
+math_trig	trunc	694	TRUNC({1})	(True,)	n	1.0
+math_trig	trunc	695	TRUNC({1})	(False,)	n	0.0
+math_trig	trunc	696	TRUNC({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	log	697	LOG({1})	(0.0,)	e	#NUM!
+math_trig	log	698	LOG({1})	(1.0,)	n	0.0
+math_trig	log	699	LOG({1})	(-1.0,)	e	#NUM!
+math_trig	log	700	LOG({1})	(0.5,)	n	-0.3010299956639812
+math_trig	log	701	LOG({1})	(-0.5,)	e	#NUM!
+math_trig	log	702	LOG({1})	(2.0,)	n	0.3010299956639812
+math_trig	log	703	LOG({1})	(-2.0,)	e	#NUM!
+math_trig	log	704	LOG({1})	(0.1,)	n	-1.0
+math_trig	log	705	LOG({1})	(3.7,)	n	0.568201724066995
+math_trig	log	706	LOG({1})	(-3.7,)	e	#NUM!
+math_trig	log	707	LOG({1})	(10.0,)	n	1.0
+math_trig	log	708	LOG({1})	(100.0,)	n	2.0
+math_trig	log	709	LOG({1})	(1e-10,)	n	-10.0
+math_trig	log	710	LOG({1})	(1e-300,)	n	-300.0
+math_trig	log	711	LOG({1})	(1000000.0,)	n	6.0
+math_trig	log	712	LOG({1})	(1000000000000000.0,)	n	15.0
+math_trig	log	713	LOG({1})	(1e+100,)	n	100.0
+math_trig	log	714	LOG({1})	(1e+308,)	n	308.0
+math_trig	log	715	LOG({1})	(0.7853981633974483,)	n	-0.10491011863382856
+math_trig	log	716	LOG({1})	(1.5707963267948966,)	n	0.19611987703015263
+math_trig	log	717	LOG({1})	(3.141592653589793,)	n	0.49714987269413385
+math_trig	log	718	LOG({1})	(6.283185307179586,)	n	0.798179868358115
+math_trig	log	719	LOG({1})	('3',)	n	0.47712125471966244
+math_trig	log	720	LOG({1})	('abc',)	e	#VALUE!
+math_trig	log	721	LOG({1})	('',)	e	#VALUE!
+math_trig	log	722	LOG({1})	(None,)	e	#NUM!
+math_trig	log	723	LOG({1})	(True,)	n	0.0
+math_trig	log	724	LOG({1})	(False,)	e	#NUM!
+math_trig	log	725	LOG({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	log10	726	LOG10({1})	(0.0,)	e	#NUM!
+math_trig	log10	727	LOG10({1})	(1.0,)	n	0.0
+math_trig	log10	728	LOG10({1})	(-1.0,)	e	#NUM!
+math_trig	log10	729	LOG10({1})	(0.5,)	n	-0.3010299956639812
+math_trig	log10	730	LOG10({1})	(-0.5,)	e	#NUM!
+math_trig	log10	731	LOG10({1})	(2.0,)	n	0.3010299956639812
+math_trig	log10	732	LOG10({1})	(-2.0,)	e	#NUM!
+math_trig	log10	733	LOG10({1})	(0.1,)	n	-1.0
+math_trig	log10	734	LOG10({1})	(3.7,)	n	0.568201724066995
+math_trig	log10	735	LOG10({1})	(-3.7,)	e	#NUM!
+math_trig	log10	736	LOG10({1})	(10.0,)	n	1.0
+math_trig	log10	737	LOG10({1})	(100.0,)	n	2.0
+math_trig	log10	738	LOG10({1})	(1e-10,)	n	-10.0
+math_trig	log10	739	LOG10({1})	(1e-300,)	n	-300.0
+math_trig	log10	740	LOG10({1})	(1000000.0,)	n	6.0
+math_trig	log10	741	LOG10({1})	(1000000000000000.0,)	n	15.0
+math_trig	log10	742	LOG10({1})	(1e+100,)	n	100.0
+math_trig	log10	743	LOG10({1})	(1e+308,)	n	308.0
+math_trig	log10	744	LOG10({1})	(0.7853981633974483,)	n	-0.10491011863382856
+math_trig	log10	745	LOG10({1})	(1.5707963267948966,)	n	0.19611987703015263
+math_trig	log10	746	LOG10({1})	(3.141592653589793,)	n	0.49714987269413385
+math_trig	log10	747	LOG10({1})	(6.283185307179586,)	n	0.798179868358115
+math_trig	log10	748	LOG10({1})	('3',)	n	0.47712125471966244
+math_trig	log10	749	LOG10({1})	('abc',)	e	#VALUE!
+math_trig	log10	750	LOG10({1})	('',)	e	#VALUE!
+math_trig	log10	751	LOG10({1})	(None,)	e	#NUM!
+math_trig	log10	752	LOG10({1})	(True,)	n	0.0
+math_trig	log10	753	LOG10({1})	(False,)	e	#NUM!
+math_trig	log10	754	LOG10({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	sqrtpi	755	SQRTPI({1})	(0.0,)	n	0.0
+math_trig	sqrtpi	756	SQRTPI({1})	(1.0,)	n	1.7724538509055159
+math_trig	sqrtpi	757	SQRTPI({1})	(-1.0,)	e	#NUM!
+math_trig	sqrtpi	758	SQRTPI({1})	(0.5,)	n	1.2533141373155001
+math_trig	sqrtpi	759	SQRTPI({1})	(-0.5,)	e	#NUM!
+math_trig	sqrtpi	760	SQRTPI({1})	(2.0,)	n	2.5066282746310002
+math_trig	sqrtpi	761	SQRTPI({1})	(-2.0,)	e	#NUM!
+math_trig	sqrtpi	762	SQRTPI({1})	(0.1,)	n	0.5604991216397929
+math_trig	sqrtpi	763	SQRTPI({1})	(3.7,)	n	3.409383055375596
+math_trig	sqrtpi	764	SQRTPI({1})	(-3.7,)	e	#NUM!
+math_trig	sqrtpi	765	SQRTPI({1})	(10.0,)	n	5.604991216397929
+math_trig	sqrtpi	766	SQRTPI({1})	(100.0,)	n	17.72453850905516
+math_trig	sqrtpi	767	SQRTPI({1})	(1e-10,)	n	1.772453850905516e-05
+math_trig	sqrtpi	768	SQRTPI({1})	(1e-300,)	n	1.772453850905516e-150
+math_trig	sqrtpi	769	SQRTPI({1})	(1000000.0,)	n	1772.453850905516
+math_trig	sqrtpi	770	SQRTPI({1})	(1000000000000000.0,)	n	56049912.163979284
+math_trig	sqrtpi	771	SQRTPI({1})	(1e+100,)	n	1.772453850905516e+50
+math_trig	sqrtpi	772	SQRTPI({1})	(1e+308,)	e	#NUM!
+math_trig	sqrtpi	773	SQRTPI({1})	(0.7853981633974483,)	n	1.5707963267948966
+math_trig	sqrtpi	774	SQRTPI({1})	(1.5707963267948966,)	n	2.221441469079183
+math_trig	sqrtpi	775	SQRTPI({1})	(3.141592653589793,)	n	3.141592653589793
+math_trig	sqrtpi	776	SQRTPI({1})	(6.283185307179586,)	n	4.442882938158366
+math_trig	sqrtpi	777	SQRTPI({1})	('3',)	n	3.0699801238394655
+math_trig	sqrtpi	778	SQRTPI({1})	('abc',)	e	#VALUE!
+math_trig	sqrtpi	779	SQRTPI({1})	('',)	e	#VALUE!
+math_trig	sqrtpi	780	SQRTPI({1})	(None,)	n	0.0
+math_trig	sqrtpi	781	SQRTPI({1})	(True,)	e	#VALUE!
+math_trig	sqrtpi	782	SQRTPI({1})	(False,)	e	#VALUE!
+math_trig	sqrtpi	783	SQRTPI({1})	(ErrorValue('#N/A'),)	e	#N/A
+math_trig	atan2	784	ATAN2({1},{2})	(0.0, 0.0)	e	#DIV/0!
+math_trig	atan2	785	ATAN2({1},{2})	(0.0, 1.0)	n	1.5707963267948966
+math_trig	atan2	786	ATAN2({1},{2})	(0.0, -1.0)	n	-1.5707963267948966
+math_trig	atan2	787	ATAN2({1},{2})	(0.0, 0.5)	n	1.5707963267948966
+math_trig	atan2	788	ATAN2({1},{2})	(0.0, 2.0)	n	1.5707963267948966
+math_trig	atan2	789	ATAN2({1},{2})	(0.0, -2.5)	n	-1.5707963267948966
+math_trig	atan2	790	ATAN2({1},{2})	(0.0, 3.7)	n	1.5707963267948966
+math_trig	atan2	791	ATAN2({1},{2})	(0.0, 10.0)	n	1.5707963267948966
+math_trig	atan2	792	ATAN2({1},{2})	(0.0, 1000000000000000.0)	n	1.5707963267948966
+math_trig	atan2	793	ATAN2({1},{2})	(0.0, '2')	n	1.5707963267948966
+math_trig	atan2	794	ATAN2({1},{2})	(0.0, 'abc')	e	#VALUE!
+math_trig	atan2	795	ATAN2({1},{2})	(0.0, None)	e	#DIV/0!
+math_trig	atan2	796	ATAN2({1},{2})	(0.0, True)	n	1.5707963267948966
+math_trig	atan2	797	ATAN2({1},{2})	(0.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	atan2	798	ATAN2({1},{2})	(1.0, 0.0)	n	0.0
+math_trig	atan2	799	ATAN2({1},{2})	(1.0, 1.0)	n	0.7853981633974483
+math_trig	atan2	800	ATAN2({1},{2})	(1.0, -1.0)	n	-0.7853981633974483
+math_trig	atan2	801	ATAN2({1},{2})	(1.0, 0.5)	n	0.46364760900080615
+math_trig	atan2	802	ATAN2({1},{2})	(1.0, 2.0)	n	1.1071487177940906
+math_trig	atan2	803	ATAN2({1},{2})	(1.0, -2.5)	n	-1.1902899496825317
+math_trig	atan2	804	ATAN2({1},{2})	(1.0, 3.7)	n	1.3068326031691921
+math_trig	atan2	805	ATAN2({1},{2})	(1.0, 10.0)	n	1.4711276743037345
+math_trig	atan2	806	ATAN2({1},{2})	(1.0, 1000000000000000.0)	n	1.5707963267948957
+math_trig	atan2	807	ATAN2({1},{2})	(1.0, '2')	n	1.1071487177940906
+math_trig	atan2	808	ATAN2({1},{2})	(1.0, 'abc')	e	#VALUE!
+math_trig	atan2	809	ATAN2({1},{2})	(1.0, None)	n	0.0
+math_trig	atan2	810	ATAN2({1},{2})	(1.0, True)	n	0.7853981633974483
+math_trig	atan2	811	ATAN2({1},{2})	(1.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	atan2	812	ATAN2({1},{2})	(-1.0, 0.0)	n	3.141592653589793
+math_trig	atan2	813	ATAN2({1},{2})	(-1.0, 1.0)	n	2.356194490192345
+math_trig	atan2	814	ATAN2({1},{2})	(-1.0, -1.0)	n	-2.356194490192345
+math_trig	atan2	815	ATAN2({1},{2})	(-1.0, 0.5)	n	2.677945044588987
+math_trig	atan2	816	ATAN2({1},{2})	(-1.0, 2.0)	n	2.0344439357957027
+math_trig	atan2	817	ATAN2({1},{2})	(-1.0, -2.5)	n	-1.9513027039072615
+math_trig	atan2	818	ATAN2({1},{2})	(-1.0, 3.7)	n	1.834760050420601
+math_trig	atan2	819	ATAN2({1},{2})	(-1.0, 10.0)	n	1.6704649792860586
+math_trig	atan2	820	ATAN2({1},{2})	(-1.0, 1000000000000000.0)	n	1.5707963267948974
+math_trig	atan2	821	ATAN2({1},{2})	(-1.0, '2')	n	2.0344439357957027
+math_trig	atan2	822	ATAN2({1},{2})	(-1.0, 'abc')	e	#VALUE!
+math_trig	atan2	823	ATAN2({1},{2})	(-1.0, None)	n	3.141592653589793
+math_trig	atan2	824	ATAN2({1},{2})	(-1.0, True)	n	2.356194490192345
+math_trig	atan2	825	ATAN2({1},{2})	(-1.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	atan2	826	ATAN2({1},{2})	(0.5, 0.0)	n	0.0
+math_trig	atan2	827	ATAN2({1},{2})	(0.5, 1.0)	n	1.1071487177940906
+math_trig	atan2	828	ATAN2({1},{2})	(0.5, -1.0)	n	-1.1071487177940906
+math_trig	atan2	829	ATAN2({1},{2})	(0.5, 0.5)	n	0.7853981633974483
+math_trig	atan2	830	ATAN2({1},{2})	(0.5, 2.0)	n	1.3258176636680326
+math_trig	atan2	831	ATAN2({1},{2})	(0.5, -2.5)	n	-1.373400766945016
+math_trig	atan2	832	ATAN2({1},{2})	(0.5, 3.7)	n	1.4364748848419282
+math_trig	atan2	833	ATAN2({1},{2})	(0.5, 10.0)	n	1.5208379310729538
+math_trig	atan2	834	ATAN2({1},{2})	(0.5, 1000000000000000.0)	n	1.5707963267948961
+math_trig	atan2	835	ATAN2({1},{2})	(0.5, '2')	n	1.3258176636680326
+math_trig	atan2	836	ATAN2({1},{2})	(0.5, 'abc')	e	#VALUE!
+math_trig	atan2	837	ATAN2({1},{2})	(0.5, None)	n	0.0
+math_trig	atan2	838	ATAN2({1},{2})	(0.5, True)	n	1.1071487177940906
+math_trig	atan2	839	ATAN2({1},{2})	(0.5, ErrorValue('#N/A'))	e	#N/A
+math_trig	atan2	840	ATAN2({1},{2})	(2.0, 0.0)	n	0.0
+math_trig	atan2	841	ATAN2({1},{2})	(2.0, 1.0)	n	0.46364760900080615
+math_trig	atan2	842	ATAN2({1},{2})	(2.0, -1.0)	n	-0.46364760900080615
+math_trig	atan2	843	ATAN2({1},{2})	(2.0, 0.5)	n	0.24497866312686414
+math_trig	atan2	844	ATAN2({1},{2})	(2.0, 2.0)	n	0.7853981633974483
+math_trig	atan2	845	ATAN2({1},{2})	(2.0, -2.5)	n	-0.8960553845713439
+math_trig	atan2	846	ATAN2({1},{2})	(2.0, 3.7)	n	1.075244653309068
+math_trig	atan2	847	ATAN2({1},{2})	(2.0, 10.0)	n	1.373400766945016
+math_trig	atan2	848	ATAN2({1},{2})	(2.0, 1000000000000000.0)	n	1.5707963267948946
+math_trig	atan2	849	ATAN2({1},{2})	(2.0, '2')	n	0.7853981633974483
+math_trig	atan2	850	ATAN2({1},{2})	(2.0, 'abc')	e	#VALUE!
+math_trig	atan2	851	ATAN2({1},{2})	(2.0, None)	n	0.0
+math_trig	atan2	852	ATAN2({1},{2})	(2.0, True)	n	0.46364760900080615
+math_trig	atan2	853	ATAN2({1},{2})	(2.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	atan2	854	ATAN2({1},{2})	(-2.5, 0.0)	n	3.141592653589793
+math_trig	atan2	855	ATAN2({1},{2})	(-2.5, 1.0)	n	2.761086276477428
+math_trig	atan2	856	ATAN2({1},{2})	(-2.5, -1.0)	n	-2.761086276477428
+math_trig	atan2	857	ATAN2({1},{2})	(-2.5, 0.5)	n	2.9441970937399122
+math_trig	atan2	858	ATAN2({1},{2})	(-2.5, 2.0)	n	2.4668517113662403
+math_trig	atan2	859	ATAN2({1},{2})	(-2.5, -2.5)	n	-2.356194490192345
+math_trig	atan2	860	ATAN2({1},{2})	(-2.5, 3.7)	n	2.1650100305953304
+math_trig	atan2	861	ATAN2({1},{2})	(-2.5, 10.0)	n	1.8157749899217606
+math_trig	atan2	862	ATAN2({1},{2})	(-2.5, 1000000000000000.0)	n	1.570796326794899
+math_trig	atan2	863	ATAN2({1},{2})	(-2.5, '2')	n	2.4668517113662403
+math_trig	atan2	864	ATAN2({1},{2})	(-2.5, 'abc')	e	#VALUE!
+math_trig	atan2	865	ATAN2({1},{2})	(-2.5, None)	n	3.141592653589793
+math_trig	atan2	866	ATAN2({1},{2})	(-2.5, True)	n	2.761086276477428
+math_trig	atan2	867	ATAN2({1},{2})	(-2.5, ErrorValue('#N/A'))	e	#N/A
+math_trig	atan2	868	ATAN2({1},{2})	(3.7, 0.0)	n	0.0
+math_trig	atan2	869	ATAN2({1},{2})	(3.7, 1.0)	n	0.2639637236257045
+math_trig	atan2	870	ATAN2({1},{2})	(3.7, -1.0)	n	-0.2639637236257045
+math_trig	atan2	871	ATAN2({1},{2})	(3.7, 0.5)	n	0.1343214419529685
+math_trig	atan2	872	ATAN2({1},{2})	(3.7, 2.0)	n	0.49555167348582846
+math_trig	atan2	873	ATAN2({1},{2})	(3.7, -2.5)	n	-0.5942137038004338
+math_trig	atan2	874	ATAN2({1},{2})	(3.7, 3.7)	n	0.7853981633974483
+math_trig	atan2	875	ATAN2({1},{2})	(3.7, 10.0)	n	1.2164164076714588
+math_trig	atan2	876	ATAN2({1},{2})	(3.7, 1000000000000000.0)	n	1.570796326794893
+math_trig	atan2	877	ATAN2({1},{2})	(3.7, '2')	n	0.49555167348582846
+math_trig	atan2	878	ATAN2({1},{2})	(3.7, 'abc')	e	#VALUE!
+math_trig	atan2	879	ATAN2({1},{2})	(3.7, None)	n	0.0
+math_trig	atan2	880	ATAN2({1},{2})	(3.7, True)	n	0.2639637236257045
+math_trig	atan2	881	ATAN2({1},{2})	(3.7, ErrorValue('#N/A'))	e	#N/A
+math_trig	atan2	882	ATAN2({1},{2})	(10.0, 0.0)	n	0.0
+math_trig	atan2	883	ATAN2({1},{2})	(10.0, 1.0)	n	0.09966865249116204
+math_trig	atan2	884	ATAN2({1},{2})	(10.0, -1.0)	n	-0.09966865249116204
+math_trig	atan2	885	ATAN2({1},{2})	(10.0, 0.5)	n	0.049958395721942765
+math_trig	atan2	886	ATAN2({1},{2})	(10.0, 2.0)	n	0.19739555984988078
+math_trig	atan2	887	ATAN2({1},{2})	(10.0, -2.5)	n	-0.24497866312686414
+math_trig	atan2	888	ATAN2({1},{2})	(10.0, 3.7)	n	0.3543799191234378
+math_trig	atan2	889	ATAN2({1},{2})	(10.0, 10.0)	n	0.7853981633974483
+math_trig	atan2	890	ATAN2({1},{2})	(10.0, 1000000000000000.0)	n	1.5707963267948866
+math_trig	atan2	891	ATAN2({1},{2})	(10.0, '2')	n	0.19739555984988078
+math_trig	atan2	892	ATAN2({1},{2})	(10.0, 'abc')	e	#VALUE!
+math_trig	atan2	893	ATAN2({1},{2})	(10.0, None)	n	0.0
+math_trig	atan2	894	ATAN2({1},{2})	(10.0, True)	n	0.09966865249116204
+math_trig	atan2	895	ATAN2({1},{2})	(10.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	atan2	896	ATAN2({1},{2})	(1000000000000000.0, 0.0)	n	0.0
+math_trig	atan2	897	ATAN2({1},{2})	(1000000000000000.0, 1.0)	n	1e-15
+math_trig	atan2	898	ATAN2({1},{2})	(1000000000000000.0, -1.0)	n	-1e-15
+math_trig	atan2	899	ATAN2({1},{2})	(1000000000000000.0, 0.5)	n	5e-16
+math_trig	atan2	900	ATAN2({1},{2})	(1000000000000000.0, 2.0)	n	2e-15
+math_trig	atan2	901	ATAN2({1},{2})	(1000000000000000.0, -2.5)	n	-2.5e-15
+math_trig	atan2	902	ATAN2({1},{2})	(1000000000000000.0, 3.7)	n	3.7e-15
+math_trig	atan2	903	ATAN2({1},{2})	(1000000000000000.0, 10.0)	n	1e-14
+math_trig	atan2	904	ATAN2({1},{2})	(1000000000000000.0, 1000000000000000.0)	n	0.7853981633974483
+math_trig	atan2	905	ATAN2({1},{2})	(1000000000000000.0, '2')	n	2e-15
+math_trig	atan2	906	ATAN2({1},{2})	(1000000000000000.0, 'abc')	e	#VALUE!
+math_trig	atan2	907	ATAN2({1},{2})	(1000000000000000.0, None)	n	0.0
+math_trig	atan2	908	ATAN2({1},{2})	(1000000000000000.0, True)	n	1e-15
+math_trig	atan2	909	ATAN2({1},{2})	(1000000000000000.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	atan2	910	ATAN2({1},{2})	('2', 0.0)	n	0.0
+math_trig	atan2	911	ATAN2({1},{2})	('2', 1.0)	n	0.46364760900080615
+math_trig	atan2	912	ATAN2({1},{2})	('2', -1.0)	n	-0.46364760900080615
+math_trig	atan2	913	ATAN2({1},{2})	('2', 0.5)	n	0.24497866312686414
+math_trig	atan2	914	ATAN2({1},{2})	('2', 2.0)	n	0.7853981633974483
+math_trig	atan2	915	ATAN2({1},{2})	('2', -2.5)	n	-0.8960553845713439
+math_trig	atan2	916	ATAN2({1},{2})	('2', 3.7)	n	1.075244653309068
+math_trig	atan2	917	ATAN2({1},{2})	('2', 10.0)	n	1.373400766945016
+math_trig	atan2	918	ATAN2({1},{2})	('2', 1000000000000000.0)	n	1.5707963267948946
+math_trig	atan2	919	ATAN2({1},{2})	('2', '2')	n	0.7853981633974483
+math_trig	atan2	920	ATAN2({1},{2})	('2', 'abc')	e	#VALUE!
+math_trig	atan2	921	ATAN2({1},{2})	('2', None)	n	0.0
+math_trig	atan2	922	ATAN2({1},{2})	('2', True)	n	0.46364760900080615
+math_trig	atan2	923	ATAN2({1},{2})	('2', ErrorValue('#N/A'))	e	#N/A
+math_trig	atan2	924	ATAN2({1},{2})	('abc', 0.0)	e	#VALUE!
+math_trig	atan2	925	ATAN2({1},{2})	('abc', 1.0)	e	#VALUE!
+math_trig	atan2	926	ATAN2({1},{2})	('abc', -1.0)	e	#VALUE!
+math_trig	atan2	927	ATAN2({1},{2})	('abc', 0.5)	e	#VALUE!
+math_trig	atan2	928	ATAN2({1},{2})	('abc', 2.0)	e	#VALUE!
+math_trig	atan2	929	ATAN2({1},{2})	('abc', -2.5)	e	#VALUE!
+math_trig	atan2	930	ATAN2({1},{2})	('abc', 3.7)	e	#VALUE!
+math_trig	atan2	931	ATAN2({1},{2})	('abc', 10.0)	e	#VALUE!
+math_trig	atan2	932	ATAN2({1},{2})	('abc', 1000000000000000.0)	e	#VALUE!
+math_trig	atan2	933	ATAN2({1},{2})	('abc', '2')	e	#VALUE!
+math_trig	atan2	934	ATAN2({1},{2})	('abc', 'abc')	e	#VALUE!
+math_trig	atan2	935	ATAN2({1},{2})	('abc', None)	e	#VALUE!
+math_trig	atan2	936	ATAN2({1},{2})	('abc', True)	e	#VALUE!
+math_trig	atan2	937	ATAN2({1},{2})	('abc', ErrorValue('#N/A'))	e	#VALUE!
+math_trig	atan2	938	ATAN2({1},{2})	(None, 0.0)	e	#DIV/0!
+math_trig	atan2	939	ATAN2({1},{2})	(None, 1.0)	n	1.5707963267948966
+math_trig	atan2	940	ATAN2({1},{2})	(None, -1.0)	n	-1.5707963267948966
+math_trig	atan2	941	ATAN2({1},{2})	(None, 0.5)	n	1.5707963267948966
+math_trig	atan2	942	ATAN2({1},{2})	(None, 2.0)	n	1.5707963267948966
+math_trig	atan2	943	ATAN2({1},{2})	(None, -2.5)	n	-1.5707963267948966
+math_trig	atan2	944	ATAN2({1},{2})	(None, 3.7)	n	1.5707963267948966
+math_trig	atan2	945	ATAN2({1},{2})	(None, 10.0)	n	1.5707963267948966
+math_trig	atan2	946	ATAN2({1},{2})	(None, 1000000000000000.0)	n	1.5707963267948966
+math_trig	atan2	947	ATAN2({1},{2})	(None, '2')	n	1.5707963267948966
+math_trig	atan2	948	ATAN2({1},{2})	(None, 'abc')	e	#VALUE!
+math_trig	atan2	949	ATAN2({1},{2})	(None, None)	e	#DIV/0!
+math_trig	atan2	950	ATAN2({1},{2})	(None, True)	n	1.5707963267948966
+math_trig	atan2	951	ATAN2({1},{2})	(None, ErrorValue('#N/A'))	e	#N/A
+math_trig	atan2	952	ATAN2({1},{2})	(True, 0.0)	n	0.0
+math_trig	atan2	953	ATAN2({1},{2})	(True, 1.0)	n	0.7853981633974483
+math_trig	atan2	954	ATAN2({1},{2})	(True, -1.0)	n	-0.7853981633974483
+math_trig	atan2	955	ATAN2({1},{2})	(True, 0.5)	n	0.46364760900080615
+math_trig	atan2	956	ATAN2({1},{2})	(True, 2.0)	n	1.1071487177940906
+math_trig	atan2	957	ATAN2({1},{2})	(True, -2.5)	n	-1.1902899496825317
+math_trig	atan2	958	ATAN2({1},{2})	(True, 3.7)	n	1.3068326031691921
+math_trig	atan2	959	ATAN2({1},{2})	(True, 10.0)	n	1.4711276743037345
+math_trig	atan2	960	ATAN2({1},{2})	(True, 1000000000000000.0)	n	1.5707963267948957
+math_trig	atan2	961	ATAN2({1},{2})	(True, '2')	n	1.1071487177940906
+math_trig	atan2	962	ATAN2({1},{2})	(True, 'abc')	e	#VALUE!
+math_trig	atan2	963	ATAN2({1},{2})	(True, None)	n	0.0
+math_trig	atan2	964	ATAN2({1},{2})	(True, True)	n	0.7853981633974483
+math_trig	atan2	965	ATAN2({1},{2})	(True, ErrorValue('#N/A'))	e	#N/A
+math_trig	atan2	966	ATAN2({1},{2})	(ErrorValue('#N/A'), 0.0)	e	#N/A
+math_trig	atan2	967	ATAN2({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+math_trig	atan2	968	ATAN2({1},{2})	(ErrorValue('#N/A'), -1.0)	e	#N/A
+math_trig	atan2	969	ATAN2({1},{2})	(ErrorValue('#N/A'), 0.5)	e	#N/A
+math_trig	atan2	970	ATAN2({1},{2})	(ErrorValue('#N/A'), 2.0)	e	#N/A
+math_trig	atan2	971	ATAN2({1},{2})	(ErrorValue('#N/A'), -2.5)	e	#N/A
+math_trig	atan2	972	ATAN2({1},{2})	(ErrorValue('#N/A'), 3.7)	e	#N/A
+math_trig	atan2	973	ATAN2({1},{2})	(ErrorValue('#N/A'), 10.0)	e	#N/A
+math_trig	atan2	974	ATAN2({1},{2})	(ErrorValue('#N/A'), 1000000000000000.0)	e	#N/A
+math_trig	atan2	975	ATAN2({1},{2})	(ErrorValue('#N/A'), '2')	e	#N/A
+math_trig	atan2	976	ATAN2({1},{2})	(ErrorValue('#N/A'), 'abc')	e	#N/A
+math_trig	atan2	977	ATAN2({1},{2})	(ErrorValue('#N/A'), None)	e	#N/A
+math_trig	atan2	978	ATAN2({1},{2})	(ErrorValue('#N/A'), True)	e	#N/A
+math_trig	atan2	979	ATAN2({1},{2})	(ErrorValue('#N/A'), ErrorValue('#N/A'))	e	#N/A
+math_trig	log	980	LOG({1},{2})	(0.0, 0.0)	e	#NUM!
+math_trig	log	981	LOG({1},{2})	(0.0, 1.0)	e	#NUM!
+math_trig	log	982	LOG({1},{2})	(0.0, -1.0)	e	#NUM!
+math_trig	log	983	LOG({1},{2})	(0.0, 0.5)	e	#NUM!
+math_trig	log	984	LOG({1},{2})	(0.0, 2.0)	e	#NUM!
+math_trig	log	985	LOG({1},{2})	(0.0, -2.5)	e	#NUM!
+math_trig	log	986	LOG({1},{2})	(0.0, 3.7)	e	#NUM!
+math_trig	log	987	LOG({1},{2})	(0.0, 10.0)	e	#NUM!
+math_trig	log	988	LOG({1},{2})	(0.0, 1000000000000000.0)	e	#NUM!
+math_trig	log	989	LOG({1},{2})	(0.0, '2')	e	#NUM!
+math_trig	log	990	LOG({1},{2})	(0.0, 'abc')	e	#VALUE!
+math_trig	log	991	LOG({1},{2})	(0.0, None)	e	#NUM!
+math_trig	log	992	LOG({1},{2})	(0.0, True)	e	#NUM!
+math_trig	log	993	LOG({1},{2})	(0.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	log	994	LOG({1},{2})	(1.0, 0.0)	e	#NUM!
+math_trig	log	995	LOG({1},{2})	(1.0, 1.0)	e	#DIV/0!
+math_trig	log	996	LOG({1},{2})	(1.0, -1.0)	e	#NUM!
+math_trig	log	997	LOG({1},{2})	(1.0, 0.5)	n	0.0
+math_trig	log	998	LOG({1},{2})	(1.0, 2.0)	n	0.0
+math_trig	log	999	LOG({1},{2})	(1.0, -2.5)	e	#NUM!
+math_trig	log	1000	LOG({1},{2})	(1.0, 3.7)	n	0.0
+math_trig	log	1001	LOG({1},{2})	(1.0, 10.0)	n	0.0
+math_trig	log	1002	LOG({1},{2})	(1.0, 1000000000000000.0)	n	0.0
+math_trig	log	1003	LOG({1},{2})	(1.0, '2')	n	0.0
+math_trig	log	1004	LOG({1},{2})	(1.0, 'abc')	e	#VALUE!
+math_trig	log	1005	LOG({1},{2})	(1.0, None)	e	#NUM!
+math_trig	log	1006	LOG({1},{2})	(1.0, True)	e	#DIV/0!
+math_trig	log	1007	LOG({1},{2})	(1.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	log	1008	LOG({1},{2})	(-1.0, 0.0)	e	#NUM!
+math_trig	log	1009	LOG({1},{2})	(-1.0, 1.0)	e	#NUM!
+math_trig	log	1010	LOG({1},{2})	(-1.0, -1.0)	e	#NUM!
+math_trig	log	1011	LOG({1},{2})	(-1.0, 0.5)	e	#NUM!
+math_trig	log	1012	LOG({1},{2})	(-1.0, 2.0)	e	#NUM!
+math_trig	log	1013	LOG({1},{2})	(-1.0, -2.5)	e	#NUM!
+math_trig	log	1014	LOG({1},{2})	(-1.0, 3.7)	e	#NUM!
+math_trig	log	1015	LOG({1},{2})	(-1.0, 10.0)	e	#NUM!
+math_trig	log	1016	LOG({1},{2})	(-1.0, 1000000000000000.0)	e	#NUM!
+math_trig	log	1017	LOG({1},{2})	(-1.0, '2')	e	#NUM!
+math_trig	log	1018	LOG({1},{2})	(-1.0, 'abc')	e	#VALUE!
+math_trig	log	1019	LOG({1},{2})	(-1.0, None)	e	#NUM!
+math_trig	log	1020	LOG({1},{2})	(-1.0, True)	e	#NUM!
+math_trig	log	1021	LOG({1},{2})	(-1.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	log	1022	LOG({1},{2})	(0.5, 0.0)	e	#NUM!
+math_trig	log	1023	LOG({1},{2})	(0.5, 1.0)	e	#DIV/0!
+math_trig	log	1024	LOG({1},{2})	(0.5, -1.0)	e	#NUM!
+math_trig	log	1025	LOG({1},{2})	(0.5, 0.5)	n	1.0
+math_trig	log	1026	LOG({1},{2})	(0.5, 2.0)	n	-1.0
+math_trig	log	1027	LOG({1},{2})	(0.5, -2.5)	e	#NUM!
+math_trig	log	1028	LOG({1},{2})	(0.5, 3.7)	n	-0.5297942313678858
+math_trig	log	1029	LOG({1},{2})	(0.5, 10.0)	n	-0.30102999566398114
+math_trig	log	1030	LOG({1},{2})	(0.5, 1000000000000000.0)	n	-0.020068666377598746
+math_trig	log	1031	LOG({1},{2})	(0.5, '2')	n	-1.0
+math_trig	log	1032	LOG({1},{2})	(0.5, 'abc')	e	#VALUE!
+math_trig	log	1033	LOG({1},{2})	(0.5, None)	e	#NUM!
+math_trig	log	1034	LOG({1},{2})	(0.5, True)	e	#DIV/0!
+math_trig	log	1035	LOG({1},{2})	(0.5, ErrorValue('#N/A'))	e	#N/A
+math_trig	log	1036	LOG({1},{2})	(2.0, 0.0)	e	#NUM!
+math_trig	log	1037	LOG({1},{2})	(2.0, 1.0)	e	#DIV/0!
+math_trig	log	1038	LOG({1},{2})	(2.0, -1.0)	e	#NUM!
+math_trig	log	1039	LOG({1},{2})	(2.0, 0.5)	n	-1.0
+math_trig	log	1040	LOG({1},{2})	(2.0, 2.0)	n	1.0
+math_trig	log	1041	LOG({1},{2})	(2.0, -2.5)	e	#NUM!
+math_trig	log	1042	LOG({1},{2})	(2.0, 3.7)	n	0.5297942313678858
+math_trig	log	1043	LOG({1},{2})	(2.0, 10.0)	n	0.30102999566398114
+math_trig	log	1044	LOG({1},{2})	(2.0, 1000000000000000.0)	n	0.020068666377598746
+math_trig	log	1045	LOG({1},{2})	(2.0, '2')	n	1.0
+math_trig	log	1046	LOG({1},{2})	(2.0, 'abc')	e	#VALUE!
+math_trig	log	1047	LOG({1},{2})	(2.0, None)	e	#NUM!
+math_trig	log	1048	LOG({1},{2})	(2.0, True)	e	#DIV/0!
+math_trig	log	1049	LOG({1},{2})	(2.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	log	1050	LOG({1},{2})	(-2.5, 0.0)	e	#NUM!
+math_trig	log	1051	LOG({1},{2})	(-2.5, 1.0)	e	#NUM!
+math_trig	log	1052	LOG({1},{2})	(-2.5, -1.0)	e	#NUM!
+math_trig	log	1053	LOG({1},{2})	(-2.5, 0.5)	e	#NUM!
+math_trig	log	1054	LOG({1},{2})	(-2.5, 2.0)	e	#NUM!
+math_trig	log	1055	LOG({1},{2})	(-2.5, -2.5)	e	#NUM!
+math_trig	log	1056	LOG({1},{2})	(-2.5, 3.7)	e	#NUM!
+math_trig	log	1057	LOG({1},{2})	(-2.5, 10.0)	e	#NUM!
+math_trig	log	1058	LOG({1},{2})	(-2.5, 1000000000000000.0)	e	#NUM!
+math_trig	log	1059	LOG({1},{2})	(-2.5, '2')	e	#NUM!
+math_trig	log	1060	LOG({1},{2})	(-2.5, 'abc')	e	#VALUE!
+math_trig	log	1061	LOG({1},{2})	(-2.5, None)	e	#NUM!
+math_trig	log	1062	LOG({1},{2})	(-2.5, True)	e	#NUM!
+math_trig	log	1063	LOG({1},{2})	(-2.5, ErrorValue('#N/A'))	e	#N/A
+math_trig	log	1064	LOG({1},{2})	(3.7, 0.0)	e	#NUM!
+math_trig	log	1065	LOG({1},{2})	(3.7, 1.0)	e	#DIV/0!
+math_trig	log	1066	LOG({1},{2})	(3.7, -1.0)	e	#NUM!
+math_trig	log	1067	LOG({1},{2})	(3.7, 0.5)	n	-1.8875252707415877
+math_trig	log	1068	LOG({1},{2})	(3.7, 2.0)	n	1.8875252707415877
+math_trig	log	1069	LOG({1},{2})	(3.7, -2.5)	e	#NUM!
+math_trig	log	1070	LOG({1},{2})	(3.7, 3.7)	n	1.0
+math_trig	log	1071	LOG({1},{2})	(3.7, 10.0)	n	0.568201724066995
+math_trig	log	1072	LOG({1},{2})	(3.7, 1000000000000000.0)	n	0.03788011493779967
+math_trig	log	1073	LOG({1},{2})	(3.7, '2')	n	1.8875252707415877
+math_trig	log	1074	LOG({1},{2})	(3.7, 'abc')	e	#VALUE!
+math_trig	log	1075	LOG({1},{2})	(3.7, None)	e	#NUM!
+math_trig	log	1076	LOG({1},{2})	(3.7, True)	e	#DIV/0!
+math_trig	log	1077	LOG({1},{2})	(3.7, ErrorValue('#N/A'))	e	#N/A
+math_trig	log	1078	LOG({1},{2})	(10.0, 0.0)	e	#NUM!
+math_trig	log	1079	LOG({1},{2})	(10.0, 1.0)	e	#DIV/0!
+math_trig	log	1080	LOG({1},{2})	(10.0, -1.0)	e	#NUM!
+math_trig	log	1081	LOG({1},{2})	(10.0, 0.5)	n	-3.3219280948873626
+math_trig	log	1082	LOG({1},{2})	(10.0, 2.0)	n	3.3219280948873626
+math_trig	log	1083	LOG({1},{2})	(10.0, -2.5)	e	#NUM!
+math_trig	log	1084	LOG({1},{2})	(10.0, 3.7)	n	1.7599383416902357
+math_trig	log	1085	LOG({1},{2})	(10.0, 10.0)	n	1.0
+math_trig	log	1086	LOG({1},{2})	(10.0, 1000000000000000.0)	n	0.06666666666666668
+math_trig	log	1087	LOG({1},{2})	(10.0, '2')	n	3.3219280948873626
+math_trig	log	1088	LOG({1},{2})	(10.0, 'abc')	e	#VALUE!
+math_trig	log	1089	LOG({1},{2})	(10.0, None)	e	#NUM!
+math_trig	log	1090	LOG({1},{2})	(10.0, True)	e	#DIV/0!
+math_trig	log	1091	LOG({1},{2})	(10.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	log	1092	LOG({1},{2})	(1000000000000000.0, 0.0)	e	#NUM!
+math_trig	log	1093	LOG({1},{2})	(1000000000000000.0, 1.0)	e	#DIV/0!
+math_trig	log	1094	LOG({1},{2})	(1000000000000000.0, -1.0)	e	#NUM!
+math_trig	log	1095	LOG({1},{2})	(1000000000000000.0, 0.5)	n	-49.82892142331043
+math_trig	log	1096	LOG({1},{2})	(1000000000000000.0, 2.0)	n	49.82892142331043
+math_trig	log	1097	LOG({1},{2})	(1000000000000000.0, -2.5)	e	#NUM!
+math_trig	log	1098	LOG({1},{2})	(1000000000000000.0, 3.7)	n	26.39907512535353
+math_trig	log	1099	LOG({1},{2})	(1000000000000000.0, 10.0)	n	14.999999999999998
+math_trig	log	1100	LOG({1},{2})	(1000000000000000.0, 1000000000000000.0)	n	1.0
+math_trig	log	1101	LOG({1},{2})	(1000000000000000.0, '2')	n	49.82892142331043
+math_trig	log	1102	LOG({1},{2})	(1000000000000000.0, 'abc')	e	#VALUE!
+math_trig	log	1103	LOG({1},{2})	(1000000000000000.0, None)	e	#NUM!
+math_trig	log	1104	LOG({1},{2})	(1000000000000000.0, True)	e	#DIV/0!
+math_trig	log	1105	LOG({1},{2})	(1000000000000000.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	log	1106	LOG({1},{2})	('2', 0.0)	e	#NUM!
+math_trig	log	1107	LOG({1},{2})	('2', 1.0)	e	#DIV/0!
+math_trig	log	1108	LOG({1},{2})	('2', -1.0)	e	#NUM!
+math_trig	log	1109	LOG({1},{2})	('2', 0.5)	n	-1.0
+math_trig	log	1110	LOG({1},{2})	('2', 2.0)	n	1.0
+math_trig	log	1111	LOG({1},{2})	('2', -2.5)	e	#NUM!
+math_trig	log	1112	LOG({1},{2})	('2', 3.7)	n	0.5297942313678858
+math_trig	log	1113	LOG({1},{2})	('2', 10.0)	n	0.30102999566398114
+math_trig	log	1114	LOG({1},{2})	('2', 1000000000000000.0)	n	0.020068666377598746
+math_trig	log	1115	LOG({1},{2})	('2', '2')	n	1.0
+math_trig	log	1116	LOG({1},{2})	('2', 'abc')	e	#VALUE!
+math_trig	log	1117	LOG({1},{2})	('2', None)	e	#NUM!
+math_trig	log	1118	LOG({1},{2})	('2', True)	e	#DIV/0!
+math_trig	log	1119	LOG({1},{2})	('2', ErrorValue('#N/A'))	e	#N/A
+math_trig	log	1120	LOG({1},{2})	('abc', 0.0)	e	#VALUE!
+math_trig	log	1121	LOG({1},{2})	('abc', 1.0)	e	#VALUE!
+math_trig	log	1122	LOG({1},{2})	('abc', -1.0)	e	#VALUE!
+math_trig	log	1123	LOG({1},{2})	('abc', 0.5)	e	#VALUE!
+math_trig	log	1124	LOG({1},{2})	('abc', 2.0)	e	#VALUE!
+math_trig	log	1125	LOG({1},{2})	('abc', -2.5)	e	#VALUE!
+math_trig	log	1126	LOG({1},{2})	('abc', 3.7)	e	#VALUE!
+math_trig	log	1127	LOG({1},{2})	('abc', 10.0)	e	#VALUE!
+math_trig	log	1128	LOG({1},{2})	('abc', 1000000000000000.0)	e	#VALUE!
+math_trig	log	1129	LOG({1},{2})	('abc', '2')	e	#VALUE!
+math_trig	log	1130	LOG({1},{2})	('abc', 'abc')	e	#VALUE!
+math_trig	log	1131	LOG({1},{2})	('abc', None)	e	#VALUE!
+math_trig	log	1132	LOG({1},{2})	('abc', True)	e	#VALUE!
+math_trig	log	1133	LOG({1},{2})	('abc', ErrorValue('#N/A'))	e	#VALUE!
+math_trig	log	1134	LOG({1},{2})	(None, 0.0)	e	#NUM!
+math_trig	log	1135	LOG({1},{2})	(None, 1.0)	e	#NUM!
+math_trig	log	1136	LOG({1},{2})	(None, -1.0)	e	#NUM!
+math_trig	log	1137	LOG({1},{2})	(None, 0.5)	e	#NUM!
+math_trig	log	1138	LOG({1},{2})	(None, 2.0)	e	#NUM!
+math_trig	log	1139	LOG({1},{2})	(None, -2.5)	e	#NUM!
+math_trig	log	1140	LOG({1},{2})	(None, 3.7)	e	#NUM!
+math_trig	log	1141	LOG({1},{2})	(None, 10.0)	e	#NUM!
+math_trig	log	1142	LOG({1},{2})	(None, 1000000000000000.0)	e	#NUM!
+math_trig	log	1143	LOG({1},{2})	(None, '2')	e	#NUM!
+math_trig	log	1144	LOG({1},{2})	(None, 'abc')	e	#VALUE!
+math_trig	log	1145	LOG({1},{2})	(None, None)	e	#NUM!
+math_trig	log	1146	LOG({1},{2})	(None, True)	e	#NUM!
+math_trig	log	1147	LOG({1},{2})	(None, ErrorValue('#N/A'))	e	#N/A
+math_trig	log	1148	LOG({1},{2})	(True, 0.0)	e	#NUM!
+math_trig	log	1149	LOG({1},{2})	(True, 1.0)	e	#DIV/0!
+math_trig	log	1150	LOG({1},{2})	(True, -1.0)	e	#NUM!
+math_trig	log	1151	LOG({1},{2})	(True, 0.5)	n	0.0
+math_trig	log	1152	LOG({1},{2})	(True, 2.0)	n	0.0
+math_trig	log	1153	LOG({1},{2})	(True, -2.5)	e	#NUM!
+math_trig	log	1154	LOG({1},{2})	(True, 3.7)	n	0.0
+math_trig	log	1155	LOG({1},{2})	(True, 10.0)	n	0.0
+math_trig	log	1156	LOG({1},{2})	(True, 1000000000000000.0)	n	0.0
+math_trig	log	1157	LOG({1},{2})	(True, '2')	n	0.0
+math_trig	log	1158	LOG({1},{2})	(True, 'abc')	e	#VALUE!
+math_trig	log	1159	LOG({1},{2})	(True, None)	e	#NUM!
+math_trig	log	1160	LOG({1},{2})	(True, True)	e	#DIV/0!
+math_trig	log	1161	LOG({1},{2})	(True, ErrorValue('#N/A'))	e	#N/A
+math_trig	log	1162	LOG({1},{2})	(ErrorValue('#N/A'), 0.0)	e	#N/A
+math_trig	log	1163	LOG({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+math_trig	log	1164	LOG({1},{2})	(ErrorValue('#N/A'), -1.0)	e	#N/A
+math_trig	log	1165	LOG({1},{2})	(ErrorValue('#N/A'), 0.5)	e	#N/A
+math_trig	log	1166	LOG({1},{2})	(ErrorValue('#N/A'), 2.0)	e	#N/A
+math_trig	log	1167	LOG({1},{2})	(ErrorValue('#N/A'), -2.5)	e	#N/A
+math_trig	log	1168	LOG({1},{2})	(ErrorValue('#N/A'), 3.7)	e	#N/A
+math_trig	log	1169	LOG({1},{2})	(ErrorValue('#N/A'), 10.0)	e	#N/A
+math_trig	log	1170	LOG({1},{2})	(ErrorValue('#N/A'), 1000000000000000.0)	e	#N/A
+math_trig	log	1171	LOG({1},{2})	(ErrorValue('#N/A'), '2')	e	#N/A
+math_trig	log	1172	LOG({1},{2})	(ErrorValue('#N/A'), 'abc')	e	#N/A
+math_trig	log	1173	LOG({1},{2})	(ErrorValue('#N/A'), None)	e	#N/A
+math_trig	log	1174	LOG({1},{2})	(ErrorValue('#N/A'), True)	e	#N/A
+math_trig	log	1175	LOG({1},{2})	(ErrorValue('#N/A'), ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc	1176	TRUNC({1},{2})	(0.0, 0.0)	n	0.0
+math_trig	trunc	1177	TRUNC({1},{2})	(0.0, 1.0)	n	0.0
+math_trig	trunc	1178	TRUNC({1},{2})	(0.0, -1.0)	n	0.0
+math_trig	trunc	1179	TRUNC({1},{2})	(0.0, 0.5)	n	0.0
+math_trig	trunc	1180	TRUNC({1},{2})	(0.0, 2.0)	n	0.0
+math_trig	trunc	1181	TRUNC({1},{2})	(0.0, -2.5)	n	0.0
+math_trig	trunc	1182	TRUNC({1},{2})	(0.0, 3.7)	n	0.0
+math_trig	trunc	1183	TRUNC({1},{2})	(0.0, 10.0)	n	0.0
+math_trig	trunc	1184	TRUNC({1},{2})	(0.0, 1000000000000000.0)	n	0.0
+math_trig	trunc	1185	TRUNC({1},{2})	(0.0, '2')	n	0.0
+math_trig	trunc	1186	TRUNC({1},{2})	(0.0, 'abc')	e	#VALUE!
+math_trig	trunc	1187	TRUNC({1},{2})	(0.0, None)	n	0.0
+math_trig	trunc	1188	TRUNC({1},{2})	(0.0, True)	n	0.0
+math_trig	trunc	1189	TRUNC({1},{2})	(0.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc	1190	TRUNC({1},{2})	(1.0, 0.0)	n	1.0
+math_trig	trunc	1191	TRUNC({1},{2})	(1.0, 1.0)	n	1.0
+math_trig	trunc	1192	TRUNC({1},{2})	(1.0, -1.0)	n	0.0
+math_trig	trunc	1193	TRUNC({1},{2})	(1.0, 0.5)	n	1.0
+math_trig	trunc	1194	TRUNC({1},{2})	(1.0, 2.0)	n	1.0
+math_trig	trunc	1195	TRUNC({1},{2})	(1.0, -2.5)	n	0.0
+math_trig	trunc	1196	TRUNC({1},{2})	(1.0, 3.7)	n	1.0
+math_trig	trunc	1197	TRUNC({1},{2})	(1.0, 10.0)	n	1.0
+math_trig	trunc	1198	TRUNC({1},{2})	(1.0, 1000000000000000.0)	n	1.0
+math_trig	trunc	1199	TRUNC({1},{2})	(1.0, '2')	n	1.0
+math_trig	trunc	1200	TRUNC({1},{2})	(1.0, 'abc')	e	#VALUE!
+math_trig	trunc	1201	TRUNC({1},{2})	(1.0, None)	n	1.0
+math_trig	trunc	1202	TRUNC({1},{2})	(1.0, True)	n	1.0
+math_trig	trunc	1203	TRUNC({1},{2})	(1.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc	1204	TRUNC({1},{2})	(-1.0, 0.0)	n	-1.0
+math_trig	trunc	1205	TRUNC({1},{2})	(-1.0, 1.0)	n	-1.0
+math_trig	trunc	1206	TRUNC({1},{2})	(-1.0, -1.0)	n	0.0
+math_trig	trunc	1207	TRUNC({1},{2})	(-1.0, 0.5)	n	-1.0
+math_trig	trunc	1208	TRUNC({1},{2})	(-1.0, 2.0)	n	-1.0
+math_trig	trunc	1209	TRUNC({1},{2})	(-1.0, -2.5)	n	0.0
+math_trig	trunc	1210	TRUNC({1},{2})	(-1.0, 3.7)	n	-1.0
+math_trig	trunc	1211	TRUNC({1},{2})	(-1.0, 10.0)	n	-1.0
+math_trig	trunc	1212	TRUNC({1},{2})	(-1.0, 1000000000000000.0)	n	-1.0
+math_trig	trunc	1213	TRUNC({1},{2})	(-1.0, '2')	n	-1.0
+math_trig	trunc	1214	TRUNC({1},{2})	(-1.0, 'abc')	e	#VALUE!
+math_trig	trunc	1215	TRUNC({1},{2})	(-1.0, None)	n	-1.0
+math_trig	trunc	1216	TRUNC({1},{2})	(-1.0, True)	n	-1.0
+math_trig	trunc	1217	TRUNC({1},{2})	(-1.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc	1218	TRUNC({1},{2})	(0.5, 0.0)	n	0.0
+math_trig	trunc	1219	TRUNC({1},{2})	(0.5, 1.0)	n	0.5
+math_trig	trunc	1220	TRUNC({1},{2})	(0.5, -1.0)	n	0.0
+math_trig	trunc	1221	TRUNC({1},{2})	(0.5, 0.5)	n	0.0
+math_trig	trunc	1222	TRUNC({1},{2})	(0.5, 2.0)	n	0.5
+math_trig	trunc	1223	TRUNC({1},{2})	(0.5, -2.5)	n	0.0
+math_trig	trunc	1224	TRUNC({1},{2})	(0.5, 3.7)	n	0.5
+math_trig	trunc	1225	TRUNC({1},{2})	(0.5, 10.0)	n	0.5
+math_trig	trunc	1226	TRUNC({1},{2})	(0.5, 1000000000000000.0)	n	0.5
+math_trig	trunc	1227	TRUNC({1},{2})	(0.5, '2')	n	0.5
+math_trig	trunc	1228	TRUNC({1},{2})	(0.5, 'abc')	e	#VALUE!
+math_trig	trunc	1229	TRUNC({1},{2})	(0.5, None)	n	0.0
+math_trig	trunc	1230	TRUNC({1},{2})	(0.5, True)	n	0.5
+math_trig	trunc	1231	TRUNC({1},{2})	(0.5, ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc	1232	TRUNC({1},{2})	(2.0, 0.0)	n	2.0
+math_trig	trunc	1233	TRUNC({1},{2})	(2.0, 1.0)	n	2.0
+math_trig	trunc	1234	TRUNC({1},{2})	(2.0, -1.0)	n	0.0
+math_trig	trunc	1235	TRUNC({1},{2})	(2.0, 0.5)	n	2.0
+math_trig	trunc	1236	TRUNC({1},{2})	(2.0, 2.0)	n	2.0
+math_trig	trunc	1237	TRUNC({1},{2})	(2.0, -2.5)	n	0.0
+math_trig	trunc	1238	TRUNC({1},{2})	(2.0, 3.7)	n	2.0
+math_trig	trunc	1239	TRUNC({1},{2})	(2.0, 10.0)	n	2.0
+math_trig	trunc	1240	TRUNC({1},{2})	(2.0, 1000000000000000.0)	n	2.0
+math_trig	trunc	1241	TRUNC({1},{2})	(2.0, '2')	n	2.0
+math_trig	trunc	1242	TRUNC({1},{2})	(2.0, 'abc')	e	#VALUE!
+math_trig	trunc	1243	TRUNC({1},{2})	(2.0, None)	n	2.0
+math_trig	trunc	1244	TRUNC({1},{2})	(2.0, True)	n	2.0
+math_trig	trunc	1245	TRUNC({1},{2})	(2.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc	1246	TRUNC({1},{2})	(-2.5, 0.0)	n	-2.0
+math_trig	trunc	1247	TRUNC({1},{2})	(-2.5, 1.0)	n	-2.5
+math_trig	trunc	1248	TRUNC({1},{2})	(-2.5, -1.0)	n	0.0
+math_trig	trunc	1249	TRUNC({1},{2})	(-2.5, 0.5)	n	-2.0
+math_trig	trunc	1250	TRUNC({1},{2})	(-2.5, 2.0)	n	-2.5
+math_trig	trunc	1251	TRUNC({1},{2})	(-2.5, -2.5)	n	0.0
+math_trig	trunc	1252	TRUNC({1},{2})	(-2.5, 3.7)	n	-2.5
+math_trig	trunc	1253	TRUNC({1},{2})	(-2.5, 10.0)	n	-2.5
+math_trig	trunc	1254	TRUNC({1},{2})	(-2.5, 1000000000000000.0)	n	-2.5
+math_trig	trunc	1255	TRUNC({1},{2})	(-2.5, '2')	n	-2.5
+math_trig	trunc	1256	TRUNC({1},{2})	(-2.5, 'abc')	e	#VALUE!
+math_trig	trunc	1257	TRUNC({1},{2})	(-2.5, None)	n	-2.0
+math_trig	trunc	1258	TRUNC({1},{2})	(-2.5, True)	n	-2.5
+math_trig	trunc	1259	TRUNC({1},{2})	(-2.5, ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc	1260	TRUNC({1},{2})	(3.7, 0.0)	n	3.0
+math_trig	trunc	1261	TRUNC({1},{2})	(3.7, 1.0)	n	3.7
+math_trig	trunc	1262	TRUNC({1},{2})	(3.7, -1.0)	n	0.0
+math_trig	trunc	1263	TRUNC({1},{2})	(3.7, 0.5)	n	3.0
+math_trig	trunc	1264	TRUNC({1},{2})	(3.7, 2.0)	n	3.7
+math_trig	trunc	1265	TRUNC({1},{2})	(3.7, -2.5)	n	0.0
+math_trig	trunc	1266	TRUNC({1},{2})	(3.7, 3.7)	n	3.7
+math_trig	trunc	1267	TRUNC({1},{2})	(3.7, 10.0)	n	3.7
+math_trig	trunc	1268	TRUNC({1},{2})	(3.7, 1000000000000000.0)	n	3.7
+math_trig	trunc	1269	TRUNC({1},{2})	(3.7, '2')	n	3.7
+math_trig	trunc	1270	TRUNC({1},{2})	(3.7, 'abc')	e	#VALUE!
+math_trig	trunc	1271	TRUNC({1},{2})	(3.7, None)	n	3.0
+math_trig	trunc	1272	TRUNC({1},{2})	(3.7, True)	n	3.7
+math_trig	trunc	1273	TRUNC({1},{2})	(3.7, ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc	1274	TRUNC({1},{2})	(10.0, 0.0)	n	10.0
+math_trig	trunc	1275	TRUNC({1},{2})	(10.0, 1.0)	n	10.0
+math_trig	trunc	1276	TRUNC({1},{2})	(10.0, -1.0)	n	10.0
+math_trig	trunc	1277	TRUNC({1},{2})	(10.0, 0.5)	n	10.0
+math_trig	trunc	1278	TRUNC({1},{2})	(10.0, 2.0)	n	10.0
+math_trig	trunc	1279	TRUNC({1},{2})	(10.0, -2.5)	n	0.0
+math_trig	trunc	1280	TRUNC({1},{2})	(10.0, 3.7)	n	10.0
+math_trig	trunc	1281	TRUNC({1},{2})	(10.0, 10.0)	n	10.0
+math_trig	trunc	1282	TRUNC({1},{2})	(10.0, 1000000000000000.0)	n	10.0
+math_trig	trunc	1283	TRUNC({1},{2})	(10.0, '2')	n	10.0
+math_trig	trunc	1284	TRUNC({1},{2})	(10.0, 'abc')	e	#VALUE!
+math_trig	trunc	1285	TRUNC({1},{2})	(10.0, None)	n	10.0
+math_trig	trunc	1286	TRUNC({1},{2})	(10.0, True)	n	10.0
+math_trig	trunc	1287	TRUNC({1},{2})	(10.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc	1288	TRUNC({1},{2})	(1000000000000000.0, 0.0)	n	1000000000000000.0
+math_trig	trunc	1289	TRUNC({1},{2})	(1000000000000000.0, 1.0)	n	1000000000000000.0
+math_trig	trunc	1290	TRUNC({1},{2})	(1000000000000000.0, -1.0)	n	1000000000000000.0
+math_trig	trunc	1291	TRUNC({1},{2})	(1000000000000000.0, 0.5)	n	1000000000000000.0
+math_trig	trunc	1292	TRUNC({1},{2})	(1000000000000000.0, 2.0)	n	1000000000000000.0
+math_trig	trunc	1293	TRUNC({1},{2})	(1000000000000000.0, -2.5)	n	1000000000000000.0
+math_trig	trunc	1294	TRUNC({1},{2})	(1000000000000000.0, 3.7)	n	1000000000000000.0
+math_trig	trunc	1295	TRUNC({1},{2})	(1000000000000000.0, 10.0)	n	1000000000000000.0
+math_trig	trunc	1296	TRUNC({1},{2})	(1000000000000000.0, 1000000000000000.0)	n	1000000000000000.0
+math_trig	trunc	1297	TRUNC({1},{2})	(1000000000000000.0, '2')	n	1000000000000000.0
+math_trig	trunc	1298	TRUNC({1},{2})	(1000000000000000.0, 'abc')	e	#VALUE!
+math_trig	trunc	1299	TRUNC({1},{2})	(1000000000000000.0, None)	n	1000000000000000.0
+math_trig	trunc	1300	TRUNC({1},{2})	(1000000000000000.0, True)	n	1000000000000000.0
+math_trig	trunc	1301	TRUNC({1},{2})	(1000000000000000.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc	1302	TRUNC({1},{2})	('2', 0.0)	n	2.0
+math_trig	trunc	1303	TRUNC({1},{2})	('2', 1.0)	n	2.0
+math_trig	trunc	1304	TRUNC({1},{2})	('2', -1.0)	n	0.0
+math_trig	trunc	1305	TRUNC({1},{2})	('2', 0.5)	n	2.0
+math_trig	trunc	1306	TRUNC({1},{2})	('2', 2.0)	n	2.0
+math_trig	trunc	1307	TRUNC({1},{2})	('2', -2.5)	n	0.0
+math_trig	trunc	1308	TRUNC({1},{2})	('2', 3.7)	n	2.0
+math_trig	trunc	1309	TRUNC({1},{2})	('2', 10.0)	n	2.0
+math_trig	trunc	1310	TRUNC({1},{2})	('2', 1000000000000000.0)	n	2.0
+math_trig	trunc	1311	TRUNC({1},{2})	('2', '2')	n	2.0
+math_trig	trunc	1312	TRUNC({1},{2})	('2', 'abc')	e	#VALUE!
+math_trig	trunc	1313	TRUNC({1},{2})	('2', None)	n	2.0
+math_trig	trunc	1314	TRUNC({1},{2})	('2', True)	n	2.0
+math_trig	trunc	1315	TRUNC({1},{2})	('2', ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc	1316	TRUNC({1},{2})	('abc', 0.0)	e	#VALUE!
+math_trig	trunc	1317	TRUNC({1},{2})	('abc', 1.0)	e	#VALUE!
+math_trig	trunc	1318	TRUNC({1},{2})	('abc', -1.0)	e	#VALUE!
+math_trig	trunc	1319	TRUNC({1},{2})	('abc', 0.5)	e	#VALUE!
+math_trig	trunc	1320	TRUNC({1},{2})	('abc', 2.0)	e	#VALUE!
+math_trig	trunc	1321	TRUNC({1},{2})	('abc', -2.5)	e	#VALUE!
+math_trig	trunc	1322	TRUNC({1},{2})	('abc', 3.7)	e	#VALUE!
+math_trig	trunc	1323	TRUNC({1},{2})	('abc', 10.0)	e	#VALUE!
+math_trig	trunc	1324	TRUNC({1},{2})	('abc', 1000000000000000.0)	e	#VALUE!
+math_trig	trunc	1325	TRUNC({1},{2})	('abc', '2')	e	#VALUE!
+math_trig	trunc	1326	TRUNC({1},{2})	('abc', 'abc')	e	#VALUE!
+math_trig	trunc	1327	TRUNC({1},{2})	('abc', None)	e	#VALUE!
+math_trig	trunc	1328	TRUNC({1},{2})	('abc', True)	e	#VALUE!
+math_trig	trunc	1329	TRUNC({1},{2})	('abc', ErrorValue('#N/A'))	e	#VALUE!
+math_trig	trunc	1330	TRUNC({1},{2})	(None, 0.0)	n	0.0
+math_trig	trunc	1331	TRUNC({1},{2})	(None, 1.0)	n	0.0
+math_trig	trunc	1332	TRUNC({1},{2})	(None, -1.0)	n	0.0
+math_trig	trunc	1333	TRUNC({1},{2})	(None, 0.5)	n	0.0
+math_trig	trunc	1334	TRUNC({1},{2})	(None, 2.0)	n	0.0
+math_trig	trunc	1335	TRUNC({1},{2})	(None, -2.5)	n	0.0
+math_trig	trunc	1336	TRUNC({1},{2})	(None, 3.7)	n	0.0
+math_trig	trunc	1337	TRUNC({1},{2})	(None, 10.0)	n	0.0
+math_trig	trunc	1338	TRUNC({1},{2})	(None, 1000000000000000.0)	n	0.0
+math_trig	trunc	1339	TRUNC({1},{2})	(None, '2')	n	0.0
+math_trig	trunc	1340	TRUNC({1},{2})	(None, 'abc')	e	#VALUE!
+math_trig	trunc	1341	TRUNC({1},{2})	(None, None)	n	0.0
+math_trig	trunc	1342	TRUNC({1},{2})	(None, True)	n	0.0
+math_trig	trunc	1343	TRUNC({1},{2})	(None, ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc	1344	TRUNC({1},{2})	(True, 0.0)	n	1.0
+math_trig	trunc	1345	TRUNC({1},{2})	(True, 1.0)	n	1.0
+math_trig	trunc	1346	TRUNC({1},{2})	(True, -1.0)	n	0.0
+math_trig	trunc	1347	TRUNC({1},{2})	(True, 0.5)	n	1.0
+math_trig	trunc	1348	TRUNC({1},{2})	(True, 2.0)	n	1.0
+math_trig	trunc	1349	TRUNC({1},{2})	(True, -2.5)	n	0.0
+math_trig	trunc	1350	TRUNC({1},{2})	(True, 3.7)	n	1.0
+math_trig	trunc	1351	TRUNC({1},{2})	(True, 10.0)	n	1.0
+math_trig	trunc	1352	TRUNC({1},{2})	(True, 1000000000000000.0)	n	1.0
+math_trig	trunc	1353	TRUNC({1},{2})	(True, '2')	n	1.0
+math_trig	trunc	1354	TRUNC({1},{2})	(True, 'abc')	e	#VALUE!
+math_trig	trunc	1355	TRUNC({1},{2})	(True, None)	n	1.0
+math_trig	trunc	1356	TRUNC({1},{2})	(True, True)	n	1.0
+math_trig	trunc	1357	TRUNC({1},{2})	(True, ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc	1358	TRUNC({1},{2})	(ErrorValue('#N/A'), 0.0)	e	#N/A
+math_trig	trunc	1359	TRUNC({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+math_trig	trunc	1360	TRUNC({1},{2})	(ErrorValue('#N/A'), -1.0)	e	#N/A
+math_trig	trunc	1361	TRUNC({1},{2})	(ErrorValue('#N/A'), 0.5)	e	#N/A
+math_trig	trunc	1362	TRUNC({1},{2})	(ErrorValue('#N/A'), 2.0)	e	#N/A
+math_trig	trunc	1363	TRUNC({1},{2})	(ErrorValue('#N/A'), -2.5)	e	#N/A
+math_trig	trunc	1364	TRUNC({1},{2})	(ErrorValue('#N/A'), 3.7)	e	#N/A
+math_trig	trunc	1365	TRUNC({1},{2})	(ErrorValue('#N/A'), 10.0)	e	#N/A
+math_trig	trunc	1366	TRUNC({1},{2})	(ErrorValue('#N/A'), 1000000000000000.0)	e	#N/A
+math_trig	trunc	1367	TRUNC({1},{2})	(ErrorValue('#N/A'), '2')	e	#N/A
+math_trig	trunc	1368	TRUNC({1},{2})	(ErrorValue('#N/A'), 'abc')	e	#N/A
+math_trig	trunc	1369	TRUNC({1},{2})	(ErrorValue('#N/A'), None)	e	#N/A
+math_trig	trunc	1370	TRUNC({1},{2})	(ErrorValue('#N/A'), True)	e	#N/A
+math_trig	trunc	1371	TRUNC({1},{2})	(ErrorValue('#N/A'), ErrorValue('#N/A'))	e	#N/A
+math_trig	trunc_digits	1372	TRUNC({1},{2})	(1234.5678, -5.0)	n	0.0
+math_trig	trunc_digits	1373	TRUNC({1},{2})	(1234.5678, -2.0)	n	1200.0
+math_trig	trunc_digits	1374	TRUNC({1},{2})	(1234.5678, -0.5)	n	1234.0
+math_trig	trunc_digits	1375	TRUNC({1},{2})	(1234.5678, 0.0)	n	1234.0
+math_trig	trunc_digits	1376	TRUNC({1},{2})	(1234.5678, 0.5)	n	1234.0
+math_trig	trunc_digits	1377	TRUNC({1},{2})	(1234.5678, 1.0)	n	1234.5
+math_trig	trunc_digits	1378	TRUNC({1},{2})	(1234.5678, 2.0)	n	1234.56
+math_trig	trunc_digits	1379	TRUNC({1},{2})	(1234.5678, 3.7)	n	1234.567
+math_trig	trunc_digits	1380	TRUNC({1},{2})	(1234.5678, 10.0)	n	1234.5678
+math_trig	trunc_digits	1381	TRUNC({1},{2})	(1234.5678, 15.0)	n	1234.5678
+math_trig	trunc_digits	1382	TRUNC({1},{2})	(1234.5678, 20.0)	n	1234.5678
+math_trig	trunc_digits	1383	TRUNC({1},{2})	(1234.5678, 400.0)	n	1234.5678
+math_trig	trunc_digits	1384	TRUNC({1},{2})	(1234.5678, -400.0)	n	0.0
+math_trig	trunc_digits	1385	TRUNC({1},{2})	(-1234.5678, -5.0)	n	0.0
+math_trig	trunc_digits	1386	TRUNC({1},{2})	(-1234.5678, -2.0)	n	-1200.0
+math_trig	trunc_digits	1387	TRUNC({1},{2})	(-1234.5678, -0.5)	n	-1234.0
+math_trig	trunc_digits	1388	TRUNC({1},{2})	(-1234.5678, 0.0)	n	-1234.0
+math_trig	trunc_digits	1389	TRUNC({1},{2})	(-1234.5678, 0.5)	n	-1234.0
+math_trig	trunc_digits	1390	TRUNC({1},{2})	(-1234.5678, 1.0)	n	-1234.5
+math_trig	trunc_digits	1391	TRUNC({1},{2})	(-1234.5678, 2.0)	n	-1234.56
+math_trig	trunc_digits	1392	TRUNC({1},{2})	(-1234.5678, 3.7)	n	-1234.567
+math_trig	trunc_digits	1393	TRUNC({1},{2})	(-1234.5678, 10.0)	n	-1234.5678
+math_trig	trunc_digits	1394	TRUNC({1},{2})	(-1234.5678, 15.0)	n	-1234.5678
+math_trig	trunc_digits	1395	TRUNC({1},{2})	(-1234.5678, 20.0)	n	-1234.5678
+math_trig	trunc_digits	1396	TRUNC({1},{2})	(-1234.5678, 400.0)	n	-1234.5678
+math_trig	trunc_digits	1397	TRUNC({1},{2})	(-1234.5678, -400.0)	n	0.0
+math_trig	trunc_digits	1398	TRUNC({1},{2})	(0.30000000000000004, -5.0)	n	0.0
+math_trig	trunc_digits	1399	TRUNC({1},{2})	(0.30000000000000004, -2.0)	n	0.0
+math_trig	trunc_digits	1400	TRUNC({1},{2})	(0.30000000000000004, -0.5)	n	0.0
+math_trig	trunc_digits	1401	TRUNC({1},{2})	(0.30000000000000004, 0.0)	n	0.0
+math_trig	trunc_digits	1402	TRUNC({1},{2})	(0.30000000000000004, 0.5)	n	0.0
+math_trig	trunc_digits	1403	TRUNC({1},{2})	(0.30000000000000004, 1.0)	n	0.3
+math_trig	trunc_digits	1404	TRUNC({1},{2})	(0.30000000000000004, 2.0)	n	0.3
+math_trig	trunc_digits	1405	TRUNC({1},{2})	(0.30000000000000004, 3.7)	n	0.3
+math_trig	trunc_digits	1406	TRUNC({1},{2})	(0.30000000000000004, 10.0)	n	0.3
+math_trig	trunc_digits	1407	TRUNC({1},{2})	(0.30000000000000004, 15.0)	n	0.3
+math_trig	trunc_digits	1408	TRUNC({1},{2})	(0.30000000000000004, 20.0)	n	0.3
+math_trig	trunc_digits	1409	TRUNC({1},{2})	(0.30000000000000004, 400.0)	n	0.3
+math_trig	trunc_digits	1410	TRUNC({1},{2})	(0.30000000000000004, -400.0)	n	0.0
+math_trig	trunc_digits	1411	TRUNC({1},{2})	(2.675, -5.0)	n	0.0
+math_trig	trunc_digits	1412	TRUNC({1},{2})	(2.675, -2.0)	n	0.0
+math_trig	trunc_digits	1413	TRUNC({1},{2})	(2.675, -0.5)	n	2.0
+math_trig	trunc_digits	1414	TRUNC({1},{2})	(2.675, 0.0)	n	2.0
+math_trig	trunc_digits	1415	TRUNC({1},{2})	(2.675, 0.5)	n	2.0
+math_trig	trunc_digits	1416	TRUNC({1},{2})	(2.675, 1.0)	n	2.6
+math_trig	trunc_digits	1417	TRUNC({1},{2})	(2.675, 2.0)	n	2.67
+math_trig	trunc_digits	1418	TRUNC({1},{2})	(2.675, 3.7)	n	2.675
+math_trig	trunc_digits	1419	TRUNC({1},{2})	(2.675, 10.0)	n	2.675
+math_trig	trunc_digits	1420	TRUNC({1},{2})	(2.675, 15.0)	n	2.675
+math_trig	trunc_digits	1421	TRUNC({1},{2})	(2.675, 20.0)	n	2.675
+math_trig	trunc_digits	1422	TRUNC({1},{2})	(2.675, 400.0)	n	2.675
+math_trig	trunc_digits	1423	TRUNC({1},{2})	(2.675, -400.0)	n	0.0
+math_trig	trunc_digits	1424	TRUNC({1},{2})	(1000000000000000.5, -5.0)	n	1000000000000000.0
+math_trig	trunc_digits	1425	TRUNC({1},{2})	(1000000000000000.5, -2.0)	n	1000000000000000.0
+math_trig	trunc_digits	1426	TRUNC({1},{2})	(1000000000000000.5, -0.5)	n	1000000000000000.0
+math_trig	trunc_digits	1427	TRUNC({1},{2})	(1000000000000000.5, 0.0)	n	1000000000000000.0
+math_trig	trunc_digits	1428	TRUNC({1},{2})	(1000000000000000.5, 0.5)	n	1000000000000000.0
+math_trig	trunc_digits	1429	TRUNC({1},{2})	(1000000000000000.5, 1.0)	n	1000000000000000.0
+math_trig	trunc_digits	1430	TRUNC({1},{2})	(1000000000000000.5, 2.0)	n	1000000000000000.0
+math_trig	trunc_digits	1431	TRUNC({1},{2})	(1000000000000000.5, 3.7)	n	1000000000000000.0
+math_trig	trunc_digits	1432	TRUNC({1},{2})	(1000000000000000.5, 10.0)	n	1000000000000000.0
+math_trig	trunc_digits	1433	TRUNC({1},{2})	(1000000000000000.5, 15.0)	n	1000000000000000.0
+math_trig	trunc_digits	1434	TRUNC({1},{2})	(1000000000000000.5, 20.0)	n	1000000000000000.0
+math_trig	trunc_digits	1435	TRUNC({1},{2})	(1000000000000000.5, 400.0)	n	1000000000000000.0
+math_trig	trunc_digits	1436	TRUNC({1},{2})	(1000000000000000.5, -400.0)	n	0.0
+math_trig	trunc_digits	1437	TRUNC({1},{2})	(1e-05, -5.0)	n	0.0
+math_trig	trunc_digits	1438	TRUNC({1},{2})	(1e-05, -2.0)	n	0.0
+math_trig	trunc_digits	1439	TRUNC({1},{2})	(1e-05, -0.5)	n	0.0
+math_trig	trunc_digits	1440	TRUNC({1},{2})	(1e-05, 0.0)	n	0.0
+math_trig	trunc_digits	1441	TRUNC({1},{2})	(1e-05, 0.5)	n	0.0
+math_trig	trunc_digits	1442	TRUNC({1},{2})	(1e-05, 1.0)	n	0.0
+math_trig	trunc_digits	1443	TRUNC({1},{2})	(1e-05, 2.0)	n	0.0
+math_trig	trunc_digits	1444	TRUNC({1},{2})	(1e-05, 3.7)	n	0.0
+math_trig	trunc_digits	1445	TRUNC({1},{2})	(1e-05, 10.0)	n	1e-05
+math_trig	trunc_digits	1446	TRUNC({1},{2})	(1e-05, 15.0)	n	1e-05
+math_trig	trunc_digits	1447	TRUNC({1},{2})	(1e-05, 20.0)	n	1e-05
+math_trig	trunc_digits	1448	TRUNC({1},{2})	(1e-05, 400.0)	n	1e-05
+math_trig	trunc_digits	1449	TRUNC({1},{2})	(1e-05, -400.0)	n	0.0
+math_trig	exact	1450	EXACT({1},{2})	('a', 'a')	b	True
+math_trig	exact	1451	EXACT({1},{2})	('a', 'A')	b	False
+math_trig	exact	1452	EXACT({1},{2})	('a', '')	b	False
+math_trig	exact	1453	EXACT({1},{2})	('a', 'a ')	b	False
+math_trig	exact	1454	EXACT({1},{2})	('a', '1')	b	False
+math_trig	exact	1455	EXACT({1},{2})	('a', 1.0)	b	False
+math_trig	exact	1456	EXACT({1},{2})	('a', True)	b	False
+math_trig	exact	1457	EXACT({1},{2})	('a', None)	b	False
+math_trig	exact	1458	EXACT({1},{2})	('a', ErrorValue('#N/A'))	e	#N/A
+math_trig	exact	1459	EXACT({1},{2})	('A', 'a')	b	False
+math_trig	exact	1460	EXACT({1},{2})	('A', 'A')	b	True
+math_trig	exact	1461	EXACT({1},{2})	('A', '')	b	False
+math_trig	exact	1462	EXACT({1},{2})	('A', 'a ')	b	False
+math_trig	exact	1463	EXACT({1},{2})	('A', '1')	b	False
+math_trig	exact	1464	EXACT({1},{2})	('A', 1.0)	b	False
+math_trig	exact	1465	EXACT({1},{2})	('A', True)	b	False
+math_trig	exact	1466	EXACT({1},{2})	('A', None)	b	False
+math_trig	exact	1467	EXACT({1},{2})	('A', ErrorValue('#N/A'))	e	#N/A
+math_trig	exact	1468	EXACT({1},{2})	('', 'a')	b	False
+math_trig	exact	1469	EXACT({1},{2})	('', 'A')	b	False
+math_trig	exact	1470	EXACT({1},{2})	('', '')	b	True
+math_trig	exact	1471	EXACT({1},{2})	('', 'a ')	b	False
+math_trig	exact	1472	EXACT({1},{2})	('', '1')	b	False
+math_trig	exact	1473	EXACT({1},{2})	('', 1.0)	b	False
+math_trig	exact	1474	EXACT({1},{2})	('', True)	b	False
+math_trig	exact	1475	EXACT({1},{2})	('', None)	b	True
+math_trig	exact	1476	EXACT({1},{2})	('', ErrorValue('#N/A'))	e	#N/A
+math_trig	exact	1477	EXACT({1},{2})	(' a', 'a')	b	False
+math_trig	exact	1478	EXACT({1},{2})	(' a', 'A')	b	False
+math_trig	exact	1479	EXACT({1},{2})	(' a', '')	b	False
+math_trig	exact	1480	EXACT({1},{2})	(' a', 'a ')	b	False
+math_trig	exact	1481	EXACT({1},{2})	(' a', '1')	b	False
+math_trig	exact	1482	EXACT({1},{2})	(' a', 1.0)	b	False
+math_trig	exact	1483	EXACT({1},{2})	(' a', True)	b	False
+math_trig	exact	1484	EXACT({1},{2})	(' a', None)	b	False
+math_trig	exact	1485	EXACT({1},{2})	(' a', ErrorValue('#N/A'))	e	#N/A
+math_trig	exact	1486	EXACT({1},{2})	('1', 'a')	b	False
+math_trig	exact	1487	EXACT({1},{2})	('1', 'A')	b	False
+math_trig	exact	1488	EXACT({1},{2})	('1', '')	b	False
+math_trig	exact	1489	EXACT({1},{2})	('1', 'a ')	b	False
+math_trig	exact	1490	EXACT({1},{2})	('1', '1')	b	True
+math_trig	exact	1491	EXACT({1},{2})	('1', 1.0)	b	True
+math_trig	exact	1492	EXACT({1},{2})	('1', True)	b	False
+math_trig	exact	1493	EXACT({1},{2})	('1', None)	b	False
+math_trig	exact	1494	EXACT({1},{2})	('1', ErrorValue('#N/A'))	e	#N/A
+math_trig	exact	1495	EXACT({1},{2})	(1.0, 'a')	b	False
+math_trig	exact	1496	EXACT({1},{2})	(1.0, 'A')	b	False
+math_trig	exact	1497	EXACT({1},{2})	(1.0, '')	b	False
+math_trig	exact	1498	EXACT({1},{2})	(1.0, 'a ')	b	False
+math_trig	exact	1499	EXACT({1},{2})	(1.0, '1')	b	True
+math_trig	exact	1500	EXACT({1},{2})	(1.0, 1.0)	b	True
+math_trig	exact	1501	EXACT({1},{2})	(1.0, True)	b	False
+math_trig	exact	1502	EXACT({1},{2})	(1.0, None)	b	False
+math_trig	exact	1503	EXACT({1},{2})	(1.0, ErrorValue('#N/A'))	e	#N/A
+math_trig	exact	1504	EXACT({1},{2})	(True, 'a')	b	False
+math_trig	exact	1505	EXACT({1},{2})	(True, 'A')	b	False
+math_trig	exact	1506	EXACT({1},{2})	(True, '')	b	False
+math_trig	exact	1507	EXACT({1},{2})	(True, 'a ')	b	False
+math_trig	exact	1508	EXACT({1},{2})	(True, '1')	b	False
+math_trig	exact	1509	EXACT({1},{2})	(True, 1.0)	b	False
+math_trig	exact	1510	EXACT({1},{2})	(True, True)	b	True
+math_trig	exact	1511	EXACT({1},{2})	(True, None)	b	False
+math_trig	exact	1512	EXACT({1},{2})	(True, ErrorValue('#N/A'))	e	#N/A
+math_trig	exact	1513	EXACT({1},{2})	(None, 'a')	b	False
+math_trig	exact	1514	EXACT({1},{2})	(None, 'A')	b	False
+math_trig	exact	1515	EXACT({1},{2})	(None, '')	b	True
+math_trig	exact	1516	EXACT({1},{2})	(None, 'a ')	b	False
+math_trig	exact	1517	EXACT({1},{2})	(None, '1')	b	False
+math_trig	exact	1518	EXACT({1},{2})	(None, 1.0)	b	False
+math_trig	exact	1519	EXACT({1},{2})	(None, True)	b	False
+math_trig	exact	1520	EXACT({1},{2})	(None, None)	b	True
+math_trig	exact	1521	EXACT({1},{2})	(None, ErrorValue('#N/A'))	e	#N/A
+math_trig	exact	1522	EXACT({1},{2})	(ErrorValue('#N/A'), 'a')	e	#N/A
+math_trig	exact	1523	EXACT({1},{2})	(ErrorValue('#N/A'), 'A')	e	#N/A
+math_trig	exact	1524	EXACT({1},{2})	(ErrorValue('#N/A'), '')	e	#N/A
+math_trig	exact	1525	EXACT({1},{2})	(ErrorValue('#N/A'), 'a ')	e	#N/A
+math_trig	exact	1526	EXACT({1},{2})	(ErrorValue('#N/A'), '1')	e	#N/A
+math_trig	exact	1527	EXACT({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+math_trig	exact	1528	EXACT({1},{2})	(ErrorValue('#N/A'), True)	e	#N/A
+math_trig	exact	1529	EXACT({1},{2})	(ErrorValue('#N/A'), None)	e	#N/A
+math_trig	exact	1530	EXACT({1},{2})	(ErrorValue('#N/A'), ErrorValue('#N/A'))	e	#N/A
+math_trig	time	1531	TIME({1},{2},{3})	(0.0, 0.0, 0.0)	n	0.0
+math_trig	time	1532	TIME({1},{2},{3})	(0.0, 0.0, 59.0)	n	0.0006828703703703704
+math_trig	time	1533	TIME({1},{2},{3})	(0.0, 0.0, 90.0)	n	0.0010416666666666667
+math_trig	time	1534	TIME({1},{2},{3})	(0.0, 0.0, -5.0)	e	#NUM!
+math_trig	time	1535	TIME({1},{2},{3})	(0.0, 0.0, 0.5)	n	0.0
+math_trig	time	1536	TIME({1},{2},{3})	(0.0, 0.0, 32768.0)	e	#NUM!
+math_trig	time	1537	TIME({1},{2},{3})	(0.0, 30.0, 0.0)	n	0.020833333333333332
+math_trig	time	1538	TIME({1},{2},{3})	(0.0, 30.0, 59.0)	n	0.021516203703703704
+math_trig	time	1539	TIME({1},{2},{3})	(0.0, 30.0, 90.0)	n	0.021875
+math_trig	time	1540	TIME({1},{2},{3})	(0.0, 30.0, -5.0)	n	0.020775462962962964
+math_trig	time	1541	TIME({1},{2},{3})	(0.0, 30.0, 0.5)	n	0.020833333333333332
+math_trig	time	1542	TIME({1},{2},{3})	(0.0, 30.0, 32768.0)	e	#NUM!
+math_trig	time	1543	TIME({1},{2},{3})	(0.0, 59.0, 0.0)	n	0.04097222222222222
+math_trig	time	1544	TIME({1},{2},{3})	(0.0, 59.0, 59.0)	n	0.04165509259259259
+math_trig	time	1545	TIME({1},{2},{3})	(0.0, 59.0, 90.0)	n	0.04201388888888889
+math_trig	time	1546	TIME({1},{2},{3})	(0.0, 59.0, -5.0)	n	0.040914351851851855
+math_trig	time	1547	TIME({1},{2},{3})	(0.0, 59.0, 0.5)	n	0.04097222222222222
+math_trig	time	1548	TIME({1},{2},{3})	(0.0, 59.0, 32768.0)	e	#NUM!
+math_trig	time	1549	TIME({1},{2},{3})	(0.0, 60.0, 0.0)	n	0.041666666666666664
+math_trig	time	1550	TIME({1},{2},{3})	(0.0, 60.0, 59.0)	n	0.04234953703703704
+math_trig	time	1551	TIME({1},{2},{3})	(0.0, 60.0, 90.0)	n	0.042708333333333334
+math_trig	time	1552	TIME({1},{2},{3})	(0.0, 60.0, -5.0)	n	0.041608796296296297
+math_trig	time	1553	TIME({1},{2},{3})	(0.0, 60.0, 0.5)	n	0.041666666666666664
+math_trig	time	1554	TIME({1},{2},{3})	(0.0, 60.0, 32768.0)	e	#NUM!
+math_trig	time	1555	TIME({1},{2},{3})	(0.0, -30.0, 0.0)	e	#NUM!
+math_trig	time	1556	TIME({1},{2},{3})	(0.0, -30.0, 59.0)	e	#NUM!
+math_trig	time	1557	TIME({1},{2},{3})	(0.0, -30.0, 90.0)	e	#NUM!
+math_trig	time	1558	TIME({1},{2},{3})	(0.0, -30.0, -5.0)	e	#NUM!
+math_trig	time	1559	TIME({1},{2},{3})	(0.0, -30.0, 0.5)	e	#NUM!
+math_trig	time	1560	TIME({1},{2},{3})	(0.0, -30.0, 32768.0)	e	#NUM!
+math_trig	time	1561	TIME({1},{2},{3})	(0.0, 1.9, 0.0)	n	0.0006944444444444445
+math_trig	time	1562	TIME({1},{2},{3})	(0.0, 1.9, 59.0)	n	0.0013773148148148147
+math_trig	time	1563	TIME({1},{2},{3})	(0.0, 1.9, 90.0)	n	0.001736111111111111
+math_trig	time	1564	TIME({1},{2},{3})	(0.0, 1.9, -5.0)	n	0.0006365740740740741
+math_trig	time	1565	TIME({1},{2},{3})	(0.0, 1.9, 0.5)	n	0.0006944444444444445
+math_trig	time	1566	TIME({1},{2},{3})	(0.0, 1.9, 32768.0)	e	#NUM!
+math_trig	time	1567	TIME({1},{2},{3})	(0.0, 32768.0, 0.0)	e	#NUM!
+math_trig	time	1568	TIME({1},{2},{3})	(0.0, 32768.0, 59.0)	e	#NUM!
+math_trig	time	1569	TIME({1},{2},{3})	(0.0, 32768.0, 90.0)	e	#NUM!
+math_trig	time	1570	TIME({1},{2},{3})	(0.0, 32768.0, -5.0)	e	#NUM!
+math_trig	time	1571	TIME({1},{2},{3})	(0.0, 32768.0, 0.5)	e	#NUM!
+math_trig	time	1572	TIME({1},{2},{3})	(0.0, 32768.0, 32768.0)	e	#NUM!
+math_trig	time	1573	TIME({1},{2},{3})	(1.0, 0.0, 0.0)	n	0.041666666666666664
+math_trig	time	1574	TIME({1},{2},{3})	(1.0, 0.0, 59.0)	n	0.04234953703703704
+math_trig	time	1575	TIME({1},{2},{3})	(1.0, 0.0, 90.0)	n	0.042708333333333334
+math_trig	time	1576	TIME({1},{2},{3})	(1.0, 0.0, -5.0)	n	0.041608796296296297
+math_trig	time	1577	TIME({1},{2},{3})	(1.0, 0.0, 0.5)	n	0.041666666666666664
+math_trig	time	1578	TIME({1},{2},{3})	(1.0, 0.0, 32768.0)	e	#NUM!
+math_trig	time	1579	TIME({1},{2},{3})	(1.0, 30.0, 0.0)	n	0.0625
+math_trig	time	1580	TIME({1},{2},{3})	(1.0, 30.0, 59.0)	n	0.06318287037037038
+math_trig	time	1581	TIME({1},{2},{3})	(1.0, 30.0, 90.0)	n	0.06354166666666666
+math_trig	time	1582	TIME({1},{2},{3})	(1.0, 30.0, -5.0)	n	0.06244212962962963
+math_trig	time	1583	TIME({1},{2},{3})	(1.0, 30.0, 0.5)	n	0.0625
+math_trig	time	1584	TIME({1},{2},{3})	(1.0, 30.0, 32768.0)	e	#NUM!
+math_trig	time	1585	TIME({1},{2},{3})	(1.0, 59.0, 0.0)	n	0.08263888888888889
+math_trig	time	1586	TIME({1},{2},{3})	(1.0, 59.0, 59.0)	n	0.08332175925925926
+math_trig	time	1587	TIME({1},{2},{3})	(1.0, 59.0, 90.0)	n	0.08368055555555555
+math_trig	time	1588	TIME({1},{2},{3})	(1.0, 59.0, -5.0)	n	0.08258101851851851
+math_trig	time	1589	TIME({1},{2},{3})	(1.0, 59.0, 0.5)	n	0.08263888888888889
+math_trig	time	1590	TIME({1},{2},{3})	(1.0, 59.0, 32768.0)	e	#NUM!
+math_trig	time	1591	TIME({1},{2},{3})	(1.0, 60.0, 0.0)	n	0.08333333333333333
+math_trig	time	1592	TIME({1},{2},{3})	(1.0, 60.0, 59.0)	n	0.0840162037037037
+math_trig	time	1593	TIME({1},{2},{3})	(1.0, 60.0, 90.0)	n	0.084375
+math_trig	time	1594	TIME({1},{2},{3})	(1.0, 60.0, -5.0)	n	0.08327546296296297
+math_trig	time	1595	TIME({1},{2},{3})	(1.0, 60.0, 0.5)	n	0.08333333333333333
+math_trig	time	1596	TIME({1},{2},{3})	(1.0, 60.0, 32768.0)	e	#NUM!
+math_trig	time	1597	TIME({1},{2},{3})	(1.0, -30.0, 0.0)	n	0.020833333333333332
+math_trig	time	1598	TIME({1},{2},{3})	(1.0, -30.0, 59.0)	n	0.021516203703703704
+math_trig	time	1599	TIME({1},{2},{3})	(1.0, -30.0, 90.0)	n	0.021875
+math_trig	time	1600	TIME({1},{2},{3})	(1.0, -30.0, -5.0)	n	0.020775462962962964
+math_trig	time	1601	TIME({1},{2},{3})	(1.0, -30.0, 0.5)	n	0.020833333333333332
+math_trig	time	1602	TIME({1},{2},{3})	(1.0, -30.0, 32768.0)	e	#NUM!
+math_trig	time	1603	TIME({1},{2},{3})	(1.0, 1.9, 0.0)	n	0.04236111111111111
+math_trig	time	1604	TIME({1},{2},{3})	(1.0, 1.9, 59.0)	n	0.04304398148148148
+math_trig	time	1605	TIME({1},{2},{3})	(1.0, 1.9, 90.0)	n	0.043402777777777776
+math_trig	time	1606	TIME({1},{2},{3})	(1.0, 1.9, -5.0)	n	0.04230324074074074
+math_trig	time	1607	TIME({1},{2},{3})	(1.0, 1.9, 0.5)	n	0.04236111111111111
+math_trig	time	1608	TIME({1},{2},{3})	(1.0, 1.9, 32768.0)	e	#NUM!
+math_trig	time	1609	TIME({1},{2},{3})	(1.0, 32768.0, 0.0)	e	#NUM!
+math_trig	time	1610	TIME({1},{2},{3})	(1.0, 32768.0, 59.0)	e	#NUM!
+math_trig	time	1611	TIME({1},{2},{3})	(1.0, 32768.0, 90.0)	e	#NUM!
+math_trig	time	1612	TIME({1},{2},{3})	(1.0, 32768.0, -5.0)	e	#NUM!
+math_trig	time	1613	TIME({1},{2},{3})	(1.0, 32768.0, 0.5)	e	#NUM!
+math_trig	time	1614	TIME({1},{2},{3})	(1.0, 32768.0, 32768.0)	e	#NUM!
+math_trig	time	1615	TIME({1},{2},{3})	(12.5, 0.0, 0.0)	n	0.5
+math_trig	time	1616	TIME({1},{2},{3})	(12.5, 0.0, 59.0)	n	0.5006828703703704
+math_trig	time	1617	TIME({1},{2},{3})	(12.5, 0.0, 90.0)	n	0.5010416666666667
+math_trig	time	1618	TIME({1},{2},{3})	(12.5, 0.0, -5.0)	n	0.49994212962962964
+math_trig	time	1619	TIME({1},{2},{3})	(12.5, 0.0, 0.5)	n	0.5
+math_trig	time	1620	TIME({1},{2},{3})	(12.5, 0.0, 32768.0)	e	#NUM!
+math_trig	time	1621	TIME({1},{2},{3})	(12.5, 30.0, 0.0)	n	0.5208333333333334
+math_trig	time	1622	TIME({1},{2},{3})	(12.5, 30.0, 59.0)	n	0.5215162037037037
+math_trig	time	1623	TIME({1},{2},{3})	(12.5, 30.0, 90.0)	n	0.521875
+math_trig	time	1624	TIME({1},{2},{3})	(12.5, 30.0, -5.0)	n	0.520775462962963
+math_trig	time	1625	TIME({1},{2},{3})	(12.5, 30.0, 0.5)	n	0.5208333333333334
+math_trig	time	1626	TIME({1},{2},{3})	(12.5, 30.0, 32768.0)	e	#NUM!
+math_trig	time	1627	TIME({1},{2},{3})	(12.5, 59.0, 0.0)	n	0.5409722222222222
+math_trig	time	1628	TIME({1},{2},{3})	(12.5, 59.0, 59.0)	n	0.5416550925925926
+math_trig	time	1629	TIME({1},{2},{3})	(12.5, 59.0, 90.0)	n	0.5420138888888889
+math_trig	time	1630	TIME({1},{2},{3})	(12.5, 59.0, -5.0)	n	0.5409143518518519
+math_trig	time	1631	TIME({1},{2},{3})	(12.5, 59.0, 0.5)	n	0.5409722222222222
+math_trig	time	1632	TIME({1},{2},{3})	(12.5, 59.0, 32768.0)	e	#NUM!
+math_trig	time	1633	TIME({1},{2},{3})	(12.5, 60.0, 0.0)	n	0.5416666666666666
+math_trig	time	1634	TIME({1},{2},{3})	(12.5, 60.0, 59.0)	n	0.542349537037037
+math_trig	time	1635	TIME({1},{2},{3})	(12.5, 60.0, 90.0)	n	0.5427083333333333
+math_trig	time	1636	TIME({1},{2},{3})	(12.5, 60.0, -5.0)	n	0.5416087962962963
+math_trig	time	1637	TIME({1},{2},{3})	(12.5, 60.0, 0.5)	n	0.5416666666666666
+math_trig	time	1638	TIME({1},{2},{3})	(12.5, 60.0, 32768.0)	e	#NUM!
+math_trig	time	1639	TIME({1},{2},{3})	(12.5, -30.0, 0.0)	n	0.4791666666666667
+math_trig	time	1640	TIME({1},{2},{3})	(12.5, -30.0, 59.0)	n	0.47984953703703703
+math_trig	time	1641	TIME({1},{2},{3})	(12.5, -30.0, 90.0)	n	0.48020833333333335
+math_trig	time	1642	TIME({1},{2},{3})	(12.5, -30.0, -5.0)	n	0.47910879629629627
+math_trig	time	1643	TIME({1},{2},{3})	(12.5, -30.0, 0.5)	n	0.4791666666666667
+math_trig	time	1644	TIME({1},{2},{3})	(12.5, -30.0, 32768.0)	e	#NUM!
+math_trig	time	1645	TIME({1},{2},{3})	(12.5, 1.9, 0.0)	n	0.5006944444444444
+math_trig	time	1646	TIME({1},{2},{3})	(12.5, 1.9, 59.0)	n	0.5013773148148148
+math_trig	time	1647	TIME({1},{2},{3})	(12.5, 1.9, 90.0)	n	0.5017361111111112
+math_trig	time	1648	TIME({1},{2},{3})	(12.5, 1.9, -5.0)	n	0.500636574074074
+math_trig	time	1649	TIME({1},{2},{3})	(12.5, 1.9, 0.5)	n	0.5006944444444444
+math_trig	time	1650	TIME({1},{2},{3})	(12.5, 1.9, 32768.0)	e	#NUM!
+math_trig	time	1651	TIME({1},{2},{3})	(12.5, 32768.0, 0.0)	e	#NUM!
+math_trig	time	1652	TIME({1},{2},{3})	(12.5, 32768.0, 59.0)	e	#NUM!
+math_trig	time	1653	TIME({1},{2},{3})	(12.5, 32768.0, 90.0)	e	#NUM!
+math_trig	time	1654	TIME({1},{2},{3})	(12.5, 32768.0, -5.0)	e	#NUM!
+math_trig	time	1655	TIME({1},{2},{3})	(12.5, 32768.0, 0.5)	e	#NUM!
+math_trig	time	1656	TIME({1},{2},{3})	(12.5, 32768.0, 32768.0)	e	#NUM!
+math_trig	time	1657	TIME({1},{2},{3})	(23.0, 0.0, 0.0)	n	0.9583333333333334
+math_trig	time	1658	TIME({1},{2},{3})	(23.0, 0.0, 59.0)	n	0.9590162037037037
+math_trig	time	1659	TIME({1},{2},{3})	(23.0, 0.0, 90.0)	n	0.959375
+math_trig	time	1660	TIME({1},{2},{3})	(23.0, 0.0, -5.0)	n	0.958275462962963
+math_trig	time	1661	TIME({1},{2},{3})	(23.0, 0.0, 0.5)	n	0.9583333333333334
+math_trig	time	1662	TIME({1},{2},{3})	(23.0, 0.0, 32768.0)	e	#NUM!
+math_trig	time	1663	TIME({1},{2},{3})	(23.0, 30.0, 0.0)	n	0.9791666666666666
+math_trig	time	1664	TIME({1},{2},{3})	(23.0, 30.0, 59.0)	n	0.979849537037037
+math_trig	time	1665	TIME({1},{2},{3})	(23.0, 30.0, 90.0)	n	0.9802083333333333
+math_trig	time	1666	TIME({1},{2},{3})	(23.0, 30.0, -5.0)	n	0.9791087962962963
+math_trig	time	1667	TIME({1},{2},{3})	(23.0, 30.0, 0.5)	n	0.9791666666666666
+math_trig	time	1668	TIME({1},{2},{3})	(23.0, 30.0, 32768.0)	e	#NUM!
+math_trig	time	1669	TIME({1},{2},{3})	(23.0, 59.0, 0.0)	n	0.9993055555555556
+math_trig	time	1670	TIME({1},{2},{3})	(23.0, 59.0, 59.0)	n	0.999988425925926
+math_trig	time	1671	TIME({1},{2},{3})	(23.0, 59.0, 90.0)	n	0.0003472222222222765
+math_trig	time	1672	TIME({1},{2},{3})	(23.0, 59.0, -5.0)	n	0.9992476851851851
+math_trig	time	1673	TIME({1},{2},{3})	(23.0, 59.0, 0.5)	n	0.9993055555555556
+math_trig	time	1674	TIME({1},{2},{3})	(23.0, 59.0, 32768.0)	e	#NUM!
+math_trig	time	1675	TIME({1},{2},{3})	(23.0, 60.0, 0.0)	n	0.0
+math_trig	time	1676	TIME({1},{2},{3})	(23.0, 60.0, 59.0)	n	0.0006828703703702921
+math_trig	time	1677	TIME({1},{2},{3})	(23.0, 60.0, 90.0)	n	0.0010416666666666075
+math_trig	time	1678	TIME({1},{2},{3})	(23.0, 60.0, -5.0)	n	0.9999421296296296
+math_trig	time	1679	TIME({1},{2},{3})	(23.0, 60.0, 0.5)	n	0.0
+math_trig	time	1680	TIME({1},{2},{3})	(23.0, 60.0, 32768.0)	e	#NUM!
+math_trig	time	1681	TIME({1},{2},{3})	(23.0, -30.0, 0.0)	n	0.9375
+math_trig	time	1682	TIME({1},{2},{3})	(23.0, -30.0, 59.0)	n	0.9381828703703704
+math_trig	time	1683	TIME({1},{2},{3})	(23.0, -30.0, 90.0)	n	0.9385416666666667
+math_trig	time	1684	TIME({1},{2},{3})	(23.0, -30.0, -5.0)	n	0.9374421296296296
+math_trig	time	1685	TIME({1},{2},{3})	(23.0, -30.0, 0.5)	n	0.9375
+math_trig	time	1686	TIME({1},{2},{3})	(23.0, -30.0, 32768.0)	e	#NUM!
+math_trig	time	1687	TIME({1},{2},{3})	(23.0, 1.9, 0.0)	n	0.9590277777777778
+math_trig	time	1688	TIME({1},{2},{3})	(23.0, 1.9, 59.0)	n	0.9597106481481481
+math_trig	time	1689	TIME({1},{2},{3})	(23.0, 1.9, 90.0)	n	0.9600694444444444
+math_trig	time	1690	TIME({1},{2},{3})	(23.0, 1.9, -5.0)	n	0.9589699074074074
+math_trig	time	1691	TIME({1},{2},{3})	(23.0, 1.9, 0.5)	n	0.9590277777777778
+math_trig	time	1692	TIME({1},{2},{3})	(23.0, 1.9, 32768.0)	e	#NUM!
+math_trig	time	1693	TIME({1},{2},{3})	(23.0, 32768.0, 0.0)	e	#NUM!
+math_trig	time	1694	TIME({1},{2},{3})	(23.0, 32768.0, 59.0)	e	#NUM!
+math_trig	time	1695	TIME({1},{2},{3})	(23.0, 32768.0, 90.0)	e	#NUM!
+math_trig	time	1696	TIME({1},{2},{3})	(23.0, 32768.0, -5.0)	e	#NUM!
+math_trig	time	1697	TIME({1},{2},{3})	(23.0, 32768.0, 0.5)	e	#NUM!
+math_trig	time	1698	TIME({1},{2},{3})	(23.0, 32768.0, 32768.0)	e	#NUM!
+math_trig	time	1699	TIME({1},{2},{3})	(24.0, 0.0, 0.0)	n	0.0
+math_trig	time	1700	TIME({1},{2},{3})	(24.0, 0.0, 59.0)	n	0.0006828703703702921
+math_trig	time	1701	TIME({1},{2},{3})	(24.0, 0.0, 90.0)	n	0.0010416666666666075
+math_trig	time	1702	TIME({1},{2},{3})	(24.0, 0.0, -5.0)	n	0.9999421296296296
+math_trig	time	1703	TIME({1},{2},{3})	(24.0, 0.0, 0.5)	n	0.0
+math_trig	time	1704	TIME({1},{2},{3})	(24.0, 0.0, 32768.0)	e	#NUM!
+math_trig	time	1705	TIME({1},{2},{3})	(24.0, 30.0, 0.0)	n	0.02083333333333326
+math_trig	time	1706	TIME({1},{2},{3})	(24.0, 30.0, 59.0)	n	0.021516203703703773
+math_trig	time	1707	TIME({1},{2},{3})	(24.0, 30.0, 90.0)	n	0.02187500000000009
+math_trig	time	1708	TIME({1},{2},{3})	(24.0, 30.0, -5.0)	n	0.020775462962963065
+math_trig	time	1709	TIME({1},{2},{3})	(24.0, 30.0, 0.5)	n	0.02083333333333326
+math_trig	time	1710	TIME({1},{2},{3})	(24.0, 30.0, 32768.0)	e	#NUM!
+math_trig	time	1711	TIME({1},{2},{3})	(24.0, 59.0, 0.0)	n	0.04097222222222219
+math_trig	time	1712	TIME({1},{2},{3})	(24.0, 59.0, 59.0)	n	0.0416550925925927
+math_trig	time	1713	TIME({1},{2},{3})	(24.0, 59.0, 90.0)	n	0.042013888888888795
+math_trig	time	1714	TIME({1},{2},{3})	(24.0, 59.0, -5.0)	n	0.04091435185185177
+math_trig	time	1715	TIME({1},{2},{3})	(24.0, 59.0, 0.5)	n	0.04097222222222219
+math_trig	time	1716	TIME({1},{2},{3})	(24.0, 59.0, 32768.0)	e	#NUM!
+math_trig	time	1717	TIME({1},{2},{3})	(24.0, 60.0, 0.0)	n	0.04166666666666674
+math_trig	time	1718	TIME({1},{2},{3})	(24.0, 60.0, 59.0)	n	0.04234953703703703
+math_trig	time	1719	TIME({1},{2},{3})	(24.0, 60.0, 90.0)	n	0.04270833333333335
+math_trig	time	1720	TIME({1},{2},{3})	(24.0, 60.0, -5.0)	n	0.041608796296296324
+math_trig	time	1721	TIME({1},{2},{3})	(24.0, 60.0, 0.5)	n	0.04166666666666674
+math_trig	time	1722	TIME({1},{2},{3})	(24.0, 60.0, 32768.0)	e	#NUM!
+math_trig	time	1723	TIME({1},{2},{3})	(24.0, -30.0, 0.0)	n	0.9791666666666666
+math_trig	time	1724	TIME({1},{2},{3})	(24.0, -30.0, 59.0)	n	0.979849537037037
+math_trig	time	1725	TIME({1},{2},{3})	(24.0, -30.0, 90.0)	n	0.9802083333333333
+math_trig	time	1726	TIME({1},{2},{3})	(24.0, -30.0, -5.0)	n	0.9791087962962963
+math_trig	time	1727	TIME({1},{2},{3})	(24.0, -30.0, 0.5)	n	0.9791666666666666
+math_trig	time	1728	TIME({1},{2},{3})	(24.0, -30.0, 32768.0)	e	#NUM!
+math_trig	time	1729	TIME({1},{2},{3})	(24.0, 1.9, 0.0)	n	0.000694444444444553
+math_trig	time	1730	TIME({1},{2},{3})	(24.0, 1.9, 59.0)	n	0.001377314814814845
+math_trig	time	1731	TIME({1},{2},{3})	(24.0, 1.9, 90.0)	n	0.0017361111111111605
+math_trig	time	1732	TIME({1},{2},{3})	(24.0, 1.9, -5.0)	n	0.0006365740740741366
+math_trig	time	1733	TIME({1},{2},{3})	(24.0, 1.9, 0.5)	n	0.000694444444444553
+math_trig	time	1734	TIME({1},{2},{3})	(24.0, 1.9, 32768.0)	e	#NUM!
+math_trig	time	1735	TIME({1},{2},{3})	(24.0, 32768.0, 0.0)	e	#NUM!
+math_trig	time	1736	TIME({1},{2},{3})	(24.0, 32768.0, 59.0)	e	#NUM!
+math_trig	time	1737	TIME({1},{2},{3})	(24.0, 32768.0, 90.0)	e	#NUM!
+math_trig	time	1738	TIME({1},{2},{3})	(24.0, 32768.0, -5.0)	e	#NUM!
+math_trig	time	1739	TIME({1},{2},{3})	(24.0, 32768.0, 0.5)	e	#NUM!
+math_trig	time	1740	TIME({1},{2},{3})	(24.0, 32768.0, 32768.0)	e	#NUM!
+math_trig	time	1741	TIME({1},{2},{3})	(25.0, 0.0, 0.0)	n	0.04166666666666674
+math_trig	time	1742	TIME({1},{2},{3})	(25.0, 0.0, 59.0)	n	0.04234953703703703
+math_trig	time	1743	TIME({1},{2},{3})	(25.0, 0.0, 90.0)	n	0.04270833333333335
+math_trig	time	1744	TIME({1},{2},{3})	(25.0, 0.0, -5.0)	n	0.041608796296296324
+math_trig	time	1745	TIME({1},{2},{3})	(25.0, 0.0, 0.5)	n	0.04166666666666674
+math_trig	time	1746	TIME({1},{2},{3})	(25.0, 0.0, 32768.0)	e	#NUM!
+math_trig	time	1747	TIME({1},{2},{3})	(25.0, 30.0, 0.0)	n	0.0625
+math_trig	time	1748	TIME({1},{2},{3})	(25.0, 30.0, 59.0)	n	0.06318287037037029
+math_trig	time	1749	TIME({1},{2},{3})	(25.0, 30.0, 90.0)	n	0.06354166666666661
+math_trig	time	1750	TIME({1},{2},{3})	(25.0, 30.0, -5.0)	n	0.062442129629629584
+math_trig	time	1751	TIME({1},{2},{3})	(25.0, 30.0, 0.5)	n	0.0625
+math_trig	time	1752	TIME({1},{2},{3})	(25.0, 30.0, 32768.0)	e	#NUM!
+math_trig	time	1753	TIME({1},{2},{3})	(25.0, 59.0, 0.0)	n	0.08263888888888893
+math_trig	time	1754	TIME({1},{2},{3})	(25.0, 59.0, 59.0)	n	0.08332175925925922
+math_trig	time	1755	TIME({1},{2},{3})	(25.0, 59.0, 90.0)	n	0.08368055555555554
+math_trig	time	1756	TIME({1},{2},{3})	(25.0, 59.0, -5.0)	n	0.08258101851851851
+math_trig	time	1757	TIME({1},{2},{3})	(25.0, 59.0, 0.5)	n	0.08263888888888893
+math_trig	time	1758	TIME({1},{2},{3})	(25.0, 59.0, 32768.0)	e	#NUM!
+math_trig	time	1759	TIME({1},{2},{3})	(25.0, 60.0, 0.0)	n	0.08333333333333326
+math_trig	time	1760	TIME({1},{2},{3})	(25.0, 60.0, 59.0)	n	0.08401620370370377
+math_trig	time	1761	TIME({1},{2},{3})	(25.0, 60.0, 90.0)	n	0.08437500000000009
+math_trig	time	1762	TIME({1},{2},{3})	(25.0, 60.0, -5.0)	n	0.08327546296296306
+math_trig	time	1763	TIME({1},{2},{3})	(25.0, 60.0, 0.5)	n	0.08333333333333326
+math_trig	time	1764	TIME({1},{2},{3})	(25.0, 60.0, 32768.0)	e	#NUM!
+math_trig	time	1765	TIME({1},{2},{3})	(25.0, -30.0, 0.0)	n	0.02083333333333326
+math_trig	time	1766	TIME({1},{2},{3})	(25.0, -30.0, 59.0)	n	0.021516203703703773
+math_trig	time	1767	TIME({1},{2},{3})	(25.0, -30.0, 90.0)	n	0.02187500000000009
+math_trig	time	1768	TIME({1},{2},{3})	(25.0, -30.0, -5.0)	n	0.020775462962963065
+math_trig	time	1769	TIME({1},{2},{3})	(25.0, -30.0, 0.5)	n	0.02083333333333326
+math_trig	time	1770	TIME({1},{2},{3})	(25.0, -30.0, 32768.0)	e	#NUM!
+math_trig	time	1771	TIME({1},{2},{3})	(25.0, 1.9, 0.0)	n	0.04236111111111107
+math_trig	time	1772	TIME({1},{2},{3})	(25.0, 1.9, 59.0)	n	0.043043981481481586
+math_trig	time	1773	TIME({1},{2},{3})	(25.0, 1.9, 90.0)	n	0.04340277777777768
+math_trig	time	1774	TIME({1},{2},{3})	(25.0, 1.9, -5.0)	n	0.042303240740740655
+math_trig	time	1775	TIME({1},{2},{3})	(25.0, 1.9, 0.5)	n	0.04236111111111107
+math_trig	time	1776	TIME({1},{2},{3})	(25.0, 1.9, 32768.0)	e	#NUM!
+math_trig	time	1777	TIME({1},{2},{3})	(25.0, 32768.0, 0.0)	e	#NUM!
+math_trig	time	1778	TIME({1},{2},{3})	(25.0, 32768.0, 59.0)	e	#NUM!
+math_trig	time	1779	TIME({1},{2},{3})	(25.0, 32768.0, 90.0)	e	#NUM!
+math_trig	time	1780	TIME({1},{2},{3})	(25.0, 32768.0, -5.0)	e	#NUM!
+math_trig	time	1781	TIME({1},{2},{3})	(25.0, 32768.0, 0.5)	e	#NUM!
+math_trig	time	1782	TIME({1},{2},{3})	(25.0, 32768.0, 32768.0)	e	#NUM!
+math_trig	time	1783	TIME({1},{2},{3})	(-1.0, 0.0, 0.0)	e	#NUM!
+math_trig	time	1784	TIME({1},{2},{3})	(-1.0, 0.0, 59.0)	e	#NUM!
+math_trig	time	1785	TIME({1},{2},{3})	(-1.0, 0.0, 90.0)	e	#NUM!
+math_trig	time	1786	TIME({1},{2},{3})	(-1.0, 0.0, -5.0)	e	#NUM!
+math_trig	time	1787	TIME({1},{2},{3})	(-1.0, 0.0, 0.5)	e	#NUM!
+math_trig	time	1788	TIME({1},{2},{3})	(-1.0, 0.0, 32768.0)	e	#NUM!
+math_trig	time	1789	TIME({1},{2},{3})	(-1.0, 30.0, 0.0)	e	#NUM!
+math_trig	time	1790	TIME({1},{2},{3})	(-1.0, 30.0, 59.0)	e	#NUM!
+math_trig	time	1791	TIME({1},{2},{3})	(-1.0, 30.0, 90.0)	e	#NUM!
+math_trig	time	1792	TIME({1},{2},{3})	(-1.0, 30.0, -5.0)	e	#NUM!
+math_trig	time	1793	TIME({1},{2},{3})	(-1.0, 30.0, 0.5)	e	#NUM!
+math_trig	time	1794	TIME({1},{2},{3})	(-1.0, 30.0, 32768.0)	e	#NUM!
+math_trig	time	1795	TIME({1},{2},{3})	(-1.0, 59.0, 0.0)	e	#NUM!
+math_trig	time	1796	TIME({1},{2},{3})	(-1.0, 59.0, 59.0)	e	#NUM!
+math_trig	time	1797	TIME({1},{2},{3})	(-1.0, 59.0, 90.0)	n	0.00034722222222222224
+math_trig	time	1798	TIME({1},{2},{3})	(-1.0, 59.0, -5.0)	e	#NUM!
+math_trig	time	1799	TIME({1},{2},{3})	(-1.0, 59.0, 0.5)	e	#NUM!
+math_trig	time	1800	TIME({1},{2},{3})	(-1.0, 59.0, 32768.0)	e	#NUM!
+math_trig	time	1801	TIME({1},{2},{3})	(-1.0, 60.0, 0.0)	n	0.0
+math_trig	time	1802	TIME({1},{2},{3})	(-1.0, 60.0, 59.0)	n	0.0006828703703703704
+math_trig	time	1803	TIME({1},{2},{3})	(-1.0, 60.0, 90.0)	n	0.0010416666666666667
+math_trig	time	1804	TIME({1},{2},{3})	(-1.0, 60.0, -5.0)	e	#NUM!
+math_trig	time	1805	TIME({1},{2},{3})	(-1.0, 60.0, 0.5)	n	0.0
+math_trig	time	1806	TIME({1},{2},{3})	(-1.0, 60.0, 32768.0)	e	#NUM!
+math_trig	time	1807	TIME({1},{2},{3})	(-1.0, -30.0, 0.0)	e	#NUM!
+math_trig	time	1808	TIME({1},{2},{3})	(-1.0, -30.0, 59.0)	e	#NUM!
+math_trig	time	1809	TIME({1},{2},{3})	(-1.0, -30.0, 90.0)	e	#NUM!
+math_trig	time	1810	TIME({1},{2},{3})	(-1.0, -30.0, -5.0)	e	#NUM!
+math_trig	time	1811	TIME({1},{2},{3})	(-1.0, -30.0, 0.5)	e	#NUM!
+math_trig	time	1812	TIME({1},{2},{3})	(-1.0, -30.0, 32768.0)	e	#NUM!
+math_trig	time	1813	TIME({1},{2},{3})	(-1.0, 1.9, 0.0)	e	#NUM!
+math_trig	time	1814	TIME({1},{2},{3})	(-1.0, 1.9, 59.0)	e	#NUM!
+math_trig	time	1815	TIME({1},{2},{3})	(-1.0, 1.9, 90.0)	e	#NUM!
+math_trig	time	1816	TIME({1},{2},{3})	(-1.0, 1.9, -5.0)	e	#NUM!
+math_trig	time	1817	TIME({1},{2},{3})	(-1.0, 1.9, 0.5)	e	#NUM!
+math_trig	time	1818	TIME({1},{2},{3})	(-1.0, 1.9, 32768.0)	e	#NUM!
+math_trig	time	1819	TIME({1},{2},{3})	(-1.0, 32768.0, 0.0)	e	#NUM!
+math_trig	time	1820	TIME({1},{2},{3})	(-1.0, 32768.0, 59.0)	e	#NUM!
+math_trig	time	1821	TIME({1},{2},{3})	(-1.0, 32768.0, 90.0)	e	#NUM!
+math_trig	time	1822	TIME({1},{2},{3})	(-1.0, 32768.0, -5.0)	e	#NUM!
+math_trig	time	1823	TIME({1},{2},{3})	(-1.0, 32768.0, 0.5)	e	#NUM!
+math_trig	time	1824	TIME({1},{2},{3})	(-1.0, 32768.0, 32768.0)	e	#NUM!
+math_trig	time	1825	TIME({1},{2},{3})	(32767.0, 0.0, 0.0)	n	0.29166666666674246
+math_trig	time	1826	TIME({1},{2},{3})	(32767.0, 0.0, 59.0)	n	0.29234953703712563
+math_trig	time	1827	TIME({1},{2},{3})	(32767.0, 0.0, 90.0)	n	0.29270833333339397
+math_trig	time	1828	TIME({1},{2},{3})	(32767.0, 0.0, -5.0)	n	0.29160879629625924
+math_trig	time	1829	TIME({1},{2},{3})	(32767.0, 0.0, 0.5)	n	0.29166666666674246
+math_trig	time	1830	TIME({1},{2},{3})	(32767.0, 0.0, 32768.0)	e	#NUM!
+math_trig	time	1831	TIME({1},{2},{3})	(32767.0, 30.0, 0.0)	n	0.3125
+math_trig	time	1832	TIME({1},{2},{3})	(32767.0, 30.0, 59.0)	n	0.31318287037038317
+math_trig	time	1833	TIME({1},{2},{3})	(32767.0, 30.0, 90.0)	n	0.3135416666666515
+math_trig	time	1834	TIME({1},{2},{3})	(32767.0, 30.0, -5.0)	n	0.3124421296295168
+math_trig	time	1835	TIME({1},{2},{3})	(32767.0, 30.0, 0.5)	n	0.3125
+math_trig	time	1836	TIME({1},{2},{3})	(32767.0, 30.0, 32768.0)	e	#NUM!
+math_trig	time	1837	TIME({1},{2},{3})	(32767.0, 59.0, 0.0)	n	0.3326388888888232
+math_trig	time	1838	TIME({1},{2},{3})	(32767.0, 59.0, 59.0)	n	0.3333217592592064
+math_trig	time	1839	TIME({1},{2},{3})	(32767.0, 59.0, 90.0)	n	0.3336805555554747
+math_trig	time	1840	TIME({1},{2},{3})	(32767.0, 59.0, -5.0)	n	0.33258101851856736
+math_trig	time	1841	TIME({1},{2},{3})	(32767.0, 59.0, 0.5)	n	0.3326388888888232
+math_trig	time	1842	TIME({1},{2},{3})	(32767.0, 59.0, 32768.0)	e	#NUM!
+math_trig	time	1843	TIME({1},{2},{3})	(32767.0, 60.0, 0.0)	n	0.33333333333325754
+math_trig	time	1844	TIME({1},{2},{3})	(32767.0, 60.0, 59.0)	n	0.3340162037036407
+math_trig	time	1845	TIME({1},{2},{3})	(32767.0, 60.0, 90.0)	n	0.33437499999990905
+math_trig	time	1846	TIME({1},{2},{3})	(32767.0, 60.0, -5.0)	n	0.3332754629630017
+math_trig	time	1847	TIME({1},{2},{3})	(32767.0, 60.0, 0.5)	n	0.33333333333325754
+math_trig	time	1848	TIME({1},{2},{3})	(32767.0, 60.0, 32768.0)	e	#NUM!
+math_trig	time	1849	TIME({1},{2},{3})	(32767.0, -30.0, 0.0)	n	0.27083333333325754
+math_trig	time	1850	TIME({1},{2},{3})	(32767.0, -30.0, 59.0)	n	0.2715162037036407
+math_trig	time	1851	TIME({1},{2},{3})	(32767.0, -30.0, 90.0)	n	0.27187499999990905
+math_trig	time	1852	TIME({1},{2},{3})	(32767.0, -30.0, -5.0)	n	0.2707754629630017
+math_trig	time	1853	TIME({1},{2},{3})	(32767.0, -30.0, 0.5)	n	0.27083333333325754
+math_trig	time	1854	TIME({1},{2},{3})	(32767.0, -30.0, 32768.0)	e	#NUM!
+math_trig	time	1855	TIME({1},{2},{3})	(32767.0, 1.9, 0.0)	n	0.2923611111111768
+math_trig	time	1856	TIME({1},{2},{3})	(32767.0, 1.9, 59.0)	n	0.29304398148155997
+math_trig	time	1857	TIME({1},{2},{3})	(32767.0, 1.9, 90.0)	n	0.2934027777778283
+math_trig	time	1858	TIME({1},{2},{3})	(32767.0, 1.9, -5.0)	n	0.2923032407406936
+math_trig	time	1859	TIME({1},{2},{3})	(32767.0, 1.9, 0.5)	n	0.2923611111111768
+math_trig	time	1860	TIME({1},{2},{3})	(32767.0, 1.9, 32768.0)	e	#NUM!
+math_trig	time	1861	TIME({1},{2},{3})	(32767.0, 32768.0, 0.0)	e	#NUM!
+math_trig	time	1862	TIME({1},{2},{3})	(32767.0, 32768.0, 59.0)	e	#NUM!
+math_trig	time	1863	TIME({1},{2},{3})	(32767.0, 32768.0, 90.0)	e	#NUM!
+math_trig	time	1864	TIME({1},{2},{3})	(32767.0, 32768.0, -5.0)	e	#NUM!
+math_trig	time	1865	TIME({1},{2},{3})	(32767.0, 32768.0, 0.5)	e	#NUM!
+math_trig	time	1866	TIME({1},{2},{3})	(32767.0, 32768.0, 32768.0)	e	#NUM!
+math_trig	time	1867	TIME({1},{2},{3})	(32768.0, 0.0, 0.0)	e	#NUM!
+math_trig	time	1868	TIME({1},{2},{3})	(32768.0, 0.0, 59.0)	e	#NUM!
+math_trig	time	1869	TIME({1},{2},{3})	(32768.0, 0.0, 90.0)	e	#NUM!
+math_trig	time	1870	TIME({1},{2},{3})	(32768.0, 0.0, -5.0)	e	#NUM!
+math_trig	time	1871	TIME({1},{2},{3})	(32768.0, 0.0, 0.5)	e	#NUM!
+math_trig	time	1872	TIME({1},{2},{3})	(32768.0, 0.0, 32768.0)	e	#NUM!
+math_trig	time	1873	TIME({1},{2},{3})	(32768.0, 30.0, 0.0)	e	#NUM!
+math_trig	time	1874	TIME({1},{2},{3})	(32768.0, 30.0, 59.0)	e	#NUM!
+math_trig	time	1875	TIME({1},{2},{3})	(32768.0, 30.0, 90.0)	e	#NUM!
+math_trig	time	1876	TIME({1},{2},{3})	(32768.0, 30.0, -5.0)	e	#NUM!
+math_trig	time	1877	TIME({1},{2},{3})	(32768.0, 30.0, 0.5)	e	#NUM!
+math_trig	time	1878	TIME({1},{2},{3})	(32768.0, 30.0, 32768.0)	e	#NUM!
+math_trig	time	1879	TIME({1},{2},{3})	(32768.0, 59.0, 0.0)	e	#NUM!
+math_trig	time	1880	TIME({1},{2},{3})	(32768.0, 59.0, 59.0)	e	#NUM!
+math_trig	time	1881	TIME({1},{2},{3})	(32768.0, 59.0, 90.0)	e	#NUM!
+math_trig	time	1882	TIME({1},{2},{3})	(32768.0, 59.0, -5.0)	e	#NUM!
+math_trig	time	1883	TIME({1},{2},{3})	(32768.0, 59.0, 0.5)	e	#NUM!
+math_trig	time	1884	TIME({1},{2},{3})	(32768.0, 59.0, 32768.0)	e	#NUM!
+math_trig	time	1885	TIME({1},{2},{3})	(32768.0, 60.0, 0.0)	e	#NUM!
+math_trig	time	1886	TIME({1},{2},{3})	(32768.0, 60.0, 59.0)	e	#NUM!
+math_trig	time	1887	TIME({1},{2},{3})	(32768.0, 60.0, 90.0)	e	#NUM!
+math_trig	time	1888	TIME({1},{2},{3})	(32768.0, 60.0, -5.0)	e	#NUM!
+math_trig	time	1889	TIME({1},{2},{3})	(32768.0, 60.0, 0.5)	e	#NUM!
+math_trig	time	1890	TIME({1},{2},{3})	(32768.0, 60.0, 32768.0)	e	#NUM!
+math_trig	time	1891	TIME({1},{2},{3})	(32768.0, -30.0, 0.0)	e	#NUM!
+math_trig	time	1892	TIME({1},{2},{3})	(32768.0, -30.0, 59.0)	e	#NUM!
+math_trig	time	1893	TIME({1},{2},{3})	(32768.0, -30.0, 90.0)	e	#NUM!
+math_trig	time	1894	TIME({1},{2},{3})	(32768.0, -30.0, -5.0)	e	#NUM!
+math_trig	time	1895	TIME({1},{2},{3})	(32768.0, -30.0, 0.5)	e	#NUM!
+math_trig	time	1896	TIME({1},{2},{3})	(32768.0, -30.0, 32768.0)	e	#NUM!
+math_trig	time	1897	TIME({1},{2},{3})	(32768.0, 1.9, 0.0)	e	#NUM!
+math_trig	time	1898	TIME({1},{2},{3})	(32768.0, 1.9, 59.0)	e	#NUM!
+math_trig	time	1899	TIME({1},{2},{3})	(32768.0, 1.9, 90.0)	e	#NUM!
+math_trig	time	1900	TIME({1},{2},{3})	(32768.0, 1.9, -5.0)	e	#NUM!
+math_trig	time	1901	TIME({1},{2},{3})	(32768.0, 1.9, 0.5)	e	#NUM!
+math_trig	time	1902	TIME({1},{2},{3})	(32768.0, 1.9, 32768.0)	e	#NUM!
+math_trig	time	1903	TIME({1},{2},{3})	(32768.0, 32768.0, 0.0)	e	#NUM!
+math_trig	time	1904	TIME({1},{2},{3})	(32768.0, 32768.0, 59.0)	e	#NUM!
+math_trig	time	1905	TIME({1},{2},{3})	(32768.0, 32768.0, 90.0)	e	#NUM!
+math_trig	time	1906	TIME({1},{2},{3})	(32768.0, 32768.0, -5.0)	e	#NUM!
+math_trig	time	1907	TIME({1},{2},{3})	(32768.0, 32768.0, 0.5)	e	#NUM!
+math_trig	time	1908	TIME({1},{2},{3})	(32768.0, 32768.0, 32768.0)	e	#NUM!
+math_trig	time	1909	TIME({1},{2},{3})	('3', 0.0, 0.0)	n	0.125
+math_trig	time	1910	TIME({1},{2},{3})	('3', 0.0, 59.0)	n	0.12568287037037038
+math_trig	time	1911	TIME({1},{2},{3})	('3', 0.0, 90.0)	n	0.12604166666666666
+math_trig	time	1912	TIME({1},{2},{3})	('3', 0.0, -5.0)	n	0.12494212962962963
+math_trig	time	1913	TIME({1},{2},{3})	('3', 0.0, 0.5)	n	0.125
+math_trig	time	1914	TIME({1},{2},{3})	('3', 0.0, 32768.0)	e	#NUM!
+math_trig	time	1915	TIME({1},{2},{3})	('3', 30.0, 0.0)	n	0.14583333333333334
+math_trig	time	1916	TIME({1},{2},{3})	('3', 30.0, 59.0)	n	0.1465162037037037
+math_trig	time	1917	TIME({1},{2},{3})	('3', 30.0, 90.0)	n	0.146875
+math_trig	time	1918	TIME({1},{2},{3})	('3', 30.0, -5.0)	n	0.14577546296296295
+math_trig	time	1919	TIME({1},{2},{3})	('3', 30.0, 0.5)	n	0.14583333333333334
+math_trig	time	1920	TIME({1},{2},{3})	('3', 30.0, 32768.0)	e	#NUM!
+math_trig	time	1921	TIME({1},{2},{3})	('3', 59.0, 0.0)	n	0.16597222222222222
+math_trig	time	1922	TIME({1},{2},{3})	('3', 59.0, 59.0)	n	0.1666550925925926
+math_trig	time	1923	TIME({1},{2},{3})	('3', 59.0, 90.0)	n	0.16701388888888888
+math_trig	time	1924	TIME({1},{2},{3})	('3', 59.0, -5.0)	n	0.16591435185185185
+math_trig	time	1925	TIME({1},{2},{3})	('3', 59.0, 0.5)	n	0.16597222222222222
+math_trig	time	1926	TIME({1},{2},{3})	('3', 59.0, 32768.0)	e	#NUM!
+math_trig	time	1927	TIME({1},{2},{3})	('3', 60.0, 0.0)	n	0.16666666666666666
+math_trig	time	1928	TIME({1},{2},{3})	('3', 60.0, 59.0)	n	0.16734953703703703
+math_trig	time	1929	TIME({1},{2},{3})	('3', 60.0, 90.0)	n	0.16770833333333332
+math_trig	time	1930	TIME({1},{2},{3})	('3', 60.0, -5.0)	n	0.1666087962962963
+math_trig	time	1931	TIME({1},{2},{3})	('3', 60.0, 0.5)	n	0.16666666666666666
+math_trig	time	1932	TIME({1},{2},{3})	('3', 60.0, 32768.0)	e	#NUM!
+math_trig	time	1933	TIME({1},{2},{3})	('3', -30.0, 0.0)	n	0.10416666666666667
+math_trig	time	1934	TIME({1},{2},{3})	('3', -30.0, 59.0)	n	0.10484953703703703
+math_trig	time	1935	TIME({1},{2},{3})	('3', -30.0, 90.0)	n	0.10520833333333333
+math_trig	time	1936	TIME({1},{2},{3})	('3', -30.0, -5.0)	n	0.1041087962962963
+math_trig	time	1937	TIME({1},{2},{3})	('3', -30.0, 0.5)	n	0.10416666666666667
+math_trig	time	1938	TIME({1},{2},{3})	('3', -30.0, 32768.0)	e	#NUM!
+math_trig	time	1939	TIME({1},{2},{3})	('3', 1.9, 0.0)	n	0.12569444444444444
+math_trig	time	1940	TIME({1},{2},{3})	('3', 1.9, 59.0)	n	0.12637731481481482
+math_trig	time	1941	TIME({1},{2},{3})	('3', 1.9, 90.0)	n	0.1267361111111111
+math_trig	time	1942	TIME({1},{2},{3})	('3', 1.9, -5.0)	n	0.12563657407407408
+math_trig	time	1943	TIME({1},{2},{3})	('3', 1.9, 0.5)	n	0.12569444444444444
+math_trig	time	1944	TIME({1},{2},{3})	('3', 1.9, 32768.0)	e	#NUM!
+math_trig	time	1945	TIME({1},{2},{3})	('3', 32768.0, 0.0)	e	#NUM!
+math_trig	time	1946	TIME({1},{2},{3})	('3', 32768.0, 59.0)	e	#NUM!
+math_trig	time	1947	TIME({1},{2},{3})	('3', 32768.0, 90.0)	e	#NUM!
+math_trig	time	1948	TIME({1},{2},{3})	('3', 32768.0, -5.0)	e	#NUM!
+math_trig	time	1949	TIME({1},{2},{3})	('3', 32768.0, 0.5)	e	#NUM!
+math_trig	time	1950	TIME({1},{2},{3})	('3', 32768.0, 32768.0)	e	#NUM!
+math_trig	time	1951	TIME({1},{2},{3})	(None, 0.0, 0.0)	n	0.0
+math_trig	time	1952	TIME({1},{2},{3})	(None, 0.0, 59.0)	n	0.0006828703703703704
+math_trig	time	1953	TIME({1},{2},{3})	(None, 0.0, 90.0)	n	0.0010416666666666667
+math_trig	time	1954	TIME({1},{2},{3})	(None, 0.0, -5.0)	e	#NUM!
+math_trig	time	1955	TIME({1},{2},{3})	(None, 0.0, 0.5)	n	0.0
+math_trig	time	1956	TIME({1},{2},{3})	(None, 0.0, 32768.0)	e	#NUM!
+math_trig	time	1957	TIME({1},{2},{3})	(None, 30.0, 0.0)	n	0.020833333333333332
+math_trig	time	1958	TIME({1},{2},{3})	(None, 30.0, 59.0)	n	0.021516203703703704
+math_trig	time	1959	TIME({1},{2},{3})	(None, 30.0, 90.0)	n	0.021875
+math_trig	time	1960	TIME({1},{2},{3})	(None, 30.0, -5.0)	n	0.020775462962962964
+math_trig	time	1961	TIME({1},{2},{3})	(None, 30.0, 0.5)	n	0.020833333333333332
+math_trig	time	1962	TIME({1},{2},{3})	(None, 30.0, 32768.0)	e	#NUM!
+math_trig	time	1963	TIME({1},{2},{3})	(None, 59.0, 0.0)	n	0.04097222222222222
+math_trig	time	1964	TIME({1},{2},{3})	(None, 59.0, 59.0)	n	0.04165509259259259
+math_trig	time	1965	TIME({1},{2},{3})	(None, 59.0, 90.0)	n	0.04201388888888889
+math_trig	time	1966	TIME({1},{2},{3})	(None, 59.0, -5.0)	n	0.040914351851851855
+math_trig	time	1967	TIME({1},{2},{3})	(None, 59.0, 0.5)	n	0.04097222222222222
+math_trig	time	1968	TIME({1},{2},{3})	(None, 59.0, 32768.0)	e	#NUM!
+math_trig	time	1969	TIME({1},{2},{3})	(None, 60.0, 0.0)	n	0.041666666666666664
+math_trig	time	1970	TIME({1},{2},{3})	(None, 60.0, 59.0)	n	0.04234953703703704
+math_trig	time	1971	TIME({1},{2},{3})	(None, 60.0, 90.0)	n	0.042708333333333334
+math_trig	time	1972	TIME({1},{2},{3})	(None, 60.0, -5.0)	n	0.041608796296296297
+math_trig	time	1973	TIME({1},{2},{3})	(None, 60.0, 0.5)	n	0.041666666666666664
+math_trig	time	1974	TIME({1},{2},{3})	(None, 60.0, 32768.0)	e	#NUM!
+math_trig	time	1975	TIME({1},{2},{3})	(None, -30.0, 0.0)	e	#NUM!
+math_trig	time	1976	TIME({1},{2},{3})	(None, -30.0, 59.0)	e	#NUM!
+math_trig	time	1977	TIME({1},{2},{3})	(None, -30.0, 90.0)	e	#NUM!
+math_trig	time	1978	TIME({1},{2},{3})	(None, -30.0, -5.0)	e	#NUM!
+math_trig	time	1979	TIME({1},{2},{3})	(None, -30.0, 0.5)	e	#NUM!
+math_trig	time	1980	TIME({1},{2},{3})	(None, -30.0, 32768.0)	e	#NUM!
+math_trig	time	1981	TIME({1},{2},{3})	(None, 1.9, 0.0)	n	0.0006944444444444445
+math_trig	time	1982	TIME({1},{2},{3})	(None, 1.9, 59.0)	n	0.0013773148148148147
+math_trig	time	1983	TIME({1},{2},{3})	(None, 1.9, 90.0)	n	0.001736111111111111
+math_trig	time	1984	TIME({1},{2},{3})	(None, 1.9, -5.0)	n	0.0006365740740740741
+math_trig	time	1985	TIME({1},{2},{3})	(None, 1.9, 0.5)	n	0.0006944444444444445
+math_trig	time	1986	TIME({1},{2},{3})	(None, 1.9, 32768.0)	e	#NUM!
+math_trig	time	1987	TIME({1},{2},{3})	(None, 32768.0, 0.0)	e	#NUM!
+math_trig	time	1988	TIME({1},{2},{3})	(None, 32768.0, 59.0)	e	#NUM!
+math_trig	time	1989	TIME({1},{2},{3})	(None, 32768.0, 90.0)	e	#NUM!
+math_trig	time	1990	TIME({1},{2},{3})	(None, 32768.0, -5.0)	e	#NUM!
+math_trig	time	1991	TIME({1},{2},{3})	(None, 32768.0, 0.5)	e	#NUM!
+math_trig	time	1992	TIME({1},{2},{3})	(None, 32768.0, 32768.0)	e	#NUM!
+math_trig	time	1993	TIME({1},{2},{3})	(True, 0.0, 0.0)	n	0.041666666666666664
+math_trig	time	1994	TIME({1},{2},{3})	(True, 0.0, 59.0)	n	0.04234953703703704
+math_trig	time	1995	TIME({1},{2},{3})	(True, 0.0, 90.0)	n	0.042708333333333334
+math_trig	time	1996	TIME({1},{2},{3})	(True, 0.0, -5.0)	n	0.041608796296296297
+math_trig	time	1997	TIME({1},{2},{3})	(True, 0.0, 0.5)	n	0.041666666666666664
+math_trig	time	1998	TIME({1},{2},{3})	(True, 0.0, 32768.0)	e	#NUM!
+math_trig	time	1999	TIME({1},{2},{3})	(True, 30.0, 0.0)	n	0.0625
+math_trig	time	2000	TIME({1},{2},{3})	(True, 30.0, 59.0)	n	0.06318287037037038
+math_trig	time	2001	TIME({1},{2},{3})	(True, 30.0, 90.0)	n	0.06354166666666666
+math_trig	time	2002	TIME({1},{2},{3})	(True, 30.0, -5.0)	n	0.06244212962962963
+math_trig	time	2003	TIME({1},{2},{3})	(True, 30.0, 0.5)	n	0.0625
+math_trig	time	2004	TIME({1},{2},{3})	(True, 30.0, 32768.0)	e	#NUM!
+math_trig	time	2005	TIME({1},{2},{3})	(True, 59.0, 0.0)	n	0.08263888888888889
+math_trig	time	2006	TIME({1},{2},{3})	(True, 59.0, 59.0)	n	0.08332175925925926
+math_trig	time	2007	TIME({1},{2},{3})	(True, 59.0, 90.0)	n	0.08368055555555555
+math_trig	time	2008	TIME({1},{2},{3})	(True, 59.0, -5.0)	n	0.08258101851851851
+math_trig	time	2009	TIME({1},{2},{3})	(True, 59.0, 0.5)	n	0.08263888888888889
+math_trig	time	2010	TIME({1},{2},{3})	(True, 59.0, 32768.0)	e	#NUM!
+math_trig	time	2011	TIME({1},{2},{3})	(True, 60.0, 0.0)	n	0.08333333333333333
+math_trig	time	2012	TIME({1},{2},{3})	(True, 60.0, 59.0)	n	0.0840162037037037
+math_trig	time	2013	TIME({1},{2},{3})	(True, 60.0, 90.0)	n	0.084375
+math_trig	time	2014	TIME({1},{2},{3})	(True, 60.0, -5.0)	n	0.08327546296296297
+math_trig	time	2015	TIME({1},{2},{3})	(True, 60.0, 0.5)	n	0.08333333333333333
+math_trig	time	2016	TIME({1},{2},{3})	(True, 60.0, 32768.0)	e	#NUM!
+math_trig	time	2017	TIME({1},{2},{3})	(True, -30.0, 0.0)	n	0.020833333333333332
+math_trig	time	2018	TIME({1},{2},{3})	(True, -30.0, 59.0)	n	0.021516203703703704
+math_trig	time	2019	TIME({1},{2},{3})	(True, -30.0, 90.0)	n	0.021875
+math_trig	time	2020	TIME({1},{2},{3})	(True, -30.0, -5.0)	n	0.020775462962962964
+math_trig	time	2021	TIME({1},{2},{3})	(True, -30.0, 0.5)	n	0.020833333333333332
+math_trig	time	2022	TIME({1},{2},{3})	(True, -30.0, 32768.0)	e	#NUM!
+math_trig	time	2023	TIME({1},{2},{3})	(True, 1.9, 0.0)	n	0.04236111111111111
+math_trig	time	2024	TIME({1},{2},{3})	(True, 1.9, 59.0)	n	0.04304398148148148
+math_trig	time	2025	TIME({1},{2},{3})	(True, 1.9, 90.0)	n	0.043402777777777776
+math_trig	time	2026	TIME({1},{2},{3})	(True, 1.9, -5.0)	n	0.04230324074074074
+math_trig	time	2027	TIME({1},{2},{3})	(True, 1.9, 0.5)	n	0.04236111111111111
+math_trig	time	2028	TIME({1},{2},{3})	(True, 1.9, 32768.0)	e	#NUM!
+math_trig	time	2029	TIME({1},{2},{3})	(True, 32768.0, 0.0)	e	#NUM!
+math_trig	time	2030	TIME({1},{2},{3})	(True, 32768.0, 59.0)	e	#NUM!
+math_trig	time	2031	TIME({1},{2},{3})	(True, 32768.0, 90.0)	e	#NUM!
+math_trig	time	2032	TIME({1},{2},{3})	(True, 32768.0, -5.0)	e	#NUM!
+math_trig	time	2033	TIME({1},{2},{3})	(True, 32768.0, 0.5)	e	#NUM!
+math_trig	time	2034	TIME({1},{2},{3})	(True, 32768.0, 32768.0)	e	#NUM!
+math_trig	time	2035	TIME({1},{2},{3})	(ErrorValue('#N/A'), 0.0, 0.0)	e	#N/A
+math_trig	time	2036	TIME({1},{2},{3})	(ErrorValue('#N/A'), 0.0, 59.0)	e	#N/A
+math_trig	time	2037	TIME({1},{2},{3})	(ErrorValue('#N/A'), 0.0, 90.0)	e	#N/A
+math_trig	time	2038	TIME({1},{2},{3})	(ErrorValue('#N/A'), 0.0, -5.0)	e	#N/A
+math_trig	time	2039	TIME({1},{2},{3})	(ErrorValue('#N/A'), 0.0, 0.5)	e	#N/A
+math_trig	time	2040	TIME({1},{2},{3})	(ErrorValue('#N/A'), 0.0, 32768.0)	e	#N/A
+math_trig	time	2041	TIME({1},{2},{3})	(ErrorValue('#N/A'), 30.0, 0.0)	e	#N/A
+math_trig	time	2042	TIME({1},{2},{3})	(ErrorValue('#N/A'), 30.0, 59.0)	e	#N/A
+math_trig	time	2043	TIME({1},{2},{3})	(ErrorValue('#N/A'), 30.0, 90.0)	e	#N/A
+math_trig	time	2044	TIME({1},{2},{3})	(ErrorValue('#N/A'), 30.0, -5.0)	e	#N/A
+math_trig	time	2045	TIME({1},{2},{3})	(ErrorValue('#N/A'), 30.0, 0.5)	e	#N/A
+math_trig	time	2046	TIME({1},{2},{3})	(ErrorValue('#N/A'), 30.0, 32768.0)	e	#N/A
+math_trig	time	2047	TIME({1},{2},{3})	(ErrorValue('#N/A'), 59.0, 0.0)	e	#N/A
+math_trig	time	2048	TIME({1},{2},{3})	(ErrorValue('#N/A'), 59.0, 59.0)	e	#N/A
+math_trig	time	2049	TIME({1},{2},{3})	(ErrorValue('#N/A'), 59.0, 90.0)	e	#N/A
+math_trig	time	2050	TIME({1},{2},{3})	(ErrorValue('#N/A'), 59.0, -5.0)	e	#N/A
+math_trig	time	2051	TIME({1},{2},{3})	(ErrorValue('#N/A'), 59.0, 0.5)	e	#N/A
+math_trig	time	2052	TIME({1},{2},{3})	(ErrorValue('#N/A'), 59.0, 32768.0)	e	#N/A
+math_trig	time	2053	TIME({1},{2},{3})	(ErrorValue('#N/A'), 60.0, 0.0)	e	#N/A
+math_trig	time	2054	TIME({1},{2},{3})	(ErrorValue('#N/A'), 60.0, 59.0)	e	#N/A
+math_trig	time	2055	TIME({1},{2},{3})	(ErrorValue('#N/A'), 60.0, 90.0)	e	#N/A
+math_trig	time	2056	TIME({1},{2},{3})	(ErrorValue('#N/A'), 60.0, -5.0)	e	#N/A
+math_trig	time	2057	TIME({1},{2},{3})	(ErrorValue('#N/A'), 60.0, 0.5)	e	#N/A
+math_trig	time	2058	TIME({1},{2},{3})	(ErrorValue('#N/A'), 60.0, 32768.0)	e	#N/A
+math_trig	time	2059	TIME({1},{2},{3})	(ErrorValue('#N/A'), -30.0, 0.0)	e	#N/A
+math_trig	time	2060	TIME({1},{2},{3})	(ErrorValue('#N/A'), -30.0, 59.0)	e	#N/A
+math_trig	time	2061	TIME({1},{2},{3})	(ErrorValue('#N/A'), -30.0, 90.0)	e	#N/A
+math_trig	time	2062	TIME({1},{2},{3})	(ErrorValue('#N/A'), -30.0, -5.0)	e	#N/A
+math_trig	time	2063	TIME({1},{2},{3})	(ErrorValue('#N/A'), -30.0, 0.5)	e	#N/A
+math_trig	time	2064	TIME({1},{2},{3})	(ErrorValue('#N/A'), -30.0, 32768.0)	e	#N/A
+math_trig	time	2065	TIME({1},{2},{3})	(ErrorValue('#N/A'), 1.9, 0.0)	e	#N/A
+math_trig	time	2066	TIME({1},{2},{3})	(ErrorValue('#N/A'), 1.9, 59.0)	e	#N/A
+math_trig	time	2067	TIME({1},{2},{3})	(ErrorValue('#N/A'), 1.9, 90.0)	e	#N/A
+math_trig	time	2068	TIME({1},{2},{3})	(ErrorValue('#N/A'), 1.9, -5.0)	e	#N/A
+math_trig	time	2069	TIME({1},{2},{3})	(ErrorValue('#N/A'), 1.9, 0.5)	e	#N/A
+math_trig	time	2070	TIME({1},{2},{3})	(ErrorValue('#N/A'), 1.9, 32768.0)	e	#N/A
+math_trig	time	2071	TIME({1},{2},{3})	(ErrorValue('#N/A'), 32768.0, 0.0)	e	#N/A
+math_trig	time	2072	TIME({1},{2},{3})	(ErrorValue('#N/A'), 32768.0, 59.0)	e	#N/A
+math_trig	time	2073	TIME({1},{2},{3})	(ErrorValue('#N/A'), 32768.0, 90.0)	e	#N/A
+math_trig	time	2074	TIME({1},{2},{3})	(ErrorValue('#N/A'), 32768.0, -5.0)	e	#N/A
+math_trig	time	2075	TIME({1},{2},{3})	(ErrorValue('#N/A'), 32768.0, 0.5)	e	#N/A
+math_trig	time	2076	TIME({1},{2},{3})	(ErrorValue('#N/A'), 32768.0, 32768.0)	e	#N/A

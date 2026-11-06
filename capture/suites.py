@@ -11,6 +11,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from capture.pipeline import EMPTY_TEXT, Case, FormulaInput, Input
+from xlrecalc._formula._prefixes import PREFIXES
 from xlrecalc._values import ErrorValue
 
 NA = ErrorValue.NA
@@ -1947,6 +1948,219 @@ def criteria() -> list[Case]:
     return cases
 
 
+# The absent built-ins, generated per family -----------------------------------------------------
+
+_EDGES: tuple[Input, ...] = (
+    0.0, 1.0, -1.0, 0.5, -0.5, 2.0, -2.0, 0.1, 3.7, -3.7, 10.0, 100.0, 1e-10, 1e-300, 1e6, 1e15,
+    1e100,
+    1e308, 0.7853981633974483, 1.5707963267948966, 3.141592653589793, 6.283185307179586,
+    "3", "abc", "", None, True, False, NA,
+)  # fmt: skip
+_PAIRS: tuple[Input, ...] = (
+    0.0,
+    1.0,
+    -1.0,
+    0.5,
+    2.0,
+    -2.5,
+    3.7,
+    10.0,
+    1e15,
+    "2",
+    "abc",
+    None,
+    True,
+    NA,
+)
+
+
+def _file(name: str) -> str:
+    """A function's name as a file holds it (capture ``prefixes``)."""
+    return PREFIXES.get(name, "") + name
+
+
+def _one(names: list[str], values: tuple[Input, ...] = _EDGES) -> list[Case]:
+    return [Case(n.lower(), f"{_file(n)}({{1}})", (v,)) for n in names for v in values]
+
+
+def _two(names: list[str], values: tuple[Input, ...] = _PAIRS) -> list[Case]:
+    return [
+        Case(n.lower(), f"{_file(n)}({{1}},{{2}})", (a, b))
+        for n in names
+        for a in values
+        for b in values
+    ]
+
+
+def math_trig() -> list[Case]:
+    names = "ACOS ACOSH ACOT ACOTH ASIN ASINH ATAN ATANH COS COSH COT COTH CSC CSCH SEC SECH SIN"
+    names += " SINH TAN TANH DEGREES RADIANS SIGN TRUNC LOG LOG10 SQRTPI"
+    cases = _one(names.split())
+    cases += _two(["ATAN2", "LOG", "TRUNC"])
+    cases += [
+        Case("trunc_digits", "TRUNC({1},{2})", (x, d))
+        for x in (1234.5678, -1234.5678, 0.1 + 0.2, 2.675, 1e15 + 0.5, 1e-5)
+        for d in (-5.0, -2.0, -0.5, 0.0, 0.5, 1.0, 2.0, 3.7, 10.0, 15.0, 20.0, 400.0, -400.0)
+    ]
+    cases += [
+        Case("exact", "EXACT({1},{2})", (a, b))
+        for a in ("a", "A", "", " a", "1", 1.0, True, None, NA)
+        for b in ("a", "A", "", "a ", "1", 1.0, True, None, NA)
+    ]
+    cases += [
+        Case("time", "TIME({1},{2},{3})", (h, m, s))
+        for h in (0.0, 1.0, 12.5, 23.0, 24.0, 25.0, -1.0, 32767.0, 32768.0, "3", None, True, NA)
+        for m in (0.0, 30.0, 59.0, 60.0, -30.0, 1.9, 32768.0)
+        for s in (0.0, 59.0, 90.0, -5.0, 0.5, 32768.0)
+    ]
+    return cases
+
+
+def math_integers() -> list[Case]:
+    multiples = (
+        0.0,
+        1.0,
+        -1.0,
+        0.5,
+        -0.5,
+        2.0,
+        -2.0,
+        0.1,
+        -0.1,
+        3.7,
+        1e15,
+        "2",
+        "abc",
+        None,
+        True,
+        NA,
+    )
+    numbers = (
+        0.0,
+        1.0,
+        -1.0,
+        2.5,
+        -2.5,
+        3.0,
+        6.7,
+        -6.7,
+        0.1,
+        0.3,
+        1.5,
+        1e15,
+        "2",
+        "abc",
+        None,
+        True,
+        NA,
+    )
+    cases = [
+        Case(n.lower(), f"{_file(n)}({{1}},{{2}})", (x, m))
+        for n in ("CEILING", "FLOOR", "CEILING.PRECISE", "FLOOR.PRECISE", "ISO.CEILING", "MROUND")
+        for x in numbers
+        for m in multiples
+    ]
+    cases += _one(["CEILING.PRECISE", "FLOOR.PRECISE", "ISO.CEILING", "CEILING.MATH", "FLOOR.MATH"])
+    cases += [
+        Case(n.lower(), f"{_file(n)}({{1}},{{2}},{{3}})", (x, m, mode))
+        for n in ("CEILING.MATH", "FLOOR.MATH")
+        for x in (2.5, -2.5, 6.7, -6.7, 0.0)
+        for m in (1.0, -1.0, 2.0, 0.0, 0.5, None)
+        for mode in (0.0, 1.0, -1.0, 0.5, None, True, "abc")
+    ]
+    cases += _one(["EVEN", "ODD", "FACT", "FACTDOUBLE", "ARABIC"])
+    cases += [Case("fact", "FACT({1})", (x,)) for x in (5.0, 5.9, 20.0, 21.0, 170.0, 171.0)]
+    cases += [
+        Case("factdouble", "FACTDOUBLE({1})", (x,)) for x in (5.0, 6.0, 6.9, 20.0, 300.0, 301.0)
+    ]
+    cases += _two(["QUOTIENT", "GCD", "LCM", "COMBIN", "COMBINA", "PERMUT", "PERMUTATIONA"])
+    cases += [
+        Case(n.lower(), f"{_file(n)}({{1}},{{2}})", (a, b))
+        for n in ("COMBIN", "COMBINA", "PERMUT", "PERMUTATIONA", "GCD", "LCM", "QUOTIENT")
+        for a, b in ((5.0, 2.0), (10.0, 3.0), (5.9, 2.9), (60.0, 30.0), (1030.0, 515.0),
+                     (12.0, 18.0),
+                     (2.0**53, 3.0), (1e10, 7.0))
+    ]  # fmt: skip
+    cases += [
+        Case("multinomial", "MULTINOMIAL({1},{2},{3})", (a, b, c))
+        for a in (1.0, 2.0, 2.9, 0.0, -1.0, "2", None, True, NA)
+        for b in (3.0, 0.0)
+        for c in (4.0, 200.0)
+    ]
+    cases += [
+        Case("roman", "ROMAN({1},{2})", (x, form))
+        for x in (
+            0.0,
+            1.0,
+            4.0,
+            49.0,
+            99.0,
+            499.0,
+            999.0,
+            1999.0,
+            3999.0,
+            4000.0,
+            -1.0,
+            2.9,
+            "3",
+            None,
+            NA,
+        )
+        for form in (0.0, 1.0, 2.0, 3.0, 4.0, 5.0, True, False, None)
+    ]
+    cases += _one(["ROMAN"])
+    cases += [
+        Case("arabic", "_xlfn.ARABIC({1})", (x,))
+        for x in (
+            "I",
+            "IV",
+            "MCMXCIX",
+            "mcmxcix",
+            "  XI ",
+            "-X",
+            "IIII",
+            "VX",
+            "IC",
+            "MMMM",
+            "Z",
+            "-",
+            "",
+        )
+    ]
+    cases += [
+        Case("base", "_xlfn.BASE({1},{2},{3})", (x, r, n))
+        for x in (0.0, 7.0, 255.0, 2.0**53 - 1, 2.0**53, -1.0, 7.9, "3", None, NA)
+        for r in (2.0, 16.0, 36.0, 1.0, 37.0, 16.9)
+        for n in (0.0, 5.0, 255.0, 256.0, -1.0)
+    ]
+    cases += [
+        Case("decimal", "_xlfn.DECIMAL({1},{2})", (x, r))
+        for x in ("0", "FF", "ff", " ff", "zz", "1E", "12", 12.0, "", "-1", "1.5", "G", None, NA)
+        for r in (2.0, 16.0, 36.0, 1.0, 37.0, 16.9)
+    ]
+    cases += [
+        Case("seriessum", "SERIESSUM({1},{2},{3},$AA$1:$AA$3)", (x, n, m))
+        for x in (0.0, 1.0, 2.0, 0.5, "abc", None, NA)
+        for n in (0.0, 1.0, 2.5)
+        for m in (0.0, 1.0, -1.0)
+    ]
+    for name in ("SUMX2MY2", "SUMX2PY2", "SUMXMY2"):
+        cases += [
+            Case(name.lower(), f"{name}($AA$1:$AA$3,$AB$1:$AB$3)"),
+            Case(name.lower(), f"{name}($AA$1:$AA$4,$AB$1:$AB$4)"),
+            Case(name.lower(), f"{name}($AA$1:$AA$3,$AB$1:$AB$4)"),
+            Case(name.lower(), f"{name}($AA$5:$AA$6,$AB$5:$AB$6)"),
+            Case(name.lower(), f"{name}({{1,2}},{{3,4}})"),
+        ]
+    return cases
+
+
+_INTEGERS_TABLE: dict[str, Input] = {
+    "AA1": 1.0, "AA2": 2.0, "AA3": 3.0, "AA4": "x", "AA5": NA, "AA6": 2.0,
+    "AB1": 4.0, "AB2": 5.0, "AB3": 6.0, "AB4": 7.0, "AB5": 1.0, "AB6": 3.0,
+}  # fmt: skip
+
+
 SUITES = {
     "number_text": Suite(number_text),
     "text_number": Suite(text_number),
@@ -1968,5 +2182,7 @@ SUITES = {
     "rounding": Suite(rounding),
     "modern": Suite(modern, fixed=MODERN_TABLE),
     "criteria": Suite(criteria, fixed=CRITERIA_TABLE),
+    "math_trig": Suite(math_trig),
+    "math_integers": Suite(math_integers, fixed=_INTEGERS_TABLE),
     "iteration": Suite(iteration),
 }

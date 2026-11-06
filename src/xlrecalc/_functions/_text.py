@@ -33,6 +33,12 @@ def _count(n: float, default: int) -> int | ErrorValue:
     return VALUE if k < 0 else k
 
 
+@function("EXACT", "text", "text", category=T)
+def EXACT(ctx: Context, a: str, b: str) -> bool:
+    """Whether two texts are the same, case included."""
+    return a == b
+
+
 @function("LEFT", "text", "number", min_args=1, category=T)
 def LEFT(ctx: Context, text: str, n: float = 1.0) -> str | ErrorValue:
     """The first ``n`` characters."""

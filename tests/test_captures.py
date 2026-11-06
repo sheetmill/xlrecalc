@@ -165,7 +165,14 @@ _COMPUTED_CRITERIA = (
 )
 _UNION = "a union of ranges is not implemented, and the cell is reported"
 _REGEX = "the regular-expression match mode (3) is not implemented, and the cell is reported"
+_MULTINOMIAL = (
+    "Excel's result carries noise from its logarithm of the gamma function (279.99999999999966)"
+)
 KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
+    **{
+        ("math_integers", case): _MULTINOMIAL
+        for case in (3783, 3785, 3787, 3789, 3791, 3793, 3795, 3797, 3803, 3805, 3807, 3809)
+    },
     **{("modern", case): _UNION for case in (300, 328)},
     **{("modern", case): _REGEX for case in (1384, 1417)},
     **{("finance", case): _IPMT_TAIL for case in (359, 367, 368, 371, 373, 397)},
@@ -228,6 +235,8 @@ SUITES = [
     "rounding",
     "modern",
     "criteria",
+    "math_trig",
+    "math_integers",
 ]
 
 

@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Report.from_kept`: a cell holding the cached value of a function or feature not implemented, and every
   cell computed from one. After a change upstream of the formula they move to `uncomputed` and keep the
   values they hold; a change that removes the reliance takes them out.
+- Functions, each captured from Excel over edge inputs: trigonometry (`SIN`, `COS`, `TAN`, `COT`, `SEC`, `CSC`,
+  `ASIN`, `ACOS`, `ATAN`, `ATAN2`, `ACOT`), hyperbolics (`SINH`, `COSH`, `TANH`, `COTH`, `SECH`, `CSCH`, `ASINH`,
+  `ACOSH`, `ATANH`, `ACOTH`), `DEGREES`, `RADIANS`, `SIGN`, `TRUNC`, `LOG`, `LOG10`, `SQRTPI`, `EXACT`, `TIME`;
+  `CEILING`, `FLOOR` and their `.MATH` and `.PRECISE` forms, `ISO.CEILING`, `MROUND`, `EVEN`, `ODD`, `QUOTIENT`,
+  `FACT`, `FACTDOUBLE`, `GCD`, `LCM`, `COMBIN`, `COMBINA`, `PERMUT`, `PERMUTATIONA`, `MULTINOMIAL`, `SERIESSUM`,
+  `SUMX2MY2`, `SUMX2PY2`, `SUMXMY2`, `ROMAN`, `ARABIC`, `BASE`, `DECIMAL`.
 - Functions: `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS`, `MINIFS`, `LARGE`, `SMALL`, `PERCENTILE`,
   `PERCENTILE.INC`, `QUARTILE`, `QUARTILE.INC`, `MODE`, `MODE.SNGL`, `IFS`, `SWITCH`, `TEXTJOIN`, `CONCAT`,
   `XLOOKUP` and `XMATCH` (not the regular-expression match mode). Each is captured from Excel.

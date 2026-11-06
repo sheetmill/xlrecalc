@@ -42,6 +42,18 @@ def DATE(ctx: Context, y: float, m: float, d: float) -> float | ErrorValue:
     return _serial(y, m, d, ctx)
 
 
+@function("TIME", "number", "number", "number", category=D)
+def TIME(ctx: Context, h: float, m: float, s: float) -> float | ErrorValue:
+    """The fraction of a day of a time; hours past 24 wrap, and a negative total is ``#NUM!``."""
+    if not (-32768 < h < 32768 and -32768 < m < 32768 and -32768 < s < 32768):
+        return ErrorValue.NUM
+    total = math.trunc(h) * 3600 + math.trunc(m) * 60 + math.trunc(s)
+    if total < 0:
+        return ErrorValue.NUM
+    day = total / 86400
+    return day - math.floor(day)  # past a day, not total % 86400: capture math_trig
+
+
 @function("YEAR", "number", category=D)
 def YEAR(ctx: Context, x: float) -> float | ErrorValue:
     """Year of a serial."""

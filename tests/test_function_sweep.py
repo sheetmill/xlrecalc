@@ -14,7 +14,8 @@ from xml.sax.saxutils import escape
 import pytest
 
 from tests.test_array_limit import recalculated, two_sheets
-from tests.watchdog import GIB, in_child
+from tests.watchdog import GIB, bounded, in_child
+from xlrecalc._engine import Engine
 from xlrecalc._functions._registry import SPECS, Spec
 
 WHOLE = "D!A:XFD"
@@ -93,3 +94,25 @@ def test_the_other_functions_over_a_whole_sheet():
     names = [n for n in NAMES if not set(SPECS[n].kinds) & set(REFERENCE_KINDS)]
     assert len(names) > 50
     _sweep(names)
+
+
+@pytest.mark.parametrize(
+    "formula",
+    [
+        "COMBIN(1E300,5E299)",
+        "COMBIN(2147483647,1073741823)",
+        "PERMUT(2147483647,2147483647)",
+        "_xlfn.COMBINA(2147483647,2147483647)",
+        "_xlfn.PERMUTATIONA(2147483647,2147483647)",
+        "FACT(1E300)",
+        "LCM(9007199254740992,9007199254740991,9007199254740989)",
+        "MULTINOMIAL(1E15,1E15)",
+        '_xlfn.DECIMAL(REPT("Z",255),36)',
+        "_xlfn.BASE(9007199254740991,2,255)",
+    ],
+)
+@bounded
+def test_integer_functions_stay_bounded_on_huge_arguments(formula: str) -> None:
+    """They use exact integers, which a formula must not be able to make huge."""
+    engine = Engine.from_cells({"S": {"A1": "=" + formula}})
+    assert engine.get(0, 0, 0) is not None
