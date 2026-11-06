@@ -480,8 +480,24 @@ the cached values of cycle cells as written. Excel finds cycles through the refe
 evaluates, so `=IF(FALSE,A13,5)` in A13 is 5, and so does the engine: a static cycle is a
 suspect, evaluated with every read checked, and only a read of a cell on the current path is
 circular (§6.3).
-Iterative calculation with the workbook's own settings (`<calcPr iterate iterateCount
-iterateDelta>`) comes later.
+
+With iterative calculation on (`<calcPr iterate="1">`), which is not implemented, whenever
+evaluation reaches a cycle, by any path, its cells and every cell depending on one keep their
+cached values, and the report lists them as uncomputed under the label `iterative calculation`,
+not as circular. The store holds a file's cached values during a full evaluation in such a
+workbook, and what a cell held before its evaluation comes back when a cycle closes, so
+`Workbook.value` and the written file agree. A cycle cell without a cached value is the empty
+text and the file leaves it without one. After a change, these cells are evaluated again, since
+an edit may have broken the loop. A run that trusts cached values evaluates nothing, so it changes
+nothing and reports nothing, whether or not the workbook holds a cycle.
+
+Excel recalculates a workbook with iteration on every time it opens it, whatever
+`fullCalcOnLoad` says, starting from the cached values (capture `iterate_open`): a cell adding 1
+to itself goes from 10 to 110 at the default 100 iterations, a copy saved after that holds 210, and
+reopening that copy shows 310. A file the writer has passed through gives the same numbers as the
+file it came from, so the writer's `fullCalcOnLoad` changes nothing there. A loop whose cells
+have no cached value (`<v />`, as openpyxl writes) ends at `#VALUE!` in Excel, where a loop with
+cached values converges.
 
 ### 7.3 Evaluation context
 

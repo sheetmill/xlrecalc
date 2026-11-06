@@ -50,6 +50,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- **A workbook with iterative calculation on lost its values.** Version 0.1.0 treats a deliberate
+  loop, such as circular interest in a financial model, as a circular reference with iteration
+  off, so `recalculate` replaced the values Excel had iterated to, on the loop and on every cell
+  depending on it, with the empty text, in the source file itself unless a destination was given,
+  and reported them only as `circular`. This happened with `full=True`, in a file with
+  `fullCalcOnLoad` set (openpyxl sets it on every file), and on the second `recalculate` of any such
+  file, since the first writes that flag. Iterative calculation is not implemented yet: these
+  cells now keep their cached values and are reported as uncomputed, under `iterative calculation`
+  in `Report.unsupported`, and not in `Report.circular`. A file already run through 0.1.0 has lost
+  those values until Excel calculates it again.
 - A loop of references through a branch not taken was called circular, depending on the order of
   its cells: `A1` as `=IF(TRUE,1,B1)` and `B1` as `=A1+1` were both empty, and are 1 and 2 (capture
   `static_cycle`). Only references that evaluation follows make a cycle.

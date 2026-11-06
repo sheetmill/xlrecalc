@@ -132,7 +132,13 @@ def load(
 ) -> Engine:
     """Read a workbook into an engine; formulas whose cached values are trusted stay unevaluated."""
     with Book(source, limits) as book:
-        engine = Engine(quirks, book.date1904, today, (limits or ReadLimits()).max_array_cells)
+        engine = Engine(
+            quirks,
+            book.date1904,
+            today,
+            (limits or ReadLimits()).max_array_cells,
+            book.calc.iterate,
+        )
         if isinstance(source, (str, os.PathLike)):
             engine.path = os.path.abspath(os.fspath(source))
         for sheet in book.sheets:
@@ -155,6 +161,7 @@ def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
     refusals: dict[str, object] = {}
     dependents: list[tuple[int, int, int, Value | None]] = []
     report = engine.report
+    hold = not full or engine.iterate  # a cycle keeps its cached value with iteration on (§7.2)
     boxes: list[tuple[int, int, int, int, int]] = []  # ranges array formulas fill (§7.7)
     for cell in book.cells(book.sheets[index]):
         row, col = cell.row - 1, cell.column - 1
@@ -195,7 +202,8 @@ def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
                 row,
                 col,
                 template=tid,
-                cached=None if full else cached,
+                cached=cached if hold else None,
+                stale=full,
                 array=(dynamic, box),
             )
             boxes.append((*box, node(index, row, col)))
@@ -218,14 +226,18 @@ def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
             continue
         if f.kind == "shared" and f.si is not None:
             masters[f.si] = tid
-        engine.set_formula(index, row, col, template=tid, cached=None if full else cached)
+        engine.set_formula(
+            index, row, col, template=tid, cached=cached if hold else None, stale=full
+        )
     for row, col, si, cached in dependents:
         master = masters.get(si)
         if master is None:  # no master in the file: keep the value, as there is no formula
             if cached is not None:
                 s.set(row, col, cached)
             continue
-        engine.set_formula(index, row, col, template=master, cached=None if full else cached)
+        engine.set_formula(
+            index, row, col, template=master, cached=cached if hold else None, stale=full
+        )
 
 
 def _box(ref: str) -> tuple[int, int, int, int] | None:

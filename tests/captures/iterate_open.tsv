@@ -1,0 +1,63 @@
+# suite: iterate_open
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-06
+# generator: capture/iterate_open_probe.py
+# method: a workbook per variant, cached values written into its XML, opened alone with
+#   alerts off; shown is what Excel shows on opening, saved_type and saved the cached
+#   value of a copy saved after opening again
+# columns: variant calcPr saved_calcPr row tag formula cached shown saved_type saved
+flag	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	1	counter	A1+1	'10'	110.0	n	210.0
+flag	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	2	loop	A3/2+1	'5'	2.0	n	2.0
+flag	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	3	loop	A2	'5'	2.0	n	2.0
+flag	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	4	dependent	A2+100	'999'	102.0	n	102.0
+flag	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	5	control	B5*2	'999'	4.0	n	4.0
+flag	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	6	uncached	A7/2+1	None	missing value	e	#VALUE!
+flag	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	7	uncached	A6	None	missing value	e	#VALUE!
+no_flag	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	1	counter	A1+1	'10'	110.0	n	210.0
+no_flag	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	2	loop	A3/2+1	'5'	2.0	n	2.0
+no_flag	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	3	loop	A2	'5'	2.0	n	2.0
+no_flag	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	4	dependent	A2+100	'999'	102.0	n	102.0
+no_flag	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	5	control	B5*2	'999'	4.0	n	4.0
+no_flag	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	6	uncached	A7/2+1	None	missing value	e	#VALUE!
+no_flag	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	7	uncached	A6	None	missing value	e	#VALUE!
+flag_count_1	<calcPr calcId="191029" iterate="1" iterateCount="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="1"/>	1	counter	A1+1	'10'	11.0	n	12.0
+flag_count_1	<calcPr calcId="191029" iterate="1" iterateCount="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="1"/>	2	loop	A3/2+1	'5'	3.5	n	2.75
+flag_count_1	<calcPr calcId="191029" iterate="1" iterateCount="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="1"/>	3	loop	A2	'5'	3.5	n	2.75
+flag_count_1	<calcPr calcId="191029" iterate="1" iterateCount="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="1"/>	4	dependent	A2+100	'999'	103.5	n	102.75
+flag_count_1	<calcPr calcId="191029" iterate="1" iterateCount="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="1"/>	5	control	B5*2	'999'	4.0	n	4.0
+flag_count_1	<calcPr calcId="191029" iterate="1" iterateCount="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="1"/>	6	uncached	A7/2+1	None	missing value	e	#VALUE!
+flag_count_1	<calcPr calcId="191029" iterate="1" iterateCount="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="1"/>	7	uncached	A6	None	missing value	e	#VALUE!
+flag_count_3_delta_0	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0"/>	1	counter	A1+1	'10'	13.0	n	16.0
+flag_count_3_delta_0	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0"/>	2	loop	A3/2+1	'5'	2.375	n	2.046875
+flag_count_3_delta_0	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0"/>	3	loop	A2	'5'	2.375	n	2.046875
+flag_count_3_delta_0	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0"/>	4	dependent	A2+100	'999'	102.375	n	102.046875
+flag_count_3_delta_0	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0"/>	5	control	B5*2	'999'	4.0	n	4.0
+flag_count_3_delta_0	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0"/>	6	uncached	A7/2+1	None	missing value	e	#VALUE!
+flag_count_3_delta_0	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1" iterateCount="3" iterateDelta="0"/>	7	uncached	A6	None	missing value	e	#VALUE!
+no_flag_all_cached	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	1	counter	A1+1	'10'	110.0	n	210.0
+no_flag_all_cached	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	2	loop	A3/2+1	'5'	2.0	n	2.0
+no_flag_all_cached	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	3	loop	A2	'5'	2.0	n	2.0
+no_flag_all_cached	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	4	dependent	A2+100	'999'	102.0	n	102.0
+no_flag_all_cached	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	5	control	B5*2	'999'	4.0	n	4.0
+no_flag_all_cached_off	<calcPr calcId="191029"/>	<calcPr calcId="191029"/>	1	counter	A1+1	'10'	10.0	n	10.0
+no_flag_all_cached_off	<calcPr calcId="191029"/>	<calcPr calcId="191029"/>	2	loop	A3/2+1	'5'	5.0	n	5.0
+no_flag_all_cached_off	<calcPr calcId="191029"/>	<calcPr calcId="191029"/>	3	loop	A2	'5'	5.0	n	5.0
+no_flag_all_cached_off	<calcPr calcId="191029"/>	<calcPr calcId="191029"/>	4	dependent	A2+100	'999'	999.0	n	999.0
+no_flag_all_cached_off	<calcPr calcId="191029"/>	<calcPr calcId="191029"/>	5	control	B5*2	'999'	4.0	n	4.0
+written_by_recalculate	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	1	counter	A1+1	'10'	110.0	n	210.0
+written_by_recalculate	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	2	loop	A3/2+1	'5'	2.0	n	2.0
+written_by_recalculate	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	3	loop	A2	'5'	2.0	n	2.0
+written_by_recalculate	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	4	dependent	A2+100	'999'	102.0	n	102.0
+written_by_recalculate	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	5	control	B5*2	'999'	4.0	n	4.0
+written_by_recalculate	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	6	uncached	A7/2+1	None	missing value	e	#VALUE!
+written_by_recalculate	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	7	uncached	A6	None	missing value	e	#VALUE!
+excel_copy	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	1	counter	A1+1	'10'	310.0	n	410.0
+excel_copy	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	2	loop	A3/2+1	'5'	2.0	n	2.0
+excel_copy	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	3	loop	A2	'5'	2.0	n	2.0
+excel_copy	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	4	dependent	A2+100	'999'	102.0	n	102.0
+excel_copy	<calcPr calcId="191029" iterate="1"/>	<calcPr calcId="191029" iterate="1"/>	5	control	B5*2	'999'	4.0	n	4.0
+excel_copy_written	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	1	counter	A1+1	'10'	310.0	n	410.0
+excel_copy_written	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	2	loop	A3/2+1	'5'	2.0	n	2.0
+excel_copy_written	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	3	loop	A2	'5'	2.0	n	2.0
+excel_copy_written	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	4	dependent	A2+100	'999'	102.0	n	102.0
+excel_copy_written	<calcPr calcId="191029" iterate="1" fullCalcOnLoad="1"/>	<calcPr calcId="191029" iterate="1"/>	5	control	B5*2	'999'	4.0	n	4.0

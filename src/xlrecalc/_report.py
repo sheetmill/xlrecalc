@@ -64,17 +64,21 @@ class Report:
 
     Attributes:
         unsupported: Unsupported function or feature, and the number of cells using it.
+            ``"iterative calculation"`` counts the cells of ``uncomputed`` that are on a circular
+            reference, or depend on one, in a workbook with iterative calculation on.
         exceptions: Cells where an internal error was caught, with the error; such a cell is
             ``#VALUE!`` and uncomputed.
-        circular: Cells on a circular reference or depending on one. Excel leaves them
-            uncalculated, and their value is the empty text, as Excel saves them.
+        circular: Cells on a circular reference or depending on one, with iterative calculation
+            off. Excel leaves them uncalculated, and their value is the empty text, as Excel saves
+            them.
         refused: Cells whose formula Excel refuses in a file, with the reason. They keep their
             cached value and are written as they were; Excel's repair turns each into a
             constant holding that value when it opens the file.
         uncomputed: Cells whose value could not be computed (an unsupported function or
-            feature without a cached value, a caught internal error, or an uncomputed
-            precedent). A written file keeps their cached values as they were. An array formula
-            is named by its first cell, and the cells of its range keep their values with it.
+            feature without a cached value, a caught internal error, a circular reference with
+            iterative calculation on, or an uncomputed precedent). A written file keeps their
+            cached values as they were. An array formula is named by its first cell, and the
+            cells of its range keep their values with it.
     """
 
     unsupported: Counter[str] = field(default_factory=Counter)

@@ -97,6 +97,9 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   holds and is reported (16 formulas of capture `array_refs`, listed in
   `tests/test_array_refs.py`). `OFFSET`, `INDIRECT` and `INDEX` given an array as the whole formula
   give Excel's value.
+- Iterative calculation is not implemented. In a workbook with iteration on, cells on a circular
+  reference and cells depending on one keep the values the file holds and are reported under
+  `iterative calculation`, once evaluation reaches them (ARCHITECTURE.md §7.2).
 - `XLOOKUP` and `XMATCH` with the regular-expression match mode (3) are not computed, and are
   reported. Nor is a union of ranges (`LARGE((A1:A3,C1:C3),1)`, `SUM((A1,B2))`): the formula keeps
   the value the file holds and is reported (capture `modern`). `ROW` and `COLUMN` of a union are

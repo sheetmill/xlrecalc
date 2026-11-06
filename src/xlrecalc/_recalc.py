@@ -48,7 +48,8 @@ def recalculate(
 
     Returns:
         What could not be done: unsupported functions, uncomputed cells (whose cached values
-        are left as they were), circular references, and formulas Excel refuses in a file
+        are left as they were, among them cycles in a workbook with iterative calculation on),
+        circular references, and formulas Excel refuses in a file
         (left as written; Excel's repair turns each into its cached value on open).
 
     Raises:
