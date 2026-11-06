@@ -469,8 +469,9 @@ correct for any graph, and what `_engine.py` does.
 
 ### 7.2 Circular references
 
-Detected during ordering (a cell reached while on the stack), and every cell on the stack from
-there belongs to the cycle. With iterative calculation off, as Excel's default, Excel calculates
+Detected during evaluation: a chain of cells, each stopped by reading the next, that closes on
+itself (capture `static_cycle`). A loop of references through a branch not taken is none, wherever
+its cells sit. With iterative calculation off, as Excel's default, Excel calculates
 no cell on a cycle and no cell depending on one: it shows each as empty and saves it as the empty
 text (`t="str"` with an empty `<v/>`), with alerts on or off (captures `circular` and
 `circular_alerts`, `capture/circular_probe.py`). The engine gives those cells the empty text and

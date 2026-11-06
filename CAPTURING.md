@@ -42,6 +42,7 @@ people's workbooks are used.
 | `modern` | 2,230 | `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS`, `MINIFS`, `LARGE`, `SMALL`, `PERCENTILE`, `QUARTILE`, `MODE`, `IFS`, `SWITCH`, `TEXTJOIN`, `CONCAT`, `XLOOKUP`, `XMATCH` across argument kinds, edges and modes; how text compares, every pair of 40 characters |
 | `iteration` | 1,337 | `IRR`, `RATE`, `XIRR` from 20 guesses over flows of many shapes, and over a double root with guesses 2^k away, which shows the iteration's limit and stopping test; `YIELD` over a grid of bonds. Evidence for inferring Excel's iteration: not compared by `tests/test_captures.py` yet |
 | `index_range` | 38 | ranges built with `INDEX`, lookups and aggregates over a formula's own column: which Excel calls circular |
+| `static_cycle` | 37 | loops of references through a branch not taken, and real loops as controls: which Excel calls circular |
 | `array_refs` | 8,954 cells | `ROW`, `COLUMN`, `CELL`, ranges and arrays as a criterion or a lookup key, and arrays of references, each as a legacy formula, a legacy array formula and a dynamic array |
 | `array_functions` | 41 | the `SUMIF` family, `DSUM`, `CORREL` and `ROW` times `COLUMN` over one column, ten and every column of another sheet, with Excel's memory: Excel's value, or the file's value kept |
 | `circular`, `circular_alerts` | 16 each | circular references with iteration off: what Excel saves and shows, alerts off and on (the second interactive; [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §7.2) |

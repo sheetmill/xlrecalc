@@ -50,6 +50,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- A loop of references through a branch not taken was called circular, depending on the order of
+  its cells: `A1` as `=IF(TRUE,1,B1)` and `B1` as `=A1+1` were both empty, and are 1 and 2 (capture
+  `static_cycle`). Only references that evaluation follows make a cycle.
 - An exact lookup over its own column was called circular wherever the formula sat. `MATCH`,
   `VLOOKUP`, `HLOOKUP`, `XLOOKUP` and `XMATCH` stop at their match, as Excel does (capture
   `index_range`): a formula below the match is computed, and only one that reads past itself is

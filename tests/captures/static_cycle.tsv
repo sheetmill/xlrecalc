@@ -1,0 +1,42 @@
+# suite: static_cycle
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-06
+# generator: capture/static_cycle_probe.py
+# columns: group, cell, formula (repr), cached value (repr) in the copy Excel saved
+pair, not taken	A1	'=IF(TRUE,1,A2)'	1.0
+pair, not taken	A2	'=A1+1'	2.0
+pair, not taken, reader first	B1	'=B2+1'	2.0
+pair, not taken, reader first	B2	'=IF(TRUE,1,B1)'	1.0
+pair, on a constant	C1	'=IF(C3=0,1,C2)'	1.0
+pair, on a constant	C2	'=C1+1'	2.0
+pair, on a constant	C3	0.0	0.0
+three cells	D1	'=IF(D3=0,1,D4)'	1.0
+three cells	D2	'=D1+1'	2.0
+three cells	D3	0.0	0.0
+three cells	D4	'=D2*2'	4.0
+a dependent after	E1	'=E2+1'	5.0
+a dependent after	E2	'=E3*2'	4.0
+a dependent after	E3	'=E4+1'	2.0
+a dependent after	E4	'=IF(E5=0,1,E2)'	1.0
+a dependent after	E5	0.0	0.0
+two readers, as a real workbook	F1	'=IF(ISNUMBER(F4),F5+F4,F3)'	2.0
+two readers, as a real workbook	F2	'=IF(ISNUMBER(F6),F7+F6,F3)'	3.0
+two readers, as a real workbook	F3	'=F2+F1'	5.0
+two readers, as a real workbook	F4	0.0	0.0
+two readers, as a real workbook	F5	2.0	2.0
+two readers, as a real workbook	F6	0.0	0.0
+two readers, as a real workbook	F7	3.0	3.0
+CHOOSE, not taken	G1	'=CHOOSE(1,1,G2)'	1.0
+CHOOSE, not taken	G2	'=G1+1'	2.0
+IFERROR, not taken	H1	'=IFERROR(1,H2)'	1.0
+IFERROR, not taken	H2	'=H1+1'	2.0
+control: taken	I1	'=IF(TRUE,I2,1)'	''
+control: taken	I2	'=I1+1'	''
+control: taken after a constant	J1	'=IF(J3=0,J2,1)'	''
+control: taken after a constant	J2	'=J1+1'	''
+control: taken after a constant	J3	0.0	0.0
+control: a plain loop	K1	'=K2+1'	''
+control: a plain loop	K2	'=K1+1'	''
+control: three in a loop	L1	'=L2'	''
+control: three in a loop	L2	'=L3'	''
+control: three in a loop	L3	'=L1'	''

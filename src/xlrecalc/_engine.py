@@ -642,8 +642,9 @@ class Engine:
         during evaluation (§6.3).
         A formula that reads a formula cell not evaluated yet (through ``OFFSET``,
         ``INDIRECT``, or a static cycle that evaluation may not follow) stops with
-        ``_NotEvaluatedError``: when that cell is on the current path it is a circular reference;
-        otherwise it is evaluated first and the formula again.
+        ``_NotEvaluatedError``: that cell is evaluated first, and the formula again. A circular
+        reference is a chain of cells each stopped by reading the next that closes on itself; the
+        static path alone does not show one, since a formula may not follow a reference.
         """
         pending = self.stale
         on_stack: dict[int, int] = {}  # node -> its position on the current path
@@ -653,6 +654,7 @@ class Engine:
         marked_from = marked_to = 0  # path[marked_from:marked_to] is all in suspects
         clean: set[tuple[int, int, int, int, int]] = set()  # large boxes with nothing stale left
         live: dict[tuple[int, int, int], tuple[RefSpec, ...]] = {}
+        waits: dict[int, int] = {}  # a cell stopped by a read, and the cell it read
         for target in targets:  # one at a time: no stack entry per stale cell up front
             if target not in pending:
                 continue
@@ -667,15 +669,27 @@ class Engine:
                         self._compute(n)
                     except _NotEvaluatedError as wait:
                         t = wait.node
-                        if t not in on_stack:  # evaluate what it reads first, then it again
+                        waits[n] = t
+                        chain = {n}  # who waits for whose value: a real cycle closes this
+                        x = t
+                        while x != n and x in waits and x not in chain:
+                            chain.add(x)
+                            x = waits[x]
+                        if x != n:  # evaluate what it reads first, then it again
                             stack.append((n, True))
-                            stack.append((t, False))
+                            if t in on_stack:  # on the path by a reference it may not follow
+                                suspects.add(t)
+                                stack.append((t, True))
+                            else:
+                                stack.append((t, False))
                             continue
-                        cyclic.update(path[on_stack[t] :])
+                        cyclic.update(chain)
                     finally:
                         self._strict = False
+                    waits.pop(n, None)
                     del on_stack[n]
-                    path.pop()
+                    while path and path[-1] not in on_stack:  # n, and any evaluated ahead of it
+                        path.pop()
                     marked_to = min(marked_to, len(path))
                     pending.discard(n)
                     continue

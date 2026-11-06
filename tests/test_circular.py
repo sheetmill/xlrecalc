@@ -96,3 +96,28 @@ def test_a_range_over_a_formulas_own_column_is_circular_only_as_read(row):
     engine.recalculate()
     r = int(address[len(column) :])
     assert engine.get(0, r - 1, number - 1) == ast.literal_eval(value)
+
+
+STATIC_CYCLES = [
+    line.rstrip("\n").split("\t")
+    for line in (Path(__file__).with_name("captures") / "static_cycle.tsv")
+    .read_text(encoding="utf-8")
+    .splitlines()
+    if not line.startswith("#")
+]
+
+
+@pytest.mark.parametrize("group", sorted({r[0] for r in STATIC_CYCLES}))
+def test_only_references_evaluated_make_a_cycle(group):
+    """Capture ``static_cycle``: a loop through a branch not taken is not circular."""
+    rows = [r for r in STATIC_CYCLES if r[0] == group]
+    cells = {r[1]: ast.literal_eval(r[2]) for r in rows}
+    engine = Engine.from_cells({"probe": cells})
+    engine.recalculate()
+    for _, address, formula, value in rows:
+        if isinstance(ast.literal_eval(formula), str):
+            column = address.rstrip("0123456789")
+            r = int(address[len(column) :])
+            assert engine.get(0, r - 1, column_number(column) - 1) == ast.literal_eval(value), (
+                address
+            )
