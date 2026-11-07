@@ -321,6 +321,7 @@ SUITES = [
     "dates_family",
     "text_family",
     "database_family",
+    "engineering_family",
 ]
 
 
