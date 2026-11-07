@@ -111,6 +111,7 @@ def test_the_module_imports_without_openpyxl():
 
 
 def test_a_capture_limit_grows_with_its_cases_and_is_generous():
+    pytest.importorskip("openpyxl")  # capture.pipeline builds workbooks with it
     from capture.pipeline import capture_limit
 
     assert capture_limit(10) >= 600
