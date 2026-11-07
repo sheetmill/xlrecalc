@@ -9,7 +9,7 @@ from __future__ import annotations
 import calendar
 import datetime as dt
 import math
-from typing import Any
+from typing import Any, cast
 
 from xlrecalc._coerce import Context, scalar, to_number
 from xlrecalc._dates import MAX_SERIAL_1900, MAX_SERIAL_1904, date_serial, serial_parts, weekday
@@ -362,3 +362,113 @@ def SECOND(ctx: Context, x: float) -> Any:
     """The second, 0 to 59, of a time."""
     s = _seconds(x, ctx)
     return s if isinstance(s, ErrorValue) else float(s % 60)
+
+
+def _day(x: float, ctx: Context) -> int | ErrorValue:
+    """A serial's whole day, or ``#NUM!`` off the calendar."""
+    limit = MAX_SERIAL_1904 if ctx.date1904 else MAX_SERIAL_1900
+    return int(x) if 0 <= x < limit + 1 else NUM
+
+
+@function("_xlfn.DAYS", "value", "value", errors=True, category=D)
+def DAYS(ctx: Context, end: Any, start: Any) -> float | ErrorValue:
+    """Days from ``start`` to ``end``, each cut to a whole day; an error in either comes first."""
+    if isinstance(end, ErrorValue):
+        return end
+    if isinstance(start, ErrorValue):
+        return start
+    a = to_number(end, ctx)
+    a = a if isinstance(a, ErrorValue) else _day(a, ctx)
+    if isinstance(a, ErrorValue):
+        return a
+    b = to_number(start, ctx)
+    b = b if isinstance(b, ErrorValue) else _day(b, ctx)
+    return b if isinstance(b, ErrorValue) else float(a - b)
+
+
+def _year_start(year: int, ctx: Context) -> int:
+    start = _serial(float(year), 1.0, 1.0, ctx)
+    return int(start)  # type: ignore[arg-type]  # a year read from a serial is on the calendar
+
+
+def _iso_week(s: int, ctx: Context) -> float | ErrorValue:
+    """The ISO week: that of the week's Thursday, which fixes the year it belongs to."""
+    w = weekday(s, date1904=ctx.date1904, leap=_leap(ctx))
+    if w is None:
+        return NUM
+    thursday = s - (w + 5) % 7 + 3  # w is 1 on Sunday
+    if thursday < 1:  # in the year before the calendar starts
+        day_of_year = 366 + thursday if ctx.date1904 else 365 + thursday
+        return float((day_of_year - 1) // 7 + 1)
+    parts = _parts(float(thursday), ctx)
+    if isinstance(parts, ErrorValue):
+        return parts
+    return float((thursday - _year_start(parts[0], ctx)) // 7 + 1)
+
+
+@function("_xlfn.ISOWEEKNUM", "number", category=D)
+def ISOWEEKNUM(ctx: Context, x: float) -> float | ErrorValue:
+    """The ISO 8601 week number of a date."""
+    s = _day(x, ctx)
+    return s if isinstance(s, ErrorValue) else _iso_week(s, ctx)
+
+
+@function("WEEKNUM", "value", "value", min_args=1, errors=True, category=D)
+def WEEKNUM(ctx: Context, x: Any, kind: Any = 1.0) -> float | ErrorValue:
+    """The week of the year: week 1 holds January 1, and weeks start on the day ``kind`` names."""
+    number = VALUE if isinstance(x, bool) else to_number(x, ctx)
+    s = number if isinstance(number, ErrorValue) else _day(number, ctx)
+    if isinstance(s, ErrorValue):
+        return s
+    k = VALUE if isinstance(kind, bool) else to_number(kind, ctx)
+    if isinstance(k, ErrorValue):
+        return k
+    code = math.trunc(k)
+    if code == 21:
+        return _iso_week(s, ctx)
+    start = _WEEK_STARTS.get(code) if code != 3 else None
+    if start is None:
+        return NUM
+    parts = _parts(float(s), ctx)
+    if isinstance(parts, ErrorValue):
+        return parts
+    first = _year_start(parts[0], ctx)
+    w = weekday(first, date1904=ctx.date1904, leap=_leap(ctx))
+    return float((s - first + (w - start) % 7) // 7 + 1)  # type: ignore[operator]
+
+
+@function("DATEDIF", "number", "number", "text", category=D)
+def DATEDIF(ctx: Context, start: float, end: float, unit: str) -> float | ErrorValue:
+    """Whole years, months or days between two dates, or the parts past them."""
+    a, b = _day(start, ctx), _day(end, ctx)
+    if isinstance(a, ErrorValue):
+        return a
+    if isinstance(b, ErrorValue):
+        return b
+    code = unit.upper()
+    if a > b or code not in ("Y", "M", "D", "MD", "YM", "YD"):
+        return NUM
+    if code == "D":
+        return float(b - a)
+    first, last = _parts(float(a), ctx), _parts(float(b), ctx)
+    if isinstance(first, ErrorValue):
+        return first
+    if isinstance(last, ErrorValue):
+        return last
+    months = (last[0] - first[0]) * 12 + last[1] - first[1] - (last[2] < first[2])
+    if code == "Y":
+        return float(months // 12)
+    if code == "M":
+        return float(months)
+    if code == "YM":
+        return float(months % 12)
+    if code == "MD":
+        if last[2] >= first[2]:
+            return float(last[2] - first[2])
+        y, m = float(last[0]), float(last[1])
+        days = cast(float, _serial(y, m, 1.0, ctx)) - cast(float, _serial(y, m - 1, 1.0, ctx))
+        return float(days - first[2] + last[2])
+    # YD places the end's month and day in the start's year, or the next if that comes before.
+    year = first[0] + ((last[1], last[2]) < (first[1], first[2]))
+    moved = _serial(float(year), float(last[1]), float(last[2]), ctx)
+    return moved if isinstance(moved, ErrorValue) else float(moved - a)

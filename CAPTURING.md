@@ -50,7 +50,8 @@ people's workbooks are used.
 | `math_integers` | 4,457 | rounding to a multiple, `QUOTIENT`, factorials, combinations, `GCD`, `LCM`, `MULTINOMIAL`, `ROMAN`, `ARABIC`, `BASE`, `DECIMAL`, `SERIESSUM`, `SUMX2MY2` and its family, over the same inputs |
 | `info_family` | 599 | `XOR`, `ISEVEN`, `ISODD`, `ISNONTEXT`, `ISREF`, `ISFORMULA`, `FORMULATEXT`, `ERROR.TYPE`, `TYPE`, `SHEET`, `SHEETS`, `AREAS`, `HYPERLINK` across argument kinds, references, unions and errors. Excel refuses a file with `AREAS`, `ISFORMULA` or `FORMULATEXT` over a constant, an array, an error other than `#REF!`, or a function that gives no reference, such as `SUM` or `NA` |
 | `mac_gaps` | 8 | whether this Excel computes `ENCODEURL`, `FILTERXML` and `EUROCONVERT`, with and without `_xlfn.`: `#NAME?` in every form, as for a name it does not know, so their behavior needs another Excel. Not compared by `tests/test_captures.py` |
-| `text_family`, `dates_family` | 9,527, 5,028 | the text and date families, captured before they are implemented; not compared by `tests/test_captures.py` yet |
+| `text_family` | 9,527 | the text family, captured before it is implemented; not compared by `tests/test_captures.py` yet |
+| `dates_family` | 5,028 | `DAYS`, `DATEDIF` in every unit over month ends and the 1900 leap day, `ISOWEEKNUM`, `WEEKNUM` of every type, argument kinds and the limits of the calendar |
 | `index_range` | 38 | ranges built with `INDEX`, lookups and aggregates over a formula's own column: which Excel calls circular |
 | `static_cycle` | 37 | loops of references through a branch not taken, and real loops as controls: which Excel calls circular |
 | `array_refs` | 8,954 cells | `ROW`, `COLUMN`, `CELL`, ranges and arrays as a criterion or a lookup key, and arrays of references, each as a legacy formula, a legacy array formula and a dynamic array |

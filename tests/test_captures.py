@@ -166,6 +166,51 @@ _COMPUTED_CRITERIA = (
 _UNION = "a union of ranges is not implemented, and the cell is reported"
 _REGEX = "the regular-expression match mode (3) is not implemented, and the cell is reported"
 _AT_SIGN = "the @ the formula bar shows in a legacy formula is not shown by FORMULATEXT"
+_WEEKNUM_ODD_TYPE = (
+    "WEEKNUM with a type its documentation lacks (-1, 22): #NUM! on some weekdays and a week "
+    "number on others, with no rule found, where the package gives #NUM!"
+)
+_DATEDIF_MARCH = (
+    "DATEDIF from December 31, 1900 to March 1, 2000 in YD is 61 where every neighbor gives 60"
+)
+_WEEKNUM_ODD_CASES = (
+    476,
+    497,
+    520,
+    543,
+    591,
+    612,
+    614,
+    635,
+    681,
+    704,
+    727,
+    750,
+    773,
+    775,
+    821,
+    865,
+    867,
+    913,
+    934,
+    936,
+    957,
+    1003,
+    1026,
+    1118,
+    1166,
+    1189,
+    1212,
+    1235,
+    1256,
+    1258,
+    1279,
+    1302,
+    1304,
+    1325,
+    1327,
+    1348,
+)
 _MULTINOMIAL = (
     "Excel's result carries noise from its logarithm of the gamma function (279.99999999999966)"
 )
@@ -180,6 +225,8 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
         for case in (272, 303, 334, 396, 427, 452, 475, 484, 485, 505, 506)
     },
     ("info_family", 468): _AT_SIGN,
+    **{("dates_family", case): _WEEKNUM_ODD_TYPE for case in _WEEKNUM_ODD_CASES},
+    ("dates_family", 2004): _DATEDIF_MARCH,
     **{("modern", case): _REGEX for case in (1384, 1417)},
     **{("finance", case): _IPMT_TAIL for case in (359, 367, 368, 371, 373, 397)},
     **{("iterative", case): _ITER_NEAR_ZERO for case in _ITER_NEAR_ZERO_CASES},
@@ -244,6 +291,7 @@ SUITES = [
     "math_trig",
     "math_integers",
     "info_family",
+    "dates_family",
 ]
 
 

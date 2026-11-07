@@ -110,6 +110,9 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 - `FORMULATEXT` gives a legacy formula as the file holds it, without the `@` the formula bar shows
   (`=@{1,2;3,4}`; capture `info_family`). `AREAS` and `ISREF` of a union are computed, from the
   formula alone; the other functions of that family are not, as for any union.
+- `WEEKNUM` with a type the documentation lacks (-1, 22) gives `#NUM!` here. Excel gives `#NUM!` on some weekdays and a
+  week number on others, with no rule found; 36 rows of capture `dates_family`. `DATEDIF` from December 31, 1900 to March
+  1, 2000 in `YD` is 60 here and 61 in Excel, where every neighbor fits the rule (one row).
 - How text orders is captured only in part: every pair of 40 ASCII characters and 24 pairs of words,
   on Excel 16 for Mac (capture `modern`). Those give one consistent order, marks and symbols before
   digits before letters, with accents after their base letter. The rest is approximated: other

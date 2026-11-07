@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `CEILING`, `FLOOR` and their `.MATH` and `.PRECISE` forms, `ISO.CEILING`, `MROUND`, `EVEN`, `ODD`, `QUOTIENT`,
   `FACT`, `FACTDOUBLE`, `GCD`, `LCM`, `COMBIN`, `COMBINA`, `PERMUT`, `PERMUTATIONA`, `MULTINOMIAL`, `SERIESSUM`,
   `SUMX2MY2`, `SUMX2PY2`, `SUMXMY2`, `ROMAN`, `ARABIC`, `BASE`, `DECIMAL`.
+- Functions, captured from Excel: `DAYS`, `ISOWEEKNUM`, `WEEKNUM`, `DATEDIF`.
 - Functions, captured from Excel: `XOR`, `ISEVEN`, `ISODD`, `ISNONTEXT`, `ISREF`, `ISFORMULA`, `ERROR.TYPE`, `TYPE`,
   `SHEET`, `SHEETS`, `AREAS` and `HYPERLINK`, whose result is the text it shows and which follows nothing.
   `FORMULATEXT` does not show the `@` the formula bar adds to a legacy formula.
