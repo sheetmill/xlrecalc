@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `CEILING`, `FLOOR` and their `.MATH` and `.PRECISE` forms, `ISO.CEILING`, `MROUND`, `EVEN`, `ODD`, `QUOTIENT`,
   `FACT`, `FACTDOUBLE`, `GCD`, `LCM`, `COMBIN`, `COMBINA`, `PERMUT`, `PERMUTATIONA`, `MULTINOMIAL`, `SERIESSUM`,
   `SUMX2MY2`, `SUMX2PY2`, `SUMXMY2`, `ROMAN`, `ARABIC`, `BASE`, `DECIMAL`.
+- Functions, captured from Excel: `DCOUNTA`, `DGET`, `DPRODUCT`, `DSTDEV`, `DSTDEVP`, `DVAR`, `DVARP`.
 - Functions, captured from Excel: `SEARCH`, `SUBSTITUTE`, `PROPER`, `CLEAN`, `T`, `UNICHAR`, `UNICODE`, `NUMBERVALUE`,
   `USDOLLAR`, `VALUETOTEXT`, `ARRAYTOTEXT`, `TEXTBEFORE`, `TEXTAFTER`, and `FINDB`, `SEARCHB`, `LEFTB`, `RIGHTB`, `MIDB`,
   `LENB` and `REPLACEB`, as they behave in an English language setting.
@@ -56,6 +57,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   placed by position, as Excel places it.
 
 ### Changed
+- The database functions read a range's non-blank cells, not every cell, so they are computed over whole columns and
+  sheets, and `DCOUNT` passes over an error in its field, as Excel does (capture `database_family`).
 - A cell naming a function not implemented keeps its cached value in a full recalculation too, as it
   did when cached values were trusted, and what depends on it is computed from that, not `#NAME?`.
   `Workbook.value` gives the kept value. Without a cached value it is `#NAME?`, as before.

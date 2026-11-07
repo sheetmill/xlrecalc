@@ -87,11 +87,11 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 
 - An array past `ReadLimits.max_array_cells` (ten full columns by default) is not made: the
   formula keeps the value the file holds and is reported. Over a whole sheet this stops
-  `SUMPRODUCT`, `CORREL`, `LINEST`, `XIRR`, `XNPV` and the database functions (`DSUM`, `DAVERAGE`,
-  `DCOUNT`, `DMAX`, `DMIN`). Excel computes `SUMPRODUCT` and `DSUM` there without making the
+  `SUMPRODUCT`, `CORREL`, `LINEST`, `XIRR` and `XNPV`. Excel computes `SUMPRODUCT` there without making the
   array; given `CORREL` over the whole sheet it too keeps the value the file holds, though it
   computes `CORREL` over ten columns (captures `array_size`, `array_functions`). `LINEST`,
-  `XIRR`, `XNPV` and the other database functions were not captured at that size.
+  `XIRR` and `XNPV` were not captured at that size. The database functions walk their non-blank
+  cells, and are computed at any size.
 - A function given an array of references (`N(OFFSET(Z1,{0;1;2;3},0))`, `SUBTOTAL(9,OFFSET(...))`,
   `COUNTIF(INDIRECT({"Z1";"Z2"}),">0")`) is not computed: the formula keeps the value the file
   holds and is reported (16 formulas of capture `array_refs`, listed in
@@ -133,7 +133,9 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 - `VDB` (`finance`) within 4 units in the last place but five rows: the last period of a
   long schedule (7 to 48 units), and two edge cases Excel answers oddly (`#DIV/0!` for start
   = end = life at a rate of 1 per period; cost - salvage when salvage exceeds cost).
-- Database functions (`misc`): a computed criterion is not supported (five rows).
+- Database functions (`misc`, `database_family`): a computed criterion is not supported. `DVAR`, `DVARP`, `DSTDEV` and
+  `DSTDEVP` declare 4 units in the last place for Excel's sum of squares; two rows are 5 and 12 units away. Blank records
+  are counted up to the sheet's last row holding a value, where Excel's used range also counts formatted rows.
 - Random numbers (`misc`): two rows draw them (`RANDBETWEEN(1.5,2.5)`, and two draws
   compared), so no result can be expected to repeat Excel's; both are listed whatever the draw.
 - Declared tolerances ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1), statistics: the variances and standard

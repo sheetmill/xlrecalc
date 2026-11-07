@@ -2604,6 +2604,561 @@ def info_family() -> list[Case]:
     return cases
 
 
+_DATABASES = ("DSUM", "DAVERAGE", "DCOUNT", "DMAX", "DMIN")
+_DATABASES_NEW = ("DCOUNTA", "DGET", "DPRODUCT", "DSTDEV", "DSTDEVP", "DVAR", "DVARP")
+_DB_EXTRA: dict[str, Input] = {
+    "FA1": "Key", "FB1": "Num", "FC1": "Mix",
+    "FA2": "a", "FB2": 2.0, "FC2": 1.0,
+    "FA3": "b", "FB3": 4.0, "FC3": "text",
+    "FA4": "c", "FB4": 8.0, "FC4": True,
+    "FA6": "d", "FB6": -1.5, "FC6": NA,
+    "FA7": "e", "FC7": FormulaInput("=TRIM(\"\")"),
+    "FD1": "Key", "FD2": "a",
+    "FE1": "Key", "FE2": "<>a",
+    "FF1": "Num", "FF2": ">100",
+    "FG1": "Key",
+    "FH1": "Num", "FH2": ">0",
+    "FI1": "Key", "FJ1": "Num", "FI3": "a", "FJ2": ">3",
+    "FK1": "Mix", "FK2": "text",
+}  # fmt: skip
+
+
+def database_family() -> list[Case]:
+    cases = []
+    fields = [
+        '"Profit"',
+        "4",
+        '"Age"',
+        '"profit"',
+        "0",
+        "5",
+        '"Nope"',
+        "DS1",
+        "2.9",
+        "TRUE",
+        '"Tree"',
+    ]
+    for fn in _DATABASES_NEW:
+        for crit in CRITERIA_RANGES:
+            cases.append(Case(fn.lower(), f'{fn}(DP1:DS7,"Profit",{crit})'))
+            cases.append(Case(fn.lower(), f'{fn}(DP1:DS7,"Tree",{crit})'))
+        cases += [Case(fn.lower(), f"{fn}(DP1:DS7,{field},DY1:DY3)") for field in fields]
+        cases += [
+            Case(fn.lower(), f'{fn}(DP1:DS7,"Tree",DU1:DU2)'),
+            Case(fn.lower(), f'{fn}(DP1:DS1,"Profit",DU1:DU2)'),
+            Case(fn.lower(), f'{fn}(DP1:DS7,"Profit",DU1)'),
+            Case(fn.lower(), f'{fn}(DP2:DS7,"Profit",DU1:DU2)'),
+            Case(fn.lower(), f"{fn}(DP1:DS7,,DY1:DY3)"),
+        ]
+    # A table with a blank row and every kind of value; criteria that match blanks; whole columns.
+    for fn in (*_DATABASES, *_DATABASES_NEW):
+        for field in ('"Num"', '"Mix"', '"Key"', "2", "3", ""):
+            for crit in (
+                "FD1:FD2",
+                "FE1:FE2",
+                "FF1:FF2",
+                "FG1:FG2",
+                "FH1:FH2",
+                "FI1:FJ3",
+                "FK1:FK2",
+            ):
+                cases.append(Case(fn.lower(), f"{fn}(FA1:FC7,{field},{crit})"))
+                cases.append(Case(fn.lower(), f"{fn}(FA:FC,{field},{crit})"))
+            cases.append(Case(fn.lower(), f"{fn}(FA:FC,{field},FD:FD)"))
+            cases.append(Case(fn.lower(), f"{fn}(FA:FC,{field},FG:FG)"))
+            cases.append(Case(fn.lower(), f"{fn}(FA1:FC1048576,{field},FE:FE)"))
+    return cases
+
+
+_ENGINEERING_NUMBERS: tuple[Input, ...] = (
+    0.0, 1.0, -1.0, 5.0, 1.5, -1.5, 13.0, 255.0, 256.0, -256.0, 511.0, 512.0, -512.0, -513.0, 7.0,
+    4095.0, 1023.0, 1e10, 549755813887.0, 549755813888.0, -549755813888.0, -549755813889.0,
+    "12", "abc", "", True, None, NA,
+)  # fmt: skip
+_BINARIES: tuple[Input, ...] = (
+    "0", "1", "101", 101.0, 1111111111.0, "1111111111", "1000000000", "0111111111", "11111111111",
+    "2", "abc", "", " 1", "1 ", 1.5, -1.0, True, None, NA,
+)  # fmt: skip
+_OCTALS: tuple[Input, ...] = (
+    "0", "7", "17", 17.0, "7777777777", "4000000000", "3777777777", "77777777777", "8", "abc", "",
+    " 1", 1.5, -1.0, True, None, NA, "777", "1000", "7777777000", "6777777777",
+)  # fmt: skip
+_HEXES: tuple[Input, ...] = (
+    "0", "F", "f", "1F", 10.0, "FFFFFFFFFF", "8000000000", "7FFFFFFFFF", "FFFFFFFFFFF", "G", "abc",
+    "", " 1", 1.5, -1.0, True, None, NA, "1FF", "200", "FFFFFFFE00", "FFFFFFFDFF",
+    "1FFFFFFF", "20000000", "FFE0000000", "FFDFFFFFFF",
+)  # fmt: skip
+_PLACES: tuple[Input, ...] = (0.0, 1.0, 3.0, 4.0, 8.0, 10.0, 11.0, -1.0, 2.9, "3", True, None, NA)
+_BITS: tuple[Input, ...] = (
+    0.0, 1.0, 5.0, 13.0, 281474976710655.0, 281474976710656.0, -1.0, 1.5, 2.0**47, "3", "abc",
+    True, None, NA,
+)  # fmt: skip
+
+
+def engineering_family() -> list[Case]:
+    cases = []
+    for sources, source in (
+        (_ENGINEERING_NUMBERS, "DEC"),
+        (_BINARIES, "BIN"),
+        (_OCTALS, "OCT"),
+        (_HEXES, "HEX"),
+    ):
+        for target in ("BIN", "OCT", "DEC", "HEX"):
+            if target == source:
+                continue
+            name = f"{source}2{target}"
+            cases += [Case(name.lower(), f"{name}({{1}})", (v,)) for v in sources]
+            if target == "DEC":
+                continue
+            cases += [
+                Case(name.lower(), f"{name}({{1}},{{2}})", (v, k))
+                for v in sources[:14]
+                for k in _PLACES
+            ]
+    for name in ("BITAND", "BITOR", "BITXOR"):
+        cases += [
+            Case(name.lower(), f"_xlfn.{name}({{1}},{{2}})", (a, b)) for a in _BITS for b in _BITS
+        ]
+    for name in ("BITLSHIFT", "BITRSHIFT"):
+        cases += [
+            Case(name.lower(), f"_xlfn.{name}({{1}},{{2}})", (a, k))
+            for a in _BITS
+            for k in (
+                0.0,
+                1.0,
+                -1.0,
+                2.0,
+                47.0,
+                48.0,
+                53.0,
+                54.0,
+                -53.0,
+                -54.0,
+                1.5,
+                -1.5,
+                "1",
+                True,
+                None,
+                NA,
+            )
+        ]
+    pairs = (0.0, 1.0, -1.0, 0.5, 1e300, "1", "abc", "", True, None, NA)
+    for name in ("DELTA", "GESTEP"):
+        cases += [Case(name.lower(), f"{name}({{1}})", (a,)) for a in pairs]
+        cases += [Case(name.lower(), f"{name}({{1}},{{2}})", (a, b)) for a in pairs for b in pairs]
+    return cases
+
+
+_STATS_FAMILY_TABLE: dict[str, Input] = {
+    **{f"AA{i + 1}": v for i, v in enumerate((1.0, 2.0, 4.0, 4.5, 7.0, 9.5, 13.0, 21.0))},
+    **{f"AB{i + 1}": v for i, v in enumerate((2.5, 1.0, 5.5, 6.0, 12.0, 8.0, 19.0, 30.0))},
+    **{f"AC{i + 1}": v for i, v in enumerate((1.0, "x", 3.0, None, True, 8.0, "5", 2.0))},
+    **{f"AD{i + 1}": v for i, v in enumerate((1.0, 2.0, NA, 4.0))},
+    **{f"AE{i + 1}": v for i, v in enumerate((0.0, 0.0, 0.0, 0.0))},
+    **{f"AF{i + 1}": v for i, v in enumerate((3.0, 3.0, 3.0, 3.0))},
+    **{f"AG{i + 1}": v for i, v in enumerate((1e150, 2e150, 3e150, 5e150))},
+    **{f"AH{i + 1}": v for i, v in enumerate((1e-150, 2e-150, 3e-150, 5e-150))},
+    **{f"AI{i + 1}": v for i, v in enumerate((0.1, 0.2, 0.3, 0.4))},
+    **{f"AJ{i + 1}": v for i, v in enumerate((1.0, 2.0, 3.0, 4.0))},
+    **{f"AK{i + 1}": v for i, v in enumerate((-1.0, 2.0, 3.0, 4.0))},
+    **{f"AL{i + 1}": v for i, v in enumerate((1.0, 2.0, 3.0))},
+    **{f"AM{i + 1}": v for i, v in enumerate((0.1, 0.2, 0.3, 0.5))},
+    "AN1": 5.0,
+    "AO1": None,
+    "AP1": "x",
+}
+_RANGES = (
+    "AA1:AA8", "AB1:AB8", "AC1:AC8", "AD1:AD4", "AE1:AE4", "AF1:AF4", "AG1:AG4", "AH1:AH4",
+    "AJ1:AJ4",
+    "AK1:AK4", "AL1:AL3", "AN1", "AO1", "AP1", "AA1:AB8", "AA1:AA2", "{1,2,3,4}", "{1;2;3;4}", "1",
+    '"3"', "TRUE", "1/0",
+)  # fmt: skip
+_PAIR_RANGES = (
+    ("AA1:AA8", "AB1:AB8"), ("AB1:AB8", "AA1:AA8"), ("AJ1:AJ4", "AK1:AK4"), ("AJ1:AJ4", "AF1:AF4"),
+    ("AF1:AF4", "AJ1:AJ4"), ("AE1:AE4", "AF1:AF4"), ("AC1:AC8", "AA1:AA8"), ("AA1:AA8", "AC1:AC8"),
+    ("AD1:AD4", "AJ1:AJ4"), ("AJ1:AJ4", "AD1:AD4"), ("AJ1:AJ4", "AL1:AL3"), ("AG1:AG4", "AJ1:AJ4"),
+    ("AH1:AH4", "AJ1:AJ4"), ("AJ1:AJ4", "AG1:AG4"), ("{1,2,3}", "{2,4,7}"), ("{1;2;3}", "{2,4,7}"),
+    ("AN1", "AN1"), ("AO1", "AO1"), ("1", "2"), ("AA1:AB4", "AB1:AC4"), ("AA1:AA2", "AB1:AB2"),
+)  # fmt: skip
+
+
+def statistics_family() -> list[Case]:
+    cases = []
+    for name in ("AVEDEV", "DEVSQ", "GEOMEAN", "HARMEAN", "KURT", "SKEW", "SKEW.P"):
+        call = _file(name)
+        cases += [Case(name.lower(), f"{call}({r})") for r in _RANGES]
+        cases += [
+            Case(name.lower(), f"{call}({a})")
+            for a in (
+                "1,2,3,4",
+                "AA1:AA4,5",
+                '1,"2",3,TRUE',
+                "1,2,AO1,4",
+                '1,2,"x",4',
+                "AJ1:AJ4,AK1:AK4",
+                "1,,3,4",
+            )
+        ]
+    for name in (
+        "PEARSON", "RSQ", "SLOPE", "INTERCEPT", "STEYX", "COVAR", "COVARIANCE.P", "COVARIANCE.S",
+    ):  # fmt: skip
+        call = _file(name)
+        cases += [Case(name.lower(), f"{call}({y},{x})") for y, x in _PAIR_RANGES]
+    for name in ("FORECAST", "FORECAST.LINEAR"):
+        call = _file(name)
+        for at in ("5", "0", "-1.5", '"2"', "TRUE", "AO1", "AP1", "1/0"):
+            cases += [Case(name.lower(), f"{call}({at},{y},{x})") for y, x in _PAIR_RANGES]
+    for r in _RANGES:
+        cases += [
+            Case("trimmean", f"TRIMMEAN({r},{k})")
+            for k in ("0", "0.2", "0.25", "0.5", "0.99", "1", "-0.1", '"0.5"', "TRUE", "AO1", "1/0")
+        ]
+    values = (
+        0.0,
+        1.0,
+        -1.0,
+        0.5,
+        -0.5,
+        0.99,
+        1.5,
+        2.5,
+        40.0,
+        -40.0,
+        1e-5,
+        1e300,
+        "1",
+        "abc",
+        True,
+        None,
+        NA,
+    )
+    cases += _one(["FISHER", "FISHERINV", "PHI", "GAUSS"], values)
+    cases += [
+        Case("standardize", "STANDARDIZE({1},{2},{3})", (x, m, sd))
+        for x in values
+        for m in (0.0, 1.0, "2", True, None, NA)
+        for sd in (1.0, 2.5, 0.0, -1.0, "2", True, None, NA)
+    ]
+    for name in ("PERCENTRANK", "PERCENTRANK.INC", "PERCENTRANK.EXC"):
+        call = _file(name)
+        for r in ("AA1:AA8", "AC1:AC8", "AD1:AD4", "AF1:AF4", "{1,2,3,4}", "AN1", "AO1", "AE1:AE4"):
+            for x in (
+                "1",
+                "2",
+                "3",
+                "4.5",
+                "4.25",
+                "21",
+                "0",
+                "22",
+                '"2"',
+                "TRUE",
+                "AO1",
+                "AP1",
+                "1/0",
+            ):
+                cases.append(Case(name.lower(), f"{call}({r},{x})"))
+                for sig in (
+                    "1",
+                    "2",
+                    "5",
+                    "15",
+                    "16",
+                    "0",
+                    "-1",
+                    "2.9",
+                    '"2"',
+                    "TRUE",
+                    "AO1",
+                    "1/0",
+                ):
+                    if r in ("AA1:AA8", "AC1:AC8") and x in ("2", "4.25", "22"):
+                        cases.append(Case(name.lower(), f"{call}({r},{x},{sig})"))
+    quantiles = (
+        "0",
+        "0.1",
+        "0.111",
+        "0.25",
+        "0.5",
+        "0.75",
+        "0.9",
+        "0.99",
+        "1",
+        "1.1",
+        "-0.1",
+        '"0.5"',
+        "TRUE",
+        "AO1",
+        "1/0",
+    )
+    for r in ("AA1:AA8", "AC1:AC8", "AD1:AD4", "AF1:AF4", "{1,2,3,4}", "AN1", "AO1", "AA1:AB8"):
+        cases += [Case("percentile.exc", f"_xlfn.PERCENTILE.EXC({r},{k})") for k in quantiles]
+        cases += [
+            Case("quartile.exc", f"_xlfn.QUARTILE.EXC({r},{k})")
+            for k in ("0", "1", "2", "3", "4", "2.9", "-1", '"2"', "TRUE", "AO1", "1/0")
+        ]
+    for xs, ps in (
+        ("AJ1:AJ4", "AI1:AI4"), ("AJ1:AJ4", "AM1:AM4"), ("AL1:AL3", "AI1:AI4"), ("AJ1:AJ4",
+        "AF1:AF4"),
+        ("AK1:AK4", "AI1:AI4"), ("AD1:AD4", "AI1:AI4"), ("{1,2,3,4}", "{0.1,0.2,0.3,0.4}"),
+        ("AC1:AC4", "AI1:AI4"),
+    ):  # fmt: skip
+        for bounds in (
+            "2",
+            "2,3",
+            "0,10",
+            "3,2",
+            "4",
+            "2.5",
+            '"2"',
+            "TRUE",
+            "AO1",
+            "2,AO1",
+            "1/0",
+            "2,1/0",
+        ):
+            cases.append(Case("prob", f"PROB({xs},{ps},{bounds})"))
+    for name in ("CONFIDENCE", "CONFIDENCE.NORM"):
+        call = _file(name)
+        cases += [
+            Case(name.lower(), f"{call}({{1}},{{2}},{{3}})", (a, sd, n))
+            for a in (0.05, 0.5, 0.0, 1.0, 1.5, -0.1, "0.1", True, None, NA)
+            for sd in (1.0, 2.5, 0.0, -1.0, "2", True, None, NA)
+            for n in (1.0, 50.0, 1.9, 0.5, 0.0, -1.0, "2", True, None, NA)
+        ]
+    return cases
+
+
+_FINANCE_FAMILY_TABLE: dict[str, Input] = {
+    **{f"AA{i + 1}": v for i, v in enumerate((-1000.0, 300.0, 400.0, 500.0, 200.0))},
+    **{f"AB{i + 1}": v for i, v in enumerate((0.1, 0.05, 0.2))},
+    **{f"AC{i + 1}": v for i, v in enumerate((100.0, 200.0, 300.0))},
+    **{f"AD{i + 1}": v for i, v in enumerate((-100.0, -200.0))},
+    **{f"AE{i + 1}": v for i, v in enumerate((0.1, "x", None, True, 0.2))},
+    **{f"AF{i + 1}": v for i, v in enumerate((0.1, NA))},
+    "AG1": None,
+    "AH1": 0.1,
+}
+_SETTLES = (36526.0, 36600.0, 36951.5, 40000.0, 0.0, -1.0, "1/15/2000", True, None, NA)
+_MATURES = (
+    36892.0,
+    36527.0,
+    36526.0,
+    36525.0,
+    37257.0,
+    2958465.0,
+    2958466.0,
+    "1/15/2001",
+    True,
+    None,
+    NA,
+)
+
+
+def finance_family() -> list[Case]:
+    cases = []
+    rates = (0.1, 0.05 / 12, 0.0, -0.1, 1.0, 1e-10, "0.1", True, None, NA)
+    for name in ("CUMIPMT", "CUMPRINC"):
+        cases += [
+            Case(name.lower(), f"{name}({{1}},{{2}},{{3}},{{4}},{{5}},{{6}})", (r, n, pv, a, b, t))
+            for r in rates
+            for n, pv in (
+                (12.0, 1000.0),
+                (360.0, 125000.0),
+                (12.5, 1000.0),
+                (0.0, 1000.0),
+                (12.0, 0.0),
+                (12.0, -1000.0),
+                ("12", "1000"),
+                (None, None),
+                (NA, 1.0),
+            )
+            for a, b in (
+                (1.0, 1.0),
+                (1.0, 12.0),
+                (2.0, 5.0),
+                (5.0, 2.0),
+                (0.0, 1.0),
+                (1.0, 13.0),
+                (1.5, 3.5),
+                ("1", "2"),
+                (True, 2.0),
+                (None, 1.0),
+                (NA, 1.0),
+            )
+            for t in (0.0, 1.0, 2.0)
+        ]
+    cost = (
+        (1000.0, 100.0, 5.0),
+        (1000000.0, 100000.0, 6.0),
+        (10000.0, 0.0, 5.0),
+        (1000.0, 1000.0, 5.0),
+        (100.0, 1000.0, 5.0),
+        (0.0, 0.0, 5.0),
+        (-1000.0, 100.0, 5.0),
+        (1000.0, -100.0, 5.0),
+        (1000.0, 100.0, 0.0),
+        (1000.0, 100.0, -1.0),
+        (1000.0, 100.0, 2.5),
+        ("1000", "100", "5"),
+        (True, 0.0, 2.0),
+        (None, 0.0, 2.0),
+        (NA, 1.0, 2.0),
+        (1.0, NA, 2.0),
+        (1.0, 2.0, NA),
+    )
+    periods = (1.0, 2.0, 3.0, 5.0, 6.0, 7.0, 0.0, -1.0, 1.5, 2.5, 4.9, "2", True, None, NA)
+    for c, s, life in cost:
+        for per in periods:
+            cases.append(Case("db", "DB({1},{2},{3},{4})", (c, s, life, per)))
+            cases.append(Case("ddb", "DDB({1},{2},{3},{4})", (c, s, life, per)))
+            cases.append(Case("syd", "SYD({1},{2},{3},{4})", (c, s, life, per)))
+            for m in (1.0, 6.0, 7.0, 12.0, 13.0, 0.0, -1.0, 6.5, "6", True, None, NA):
+                if per in (1.0, 2.0, 6.0, 7.0, 1.5):
+                    cases.append(Case("db", "DB({1},{2},{3},{4},{5})", (c, s, life, per, m)))
+            for factor in (1.0, 1.5, 2.0, 3.0, 0.0, -1.0, 0.5, "2", True, None, NA):
+                if per in (1.0, 2.0, 5.0, 1.5):
+                    cases.append(Case("ddb", "DDB({1},{2},{3},{4},{5})", (c, s, life, per, factor)))
+    # DISC, INTRATE, RECEIVED, PRICEDISC, YIELDDISC: settlement, maturity, a pair, basis.
+    money = (
+        (97.0, 100.0),
+        (1000.0, 1050.0),
+        (0.05, 100.0),
+        (0.0, 100.0),
+        (97.0, 0.0),
+        (-1.0, 100.0),
+        (97.0, -1.0),
+        ("97", "100"),
+        (True, 100.0),
+        (None, 100.0),
+        (NA, 100.0),
+        (97.0, NA),
+    )
+    for name in ("DISC", "INTRATE", "RECEIVED", "PRICEDISC", "YIELDDISC"):
+        for st in _SETTLES:
+            for mt in _MATURES:
+                for a, b in money[:2] if st != 36526.0 or mt != 36892.0 else money:
+                    cases.append(
+                        Case(name.lower(), f"{name}({{1}},{{2}},{{3}},{{4}})", (st, mt, a, b))
+                    )
+        for basis in (0.0, 1.0, 2.0, 3.0, 4.0, 5.0, -1.0, 1.9, "1", True, None, NA):
+            for st, mt in (
+                (36526.0, 36892.0),
+                (36585.0, 36616.0),
+                (36950.0, 37315.0),
+                (36526.0, 45000.0),
+            ):
+                for a, b in money[:3]:
+                    cases.append(
+                        Case(
+                            name.lower(),
+                            f"{name}({{1}},{{2}},{{3}},{{4}},{{5}})",
+                            (st, mt, a, b, basis),
+                        )
+                    )
+    for name in ("TBILLEQ", "TBILLPRICE", "TBILLYIELD"):
+        for st in _SETTLES:
+            for mt in (
+                36527.0,
+                36616.0,
+                36708.0,
+                36709.0,
+                36800.0,
+                36891.0,
+                36892.0,
+                36893.0,
+                36526.0,
+                36525.0,
+                "6/1/2000",
+                True,
+                None,
+                NA,
+            ):
+                for x in (0.05, 0.0914, 98.45, 1.0, 0.0, -1.0, "0.05", True, None, NA):
+                    if st == 36526.0 or x == 0.05:
+                        cases.append(Case(name.lower(), f"{name}({{1}},{{2}},{{3}})", (st, mt, x)))
+    values = (1.125, 1.0625, 1.02, 1.1, 2.5, 0.0, 1.0, -1.125, 1e10, "1.5", True, None, NA)
+    denominators = (
+        16.0,
+        32.0,
+        8.0,
+        10.0,
+        100.0,
+        1.0,
+        0.5,
+        0.0,
+        -1.0,
+        16.9,
+        3.0,
+        1000.0,
+        1.5,
+        "16",
+        True,
+        None,
+        NA,
+    )
+    for name in ("DOLLARDE", "DOLLARFR"):
+        cases += [
+            Case(name.lower(), f"{name}({{1}},{{2}})", (v, d)) for v in values for d in denominators
+        ]
+    pcts = (0.05, 0.1, 0.0, -0.05, -1.0, -2.0, 1.0, 1e-10, "0.1", True, None, NA)
+    nums = (12.0, 4.0, 1.0, 0.5, 0.0, -1.0, 12.9, 1e6, "4", True, None, NA)
+    for name in ("EFFECT", "NOMINAL"):
+        cases += [Case(name.lower(), f"{name}({{1}},{{2}})", (r, k)) for r in pcts for k in nums]
+    for pv in (1000.0, 0.0, -1000.0, "1000", True, None, NA):
+        for sched in (
+            "AB1:AB3",
+            "AC1:AC3",
+            "AE1:AE5",
+            "AF1:AF2",
+            "AG1",
+            "AH1",
+            "{0.1,0.2}",
+            "{0.1;0.2}",
+            "0.1",
+            '"0.1"',
+            "TRUE",
+            "1/0",
+        ):
+            cases.append(Case("fvschedule", f"FVSCHEDULE({{1}},{sched})", (pv,)))
+    cases += [
+        Case("ispmt", "ISPMT({1},{2},{3},{4})", (r, per, n, pv))
+        for r in rates
+        for per in (0.0, 1.0, 5.0, 12.0, 13.0, -1.0, 1.5, "1", True, None, NA)
+        for n in (12.0, 0.0, -1.0, 12.5)
+        for pv in (1000.0, 0.0, -1000.0)
+    ]
+    for flows in (
+        "AA1:AA5",
+        "AC1:AC3",
+        "AD1:AD2",
+        "AE1:AE5",
+        "AF1:AF2",
+        "{-100,50,60}",
+        "{-100;50;60}",
+        "AG1",
+        "100",
+    ):
+        for f in (0.1, 0.0, -0.5, -1.0, -2.0, "0.1", True, None, NA):
+            for g in (0.12, 0.0, -1.0, "0.1", True, None, NA):
+                cases.append(Case("mirr", f"MIRR({flows},{{1}},{{2}})", (f, g)))
+    trio = (0.05, 0.025, 1.0, 0.0, -0.05, -1.0, "0.05", True, None, NA)
+    amounts = (1000.0, 2000.0, 0.0, -1000.0, "2000", True, None, NA)
+    cases += [
+        Case("pduration", "_xlfn.PDURATION({1},{2},{3})", (r, a, b))
+        for r in trio
+        for a in amounts
+        for b in amounts
+    ]
+    cases += [
+        Case("rri", "_xlfn.RRI({1},{2},{3})", (n, a, b))
+        for n in (96.0, 1.0, 0.5, 0.0, -1.0, 96.9, "12", True, None, NA)
+        for a in amounts
+        for b in amounts
+    ]
+    return cases
+
+
 def mac_gaps() -> list[Case]:
     """Whether Excel for Mac computes functions a source says it lacks, in each file form."""
     url = '("a b&c=d/é")'
@@ -2651,6 +3206,10 @@ SUITES = {
     "math_integers": Suite(math_integers, fixed=_INTEGERS_TABLE),
     "iteration": Suite(iteration),
     "mac_gaps": Suite(mac_gaps),
+    "database_family": Suite(database_family, fixed={**MISC_TABLE, **_DB_EXTRA}),
+    "engineering_family": Suite(engineering_family),
+    "statistics_family": Suite(statistics_family, fixed=_STATS_FAMILY_TABLE),
+    "finance_family": Suite(finance_family, fixed=_FINANCE_FAMILY_TABLE),
     "text_family": Suite(text_family, fixed=_TEXT_TABLE),
     "dates_family": Suite(dates_family),
     "info_family": Suite(info_family, fixed=_INFO_TABLE),

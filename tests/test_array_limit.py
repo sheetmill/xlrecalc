@@ -155,3 +155,15 @@ def test_the_writer_keeps_the_cached_value():
         with Book(path) as book:  # the file's own cached value, untouched
             (cell,) = list(book.cells("S"))
         assert (cell.value, cell.formula.text) == (3.0, "SUMPRODUCT(D!A:XFD*1)")
+
+
+@pytest.mark.parametrize(
+    "formula",
+    ["DSUM(D!A:XFD,1,D!A:XFD)", "DCOUNT(D!A:XFD,,D!A:XFD)", "DCOUNTA(D!A:XFD,1,D!A:XFD)"],
+)
+@bounded
+def test_the_database_functions_read_only_the_cells_a_sheet_holds(formula):
+    """Over a whole sheet of two cells they are computed, not refused, in little memory."""
+    book = recalculated(two_sheets(formula))
+    assert book.value("S!A1") != 7.0
+    assert not book.report.unsupported
