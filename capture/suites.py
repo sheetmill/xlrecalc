@@ -2155,6 +2155,401 @@ def math_integers() -> list[Case]:
     return cases
 
 
+_CONTROL = FormulaInput('=CHAR(1)&"a"&CHAR(9)&"b"&CHAR(10)&CHAR(31)&"c"&CHAR(127)&CHAR(129)')
+_TEXTS: tuple[Input, ...] = (
+    "",
+    " ",
+    "abc",
+    "ABC",
+    "a b-c d'e",
+    "hello WORLD 1st",
+    "éa ßx ÀB",
+    "x1y2z",
+    "1",
+    "1.5",
+    "$1.50",
+    "12%",
+    "1,234.5",
+    "1E3",
+    "TRUE",
+    "#N/A",
+    "€",
+    "😀x",
+    _CONTROL,
+    1.0,
+    0.0,
+    -2.5,
+    1e15,
+    True,
+    False,
+    None,
+    NA,
+)
+_TEXT_TABLE: dict[str, Input] = {
+    "AA1": "x",
+    "AB1": 1.5,
+    "AA2": None,
+    "AB2": True,
+    "AA3": NA,
+    "AB3": 'a"b',
+}
+_UNICODE_POINTS: tuple[Input, ...] = (
+    0.0, 1.0, 9.0, 10.0, 31.0, 32.0, 65.0, 127.0, 128.0, 160.0, 255.0, 256.0, 8364.0, 55295.0,
+    55296.0, 57343.0, 57344.0, 65533.0, 65534.0, 65535.0, 65536.0, 128512.0, 1114111.0, 1114112.0,
+    -1.0, 1.9, "65", "abc", True, None, NA,
+)  # fmt: skip
+
+
+def _optional(function: str, *fixed: str) -> list[str]:
+    """A call with each optional argument dropped in turn, from the last."""
+    return [f"{function}({','.join(fixed[:k])})" for k in range(1, len(fixed) + 1)]
+
+
+def text_family() -> list[Case]:
+    cases = _one(["PROPER", "CLEAN", "T", "UNICODE", "LENB"], _TEXTS)
+    cases += _one(["UNICHAR"], _UNICODE_POINTS)
+    cases += [Case("t", "T($AA$1:$AB$2)"), Case("t", "T($AB$1:$AB$2)"), Case("t", "T(1/0)")]
+    # SEARCH, FINDB and SEARCHB: wildcards, escapes, starts.
+    finds = ("a", "A", "?", "*", "~", "~*", "~?", "a*c", "b?", "", "zz", "é", 1.0, True, None, NA)
+    withins = ("abcABC", "a*c?~", "", "éa1", 123.5, True, None, NA)
+    starts = (1.0, 2.0, 3.9, 0.0, -1.0, 7.0, 100.0, "2", True, None, NA)
+    for name in ("SEARCH", "SEARCHB", "FINDB"):
+        cases += [
+            Case(name.lower(), f"{name}({{1}},{{2}})", (f, w)) for f in finds for w in withins
+        ]
+        cases += [
+            Case(name.lower(), f"{name}({{1}},{{2}},{{3}})", (f, w, st))
+            for f in ("a", "?", "*", "", "zz")
+            for w in withins[:4]
+            for st in starts
+        ]
+    # SUBSTITUTE.
+    for text in ("aaa", "a.b.a", "AaA", "", "abab", 123.0, True, None, NA):
+        for old in ("a", "", "ab", "A", 1.0, NA):
+            for new in ("x", "", "aa", 2.0):
+                cases.append(Case("substitute", "SUBSTITUTE({1},{2},{3})", (text, old, new)))
+    cases += [
+        Case("substitute", "SUBSTITUTE({1},{2},{3},{4})", (text, old, "x", k))
+        for text in ("aaa", "abab", "AaA", "", 1212.0)
+        for old in ("a", "", "ab", 1.0)
+        for k in (1.0, 2.0, 3.0, 4.0, 0.0, -1.0, 1.5, 0.5, "2", "x", True, None, NA)
+    ]
+    # NUMBERVALUE.
+    numbers = (
+        "2.500,27", "1,234.5", " 1 2 ", "", " ", "%", "1%", "1%%", "1.2.3", "1,2,3", "abc", "1E3",
+        "1e-2", "-5", "+5", "(5)", "$5", "TRUE", "1 . 5", ",5", "5,", ".5", "5.", "3.5%", "1,5%",
+        "1.000.000", "1E400", "--5", 5.0, -2.5, True, None, NA,
+    )  # fmt: skip
+    cases += [Case("numbervalue", "_xlfn.NUMBERVALUE({1})", (t,)) for t in numbers]
+    cases += [
+        Case("numbervalue", "_xlfn.NUMBERVALUE({1},{2},{3})", (t, d, g))
+        for t in numbers
+        for d, g in (
+            (".", ","), (",", "."), (",", " "), (".", "."), (",", ","), ("", ","), (".", ""),
+            ("ab", "cd"), (None, ","), (".", None), (1.0, 2.0), (True, ","), (NA, ","), (".", NA),
+        )
+    ]  # fmt: skip
+    cases += [
+        Case("numbervalue", "_xlfn.NUMBERVALUE({1},{2})", (t, d))
+        for t in ("1,5", "1.5", "1,234.5")
+        for d in (",", ".", "ab")
+    ]
+    # USDOLLAR.
+    amounts = (
+        0.0,
+        1.0,
+        -1.0,
+        1234.567,
+        -1234.567,
+        0.005,
+        0.015,
+        1e15,
+        1e300,
+        "2",
+        "abc",
+        True,
+        None,
+        NA,
+    )
+    cases += [Case("usdollar", "USDOLLAR({1})", (x,)) for x in amounts]
+    cases += [
+        Case("usdollar", "USDOLLAR({1},{2})", (x, d))
+        for x in amounts
+        for d in (0.0, 2.0, -2.0, 2.9, 128.0, 129.0, -400.0, "1", True, None, NA)
+    ]
+    # VALUETOTEXT and ARRAYTOTEXT.
+    values = ("abc", 'a"b', "", 1.0, 0.5, 1e15, 1e-7, 1 / 3, True, False, None, NA, "😀")
+    formats = (0.0, 1.0, 2.0, -1.0, 0.9, 1.9, "1", True, None, NA)
+    for name in ("VALUETOTEXT", "ARRAYTOTEXT"):
+        cases += [Case(name.lower(), f"_xlfn.{name}({{1}})", (v,)) for v in values]
+        cases += [
+            Case(name.lower(), f"_xlfn.{name}({{1}},{{2}})", (v, f))
+            for v in values
+            for f in formats
+        ]
+        for arg in (
+            "$AA$1:$AB$2", "$AA$1:$AB$3", "$AA$1:$AA$2", "$AB$1:$AB$3", '{1,"a";TRUE,#N/A}',
+            "{1,2,3}", "{1;2;3}", "$AA$1", "$AA$2", "$AC$1:$AC$3",
+        ):  # fmt: skip
+            cases += [Case(name.lower(), f"_xlfn.{name}({arg})")]
+            cases += [Case(name.lower(), f"_xlfn.{name}({arg},{f})") for f in (0, 1, 2)]
+    # TEXTBEFORE and TEXTAFTER.
+    for name in ("TEXTBEFORE", "TEXTAFTER"):
+        call = f"_xlfn.{name}"
+        for t in ("a,b,c", "A-b-A", "abc", "", ",a,", "a,,b", 5.5, True, None, NA):
+            for d in (",", "-", "a", "", "zz", 5.0, None, NA):
+                cases.append(Case(name.lower(), f"{call}({{1}},{{2}})", (t, d)))
+        for t in ("a,b,c", "A-b-A", "abc", "", ",a,", "a,,b"):
+            for d in (",", "a", "", "zz"):
+                for k in (
+                    1.0,
+                    2.0,
+                    3.0,
+                    4.0,
+                    -1.0,
+                    -2.0,
+                    -3.0,
+                    -4.0,
+                    0.0,
+                    1.5,
+                    -1.5,
+                    "2",
+                    True,
+                    None,
+                    NA,
+                ):
+                    cases.append(Case(name.lower(), f"{call}({{1}},{{2}},{{3}})", (t, d, k)))
+                for mode in (0.0, 1.0, 2.0, -1.0, 0.5, "1", True, None, NA):
+                    cases.append(Case(name.lower(), f"{call}({{1}},{{2}},1,{{3}})", (t, d, mode)))
+                    cases.append(Case(name.lower(), f"{call}({{1}},{{2}},-1,{{3}})", (t, d, mode)))
+                for end in (0.0, 1.0, 2.0, -1.0, 0.5, "1", True, None, NA):
+                    for k in (1, 2, -1, -2, 5, -5):
+                        cases.append(
+                            Case(name.lower(), f"{call}({{1}},{{2}},{k},0,{{3}})", (t, d, end))
+                        )
+                for nf in ("none", "", 0.0, True, NA):
+                    cases.append(Case(name.lower(), f"{call}({{1}},{{2}},1,0,0,{{3}})", (t, d, nf)))
+                    cases.append(Case(name.lower(), f"{call}({{1}},{{2}},9,0,1,{{3}})", (t, d, nf)))
+        cases += [
+            Case(name.lower(), f'{call}("a-b,c",{{",","-"}})'),
+            Case(name.lower(), f'{call}("a-b,c",{{",","-"}},2)'),
+            Case(name.lower(), f'{call}("a-b,c",{{",","-"}},-1)'),
+            Case(name.lower(), f'{call}("aXbxc","x",1,1)'),
+            Case(name.lower(), f'{call}("aXbxc","x",-1,1)'),
+            Case(name.lower(), f'{call}("aXbxc","x",2,0)'),
+            Case(name.lower(), f'{call}("a",$AA$1:$AA$2)'),
+            Case(name.lower(), f'{call}("axb",$AA$1:$AA$2)'),
+        ]
+    # The byte functions, on a language setting without double-byte text.
+    byte_texts = ("abc", "é€", "😀x", "", 1.5, True, None, NA)
+    counts = (0.0, 1.0, 2.0, 100.0, -1.0, 1.5, "1", True, None, NA)
+    for name in ("LEFTB", "RIGHTB"):
+        cases += [Case(name.lower(), f"{name}({{1}})", (t,)) for t in byte_texts]
+        cases += [
+            Case(name.lower(), f"{name}({{1}},{{2}})", (t, n)) for t in byte_texts for n in counts
+        ]
+    cases += [
+        Case("midb", "MIDB({1},{2},{3})", (t, st, n))
+        for t in byte_texts
+        for st in (0.0, 1.0, 2.0, 5.0, 1.5, True, None, NA)
+        for n in (0.0, 1.0, 2.0, -1.0, 100.0, None, NA)
+    ]
+    cases += [
+        Case("replaceb", "REPLACEB({1},{2},{3},{4})", (t, st, n, new))
+        for t in byte_texts
+        for st in (0.0, 1.0, 2.0, 5.0, 1.5, None, NA)
+        for n in (0.0, 1.0, 2.0, -1.0, 100.0, None)
+        for new in ("X", "", 1.0, NA)
+    ]
+    return cases
+
+
+_DATE_VALUES: tuple[Input, ...] = (
+    0.0, 1.0, 59.0, 60.0, 61.0, 366.0, 367.0, 1.5, -1.0, 36526.0, 36527.25, 38353.0, 39448.0,
+    42370.0,
+    42736.0, 43101.0, 43466.0, 43831.0, 44197.0, 45292.0, 45657.0, 2958465.0, 2958466.0,
+    "2024-01-31", "1/1/2021", "abc", "", True, None, NA,
+)  # fmt: skip
+_DATEDIF_DATES: tuple[Input, ...] = (
+    1.0, 59.0, 60.0, 61.0, 366.0, 36526.0, 36585.0, 36586.0, 36616.0, 36617.0, 36950.0, 36981.0,
+    37011.0, 45350.0, 45351.0, 45382.0, 2958465.0, 0.0, -1.0, 36526.75, "1/31/2001", True, None, NA,
+)  # fmt: skip
+
+
+def dates_family() -> list[Case]:
+    cases = [
+        Case("days", "_xlfn.DAYS({1},{2})", (a, b))
+        for a in _DATE_VALUES
+        for b in (
+            0.0,
+            1.0,
+            1.5,
+            60.0,
+            36526.0,
+            2958465.0,
+            2958466.0,
+            -1.0,
+            "1/1/2021",
+            "abc",
+            True,
+            None,
+            NA,
+        )
+    ]
+    cases += _one(["ISOWEEKNUM"], _DATE_VALUES)
+    cases += [Case("isoweeknum", "_xlfn.ISOWEEKNUM({1})", (float(d),)) for d in range(42368, 42378)]
+    cases += [Case("weeknum", "WEEKNUM({1})", (d,)) for d in _DATE_VALUES]
+    cases += [
+        Case("weeknum", "WEEKNUM({1},{2})", (d, kind))
+        for d in (*_DATE_VALUES, *(float(n) for n in range(42368, 42378)))
+        for kind in (
+            1.0, 2.0, 3.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 21.0, 22.0, 0.0,
+            -1.0,
+            1.5, 11.9, "2", "abc", True, None, NA,
+        )
+    ]  # fmt: skip
+    units = ("Y", "M", "D", "MD", "YM", "YD", "y", "md", "", "X", 1.0, True, None, NA)
+    cases += [
+        Case("datedif", "DATEDIF({1},{2},{3})", (a, b, u))
+        for a in _DATEDIF_DATES
+        for b in _DATEDIF_DATES
+        for u in units
+        if u in ("Y", "M", "D", "MD", "YM", "YD") or a == 36526.0
+    ]
+    return cases
+
+
+_INFO_TABLE: dict[str, Input] = {
+    "AA1": 1.0,
+    "AA2": "text",
+    "AA3": FormulaInput("=1+1"),
+    "AA4": None,
+    "AA5": True,
+    "AA6": NA,
+    "AA7": FormulaInput('=TRIM("made")'),
+    "AA8": FormulaInput("=NA()"),
+    "AA9": FormulaInput('=IF(TRUE,"a","b")&" ""q"""'),
+    "AB1": FormulaInput("={1,2;3,4}"),
+    "AC1": FormulaInput("=SUM($AA$1:$AA$1)"),
+    "AD1": FormulaInput("=_xlfn.ANCHORARRAY(AC1)"),
+}
+_ERRORS: tuple[Input, ...] = tuple(
+    FormulaInput(f"={f}") for f in ("1/0", "NA()", '"a"+1', "SQRT(-1)", "#NULL!", "#REF!", "#NAME?")
+)
+_KINDS: tuple[Input, ...] = (
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    -1.0,
+    -2.0,
+    2.5,
+    3.5,
+    4.9,
+    1e15,
+    1e300,
+    "2",
+    "3",
+    "abc",
+    "",
+    True,
+    False,
+    None,
+    NA,
+    *_ERRORS,
+)
+
+
+# Excel refuses a file holding one of these functions over an argument that is no reference (-50).
+_REFERENCE_ONLY = frozenset({"ISFORMULA", "FORMULATEXT", "AREAS"})
+_REFUSED_ARGUMENTS = frozenset(
+    {"1", '"a"', '"cases"', '"nosuch"', "TRUE", "1/0", "{1,2}", "NA()", "SUM($AA$1)", "#N/A"}
+)
+
+
+def info_family() -> list[Case]:
+    cases = [Case("xor", "_xlfn.XOR({1})", (v,)) for v in _KINDS]
+    cases += [
+        Case("xor", "_xlfn.XOR({1},{2})", (a, b))
+        for a in (True, False, 1.0, 0.0, "TRUE", "abc", "", None, NA)
+        for b in (True, False, 1.0, 0.0, "TRUE", "abc", "", None, NA)
+    ]
+    cases += [
+        Case("xor", f"_xlfn.XOR({arg})")
+        for arg in (
+            "$AA$1:$AA$2", "$AA$2:$AA$2", "$AA$4:$AA$5", "$AA$1:$AA$6", "{TRUE,TRUE,TRUE}",
+            "{TRUE,FALSE,0,1}",
+            '{"a",TRUE}', "$AA$4", "$AA$1,$AA$5", "TRUE,TRUE,TRUE", '"TRUE"', '"abc",TRUE',
+        )
+    ]  # fmt: skip
+    cases += _one(["ISEVEN", "ISODD", "ISNONTEXT", "TYPE", "ERROR.TYPE"], _KINDS)
+    for name in (
+        "ISEVEN",
+        "ISODD",
+        "ISNONTEXT",
+        "ISREF",
+        "TYPE",
+        "ERROR.TYPE",
+        "ISFORMULA",
+        "FORMULATEXT",
+    ):
+        call = _file(name)
+        for arg in (
+            "$AA$1", "$AA$2", "$AA$3", "$AA$4", "$AA$5", "$AA$6", "$AA$7", "$AA$8", "$AA$9",
+            "$AB$1",
+            "$AA$1:$AA$2", "$AA$3:$AA$4", "$AA$4:$AA$5", "$AA$6:$AA$8", "OFFSET($AA$1,2,0)",
+            'INDIRECT("AA3")', "1", '"a"', "TRUE", "1/0", "{1,2}", "NA()", "($AA$1,$AA$2)",
+            "$AA$1 $AA$2", "$AA$1:$AA$2 $AA$2", "INDEX($AA$1:$AA$3,3)", "IF(TRUE,$AA$3)",
+            "NOSUCHNAME",
+            'SUM($AA$1)', "#REF!", "#N/A",
+        ):  # fmt: skip
+            if name in _REFERENCE_ONLY and arg in _REFUSED_ARGUMENTS:
+                continue
+            cases.append(Case(name.lower(), f"{call}({arg})"))
+    for name in ("SHEET", "SHEETS", "AREAS"):
+        call = _file(name)
+        for arg in (
+            "$AA$1", "$AA$1:$AA$3", "($AA$1,$AB$1)", "($AA$1,$AB$1,$AC$1)", "$AA$1 $AA$1",
+            "$AA$1 $AB$1",
+            "OFFSET($AA$1,1,0)", 'INDIRECT("AA3")', "1", '"cases"', '"nosuch"', '"a"', "TRUE",
+            "1/0", "{1,2}",
+            "NOSUCHNAME", "#REF!", "IF(TRUE,$AA$1)", "INDEX($AA$1:$AA$3,2)", "cases!$AA$1",
+            "'cases'!A:A",
+        ):  # fmt: skip
+            if name in _REFERENCE_ONLY and arg in _REFUSED_ARGUMENTS:
+                continue
+            cases.append(Case(name.lower(), f"{call}({arg})"))
+    cases += [Case("sheet", "_xlfn.SHEET()"), Case("sheets", "_xlfn.SHEETS()")]
+    # HYPERLINK computes its friendly name, with fixed local text: nothing is followed.
+    for link in ("#cases!A1", "local.xlsx", "", 5.0, True, None, NA):
+        cases.append(Case("hyperlink", "HYPERLINK({1})", (link,)))
+        for name in ("shown", "", 5.0, 0.5, True, None, NA):
+            cases.append(Case("hyperlink", "HYPERLINK({1},{2})", (link, name)))
+    cases += [
+        Case("hyperlink", "HYPERLINK($AA$1:$AA$2)"),
+        Case("hyperlink", 'HYPERLINK("#cases!A1",$AA$1:$AA$2)'),
+        Case("hyperlink", 'HYPERLINK("#cases!A1",1)+1'),
+        Case("hyperlink", 'LEN(HYPERLINK("#cases!A1","abc"))'),
+    ]
+    return cases
+
+
+def mac_gaps() -> list[Case]:
+    """Whether Excel for Mac computes functions a source says it lacks, in each file form."""
+    url = '("a b&c=d/é")'
+    xml = '("<a><b>1</b><b>x</b></a>","//b")'
+    return [
+        Case("encodeurl", f"_xlfn.ENCODEURL{url}"),
+        Case("encodeurl", f"ENCODEURL{url}"),
+        Case("filterxml", f"_xlfn.FILTERXML{xml}"),
+        Case("filterxml", f"FILTERXML{xml}"),
+        Case("euroconvert", 'EUROCONVERT(1,"EUR","DEM")'),
+        Case("euroconvert", '_xlfn.EUROCONVERT(1,"EUR","DEM")'),
+        Case("control", "SUM(1,2)"),
+        Case("control", "NOSUCHFUNCTION(1)"),
+    ]
+
+
 _INTEGERS_TABLE: dict[str, Input] = {
     "AA1": 1.0, "AA2": 2.0, "AA3": 3.0, "AA4": "x", "AA5": NA, "AA6": 2.0,
     "AB1": 4.0, "AB2": 5.0, "AB3": 6.0, "AB4": 7.0, "AB5": 1.0, "AB6": 3.0,
@@ -2185,4 +2580,8 @@ SUITES = {
     "math_trig": Suite(math_trig),
     "math_integers": Suite(math_integers, fixed=_INTEGERS_TABLE),
     "iteration": Suite(iteration),
+    "mac_gaps": Suite(mac_gaps),
+    "text_family": Suite(text_family, fixed=_TEXT_TABLE),
+    "dates_family": Suite(dates_family),
+    "info_family": Suite(info_family, fixed=_INFO_TABLE),
 }

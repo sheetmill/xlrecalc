@@ -107,6 +107,9 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   reported. Nor is a union of ranges (`LARGE((A1:A3,C1:C3),1)`, `SUM((A1,B2))`): the formula keeps
   the value the file holds and is reported (capture `modern`). `ROW` and `COLUMN` of a union are
   `#REF!`, as in Excel.
+- `FORMULATEXT` gives a legacy formula as the file holds it, without the `@` the formula bar shows
+  (`=@{1,2;3,4}`; capture `info_family`). `AREAS` and `ISREF` of a union are computed, from the
+  formula alone; the other functions of that family are not, as for any union.
 - How text orders is captured only in part: every pair of 40 ASCII characters and 24 pairs of words,
   on Excel 16 for Mac (capture `modern`). Those give one consistent order, marks and symbols before
   digits before letters, with accents after their base letter. The rest is approximated: other

@@ -34,6 +34,9 @@ _FILE_ERRORS = frozenset(
 )
 
 
+_REFERENCE_ONLY = frozenset({"AREAS", "ISFORMULA", "FORMULATEXT"})
+
+
 def refused_in_file(text: str) -> str | None:
     """Why Excel refuses this formula in a file (``formula_forms`` capture), or ``None``."""
     try:
@@ -57,6 +60,18 @@ def refused_in_file(text: str) -> str | None:
             and before.text.upper() == "OFFSET"
         ):
             return "a constant as OFFSET's reference"
+        if (  # AREAS(1), ISFORMULA({1,2}): capture info_family, the file does not open
+            (
+                tok.kind in (Kind.NUMBER, Kind.STRING, Kind.BOOL, Kind.ARRAY_OPEN)
+                or (tok.kind is Kind.ERROR and tok.text != "#REF!")
+            )
+            and previous is not None
+            and previous.kind is Kind.OPEN
+            and before is not None
+            and before.kind is Kind.FUNCTION
+            and before.text.upper().removeprefix("_XLFN.") in _REFERENCE_ONLY
+        ):
+            return f"an argument of {before.text} that is no reference"
         if (
             tok.kind is Kind.CLOSE
             and previous is not None

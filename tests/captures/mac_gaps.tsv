@@ -1,0 +1,19 @@
+# suite: mac_gaps
+# excel: 16.114.3 for Mac, locale en_US
+# date_system: 1900
+# captured: 2026-11-06
+# generator: capture/suites.py:mac_gaps
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# columns: suite tag case formula inputs expected_type expected_repr
+mac_gaps	encodeurl	1	_xlfn.ENCODEURL("a b&c=d/é")	()	e	#NAME?
+mac_gaps	encodeurl	2	ENCODEURL("a b&c=d/é")	()	e	#NAME?
+mac_gaps	filterxml	3	_xlfn.FILTERXML("<a><b>1</b><b>x</b></a>","//b")	()	e	#NAME?
+mac_gaps	filterxml	4	FILTERXML("<a><b>1</b><b>x</b></a>","//b")	()	e	#NAME?
+mac_gaps	euroconvert	5	EUROCONVERT(1,"EUR","DEM")	()	e	#NAME?
+mac_gaps	euroconvert	6	_xlfn.EUROCONVERT(1,"EUR","DEM")	()	e	#NAME?
+mac_gaps	control	7	SUM(1,2)	()	n	3.0
+mac_gaps	control	8	NOSUCHFUNCTION(1)	()	e	#NAME?

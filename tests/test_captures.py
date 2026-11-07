@@ -165,6 +165,7 @@ _COMPUTED_CRITERIA = (
 )
 _UNION = "a union of ranges is not implemented, and the cell is reported"
 _REGEX = "the regular-expression match mode (3) is not implemented, and the cell is reported"
+_AT_SIGN = "the @ the formula bar shows in a legacy formula is not shown by FORMULATEXT"
 _MULTINOMIAL = (
     "Excel's result carries noise from its logarithm of the gamma function (279.99999999999966)"
 )
@@ -174,6 +175,11 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
         for case in (3783, 3785, 3787, 3789, 3791, 3793, 3795, 3797, 3803, 3805, 3807, 3809)
     },
     **{("modern", case): _UNION for case in (300, 328)},
+    **{
+        ("info_family", case): _UNION
+        for case in (272, 303, 334, 396, 427, 452, 475, 484, 485, 505, 506)
+    },
+    ("info_family", 468): _AT_SIGN,
     **{("modern", case): _REGEX for case in (1384, 1417)},
     **{("finance", case): _IPMT_TAIL for case in (359, 367, 368, 371, 373, 397)},
     **{("iterative", case): _ITER_NEAR_ZERO for case in _ITER_NEAR_ZERO_CASES},
@@ -237,6 +243,7 @@ SUITES = [
     "criteria",
     "math_trig",
     "math_integers",
+    "info_family",
 ]
 
 
@@ -338,7 +345,10 @@ def run(suite: Suite) -> tuple[Engine, int]:
     s = engine.add_sheet("cases")
     for ref, value in suite.fixed.items():
         r, c = cell_axes(ref, 0, 0)
-        engine.sheets[s].set(r.value, c.value, _input(value))
+        if isinstance(value, Formula):
+            engine.set_formula(s, r.value, c.value, value.text[1:])
+        else:
+            engine.sheets[s].set(r.value, c.value, _input(value))
     for k, row in enumerate(suite.rows, 1):
         for i, value in enumerate(row.inputs, 1):
             if isinstance(value, Formula):

@@ -11,11 +11,14 @@ from __future__ import annotations
 import math
 import posixpath
 import re
+from collections.abc import Callable
 from typing import Any
 
-from xlrecalc._coerce import Context, to_number
+from xlrecalc._arrays import check_area
+from xlrecalc._coerce import Context, to_number, to_text
 from xlrecalc._formula import MISSING, Kind, TokenizeError, tokenize
 from xlrecalc._formula._codegen import sheet_text
+from xlrecalc._formula._fileform import display_form
 from xlrecalc._formula._template import cell_axes, line_axes
 from xlrecalc._functions._registry import function
 from xlrecalc._report import column_letters, sheet_prefix
@@ -24,7 +27,9 @@ from xlrecalc._values import BLANK, ErrorValue, Ref
 
 REF, VALUE = ErrorValue.REF, ErrorValue.VALUE
 L = "lookup and reference"
+VALUE = ErrorValue.VALUE
 INFO = "information"
+_FORMULATEXT = "the @ the formula bar adds to a legacy formula is not shown"
 
 
 def _size(arg: Any, default: int, ctx: Context) -> int | ErrorValue:
@@ -268,3 +273,97 @@ def ADDRESS(
     if sheet is MISSING:
         return text
     return _address_sheet(sheet) + text
+
+
+def _each_cell(ref: Any, ctx: Any, read: Callable[[int, int, int], Any]) -> Any:
+    """``read`` of each cell of a reference, as an array (capture ``array_refs``)."""
+    if not isinstance(ref, Ref):
+        return ref if isinstance(ref, ErrorValue) else VALUE
+    if ref.is_cell():
+        return read(ref.sheet, ref.r1, ref.c1)
+    check_area(ref.rows, ref.columns, getattr(ctx, "max_array_cells", None))
+    return tuple(
+        tuple(read(ref.sheet, r, c) for c in range(ref.c1, ref.c2 + 1))
+        for r in range(ref.r1, ref.r2 + 1)
+    )
+
+
+def _formula_shown(ctx: Any, sheet: int, row: int, col: int) -> Any:
+    text = ctx.formula_text(sheet, row, col)
+    return ErrorValue.NA if text is None else "=" + display_form(text)
+
+
+def _isformula_array(ctx: Any, ref: Any) -> Any:
+    return _each_cell(ref, ctx, lambda s, r, c: ctx.formula_text(s, r, c) is not None)
+
+
+def _formulatext_array(ctx: Any, ref: Any) -> Any:
+    return _each_cell(ref, ctx, lambda s, r, c: _formula_shown(ctx, s, r, c))
+
+
+@function("_xlfn.ISFORMULA", "raw", errors=True, category=INFO, in_array=_isformula_array)
+def ISFORMULA(ctx: Any, ref: Any) -> Any:
+    """Whether a reference's top-left cell holds a formula."""
+    if not isinstance(ref, Ref):
+        return ref if isinstance(ref, ErrorValue) else VALUE
+    return ctx.formula_text(ref.sheet, ref.r1, ref.c1) is not None
+
+
+@function(
+    "_xlfn.FORMULATEXT",
+    "raw",
+    errors=True,
+    category=INFO,
+    status="partial",
+    note=_FORMULATEXT,
+    in_array=_formulatext_array,
+)
+def FORMULATEXT(ctx: Any, ref: Any) -> Any:
+    """A reference's top-left cell's formula as the formula bar shows it; ``#N/A`` without one."""
+    if not isinstance(ref, Ref):
+        return ref if isinstance(ref, ErrorValue) else VALUE
+    return _formula_shown(ctx, ref.sheet, ref.r1, ref.c1)
+
+
+@function("_xlfn.SHEET", "raw", min_args=0, errors=True, category=INFO)
+def SHEET(ctx: Any, v: Any = MISSING) -> Any:
+    """The number of a reference's sheet, or of a sheet named by a text."""
+    if v is MISSING:
+        return float(ctx.sheet + 1)
+    if isinstance(v, Ref):
+        return float(v.sheet + 1)
+    if isinstance(v, ErrorValue):
+        return v
+    if isinstance(v, str):
+        for i, sheet in enumerate(ctx.sheets):
+            if sheet.name.casefold() == v.casefold():
+                return float(i + 1)
+    return ErrorValue.NA
+
+
+@function("_xlfn.SHEETS", "raw", min_args=0, errors=True, category=INFO)
+def SHEETS(ctx: Any, v: Any = MISSING) -> Any:
+    """The number of sheets in the workbook, or in a reference (one here: no 3-D references)."""
+    if v is MISSING:
+        return float(len(ctx.sheets))
+    if isinstance(v, Ref):
+        return 1.0
+    return v if isinstance(v, ErrorValue) else ErrorValue.NA
+
+
+@function("AREAS", "raw", errors=True, category=L)
+def AREAS(ctx: Any, ref: Any) -> Any:
+    """The number of areas in a reference; a union is counted where the formula is compiled."""
+    if isinstance(ref, Ref):
+        return 1.0
+    return ref if isinstance(ref, ErrorValue) else VALUE
+
+
+@function("HYPERLINK", "value", "value", min_args=1, errors=True, category=L)
+def HYPERLINK(ctx: Any, link: Any, name: Any = MISSING) -> Any:
+    """The text a link shows: its name, or the link itself. Nothing is followed."""
+    if isinstance(link, ErrorValue):
+        return link
+    if name is MISSING:
+        return to_text(link, ctx)
+    return 0.0 if name is BLANK else name

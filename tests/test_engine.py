@@ -143,6 +143,13 @@ def test_a_refused_formula_without_a_cached_value_is_blank():
         ("SUM( )", True),
         ("SUM()", False),
         ("SUM( A1 )", False),
+        ("AREAS(1)", True),
+        ('_xlfn.ISFORMULA("a")', True),
+        ("_xlfn.FORMULATEXT({1,2})", True),
+        ("AREAS(#N/A)", True),
+        ("AREAS(A1)", False),
+        ("_xlfn.ISFORMULA(#REF!)", False),
+        ("_xlfn.FORMULATEXT((A1,B1))", False),
     ],
 )
 def test_refused_in_file(text, refused):

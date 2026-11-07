@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+import math
 from typing import Any
 
-from xlrecalc._coerce import Context, scalar, to_bool
+from xlrecalc._coerce import Context, scalar, to_bool, to_number
 from xlrecalc._compare import switch_equal
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._registry import function
@@ -191,3 +192,78 @@ def SWITCH(ctx: Context, expression: Any, *pairs: Any) -> Any:
         if switch_equal(v, candidate):
             return pairs[k + 1]
     return pairs[-1] if len(pairs) % 2 else NA
+
+
+def _ignored_text(v: Any) -> bool:
+    return isinstance(v, str) and v.upper() not in ("TRUE", "FALSE")
+
+
+@function("_xlfn.XOR", "raw", min_args=1, variadic=True, category=L)
+def XOR(ctx: Context, *args: Any) -> bool | ErrorValue:
+    """TRUE when an odd number of logicals are; ``#VALUE!`` when there are none."""
+    values = _logicals(tuple(a for a in args if not _ignored_text(a)), ctx)
+    if isinstance(values, ErrorValue):
+        return values
+    return sum(values) % 2 == 1 if values else VALUE
+
+
+def _parity(v: Any, ctx: Context) -> int | ErrorValue:
+    """A number's whole part modulo 2, as the old Analysis ToolPak functions take a number."""
+    if isinstance(v, bool):
+        return VALUE
+    x = to_number(v, ctx)
+    return x if isinstance(x, ErrorValue) else int(math.fmod(math.trunc(x), 2))
+
+
+@function("ISEVEN", "value", category=INFO)
+def ISEVEN(ctx: Context, v: Any) -> bool | ErrorValue:
+    """Whether a number's whole part is even."""
+    odd = _parity(v, ctx)
+    return odd if isinstance(odd, ErrorValue) else odd == 0
+
+
+@function("ISODD", "value", category=INFO)
+def ISODD(ctx: Context, v: Any) -> bool | ErrorValue:
+    """Whether a number's whole part is odd."""
+    odd = _parity(v, ctx)
+    return odd if isinstance(odd, ErrorValue) else odd != 0
+
+
+@function("ISNONTEXT", "value", errors=True, category=INFO)
+def ISNONTEXT(ctx: Context, v: Any) -> bool:
+    """Whether the value is anything but text."""
+    return not isinstance(v, str)
+
+
+@function("ISREF", "raw", errors=True, category=INFO)
+def ISREF(ctx: Context, v: Any) -> bool:
+    """Whether the argument is a reference."""
+    return isinstance(v, Ref)
+
+
+@function("TYPE", "raw", errors=True, category=INFO)
+def TYPE(ctx: Context, v: Any) -> float:
+    """The kind of a value: 1 number or blank, 2 text, 4 logical, 16 error, 64 array."""
+    if isinstance(v, Ref):
+        if not v.is_cell():
+            return 16.0
+        v = v.value(0, 0)
+    if isinstance(v, tuple):
+        return 64.0
+    if isinstance(v, str):
+        return 2.0
+    if isinstance(v, bool):
+        return 4.0
+    return 16.0 if isinstance(v, ErrorValue) else 1.0
+
+
+_ERROR_TYPES = {
+    "#NULL!": 1.0, "#DIV/0!": 2.0, "#VALUE!": 3.0, "#REF!": 4.0, "#NAME?": 5.0, "#NUM!": 6.0,
+    "#N/A": 7.0, "#GETTING_DATA": 8.0, "#SPILL!": 9.0, "#CALC!": 14.0,
+}  # fmt: skip
+
+
+@function("ERROR.TYPE", "value", errors=True, category=INFO)
+def ERROR_TYPE(ctx: Context, v: Any) -> float | ErrorValue:
+    """The number of an error; ``#N/A`` for anything else."""
+    return _ERROR_TYPES.get(v.code, NA) if isinstance(v, ErrorValue) else NA

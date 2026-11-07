@@ -1,0 +1,611 @@
+# suite: info_family
+# excel: 16.114.3 for Mac, locale en_US
+# date_system: 1900
+# captured: 2026-11-06
+# generator: capture/suites.py:info_family
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# fixed: {'AA1': 1.0, 'AA2': 'text', 'AA3': FormulaInput('=1+1'), 'AA4': None, 'AA5': True, 'AA6': ErrorValue('#N/A'), 'AA7': FormulaInput('=TRIM("made")'), 'AA8': FormulaInput('=NA()'), 'AA9': FormulaInput('=IF(TRUE,"a","b")&" ""q"""'), 'AB1': FormulaInput('={1,2;3,4}'), 'AC1': FormulaInput('=SUM($AA$1:$AA$1)'), 'AD1': FormulaInput('=_xlfn.ANCHORARRAY(AC1)')}
+# columns: suite tag case formula inputs expected_type expected_repr
+info_family	xor	1	_xlfn.XOR({1})	(0.0,)	b	False
+info_family	xor	2	_xlfn.XOR({1})	(1.0,)	b	True
+info_family	xor	3	_xlfn.XOR({1})	(2.0,)	b	True
+info_family	xor	4	_xlfn.XOR({1})	(3.0,)	b	True
+info_family	xor	5	_xlfn.XOR({1})	(-1.0,)	b	True
+info_family	xor	6	_xlfn.XOR({1})	(-2.0,)	b	True
+info_family	xor	7	_xlfn.XOR({1})	(2.5,)	b	True
+info_family	xor	8	_xlfn.XOR({1})	(3.5,)	b	True
+info_family	xor	9	_xlfn.XOR({1})	(4.9,)	b	True
+info_family	xor	10	_xlfn.XOR({1})	(1000000000000000.0,)	b	True
+info_family	xor	11	_xlfn.XOR({1})	(1e+300,)	b	True
+info_family	xor	12	_xlfn.XOR({1})	('2',)	e	#VALUE!
+info_family	xor	13	_xlfn.XOR({1})	('3',)	e	#VALUE!
+info_family	xor	14	_xlfn.XOR({1})	('abc',)	e	#VALUE!
+info_family	xor	15	_xlfn.XOR({1})	('',)	e	#VALUE!
+info_family	xor	16	_xlfn.XOR({1})	(True,)	b	True
+info_family	xor	17	_xlfn.XOR({1})	(False,)	b	False
+info_family	xor	18	_xlfn.XOR({1})	(None,)	e	#VALUE!
+info_family	xor	19	_xlfn.XOR({1})	(ErrorValue('#N/A'),)	e	#N/A
+info_family	xor	20	_xlfn.XOR({1})	(FormulaInput('=1/0'),)	e	#DIV/0!
+info_family	xor	21	_xlfn.XOR({1})	(FormulaInput('=NA()'),)	e	#N/A
+info_family	xor	22	_xlfn.XOR({1})	(FormulaInput('="a"+1'),)	e	#VALUE!
+info_family	xor	23	_xlfn.XOR({1})	(FormulaInput('=SQRT(-1)'),)	e	#NUM!
+info_family	xor	24	_xlfn.XOR({1})	(FormulaInput('=#NULL!'),)	e	#NULL!
+info_family	xor	25	_xlfn.XOR({1})	(FormulaInput('=#REF!'),)	e	#REF!
+info_family	xor	26	_xlfn.XOR({1})	(FormulaInput('=#NAME?'),)	e	#NAME?
+info_family	xor	27	_xlfn.XOR({1},{2})	(True, True)	b	False
+info_family	xor	28	_xlfn.XOR({1},{2})	(True, False)	b	True
+info_family	xor	29	_xlfn.XOR({1},{2})	(True, 1.0)	b	False
+info_family	xor	30	_xlfn.XOR({1},{2})	(True, 0.0)	b	True
+info_family	xor	31	_xlfn.XOR({1},{2})	(True, 'TRUE')	b	True
+info_family	xor	32	_xlfn.XOR({1},{2})	(True, 'abc')	b	True
+info_family	xor	33	_xlfn.XOR({1},{2})	(True, '')	b	True
+info_family	xor	34	_xlfn.XOR({1},{2})	(True, None)	b	True
+info_family	xor	35	_xlfn.XOR({1},{2})	(True, ErrorValue('#N/A'))	e	#N/A
+info_family	xor	36	_xlfn.XOR({1},{2})	(False, True)	b	True
+info_family	xor	37	_xlfn.XOR({1},{2})	(False, False)	b	False
+info_family	xor	38	_xlfn.XOR({1},{2})	(False, 1.0)	b	True
+info_family	xor	39	_xlfn.XOR({1},{2})	(False, 0.0)	b	False
+info_family	xor	40	_xlfn.XOR({1},{2})	(False, 'TRUE')	b	False
+info_family	xor	41	_xlfn.XOR({1},{2})	(False, 'abc')	b	False
+info_family	xor	42	_xlfn.XOR({1},{2})	(False, '')	b	False
+info_family	xor	43	_xlfn.XOR({1},{2})	(False, None)	b	False
+info_family	xor	44	_xlfn.XOR({1},{2})	(False, ErrorValue('#N/A'))	e	#N/A
+info_family	xor	45	_xlfn.XOR({1},{2})	(1.0, True)	b	False
+info_family	xor	46	_xlfn.XOR({1},{2})	(1.0, False)	b	True
+info_family	xor	47	_xlfn.XOR({1},{2})	(1.0, 1.0)	b	False
+info_family	xor	48	_xlfn.XOR({1},{2})	(1.0, 0.0)	b	True
+info_family	xor	49	_xlfn.XOR({1},{2})	(1.0, 'TRUE')	b	True
+info_family	xor	50	_xlfn.XOR({1},{2})	(1.0, 'abc')	b	True
+info_family	xor	51	_xlfn.XOR({1},{2})	(1.0, '')	b	True
+info_family	xor	52	_xlfn.XOR({1},{2})	(1.0, None)	b	True
+info_family	xor	53	_xlfn.XOR({1},{2})	(1.0, ErrorValue('#N/A'))	e	#N/A
+info_family	xor	54	_xlfn.XOR({1},{2})	(0.0, True)	b	True
+info_family	xor	55	_xlfn.XOR({1},{2})	(0.0, False)	b	False
+info_family	xor	56	_xlfn.XOR({1},{2})	(0.0, 1.0)	b	True
+info_family	xor	57	_xlfn.XOR({1},{2})	(0.0, 0.0)	b	False
+info_family	xor	58	_xlfn.XOR({1},{2})	(0.0, 'TRUE')	b	False
+info_family	xor	59	_xlfn.XOR({1},{2})	(0.0, 'abc')	b	False
+info_family	xor	60	_xlfn.XOR({1},{2})	(0.0, '')	b	False
+info_family	xor	61	_xlfn.XOR({1},{2})	(0.0, None)	b	False
+info_family	xor	62	_xlfn.XOR({1},{2})	(0.0, ErrorValue('#N/A'))	e	#N/A
+info_family	xor	63	_xlfn.XOR({1},{2})	('TRUE', True)	b	True
+info_family	xor	64	_xlfn.XOR({1},{2})	('TRUE', False)	b	False
+info_family	xor	65	_xlfn.XOR({1},{2})	('TRUE', 1.0)	b	True
+info_family	xor	66	_xlfn.XOR({1},{2})	('TRUE', 0.0)	b	False
+info_family	xor	67	_xlfn.XOR({1},{2})	('TRUE', 'TRUE')	e	#VALUE!
+info_family	xor	68	_xlfn.XOR({1},{2})	('TRUE', 'abc')	e	#VALUE!
+info_family	xor	69	_xlfn.XOR({1},{2})	('TRUE', '')	e	#VALUE!
+info_family	xor	70	_xlfn.XOR({1},{2})	('TRUE', None)	e	#VALUE!
+info_family	xor	71	_xlfn.XOR({1},{2})	('TRUE', ErrorValue('#N/A'))	e	#N/A
+info_family	xor	72	_xlfn.XOR({1},{2})	('abc', True)	b	True
+info_family	xor	73	_xlfn.XOR({1},{2})	('abc', False)	b	False
+info_family	xor	74	_xlfn.XOR({1},{2})	('abc', 1.0)	b	True
+info_family	xor	75	_xlfn.XOR({1},{2})	('abc', 0.0)	b	False
+info_family	xor	76	_xlfn.XOR({1},{2})	('abc', 'TRUE')	e	#VALUE!
+info_family	xor	77	_xlfn.XOR({1},{2})	('abc', 'abc')	e	#VALUE!
+info_family	xor	78	_xlfn.XOR({1},{2})	('abc', '')	e	#VALUE!
+info_family	xor	79	_xlfn.XOR({1},{2})	('abc', None)	e	#VALUE!
+info_family	xor	80	_xlfn.XOR({1},{2})	('abc', ErrorValue('#N/A'))	e	#N/A
+info_family	xor	81	_xlfn.XOR({1},{2})	('', True)	b	True
+info_family	xor	82	_xlfn.XOR({1},{2})	('', False)	b	False
+info_family	xor	83	_xlfn.XOR({1},{2})	('', 1.0)	b	True
+info_family	xor	84	_xlfn.XOR({1},{2})	('', 0.0)	b	False
+info_family	xor	85	_xlfn.XOR({1},{2})	('', 'TRUE')	e	#VALUE!
+info_family	xor	86	_xlfn.XOR({1},{2})	('', 'abc')	e	#VALUE!
+info_family	xor	87	_xlfn.XOR({1},{2})	('', '')	e	#VALUE!
+info_family	xor	88	_xlfn.XOR({1},{2})	('', None)	e	#VALUE!
+info_family	xor	89	_xlfn.XOR({1},{2})	('', ErrorValue('#N/A'))	e	#N/A
+info_family	xor	90	_xlfn.XOR({1},{2})	(None, True)	b	True
+info_family	xor	91	_xlfn.XOR({1},{2})	(None, False)	b	False
+info_family	xor	92	_xlfn.XOR({1},{2})	(None, 1.0)	b	True
+info_family	xor	93	_xlfn.XOR({1},{2})	(None, 0.0)	b	False
+info_family	xor	94	_xlfn.XOR({1},{2})	(None, 'TRUE')	e	#VALUE!
+info_family	xor	95	_xlfn.XOR({1},{2})	(None, 'abc')	e	#VALUE!
+info_family	xor	96	_xlfn.XOR({1},{2})	(None, '')	e	#VALUE!
+info_family	xor	97	_xlfn.XOR({1},{2})	(None, None)	e	#VALUE!
+info_family	xor	98	_xlfn.XOR({1},{2})	(None, ErrorValue('#N/A'))	e	#N/A
+info_family	xor	99	_xlfn.XOR({1},{2})	(ErrorValue('#N/A'), True)	e	#N/A
+info_family	xor	100	_xlfn.XOR({1},{2})	(ErrorValue('#N/A'), False)	e	#N/A
+info_family	xor	101	_xlfn.XOR({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+info_family	xor	102	_xlfn.XOR({1},{2})	(ErrorValue('#N/A'), 0.0)	e	#N/A
+info_family	xor	103	_xlfn.XOR({1},{2})	(ErrorValue('#N/A'), 'TRUE')	e	#N/A
+info_family	xor	104	_xlfn.XOR({1},{2})	(ErrorValue('#N/A'), 'abc')	e	#N/A
+info_family	xor	105	_xlfn.XOR({1},{2})	(ErrorValue('#N/A'), '')	e	#N/A
+info_family	xor	106	_xlfn.XOR({1},{2})	(ErrorValue('#N/A'), None)	e	#N/A
+info_family	xor	107	_xlfn.XOR({1},{2})	(ErrorValue('#N/A'), ErrorValue('#N/A'))	e	#N/A
+info_family	xor	108	_xlfn.XOR($AA$1:$AA$2)	()	b	True
+info_family	xor	109	_xlfn.XOR($AA$2:$AA$2)	()	e	#VALUE!
+info_family	xor	110	_xlfn.XOR($AA$4:$AA$5)	()	b	True
+info_family	xor	111	_xlfn.XOR($AA$1:$AA$6)	()	e	#N/A
+info_family	xor	112	_xlfn.XOR({TRUE,TRUE,TRUE})	()	b	True
+info_family	xor	113	_xlfn.XOR({TRUE,FALSE,0,1})	()	b	False
+info_family	xor	114	_xlfn.XOR({"a",TRUE})	()	b	True
+info_family	xor	115	_xlfn.XOR($AA$4)	()	e	#VALUE!
+info_family	xor	116	_xlfn.XOR($AA$1,$AA$5)	()	b	False
+info_family	xor	117	_xlfn.XOR(TRUE,TRUE,TRUE)	()	b	True
+info_family	xor	118	_xlfn.XOR("TRUE")	()	b	True
+info_family	xor	119	_xlfn.XOR("abc",TRUE)	()	b	True
+info_family	iseven	120	ISEVEN({1})	(0.0,)	b	True
+info_family	iseven	121	ISEVEN({1})	(1.0,)	b	False
+info_family	iseven	122	ISEVEN({1})	(2.0,)	b	True
+info_family	iseven	123	ISEVEN({1})	(3.0,)	b	False
+info_family	iseven	124	ISEVEN({1})	(-1.0,)	b	False
+info_family	iseven	125	ISEVEN({1})	(-2.0,)	b	True
+info_family	iseven	126	ISEVEN({1})	(2.5,)	b	True
+info_family	iseven	127	ISEVEN({1})	(3.5,)	b	False
+info_family	iseven	128	ISEVEN({1})	(4.9,)	b	True
+info_family	iseven	129	ISEVEN({1})	(1000000000000000.0,)	b	True
+info_family	iseven	130	ISEVEN({1})	(1e+300,)	b	True
+info_family	iseven	131	ISEVEN({1})	('2',)	b	True
+info_family	iseven	132	ISEVEN({1})	('3',)	b	False
+info_family	iseven	133	ISEVEN({1})	('abc',)	e	#VALUE!
+info_family	iseven	134	ISEVEN({1})	('',)	e	#VALUE!
+info_family	iseven	135	ISEVEN({1})	(True,)	e	#VALUE!
+info_family	iseven	136	ISEVEN({1})	(False,)	e	#VALUE!
+info_family	iseven	137	ISEVEN({1})	(None,)	b	True
+info_family	iseven	138	ISEVEN({1})	(ErrorValue('#N/A'),)	e	#N/A
+info_family	iseven	139	ISEVEN({1})	(FormulaInput('=1/0'),)	e	#DIV/0!
+info_family	iseven	140	ISEVEN({1})	(FormulaInput('=NA()'),)	e	#N/A
+info_family	iseven	141	ISEVEN({1})	(FormulaInput('="a"+1'),)	e	#VALUE!
+info_family	iseven	142	ISEVEN({1})	(FormulaInput('=SQRT(-1)'),)	e	#NUM!
+info_family	iseven	143	ISEVEN({1})	(FormulaInput('=#NULL!'),)	e	#NULL!
+info_family	iseven	144	ISEVEN({1})	(FormulaInput('=#REF!'),)	e	#REF!
+info_family	iseven	145	ISEVEN({1})	(FormulaInput('=#NAME?'),)	e	#NAME?
+info_family	isodd	146	ISODD({1})	(0.0,)	b	False
+info_family	isodd	147	ISODD({1})	(1.0,)	b	True
+info_family	isodd	148	ISODD({1})	(2.0,)	b	False
+info_family	isodd	149	ISODD({1})	(3.0,)	b	True
+info_family	isodd	150	ISODD({1})	(-1.0,)	b	True
+info_family	isodd	151	ISODD({1})	(-2.0,)	b	False
+info_family	isodd	152	ISODD({1})	(2.5,)	b	False
+info_family	isodd	153	ISODD({1})	(3.5,)	b	True
+info_family	isodd	154	ISODD({1})	(4.9,)	b	False
+info_family	isodd	155	ISODD({1})	(1000000000000000.0,)	b	False
+info_family	isodd	156	ISODD({1})	(1e+300,)	b	False
+info_family	isodd	157	ISODD({1})	('2',)	b	False
+info_family	isodd	158	ISODD({1})	('3',)	b	True
+info_family	isodd	159	ISODD({1})	('abc',)	e	#VALUE!
+info_family	isodd	160	ISODD({1})	('',)	e	#VALUE!
+info_family	isodd	161	ISODD({1})	(True,)	e	#VALUE!
+info_family	isodd	162	ISODD({1})	(False,)	e	#VALUE!
+info_family	isodd	163	ISODD({1})	(None,)	b	False
+info_family	isodd	164	ISODD({1})	(ErrorValue('#N/A'),)	e	#N/A
+info_family	isodd	165	ISODD({1})	(FormulaInput('=1/0'),)	e	#DIV/0!
+info_family	isodd	166	ISODD({1})	(FormulaInput('=NA()'),)	e	#N/A
+info_family	isodd	167	ISODD({1})	(FormulaInput('="a"+1'),)	e	#VALUE!
+info_family	isodd	168	ISODD({1})	(FormulaInput('=SQRT(-1)'),)	e	#NUM!
+info_family	isodd	169	ISODD({1})	(FormulaInput('=#NULL!'),)	e	#NULL!
+info_family	isodd	170	ISODD({1})	(FormulaInput('=#REF!'),)	e	#REF!
+info_family	isodd	171	ISODD({1})	(FormulaInput('=#NAME?'),)	e	#NAME?
+info_family	isnontext	172	ISNONTEXT({1})	(0.0,)	b	True
+info_family	isnontext	173	ISNONTEXT({1})	(1.0,)	b	True
+info_family	isnontext	174	ISNONTEXT({1})	(2.0,)	b	True
+info_family	isnontext	175	ISNONTEXT({1})	(3.0,)	b	True
+info_family	isnontext	176	ISNONTEXT({1})	(-1.0,)	b	True
+info_family	isnontext	177	ISNONTEXT({1})	(-2.0,)	b	True
+info_family	isnontext	178	ISNONTEXT({1})	(2.5,)	b	True
+info_family	isnontext	179	ISNONTEXT({1})	(3.5,)	b	True
+info_family	isnontext	180	ISNONTEXT({1})	(4.9,)	b	True
+info_family	isnontext	181	ISNONTEXT({1})	(1000000000000000.0,)	b	True
+info_family	isnontext	182	ISNONTEXT({1})	(1e+300,)	b	True
+info_family	isnontext	183	ISNONTEXT({1})	('2',)	b	False
+info_family	isnontext	184	ISNONTEXT({1})	('3',)	b	False
+info_family	isnontext	185	ISNONTEXT({1})	('abc',)	b	False
+info_family	isnontext	186	ISNONTEXT({1})	('',)	b	False
+info_family	isnontext	187	ISNONTEXT({1})	(True,)	b	True
+info_family	isnontext	188	ISNONTEXT({1})	(False,)	b	True
+info_family	isnontext	189	ISNONTEXT({1})	(None,)	b	True
+info_family	isnontext	190	ISNONTEXT({1})	(ErrorValue('#N/A'),)	b	True
+info_family	isnontext	191	ISNONTEXT({1})	(FormulaInput('=1/0'),)	b	True
+info_family	isnontext	192	ISNONTEXT({1})	(FormulaInput('=NA()'),)	b	True
+info_family	isnontext	193	ISNONTEXT({1})	(FormulaInput('="a"+1'),)	b	True
+info_family	isnontext	194	ISNONTEXT({1})	(FormulaInput('=SQRT(-1)'),)	b	True
+info_family	isnontext	195	ISNONTEXT({1})	(FormulaInput('=#NULL!'),)	b	True
+info_family	isnontext	196	ISNONTEXT({1})	(FormulaInput('=#REF!'),)	b	True
+info_family	isnontext	197	ISNONTEXT({1})	(FormulaInput('=#NAME?'),)	b	True
+info_family	type	198	TYPE({1})	(0.0,)	n	1.0
+info_family	type	199	TYPE({1})	(1.0,)	n	1.0
+info_family	type	200	TYPE({1})	(2.0,)	n	1.0
+info_family	type	201	TYPE({1})	(3.0,)	n	1.0
+info_family	type	202	TYPE({1})	(-1.0,)	n	1.0
+info_family	type	203	TYPE({1})	(-2.0,)	n	1.0
+info_family	type	204	TYPE({1})	(2.5,)	n	1.0
+info_family	type	205	TYPE({1})	(3.5,)	n	1.0
+info_family	type	206	TYPE({1})	(4.9,)	n	1.0
+info_family	type	207	TYPE({1})	(1000000000000000.0,)	n	1.0
+info_family	type	208	TYPE({1})	(1e+300,)	n	1.0
+info_family	type	209	TYPE({1})	('2',)	n	2.0
+info_family	type	210	TYPE({1})	('3',)	n	2.0
+info_family	type	211	TYPE({1})	('abc',)	n	2.0
+info_family	type	212	TYPE({1})	('',)	n	2.0
+info_family	type	213	TYPE({1})	(True,)	n	4.0
+info_family	type	214	TYPE({1})	(False,)	n	4.0
+info_family	type	215	TYPE({1})	(None,)	n	1.0
+info_family	type	216	TYPE({1})	(ErrorValue('#N/A'),)	n	16.0
+info_family	type	217	TYPE({1})	(FormulaInput('=1/0'),)	n	16.0
+info_family	type	218	TYPE({1})	(FormulaInput('=NA()'),)	n	16.0
+info_family	type	219	TYPE({1})	(FormulaInput('="a"+1'),)	n	16.0
+info_family	type	220	TYPE({1})	(FormulaInput('=SQRT(-1)'),)	n	16.0
+info_family	type	221	TYPE({1})	(FormulaInput('=#NULL!'),)	n	16.0
+info_family	type	222	TYPE({1})	(FormulaInput('=#REF!'),)	n	16.0
+info_family	type	223	TYPE({1})	(FormulaInput('=#NAME?'),)	n	16.0
+info_family	error.type	224	ERROR.TYPE({1})	(0.0,)	e	#N/A
+info_family	error.type	225	ERROR.TYPE({1})	(1.0,)	e	#N/A
+info_family	error.type	226	ERROR.TYPE({1})	(2.0,)	e	#N/A
+info_family	error.type	227	ERROR.TYPE({1})	(3.0,)	e	#N/A
+info_family	error.type	228	ERROR.TYPE({1})	(-1.0,)	e	#N/A
+info_family	error.type	229	ERROR.TYPE({1})	(-2.0,)	e	#N/A
+info_family	error.type	230	ERROR.TYPE({1})	(2.5,)	e	#N/A
+info_family	error.type	231	ERROR.TYPE({1})	(3.5,)	e	#N/A
+info_family	error.type	232	ERROR.TYPE({1})	(4.9,)	e	#N/A
+info_family	error.type	233	ERROR.TYPE({1})	(1000000000000000.0,)	e	#N/A
+info_family	error.type	234	ERROR.TYPE({1})	(1e+300,)	e	#N/A
+info_family	error.type	235	ERROR.TYPE({1})	('2',)	e	#N/A
+info_family	error.type	236	ERROR.TYPE({1})	('3',)	e	#N/A
+info_family	error.type	237	ERROR.TYPE({1})	('abc',)	e	#N/A
+info_family	error.type	238	ERROR.TYPE({1})	('',)	e	#N/A
+info_family	error.type	239	ERROR.TYPE({1})	(True,)	e	#N/A
+info_family	error.type	240	ERROR.TYPE({1})	(False,)	e	#N/A
+info_family	error.type	241	ERROR.TYPE({1})	(None,)	e	#N/A
+info_family	error.type	242	ERROR.TYPE({1})	(ErrorValue('#N/A'),)	n	7.0
+info_family	error.type	243	ERROR.TYPE({1})	(FormulaInput('=1/0'),)	n	2.0
+info_family	error.type	244	ERROR.TYPE({1})	(FormulaInput('=NA()'),)	n	7.0
+info_family	error.type	245	ERROR.TYPE({1})	(FormulaInput('="a"+1'),)	n	3.0
+info_family	error.type	246	ERROR.TYPE({1})	(FormulaInput('=SQRT(-1)'),)	n	6.0
+info_family	error.type	247	ERROR.TYPE({1})	(FormulaInput('=#NULL!'),)	n	1.0
+info_family	error.type	248	ERROR.TYPE({1})	(FormulaInput('=#REF!'),)	n	4.0
+info_family	error.type	249	ERROR.TYPE({1})	(FormulaInput('=#NAME?'),)	n	5.0
+info_family	iseven	250	ISEVEN($AA$1)	()	b	False
+info_family	iseven	251	ISEVEN($AA$2)	()	e	#VALUE!
+info_family	iseven	252	ISEVEN($AA$3)	()	b	True
+info_family	iseven	253	ISEVEN($AA$4)	()	b	True
+info_family	iseven	254	ISEVEN($AA$5)	()	e	#VALUE!
+info_family	iseven	255	ISEVEN($AA$6)	()	e	#N/A
+info_family	iseven	256	ISEVEN($AA$7)	()	e	#VALUE!
+info_family	iseven	257	ISEVEN($AA$8)	()	e	#N/A
+info_family	iseven	258	ISEVEN($AA$9)	()	e	#VALUE!
+info_family	iseven	259	ISEVEN($AB$1)	()	b	False
+info_family	iseven	260	ISEVEN($AA$1:$AA$2)	()	e	#VALUE!
+info_family	iseven	261	ISEVEN($AA$3:$AA$4)	()	e	#VALUE!
+info_family	iseven	262	ISEVEN($AA$4:$AA$5)	()	e	#VALUE!
+info_family	iseven	263	ISEVEN($AA$6:$AA$8)	()	e	#VALUE!
+info_family	iseven	264	ISEVEN(OFFSET($AA$1,2,0))	()	b	True
+info_family	iseven	265	ISEVEN(INDIRECT("AA3"))	()	b	True
+info_family	iseven	266	ISEVEN(1)	()	b	False
+info_family	iseven	267	ISEVEN("a")	()	e	#VALUE!
+info_family	iseven	268	ISEVEN(TRUE)	()	e	#VALUE!
+info_family	iseven	269	ISEVEN(1/0)	()	e	#DIV/0!
+info_family	iseven	270	ISEVEN({1,2})	()	b	False
+info_family	iseven	271	ISEVEN(NA())	()	e	#N/A
+info_family	iseven	272	ISEVEN(($AA$1,$AA$2))	()	e	#VALUE!
+info_family	iseven	273	ISEVEN($AA$1 $AA$2)	()	e	#NULL!
+info_family	iseven	274	ISEVEN($AA$1:$AA$2 $AA$2)	()	e	#VALUE!
+info_family	iseven	275	ISEVEN(INDEX($AA$1:$AA$3,3))	()	b	True
+info_family	iseven	276	ISEVEN(IF(TRUE,$AA$3))	()	b	True
+info_family	iseven	277	ISEVEN(NOSUCHNAME)	()	e	#NAME?
+info_family	iseven	278	ISEVEN(SUM($AA$1))	()	b	False
+info_family	iseven	279	ISEVEN(#REF!)	()	e	#REF!
+info_family	iseven	280	ISEVEN(#N/A)	()	e	#N/A
+info_family	isodd	281	ISODD($AA$1)	()	b	True
+info_family	isodd	282	ISODD($AA$2)	()	e	#VALUE!
+info_family	isodd	283	ISODD($AA$3)	()	b	False
+info_family	isodd	284	ISODD($AA$4)	()	b	False
+info_family	isodd	285	ISODD($AA$5)	()	e	#VALUE!
+info_family	isodd	286	ISODD($AA$6)	()	e	#N/A
+info_family	isodd	287	ISODD($AA$7)	()	e	#VALUE!
+info_family	isodd	288	ISODD($AA$8)	()	e	#N/A
+info_family	isodd	289	ISODD($AA$9)	()	e	#VALUE!
+info_family	isodd	290	ISODD($AB$1)	()	b	True
+info_family	isodd	291	ISODD($AA$1:$AA$2)	()	e	#VALUE!
+info_family	isodd	292	ISODD($AA$3:$AA$4)	()	e	#VALUE!
+info_family	isodd	293	ISODD($AA$4:$AA$5)	()	e	#VALUE!
+info_family	isodd	294	ISODD($AA$6:$AA$8)	()	e	#VALUE!
+info_family	isodd	295	ISODD(OFFSET($AA$1,2,0))	()	b	False
+info_family	isodd	296	ISODD(INDIRECT("AA3"))	()	b	False
+info_family	isodd	297	ISODD(1)	()	b	True
+info_family	isodd	298	ISODD("a")	()	e	#VALUE!
+info_family	isodd	299	ISODD(TRUE)	()	e	#VALUE!
+info_family	isodd	300	ISODD(1/0)	()	e	#DIV/0!
+info_family	isodd	301	ISODD({1,2})	()	b	True
+info_family	isodd	302	ISODD(NA())	()	e	#N/A
+info_family	isodd	303	ISODD(($AA$1,$AA$2))	()	e	#VALUE!
+info_family	isodd	304	ISODD($AA$1 $AA$2)	()	e	#NULL!
+info_family	isodd	305	ISODD($AA$1:$AA$2 $AA$2)	()	e	#VALUE!
+info_family	isodd	306	ISODD(INDEX($AA$1:$AA$3,3))	()	b	False
+info_family	isodd	307	ISODD(IF(TRUE,$AA$3))	()	b	False
+info_family	isodd	308	ISODD(NOSUCHNAME)	()	e	#NAME?
+info_family	isodd	309	ISODD(SUM($AA$1))	()	b	True
+info_family	isodd	310	ISODD(#REF!)	()	e	#REF!
+info_family	isodd	311	ISODD(#N/A)	()	e	#N/A
+info_family	isnontext	312	ISNONTEXT($AA$1)	()	b	True
+info_family	isnontext	313	ISNONTEXT($AA$2)	()	b	False
+info_family	isnontext	314	ISNONTEXT($AA$3)	()	b	True
+info_family	isnontext	315	ISNONTEXT($AA$4)	()	b	True
+info_family	isnontext	316	ISNONTEXT($AA$5)	()	b	True
+info_family	isnontext	317	ISNONTEXT($AA$6)	()	b	True
+info_family	isnontext	318	ISNONTEXT($AA$7)	()	b	False
+info_family	isnontext	319	ISNONTEXT($AA$8)	()	b	True
+info_family	isnontext	320	ISNONTEXT($AA$9)	()	b	False
+info_family	isnontext	321	ISNONTEXT($AB$1)	()	b	True
+info_family	isnontext	322	ISNONTEXT($AA$1:$AA$2)	()	b	True
+info_family	isnontext	323	ISNONTEXT($AA$3:$AA$4)	()	b	True
+info_family	isnontext	324	ISNONTEXT($AA$4:$AA$5)	()	b	True
+info_family	isnontext	325	ISNONTEXT($AA$6:$AA$8)	()	b	True
+info_family	isnontext	326	ISNONTEXT(OFFSET($AA$1,2,0))	()	b	True
+info_family	isnontext	327	ISNONTEXT(INDIRECT("AA3"))	()	b	True
+info_family	isnontext	328	ISNONTEXT(1)	()	b	True
+info_family	isnontext	329	ISNONTEXT("a")	()	b	False
+info_family	isnontext	330	ISNONTEXT(TRUE)	()	b	True
+info_family	isnontext	331	ISNONTEXT(1/0)	()	b	True
+info_family	isnontext	332	ISNONTEXT({1,2})	()	b	True
+info_family	isnontext	333	ISNONTEXT(NA())	()	b	True
+info_family	isnontext	334	ISNONTEXT(($AA$1,$AA$2))	()	b	True
+info_family	isnontext	335	ISNONTEXT($AA$1 $AA$2)	()	b	True
+info_family	isnontext	336	ISNONTEXT($AA$1:$AA$2 $AA$2)	()	b	False
+info_family	isnontext	337	ISNONTEXT(INDEX($AA$1:$AA$3,3))	()	b	True
+info_family	isnontext	338	ISNONTEXT(IF(TRUE,$AA$3))	()	b	True
+info_family	isnontext	339	ISNONTEXT(NOSUCHNAME)	()	b	True
+info_family	isnontext	340	ISNONTEXT(SUM($AA$1))	()	b	True
+info_family	isnontext	341	ISNONTEXT(#REF!)	()	b	True
+info_family	isnontext	342	ISNONTEXT(#N/A)	()	b	True
+info_family	isref	343	ISREF($AA$1)	()	b	True
+info_family	isref	344	ISREF($AA$2)	()	b	True
+info_family	isref	345	ISREF($AA$3)	()	b	True
+info_family	isref	346	ISREF($AA$4)	()	b	True
+info_family	isref	347	ISREF($AA$5)	()	b	True
+info_family	isref	348	ISREF($AA$6)	()	b	True
+info_family	isref	349	ISREF($AA$7)	()	b	True
+info_family	isref	350	ISREF($AA$8)	()	b	True
+info_family	isref	351	ISREF($AA$9)	()	b	True
+info_family	isref	352	ISREF($AB$1)	()	b	True
+info_family	isref	353	ISREF($AA$1:$AA$2)	()	b	True
+info_family	isref	354	ISREF($AA$3:$AA$4)	()	b	True
+info_family	isref	355	ISREF($AA$4:$AA$5)	()	b	True
+info_family	isref	356	ISREF($AA$6:$AA$8)	()	b	True
+info_family	isref	357	ISREF(OFFSET($AA$1,2,0))	()	b	True
+info_family	isref	358	ISREF(INDIRECT("AA3"))	()	b	True
+info_family	isref	359	ISREF(1)	()	b	False
+info_family	isref	360	ISREF("a")	()	b	False
+info_family	isref	361	ISREF(TRUE)	()	b	False
+info_family	isref	362	ISREF(1/0)	()	b	False
+info_family	isref	363	ISREF({1,2})	()	b	False
+info_family	isref	364	ISREF(NA())	()	b	False
+info_family	isref	365	ISREF(($AA$1,$AA$2))	()	b	True
+info_family	isref	366	ISREF($AA$1 $AA$2)	()	b	False
+info_family	isref	367	ISREF($AA$1:$AA$2 $AA$2)	()	b	True
+info_family	isref	368	ISREF(INDEX($AA$1:$AA$3,3))	()	b	True
+info_family	isref	369	ISREF(IF(TRUE,$AA$3))	()	b	True
+info_family	isref	370	ISREF(NOSUCHNAME)	()	b	False
+info_family	isref	371	ISREF(SUM($AA$1))	()	b	False
+info_family	isref	372	ISREF(#REF!)	()	b	False
+info_family	isref	373	ISREF(#N/A)	()	b	False
+info_family	type	374	TYPE($AA$1)	()	n	1.0
+info_family	type	375	TYPE($AA$2)	()	n	2.0
+info_family	type	376	TYPE($AA$3)	()	n	1.0
+info_family	type	377	TYPE($AA$4)	()	n	1.0
+info_family	type	378	TYPE($AA$5)	()	n	4.0
+info_family	type	379	TYPE($AA$6)	()	n	16.0
+info_family	type	380	TYPE($AA$7)	()	n	2.0
+info_family	type	381	TYPE($AA$8)	()	n	16.0
+info_family	type	382	TYPE($AA$9)	()	n	2.0
+info_family	type	383	TYPE($AB$1)	()	n	1.0
+info_family	type	384	TYPE($AA$1:$AA$2)	()	n	16.0
+info_family	type	385	TYPE($AA$3:$AA$4)	()	n	16.0
+info_family	type	386	TYPE($AA$4:$AA$5)	()	n	16.0
+info_family	type	387	TYPE($AA$6:$AA$8)	()	n	16.0
+info_family	type	388	TYPE(OFFSET($AA$1,2,0))	()	n	1.0
+info_family	type	389	TYPE(INDIRECT("AA3"))	()	n	1.0
+info_family	type	390	TYPE(1)	()	n	1.0
+info_family	type	391	TYPE("a")	()	n	2.0
+info_family	type	392	TYPE(TRUE)	()	n	4.0
+info_family	type	393	TYPE(1/0)	()	n	16.0
+info_family	type	394	TYPE({1,2})	()	n	64.0
+info_family	type	395	TYPE(NA())	()	n	16.0
+info_family	type	396	TYPE(($AA$1,$AA$2))	()	n	16.0
+info_family	type	397	TYPE($AA$1 $AA$2)	()	n	16.0
+info_family	type	398	TYPE($AA$1:$AA$2 $AA$2)	()	n	2.0
+info_family	type	399	TYPE(INDEX($AA$1:$AA$3,3))	()	n	1.0
+info_family	type	400	TYPE(IF(TRUE,$AA$3))	()	n	1.0
+info_family	type	401	TYPE(NOSUCHNAME)	()	n	16.0
+info_family	type	402	TYPE(SUM($AA$1))	()	n	1.0
+info_family	type	403	TYPE(#REF!)	()	n	16.0
+info_family	type	404	TYPE(#N/A)	()	n	16.0
+info_family	error.type	405	ERROR.TYPE($AA$1)	()	e	#N/A
+info_family	error.type	406	ERROR.TYPE($AA$2)	()	e	#N/A
+info_family	error.type	407	ERROR.TYPE($AA$3)	()	e	#N/A
+info_family	error.type	408	ERROR.TYPE($AA$4)	()	e	#N/A
+info_family	error.type	409	ERROR.TYPE($AA$5)	()	e	#N/A
+info_family	error.type	410	ERROR.TYPE($AA$6)	()	n	7.0
+info_family	error.type	411	ERROR.TYPE($AA$7)	()	e	#N/A
+info_family	error.type	412	ERROR.TYPE($AA$8)	()	n	7.0
+info_family	error.type	413	ERROR.TYPE($AA$9)	()	e	#N/A
+info_family	error.type	414	ERROR.TYPE($AB$1)	()	e	#N/A
+info_family	error.type	415	ERROR.TYPE($AA$1:$AA$2)	()	n	3.0
+info_family	error.type	416	ERROR.TYPE($AA$3:$AA$4)	()	n	3.0
+info_family	error.type	417	ERROR.TYPE($AA$4:$AA$5)	()	n	3.0
+info_family	error.type	418	ERROR.TYPE($AA$6:$AA$8)	()	n	3.0
+info_family	error.type	419	ERROR.TYPE(OFFSET($AA$1,2,0))	()	e	#N/A
+info_family	error.type	420	ERROR.TYPE(INDIRECT("AA3"))	()	e	#N/A
+info_family	error.type	421	ERROR.TYPE(1)	()	e	#N/A
+info_family	error.type	422	ERROR.TYPE("a")	()	e	#N/A
+info_family	error.type	423	ERROR.TYPE(TRUE)	()	e	#N/A
+info_family	error.type	424	ERROR.TYPE(1/0)	()	n	2.0
+info_family	error.type	425	ERROR.TYPE({1,2})	()	e	#N/A
+info_family	error.type	426	ERROR.TYPE(NA())	()	n	7.0
+info_family	error.type	427	ERROR.TYPE(($AA$1,$AA$2))	()	n	3.0
+info_family	error.type	428	ERROR.TYPE($AA$1 $AA$2)	()	n	1.0
+info_family	error.type	429	ERROR.TYPE($AA$1:$AA$2 $AA$2)	()	e	#N/A
+info_family	error.type	430	ERROR.TYPE(INDEX($AA$1:$AA$3,3))	()	e	#N/A
+info_family	error.type	431	ERROR.TYPE(IF(TRUE,$AA$3))	()	e	#N/A
+info_family	error.type	432	ERROR.TYPE(NOSUCHNAME)	()	n	5.0
+info_family	error.type	433	ERROR.TYPE(SUM($AA$1))	()	e	#N/A
+info_family	error.type	434	ERROR.TYPE(#REF!)	()	n	4.0
+info_family	error.type	435	ERROR.TYPE(#N/A)	()	n	7.0
+info_family	isformula	436	_xlfn.ISFORMULA($AA$1)	()	b	False
+info_family	isformula	437	_xlfn.ISFORMULA($AA$2)	()	b	False
+info_family	isformula	438	_xlfn.ISFORMULA($AA$3)	()	b	True
+info_family	isformula	439	_xlfn.ISFORMULA($AA$4)	()	b	False
+info_family	isformula	440	_xlfn.ISFORMULA($AA$5)	()	b	False
+info_family	isformula	441	_xlfn.ISFORMULA($AA$6)	()	b	False
+info_family	isformula	442	_xlfn.ISFORMULA($AA$7)	()	b	True
+info_family	isformula	443	_xlfn.ISFORMULA($AA$8)	()	b	True
+info_family	isformula	444	_xlfn.ISFORMULA($AA$9)	()	b	True
+info_family	isformula	445	_xlfn.ISFORMULA($AB$1)	()	b	True
+info_family	isformula	446	_xlfn.ISFORMULA($AA$1:$AA$2)	()	b	False
+info_family	isformula	447	_xlfn.ISFORMULA($AA$3:$AA$4)	()	b	True
+info_family	isformula	448	_xlfn.ISFORMULA($AA$4:$AA$5)	()	b	False
+info_family	isformula	449	_xlfn.ISFORMULA($AA$6:$AA$8)	()	b	False
+info_family	isformula	450	_xlfn.ISFORMULA(OFFSET($AA$1,2,0))	()	b	True
+info_family	isformula	451	_xlfn.ISFORMULA(INDIRECT("AA3"))	()	b	True
+info_family	isformula	452	_xlfn.ISFORMULA(($AA$1,$AA$2))	()	b	False
+info_family	isformula	453	_xlfn.ISFORMULA($AA$1 $AA$2)	()	e	#NULL!
+info_family	isformula	454	_xlfn.ISFORMULA($AA$1:$AA$2 $AA$2)	()	b	False
+info_family	isformula	455	_xlfn.ISFORMULA(INDEX($AA$1:$AA$3,3))	()	b	True
+info_family	isformula	456	_xlfn.ISFORMULA(IF(TRUE,$AA$3))	()	b	True
+info_family	isformula	457	_xlfn.ISFORMULA(NOSUCHNAME)	()	e	#NAME?
+info_family	isformula	458	_xlfn.ISFORMULA(#REF!)	()	e	#REF!
+info_family	formulatext	459	_xlfn.FORMULATEXT($AA$1)	()	e	#N/A
+info_family	formulatext	460	_xlfn.FORMULATEXT($AA$2)	()	e	#N/A
+info_family	formulatext	461	_xlfn.FORMULATEXT($AA$3)	()	str	'=1+1'
+info_family	formulatext	462	_xlfn.FORMULATEXT($AA$4)	()	e	#N/A
+info_family	formulatext	463	_xlfn.FORMULATEXT($AA$5)	()	e	#N/A
+info_family	formulatext	464	_xlfn.FORMULATEXT($AA$6)	()	e	#N/A
+info_family	formulatext	465	_xlfn.FORMULATEXT($AA$7)	()	str	'=TRIM("made")'
+info_family	formulatext	466	_xlfn.FORMULATEXT($AA$8)	()	str	'=NA()'
+info_family	formulatext	467	_xlfn.FORMULATEXT($AA$9)	()	str	'=IF(TRUE,"a","b")&" ""q"""'
+info_family	formulatext	468	_xlfn.FORMULATEXT($AB$1)	()	str	'=@{1,2;3,4}'
+info_family	formulatext	469	_xlfn.FORMULATEXT($AA$1:$AA$2)	()	e	#N/A
+info_family	formulatext	470	_xlfn.FORMULATEXT($AA$3:$AA$4)	()	str	'=1+1'
+info_family	formulatext	471	_xlfn.FORMULATEXT($AA$4:$AA$5)	()	e	#N/A
+info_family	formulatext	472	_xlfn.FORMULATEXT($AA$6:$AA$8)	()	e	#N/A
+info_family	formulatext	473	_xlfn.FORMULATEXT(OFFSET($AA$1,2,0))	()	str	'=1+1'
+info_family	formulatext	474	_xlfn.FORMULATEXT(INDIRECT("AA3"))	()	str	'=1+1'
+info_family	formulatext	475	_xlfn.FORMULATEXT(($AA$1,$AA$2))	()	e	#N/A
+info_family	formulatext	476	_xlfn.FORMULATEXT($AA$1 $AA$2)	()	e	#NULL!
+info_family	formulatext	477	_xlfn.FORMULATEXT($AA$1:$AA$2 $AA$2)	()	e	#N/A
+info_family	formulatext	478	_xlfn.FORMULATEXT(INDEX($AA$1:$AA$3,3))	()	str	'=1+1'
+info_family	formulatext	479	_xlfn.FORMULATEXT(IF(TRUE,$AA$3))	()	str	'=1+1'
+info_family	formulatext	480	_xlfn.FORMULATEXT(NOSUCHNAME)	()	e	#NAME?
+info_family	formulatext	481	_xlfn.FORMULATEXT(#REF!)	()	e	#REF!
+info_family	sheet	482	_xlfn.SHEET($AA$1)	()	n	1.0
+info_family	sheet	483	_xlfn.SHEET($AA$1:$AA$3)	()	n	1.0
+info_family	sheet	484	_xlfn.SHEET(($AA$1,$AB$1))	()	n	1.0
+info_family	sheet	485	_xlfn.SHEET(($AA$1,$AB$1,$AC$1))	()	n	1.0
+info_family	sheet	486	_xlfn.SHEET($AA$1 $AA$1)	()	n	1.0
+info_family	sheet	487	_xlfn.SHEET($AA$1 $AB$1)	()	e	#NULL!
+info_family	sheet	488	_xlfn.SHEET(OFFSET($AA$1,1,0))	()	n	1.0
+info_family	sheet	489	_xlfn.SHEET(INDIRECT("AA3"))	()	n	1.0
+info_family	sheet	490	_xlfn.SHEET(1)	()	e	#N/A
+info_family	sheet	491	_xlfn.SHEET("cases")	()	n	1.0
+info_family	sheet	492	_xlfn.SHEET("nosuch")	()	e	#N/A
+info_family	sheet	493	_xlfn.SHEET("a")	()	e	#N/A
+info_family	sheet	494	_xlfn.SHEET(TRUE)	()	e	#N/A
+info_family	sheet	495	_xlfn.SHEET(1/0)	()	e	#DIV/0!
+info_family	sheet	496	_xlfn.SHEET({1,2})	()	e	#N/A
+info_family	sheet	497	_xlfn.SHEET(NOSUCHNAME)	()	e	#NAME?
+info_family	sheet	498	_xlfn.SHEET(#REF!)	()	e	#REF!
+info_family	sheet	499	_xlfn.SHEET(IF(TRUE,$AA$1))	()	n	1.0
+info_family	sheet	500	_xlfn.SHEET(INDEX($AA$1:$AA$3,2))	()	n	1.0
+info_family	sheet	501	_xlfn.SHEET(cases!$AA$1)	()	n	1.0
+info_family	sheet	502	_xlfn.SHEET('cases'!A:A)	()	n	1.0
+info_family	sheets	503	_xlfn.SHEETS($AA$1)	()	n	1.0
+info_family	sheets	504	_xlfn.SHEETS($AA$1:$AA$3)	()	n	1.0
+info_family	sheets	505	_xlfn.SHEETS(($AA$1,$AB$1))	()	n	1.0
+info_family	sheets	506	_xlfn.SHEETS(($AA$1,$AB$1,$AC$1))	()	n	1.0
+info_family	sheets	507	_xlfn.SHEETS($AA$1 $AA$1)	()	n	1.0
+info_family	sheets	508	_xlfn.SHEETS($AA$1 $AB$1)	()	e	#NULL!
+info_family	sheets	509	_xlfn.SHEETS(OFFSET($AA$1,1,0))	()	n	1.0
+info_family	sheets	510	_xlfn.SHEETS(INDIRECT("AA3"))	()	n	1.0
+info_family	sheets	511	_xlfn.SHEETS(1)	()	e	#N/A
+info_family	sheets	512	_xlfn.SHEETS("cases")	()	e	#N/A
+info_family	sheets	513	_xlfn.SHEETS("nosuch")	()	e	#N/A
+info_family	sheets	514	_xlfn.SHEETS("a")	()	e	#N/A
+info_family	sheets	515	_xlfn.SHEETS(TRUE)	()	e	#N/A
+info_family	sheets	516	_xlfn.SHEETS(1/0)	()	e	#DIV/0!
+info_family	sheets	517	_xlfn.SHEETS({1,2})	()	e	#N/A
+info_family	sheets	518	_xlfn.SHEETS(NOSUCHNAME)	()	e	#NAME?
+info_family	sheets	519	_xlfn.SHEETS(#REF!)	()	e	#REF!
+info_family	sheets	520	_xlfn.SHEETS(IF(TRUE,$AA$1))	()	n	1.0
+info_family	sheets	521	_xlfn.SHEETS(INDEX($AA$1:$AA$3,2))	()	n	1.0
+info_family	sheets	522	_xlfn.SHEETS(cases!$AA$1)	()	n	1.0
+info_family	sheets	523	_xlfn.SHEETS('cases'!A:A)	()	n	1.0
+info_family	areas	524	AREAS($AA$1)	()	n	1.0
+info_family	areas	525	AREAS($AA$1:$AA$3)	()	n	1.0
+info_family	areas	526	AREAS(($AA$1,$AB$1))	()	n	2.0
+info_family	areas	527	AREAS(($AA$1,$AB$1,$AC$1))	()	n	3.0
+info_family	areas	528	AREAS($AA$1 $AA$1)	()	n	1.0
+info_family	areas	529	AREAS($AA$1 $AB$1)	()	e	#NULL!
+info_family	areas	530	AREAS(OFFSET($AA$1,1,0))	()	n	1.0
+info_family	areas	531	AREAS(INDIRECT("AA3"))	()	n	1.0
+info_family	areas	532	AREAS(NOSUCHNAME)	()	e	#NAME?
+info_family	areas	533	AREAS(#REF!)	()	e	#REF!
+info_family	areas	534	AREAS(IF(TRUE,$AA$1))	()	n	1.0
+info_family	areas	535	AREAS(INDEX($AA$1:$AA$3,2))	()	n	1.0
+info_family	areas	536	AREAS(cases!$AA$1)	()	n	1.0
+info_family	areas	537	AREAS('cases'!A:A)	()	n	1.0
+info_family	sheet	538	_xlfn.SHEET()	()	n	1.0
+info_family	sheets	539	_xlfn.SHEETS()	()	n	1.0
+info_family	hyperlink	540	HYPERLINK({1})	('#cases!A1',)	str	'#cases!A1'
+info_family	hyperlink	541	HYPERLINK({1},{2})	('#cases!A1', 'shown')	str	'shown'
+info_family	hyperlink	542	HYPERLINK({1},{2})	('#cases!A1', '')	str	''
+info_family	hyperlink	543	HYPERLINK({1},{2})	('#cases!A1', 5.0)	n	5.0
+info_family	hyperlink	544	HYPERLINK({1},{2})	('#cases!A1', 0.5)	n	0.5
+info_family	hyperlink	545	HYPERLINK({1},{2})	('#cases!A1', True)	b	True
+info_family	hyperlink	546	HYPERLINK({1},{2})	('#cases!A1', None)	n	0.0
+info_family	hyperlink	547	HYPERLINK({1},{2})	('#cases!A1', ErrorValue('#N/A'))	e	#N/A
+info_family	hyperlink	548	HYPERLINK({1})	('local.xlsx',)	str	'local.xlsx'
+info_family	hyperlink	549	HYPERLINK({1},{2})	('local.xlsx', 'shown')	str	'shown'
+info_family	hyperlink	550	HYPERLINK({1},{2})	('local.xlsx', '')	str	''
+info_family	hyperlink	551	HYPERLINK({1},{2})	('local.xlsx', 5.0)	n	5.0
+info_family	hyperlink	552	HYPERLINK({1},{2})	('local.xlsx', 0.5)	n	0.5
+info_family	hyperlink	553	HYPERLINK({1},{2})	('local.xlsx', True)	b	True
+info_family	hyperlink	554	HYPERLINK({1},{2})	('local.xlsx', None)	n	0.0
+info_family	hyperlink	555	HYPERLINK({1},{2})	('local.xlsx', ErrorValue('#N/A'))	e	#N/A
+info_family	hyperlink	556	HYPERLINK({1})	('',)	str	''
+info_family	hyperlink	557	HYPERLINK({1},{2})	('', 'shown')	str	'shown'
+info_family	hyperlink	558	HYPERLINK({1},{2})	('', '')	str	''
+info_family	hyperlink	559	HYPERLINK({1},{2})	('', 5.0)	n	5.0
+info_family	hyperlink	560	HYPERLINK({1},{2})	('', 0.5)	n	0.5
+info_family	hyperlink	561	HYPERLINK({1},{2})	('', True)	b	True
+info_family	hyperlink	562	HYPERLINK({1},{2})	('', None)	n	0.0
+info_family	hyperlink	563	HYPERLINK({1},{2})	('', ErrorValue('#N/A'))	e	#N/A
+info_family	hyperlink	564	HYPERLINK({1})	(5.0,)	str	'5'
+info_family	hyperlink	565	HYPERLINK({1},{2})	(5.0, 'shown')	str	'shown'
+info_family	hyperlink	566	HYPERLINK({1},{2})	(5.0, '')	str	''
+info_family	hyperlink	567	HYPERLINK({1},{2})	(5.0, 5.0)	n	5.0
+info_family	hyperlink	568	HYPERLINK({1},{2})	(5.0, 0.5)	n	0.5
+info_family	hyperlink	569	HYPERLINK({1},{2})	(5.0, True)	b	True
+info_family	hyperlink	570	HYPERLINK({1},{2})	(5.0, None)	n	0.0
+info_family	hyperlink	571	HYPERLINK({1},{2})	(5.0, ErrorValue('#N/A'))	e	#N/A
+info_family	hyperlink	572	HYPERLINK({1})	(True,)	str	'TRUE'
+info_family	hyperlink	573	HYPERLINK({1},{2})	(True, 'shown')	str	'shown'
+info_family	hyperlink	574	HYPERLINK({1},{2})	(True, '')	str	''
+info_family	hyperlink	575	HYPERLINK({1},{2})	(True, 5.0)	n	5.0
+info_family	hyperlink	576	HYPERLINK({1},{2})	(True, 0.5)	n	0.5
+info_family	hyperlink	577	HYPERLINK({1},{2})	(True, True)	b	True
+info_family	hyperlink	578	HYPERLINK({1},{2})	(True, None)	n	0.0
+info_family	hyperlink	579	HYPERLINK({1},{2})	(True, ErrorValue('#N/A'))	e	#N/A
+info_family	hyperlink	580	HYPERLINK({1})	(None,)	str	''
+info_family	hyperlink	581	HYPERLINK({1},{2})	(None, 'shown')	str	'shown'
+info_family	hyperlink	582	HYPERLINK({1},{2})	(None, '')	str	''
+info_family	hyperlink	583	HYPERLINK({1},{2})	(None, 5.0)	n	5.0
+info_family	hyperlink	584	HYPERLINK({1},{2})	(None, 0.5)	n	0.5
+info_family	hyperlink	585	HYPERLINK({1},{2})	(None, True)	b	True
+info_family	hyperlink	586	HYPERLINK({1},{2})	(None, None)	n	0.0
+info_family	hyperlink	587	HYPERLINK({1},{2})	(None, ErrorValue('#N/A'))	e	#N/A
+info_family	hyperlink	588	HYPERLINK({1})	(ErrorValue('#N/A'),)	e	#N/A
+info_family	hyperlink	589	HYPERLINK({1},{2})	(ErrorValue('#N/A'), 'shown')	e	#N/A
+info_family	hyperlink	590	HYPERLINK({1},{2})	(ErrorValue('#N/A'), '')	e	#N/A
+info_family	hyperlink	591	HYPERLINK({1},{2})	(ErrorValue('#N/A'), 5.0)	e	#N/A
+info_family	hyperlink	592	HYPERLINK({1},{2})	(ErrorValue('#N/A'), 0.5)	e	#N/A
+info_family	hyperlink	593	HYPERLINK({1},{2})	(ErrorValue('#N/A'), True)	e	#N/A
+info_family	hyperlink	594	HYPERLINK({1},{2})	(ErrorValue('#N/A'), None)	e	#N/A
+info_family	hyperlink	595	HYPERLINK({1},{2})	(ErrorValue('#N/A'), ErrorValue('#N/A'))	e	#N/A
+info_family	hyperlink	596	HYPERLINK($AA$1:$AA$2)	()	e	#VALUE!
+info_family	hyperlink	597	HYPERLINK("#cases!A1",$AA$1:$AA$2)	()	e	#VALUE!
+info_family	hyperlink	598	HYPERLINK("#cases!A1",1)+1	()	n	2.0
+info_family	hyperlink	599	LEN(HYPERLINK("#cases!A1","abc"))	()	n	3.0

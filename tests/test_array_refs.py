@@ -38,7 +38,6 @@ ROWS = [
 ]
 INPUTS = [(r[1], r[2], ast.literal_eval(r[3])) for r in ROWS if r[0] == "input"]
 CELLS = {r[1]: r[2:] for r in ROWS if r[0] == "cell"}
-NOT_IMPLEMENTED = ("_xlfn.ISFORMULA", "_xlfn.FORMULATEXT", "_xlfn.SHEET", "ISREF", "AREAS")
 
 _REFS = "an array of references read by a function: not implemented, and the cell is reported"
 OFFSETS = "OFFSET(Z1,{0;1;2;3},0)"
@@ -182,10 +181,6 @@ def _expected(cell: list[str]) -> object:
     return value
 
 
-def _not_implemented(formula: str) -> bool:
-    return any(name in formula for name in NOT_IMPLEMENTED)
-
-
 @functools.cache
 def _engine(large: bool) -> Engine:
     engine = load(io.BytesIO(workbook(large)))
@@ -201,7 +196,7 @@ def differences(large: bool = False) -> dict[str, list[str]]:
     for address, cell in CELLS.items():
         r, c = _cell(address)
         formula = owners.get((r, c))
-        if formula is None or _not_implemented(formula) or (_large(formula) and not large):
+        if formula is None or (_large(formula) and not large):
             continue
         got = engine.get(0, r - 1, c - 1)
         want = _expected(cell)
@@ -246,7 +241,7 @@ def test_spill_ranges_match_excel():
     engine = _engine(False)
     wrong = []
     for kind, anchor, formula in INPUTS:
-        if kind != "dynamic" or formula in KNOWN or _not_implemented(formula) or _large(formula):
+        if kind != "dynamic" or formula in KNOWN or _large(formula):
             continue
         r, c = _cell(anchor)
         filling = engine.anchors.get(node(0, r - 1, c - 1))

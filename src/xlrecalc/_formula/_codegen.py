@@ -437,6 +437,9 @@ class _Generator:
         if name.text.upper() in ("ROW", "COLUMN") and len(args) == 1 and _is_union(args[0]):
             self.calls.add(name.text.upper())
             return self.constant(ErrorValue.REF)  # of several areas (capture array_refs)
+        if name.text.upper() in ("AREAS", "ISREF") and len(args) == 1 and _is_union(args[0]):
+            self.calls.add(name.text.upper())  # known from the formula alone (capture info_family)
+            return self.constant(float(_areas(args[0])) if name.text.upper() == "AREAS" else True)
         if self.arrays:
             fn = getattr(fn, "in_array", fn)
         kinds: tuple[str, ...] = getattr(fn, "kinds", ())
@@ -498,6 +501,13 @@ def _is_union(node: Node) -> bool:
     while isinstance(node, Group):
         node = node.inner
     return isinstance(node, Union)
+
+
+def _areas(node: Node) -> int:
+    """The areas a union names, nested unions included."""
+    while isinstance(node, Group):
+        node = node.inner
+    return sum(_areas(item) for item in node.items) if isinstance(node, Union) else 1
 
 
 def kind_at(kinds: tuple[str, ...], i: int, cycle: int = 1) -> str:
