@@ -885,7 +885,7 @@ def QUOTIENT(ctx: Context, a: Any, b: Any) -> float | ErrorValue:
 
 _PRODUCT = "the order in which Excel multiplies, which a few tried orders did not reproduce"
 _PAST_DOUBLES = 2**1024
-_LARGEST_N = 2.0**31  # COMBIN, PERMUT: 1,030 is computed, 1E10 is #NUM! (not located closer)
+_LARGEST_N = 2147483647.0  # COMBIN, PERMUT: 2147483646 is computed, this is #NUM! (capture)
 
 
 def _big(value: int) -> float | ErrorValue:

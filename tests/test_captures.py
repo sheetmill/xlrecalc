@@ -432,6 +432,7 @@ SUITES = [
     "finance_family",
     "empty_args",
     "cum_large",
+    "combin_limit",
 ]
 
 

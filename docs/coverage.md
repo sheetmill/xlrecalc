@@ -87,7 +87,7 @@ library differs in the last bits; the rows that match either way do not.
 | `CODE` | text | implemented | 18 | 18 | 0 | 0 | 0 |  |  |
 | `COLUMN` | lookup and reference | implemented | 3 | 3 | 0 | 0 | 0 |  |  |
 | `COLUMNS` | lookup and reference | implemented | 2 | 2 | 0 | 0 | 0 |  |  |
-| `COMBIN` | math | implemented | 206 | 205 | 1 | 0 | 0 | 4 ulps |  |
+| `COMBIN` | math | implemented | 288 | 287 | 1 | 0 | 0 | 4 ulps |  |
 | `COMBINA` | math | implemented | 206 | 204 | 2 | 0 | 0 | 4 ulps |  |
 | `COMPLEX` | | absent | | | | | | | |
 | `CONCAT` | text | implemented | 33 | 33 | 0 | 0 | 0 |  |  |
@@ -372,7 +372,7 @@ library differs in the last bits; the rows that match either way do not.
 | `PERCENTRANK` | statistical | implemented | 179 | 179 | 0 | 0 | 0 |  |  |
 | `PERCENTRANK.EXC` | statistical | implemented | 179 | 179 | 0 | 0 | 0 |  |  |
 | `PERCENTRANK.INC` | statistical | implemented | 179 | 179 | 0 | 0 | 0 |  |  |
-| `PERMUT` | math | implemented | 206 | 205 | 1 | 0 | 0 | 4 ulps |  |
+| `PERMUT` | math | implemented | 288 | 287 | 1 | 0 | 0 | 4 ulps |  |
 | `PERMUTATIONA` | math | implemented | 206 | 206 | 0 | 0 | 0 |  |  |
 | `PHI` | statistical | implemented | 17 | 16 | 1 | 0 | 0 | 4 ulps |  |
 | `PHONETIC` | | absent | | | | | | | |

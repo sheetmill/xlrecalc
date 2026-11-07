@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import io
+import zipfile
 from pathlib import Path
 
 import pytest
 
 from tests.test_xlsx import package
+from xlrecalc import recalculate
 from xlrecalc._engine import Engine
 from xlrecalc._functions import REGISTRY, function
 from xlrecalc._load import load, refused_in_file
@@ -290,3 +292,16 @@ def test_refused_in_file_agrees_with_excel_on_empty_arguments():
     computed = [r.split("\t")[3] for r in rows if r.startswith("empty_args\t")]
     assert len(computed) > 500
     assert [f for f in computed if refused_in_file(f) is not None] == []
+
+
+def test_a_lone_surrogate_is_written_as_excel_stores_it(tmp_path):
+    """``MID`` can cut a character in two; the file holds ``_xDE00_``, as Excel saves it."""
+    openpyxl = pytest.importorskip("openpyxl")
+    book = openpyxl.Workbook()
+    book.active["B1"] = "\U0001f600ab"
+    book.active["A1"] = "=MID(B1,2,2)"
+    source, out = tmp_path / "in.xlsx", tmp_path / "out.xlsx"
+    book.save(source)
+    recalculate(source, out, full=True)
+    with zipfile.ZipFile(out) as written:
+        assert "<v>_xDE00_a</v>" in written.read("xl/worksheets/sheet1.xml").decode("utf-8")

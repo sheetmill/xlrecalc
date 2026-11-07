@@ -58,6 +58,7 @@ people's workbooks are used.
 | `finance_family` | 15,513 | `CUMIPMT`, `CUMPRINC`, `DB`, `DDB`, `SYD`, `DISC`, `INTRATE`, `RECEIVED`, `PRICEDISC`, `YIELDDISC`, the Treasury bills, `DOLLARDE`, `DOLLARFR`, `EFFECT`, `NOMINAL`, `FVSCHEDULE`, `ISPMT`, `MIRR`, `PDURATION`, `RRI` over rates, periods, dates in every basis, argument kinds and the order of errors |
 | `empty_args` | generated | every implemented function from the registry with each argument empty in turn, and its optional ones empty together. `capture/empty_probe.py` opens them in batches and halves a refused batch: 135 formulas Excel refuses are in `empty_args_refused.tsv`, and the suite holds the rest |
 | `cum_large` | 40 | `CUMIPMT`, `CUMPRINC`, `DB` over 1E6 to 1E8 periods: answered at once, with no bound |
+| `combin_limit` | 164 | `COMBIN` and `PERMUT` at powers of 2 and of 10 up to 2^33: 2,147,483,646 is computed and 2,147,483,647 is `#NUM!` |
 | `index_range` | 38 | ranges built with `INDEX`, lookups and aggregates over a formula's own column: which Excel calls circular |
 | `static_cycle` | 37 | loops of references through a branch not taken, and real loops as controls: which Excel calls circular |
 | `array_refs` | 8,954 cells | `ROW`, `COLUMN`, `CELL`, ranges and arrays as a criterion or a lookup key, and arrays of references, each as a legacy formula, a legacy array formula and a dynamic array |

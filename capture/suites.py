@@ -3254,6 +3254,30 @@ def cum_large() -> list[Case]:
     return cases
 
 
+def combin_limit() -> list[Case]:
+    """Where COMBIN and PERMUT stop taking n, between 1,030 and 1E10."""
+    ns = (
+        [2**k for k in range(10, 34)] + [2**k - 1 for k in (31, 32)] + [10**k for k in range(4, 11)]
+    )
+    ns += [
+        2**30 + 1,
+        1500000000,
+        2000000000,
+        2100000000,
+        2147483000,
+        2147483640,
+        2147483645,
+        2147483646,
+    ]
+    cases = []
+    for n in sorted(set(ns)):
+        cases.append(Case("combin", f"COMBIN({n},1)"))
+        cases.append(Case("combin", f"COMBIN({n},2)"))
+        cases.append(Case("permut", f"PERMUT({n},1)"))
+        cases.append(Case("permut", f"PERMUT({n},2)"))
+    return cases
+
+
 def mac_gaps() -> list[Case]:
     """Whether Excel for Mac computes functions a source says it lacks, in each file form."""
     url = '("a b&c=d/é")'
@@ -3301,6 +3325,7 @@ SUITES = {
     "math_integers": Suite(math_integers, fixed=_INTEGERS_TABLE),
     "iteration": Suite(iteration),
     "mac_gaps": Suite(mac_gaps),
+    "combin_limit": Suite(combin_limit),
     "cum_large": Suite(cum_large),
     "empty_args": Suite(empty_args, fixed=_EMPTY_TABLE),
     "database_family": Suite(database_family, fixed={**MISC_TABLE, **_DB_EXTRA}),

@@ -173,8 +173,7 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   logarithms and `SERIESSUM` within 4 units in the last place, for Excel's own math library; `FACT` and `FACTDOUBLE`
   within 8 and `COMBIN`, `COMBINA` and `PERMUT` within 4, for the order Excel multiplies in, which a few tried orders
   did not reproduce. `MULTINOMIAL` is exact, where Excel's result carries noise from its logarithm of the gamma
-  function (279.99999999999966 for 280); 12 rows listed in `tests/test_captures.py`. Excel's limit on `n`
-  for `COMBIN` and `PERMUT` lies between 1,030 and 1E10 and was not located closer; 2^31 is used.
+  function (279.99999999999966 for 280); 12 rows listed in `tests/test_captures.py`.
 - `IRR`, `XIRR`, `RATE`, `YIELD` ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1, §8.2): a relative tolerance of
   1E-9, declared per function, since Excel's Newton iterates rest on its own NPV, whose last
   bits are not reproduced, and Excel guarantees its result only to its documented stopping
