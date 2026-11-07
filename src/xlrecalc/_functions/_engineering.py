@@ -44,21 +44,24 @@ def _decode(v: Any, source: str, ctx: Context) -> int | ErrorValue:
     return value - 2**width if len(digits) == _MAX_DIGITS and value >= 2 ** (width - 1) else value
 
 
-def _encode(n: int, target: str, places: Any, ctx: Context) -> str | ErrorValue:
-    """An integer written in a base, in ``places`` digits if given."""
+def _places(places: Any, ctx: Context) -> int | ErrorValue | None:
+    """The digits asked for, or ``None``; any problem here comes before the number's."""
+    if places is MISSING:
+        return None
+    p = _strict(places, ctx)
+    if isinstance(p, ErrorValue):
+        return p
+    count = math.trunc(p) if abs(p) < _MAX_DIGITS + 1 else 0
+    return count if 1 <= count <= _MAX_DIGITS else NUM
+
+
+def _encode(n: int, target: str, count: int | None) -> str | ErrorValue:
+    """An integer written in a base, in ``count`` digits if given."""
     base, bits = _BITS[target]
     width = _MAX_DIGITS * bits
     # BIN holds 10 bits; OCT and HEX keep to their own widths (30 and 40).
     if not -(2 ** (width - 1)) <= n < 2 ** (width - 1):
         return NUM
-    count = None
-    if places is not MISSING:
-        p = _strict(places, ctx)
-        if isinstance(p, ErrorValue):
-            return p
-        count = math.trunc(p)
-        if not 1 <= count <= _MAX_DIGITS:
-            return NUM
     value = n + 2**width if n < 0 else n
     digits = ""
     while value:
@@ -91,14 +94,11 @@ def _converter(source: str, target: str) -> None:
 
     @function(name, "value", "value", min_args=1, errors=True, category=E)
     def convert(ctx: Context, v: Any, places: Any = MISSING) -> str | ErrorValue:
-        if isinstance(places, bool) or isinstance(v, bool):  # first (capture engineering_family)
-            return VALUE
-        if isinstance(v, ErrorValue):
-            return v
-        if isinstance(places, ErrorValue):
-            return places
+        count = _places(places, ctx)
+        if isinstance(count, ErrorValue):
+            return count
         n = _from_decimal(v, ctx) if source == "DEC" else _decode(v, source, ctx)
-        return n if isinstance(n, ErrorValue) else _encode(n, target, places, ctx)
+        return n if isinstance(n, ErrorValue) else _encode(n, target, count)
 
     convert.__doc__ = f"A number in {source} as a number in {target}."
 

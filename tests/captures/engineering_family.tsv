@@ -3229,3 +3229,597 @@ engineering_family	gestep	3217	GESTEP({1},{2})	(ErrorValue('#N/A'), '')	e	#VALUE
 engineering_family	gestep	3218	GESTEP({1},{2})	(ErrorValue('#N/A'), True)	e	#VALUE!
 engineering_family	gestep	3219	GESTEP({1},{2})	(ErrorValue('#N/A'), None)	e	#N/A
 engineering_family	gestep	3220	GESTEP({1},{2})	(ErrorValue('#N/A'), ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2bin	3221	DEC2BIN({1},{2})	('E', 0.0)	e	#NUM!
+engineering_family	order_dec2bin	3222	DEC2BIN({1},{2})	('E', -1.0)	e	#NUM!
+engineering_family	order_dec2bin	3223	DEC2BIN({1},{2})	('E', 1.0)	e	#VALUE!
+engineering_family	order_dec2bin	3224	DEC2BIN({1},{2})	('E', 11.0)	e	#NUM!
+engineering_family	order_dec2bin	3225	DEC2BIN({1},{2})	('E', 1e+300)	e	#NUM!
+engineering_family	order_dec2bin	3226	DEC2BIN({1},{2})	('E', 'x')	e	#VALUE!
+engineering_family	order_dec2bin	3227	DEC2BIN({1},{2})	('E', '')	e	#VALUE!
+engineering_family	order_dec2bin	3228	DEC2BIN({1},{2})	('E', '3')	e	#VALUE!
+engineering_family	order_dec2bin	3229	DEC2BIN({1},{2})	('E', True)	e	#VALUE!
+engineering_family	order_dec2bin	3230	DEC2BIN({1},{2})	('E', None)	e	#NUM!
+engineering_family	order_dec2bin	3231	DEC2BIN({1},{2})	('E', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2bin	3232	DEC2BIN({1},{2})	('', 0.0)	e	#NUM!
+engineering_family	order_dec2bin	3233	DEC2BIN({1},{2})	('', -1.0)	e	#NUM!
+engineering_family	order_dec2bin	3234	DEC2BIN({1},{2})	('', 1.0)	e	#VALUE!
+engineering_family	order_dec2bin	3235	DEC2BIN({1},{2})	('', 11.0)	e	#NUM!
+engineering_family	order_dec2bin	3236	DEC2BIN({1},{2})	('', 1e+300)	e	#NUM!
+engineering_family	order_dec2bin	3237	DEC2BIN({1},{2})	('', 'x')	e	#VALUE!
+engineering_family	order_dec2bin	3238	DEC2BIN({1},{2})	('', '')	e	#VALUE!
+engineering_family	order_dec2bin	3239	DEC2BIN({1},{2})	('', '3')	e	#VALUE!
+engineering_family	order_dec2bin	3240	DEC2BIN({1},{2})	('', True)	e	#VALUE!
+engineering_family	order_dec2bin	3241	DEC2BIN({1},{2})	('', None)	e	#NUM!
+engineering_family	order_dec2bin	3242	DEC2BIN({1},{2})	('', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2bin	3243	DEC2BIN({1},{2})	('2', 0.0)	e	#NUM!
+engineering_family	order_dec2bin	3244	DEC2BIN({1},{2})	('2', -1.0)	e	#NUM!
+engineering_family	order_dec2bin	3245	DEC2BIN({1},{2})	('2', 1.0)	e	#NUM!
+engineering_family	order_dec2bin	3246	DEC2BIN({1},{2})	('2', 11.0)	e	#NUM!
+engineering_family	order_dec2bin	3247	DEC2BIN({1},{2})	('2', 1e+300)	e	#NUM!
+engineering_family	order_dec2bin	3248	DEC2BIN({1},{2})	('2', 'x')	e	#VALUE!
+engineering_family	order_dec2bin	3249	DEC2BIN({1},{2})	('2', '')	e	#VALUE!
+engineering_family	order_dec2bin	3250	DEC2BIN({1},{2})	('2', '3')	str	'010'
+engineering_family	order_dec2bin	3251	DEC2BIN({1},{2})	('2', True)	e	#VALUE!
+engineering_family	order_dec2bin	3252	DEC2BIN({1},{2})	('2', None)	e	#NUM!
+engineering_family	order_dec2bin	3253	DEC2BIN({1},{2})	('2', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2bin	3254	DEC2BIN({1},{2})	(' 1', 0.0)	e	#NUM!
+engineering_family	order_dec2bin	3255	DEC2BIN({1},{2})	(' 1', -1.0)	e	#NUM!
+engineering_family	order_dec2bin	3256	DEC2BIN({1},{2})	(' 1', 1.0)	str	'1'
+engineering_family	order_dec2bin	3257	DEC2BIN({1},{2})	(' 1', 11.0)	e	#NUM!
+engineering_family	order_dec2bin	3258	DEC2BIN({1},{2})	(' 1', 1e+300)	e	#NUM!
+engineering_family	order_dec2bin	3259	DEC2BIN({1},{2})	(' 1', 'x')	e	#VALUE!
+engineering_family	order_dec2bin	3260	DEC2BIN({1},{2})	(' 1', '')	e	#VALUE!
+engineering_family	order_dec2bin	3261	DEC2BIN({1},{2})	(' 1', '3')	str	'001'
+engineering_family	order_dec2bin	3262	DEC2BIN({1},{2})	(' 1', True)	e	#VALUE!
+engineering_family	order_dec2bin	3263	DEC2BIN({1},{2})	(' 1', None)	e	#NUM!
+engineering_family	order_dec2bin	3264	DEC2BIN({1},{2})	(' 1', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2bin	3265	DEC2BIN({1},{2})	(1e+300, 0.0)	e	#NUM!
+engineering_family	order_dec2bin	3266	DEC2BIN({1},{2})	(1e+300, -1.0)	e	#NUM!
+engineering_family	order_dec2bin	3267	DEC2BIN({1},{2})	(1e+300, 1.0)	e	#NUM!
+engineering_family	order_dec2bin	3268	DEC2BIN({1},{2})	(1e+300, 11.0)	e	#NUM!
+engineering_family	order_dec2bin	3269	DEC2BIN({1},{2})	(1e+300, 1e+300)	e	#NUM!
+engineering_family	order_dec2bin	3270	DEC2BIN({1},{2})	(1e+300, 'x')	e	#VALUE!
+engineering_family	order_dec2bin	3271	DEC2BIN({1},{2})	(1e+300, '')	e	#VALUE!
+engineering_family	order_dec2bin	3272	DEC2BIN({1},{2})	(1e+300, '3')	e	#NUM!
+engineering_family	order_dec2bin	3273	DEC2BIN({1},{2})	(1e+300, True)	e	#VALUE!
+engineering_family	order_dec2bin	3274	DEC2BIN({1},{2})	(1e+300, None)	e	#NUM!
+engineering_family	order_dec2bin	3275	DEC2BIN({1},{2})	(1e+300, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2bin	3276	DEC2BIN({1},{2})	(-1e+300, 0.0)	e	#NUM!
+engineering_family	order_dec2bin	3277	DEC2BIN({1},{2})	(-1e+300, -1.0)	e	#NUM!
+engineering_family	order_dec2bin	3278	DEC2BIN({1},{2})	(-1e+300, 1.0)	e	#NUM!
+engineering_family	order_dec2bin	3279	DEC2BIN({1},{2})	(-1e+300, 11.0)	e	#NUM!
+engineering_family	order_dec2bin	3280	DEC2BIN({1},{2})	(-1e+300, 1e+300)	e	#NUM!
+engineering_family	order_dec2bin	3281	DEC2BIN({1},{2})	(-1e+300, 'x')	e	#VALUE!
+engineering_family	order_dec2bin	3282	DEC2BIN({1},{2})	(-1e+300, '')	e	#VALUE!
+engineering_family	order_dec2bin	3283	DEC2BIN({1},{2})	(-1e+300, '3')	e	#NUM!
+engineering_family	order_dec2bin	3284	DEC2BIN({1},{2})	(-1e+300, True)	e	#VALUE!
+engineering_family	order_dec2bin	3285	DEC2BIN({1},{2})	(-1e+300, None)	e	#NUM!
+engineering_family	order_dec2bin	3286	DEC2BIN({1},{2})	(-1e+300, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2bin	3287	DEC2BIN({1},{2})	(True, 0.0)	e	#NUM!
+engineering_family	order_dec2bin	3288	DEC2BIN({1},{2})	(True, -1.0)	e	#NUM!
+engineering_family	order_dec2bin	3289	DEC2BIN({1},{2})	(True, 1.0)	e	#VALUE!
+engineering_family	order_dec2bin	3290	DEC2BIN({1},{2})	(True, 11.0)	e	#NUM!
+engineering_family	order_dec2bin	3291	DEC2BIN({1},{2})	(True, 1e+300)	e	#NUM!
+engineering_family	order_dec2bin	3292	DEC2BIN({1},{2})	(True, 'x')	e	#VALUE!
+engineering_family	order_dec2bin	3293	DEC2BIN({1},{2})	(True, '')	e	#VALUE!
+engineering_family	order_dec2bin	3294	DEC2BIN({1},{2})	(True, '3')	e	#VALUE!
+engineering_family	order_dec2bin	3295	DEC2BIN({1},{2})	(True, True)	e	#VALUE!
+engineering_family	order_dec2bin	3296	DEC2BIN({1},{2})	(True, None)	e	#NUM!
+engineering_family	order_dec2bin	3297	DEC2BIN({1},{2})	(True, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2bin	3298	DEC2BIN({1},{2})	(None, 0.0)	e	#NUM!
+engineering_family	order_dec2bin	3299	DEC2BIN({1},{2})	(None, -1.0)	e	#NUM!
+engineering_family	order_dec2bin	3300	DEC2BIN({1},{2})	(None, 1.0)	str	'0'
+engineering_family	order_dec2bin	3301	DEC2BIN({1},{2})	(None, 11.0)	e	#NUM!
+engineering_family	order_dec2bin	3302	DEC2BIN({1},{2})	(None, 1e+300)	e	#NUM!
+engineering_family	order_dec2bin	3303	DEC2BIN({1},{2})	(None, 'x')	e	#VALUE!
+engineering_family	order_dec2bin	3304	DEC2BIN({1},{2})	(None, '')	e	#VALUE!
+engineering_family	order_dec2bin	3305	DEC2BIN({1},{2})	(None, '3')	str	'000'
+engineering_family	order_dec2bin	3306	DEC2BIN({1},{2})	(None, True)	e	#VALUE!
+engineering_family	order_dec2bin	3307	DEC2BIN({1},{2})	(None, None)	e	#NUM!
+engineering_family	order_dec2bin	3308	DEC2BIN({1},{2})	(None, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2bin	3309	DEC2BIN({1},{2})	(ErrorValue('#N/A'), 0.0)	e	#NUM!
+engineering_family	order_dec2bin	3310	DEC2BIN({1},{2})	(ErrorValue('#N/A'), -1.0)	e	#NUM!
+engineering_family	order_dec2bin	3311	DEC2BIN({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+engineering_family	order_dec2bin	3312	DEC2BIN({1},{2})	(ErrorValue('#N/A'), 11.0)	e	#NUM!
+engineering_family	order_dec2bin	3313	DEC2BIN({1},{2})	(ErrorValue('#N/A'), 1e+300)	e	#NUM!
+engineering_family	order_dec2bin	3314	DEC2BIN({1},{2})	(ErrorValue('#N/A'), 'x')	e	#VALUE!
+engineering_family	order_dec2bin	3315	DEC2BIN({1},{2})	(ErrorValue('#N/A'), '')	e	#VALUE!
+engineering_family	order_dec2bin	3316	DEC2BIN({1},{2})	(ErrorValue('#N/A'), '3')	e	#N/A
+engineering_family	order_dec2bin	3317	DEC2BIN({1},{2})	(ErrorValue('#N/A'), True)	e	#VALUE!
+engineering_family	order_dec2bin	3318	DEC2BIN({1},{2})	(ErrorValue('#N/A'), None)	e	#NUM!
+engineering_family	order_dec2bin	3319	DEC2BIN({1},{2})	(ErrorValue('#N/A'), ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2oct	3320	DEC2OCT({1},{2})	('E', 0.0)	e	#NUM!
+engineering_family	order_dec2oct	3321	DEC2OCT({1},{2})	('E', -1.0)	e	#NUM!
+engineering_family	order_dec2oct	3322	DEC2OCT({1},{2})	('E', 1.0)	e	#VALUE!
+engineering_family	order_dec2oct	3323	DEC2OCT({1},{2})	('E', 11.0)	e	#NUM!
+engineering_family	order_dec2oct	3324	DEC2OCT({1},{2})	('E', 1e+300)	e	#NUM!
+engineering_family	order_dec2oct	3325	DEC2OCT({1},{2})	('E', 'x')	e	#VALUE!
+engineering_family	order_dec2oct	3326	DEC2OCT({1},{2})	('E', '')	e	#VALUE!
+engineering_family	order_dec2oct	3327	DEC2OCT({1},{2})	('E', '3')	e	#VALUE!
+engineering_family	order_dec2oct	3328	DEC2OCT({1},{2})	('E', True)	e	#VALUE!
+engineering_family	order_dec2oct	3329	DEC2OCT({1},{2})	('E', None)	e	#NUM!
+engineering_family	order_dec2oct	3330	DEC2OCT({1},{2})	('E', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2oct	3331	DEC2OCT({1},{2})	('', 0.0)	e	#NUM!
+engineering_family	order_dec2oct	3332	DEC2OCT({1},{2})	('', -1.0)	e	#NUM!
+engineering_family	order_dec2oct	3333	DEC2OCT({1},{2})	('', 1.0)	e	#VALUE!
+engineering_family	order_dec2oct	3334	DEC2OCT({1},{2})	('', 11.0)	e	#NUM!
+engineering_family	order_dec2oct	3335	DEC2OCT({1},{2})	('', 1e+300)	e	#NUM!
+engineering_family	order_dec2oct	3336	DEC2OCT({1},{2})	('', 'x')	e	#VALUE!
+engineering_family	order_dec2oct	3337	DEC2OCT({1},{2})	('', '')	e	#VALUE!
+engineering_family	order_dec2oct	3338	DEC2OCT({1},{2})	('', '3')	e	#VALUE!
+engineering_family	order_dec2oct	3339	DEC2OCT({1},{2})	('', True)	e	#VALUE!
+engineering_family	order_dec2oct	3340	DEC2OCT({1},{2})	('', None)	e	#NUM!
+engineering_family	order_dec2oct	3341	DEC2OCT({1},{2})	('', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2oct	3342	DEC2OCT({1},{2})	('2', 0.0)	e	#NUM!
+engineering_family	order_dec2oct	3343	DEC2OCT({1},{2})	('2', -1.0)	e	#NUM!
+engineering_family	order_dec2oct	3344	DEC2OCT({1},{2})	('2', 1.0)	str	'2'
+engineering_family	order_dec2oct	3345	DEC2OCT({1},{2})	('2', 11.0)	e	#NUM!
+engineering_family	order_dec2oct	3346	DEC2OCT({1},{2})	('2', 1e+300)	e	#NUM!
+engineering_family	order_dec2oct	3347	DEC2OCT({1},{2})	('2', 'x')	e	#VALUE!
+engineering_family	order_dec2oct	3348	DEC2OCT({1},{2})	('2', '')	e	#VALUE!
+engineering_family	order_dec2oct	3349	DEC2OCT({1},{2})	('2', '3')	str	'002'
+engineering_family	order_dec2oct	3350	DEC2OCT({1},{2})	('2', True)	e	#VALUE!
+engineering_family	order_dec2oct	3351	DEC2OCT({1},{2})	('2', None)	e	#NUM!
+engineering_family	order_dec2oct	3352	DEC2OCT({1},{2})	('2', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2oct	3353	DEC2OCT({1},{2})	(' 1', 0.0)	e	#NUM!
+engineering_family	order_dec2oct	3354	DEC2OCT({1},{2})	(' 1', -1.0)	e	#NUM!
+engineering_family	order_dec2oct	3355	DEC2OCT({1},{2})	(' 1', 1.0)	str	'1'
+engineering_family	order_dec2oct	3356	DEC2OCT({1},{2})	(' 1', 11.0)	e	#NUM!
+engineering_family	order_dec2oct	3357	DEC2OCT({1},{2})	(' 1', 1e+300)	e	#NUM!
+engineering_family	order_dec2oct	3358	DEC2OCT({1},{2})	(' 1', 'x')	e	#VALUE!
+engineering_family	order_dec2oct	3359	DEC2OCT({1},{2})	(' 1', '')	e	#VALUE!
+engineering_family	order_dec2oct	3360	DEC2OCT({1},{2})	(' 1', '3')	str	'001'
+engineering_family	order_dec2oct	3361	DEC2OCT({1},{2})	(' 1', True)	e	#VALUE!
+engineering_family	order_dec2oct	3362	DEC2OCT({1},{2})	(' 1', None)	e	#NUM!
+engineering_family	order_dec2oct	3363	DEC2OCT({1},{2})	(' 1', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2oct	3364	DEC2OCT({1},{2})	(1e+300, 0.0)	e	#NUM!
+engineering_family	order_dec2oct	3365	DEC2OCT({1},{2})	(1e+300, -1.0)	e	#NUM!
+engineering_family	order_dec2oct	3366	DEC2OCT({1},{2})	(1e+300, 1.0)	e	#NUM!
+engineering_family	order_dec2oct	3367	DEC2OCT({1},{2})	(1e+300, 11.0)	e	#NUM!
+engineering_family	order_dec2oct	3368	DEC2OCT({1},{2})	(1e+300, 1e+300)	e	#NUM!
+engineering_family	order_dec2oct	3369	DEC2OCT({1},{2})	(1e+300, 'x')	e	#VALUE!
+engineering_family	order_dec2oct	3370	DEC2OCT({1},{2})	(1e+300, '')	e	#VALUE!
+engineering_family	order_dec2oct	3371	DEC2OCT({1},{2})	(1e+300, '3')	e	#NUM!
+engineering_family	order_dec2oct	3372	DEC2OCT({1},{2})	(1e+300, True)	e	#VALUE!
+engineering_family	order_dec2oct	3373	DEC2OCT({1},{2})	(1e+300, None)	e	#NUM!
+engineering_family	order_dec2oct	3374	DEC2OCT({1},{2})	(1e+300, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2oct	3375	DEC2OCT({1},{2})	(-1e+300, 0.0)	e	#NUM!
+engineering_family	order_dec2oct	3376	DEC2OCT({1},{2})	(-1e+300, -1.0)	e	#NUM!
+engineering_family	order_dec2oct	3377	DEC2OCT({1},{2})	(-1e+300, 1.0)	e	#NUM!
+engineering_family	order_dec2oct	3378	DEC2OCT({1},{2})	(-1e+300, 11.0)	e	#NUM!
+engineering_family	order_dec2oct	3379	DEC2OCT({1},{2})	(-1e+300, 1e+300)	e	#NUM!
+engineering_family	order_dec2oct	3380	DEC2OCT({1},{2})	(-1e+300, 'x')	e	#VALUE!
+engineering_family	order_dec2oct	3381	DEC2OCT({1},{2})	(-1e+300, '')	e	#VALUE!
+engineering_family	order_dec2oct	3382	DEC2OCT({1},{2})	(-1e+300, '3')	e	#NUM!
+engineering_family	order_dec2oct	3383	DEC2OCT({1},{2})	(-1e+300, True)	e	#VALUE!
+engineering_family	order_dec2oct	3384	DEC2OCT({1},{2})	(-1e+300, None)	e	#NUM!
+engineering_family	order_dec2oct	3385	DEC2OCT({1},{2})	(-1e+300, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2oct	3386	DEC2OCT({1},{2})	(True, 0.0)	e	#NUM!
+engineering_family	order_dec2oct	3387	DEC2OCT({1},{2})	(True, -1.0)	e	#NUM!
+engineering_family	order_dec2oct	3388	DEC2OCT({1},{2})	(True, 1.0)	e	#VALUE!
+engineering_family	order_dec2oct	3389	DEC2OCT({1},{2})	(True, 11.0)	e	#NUM!
+engineering_family	order_dec2oct	3390	DEC2OCT({1},{2})	(True, 1e+300)	e	#NUM!
+engineering_family	order_dec2oct	3391	DEC2OCT({1},{2})	(True, 'x')	e	#VALUE!
+engineering_family	order_dec2oct	3392	DEC2OCT({1},{2})	(True, '')	e	#VALUE!
+engineering_family	order_dec2oct	3393	DEC2OCT({1},{2})	(True, '3')	e	#VALUE!
+engineering_family	order_dec2oct	3394	DEC2OCT({1},{2})	(True, True)	e	#VALUE!
+engineering_family	order_dec2oct	3395	DEC2OCT({1},{2})	(True, None)	e	#NUM!
+engineering_family	order_dec2oct	3396	DEC2OCT({1},{2})	(True, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2oct	3397	DEC2OCT({1},{2})	(None, 0.0)	e	#NUM!
+engineering_family	order_dec2oct	3398	DEC2OCT({1},{2})	(None, -1.0)	e	#NUM!
+engineering_family	order_dec2oct	3399	DEC2OCT({1},{2})	(None, 1.0)	str	'0'
+engineering_family	order_dec2oct	3400	DEC2OCT({1},{2})	(None, 11.0)	e	#NUM!
+engineering_family	order_dec2oct	3401	DEC2OCT({1},{2})	(None, 1e+300)	e	#NUM!
+engineering_family	order_dec2oct	3402	DEC2OCT({1},{2})	(None, 'x')	e	#VALUE!
+engineering_family	order_dec2oct	3403	DEC2OCT({1},{2})	(None, '')	e	#VALUE!
+engineering_family	order_dec2oct	3404	DEC2OCT({1},{2})	(None, '3')	str	'000'
+engineering_family	order_dec2oct	3405	DEC2OCT({1},{2})	(None, True)	e	#VALUE!
+engineering_family	order_dec2oct	3406	DEC2OCT({1},{2})	(None, None)	e	#NUM!
+engineering_family	order_dec2oct	3407	DEC2OCT({1},{2})	(None, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2oct	3408	DEC2OCT({1},{2})	(ErrorValue('#N/A'), 0.0)	e	#NUM!
+engineering_family	order_dec2oct	3409	DEC2OCT({1},{2})	(ErrorValue('#N/A'), -1.0)	e	#NUM!
+engineering_family	order_dec2oct	3410	DEC2OCT({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+engineering_family	order_dec2oct	3411	DEC2OCT({1},{2})	(ErrorValue('#N/A'), 11.0)	e	#NUM!
+engineering_family	order_dec2oct	3412	DEC2OCT({1},{2})	(ErrorValue('#N/A'), 1e+300)	e	#NUM!
+engineering_family	order_dec2oct	3413	DEC2OCT({1},{2})	(ErrorValue('#N/A'), 'x')	e	#VALUE!
+engineering_family	order_dec2oct	3414	DEC2OCT({1},{2})	(ErrorValue('#N/A'), '')	e	#VALUE!
+engineering_family	order_dec2oct	3415	DEC2OCT({1},{2})	(ErrorValue('#N/A'), '3')	e	#N/A
+engineering_family	order_dec2oct	3416	DEC2OCT({1},{2})	(ErrorValue('#N/A'), True)	e	#VALUE!
+engineering_family	order_dec2oct	3417	DEC2OCT({1},{2})	(ErrorValue('#N/A'), None)	e	#NUM!
+engineering_family	order_dec2oct	3418	DEC2OCT({1},{2})	(ErrorValue('#N/A'), ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2hex	3419	DEC2HEX({1},{2})	('E', 0.0)	e	#NUM!
+engineering_family	order_dec2hex	3420	DEC2HEX({1},{2})	('E', -1.0)	e	#NUM!
+engineering_family	order_dec2hex	3421	DEC2HEX({1},{2})	('E', 1.0)	e	#VALUE!
+engineering_family	order_dec2hex	3422	DEC2HEX({1},{2})	('E', 11.0)	e	#NUM!
+engineering_family	order_dec2hex	3423	DEC2HEX({1},{2})	('E', 1e+300)	e	#NUM!
+engineering_family	order_dec2hex	3424	DEC2HEX({1},{2})	('E', 'x')	e	#VALUE!
+engineering_family	order_dec2hex	3425	DEC2HEX({1},{2})	('E', '')	e	#VALUE!
+engineering_family	order_dec2hex	3426	DEC2HEX({1},{2})	('E', '3')	e	#VALUE!
+engineering_family	order_dec2hex	3427	DEC2HEX({1},{2})	('E', True)	e	#VALUE!
+engineering_family	order_dec2hex	3428	DEC2HEX({1},{2})	('E', None)	e	#NUM!
+engineering_family	order_dec2hex	3429	DEC2HEX({1},{2})	('E', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2hex	3430	DEC2HEX({1},{2})	('', 0.0)	e	#NUM!
+engineering_family	order_dec2hex	3431	DEC2HEX({1},{2})	('', -1.0)	e	#NUM!
+engineering_family	order_dec2hex	3432	DEC2HEX({1},{2})	('', 1.0)	e	#VALUE!
+engineering_family	order_dec2hex	3433	DEC2HEX({1},{2})	('', 11.0)	e	#NUM!
+engineering_family	order_dec2hex	3434	DEC2HEX({1},{2})	('', 1e+300)	e	#NUM!
+engineering_family	order_dec2hex	3435	DEC2HEX({1},{2})	('', 'x')	e	#VALUE!
+engineering_family	order_dec2hex	3436	DEC2HEX({1},{2})	('', '')	e	#VALUE!
+engineering_family	order_dec2hex	3437	DEC2HEX({1},{2})	('', '3')	e	#VALUE!
+engineering_family	order_dec2hex	3438	DEC2HEX({1},{2})	('', True)	e	#VALUE!
+engineering_family	order_dec2hex	3439	DEC2HEX({1},{2})	('', None)	e	#NUM!
+engineering_family	order_dec2hex	3440	DEC2HEX({1},{2})	('', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2hex	3441	DEC2HEX({1},{2})	('2', 0.0)	e	#NUM!
+engineering_family	order_dec2hex	3442	DEC2HEX({1},{2})	('2', -1.0)	e	#NUM!
+engineering_family	order_dec2hex	3443	DEC2HEX({1},{2})	('2', 1.0)	str	'2'
+engineering_family	order_dec2hex	3444	DEC2HEX({1},{2})	('2', 11.0)	e	#NUM!
+engineering_family	order_dec2hex	3445	DEC2HEX({1},{2})	('2', 1e+300)	e	#NUM!
+engineering_family	order_dec2hex	3446	DEC2HEX({1},{2})	('2', 'x')	e	#VALUE!
+engineering_family	order_dec2hex	3447	DEC2HEX({1},{2})	('2', '')	e	#VALUE!
+engineering_family	order_dec2hex	3448	DEC2HEX({1},{2})	('2', '3')	str	'002'
+engineering_family	order_dec2hex	3449	DEC2HEX({1},{2})	('2', True)	e	#VALUE!
+engineering_family	order_dec2hex	3450	DEC2HEX({1},{2})	('2', None)	e	#NUM!
+engineering_family	order_dec2hex	3451	DEC2HEX({1},{2})	('2', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2hex	3452	DEC2HEX({1},{2})	(' 1', 0.0)	e	#NUM!
+engineering_family	order_dec2hex	3453	DEC2HEX({1},{2})	(' 1', -1.0)	e	#NUM!
+engineering_family	order_dec2hex	3454	DEC2HEX({1},{2})	(' 1', 1.0)	str	'1'
+engineering_family	order_dec2hex	3455	DEC2HEX({1},{2})	(' 1', 11.0)	e	#NUM!
+engineering_family	order_dec2hex	3456	DEC2HEX({1},{2})	(' 1', 1e+300)	e	#NUM!
+engineering_family	order_dec2hex	3457	DEC2HEX({1},{2})	(' 1', 'x')	e	#VALUE!
+engineering_family	order_dec2hex	3458	DEC2HEX({1},{2})	(' 1', '')	e	#VALUE!
+engineering_family	order_dec2hex	3459	DEC2HEX({1},{2})	(' 1', '3')	str	'001'
+engineering_family	order_dec2hex	3460	DEC2HEX({1},{2})	(' 1', True)	e	#VALUE!
+engineering_family	order_dec2hex	3461	DEC2HEX({1},{2})	(' 1', None)	e	#NUM!
+engineering_family	order_dec2hex	3462	DEC2HEX({1},{2})	(' 1', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2hex	3463	DEC2HEX({1},{2})	(1e+300, 0.0)	e	#NUM!
+engineering_family	order_dec2hex	3464	DEC2HEX({1},{2})	(1e+300, -1.0)	e	#NUM!
+engineering_family	order_dec2hex	3465	DEC2HEX({1},{2})	(1e+300, 1.0)	e	#NUM!
+engineering_family	order_dec2hex	3466	DEC2HEX({1},{2})	(1e+300, 11.0)	e	#NUM!
+engineering_family	order_dec2hex	3467	DEC2HEX({1},{2})	(1e+300, 1e+300)	e	#NUM!
+engineering_family	order_dec2hex	3468	DEC2HEX({1},{2})	(1e+300, 'x')	e	#VALUE!
+engineering_family	order_dec2hex	3469	DEC2HEX({1},{2})	(1e+300, '')	e	#VALUE!
+engineering_family	order_dec2hex	3470	DEC2HEX({1},{2})	(1e+300, '3')	e	#NUM!
+engineering_family	order_dec2hex	3471	DEC2HEX({1},{2})	(1e+300, True)	e	#VALUE!
+engineering_family	order_dec2hex	3472	DEC2HEX({1},{2})	(1e+300, None)	e	#NUM!
+engineering_family	order_dec2hex	3473	DEC2HEX({1},{2})	(1e+300, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2hex	3474	DEC2HEX({1},{2})	(-1e+300, 0.0)	e	#NUM!
+engineering_family	order_dec2hex	3475	DEC2HEX({1},{2})	(-1e+300, -1.0)	e	#NUM!
+engineering_family	order_dec2hex	3476	DEC2HEX({1},{2})	(-1e+300, 1.0)	e	#NUM!
+engineering_family	order_dec2hex	3477	DEC2HEX({1},{2})	(-1e+300, 11.0)	e	#NUM!
+engineering_family	order_dec2hex	3478	DEC2HEX({1},{2})	(-1e+300, 1e+300)	e	#NUM!
+engineering_family	order_dec2hex	3479	DEC2HEX({1},{2})	(-1e+300, 'x')	e	#VALUE!
+engineering_family	order_dec2hex	3480	DEC2HEX({1},{2})	(-1e+300, '')	e	#VALUE!
+engineering_family	order_dec2hex	3481	DEC2HEX({1},{2})	(-1e+300, '3')	e	#NUM!
+engineering_family	order_dec2hex	3482	DEC2HEX({1},{2})	(-1e+300, True)	e	#VALUE!
+engineering_family	order_dec2hex	3483	DEC2HEX({1},{2})	(-1e+300, None)	e	#NUM!
+engineering_family	order_dec2hex	3484	DEC2HEX({1},{2})	(-1e+300, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2hex	3485	DEC2HEX({1},{2})	(True, 0.0)	e	#NUM!
+engineering_family	order_dec2hex	3486	DEC2HEX({1},{2})	(True, -1.0)	e	#NUM!
+engineering_family	order_dec2hex	3487	DEC2HEX({1},{2})	(True, 1.0)	e	#VALUE!
+engineering_family	order_dec2hex	3488	DEC2HEX({1},{2})	(True, 11.0)	e	#NUM!
+engineering_family	order_dec2hex	3489	DEC2HEX({1},{2})	(True, 1e+300)	e	#NUM!
+engineering_family	order_dec2hex	3490	DEC2HEX({1},{2})	(True, 'x')	e	#VALUE!
+engineering_family	order_dec2hex	3491	DEC2HEX({1},{2})	(True, '')	e	#VALUE!
+engineering_family	order_dec2hex	3492	DEC2HEX({1},{2})	(True, '3')	e	#VALUE!
+engineering_family	order_dec2hex	3493	DEC2HEX({1},{2})	(True, True)	e	#VALUE!
+engineering_family	order_dec2hex	3494	DEC2HEX({1},{2})	(True, None)	e	#NUM!
+engineering_family	order_dec2hex	3495	DEC2HEX({1},{2})	(True, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2hex	3496	DEC2HEX({1},{2})	(None, 0.0)	e	#NUM!
+engineering_family	order_dec2hex	3497	DEC2HEX({1},{2})	(None, -1.0)	e	#NUM!
+engineering_family	order_dec2hex	3498	DEC2HEX({1},{2})	(None, 1.0)	str	'0'
+engineering_family	order_dec2hex	3499	DEC2HEX({1},{2})	(None, 11.0)	e	#NUM!
+engineering_family	order_dec2hex	3500	DEC2HEX({1},{2})	(None, 1e+300)	e	#NUM!
+engineering_family	order_dec2hex	3501	DEC2HEX({1},{2})	(None, 'x')	e	#VALUE!
+engineering_family	order_dec2hex	3502	DEC2HEX({1},{2})	(None, '')	e	#VALUE!
+engineering_family	order_dec2hex	3503	DEC2HEX({1},{2})	(None, '3')	str	'000'
+engineering_family	order_dec2hex	3504	DEC2HEX({1},{2})	(None, True)	e	#VALUE!
+engineering_family	order_dec2hex	3505	DEC2HEX({1},{2})	(None, None)	e	#NUM!
+engineering_family	order_dec2hex	3506	DEC2HEX({1},{2})	(None, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_dec2hex	3507	DEC2HEX({1},{2})	(ErrorValue('#N/A'), 0.0)	e	#NUM!
+engineering_family	order_dec2hex	3508	DEC2HEX({1},{2})	(ErrorValue('#N/A'), -1.0)	e	#NUM!
+engineering_family	order_dec2hex	3509	DEC2HEX({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+engineering_family	order_dec2hex	3510	DEC2HEX({1},{2})	(ErrorValue('#N/A'), 11.0)	e	#NUM!
+engineering_family	order_dec2hex	3511	DEC2HEX({1},{2})	(ErrorValue('#N/A'), 1e+300)	e	#NUM!
+engineering_family	order_dec2hex	3512	DEC2HEX({1},{2})	(ErrorValue('#N/A'), 'x')	e	#VALUE!
+engineering_family	order_dec2hex	3513	DEC2HEX({1},{2})	(ErrorValue('#N/A'), '')	e	#VALUE!
+engineering_family	order_dec2hex	3514	DEC2HEX({1},{2})	(ErrorValue('#N/A'), '3')	e	#N/A
+engineering_family	order_dec2hex	3515	DEC2HEX({1},{2})	(ErrorValue('#N/A'), True)	e	#VALUE!
+engineering_family	order_dec2hex	3516	DEC2HEX({1},{2})	(ErrorValue('#N/A'), None)	e	#NUM!
+engineering_family	order_dec2hex	3517	DEC2HEX({1},{2})	(ErrorValue('#N/A'), ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_bin2hex	3518	BIN2HEX({1},{2})	('E', 0.0)	e	#NUM!
+engineering_family	order_bin2hex	3519	BIN2HEX({1},{2})	('E', -1.0)	e	#NUM!
+engineering_family	order_bin2hex	3520	BIN2HEX({1},{2})	('E', 1.0)	e	#NUM!
+engineering_family	order_bin2hex	3521	BIN2HEX({1},{2})	('E', 11.0)	e	#NUM!
+engineering_family	order_bin2hex	3522	BIN2HEX({1},{2})	('E', 1e+300)	e	#NUM!
+engineering_family	order_bin2hex	3523	BIN2HEX({1},{2})	('E', 'x')	e	#VALUE!
+engineering_family	order_bin2hex	3524	BIN2HEX({1},{2})	('E', '')	e	#VALUE!
+engineering_family	order_bin2hex	3525	BIN2HEX({1},{2})	('E', '3')	e	#NUM!
+engineering_family	order_bin2hex	3526	BIN2HEX({1},{2})	('E', True)	e	#VALUE!
+engineering_family	order_bin2hex	3527	BIN2HEX({1},{2})	('E', None)	e	#NUM!
+engineering_family	order_bin2hex	3528	BIN2HEX({1},{2})	('E', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_bin2hex	3529	BIN2HEX({1},{2})	('', 0.0)	e	#NUM!
+engineering_family	order_bin2hex	3530	BIN2HEX({1},{2})	('', -1.0)	e	#NUM!
+engineering_family	order_bin2hex	3531	BIN2HEX({1},{2})	('', 1.0)	str	'0'
+engineering_family	order_bin2hex	3532	BIN2HEX({1},{2})	('', 11.0)	e	#NUM!
+engineering_family	order_bin2hex	3533	BIN2HEX({1},{2})	('', 1e+300)	e	#NUM!
+engineering_family	order_bin2hex	3534	BIN2HEX({1},{2})	('', 'x')	e	#VALUE!
+engineering_family	order_bin2hex	3535	BIN2HEX({1},{2})	('', '')	e	#VALUE!
+engineering_family	order_bin2hex	3536	BIN2HEX({1},{2})	('', '3')	str	'000'
+engineering_family	order_bin2hex	3537	BIN2HEX({1},{2})	('', True)	e	#VALUE!
+engineering_family	order_bin2hex	3538	BIN2HEX({1},{2})	('', None)	e	#NUM!
+engineering_family	order_bin2hex	3539	BIN2HEX({1},{2})	('', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_bin2hex	3540	BIN2HEX({1},{2})	('2', 0.0)	e	#NUM!
+engineering_family	order_bin2hex	3541	BIN2HEX({1},{2})	('2', -1.0)	e	#NUM!
+engineering_family	order_bin2hex	3542	BIN2HEX({1},{2})	('2', 1.0)	e	#NUM!
+engineering_family	order_bin2hex	3543	BIN2HEX({1},{2})	('2', 11.0)	e	#NUM!
+engineering_family	order_bin2hex	3544	BIN2HEX({1},{2})	('2', 1e+300)	e	#NUM!
+engineering_family	order_bin2hex	3545	BIN2HEX({1},{2})	('2', 'x')	e	#VALUE!
+engineering_family	order_bin2hex	3546	BIN2HEX({1},{2})	('2', '')	e	#VALUE!
+engineering_family	order_bin2hex	3547	BIN2HEX({1},{2})	('2', '3')	e	#NUM!
+engineering_family	order_bin2hex	3548	BIN2HEX({1},{2})	('2', True)	e	#VALUE!
+engineering_family	order_bin2hex	3549	BIN2HEX({1},{2})	('2', None)	e	#NUM!
+engineering_family	order_bin2hex	3550	BIN2HEX({1},{2})	('2', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_bin2hex	3551	BIN2HEX({1},{2})	(' 1', 0.0)	e	#NUM!
+engineering_family	order_bin2hex	3552	BIN2HEX({1},{2})	(' 1', -1.0)	e	#NUM!
+engineering_family	order_bin2hex	3553	BIN2HEX({1},{2})	(' 1', 1.0)	e	#NUM!
+engineering_family	order_bin2hex	3554	BIN2HEX({1},{2})	(' 1', 11.0)	e	#NUM!
+engineering_family	order_bin2hex	3555	BIN2HEX({1},{2})	(' 1', 1e+300)	e	#NUM!
+engineering_family	order_bin2hex	3556	BIN2HEX({1},{2})	(' 1', 'x')	e	#VALUE!
+engineering_family	order_bin2hex	3557	BIN2HEX({1},{2})	(' 1', '')	e	#VALUE!
+engineering_family	order_bin2hex	3558	BIN2HEX({1},{2})	(' 1', '3')	e	#NUM!
+engineering_family	order_bin2hex	3559	BIN2HEX({1},{2})	(' 1', True)	e	#VALUE!
+engineering_family	order_bin2hex	3560	BIN2HEX({1},{2})	(' 1', None)	e	#NUM!
+engineering_family	order_bin2hex	3561	BIN2HEX({1},{2})	(' 1', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_bin2hex	3562	BIN2HEX({1},{2})	(1e+300, 0.0)	e	#NUM!
+engineering_family	order_bin2hex	3563	BIN2HEX({1},{2})	(1e+300, -1.0)	e	#NUM!
+engineering_family	order_bin2hex	3564	BIN2HEX({1},{2})	(1e+300, 1.0)	e	#NUM!
+engineering_family	order_bin2hex	3565	BIN2HEX({1},{2})	(1e+300, 11.0)	e	#NUM!
+engineering_family	order_bin2hex	3566	BIN2HEX({1},{2})	(1e+300, 1e+300)	e	#NUM!
+engineering_family	order_bin2hex	3567	BIN2HEX({1},{2})	(1e+300, 'x')	e	#VALUE!
+engineering_family	order_bin2hex	3568	BIN2HEX({1},{2})	(1e+300, '')	e	#VALUE!
+engineering_family	order_bin2hex	3569	BIN2HEX({1},{2})	(1e+300, '3')	e	#NUM!
+engineering_family	order_bin2hex	3570	BIN2HEX({1},{2})	(1e+300, True)	e	#VALUE!
+engineering_family	order_bin2hex	3571	BIN2HEX({1},{2})	(1e+300, None)	e	#NUM!
+engineering_family	order_bin2hex	3572	BIN2HEX({1},{2})	(1e+300, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_bin2hex	3573	BIN2HEX({1},{2})	(-1e+300, 0.0)	e	#NUM!
+engineering_family	order_bin2hex	3574	BIN2HEX({1},{2})	(-1e+300, -1.0)	e	#NUM!
+engineering_family	order_bin2hex	3575	BIN2HEX({1},{2})	(-1e+300, 1.0)	e	#NUM!
+engineering_family	order_bin2hex	3576	BIN2HEX({1},{2})	(-1e+300, 11.0)	e	#NUM!
+engineering_family	order_bin2hex	3577	BIN2HEX({1},{2})	(-1e+300, 1e+300)	e	#NUM!
+engineering_family	order_bin2hex	3578	BIN2HEX({1},{2})	(-1e+300, 'x')	e	#VALUE!
+engineering_family	order_bin2hex	3579	BIN2HEX({1},{2})	(-1e+300, '')	e	#VALUE!
+engineering_family	order_bin2hex	3580	BIN2HEX({1},{2})	(-1e+300, '3')	e	#NUM!
+engineering_family	order_bin2hex	3581	BIN2HEX({1},{2})	(-1e+300, True)	e	#VALUE!
+engineering_family	order_bin2hex	3582	BIN2HEX({1},{2})	(-1e+300, None)	e	#NUM!
+engineering_family	order_bin2hex	3583	BIN2HEX({1},{2})	(-1e+300, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_bin2hex	3584	BIN2HEX({1},{2})	(True, 0.0)	e	#NUM!
+engineering_family	order_bin2hex	3585	BIN2HEX({1},{2})	(True, -1.0)	e	#NUM!
+engineering_family	order_bin2hex	3586	BIN2HEX({1},{2})	(True, 1.0)	e	#VALUE!
+engineering_family	order_bin2hex	3587	BIN2HEX({1},{2})	(True, 11.0)	e	#NUM!
+engineering_family	order_bin2hex	3588	BIN2HEX({1},{2})	(True, 1e+300)	e	#NUM!
+engineering_family	order_bin2hex	3589	BIN2HEX({1},{2})	(True, 'x')	e	#VALUE!
+engineering_family	order_bin2hex	3590	BIN2HEX({1},{2})	(True, '')	e	#VALUE!
+engineering_family	order_bin2hex	3591	BIN2HEX({1},{2})	(True, '3')	e	#VALUE!
+engineering_family	order_bin2hex	3592	BIN2HEX({1},{2})	(True, True)	e	#VALUE!
+engineering_family	order_bin2hex	3593	BIN2HEX({1},{2})	(True, None)	e	#NUM!
+engineering_family	order_bin2hex	3594	BIN2HEX({1},{2})	(True, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_bin2hex	3595	BIN2HEX({1},{2})	(None, 0.0)	e	#NUM!
+engineering_family	order_bin2hex	3596	BIN2HEX({1},{2})	(None, -1.0)	e	#NUM!
+engineering_family	order_bin2hex	3597	BIN2HEX({1},{2})	(None, 1.0)	str	'0'
+engineering_family	order_bin2hex	3598	BIN2HEX({1},{2})	(None, 11.0)	e	#NUM!
+engineering_family	order_bin2hex	3599	BIN2HEX({1},{2})	(None, 1e+300)	e	#NUM!
+engineering_family	order_bin2hex	3600	BIN2HEX({1},{2})	(None, 'x')	e	#VALUE!
+engineering_family	order_bin2hex	3601	BIN2HEX({1},{2})	(None, '')	e	#VALUE!
+engineering_family	order_bin2hex	3602	BIN2HEX({1},{2})	(None, '3')	str	'000'
+engineering_family	order_bin2hex	3603	BIN2HEX({1},{2})	(None, True)	e	#VALUE!
+engineering_family	order_bin2hex	3604	BIN2HEX({1},{2})	(None, None)	e	#NUM!
+engineering_family	order_bin2hex	3605	BIN2HEX({1},{2})	(None, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_bin2hex	3606	BIN2HEX({1},{2})	(ErrorValue('#N/A'), 0.0)	e	#NUM!
+engineering_family	order_bin2hex	3607	BIN2HEX({1},{2})	(ErrorValue('#N/A'), -1.0)	e	#NUM!
+engineering_family	order_bin2hex	3608	BIN2HEX({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+engineering_family	order_bin2hex	3609	BIN2HEX({1},{2})	(ErrorValue('#N/A'), 11.0)	e	#NUM!
+engineering_family	order_bin2hex	3610	BIN2HEX({1},{2})	(ErrorValue('#N/A'), 1e+300)	e	#NUM!
+engineering_family	order_bin2hex	3611	BIN2HEX({1},{2})	(ErrorValue('#N/A'), 'x')	e	#VALUE!
+engineering_family	order_bin2hex	3612	BIN2HEX({1},{2})	(ErrorValue('#N/A'), '')	e	#VALUE!
+engineering_family	order_bin2hex	3613	BIN2HEX({1},{2})	(ErrorValue('#N/A'), '3')	e	#N/A
+engineering_family	order_bin2hex	3614	BIN2HEX({1},{2})	(ErrorValue('#N/A'), True)	e	#VALUE!
+engineering_family	order_bin2hex	3615	BIN2HEX({1},{2})	(ErrorValue('#N/A'), None)	e	#NUM!
+engineering_family	order_bin2hex	3616	BIN2HEX({1},{2})	(ErrorValue('#N/A'), ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_oct2bin	3617	OCT2BIN({1},{2})	('E', 0.0)	e	#NUM!
+engineering_family	order_oct2bin	3618	OCT2BIN({1},{2})	('E', -1.0)	e	#NUM!
+engineering_family	order_oct2bin	3619	OCT2BIN({1},{2})	('E', 1.0)	e	#NUM!
+engineering_family	order_oct2bin	3620	OCT2BIN({1},{2})	('E', 11.0)	e	#NUM!
+engineering_family	order_oct2bin	3621	OCT2BIN({1},{2})	('E', 1e+300)	e	#NUM!
+engineering_family	order_oct2bin	3622	OCT2BIN({1},{2})	('E', 'x')	e	#VALUE!
+engineering_family	order_oct2bin	3623	OCT2BIN({1},{2})	('E', '')	e	#VALUE!
+engineering_family	order_oct2bin	3624	OCT2BIN({1},{2})	('E', '3')	e	#NUM!
+engineering_family	order_oct2bin	3625	OCT2BIN({1},{2})	('E', True)	e	#VALUE!
+engineering_family	order_oct2bin	3626	OCT2BIN({1},{2})	('E', None)	e	#NUM!
+engineering_family	order_oct2bin	3627	OCT2BIN({1},{2})	('E', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_oct2bin	3628	OCT2BIN({1},{2})	('', 0.0)	e	#NUM!
+engineering_family	order_oct2bin	3629	OCT2BIN({1},{2})	('', -1.0)	e	#NUM!
+engineering_family	order_oct2bin	3630	OCT2BIN({1},{2})	('', 1.0)	str	'0'
+engineering_family	order_oct2bin	3631	OCT2BIN({1},{2})	('', 11.0)	e	#NUM!
+engineering_family	order_oct2bin	3632	OCT2BIN({1},{2})	('', 1e+300)	e	#NUM!
+engineering_family	order_oct2bin	3633	OCT2BIN({1},{2})	('', 'x')	e	#VALUE!
+engineering_family	order_oct2bin	3634	OCT2BIN({1},{2})	('', '')	e	#VALUE!
+engineering_family	order_oct2bin	3635	OCT2BIN({1},{2})	('', '3')	str	'000'
+engineering_family	order_oct2bin	3636	OCT2BIN({1},{2})	('', True)	e	#VALUE!
+engineering_family	order_oct2bin	3637	OCT2BIN({1},{2})	('', None)	e	#NUM!
+engineering_family	order_oct2bin	3638	OCT2BIN({1},{2})	('', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_oct2bin	3639	OCT2BIN({1},{2})	('2', 0.0)	e	#NUM!
+engineering_family	order_oct2bin	3640	OCT2BIN({1},{2})	('2', -1.0)	e	#NUM!
+engineering_family	order_oct2bin	3641	OCT2BIN({1},{2})	('2', 1.0)	e	#NUM!
+engineering_family	order_oct2bin	3642	OCT2BIN({1},{2})	('2', 11.0)	e	#NUM!
+engineering_family	order_oct2bin	3643	OCT2BIN({1},{2})	('2', 1e+300)	e	#NUM!
+engineering_family	order_oct2bin	3644	OCT2BIN({1},{2})	('2', 'x')	e	#VALUE!
+engineering_family	order_oct2bin	3645	OCT2BIN({1},{2})	('2', '')	e	#VALUE!
+engineering_family	order_oct2bin	3646	OCT2BIN({1},{2})	('2', '3')	str	'010'
+engineering_family	order_oct2bin	3647	OCT2BIN({1},{2})	('2', True)	e	#VALUE!
+engineering_family	order_oct2bin	3648	OCT2BIN({1},{2})	('2', None)	e	#NUM!
+engineering_family	order_oct2bin	3649	OCT2BIN({1},{2})	('2', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_oct2bin	3650	OCT2BIN({1},{2})	(' 1', 0.0)	e	#NUM!
+engineering_family	order_oct2bin	3651	OCT2BIN({1},{2})	(' 1', -1.0)	e	#NUM!
+engineering_family	order_oct2bin	3652	OCT2BIN({1},{2})	(' 1', 1.0)	e	#NUM!
+engineering_family	order_oct2bin	3653	OCT2BIN({1},{2})	(' 1', 11.0)	e	#NUM!
+engineering_family	order_oct2bin	3654	OCT2BIN({1},{2})	(' 1', 1e+300)	e	#NUM!
+engineering_family	order_oct2bin	3655	OCT2BIN({1},{2})	(' 1', 'x')	e	#VALUE!
+engineering_family	order_oct2bin	3656	OCT2BIN({1},{2})	(' 1', '')	e	#VALUE!
+engineering_family	order_oct2bin	3657	OCT2BIN({1},{2})	(' 1', '3')	e	#NUM!
+engineering_family	order_oct2bin	3658	OCT2BIN({1},{2})	(' 1', True)	e	#VALUE!
+engineering_family	order_oct2bin	3659	OCT2BIN({1},{2})	(' 1', None)	e	#NUM!
+engineering_family	order_oct2bin	3660	OCT2BIN({1},{2})	(' 1', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_oct2bin	3661	OCT2BIN({1},{2})	(1e+300, 0.0)	e	#NUM!
+engineering_family	order_oct2bin	3662	OCT2BIN({1},{2})	(1e+300, -1.0)	e	#NUM!
+engineering_family	order_oct2bin	3663	OCT2BIN({1},{2})	(1e+300, 1.0)	e	#NUM!
+engineering_family	order_oct2bin	3664	OCT2BIN({1},{2})	(1e+300, 11.0)	e	#NUM!
+engineering_family	order_oct2bin	3665	OCT2BIN({1},{2})	(1e+300, 1e+300)	e	#NUM!
+engineering_family	order_oct2bin	3666	OCT2BIN({1},{2})	(1e+300, 'x')	e	#VALUE!
+engineering_family	order_oct2bin	3667	OCT2BIN({1},{2})	(1e+300, '')	e	#VALUE!
+engineering_family	order_oct2bin	3668	OCT2BIN({1},{2})	(1e+300, '3')	e	#NUM!
+engineering_family	order_oct2bin	3669	OCT2BIN({1},{2})	(1e+300, True)	e	#VALUE!
+engineering_family	order_oct2bin	3670	OCT2BIN({1},{2})	(1e+300, None)	e	#NUM!
+engineering_family	order_oct2bin	3671	OCT2BIN({1},{2})	(1e+300, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_oct2bin	3672	OCT2BIN({1},{2})	(-1e+300, 0.0)	e	#NUM!
+engineering_family	order_oct2bin	3673	OCT2BIN({1},{2})	(-1e+300, -1.0)	e	#NUM!
+engineering_family	order_oct2bin	3674	OCT2BIN({1},{2})	(-1e+300, 1.0)	e	#NUM!
+engineering_family	order_oct2bin	3675	OCT2BIN({1},{2})	(-1e+300, 11.0)	e	#NUM!
+engineering_family	order_oct2bin	3676	OCT2BIN({1},{2})	(-1e+300, 1e+300)	e	#NUM!
+engineering_family	order_oct2bin	3677	OCT2BIN({1},{2})	(-1e+300, 'x')	e	#VALUE!
+engineering_family	order_oct2bin	3678	OCT2BIN({1},{2})	(-1e+300, '')	e	#VALUE!
+engineering_family	order_oct2bin	3679	OCT2BIN({1},{2})	(-1e+300, '3')	e	#NUM!
+engineering_family	order_oct2bin	3680	OCT2BIN({1},{2})	(-1e+300, True)	e	#VALUE!
+engineering_family	order_oct2bin	3681	OCT2BIN({1},{2})	(-1e+300, None)	e	#NUM!
+engineering_family	order_oct2bin	3682	OCT2BIN({1},{2})	(-1e+300, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_oct2bin	3683	OCT2BIN({1},{2})	(True, 0.0)	e	#NUM!
+engineering_family	order_oct2bin	3684	OCT2BIN({1},{2})	(True, -1.0)	e	#NUM!
+engineering_family	order_oct2bin	3685	OCT2BIN({1},{2})	(True, 1.0)	e	#VALUE!
+engineering_family	order_oct2bin	3686	OCT2BIN({1},{2})	(True, 11.0)	e	#NUM!
+engineering_family	order_oct2bin	3687	OCT2BIN({1},{2})	(True, 1e+300)	e	#NUM!
+engineering_family	order_oct2bin	3688	OCT2BIN({1},{2})	(True, 'x')	e	#VALUE!
+engineering_family	order_oct2bin	3689	OCT2BIN({1},{2})	(True, '')	e	#VALUE!
+engineering_family	order_oct2bin	3690	OCT2BIN({1},{2})	(True, '3')	e	#VALUE!
+engineering_family	order_oct2bin	3691	OCT2BIN({1},{2})	(True, True)	e	#VALUE!
+engineering_family	order_oct2bin	3692	OCT2BIN({1},{2})	(True, None)	e	#NUM!
+engineering_family	order_oct2bin	3693	OCT2BIN({1},{2})	(True, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_oct2bin	3694	OCT2BIN({1},{2})	(None, 0.0)	e	#NUM!
+engineering_family	order_oct2bin	3695	OCT2BIN({1},{2})	(None, -1.0)	e	#NUM!
+engineering_family	order_oct2bin	3696	OCT2BIN({1},{2})	(None, 1.0)	str	'0'
+engineering_family	order_oct2bin	3697	OCT2BIN({1},{2})	(None, 11.0)	e	#NUM!
+engineering_family	order_oct2bin	3698	OCT2BIN({1},{2})	(None, 1e+300)	e	#NUM!
+engineering_family	order_oct2bin	3699	OCT2BIN({1},{2})	(None, 'x')	e	#VALUE!
+engineering_family	order_oct2bin	3700	OCT2BIN({1},{2})	(None, '')	e	#VALUE!
+engineering_family	order_oct2bin	3701	OCT2BIN({1},{2})	(None, '3')	str	'000'
+engineering_family	order_oct2bin	3702	OCT2BIN({1},{2})	(None, True)	e	#VALUE!
+engineering_family	order_oct2bin	3703	OCT2BIN({1},{2})	(None, None)	e	#NUM!
+engineering_family	order_oct2bin	3704	OCT2BIN({1},{2})	(None, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_oct2bin	3705	OCT2BIN({1},{2})	(ErrorValue('#N/A'), 0.0)	e	#NUM!
+engineering_family	order_oct2bin	3706	OCT2BIN({1},{2})	(ErrorValue('#N/A'), -1.0)	e	#NUM!
+engineering_family	order_oct2bin	3707	OCT2BIN({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+engineering_family	order_oct2bin	3708	OCT2BIN({1},{2})	(ErrorValue('#N/A'), 11.0)	e	#NUM!
+engineering_family	order_oct2bin	3709	OCT2BIN({1},{2})	(ErrorValue('#N/A'), 1e+300)	e	#NUM!
+engineering_family	order_oct2bin	3710	OCT2BIN({1},{2})	(ErrorValue('#N/A'), 'x')	e	#VALUE!
+engineering_family	order_oct2bin	3711	OCT2BIN({1},{2})	(ErrorValue('#N/A'), '')	e	#VALUE!
+engineering_family	order_oct2bin	3712	OCT2BIN({1},{2})	(ErrorValue('#N/A'), '3')	e	#N/A
+engineering_family	order_oct2bin	3713	OCT2BIN({1},{2})	(ErrorValue('#N/A'), True)	e	#VALUE!
+engineering_family	order_oct2bin	3714	OCT2BIN({1},{2})	(ErrorValue('#N/A'), None)	e	#NUM!
+engineering_family	order_oct2bin	3715	OCT2BIN({1},{2})	(ErrorValue('#N/A'), ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_hex2bin	3716	HEX2BIN({1},{2})	('E', 0.0)	e	#NUM!
+engineering_family	order_hex2bin	3717	HEX2BIN({1},{2})	('E', -1.0)	e	#NUM!
+engineering_family	order_hex2bin	3718	HEX2BIN({1},{2})	('E', 1.0)	e	#NUM!
+engineering_family	order_hex2bin	3719	HEX2BIN({1},{2})	('E', 11.0)	e	#NUM!
+engineering_family	order_hex2bin	3720	HEX2BIN({1},{2})	('E', 1e+300)	e	#NUM!
+engineering_family	order_hex2bin	3721	HEX2BIN({1},{2})	('E', 'x')	e	#VALUE!
+engineering_family	order_hex2bin	3722	HEX2BIN({1},{2})	('E', '')	e	#VALUE!
+engineering_family	order_hex2bin	3723	HEX2BIN({1},{2})	('E', '3')	e	#NUM!
+engineering_family	order_hex2bin	3724	HEX2BIN({1},{2})	('E', True)	e	#VALUE!
+engineering_family	order_hex2bin	3725	HEX2BIN({1},{2})	('E', None)	e	#NUM!
+engineering_family	order_hex2bin	3726	HEX2BIN({1},{2})	('E', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_hex2bin	3727	HEX2BIN({1},{2})	('', 0.0)	e	#NUM!
+engineering_family	order_hex2bin	3728	HEX2BIN({1},{2})	('', -1.0)	e	#NUM!
+engineering_family	order_hex2bin	3729	HEX2BIN({1},{2})	('', 1.0)	str	'0'
+engineering_family	order_hex2bin	3730	HEX2BIN({1},{2})	('', 11.0)	e	#NUM!
+engineering_family	order_hex2bin	3731	HEX2BIN({1},{2})	('', 1e+300)	e	#NUM!
+engineering_family	order_hex2bin	3732	HEX2BIN({1},{2})	('', 'x')	e	#VALUE!
+engineering_family	order_hex2bin	3733	HEX2BIN({1},{2})	('', '')	e	#VALUE!
+engineering_family	order_hex2bin	3734	HEX2BIN({1},{2})	('', '3')	str	'000'
+engineering_family	order_hex2bin	3735	HEX2BIN({1},{2})	('', True)	e	#VALUE!
+engineering_family	order_hex2bin	3736	HEX2BIN({1},{2})	('', None)	e	#NUM!
+engineering_family	order_hex2bin	3737	HEX2BIN({1},{2})	('', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_hex2bin	3738	HEX2BIN({1},{2})	('2', 0.0)	e	#NUM!
+engineering_family	order_hex2bin	3739	HEX2BIN({1},{2})	('2', -1.0)	e	#NUM!
+engineering_family	order_hex2bin	3740	HEX2BIN({1},{2})	('2', 1.0)	e	#NUM!
+engineering_family	order_hex2bin	3741	HEX2BIN({1},{2})	('2', 11.0)	e	#NUM!
+engineering_family	order_hex2bin	3742	HEX2BIN({1},{2})	('2', 1e+300)	e	#NUM!
+engineering_family	order_hex2bin	3743	HEX2BIN({1},{2})	('2', 'x')	e	#VALUE!
+engineering_family	order_hex2bin	3744	HEX2BIN({1},{2})	('2', '')	e	#VALUE!
+engineering_family	order_hex2bin	3745	HEX2BIN({1},{2})	('2', '3')	str	'010'
+engineering_family	order_hex2bin	3746	HEX2BIN({1},{2})	('2', True)	e	#VALUE!
+engineering_family	order_hex2bin	3747	HEX2BIN({1},{2})	('2', None)	e	#NUM!
+engineering_family	order_hex2bin	3748	HEX2BIN({1},{2})	('2', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_hex2bin	3749	HEX2BIN({1},{2})	(' 1', 0.0)	e	#NUM!
+engineering_family	order_hex2bin	3750	HEX2BIN({1},{2})	(' 1', -1.0)	e	#NUM!
+engineering_family	order_hex2bin	3751	HEX2BIN({1},{2})	(' 1', 1.0)	e	#NUM!
+engineering_family	order_hex2bin	3752	HEX2BIN({1},{2})	(' 1', 11.0)	e	#NUM!
+engineering_family	order_hex2bin	3753	HEX2BIN({1},{2})	(' 1', 1e+300)	e	#NUM!
+engineering_family	order_hex2bin	3754	HEX2BIN({1},{2})	(' 1', 'x')	e	#VALUE!
+engineering_family	order_hex2bin	3755	HEX2BIN({1},{2})	(' 1', '')	e	#VALUE!
+engineering_family	order_hex2bin	3756	HEX2BIN({1},{2})	(' 1', '3')	e	#NUM!
+engineering_family	order_hex2bin	3757	HEX2BIN({1},{2})	(' 1', True)	e	#VALUE!
+engineering_family	order_hex2bin	3758	HEX2BIN({1},{2})	(' 1', None)	e	#NUM!
+engineering_family	order_hex2bin	3759	HEX2BIN({1},{2})	(' 1', ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_hex2bin	3760	HEX2BIN({1},{2})	(1e+300, 0.0)	e	#NUM!
+engineering_family	order_hex2bin	3761	HEX2BIN({1},{2})	(1e+300, -1.0)	e	#NUM!
+engineering_family	order_hex2bin	3762	HEX2BIN({1},{2})	(1e+300, 1.0)	e	#NUM!
+engineering_family	order_hex2bin	3763	HEX2BIN({1},{2})	(1e+300, 11.0)	e	#NUM!
+engineering_family	order_hex2bin	3764	HEX2BIN({1},{2})	(1e+300, 1e+300)	e	#NUM!
+engineering_family	order_hex2bin	3765	HEX2BIN({1},{2})	(1e+300, 'x')	e	#VALUE!
+engineering_family	order_hex2bin	3766	HEX2BIN({1},{2})	(1e+300, '')	e	#VALUE!
+engineering_family	order_hex2bin	3767	HEX2BIN({1},{2})	(1e+300, '3')	e	#NUM!
+engineering_family	order_hex2bin	3768	HEX2BIN({1},{2})	(1e+300, True)	e	#VALUE!
+engineering_family	order_hex2bin	3769	HEX2BIN({1},{2})	(1e+300, None)	e	#NUM!
+engineering_family	order_hex2bin	3770	HEX2BIN({1},{2})	(1e+300, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_hex2bin	3771	HEX2BIN({1},{2})	(-1e+300, 0.0)	e	#NUM!
+engineering_family	order_hex2bin	3772	HEX2BIN({1},{2})	(-1e+300, -1.0)	e	#NUM!
+engineering_family	order_hex2bin	3773	HEX2BIN({1},{2})	(-1e+300, 1.0)	e	#NUM!
+engineering_family	order_hex2bin	3774	HEX2BIN({1},{2})	(-1e+300, 11.0)	e	#NUM!
+engineering_family	order_hex2bin	3775	HEX2BIN({1},{2})	(-1e+300, 1e+300)	e	#NUM!
+engineering_family	order_hex2bin	3776	HEX2BIN({1},{2})	(-1e+300, 'x')	e	#VALUE!
+engineering_family	order_hex2bin	3777	HEX2BIN({1},{2})	(-1e+300, '')	e	#VALUE!
+engineering_family	order_hex2bin	3778	HEX2BIN({1},{2})	(-1e+300, '3')	e	#NUM!
+engineering_family	order_hex2bin	3779	HEX2BIN({1},{2})	(-1e+300, True)	e	#VALUE!
+engineering_family	order_hex2bin	3780	HEX2BIN({1},{2})	(-1e+300, None)	e	#NUM!
+engineering_family	order_hex2bin	3781	HEX2BIN({1},{2})	(-1e+300, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_hex2bin	3782	HEX2BIN({1},{2})	(True, 0.0)	e	#NUM!
+engineering_family	order_hex2bin	3783	HEX2BIN({1},{2})	(True, -1.0)	e	#NUM!
+engineering_family	order_hex2bin	3784	HEX2BIN({1},{2})	(True, 1.0)	e	#VALUE!
+engineering_family	order_hex2bin	3785	HEX2BIN({1},{2})	(True, 11.0)	e	#NUM!
+engineering_family	order_hex2bin	3786	HEX2BIN({1},{2})	(True, 1e+300)	e	#NUM!
+engineering_family	order_hex2bin	3787	HEX2BIN({1},{2})	(True, 'x')	e	#VALUE!
+engineering_family	order_hex2bin	3788	HEX2BIN({1},{2})	(True, '')	e	#VALUE!
+engineering_family	order_hex2bin	3789	HEX2BIN({1},{2})	(True, '3')	e	#VALUE!
+engineering_family	order_hex2bin	3790	HEX2BIN({1},{2})	(True, True)	e	#VALUE!
+engineering_family	order_hex2bin	3791	HEX2BIN({1},{2})	(True, None)	e	#NUM!
+engineering_family	order_hex2bin	3792	HEX2BIN({1},{2})	(True, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_hex2bin	3793	HEX2BIN({1},{2})	(None, 0.0)	e	#NUM!
+engineering_family	order_hex2bin	3794	HEX2BIN({1},{2})	(None, -1.0)	e	#NUM!
+engineering_family	order_hex2bin	3795	HEX2BIN({1},{2})	(None, 1.0)	str	'0'
+engineering_family	order_hex2bin	3796	HEX2BIN({1},{2})	(None, 11.0)	e	#NUM!
+engineering_family	order_hex2bin	3797	HEX2BIN({1},{2})	(None, 1e+300)	e	#NUM!
+engineering_family	order_hex2bin	3798	HEX2BIN({1},{2})	(None, 'x')	e	#VALUE!
+engineering_family	order_hex2bin	3799	HEX2BIN({1},{2})	(None, '')	e	#VALUE!
+engineering_family	order_hex2bin	3800	HEX2BIN({1},{2})	(None, '3')	str	'000'
+engineering_family	order_hex2bin	3801	HEX2BIN({1},{2})	(None, True)	e	#VALUE!
+engineering_family	order_hex2bin	3802	HEX2BIN({1},{2})	(None, None)	e	#NUM!
+engineering_family	order_hex2bin	3803	HEX2BIN({1},{2})	(None, ErrorValue('#N/A'))	e	#N/A
+engineering_family	order_hex2bin	3804	HEX2BIN({1},{2})	(ErrorValue('#N/A'), 0.0)	e	#NUM!
+engineering_family	order_hex2bin	3805	HEX2BIN({1},{2})	(ErrorValue('#N/A'), -1.0)	e	#NUM!
+engineering_family	order_hex2bin	3806	HEX2BIN({1},{2})	(ErrorValue('#N/A'), 1.0)	e	#N/A
+engineering_family	order_hex2bin	3807	HEX2BIN({1},{2})	(ErrorValue('#N/A'), 11.0)	e	#NUM!
+engineering_family	order_hex2bin	3808	HEX2BIN({1},{2})	(ErrorValue('#N/A'), 1e+300)	e	#NUM!
+engineering_family	order_hex2bin	3809	HEX2BIN({1},{2})	(ErrorValue('#N/A'), 'x')	e	#VALUE!
+engineering_family	order_hex2bin	3810	HEX2BIN({1},{2})	(ErrorValue('#N/A'), '')	e	#VALUE!
+engineering_family	order_hex2bin	3811	HEX2BIN({1},{2})	(ErrorValue('#N/A'), '3')	e	#N/A
+engineering_family	order_hex2bin	3812	HEX2BIN({1},{2})	(ErrorValue('#N/A'), True)	e	#VALUE!
+engineering_family	order_hex2bin	3813	HEX2BIN({1},{2})	(ErrorValue('#N/A'), None)	e	#NUM!
+engineering_family	order_hex2bin	3814	HEX2BIN({1},{2})	(ErrorValue('#N/A'), ErrorValue('#N/A'))	e	#N/A

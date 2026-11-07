@@ -2746,6 +2746,13 @@ def engineering_family() -> list[Case]:
     for name in ("DELTA", "GESTEP"):
         cases += [Case(name.lower(), f"{name}({{1}})", (a,)) for a in pairs]
         cases += [Case(name.lower(), f"{name}({{1}},{{2}})", (a, b)) for a in pairs for b in pairs]
+    # A number that is not one, with places that are bad: which problem comes first.
+    for name in ("DEC2BIN", "DEC2OCT", "DEC2HEX", "BIN2HEX", "OCT2BIN", "HEX2BIN"):
+        cases += [
+            Case("order_" + name.lower(), f"{name}({{1}},{{2}})", (v, k))
+            for v in ("E", "", "2", " 1", 1e300, -1e300, True, None, NA)
+            for k in (0.0, -1.0, 1.0, 11.0, 1e300, "x", "", "3", True, None, NA)
+        ]
     return cases
 
 

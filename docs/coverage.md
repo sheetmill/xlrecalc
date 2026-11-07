@@ -53,7 +53,7 @@ library differs in the last bits; the rows that match either way do not.
 | `BETADIST` | | absent | | | | | | | |
 | `BETAINV` | | absent | | | | | | | |
 | `BIN2DEC` | engineering | implemented | 19 | 19 | 0 | 0 | 0 |  |  |
-| `BIN2HEX` | engineering | implemented | 201 | 201 | 0 | 0 | 0 |  |  |
+| `BIN2HEX` | engineering | implemented | 300 | 300 | 0 | 0 | 0 |  |  |
 | `BIN2OCT` | engineering | implemented | 201 | 201 | 0 | 0 | 0 |  |  |
 | `BINOM.DIST` | | absent | | | | | | | |
 | `BINOM.DIST.RANGE` | | absent | | | | | | | |
@@ -139,9 +139,9 @@ library differs in the last bits; the rows that match either way do not.
 | `DCOUNT` | database | partial | 128 | 127 | 0 | 0 | 1 |  | computed criteria are not supported |
 | `DCOUNTA` | database | partial | 140 | 138 | 0 | 0 | 2 |  | computed criteria are not supported |
 | `DDB` | financial | implemented | 1190 | 1174 | 16 | 0 | 0 | 8 ulps |  |
-| `DEC2BIN` | engineering | implemented | 210 | 210 | 0 | 0 | 0 |  |  |
-| `DEC2HEX` | engineering | implemented | 210 | 210 | 0 | 0 | 0 |  |  |
-| `DEC2OCT` | engineering | implemented | 210 | 210 | 0 | 0 | 0 |  |  |
+| `DEC2BIN` | engineering | implemented | 309 | 309 | 0 | 0 | 0 |  |  |
+| `DEC2HEX` | engineering | implemented | 309 | 309 | 0 | 0 | 0 |  |  |
+| `DEC2OCT` | engineering | implemented | 309 | 309 | 0 | 0 | 0 |  |  |
 | `DECIMAL` | math | implemented | 84 | 84 | 0 | 0 | 0 |  |  |
 | `DEGREES` | math | implemented | 29 | 29 | 0 | 0 | 0 |  |  |
 | `DELTA` | engineering | implemented | 132 | 132 | 0 | 0 | 0 |  |  |
@@ -223,7 +223,7 @@ library differs in the last bits; the rows that match either way do not.
 | `GROUPBY` | | absent | | | | | | | |
 | `GROWTH` | | absent | | | | | | | |
 | `HARMEAN` | statistical | implemented | 29 | 29 | 0 | 0 | 0 | 4 ulps |  |
-| `HEX2BIN` | engineering | implemented | 208 | 208 | 0 | 0 | 0 |  |  |
+| `HEX2BIN` | engineering | implemented | 307 | 307 | 0 | 0 | 0 |  |  |
 | `HEX2DEC` | engineering | implemented | 26 | 26 | 0 | 0 | 0 |  |  |
 | `HEX2OCT` | engineering | implemented | 208 | 208 | 0 | 0 | 0 |  |  |
 | `HLOOKUP` | lookup and reference | implemented | 19 | 19 | 0 | 0 | 0 |  |  |
@@ -353,7 +353,7 @@ library differs in the last bits; the rows that match either way do not.
 | `NPER` | financial | implemented | 111 | 111 | 0 | 0 | 0 |  |  |
 | `NPV` | financial | implemented | 58 | 45 | 13 | 0 | 0 | 4 ulps |  |
 | `NUMBERVALUE` | text | implemented | 514 | 513 | 0 | 0 | 1 |  |  |
-| `OCT2BIN` | engineering | implemented | 203 | 203 | 0 | 0 | 0 |  |  |
+| `OCT2BIN` | engineering | implemented | 302 | 302 | 0 | 0 | 0 |  |  |
 | `OCT2DEC` | engineering | implemented | 21 | 21 | 0 | 0 | 0 |  |  |
 | `OCT2HEX` | engineering | implemented | 203 | 203 | 0 | 0 | 0 |  |  |
 | `ODD` | math | implemented | 29 | 29 | 0 | 0 | 0 |  |  |
