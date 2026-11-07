@@ -5,13 +5,21 @@
 Past its limit a request is stopped, and what can be learned is saved under ``capture/build``: a
 ``sample`` of Excel, how long it has been up, its CPU and memory, the display's last change, the
 request and its file, and whether Excel answers a question about its workbooks now and after 1 and
-5 minutes. Excel is never ended: it may hold what the person using it needs. Imports only the
-standard library, so that the default test run can import it.
+5 minutes. Excel is never ended: it may hold what the person using it needs. When it answers again,
+the workbooks the request named in Excel's container are closed without saving and alerts are
+turned back on, so a recovered hang leaves nothing behind. Imports only the standard library, so
+that the default test run can import it.
+
+The display is kept awake while a process drives Excel (``caffeinate -d``, from the first request
+until the process ends): every hang so far happened with the display off. The record says whether
+it was.
 """
 
 from __future__ import annotations
 
 import datetime as dt
+import os
+import shutil
 import subprocess
 import sys
 import time
@@ -26,6 +34,55 @@ ASK_AGAIN = (60.0, 240.0)
 """Seconds to wait before each further question: 1 minute after the first, then 5."""
 SAMPLE_SECONDS = 10
 _VERSION = 'tell application "Microsoft Excel" to version'
+CONTAINER_MARK = "/Library/Containers/com.microsoft.Excel/"
+"""Only workbooks in Excel's own container are ever closed: the probes create theirs there."""
+_TIDY = (
+    "on run argv",
+    'tell application "Microsoft Excel"',
+    "set closed to {}",
+    "repeat with xlName in argv",
+    "if exists workbook (xlName as text) then",
+    "close workbook (xlName as text) saving no",
+    "set end of closed to (xlName as text)",
+    "end if",
+    "end repeat",
+    "set display alerts to true",
+    "end tell",
+    'set AppleScript\'s text item delimiters to ", "',
+    "return closed as text",
+    "end run",
+)
+_awake: subprocess.Popen[bytes] | None = None
+
+
+def keep_awake() -> None:
+    """Keep the display awake until this process ends (``caffeinate -d -w``), on a Mac."""
+    global _awake
+    if _awake is not None and _awake.poll() is None:
+        return
+    tool = shutil.which("caffeinate")
+    if tool is None:
+        return
+    _awake = subprocess.Popen(
+        [tool, "-d", "-w", str(os.getpid())],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+
+def awake() -> str:
+    """Whether the display is being kept awake, for the record."""
+    if _awake is not None and _awake.poll() is None:
+        return f"display kept awake: yes (caffeinate -d, pid {_awake.pid})"
+    return "display kept awake: no"
+
+
+def tidy(arguments: tuple[str, ...]) -> str:
+    """Close the container workbooks a request named, without saving, and turn alerts back on."""
+    names = [Path(a).name for a in arguments if a.endswith(".xlsx") and CONTAINER_MARK in a]
+    script = [part for line in _TIDY for part in ("-e", line)]
+    closed = _output("osascript", *script, *names, seconds=ANSWER_SECONDS)
+    return f"after the answer: closed without saving [{closed}]; display alerts set to true"
 
 
 def answers(seconds: float = ANSWER_SECONDS) -> bool:
@@ -93,6 +150,7 @@ def collect(what: str, arguments: tuple[str, ...], seconds: float) -> tuple[Path
     answered = answers()
     _log(record, f"answers about workbooks at once: {answered}")
     _log(record, _state())
+    _log(record, awake())
     _log(record, f"sample: {_sample(EVIDENCE / f'{stamp}.sample.txt')}")
     waited = 0.0
     for wait in ASK_AGAIN:
@@ -103,6 +161,8 @@ def collect(what: str, arguments: tuple[str, ...], seconds: float) -> tuple[Path
         waited += wait
         answered = answers()
         _log(record, f"answers after {waited:.0f} s: {answered}")
+    if answered:
+        _log(record, tidy(arguments))
     return record, answered
 
 
@@ -130,6 +190,7 @@ def osascript(*arguments: str, seconds: float) -> subprocess.CompletedProcess[st
     Raises:
         ExcelTimeoutError: past the limit, after the evidence is saved.
     """
+    keep_awake()
     try:
         return subprocess.run(
             ["osascript", *arguments], capture_output=True, text=True, timeout=seconds

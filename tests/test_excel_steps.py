@@ -21,6 +21,8 @@ def waits(monkeypatch, tmp_path):
     slept: list[float] = []
     monkeypatch.setattr(excel_watch, "EVIDENCE", tmp_path)
     monkeypatch.setattr(excel_watch.time, "sleep", slept.append)
+    monkeypatch.setattr(excel_watch.shutil, "which", lambda name: None)  # no real caffeinate
+    monkeypatch.setattr(excel_watch, "_awake", None)
     return slept
 
 
@@ -78,10 +80,14 @@ def test_the_record_holds_the_request_the_state_and_each_answer(monkeypatch, tmp
         return subprocess.CompletedProcess(command, 0, "", "")
 
     monkeypatch.setattr(subprocess, "run", run)
-    record, answered = excel_watch.collect("x past 9 s", ("s.applescript", "book.xlsx"), 9.0)
+    container = "/Users/u/Library/Containers/com.microsoft.Excel/Data/Documents/xlrecalc/"
+    request = ("s.applescript", "book.xlsx", container + "probe.xlsx", container + "copy.xlsx")
+    record, answered = excel_watch.collect("x past 9 s", request, 9.0)
     text = record.read_text()
     assert answered
     assert waits == [60.0]
+    assert "display kept awake: no" in text
+    assert "after the answer: closed without saving" in text
     for expected in (
         "x past 9 s",
         "limit: 9 s",
@@ -116,3 +122,39 @@ def test_a_capture_limit_grows_with_its_cases_and_is_generous():
 
     assert capture_limit(10) >= 600
     assert capture_limit(100_000) > capture_limit(10) + 5_000
+
+
+def test_a_recovered_hang_closes_only_the_requests_container_workbooks(monkeypatch):
+    """Their names reach AppleScript as arguments, never as source, and alerts come back on."""
+    commands = []
+    monkeypatch.setattr(
+        subprocess, "run", lambda c, **k: commands.append(c) or subprocess.CompletedProcess(c, 0)
+    )
+    container = "/Users/u/Library/Containers/com.microsoft.Excel/Data/Documents/xlrecalc/"
+    excel_watch.tidy(("s.applescript", "/tmp/other.xlsx", container + 'a "b".xlsx'))
+    (command,) = commands
+    source = [command[i + 1] for i, part in enumerate(command) if part == "-e"]
+    assert command[-1] == 'a "b".xlsx'
+    assert "/tmp/other.xlsx" not in command
+    assert "set display alerts to true" in source
+    assert not any('"b"' in line for line in source)
+
+
+def test_the_display_is_kept_awake_for_the_process(monkeypatch):
+    started = []
+
+    class Fake:
+        pid = 7
+
+        def __init__(self, command, **kwargs):
+            started.append(command)
+
+        def poll(self):
+            return None
+
+    monkeypatch.setattr(excel_watch.shutil, "which", lambda name: "/usr/bin/caffeinate")
+    monkeypatch.setattr(excel_watch.subprocess, "Popen", Fake)
+    excel_watch.keep_awake()
+    excel_watch.keep_awake()
+    assert started == [["/usr/bin/caffeinate", "-d", "-w", str(excel_watch.os.getpid())]]
+    assert excel_watch.awake() == "display kept awake: yes (caffeinate -d, pid 7)"
