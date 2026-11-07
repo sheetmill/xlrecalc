@@ -154,7 +154,19 @@ def test_the_display_is_kept_awake_for_the_process(monkeypatch):
 
     monkeypatch.setattr(excel_watch.shutil, "which", lambda name: "/usr/bin/caffeinate")
     monkeypatch.setattr(excel_watch.subprocess, "Popen", Fake)
+    ran = []
+
+    def run(command, **kwargs):
+        ran.append(command)
+        text = "t Display is turned off\n" if command[0] == "pmset" else ""
+        return subprocess.CompletedProcess(command, 0, text, "")
+
+    monkeypatch.setattr(subprocess, "run", run)
     excel_watch.keep_awake()
     excel_watch.keep_awake()
     assert started == [["/usr/bin/caffeinate", "-d", "-w", str(excel_watch.os.getpid())]]
-    assert excel_watch.awake() == "display kept awake: yes (caffeinate -d, pid 7)"
+    assert ("/usr/bin/caffeinate", "-u", "-t", "1") in ran  # wakes a display already off
+    assert excel_watch.awake() == (
+        "display kept awake: yes (caffeinate -d, pid 7); display at the start of the run, "
+        "last change: t Display is turned off"
+    )

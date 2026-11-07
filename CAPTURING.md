@@ -165,8 +165,9 @@ workbooks, at 0% CPU, with no dialog, and with its menus working, its main threa
 was not dispatched. A Quit clears it, and the same work then passes; it can also clear by itself, within minutes. So ask
 about workbooks to tell whether it is alive (`tests/excel_steps.py`). The cause is unknown. Every hang so far came with
 the display off, though a locked screen, a display that is off and system sleep, each tried deliberately, did not cause
-one. So the display is kept awake while a process drives Excel (`caffeinate -d`, from its first request until it ends),
-and the record says whether it was: a hang with it awake rules the display out. The tools never end Excel, since the
+one. So the display is kept awake while a process drives Excel (`caffeinate -d`, from its first request until it ends,
+after declaring user activity once so that a display already off wakes), and the record says whether it was and how
+the display stood when the run began: a hang with it awake rules the display out. The tools never end Excel, since the
 person using it may have work open in it: they report, and leave the decision to that person.
 
 So the next one explains itself: past a limit, `capture/excel_watch.py` saves a record under

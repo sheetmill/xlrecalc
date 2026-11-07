@@ -53,16 +53,33 @@ _TIDY = (
     "end run",
 )
 _awake: subprocess.Popen[bytes] | None = None
+_display_at_start = "not checked"
+
+
+def _display_line() -> str:
+    """The display's last logged change (``pmset -g log``), or "none logged"."""
+    lines = [
+        line
+        for line in _output("pmset", "-g", "log", seconds=60.0).split("\n")
+        if "Display is turned" in line
+    ]
+    return lines[-1] if lines else "none logged"
 
 
 def keep_awake() -> None:
-    """Keep the display awake until this process ends (``caffeinate -d -w``), on a Mac."""
-    global _awake
+    """Keep the display awake until this process ends (``caffeinate -d -w``), on a Mac.
+
+    ``-d`` keeps a display on but does not wake one that is off, so the first call also declares
+    user activity once (``caffeinate -u -t 1``), and notes the display's state before it.
+    """
+    global _awake, _display_at_start
     if _awake is not None and _awake.poll() is None:
         return
     tool = shutil.which("caffeinate")
     if tool is None:
         return
+    _display_at_start = _display_line()
+    _output(tool, "-u", "-t", "1", seconds=10.0)
     _awake = subprocess.Popen(
         [tool, "-d", "-w", str(os.getpid())],
         stdout=subprocess.DEVNULL,
@@ -72,9 +89,10 @@ def keep_awake() -> None:
 
 def awake() -> str:
     """Whether the display is being kept awake, for the record."""
+    start = f"; display at the start of the run, last change: {_display_at_start}"
     if _awake is not None and _awake.poll() is None:
-        return f"display kept awake: yes (caffeinate -d, pid {_awake.pid})"
-    return "display kept awake: no"
+        return f"display kept awake: yes (caffeinate -d, pid {_awake.pid}){start}"
+    return f"display kept awake: no{start}"
 
 
 def tidy(arguments: tuple[str, ...]) -> str:
@@ -106,16 +124,12 @@ def _output(*command: str, seconds: float = 30.0) -> str:
 def _state() -> str:
     """Excel's process figures and the display's last change, as text."""
     pid = _output("pgrep", "-x", "Microsoft Excel").split("\n")[0]
-    display = [
-        line
-        for line in _output("pmset", "-g", "log", seconds=60.0).split("\n")
-        if "Display is turned" in line
-    ]
+    display = _display_line()
     lines = [
         f"process: {_output('ps', '-o', 'pid=,etime=,%cpu=,rss=', '-p', pid) if pid else 'none'}",
         "  (pid, elapsed time, CPU %, resident KB)",
         f"version answers: {_output('osascript', '-e', _VERSION, seconds=ANSWER_SECONDS)}",
-        f"display, last change: {display[-1] if display else 'none logged'}",
+        f"display, last change: {display}",
     ]
     return "\n".join(lines)
 
