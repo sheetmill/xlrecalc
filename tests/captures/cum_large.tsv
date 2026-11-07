@@ -1,0 +1,51 @@
+# suite: cum_large
+# excel: 16.114.3 for Mac, locale en_US
+# date_system: 1900
+# captured: 2026-11-06
+# generator: capture/suites.py:cum_large
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# columns: suite tag case formula inputs expected_type expected_repr
+cum_large	cumipmt	1	CUMIPMT(0.0001,1000000,1000,1,1000000,0)	()	n	-99000.0
+cum_large	cumipmt	2	CUMIPMT(0.0001,1000000,1000,1,1000000,1)	()	n	-98990.00099990003
+cum_large	cumipmt	3	CUMIPMT(0.0001,1000000,1000,2,1000000,0)	()	n	-98999.90000000001
+cum_large	cumipmt	4	CUMIPMT(0.0001,1000000,1000,1,1000,0)	()	n	-100.0
+cum_large	cumprinc	5	CUMPRINC(0.0001,1000000,1000,1,1000000,0)	()	n	-1000.0
+cum_large	cumprinc	6	CUMPRINC(0.0001,1000000,1000,1,1000000,1)	()	n	-1000.0
+cum_large	cumprinc	7	CUMPRINC(0.0001,1000000,1000,2,1000000,0)	()	n	-1000.0
+cum_large	cumprinc	8	CUMPRINC(0.0001,1000000,1000,1,1000,0)	()	n	-3.931841341844898e-42
+cum_large	db	9	DB(1000,100,1000000,1)	()	n	0.0
+cum_large	db	10	DB(1000,100,1000000,1000000)	()	n	0.0
+cum_large	cumipmt	11	CUMIPMT(0.0001,2000000,1000,1,2000000,0)	()	n	-199000.0
+cum_large	cumipmt	12	CUMIPMT(0.0001,2000000,1000,1,2000000,1)	()	n	-198980.00199980004
+cum_large	cumipmt	13	CUMIPMT(0.0001,2000000,1000,2,2000000,0)	()	n	-198999.90000000002
+cum_large	cumipmt	14	CUMIPMT(0.0001,2000000,1000,1,1000,0)	()	n	-100.0
+cum_large	cumprinc	15	CUMPRINC(0.0001,2000000,1000,1,2000000,0)	()	n	-1000.0
+cum_large	cumprinc	16	CUMPRINC(0.0001,2000000,1000,1,2000000,1)	()	n	-1000.0
+cum_large	cumprinc	17	CUMPRINC(0.0001,2000000,1000,2,2000000,0)	()	n	-1000.0
+cum_large	cumprinc	18	CUMPRINC(0.0001,2000000,1000,1,1000,0)	()	n	-1.4700060499717654e-85
+cum_large	db	19	DB(1000,100,2000000,1)	()	n	0.0
+cum_large	db	20	DB(1000,100,2000000,2000000)	()	n	0.0
+cum_large	cumipmt	21	CUMIPMT(0.0001,10000000,1000,1,10000000,0)	()	n	-999000.0
+cum_large	cumipmt	22	CUMIPMT(0.0001,10000000,1000,1,10000000,1)	()	n	-998900.0099990001
+cum_large	cumipmt	23	CUMIPMT(0.0001,10000000,1000,2,10000000,0)	()	n	-998999.9
+cum_large	cumipmt	24	CUMIPMT(0.0001,10000000,1000,1,1000,0)	()	n	-100.0
+cum_large	cumprinc	25	CUMPRINC(0.0001,10000000,1000,1,10000000,0)	()	n	-1000.0
+cum_large	cumprinc	26	CUMPRINC(0.0001,10000000,1000,1,10000000,1)	()	n	-1000.0
+cum_large	cumprinc	27	CUMPRINC(0.0001,10000000,1000,2,10000000,0)	()	n	-1000.0
+cum_large	cumprinc	28	CUMPRINC(0.0001,10000000,1000,1,1000,0)	()	n	0.0
+cum_large	db	29	DB(1000,100,10000000,1)	()	n	0.0
+cum_large	db	30	DB(1000,100,10000000,10000000)	()	n	0.0
+cum_large	cumipmt	31	CUMIPMT(0.0001,100000000,1000,1,100000000,0)	()	n	-9999000.0
+cum_large	cumipmt	32	CUMIPMT(0.0001,100000000,1000,1,100000000,1)	()	n	-9998000.099990003
+cum_large	cumipmt	33	CUMIPMT(0.0001,100000000,1000,2,100000000,0)	()	n	-9998999.9
+cum_large	cumipmt	34	CUMIPMT(0.0001,100000000,1000,1,1000,0)	()	n	-100.0
+cum_large	cumprinc	35	CUMPRINC(0.0001,100000000,1000,1,100000000,0)	()	n	-1000.0
+cum_large	cumprinc	36	CUMPRINC(0.0001,100000000,1000,1,100000000,1)	()	n	-1000.0
+cum_large	cumprinc	37	CUMPRINC(0.0001,100000000,1000,2,100000000,0)	()	n	-1000.0
+cum_large	cumprinc	38	CUMPRINC(0.0001,100000000,1000,1,1000,0)	()	n	0.0
+cum_large	db	39	DB(1000,100,100000000,1)	()	n	0.0
+cum_large	db	40	DB(1000,100,100000000,100000000)	()	n	0.0

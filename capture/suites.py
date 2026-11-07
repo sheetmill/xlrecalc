@@ -3240,6 +3240,20 @@ def empty_args() -> list[Case]:
     return [case for case in empty_args_all() if case.formula not in refused]
 
 
+def cum_large() -> list[Case]:
+    """CUMIPMT, CUMPRINC and DB over growing period counts: is there a bound?"""
+    cases = []
+    for n in ("1000000", "2000000", "10000000", "100000000"):
+        for name in ("CUMIPMT", "CUMPRINC"):
+            cases.append(Case(name.lower(), f"{name}(0.0001,{n},1000,1,{n},0)"))
+            cases.append(Case(name.lower(), f"{name}(0.0001,{n},1000,1,{n},1)"))
+            cases.append(Case(name.lower(), f"{name}(0.0001,{n},1000,2,{n},0)"))
+            cases.append(Case(name.lower(), f"{name}(0.0001,{n},1000,1,1000,0)"))
+        cases.append(Case("db", f"DB(1000,100,{n},1)"))
+        cases.append(Case("db", f"DB(1000,100,{n},{n})"))
+    return cases
+
+
 def mac_gaps() -> list[Case]:
     """Whether Excel for Mac computes functions a source says it lacks, in each file form."""
     url = '("a b&c=d/é")'
@@ -3287,6 +3301,7 @@ SUITES = {
     "math_integers": Suite(math_integers, fixed=_INTEGERS_TABLE),
     "iteration": Suite(iteration),
     "mac_gaps": Suite(mac_gaps),
+    "cum_large": Suite(cum_large),
     "empty_args": Suite(empty_args, fixed=_EMPTY_TABLE),
     "database_family": Suite(database_family, fixed={**MISC_TABLE, **_DB_EXTRA}),
     "engineering_family": Suite(engineering_family),

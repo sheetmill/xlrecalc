@@ -544,7 +544,7 @@ def RATE(
 
 # Closed forms (capture finance_family) ------------------------------------------------------
 
-_MAX_PERIODS = 1_000_000
+_WALK_PERIODS = 1024
 _POWERS = "Excel's powers and products differ in the last bits; within 4 units in the last place"
 
 
@@ -562,6 +562,26 @@ def _power(base: float, exponent: float) -> float:
     return result if isinstance(result, float) else math.nan
 
 
+def _long_span(
+    r: float, n: float, pv: float, start: int, end: int, due: int, interest: bool
+) -> float | ErrorValue:
+    """Interest or principal over many periods, in closed form as Excel's speed implies.
+
+    Balances go through discount factors, which stay finite where ``(1 + r) ** n`` would not.
+    """
+    v = 1 / (1 + r)
+    whole = 1 - _power(v, n)
+    payment = pv * r / whole * (v if due else 1.0)
+
+    def balance(k: int) -> float:
+        if k <= 0:
+            return pv
+        return pv * (v if due else 1.0) * (1 - _power(v, n - k)) / whole
+
+    principal = balance(start - 1) - balance(end)
+    return _result(principal - payment * (end - start + 1) if interest else -principal)
+
+
 def _cumulative(
     ctx: Context, rate: Any, n: Any, pv: Any, first: Any, last: Any, due: Any, part: Any
 ) -> float | ErrorValue:
@@ -575,8 +595,8 @@ def _cumulative(
         return NUM
     if code not in (0, 1):
         return NUM
-    if end - start >= _MAX_PERIODS:  # a formula must not be able to ask for 1E300 steps
-        return NUM
+    if nper >= _WALK_PERIODS:  # a formula must not be able to ask for 1E300 steps
+        return _long_span(r, nper, present, start, end, code, part is IPMT)
     total = 0.0
     for period in range(start, end + 1):
         step = part(ctx, r, float(period), nper, present, 0.0, float(code))
@@ -641,11 +661,13 @@ def DB(
     per = math.trunc(period)
     if cost < 0 or salvage < 0 or life <= 0 or per < 1 or m < 1 or m > 12 or life < 1:
         return NUM
-    if per > life + (m < 12) or per > _MAX_PERIODS:
+    if per > life + (m < 12):
         return NUM
     if cost == 0:
         return 0.0
     rate = round(1 - _power(salvage / cost, 1 / life), 3)
+    if per > _WALK_PERIODS:  # the balance only shrinks: past the first year in closed form
+        return _result((cost - cost * rate * m / 12) * _power(1 - rate, per - 2) * rate)
     taken = cost * rate * m / 12
     if per == 1:
         return taken

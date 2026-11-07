@@ -125,8 +125,8 @@ library differs in the last bits; the rows that match either way do not.
 | `CUBESET` | | absent | | | | | | | |
 | `CUBESETCOUNT` | | absent | | | | | | | |
 | `CUBEVALUE` | | absent | | | | | | | |
-| `CUMIPMT` | financial | implemented | 2976 | 2846 | 69 | 0 | 61 | 8 ulps |  |
-| `CUMPRINC` | financial | implemented | 2976 | 2814 | 139 | 0 | 23 | 8 ulps |  |
+| `CUMIPMT` | financial | implemented | 2992 | 2860 | 71 | 0 | 61 | 8 ulps |  |
+| `CUMPRINC` | financial | implemented | 2992 | 2828 | 139 | 0 | 25 | 8 ulps |  |
 | `DATE` | date and time | implemented | 39 | 39 | 0 | 0 | 0 |  |  |
 | `DATEDIF` | date and time | implemented | 3651 | 3650 | 0 | 0 | 1 |  |  |
 | `DATEVALUE` | date and time | implemented | 136 | 136 | 0 | 0 | 0 |  |  |
@@ -134,7 +134,7 @@ library differs in the last bits; the rows that match either way do not.
 | `DAY` | date and time | implemented | 36 | 36 | 0 | 0 | 0 |  |  |
 | `DAYS` | date and time | implemented | 392 | 392 | 0 | 0 | 0 |  |  |
 | `DAYS360` | date and time | implemented | 400 | 400 | 0 | 0 | 0 |  |  |
-| `DB` | financial | implemented | 1484 | 1446 | 38 | 0 | 0 | 8 ulps |  |
+| `DB` | financial | implemented | 1492 | 1454 | 38 | 0 | 0 | 8 ulps |  |
 | `DBCS` | | absent | | | | | | | |
 | `DCOUNT` | database | partial | 130 | 129 | 0 | 0 | 1 |  | computed criteria are not supported |
 | `DCOUNTA` | database | partial | 142 | 140 | 0 | 0 | 2 |  | computed criteria are not supported |

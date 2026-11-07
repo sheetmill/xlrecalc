@@ -316,6 +316,7 @@ _CUMULATIVE_CASES = (
 _EMPTY_ODD = (
     "an empty argument with no rule found: VDB's factor, WORKDAY.INTL over a range as weekend"
 )
+_TINY_PRINCIPAL = "CUMPRINC of the first periods of a very long loan: Excel gives 1E-42, 0 here"
 _MULTINOMIAL = (
     "Excel's result carries noise from its logarithm of the gamma function (279.99999999999966)"
 )
@@ -333,6 +334,7 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("dates_family", case): _WEEKNUM_ODD_TYPE for case in _WEEKNUM_ODD_CASES},
     ("dates_family", 2004): _DATEDIF_MARCH,
     ("text_family", 1761): _NUMBERVALUE_GROUP,
+    **{("cum_large", case): _TINY_PRINCIPAL for case in (8, 18)},
     ("empty_args", 296): _MULTINOMIAL,
     **{("empty_args", case): _EMPTY_ODD for case in (522, 523, 538, 702)},
     **{("finance_family", case): _CUMULATIVE_NOISE for case in _CUMULATIVE_CASES},
@@ -429,6 +431,7 @@ SUITES = [
     "statistics_family",
     "finance_family",
     "empty_args",
+    "cum_large",
 ]
 
 
