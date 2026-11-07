@@ -110,6 +110,22 @@ def test_the_other_functions_over_a_whole_sheet():
         '_xlfn.DECIMAL(REPT("Z",255),36)',
         "_xlfn.BASE(9007199254740991,2,255)",
         'SUBSTITUTE(REPT("a",32767),"a",REPT("b",32767))',
+        "_xlfn.RRI(1E-300,2,1E300)",
+        "CUMIPMT(0.1,1E300,1,1,1E300,0)",
+        "CUMPRINC(0.1,1E300,1,1,1E300,0)",
+        "DB(1,0.5,1E300,1E300)",
+        "SYD(1,0.5,1E300,1E300)",
+        "DDB(1,0.5,1E300,1E300)",
+        "SKEW(1E300,1E300,-1E300,1)",
+        "SKEW.P(1E300,-1E300,1)".replace("SKEW.P", "_xlfn.SKEW.P"),
+        "DEVSQ(1E300,-1E300)",
+        "NOMINAL(1E300,1)",
+        "DB(1,0.5,1E-300,1)",
+        "DDB(1,0.5,1,0.5,1)",
+        "MIRR({-1,1E300,1E300},1E300,1E300)",
+        "DOLLARDE(1,1E308)",
+        "PERCENTRANK({1,2},1,1E300)",
+        "_xlfn.KURT(1E300,1E300,-1E300,1)".replace("_xlfn.", ""),
     ],
 )
 @bounded
@@ -117,3 +133,4 @@ def test_integer_functions_stay_bounded_on_huge_arguments(formula: str) -> None:
     """They use exact integers or texts, which a formula must not be able to make huge."""
     engine = Engine.from_cells({"S": {"A1": "=" + formula}})
     assert engine.get(0, 0, 0) is not None
+    assert not engine.report.exceptions

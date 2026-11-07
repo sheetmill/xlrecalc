@@ -591,10 +591,10 @@ def MODE(ctx: Context, *args: Any) -> float | ErrorValue:
 _SUMS = "Excel's sums of powers differ in the last bits; within 4 units in the last place"
 
 
-def _moments(values: list[float], power: int) -> float:
-    n = len(values)
-    mean = _plain(values) / n
-    return _plain([(v - mean) ** power for v in values])
+def _squares(values: list[float]) -> float:
+    """The sum of the squares of the deviations from the mean; infinite past a double's range."""
+    mean = _plain(values) / len(values)
+    return _plain([(v - mean) * (v - mean) for v in values])
 
 
 def _standard_powers(values: list[float], sd: float, power: int) -> float:
@@ -621,7 +621,7 @@ def DEVSQ(ctx: Context, *args: Any) -> float | ErrorValue:
     values = _numbers(args, ctx)
     if isinstance(values, ErrorValue):
         return values
-    return _finite(_moments(values, 2)) if values else NUM
+    return _finite(_squares(values)) if values else NUM
 
 
 @function("GEOMEAN", "raw", min_args=1, variadic=True, category=S, ulps=4, ulps_reason=_SUMS)
@@ -657,8 +657,8 @@ def _standardized(values: list[float], lost: int) -> float | None:
     n = len(values)
     if n <= lost:
         return None
-    sd = math.sqrt(_moments(values, 2) / (n - lost))
-    return sd if sd > 0 else None
+    sd = math.sqrt(_squares(values) / (n - lost))
+    return sd if 0 < sd < math.inf else None
 
 
 @function("KURT", "raw", min_args=1, variadic=True, category=S, ulps=4, ulps_reason=_SUMS)
@@ -832,8 +832,12 @@ def GAUSS(ctx: Context, z: float) -> float:
 
 def _cut_digits(x: float, significance: float) -> float:
     """``x`` cut, not rounded, to a number of digits after the point."""
-    scale = 10.0 ** math.trunc(significance)
-    return math.floor(float(f"{x:.15g}") * scale) / scale
+    shown = float(f"{x:.15g}")
+    digits = math.trunc(significance)
+    if digits > 15:  # nothing is left to cut
+        return shown
+    scale = 10.0**digits
+    return math.floor(shown * scale) / scale
 
 
 def _percent_rank(a: Any, x: float, significance: float, ctx: Context, inclusive: bool) -> Any:

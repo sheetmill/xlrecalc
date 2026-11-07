@@ -12,7 +12,7 @@ rates (``PMT(1E-10,10,1000)`` is -100.000000055).
 from __future__ import annotations
 
 import math
-from typing import Any
+from typing import Any, cast
 
 from xlrecalc._arith import flush
 from xlrecalc._arrays import to_array
@@ -540,3 +540,265 @@ def RATE(
         return pv + pmt * (1 + r * k) * a + fv * u, pmt * (k * a + (1 + r * k) * da) + fv * du
 
     return _newton(fn, g, 20)
+
+
+# Closed forms (capture finance_family) ------------------------------------------------------
+
+_MAX_PERIODS = 1_000_000
+_POWERS = "Excel's powers and products differ in the last bits; within 4 units in the last place"
+
+
+def _strict(v: Any, ctx: Context) -> float | ErrorValue:
+    """A number as the old Analysis ToolPak functions take one: a logical is ``#VALUE!``."""
+    return VALUE if isinstance(v, bool) else to_number(v, ctx)
+
+
+def _power(base: float, exponent: float) -> float:
+    """A power, infinite where Python would raise; ``_result`` makes that ``#NUM!``."""
+    try:
+        result = base**exponent
+    except (OverflowError, ZeroDivisionError):
+        return math.inf
+    return result if isinstance(result, float) else math.nan
+
+
+def _cumulative(
+    ctx: Context, rate: Any, n: Any, pv: Any, first: Any, last: Any, due: Any, part: Any
+) -> float | ErrorValue:
+    values = [_strict(v, ctx) for v in (rate, n, pv, first, last, due)]
+    for v in values:
+        if isinstance(v, ErrorValue):
+            return v
+    r, nper, present, a, b, kind = cast(list[float], values)
+    start, end, code = math.ceil(a), math.floor(b), math.trunc(kind)
+    if r <= 0 or nper <= 0 or present <= 0 or start < 1 or end < start or end > nper:
+        return NUM
+    if code not in (0, 1):
+        return NUM
+    if end - start >= _MAX_PERIODS:  # a formula must not be able to ask for 1E300 steps
+        return NUM
+    total = 0.0
+    for period in range(start, end + 1):
+        step = part(ctx, r, float(period), nper, present, 0.0, float(code))
+        if isinstance(step, ErrorValue):
+            return step
+        total += step
+    return _result(total)
+
+
+@function(
+    "CUMIPMT", "value", "value", "value", "value", "value", "value",
+    errors=True, category=C, ulps=8, ulps_reason=_POWERS,
+)  # fmt: skip
+def CUMIPMT(ctx: Context, rate: Any, n: Any, pv: Any, a: Any, b: Any, due: Any) -> Any:
+    """Interest paid between two periods of a loan."""
+    return _cumulative(ctx, rate, n, pv, a, b, due, IPMT)
+
+
+@function(
+    "CUMPRINC", "value", "value", "value", "value", "value", "value",
+    errors=True, category=C, ulps=8, ulps_reason=_POWERS,
+)  # fmt: skip
+def CUMPRINC(ctx: Context, rate: Any, n: Any, pv: Any, a: Any, b: Any, due: Any) -> Any:
+    """Principal paid between two periods of a loan."""
+    return _cumulative(ctx, rate, n, pv, a, b, due, PPMT)
+
+
+@function("SYD", "number", "number", "number", "number", category=C)
+def SYD(
+    ctx: Context, cost: float, salvage: float, life: float, period: float
+) -> float | ErrorValue:
+    """Depreciation by the sum of the years' digits."""
+    if life <= 0 or period <= 0 or period > life or salvage < 0:
+        return NUM
+    return _result((cost - salvage) * (life - period + 1) * 2 / (life * (life + 1)))
+
+
+@function(
+    "DDB", "number", "number", "number", "number", "number",
+    min_args=4, category=C, ulps=8, ulps_reason=_POWERS,
+)  # fmt: skip
+def DDB(
+    ctx: Context, cost: float, salvage: float, life: float, period: float, factor: float = 2.0
+) -> float | ErrorValue:
+    """Depreciation by a declining balance."""
+    if cost < 0 or salvage < 0 or life <= 0 or period <= 0 or period > life or factor <= 0:
+        return NUM
+    rate = min(factor / life, 1.0)
+    left = cost * _power(1 - rate, period - 1)
+    return _result(max(min(left * rate, left - salvage), 0.0))
+
+
+@function(
+    "DB", "number", "number", "number", "number", "number",
+    min_args=4, category=C, ulps=8, ulps_reason=_POWERS,
+)  # fmt: skip
+def DB(
+    ctx: Context, cost: float, salvage: float, life: float, period: float, month: float = 12.0
+) -> Any:
+    """Depreciation by a fixed declining balance, whose rate has three decimals."""
+    m = math.trunc(month)
+    per = math.trunc(period)
+    if cost < 0 or salvage < 0 or life <= 0 or per < 1 or m < 1 or m > 12 or life < 1:
+        return NUM
+    if per > life + (m < 12) or per > _MAX_PERIODS:
+        return NUM
+    if cost == 0:
+        return 0.0
+    rate = round(1 - _power(salvage / cost, 1 / life), 3)
+    taken = cost * rate * m / 12
+    if per == 1:
+        return taken
+    total = taken
+    step = taken
+    for k in range(2, per + 1):
+        step = (cost - total) * rate * ((12 - m) / 12 if k == life + 1 else 1)
+        total += step
+    return step
+
+
+def _dollar_scale(fraction: float) -> tuple[int, float] | ErrorValue:
+    f = math.trunc(fraction)
+    if fraction < 0:
+        return NUM
+    if f == 0:
+        return DIV0
+    return f, _power(10.0, math.ceil(math.log10(f)))
+
+
+@function("DOLLARDE", "value", "value", errors=True, category=C)
+def DOLLARDE(ctx: Context, price: Any, fraction: Any) -> float | ErrorValue:
+    """A price in the form 1.02 meaning 1 and 2/16, as a decimal."""
+    x, f = _strict(price, ctx), _strict(fraction, ctx)
+    if isinstance(x, ErrorValue):
+        return x
+    if isinstance(f, ErrorValue):
+        return f
+    scale = _dollar_scale(f)
+    if isinstance(scale, ErrorValue):
+        return scale
+    whole = math.trunc(x)
+    return whole + (x - whole) * scale[1] / scale[0]
+
+
+@function("DOLLARFR", "value", "value", errors=True, category=C)
+def DOLLARFR(ctx: Context, price: Any, fraction: Any) -> float | ErrorValue:
+    """A decimal price in the form 1.02 meaning 1 and 2/16."""
+    x, f = _strict(price, ctx), _strict(fraction, ctx)
+    if isinstance(x, ErrorValue):
+        return x
+    if isinstance(f, ErrorValue):
+        return f
+    scale = _dollar_scale(f)
+    if isinstance(scale, ErrorValue):
+        return scale
+    whole = math.trunc(x)
+    return whole + (x - whole) * scale[0] / scale[1]
+
+
+@function("EFFECT", "value", "value", errors=True, category=C, ulps=4, ulps_reason=_POWERS)
+def EFFECT(ctx: Context, rate: Any, periods: Any) -> float | ErrorValue:
+    """The effective annual rate of a nominal one."""
+    r, k = _strict(rate, ctx), _strict(periods, ctx)
+    if isinstance(r, ErrorValue):
+        return r
+    if isinstance(k, ErrorValue):
+        return k
+    n = math.trunc(k)
+    if r <= 0 or n < 1:
+        return NUM
+    grown = growth(r / n, float(n))  # as Excel takes a whole power (capture finance)
+    return NUM if grown is None else _result(grown - 1)
+
+
+@function("NOMINAL", "value", "value", errors=True, category=C, ulps=4, ulps_reason=_POWERS)
+def NOMINAL(ctx: Context, rate: Any, periods: Any) -> float | ErrorValue:
+    """The nominal annual rate of an effective one."""
+    r, k = _strict(rate, ctx), _strict(periods, ctx)
+    if isinstance(r, ErrorValue):
+        return r
+    if isinstance(k, ErrorValue):
+        return k
+    n = math.trunc(k)
+    if r <= 0 or n < 1:
+        return NUM
+    return _result((_power(1 + r, 1 / n) - 1) * n)
+
+
+@function("FVSCHEDULE", "value", "raw", errors=True, category=C)
+def FVSCHEDULE(ctx: Context, present: Any, schedule: Any) -> float | ErrorValue:
+    """A present value grown by each rate of a schedule in turn."""
+    total = _strict(present, ctx)
+    if isinstance(total, ErrorValue):
+        return total
+    if isinstance(schedule, Ref):
+        rates: Any = [v for row in to_array(schedule) for v in row]
+    elif isinstance(schedule, tuple):
+        rates = [v for row in schedule for v in row]
+    else:
+        rates = [schedule]
+    for v in rates:
+        rate = 0.0 if v is BLANK else _strict(v, ctx)
+        if isinstance(rate, ErrorValue):
+            return rate
+        total *= 1 + rate
+    return _result(total)
+
+
+@function("ISPMT", "number", "number", "number", "number", category=C, ulps=4, ulps_reason=_POWERS)
+def ISPMT(ctx: Context, rate: float, period: float, n: float, pv: float) -> float | ErrorValue:
+    """Interest of a period of a loan repaid in equal parts of its principal."""
+    return DIV0 if n == 0 else _result(pv * rate * (period - n) / n)
+
+
+@function("MIRR", "raw", "number", "number", category=C, ulps=8, ulps_reason=_POWERS)
+def MIRR(ctx: Context, flows: Any, finance: float, reinvest: float) -> float | ErrorValue:
+    """The modified internal rate of return of a series of cash flows."""
+    if isinstance(flows, Ref):
+        values: Any = flows.values()
+    elif isinstance(flows, tuple):
+        values = [v for row in flows for v in row]
+    else:
+        return DIV0
+    numbers_ = []
+    for v in values:
+        if isinstance(v, ErrorValue):
+            return v
+        if type(v) is float:
+            numbers_.append(v)
+    n = len(numbers_)
+    if n < 2 or reinvest == -1:
+        return DIV0
+    if finance == -1 and any(v < 0 for v in numbers_[1:]):
+        return DIV0
+    costs = _plain_sum(v / _power(1 + finance, i) for i, v in enumerate(numbers_) if v < 0)
+    gains = _plain_sum(v * _power(1 + reinvest, n - 1 - i) for i, v in enumerate(numbers_) if v > 0)
+    if not costs:
+        return DIV0
+    return -1.0 if not gains else _result(_power(-gains / costs, 1 / (n - 1)) - 1)
+
+
+def _plain_sum(values: Any) -> float:
+    total = 0.0
+    for v in values:
+        total += v
+    return total
+
+
+@function("_xlfn.PDURATION", "number", "number", "number", category=C, ulps=4, ulps_reason=_POWERS)
+def PDURATION(ctx: Context, rate: float, present: float, future: float) -> float | ErrorValue:
+    """Periods for an investment to reach a value."""
+    if rate <= 0 or present <= 0 or future <= 0:
+        return NUM
+    return (math.log(future) - math.log(present)) / math.log(1 + rate)
+
+
+@function("_xlfn.RRI", "number", "number", "number", category=C, ulps=4, ulps_reason=_POWERS)
+def RRI(ctx: Context, n: float, present: float, future: float) -> float | ErrorValue:
+    """The rate for an investment to grow to a value."""
+    if n <= 0:
+        return NUM
+    if present == 0:
+        return 0.0 if future == 0 else NUM
+    ratio = future / present
+    return NUM if ratio < 0 else _result(_power(ratio, 1 / n) - 1)

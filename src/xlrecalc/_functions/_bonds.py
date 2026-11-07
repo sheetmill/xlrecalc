@@ -12,9 +12,9 @@ from __future__ import annotations
 
 import calendar
 import math
-from typing import Any
+from typing import Any, cast
 
-from xlrecalc._coerce import Context
+from xlrecalc._coerce import Context, to_number
 from xlrecalc._dates import date_serial, serial_parts
 from xlrecalc._functions._registry import function
 from xlrecalc._values import ErrorValue
@@ -384,3 +384,111 @@ def _durations(name: str, modified: bool) -> None:
 
 _durations("DURATION", False)
 _durations("MDURATION", True)
+
+
+# Discounted securities (capture finance_family) ------------------------------------------------
+
+
+def _on_calendar(v: Any, ctx: Context) -> float | ErrorValue:
+    """A date as a whole day: an argument's problems come before the next argument's."""
+    x = _analysis(v, ctx)
+    if isinstance(x, ErrorValue):
+        return x
+    if serial_parts(x, date1904=ctx.date1904, leap=ctx.quirks.leap_year_1900) is None:
+        return NUM
+    return float(math.trunc(x))
+
+
+def _analysis(v: Any, ctx: Context) -> float | ErrorValue:
+    """A number as the old Analysis ToolPak functions take one: a logical is ``#VALUE!``."""
+    return VALUE if isinstance(v, bool) else to_number(v, ctx)
+
+
+def _discount(name: str, doc: str, compute: Any) -> None:
+    @function(
+        name, "value", "value", "value", "value", "value", min_args=4, errors=True, category=C,
+        ulps=4, ulps_reason=_DISCOUNT,
+    )  # fmt: skip
+    def security(ctx: Context, settle: Any, mature: Any, a: Any, b: Any, basis: Any = 0.0) -> Any:
+        values = [
+            _on_calendar(settle, ctx),
+            _on_calendar(mature, ctx),
+            _analysis(a, ctx),
+            _analysis(b, ctx),
+            _analysis(basis, ctx),
+        ]
+        for v in values:
+            if isinstance(v, ErrorValue):
+                return v
+        start, end, x, y, code = cast(list[float], values)
+        kind = _basis(code)
+        if kind is None or start >= end or x <= 0 or y <= 0:
+            return NUM
+        fraction = yearfrac(start, end, kind, ctx)
+        return fraction if isinstance(fraction, ErrorValue) else compute(x, y, fraction)
+
+    security.__doc__ = doc
+
+
+def _positive(x: float) -> float | ErrorValue:
+    return x if x > 0 and math.isfinite(x) else NUM
+
+
+_DISCOUNT = "Excel's day fractions differ in the last bits; within 4 units in the last place"
+_discount("DISC", "The discount rate of a security.", lambda p, r, t: (1 - p / r) / t)
+_discount("INTRATE", "The interest rate of a security.", lambda i, r, t: (r - i) / i / t)
+_discount(
+    "RECEIVED", "The amount received at maturity.", lambda i, d, t: _positive(i / (1 - d * t))
+)
+_discount("PRICEDISC", "The price of a discounted security.", lambda d, r, t: r * (1 - d * t))
+_discount("YIELDDISC", "The yield of a discounted security.", lambda p, r, t: (r - p) / p / t)
+
+
+def _treasury(ctx: Context, settle: Any, mature: Any, x: Any) -> Any:
+    values = [_on_calendar(settle, ctx), _on_calendar(mature, ctx), _analysis(x, ctx)]
+    for v in values:
+        if isinstance(v, ErrorValue):
+            return v
+    start, end, value = cast(list[float], values)
+    days = end - start
+    return NUM if value <= 0 or days <= 0 or days > 366 else (value, days)
+
+
+@function(
+    "TBILLPRICE", "value", "value", "value", errors=True, category=C, ulps=4, ulps_reason=_DISCOUNT
+)
+def TBILLPRICE(ctx: Context, settle: Any, mature: Any, discount: Any) -> Any:
+    """The price of a Treasury bill."""
+    t = _treasury(ctx, settle, mature, discount)
+    if isinstance(t, ErrorValue):
+        return t
+    return _positive(100 * (1 - t[0] * t[1] / 360))
+
+
+@function(
+    "TBILLYIELD", "value", "value", "value", errors=True, category=C, ulps=4, ulps_reason=_DISCOUNT
+)
+def TBILLYIELD(ctx: Context, settle: Any, mature: Any, price: Any) -> Any:
+    """The yield of a Treasury bill."""
+    t = _treasury(ctx, settle, mature, price)
+    if isinstance(t, ErrorValue):
+        return t
+    return (100 - t[0]) / t[0] * 360 / t[1]
+
+
+@function(
+    "TBILLEQ", "value", "value", "value", errors=True, category=C, ulps=4, ulps_reason=_DISCOUNT
+)
+def TBILLEQ(ctx: Context, settle: Any, mature: Any, discount: Any) -> Any:
+    """The bond-equivalent yield of a Treasury bill."""
+    t = _treasury(ctx, settle, mature, discount)
+    if isinstance(t, ErrorValue):
+        return t
+    d, days = t
+    price = 1 - d * days / 360
+    if price <= 0:
+        return NUM
+    if days <= 182:
+        return 365 * d / (360 - d * days)
+    span = days / (366 if days == 366 else 365)  # capture finance_family
+    return (-span + math.sqrt(span * span - (2 * span - 1) * (1 - 1 / price))) / (span - 0.5)

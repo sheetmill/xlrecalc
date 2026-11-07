@@ -124,6 +124,12 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 - Declared tolerances, `statistics_family`: the sums of powers and regressions (`AVEDEV`, `DEVSQ`, `GEOMEAN`, `HARMEAN`,
   `KURT`, `SKEW`, `SKEW.P`, `TRIMMEAN`, `FISHER`, `FISHERINV`, the regression family, `PHI`, `GAUSS`, `CONFIDENCE`) within
   4 units in the last place; `GEOMEAN` near 1E150 and `KURT` and `FORECAST` on a few rows are further, and listed.
+- Declared tolerances, `finance_family`: `CUMIPMT`, `CUMPRINC`, `DB`, `DDB`, `MIRR` within 8 units in the last place,
+  `EFFECT`, `NOMINAL`, `ISPMT`, `PDURATION`, `RRI`, the discounted securities and Treasury bills within 4. 84 rows of `CUMIPMT`
+  and `CUMPRINC` are further, at tiny rates and in tiny principals, where Excel's result carries noise that neither a sum
+  of periods nor a difference of balances reproduces; one row of `TBILLEQ` too.
+  `CUMIPMT` and `CUMPRINC` over a million periods or more, and `DB` past a million, are `#NUM!` here, a bound Excel's
+  behavior was not captured at.
 - How text orders is captured only in part: every pair of 40 ASCII characters and 24 pairs of words,
   on Excel 16 for Mac (capture `modern`). Those give one consistent order, marks and symbols before
   digits before letters, with accents after their base letter. The rest is approximated: other
