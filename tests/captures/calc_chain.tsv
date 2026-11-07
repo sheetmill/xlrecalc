@@ -1,0 +1,33 @@
+# suite: calc_chain
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-07
+# generator: capture/calc_chain_probe.py
+# method: a loop saved by Excel, then its chain kept, reversed or removed, cached values
+#   set to 0, iterateCount 1; shown after opening, calculated after one calculate, saved
+#   the value in a copy saved after opening again, chain_out that copy's chain;
+#   *_after_save is that copy, values set to 0 again, opened once more
+# columns: loop variant chain_in cell shown calculated saved chain_out
+rows	excel_chain	s!A1 s!A5	s!A1	1.0	12.0	12	s!A1 s!A5
+rows	excel_chain	s!A1 s!A5	s!A5	11.0	22.0	22	s!A1 s!A5
+rows	excel_chain_after_save	s!A1 s!A5	s!A1	1.0	12.0	12	s!A1 s!A5
+rows	excel_chain_after_save	s!A1 s!A5	s!A5	11.0	22.0	22	s!A1 s!A5
+rows	reversed_chain	s!A5 s!A1	s!A1	1.0	12.0	12	s!A1 s!A5
+rows	reversed_chain	s!A5 s!A1	s!A5	11.0	22.0	22	s!A1 s!A5
+rows	reversed_chain_after_save	s!A1 s!A5	s!A1	1.0	12.0	12	s!A1 s!A5
+rows	reversed_chain_after_save	s!A1 s!A5	s!A5	11.0	22.0	22	s!A1 s!A5
+rows	no_chain	none	s!A1	1.0	12.0	12	s!A1 s!A5
+rows	no_chain	none	s!A5	11.0	22.0	22	s!A1 s!A5
+rows	no_chain_after_save	s!A1 s!A5	s!A1	1.0	12.0	12	s!A1 s!A5
+rows	no_chain_after_save	s!A1 s!A5	s!A5	11.0	22.0	22	s!A1 s!A5
+sheets	excel_chain	one!A1 two!A1	one!A1	1.0	12.0	12	one!A1 two!A1
+sheets	excel_chain	one!A1 two!A1	two!A1	11.0	22.0	22	one!A1 two!A1
+sheets	excel_chain_after_save	one!A1 two!A1	one!A1	1.0	12.0	12	one!A1 two!A1
+sheets	excel_chain_after_save	one!A1 two!A1	two!A1	11.0	22.0	22	one!A1 two!A1
+sheets	reversed_chain	two!A1 one!A1	one!A1	1.0	12.0	12	one!A1 two!A1
+sheets	reversed_chain	two!A1 one!A1	two!A1	11.0	22.0	22	one!A1 two!A1
+sheets	reversed_chain_after_save	one!A1 two!A1	one!A1	1.0	12.0	12	one!A1 two!A1
+sheets	reversed_chain_after_save	one!A1 two!A1	two!A1	11.0	22.0	22	one!A1 two!A1
+sheets	no_chain	none	one!A1	1.0	12.0	12	one!A1 two!A1
+sheets	no_chain	none	two!A1	11.0	22.0	22	one!A1 two!A1
+sheets	no_chain_after_save	one!A1 two!A1	one!A1	1.0	12.0	12	one!A1 two!A1
+sheets	no_chain_after_save	one!A1 two!A1	two!A1	11.0	22.0	22	one!A1 two!A1
