@@ -149,6 +149,11 @@ _NORMAL_TAIL = (
     "place from Excel, which is closer to the true value there than math.erfc and not Cody's "
     "algorithm either"
 )
+_LIBM_CANCELLATION = (
+    "a difference that cancels a value from the platform's erfc, exp, log1p or expm1 (GAUSS near "
+    "0, IPMT due in advance): it matches Excel on the platform docs/coverage.md records, and on "
+    "another a last-bit difference before the cancellation shows in the result"
+)
 _VDB_ROUNDING = (
     "VDB over the last period of a long schedule: the book value carried over nine periods "
     "rounds differently from Excel's (7 to 48 units in the last place); a closed form fits "
@@ -167,8 +172,8 @@ _UNION = "a union of ranges is not implemented, and the cell is reported"
 _REGEX = "the regular-expression match mode (3) is not implemented, and the cell is reported"
 _AT_SIGN = "the @ the formula bar shows in a legacy formula is not shown by FORMULATEXT"
 _WEEKNUM_ODD_TYPE = (
-    "WEEKNUM with a type its documentation lacks (-1, 22): Excel's result changes between runs, "
-    "#NUM! or a week number; the package gives #NUM!"
+    "WEEKNUM with a type its documentation lacks: Excel's result can change between runs and "
+    "even within one calculation, #NUM! or a week number; the package gives #NUM!"
 )
 _DATEDIF_MARCH = (
     "DATEDIF from December 31, 1900 to March 1, 2000 in YD is 61 where every neighbor gives 60"
@@ -385,6 +390,8 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     ("finance_family", 10952): _TBILLEQ_NOISE,
     **{("statistics_family", case): _MOMENT_NOISE for case in (65, 66, 118, 141, 414, 582)},
     ("statistics_family", 4432): _MULTINOMIAL,
+    ("statistics_family", 1011): _LIBM_CANCELLATION,
+    **{("empty_args", case): _LIBM_CANCELLATION for case in (343, 347)},
     **{
         ("database_family", case): _COMPUTED_CRITERIA
         for case in (
@@ -425,17 +432,20 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
         for case in (609, 610, 612, 613, 615, 616, 660, 661, 675, 676, 770)
     },
 }
-# A listed deviation that matches Excel fails the test, so a stale entry cannot survive, with two
-# exceptions. A random result can match by chance. And a row listed because the platform's math
+# A listed deviation that matches Excel fails the test, so a stale entry cannot survive, with three
+# exceptions. A random result can match by chance. A row listed because the platform's math
 # library (exp, log1p, expm1, pow, erfc) differs from Excel's in the last bits may match on another
 # platform's library: it must still differ on the platform the captures' split is measured on
 # (docs/coverage.md records it), and elsewhere it counts as listed whether or not it matches, so
-# the published counts are the same on every platform.
+# the published counts are the same on every platform. And the reverse: a row that matches on that
+# platform, but differs on another whose library differs in the bits a cancellation exposes, must
+# match there and counts as listed everywhere.
 EXEMPT = frozenset({_RANDOM, _WEEKNUM_ODD_TYPE})
 MATH_LIBRARY = frozenset(
     {_IPMT_TAIL, _ITER_NEAR_ZERO, _ITER_OUTCOME, _XIRR, _YIELD_ZERO_COUPON, _PRICE_EXTREME,
      _NORMAL_TAIL}
 )  # fmt: skip
+OTHER_PLATFORMS = frozenset({_LIBM_CANCELLATION})
 
 
 def _reference_platform() -> bool:
@@ -619,7 +629,15 @@ def outcomes(name: str) -> tuple[dict[str, int], dict[str, int], tuple[str, ...]
         else:
             outcome = "differs"
         reason = KNOWN_DEVIATIONS.get((name, row.case))
-        if reason is not None:
+        if reason in OTHER_PLATFORMS:
+            if reference and outcome == "differs":
+                failures.append(
+                    f"{row.id} ={formula_text(row, k)}: listed as matching Excel on this "
+                    f"platform, but Excel {row.expected!r}, got {got!r}"
+                )
+            else:
+                counts["listed"] += 1
+        elif reason is not None:
             may_match = reason in EXEMPT or (reason in MATH_LIBRARY and not reference)
             if outcome == "differs" or may_match:
                 counts["listed"] += 1
@@ -757,4 +775,4 @@ def test_every_listed_deviation_is_a_captured_row():
 
 
 def test_exemptions_are_listed_reasons():
-    assert (EXEMPT | MATH_LIBRARY).issubset(KNOWN_DEVIATIONS.values())
+    assert (EXEMPT | MATH_LIBRARY | OTHER_PLATFORMS).issubset(KNOWN_DEVIATIONS.values())

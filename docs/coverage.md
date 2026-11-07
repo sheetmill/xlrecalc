@@ -215,7 +215,7 @@ library differs in the last bits; the rows that match either way do not.
 | `GAMMAINV` | | absent | | | | | | | |
 | `GAMMALN` | | absent | | | | | | | |
 | `GAMMALN.PRECISE` | | absent | | | | | | | |
-| `GAUSS` | statistical | implemented | 18 | 12 | 6 | 0 | 0 | 4 ulps |  |
+| `GAUSS` | statistical | implemented | 18 | 11 | 6 | 0 | 1 | 4 ulps |  |
 | `GCD` | math | implemented | 213 | 213 | 0 | 0 | 0 |  |  |
 | `GEOMEAN` | statistical | implemented | 32 | 20 | 10 | 0 | 2 | 4 ulps |  |
 | `GESTEP` | engineering | implemented | 135 | 135 | 0 | 0 | 0 |  |  |
@@ -268,7 +268,7 @@ library differs in the last bits; the rows that match either way do not.
 | `INT` | math | implemented | 18 | 17 | 0 | 0 | 1 |  |  |
 | `INTERCEPT` | statistical | implemented | 24 | 24 | 0 | 0 | 0 | 4 ulps |  |
 | `INTRATE` | financial | implemented | 380 | 341 | 39 | 0 | 0 | 4 ulps |  |
-| `IPMT` | financial | implemented | 91 | 66 | 19 | 0 | 6 | 4 ulps |  |
+| `IPMT` | financial | implemented | 91 | 66 | 17 | 0 | 8 | 4 ulps |  |
 | `IRR` | financial | implemented | 132 | 40 | 0 | 59 | 33 | 1e-09 relative |  |
 | `ISBLANK` | information | implemented | 31 | 31 | 0 | 0 | 0 |  |  |
 | `ISERR` | information | implemented | 17 | 17 | 0 | 0 | 0 |  |  |

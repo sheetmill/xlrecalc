@@ -110,7 +110,7 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 - `FORMULATEXT` gives a legacy formula as the file holds it, without the `@` the formula bar shows
   (`=@{1,2;3,4}`; capture `info_family`). `AREAS` and `ISREF` of a union are computed, from the
   formula alone; the other functions of that family are not, as for any union.
-- `WEEKNUM` with a type the documentation lacks (-1, 22) gives `#NUM!` here. Excel's result changes between runs, `#NUM!` or a week number, so no result can be expected to repeat it; every such row of capture `dates_family` is listed, whatever it gives. `DATEDIF` from December 31, 1900 to March
+- `WEEKNUM` with a type the documentation lacks gives `#NUM!` here. Excel's result for such a type can change between runs, and even between two cells holding the same formula in one calculation, `#NUM!` or a week number, so no result can be expected to repeat it; every such row of capture `dates_family` is listed, whatever it gives. `DATEDIF` from December 31, 1900 to March
   1, 2000 in `YD` is 60 here and 61 in Excel, where every neighbor fits the rule (one row).
 - `FINDB`, `SEARCHB`, `LEFTB`, `RIGHTB`, `MIDB`, `LENB` and `REPLACEB` behave as this English Excel for Mac computes
   them, counting no text double (capture `text_family`). With a double-byte language as the default, Excel documents
@@ -127,6 +127,10 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   `EFFECT`, `NOMINAL`, `ISPMT`, `PDURATION`, `RRI`, the discounted securities and Treasury bills within 4. 84 rows of `CUMIPMT`
   and `CUMPRINC` are further, at tiny rates and in tiny principals, where Excel's result carries noise that neither a sum
   of periods nor a difference of balances reproduces; one row of `TBILLEQ` too.
+- The platform's math library: three rows match Excel on the platform `docs/coverage.md` records (bit for bit, or within the
+  function's declared tolerance) and differ on another, where a last-bit difference in `erfc`, `exp`, `log1p` or `expm1` survives a cancellation: `GAUSS(1E-5)`, which
+  subtracts 0.5 from the normal distribution (as Excel's own result shows), and two rows of `IPMT` with payments due in
+  advance (`empty_args`). They are listed on every platform, so the published counts do not depend on it.
 - An empty argument: `VDB` with an empty `factor` is `#DIV/0!` in Excel and 0 here (two rows of `empty_args`). Four others there carry the known noise of `MULTINOMIAL`, `CUMIPMT` and `XIRR`.
 - How text orders is captured only in part: every pair of 40 ASCII characters and 24 pairs of words,
   on Excel 16 for Mac (capture `modern`). Those give one consistent order, marks and symbols before
