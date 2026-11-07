@@ -1,7 +1,7 @@
 # suite: functions
 # excel: 16.114.3 for Mac, locale en_US
 # date_system: 1900
-# captured: 2026-11-05
+# captured: 2026-11-07
 # generator: capture/suites.py:functions
 # method: openpyxl writes the formula in column A and the inputs in B onward (floats as
 #   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
@@ -1190,3 +1190,61 @@ functions	hlookup	1177	HLOOKUP(1/0,$AC$1:$AD$5,NA())	()	e	#DIV/0!
 functions	hlookup	1178	HLOOKUP(1,$AC$1:$AD$5,NA())	()	e	#N/A
 functions	match	1179	MATCH(1/0,$AC$1:$AC$5,NA())	()	e	#DIV/0!
 functions	match	1180	MATCH(1,$AC$1:$AC$5,NA())	()	e	#N/A
+functions	index	1181	INDEX($Z$1:$AA$6,2,2,{1})	(1.0,)	n	2.0
+functions	index	1182	INDEX($AC$1:$AD$5,3,1,{1})	(1.0,)	n	5.0
+functions	index	1183	INDEX({1,2;3,4},2,1,{1})	(1.0,)	n	3.0
+functions	index	1184	INDEX($Z$1:$AA$6,2,2,{1})	(2.0,)	e	#REF!
+functions	index	1185	INDEX($AC$1:$AD$5,3,1,{1})	(2.0,)	e	#REF!
+functions	index	1186	INDEX({1,2;3,4},2,1,{1})	(2.0,)	e	#REF!
+functions	index	1187	INDEX($Z$1:$AA$6,2,2,{1})	(0.0,)	e	#VALUE!
+functions	index	1188	INDEX($AC$1:$AD$5,3,1,{1})	(0.0,)	e	#VALUE!
+functions	index	1189	INDEX({1,2;3,4},2,1,{1})	(0.0,)	e	#VALUE!
+functions	index	1190	INDEX($Z$1:$AA$6,2,2,{1})	(-1.0,)	e	#VALUE!
+functions	index	1191	INDEX($AC$1:$AD$5,3,1,{1})	(-1.0,)	e	#VALUE!
+functions	index	1192	INDEX({1,2;3,4},2,1,{1})	(-1.0,)	e	#VALUE!
+functions	index	1193	INDEX($Z$1:$AA$6,2,2,{1})	(1.9,)	n	2.0
+functions	index	1194	INDEX($AC$1:$AD$5,3,1,{1})	(1.9,)	n	5.0
+functions	index	1195	INDEX({1,2;3,4},2,1,{1})	(1.9,)	n	3.0
+functions	index	1196	INDEX($Z$1:$AA$6,2,2,{1})	(0.5,)	e	#VALUE!
+functions	index	1197	INDEX($AC$1:$AD$5,3,1,{1})	(0.5,)	e	#VALUE!
+functions	index	1198	INDEX({1,2;3,4},2,1,{1})	(0.5,)	e	#VALUE!
+functions	index	1199	INDEX($Z$1:$AA$6,2,2,{1})	(2.5,)	e	#REF!
+functions	index	1200	INDEX($AC$1:$AD$5,3,1,{1})	(2.5,)	e	#REF!
+functions	index	1201	INDEX({1,2;3,4},2,1,{1})	(2.5,)	e	#REF!
+functions	index	1202	INDEX($Z$1:$AA$6,2,2,{1})	('1',)	n	2.0
+functions	index	1203	INDEX($AC$1:$AD$5,3,1,{1})	('1',)	n	5.0
+functions	index	1204	INDEX({1,2;3,4},2,1,{1})	('1',)	n	3.0
+functions	index	1205	INDEX($Z$1:$AA$6,2,2,{1})	('x',)	e	#VALUE!
+functions	index	1206	INDEX($AC$1:$AD$5,3,1,{1})	('x',)	e	#VALUE!
+functions	index	1207	INDEX({1,2;3,4},2,1,{1})	('x',)	e	#VALUE!
+functions	index	1208	INDEX($Z$1:$AA$6,2,2,{1})	(True,)	n	2.0
+functions	index	1209	INDEX($AC$1:$AD$5,3,1,{1})	(True,)	n	5.0
+functions	index	1210	INDEX({1,2;3,4},2,1,{1})	(True,)	n	3.0
+functions	index	1211	INDEX($Z$1:$AA$6,2,2,{1})	(False,)	e	#VALUE!
+functions	index	1212	INDEX($AC$1:$AD$5,3,1,{1})	(False,)	e	#VALUE!
+functions	index	1213	INDEX({1,2;3,4},2,1,{1})	(False,)	e	#VALUE!
+functions	index	1214	INDEX($Z$1:$AA$6,2,2,{1})	(None,)	e	#VALUE!
+functions	index	1215	INDEX($AC$1:$AD$5,3,1,{1})	(None,)	e	#VALUE!
+functions	index	1216	INDEX({1,2;3,4},2,1,{1})	(None,)	e	#VALUE!
+functions	index	1217	INDEX($Z$1:$AA$6,2,2,{1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	index	1218	INDEX($AC$1:$AD$5,3,1,{1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	index	1219	INDEX({1,2;3,4},2,1,{1})	(ErrorValue('#N/A'),)	e	#N/A
+functions	index	1220	INDEX($Z$1:$AA$6,2,2,1)	()	n	2.0
+functions	index	1221	INDEX($Z$1:$AA$6,2,2,2)	()	e	#REF!
+functions	index	1222	INDEX($Z$1:$AA$6,2,2,)	()	e	#VALUE!
+functions	index	1223	INDEX($Z$1:$AA$6,2,,1)	()	e	#VALUE!
+functions	index	1224	INDEX($Z$1:$Z$6,3,,1)	()	str	'c'
+functions	index	1225	INDEX($AF$1:$AF$5,4,1,1)	()	n	3.0
+functions	index	1226	INDEX($AC$1:$AC$5,2,1,1.99)	()	n	3.0
+functions	index	1227	INDEX($AC$1:$AC$5,9,1,1)	()	e	#REF!
+functions	index	1228	INDEX($AC$1:$AC$5,9,1,2)	()	e	#REF!
+functions	index	1229	SUM(INDEX($AC$1:$AD$5,0,1,1))	()	n	25.0
+functions	index	1230	SUM(INDEX($AC$1:$AD$5,2,0,1))	()	n	3.0
+functions	index	1231	SUM($AC$1:INDEX($AC$1:$AD$5,3,1,1))	()	n	9.0
+functions	index	1232	ROWS(INDEX($AC$1:$AD$5,0,2,1))	()	n	5.0
+functions	index	1233	INDEX($AC$1:$AD$5,1/0,1,2)	()	e	#DIV/0!
+functions	index	1234	INDEX($AC$1:$AD$5,1,1,1/0)	()	e	#DIV/0!
+functions	index	1235	INDEX($AC$1:$AD$5,9,1,NA())	()	e	#N/A
+functions	index	1236	INDEX({1,2;3,4},1,1,1)	()	n	1.0
+functions	index	1237	INDEX(5,1,1,1)	()	n	5.0
+functions	index	1238	INDEX(5,1,1,2)	()	e	#REF!

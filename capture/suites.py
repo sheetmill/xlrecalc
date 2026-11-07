@@ -461,6 +461,21 @@ def functions() -> list[Case]:
     add(Case("hlookup", "HLOOKUP(1,$AC$1:$AD$5,NA())"))
     add(Case("match", "MATCH(1/0,$AC$1:$AC$5,NA())"))
     add(Case("match", "MATCH(1,$AC$1:$AC$5,NA())"))
+    # INDEX's fourth argument, the area, over one range, two tables and an array.
+    for area in (1.0, 2.0, 0.0, -1.0, 1.9, 0.5, 2.5, "1", "x", True, False, None, NA):
+        add(Case("index", "INDEX($Z$1:$AA$6,2,2,{1})", (area,)))
+        add(Case("index", "INDEX($AC$1:$AD$5,3,1,{1})", (area,)))
+        add(Case("index", "INDEX({1,2;3,4},2,1,{1})", (area,)))
+    for formula in (
+        "INDEX($Z$1:$AA$6,2,2,1)", "INDEX($Z$1:$AA$6,2,2,2)", "INDEX($Z$1:$AA$6,2,2,)",
+        "INDEX($Z$1:$AA$6,2,,1)", "INDEX($Z$1:$Z$6,3,,1)", "INDEX($AF$1:$AF$5,4,1,1)",
+        "INDEX($AC$1:$AC$5,2,1,1.99)", "INDEX($AC$1:$AC$5,9,1,1)", "INDEX($AC$1:$AC$5,9,1,2)",
+        "SUM(INDEX($AC$1:$AD$5,0,1,1))", "SUM(INDEX($AC$1:$AD$5,2,0,1))",
+        "SUM($AC$1:INDEX($AC$1:$AD$5,3,1,1))", "ROWS(INDEX($AC$1:$AD$5,0,2,1))",
+        "INDEX($AC$1:$AD$5,1/0,1,2)", "INDEX($AC$1:$AD$5,1,1,1/0)", "INDEX($AC$1:$AD$5,9,1,NA())",
+        "INDEX({1,2;3,4},1,1,1)", "INDEX(5,1,1,1)", "INDEX(5,1,1,2)",
+    ):  # fmt: skip
+        add(Case("index", formula))
     return cases
 
 
@@ -3232,7 +3247,7 @@ _EMPTY_VALID: dict[str, tuple[str, ...]] = {
     "VLOOKUP": ("2", "$AA$1:$AB$4", "2", "FALSE"), "HLOOKUP": ("1", "$AA$1:$AB$4", "2", "FALSE"),
     "MATCH": ("2", _R, "0"), "LOOKUP": ("2", _R, _S), "SUBTOTAL": ("9", _R),
     "OFFSET": ("$AA$1", "1", "0", "1", "1"), "INDIRECT": ('"AA1"', "TRUE"),
-    "INDEX": ("$AA$1:$AB$4", "2", "1"),
+    "INDEX": ("$AA$1:$AB$4", "2", "1", "1"),
     "CELL": ('"row"', "$AA$1"), "WEEKNUM": ("40000", "2"), "XLOOKUP": ("2", _R, _S, '"x"', "0",
     "1"),
     "CHOOSE": ("1", "2", "3"), "IF": ("TRUE", "2", "3"), "PERCENTRANK": (_R, "2", "3"),

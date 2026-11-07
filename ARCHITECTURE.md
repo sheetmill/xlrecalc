@@ -723,7 +723,7 @@ from exact and ulp matches, under the same guard.
 
 ### 8.2 Status
 
-Implemented, each against captures (suite `functions`, 1,180 rows): `SUM`, `IF`, `NOW`, `AVERAGE`,
+Implemented, each against captures (suite `functions`, 1,238 rows): `SUM`, `IF`, `NOW`, `AVERAGE`,
 `VLOOKUP`, `ROUND`, `TODAY`, `SUBTOTAL`, `MIN`, `MAX`, `SUMIF`, `MONTH`, `YEAR`, `AND`,
 `ISNUMBER`, `OR`, `CONCATENATE`, `MATCH`, `ABS`, `EOMONTH`, `WEEKDAY`, `INDEX`, `TEXT`,
 `HLOOKUP`, `NA`, `COUNTA`, `DATE`, `COUNTIF`, `SUMPRODUCT`, `COUNT`, `LEFT`, `ISNA`, `VALUE`,
@@ -775,7 +775,8 @@ Excel for Windows uses Windows-1252; there is no setting for it yet),
 `RAND` and `RANDBETWEEN` (volatile; both bounds rounded up), and `DSUM`, `DAVERAGE`,
 `DCOUNT`, `DMAX`, `DMIN` (a text condition matches by prefix; computed criteria are not
 supported) (capture `misc`);
-`INDEX` with a 0 index gives a whole row or column, and into a range returns a reference.
+`INDEX` with a 0 index gives a whole row or column, and into a range returns a reference; its area
+number is 1, since a union is not computed (below 1 `#VALUE!`, above `#REF!`).
 `SUBTOTAL` reads the rows the file marks hidden: codes 101 to 111 leave out every hidden row, and 1 to
 11 do too when a filter is hiding rows on a sheet the call names (capture `hidden_rows`).
 `CELL`'s kinds that depend on formatting (`format`, `width`, `prefix`, `protect`, `color`,

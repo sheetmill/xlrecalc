@@ -382,16 +382,16 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     ("dates_family", 2004): _DATEDIF_MARCH,
     ("text_family", 1761): _NUMBERVALUE_GROUP,
     **{("cum_large", case): _TINY_PRINCIPAL for case in (8, 18)},
-    ("empty_args", 460): _MULTINOMIAL,
+    ("empty_args", 463): _MULTINOMIAL,
     ("empty_args", 124): _CUMULATIVE_NOISE,
-    **{("empty_args", case): _XIRR for case in (814, 817)},
-    **{("empty_args", case): _EMPTY_ODD for case in (790, 791)},
+    **{("empty_args", case): _XIRR for case in (817, 820)},
+    **{("empty_args", case): _EMPTY_ODD for case in (793, 794)},
     **{("finance_family", case): _CUMULATIVE_NOISE for case in _CUMULATIVE_CASES},
     ("finance_family", 10952): _TBILLEQ_NOISE,
     **{("statistics_family", case): _MOMENT_NOISE for case in (65, 66, 118, 141, 414, 582)},
     ("statistics_family", 4432): _MULTINOMIAL,
     ("statistics_family", 1011): _LIBM_CANCELLATION,
-    **{("empty_args", case): _LIBM_CANCELLATION for case in (343, 347)},
+    **{("empty_args", case): _LIBM_CANCELLATION for case in (346, 350)},
     **{
         ("database_family", case): _COMPUTED_CRITERIA
         for case in (

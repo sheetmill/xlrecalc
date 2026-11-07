@@ -211,17 +211,20 @@ def _whole(ref: Any, r: int, c: int) -> Any:
     return (ref[r - 1],)
 
 
-@function("INDEX", "array", "number", "number", min_args=2, reference=True, category=L)
-def INDEX(ctx: Context, ref: Any, row: float, col: float = 0.0) -> Any:
+@function("INDEX", "array", "number", "number", "number", min_args=2, reference=True, category=L)
+def INDEX(ctx: Context, ref: Any, row: float, col: float = 0.0, area: float = 1.0) -> Any:
     """The value at ``row``, ``col`` (1-based) of a range; one index for a single row or column.
 
     A 0 index gives a whole column (``INDEX(A1:B5,0,1)``) or row, as a reference into a
     range (which a legacy formula's cell then intersects) or an array from an array; as does a
     row index alone into a range of several columns. ``INDEX`` as a reference
-    (``A1:INDEX(...)``) comes with dynamic references.
+    (``A1:INDEX(...)``) comes with dynamic references. ``area`` picks one of several areas; with
+    one, an area below 1 is ``#VALUE!`` and above it ``#REF!`` (capture ``functions``).
     """
     if isinstance(ref, ErrorValue):  # INDEX(TRANSPOSE(A1:C2),...) in a legacy formula
         return ref
+    if math.trunc(area) != 1:
+        return ErrorValue.VALUE if area < 1 else ErrorValue.REF
     r, c = math.trunc(row), math.trunc(col)
     whole = _whole(ref, r, c)
     if whole is not None:

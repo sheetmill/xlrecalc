@@ -262,7 +262,7 @@ library differs in the last bits; the rows that match either way do not.
 | `IMSUB` | | absent | | | | | | | |
 | `IMSUM` | | absent | | | | | | | |
 | `IMTAN` | | absent | | | | | | | |
-| `INDEX` | lookup and reference | implemented | 88 | 76 | 2 | 0 | 10 |  |  |
+| `INDEX` | lookup and reference | implemented | 149 | 137 | 2 | 0 | 10 |  |  |
 | `INDIRECT` | lookup and reference | implemented | 14 | 14 | 0 | 0 | 0 |  |  |
 | `INFO` | | absent | | | | | | | |
 | `INT` | math | implemented | 18 | 17 | 0 | 0 | 1 |  |  |
@@ -334,7 +334,7 @@ library differs in the last bits; the rows that match either way do not.
 | `MULTINOMIAL` | math | implemented | 45 | 31 | 0 | 0 | 14 |  |  |
 | `MUNIT` | | absent | | | | | | | |
 | `N` | lookup and reference | implemented | 18 | 18 | 0 | 0 | 0 |  |  |
-| `NA` | information | implemented | 32 | 32 | 0 | 0 | 0 |  |  |
+| `NA` | information | implemented | 33 | 33 | 0 | 0 | 0 |  |  |
 | `NEGBINOM.DIST` | | absent | | | | | | | |
 | `NEGBINOMDIST` | | absent | | | | | | | |
 | `NETWORKDAYS` | date and time | implemented | 139 | 139 | 0 | 0 | 0 |  |  |
@@ -418,7 +418,7 @@ library differs in the last bits; the rows that match either way do not.
 | `ROUNDDOWN` | math | implemented | 677 | 677 | 0 | 0 | 0 |  |  |
 | `ROUNDUP` | math | implemented | 677 | 677 | 0 | 0 | 0 |  |  |
 | `ROW` | lookup and reference | implemented | 5 | 5 | 0 | 0 | 0 |  |  |
-| `ROWS` | lookup and reference | implemented | 4 | 4 | 0 | 0 | 0 |  |  |
+| `ROWS` | lookup and reference | implemented | 5 | 5 | 0 | 0 | 0 |  |  |
 | `RRI` | financial | implemented | 644 | 641 | 3 | 0 | 0 | 4 ulps |  |
 | `RSQ` | statistical | implemented | 24 | 20 | 4 | 0 | 0 | 4 ulps |  |
 | `RTD` | | absent | | | | | | | |
@@ -456,7 +456,7 @@ library differs in the last bits; the rows that match either way do not.
 | `STOCKHISTORY` | | absent | | | | | | | |
 | `SUBSTITUTE` | text | implemented | 496 | 496 | 0 | 0 | 0 |  |  |
 | `SUBTOTAL` | math | implemented | 16 | 16 | 0 | 0 | 0 |  |  |
-| `SUM` | math | implemented | 90 | 89 | 1 | 0 | 0 |  |  |
+| `SUM` | math | implemented | 93 | 92 | 1 | 0 | 0 |  |  |
 | `SUMIF` | math | implemented | 86 | 86 | 0 | 0 | 0 |  |  |
 | `SUMIFS` | math | implemented | 43 | 43 | 0 | 0 | 0 |  |  |
 | `SUMPRODUCT` | math | implemented | 10 | 10 | 0 | 0 | 0 |  |  |
