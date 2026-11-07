@@ -76,8 +76,9 @@ def _resolve_blank(v: Value, other: Value) -> Value:
 
 
 # The order of ASCII marks and symbols in Excel for Mac, none ignored (capture ``modern``, every
-# pair of 40 characters); digits and letters follow them. It agrees with CLDR's root collation on
-# what was captured, which is all that is claimed. Other characters are approximated (QUIRKS.md).
+# pair of 39 characters); digits and letters follow them. It agrees with CLDR's root collation
+# on the characters captured; the agreement is not assumed elsewhere. Other characters are
+# approximated (QUIRKS.md).
 _MARKS = {ch: i for i, ch in enumerate(" _-,;:!?.'\"()[]{}@*/\\&#%`^+<=>|~$", 1)}
 
 

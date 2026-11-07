@@ -4,7 +4,7 @@ A database is a range whose first row names its columns; a criteria range has na
 first row and conditions below. A record matches when every condition of some criteria row
 holds; a blank criteria row matches every record, and a condition under a name the database
 lacks matches none. A text condition without an operator matches text that starts with it
-(``Apple`` matches ``Applesauce``), as in Excel; ``=Apple`` matches only ``Apple``.
+(``Bolt`` matches ``Boltcutter``), as in Excel; ``=Bolt`` matches only ``Bolt``.
 Conditions computed by a formula (a name the database lacks over a formula) are not supported:
 they match no record.
 """

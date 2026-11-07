@@ -155,12 +155,12 @@ library differs in the last bits; the rows that match either way do not.
 | `DOLLARFR` | financial | implemented | 224 | 224 | 0 | 0 | 0 |  |  |
 | `DPRODUCT` | database | partial | 143 | 142 | 0 | 0 | 1 |  | computed criteria are not supported |
 | `DROP` | | absent | | | | | | | |
-| `DSTDEV` | database | partial | 143 | 132 | 10 | 0 | 1 | 4 ulps | computed criteria are not supported |
-| `DSTDEVP` | database | partial | 143 | 141 | 1 | 0 | 1 | 4 ulps | computed criteria are not supported |
+| `DSTDEV` | database | partial | 143 | 130 | 12 | 0 | 1 | 4 ulps | computed criteria are not supported |
+| `DSTDEVP` | database | partial | 143 | 142 | 0 | 0 | 1 | 4 ulps | computed criteria are not supported |
 | `DSUM` | database | partial | 131 | 130 | 0 | 0 | 1 |  | computed criteria are not supported |
 | `DURATION` | financial | implemented | 108 | 53 | 54 | 0 | 1 | 4 ulps |  |
-| `DVAR` | database | partial | 143 | 132 | 10 | 0 | 1 | 4 ulps | computed criteria are not supported |
-| `DVARP` | database | partial | 143 | 131 | 11 | 0 | 1 | 4 ulps | computed criteria are not supported |
+| `DVAR` | database | partial | 143 | 130 | 10 | 0 | 3 | 4 ulps | computed criteria are not supported |
+| `DVARP` | database | partial | 143 | 132 | 10 | 0 | 1 | 4 ulps | computed criteria are not supported |
 | `EDATE` | date and time | implemented | 41 | 41 | 0 | 0 | 0 |  |  |
 | `EFFECT` | financial | implemented | 147 | 147 | 0 | 0 | 0 | 4 ulps |  |
 | `ENCODEURL` | | absent | | | | | | | |

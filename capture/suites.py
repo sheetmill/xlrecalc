@@ -1157,25 +1157,25 @@ def statistics() -> list[Case]:
 
 MISC_TABLE: dict[str, Input] = {
     # a database: a header row and six records
-    "DP1": "Tree", "DQ1": "Height", "DR1": "Age", "DS1": "Profit",
-    "DP2": "Apple", "DQ2": 18.0, "DR2": 20.0, "DS2": 14.0,
-    "DP3": "Pear", "DQ3": 12.0, "DR3": 12.0, "DS3": 10.0,
-    "DP4": "Cherry", "DQ4": 13.0, "DR4": 14.0, "DS4": 9.0,
-    "DP5": "Apple", "DQ5": 14.0, "DR5": 15.0, "DS5": 10.0,
-    "DP6": "Pear", "DQ6": 9.0, "DR6": 8.0, "DS6": 8.0,
-    "DP7": "Applesauce", "DQ7": 8.0, "DR7": 9.0, "DS7": "n/a",
+    "DP1": "Part", "DQ1": "Weight", "DR1": "Days", "DS1": "Score",
+    "DP2": "Bolt", "DQ2": 17.0, "DR2": 21.0, "DS2": 15.0,
+    "DP3": "Nut", "DQ3": 11.0, "DR3": 10.0, "DS3": 11.0,
+    "DP4": "Gear", "DQ4": 15.0, "DR4": 16.0, "DS4": 8.0,
+    "DP5": "Bolt", "DQ5": 13.0, "DR5": 12.0, "DS5": 12.0,
+    "DP6": "Nut", "DQ6": 7.0, "DR6": 9.0, "DS6": 6.0,
+    "DP7": "Boltcutter", "DQ7": 6.0, "DR7": 5.0, "DS7": "n/a",
     # criteria ranges
-    "DU1": "Tree", "DU2": "Apple",
-    "DV1": "Height", "DV2": ">10",
-    "DW1": "Tree", "DX1": "Height", "DW2": "Apple", "DX2": ">10",
-    "DY1": "Tree", "DY2": "Apple", "DY3": "Pear",
-    "DZ1": "Tree", "DZ2": "=Apple",
-    "EA1": "Tree", "EA2": "A*",
-    "EB1": "Height",
+    "DU1": "Part", "DU2": "Bolt",
+    "DV1": "Weight", "DV2": ">10",
+    "DW1": "Part", "DX1": "Weight", "DW2": "Bolt", "DX2": ">10",
+    "DY1": "Part", "DY2": "Bolt", "DY3": "Nut",
+    "DZ1": "Part", "DZ2": "=Bolt",
+    "EA1": "Part", "EA2": "B*",
+    "EB1": "Weight",
     "EC1": "Nope", "EC2": "x",
     "ED1": "Calc", "ED2": FormulaInput("=DQ2>DR2"),
-    "EE1": "Height", "EF1": "Height", "EE2": ">10", "EF2": "<16",
-    "EG1": "tree", "EG2": "pear",
+    "EE1": "Weight", "EF1": "Weight", "EE2": ">10", "EF2": "<16",
+    "EG1": "part", "EG2": "nut",
     # cells for TRANSPOSE
     "EI1": 1.0, "EJ1": 2.0, "EK1": 3.0, "EI2": "a", "EJ2": True, "EK2": NA,
 }  # fmt: skip
@@ -1229,17 +1229,17 @@ def misc() -> list[Case]:
         Case("randbetween", 'RANDBETWEEN("a",2)'),
         Case("randbetween", "INT(RANDBETWEEN(1,10))=RANDBETWEEN(4,4)+0*RAND()-4+RANDBETWEEN(1,1)"),
     ]
-    fields = ['"Profit"', "4", '"Age"', '"profit"', "0", "5", '"Nope"', "DS1", "2.9", "TRUE"]
+    fields = ['"Score"', "4", '"Days"', '"score"', "0", "5", '"Nope"', "DS1", "2.9", "TRUE"]
     for fn in ("DSUM", "DAVERAGE", "DCOUNT", "DMAX", "DMIN"):
         for crit in CRITERIA_RANGES:
-            add(Case(fn.lower(), f'{fn}(DP1:DS7,"Profit",{crit})'))
+            add(Case(fn.lower(), f'{fn}(DP1:DS7,"Score",{crit})'))
         for field in fields:
             add(Case(fn.lower(), f"{fn}(DP1:DS7,{field},DY1:DY3)"))
         cases += [
-            Case(fn.lower(), f'{fn}(DP1:DS7,"Tree",DU1:DU2)'),
-            Case(fn.lower(), f'{fn}(DP1:DS1,"Profit",DU1:DU2)'),
-            Case(fn.lower(), f'{fn}(DP1:DS7,"Profit",DU1)'),
-            Case(fn.lower(), f'{fn}(DP2:DS7,"Profit",DU1:DU2)'),
+            Case(fn.lower(), f'{fn}(DP1:DS7,"Part",DU1:DU2)'),
+            Case(fn.lower(), f'{fn}(DP1:DS1,"Score",DU1:DU2)'),
+            Case(fn.lower(), f'{fn}(DP1:DS7,"Score",DU1)'),
+            Case(fn.lower(), f'{fn}(DP2:DS7,"Score",DU1:DU2)'),
         ]
     cases += [Case("dcount", "DCOUNT(DP1:DS7,,DY1:DY3)"), Case("dsum", "DSUM(DP1:DS7,,DY1:DY3)")]
     for old, start, num, new in (("abcdef", 2.0, 3.0, "XY"), ("abcdef", 1.0, 0.0, "Z"),
@@ -2627,28 +2627,28 @@ _DB_EXTRA: dict[str, Input] = {
 def database_family() -> list[Case]:
     cases = []
     fields = [
-        '"Profit"',
+        '"Score"',
         "4",
-        '"Age"',
-        '"profit"',
+        '"Days"',
+        '"score"',
         "0",
         "5",
         '"Nope"',
         "DS1",
         "2.9",
         "TRUE",
-        '"Tree"',
+        '"Part"',
     ]
     for fn in _DATABASES_NEW:
         for crit in CRITERIA_RANGES:
-            cases.append(Case(fn.lower(), f'{fn}(DP1:DS7,"Profit",{crit})'))
-            cases.append(Case(fn.lower(), f'{fn}(DP1:DS7,"Tree",{crit})'))
+            cases.append(Case(fn.lower(), f'{fn}(DP1:DS7,"Score",{crit})'))
+            cases.append(Case(fn.lower(), f'{fn}(DP1:DS7,"Part",{crit})'))
         cases += [Case(fn.lower(), f"{fn}(DP1:DS7,{field},DY1:DY3)") for field in fields]
         cases += [
-            Case(fn.lower(), f'{fn}(DP1:DS7,"Tree",DU1:DU2)'),
-            Case(fn.lower(), f'{fn}(DP1:DS1,"Profit",DU1:DU2)'),
-            Case(fn.lower(), f'{fn}(DP1:DS7,"Profit",DU1)'),
-            Case(fn.lower(), f'{fn}(DP2:DS7,"Profit",DU1:DU2)'),
+            Case(fn.lower(), f'{fn}(DP1:DS7,"Part",DU1:DU2)'),
+            Case(fn.lower(), f'{fn}(DP1:DS1,"Score",DU1:DU2)'),
+            Case(fn.lower(), f'{fn}(DP1:DS7,"Score",DU1)'),
+            Case(fn.lower(), f'{fn}(DP2:DS7,"Score",DU1:DU2)'),
             Case(fn.lower(), f"{fn}(DP1:DS7,,DY1:DY3)"),
         ]
     # A table with a blank row and every kind of value; criteria that match blanks; whole columns.
@@ -3350,7 +3350,7 @@ def combin_limit() -> list[Case]:
 
 
 def mac_gaps() -> list[Case]:
-    """Whether Excel for Mac computes functions a source says it lacks, in each file form."""
+    """Whether Excel for Mac computes ENCODEURL, FILTERXML and EUROCONVERT, in each file form."""
     url = '("a b&c=d/é")'
     xml = '("<a><b>1</b><b>x</b></a>","//b")'
     return [

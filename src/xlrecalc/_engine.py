@@ -186,9 +186,9 @@ class Engine:
         self.iterate = iterate
         """The workbook has iterative calculation on (``<calcPr iterate>``): §7.2."""
         self.max_array_cells = max_array_cells
+        """The largest array a formula may make (``ReadLimits.max_array_cells``)."""
         self.reference_array: Any = None
         """An array of references made while the current cell is evaluated."""
-        """The largest array a formula may make (``ReadLimits.max_array_cells``)."""
         self.date1904 = date1904
         self.today = today or dt.date.today()
         self.sheets: list[Sheet] = []

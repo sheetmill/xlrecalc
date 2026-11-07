@@ -2,8 +2,9 @@
 
 The packages are built here, small, from raw parts (no openpyxl). Excel's own behavior with such
 packages (it refuses a DTD, a misstated size, other compression methods and a part named twice)
-is captured in sheetpeek's ``tests/captures/package.tsv``. A test whose guard could fail into a
-huge allocation runs under the memory watchdog (``tests.watchdog.bounded``).
+is captured in sheetpeek's ``tests/captures/package.tsv``, at
+https://github.com/sheetmill/sheetpeek/blob/main/tests/captures/package.tsv. A test whose
+guard could fail into a huge allocation runs under the memory watchdog (``tests.watchdog.bounded``).
 """
 
 from __future__ import annotations

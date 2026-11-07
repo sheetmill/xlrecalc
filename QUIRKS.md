@@ -132,7 +132,7 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   subtracts 0.5 from the normal distribution (as Excel's own result shows), and two rows of `IPMT` with payments due in
   advance (`empty_args`). They are listed on every platform, so the published counts do not depend on it.
 - An empty argument: `VDB` with an empty `factor` is `#DIV/0!` in Excel and 0 here (two rows of `empty_args`). Four others there carry the known noise of `MULTINOMIAL`, `CUMIPMT` and `XIRR`.
-- How text orders is captured only in part: every pair of 40 ASCII characters and 24 pairs of words,
+- How text orders is captured only in part: every pair of 39 ASCII characters and 24 pairs of words,
   on Excel 16 for Mac (capture `modern`). Those give one consistent order, marks and symbols before
   digits before letters, with accents after their base letter. The rest is approximated: other
   ASCII controls sort first and other characters after the letters, by code point, so another
@@ -145,7 +145,7 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   long schedule (7 to 48 units), and two edge cases Excel answers oddly (`#DIV/0!` for start
   = end = life at a rate of 1 per period; cost - salvage when salvage exceeds cost).
 - Database functions (`misc`, `database_family`): a computed criterion is not supported. `DVAR`, `DVARP`, `DSTDEV` and
-  `DSTDEVP` declare 4 units in the last place for Excel's sum of squares; two rows are 5 and 12 units away. Blank records
+  `DSTDEVP` declare 4 units in the last place for Excel's sum of squares; two rows are 6 and 10 units away. Blank records
   are counted up to the sheet's last row holding a value, where Excel's used range also counts formatted rows.
 - Random numbers (`misc`): two rows draw them (`RANDBETWEEN(1.5,2.5)`, and two draws
   compared), so no result can be expected to repeat Excel's; both are listed whatever the draw.

@@ -17,20 +17,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `CEILING`, `FLOOR` and their `.MATH` and `.PRECISE` forms, `ISO.CEILING`, `MROUND`, `EVEN`, `ODD`, `QUOTIENT`,
   `FACT`, `FACTDOUBLE`, `GCD`, `LCM`, `COMBIN`, `COMBINA`, `PERMUT`, `PERMUTATIONA`, `MULTINOMIAL`, `SERIESSUM`,
   `SUMX2MY2`, `SUMX2PY2`, `SUMXMY2`, `ROMAN`, `ARABIC`, `BASE`, `DECIMAL`.
-- Functions, captured from Excel: `CUMIPMT`, `CUMPRINC`, `DB`, `DDB`, `SYD`, `DISC`, `INTRATE`, `RECEIVED`, `PRICEDISC`, `YIELDDISC`,
+- Closed-form finance, captured from Excel: `CUMIPMT`, `CUMPRINC`, `DB`, `DDB`, `SYD`, `DISC`, `INTRATE`, `RECEIVED`, `PRICEDISC`, `YIELDDISC`,
   `TBILLEQ`, `TBILLPRICE`, `TBILLYIELD`, `DOLLARDE`, `DOLLARFR`, `EFFECT`, `NOMINAL`, `FVSCHEDULE`, `ISPMT`, `MIRR`, `PDURATION`, `RRI`.
-- Functions, captured from Excel: `AVEDEV`, `DEVSQ`, `GEOMEAN`, `HARMEAN`, `KURT`, `SKEW`, `SKEW.P`, `PEARSON`, `RSQ`, `SLOPE`,
+- Descriptive statistics and regression, captured from Excel: `AVEDEV`, `DEVSQ`, `GEOMEAN`, `HARMEAN`, `KURT`, `SKEW`, `SKEW.P`, `PEARSON`, `RSQ`, `SLOPE`,
   `INTERCEPT`, `STEYX`, `FORECAST`, `FORECAST.LINEAR`, `COVAR`, `COVARIANCE.P`, `COVARIANCE.S`, `TRIMMEAN`, `STANDARDIZE`,
   `FISHER`, `FISHERINV`, `PHI`, `GAUSS`, `PERCENTRANK` and its `.INC` and `.EXC` forms, `PERCENTILE.EXC`, `QUARTILE.EXC`,
   `PROB`, `CONFIDENCE`, `CONFIDENCE.NORM`.
-- Functions, captured from Excel: the twelve conversions between `BIN`, `OCT`, `DEC` and `HEX`, `BITAND`, `BITOR`, `BITXOR`,
+- Engineering, bases and bits, captured from Excel: the twelve conversions between `BIN`, `OCT`, `DEC` and `HEX`, `BITAND`, `BITOR`, `BITXOR`,
   `BITLSHIFT`, `BITRSHIFT`, `DELTA`, `GESTEP`.
-- Functions, captured from Excel: `DCOUNTA`, `DGET`, `DPRODUCT`, `DSTDEV`, `DSTDEVP`, `DVAR`, `DVARP`.
-- Functions, captured from Excel: `SEARCH`, `SUBSTITUTE`, `PROPER`, `CLEAN`, `T`, `UNICHAR`, `UNICODE`, `NUMBERVALUE`,
+- Database, captured from Excel: `DCOUNTA`, `DGET`, `DPRODUCT`, `DSTDEV`, `DSTDEVP`, `DVAR`, `DVARP`.
+- Text, captured from Excel: `SEARCH`, `SUBSTITUTE`, `PROPER`, `CLEAN`, `T`, `UNICHAR`, `UNICODE`, `NUMBERVALUE`,
   `USDOLLAR`, `VALUETOTEXT`, `ARRAYTOTEXT`, `TEXTBEFORE`, `TEXTAFTER`, and `FINDB`, `SEARCHB`, `LEFTB`, `RIGHTB`, `MIDB`,
   `LENB` and `REPLACEB`, as they behave in an English language setting.
-- Functions, captured from Excel: `DAYS`, `ISOWEEKNUM`, `WEEKNUM`, `DATEDIF`.
-- Functions, captured from Excel: `XOR`, `ISEVEN`, `ISODD`, `ISNONTEXT`, `ISREF`, `ISFORMULA`, `ERROR.TYPE`, `TYPE`,
+- Date and time, captured from Excel: `DAYS`, `ISOWEEKNUM`, `WEEKNUM`, `DATEDIF`.
+- Logical and information, captured from Excel: `XOR`, `ISEVEN`, `ISODD`, `ISNONTEXT`, `ISREF`, `ISFORMULA`, `ERROR.TYPE`, `TYPE`,
   `SHEET`, `SHEETS`, `AREAS` and `HYPERLINK`, whose result is the text it shows and which follows nothing.
   `FORMULATEXT` does not show the `@` the formula bar adds to a legacy formula.
 - Functions: `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS`, `MINIFS`, `LARGE`, `SMALL`, `PERCENTILE`,
@@ -42,27 +42,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `ReadLimits` now bounds computing as well as reading.
 - `SUMIF`, `SUMIFS` and `COUNTIFS` visit only a range's non-blank cells, so they are computed over
   any range, whole sheets included (capture `array_functions`).
-
-### Security
-- A small file could make the engine allocate without bound: a legacy array formula declared
-  over the whole sheet, or `SUMPRODUCT(D!A:XFD*1)` over a sheet of two cells, made arrays of 17
-  billion cells. See `max_array_cells` above.
-- `SUMIFS` and `COUNTIFS` listed every position of their ranges before testing a criterion, so a
-  small file with `SUMIFS(D!A:XFD,D!A:XFD,">0")` used memory without bound, past any limit. They
-  now make no such list; nor does `SUMIF`, which refused such a range when blank cells matched.
-- The refusal of a DTD in a package part could be bypassed: it matched the prolog's bytes, so a
-  `<!DOCTYPE>` after a long comment (200 KB) or processing instruction (900 KB), in UTF-16, or in
-  a worksheet part whose name does not end in `.xml` (`data.bin`) was accepted. expat now reads
-  each part's prolog with a handler that refuses a doctype declaration and stops at the first
-  element, for every part read, whatever its name. An entity expansion that got through was
-  stopped only by expat's amplification limit, a ratio that depends on expat's version.
-
-- A part stated in the archive as smaller than it is was read cut short, silently when its CRC
-  matched the shorter part; bytes hidden past a part's stated size were ignored. A part must now
-  inflate to exactly its stated size and CRC. Encrypted parts and compression methods other than
-  stored and deflated (bzip2 and LZMA were read) are refused, as Excel refuses them.
-- A cell reference to a column past XFD gave a key that collided with another cell; the cell is
-  placed by position, as Excel places it.
 
 ### Changed
 - The database functions read a range's non-blank cells, not every cell, so they are computed over whole columns and
@@ -132,7 +111,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `LARGE((A1,B2),1)` were `#VALUE!`, `COUNT((A1,B2))` was 0. Unions are not implemented; such a
   formula now keeps the value the file holds and is reported.
 - Text no longer compares in code-point order, so `"a"<"~"` is FALSE, as in Excel, for the operators,
-  criteria such as `">=a"`, and sorted lookups. Captured on Excel for Mac: every pair of 40 ASCII
+  criteria such as `">=a"`, and sorted lookups. Captured on Excel for Mac: every pair of 39 ASCII
   characters and 24 pairs of words. Marks and symbols sort before digits and letters, and accents
   after their base letter. Other characters are approximated (`QUIRKS.md`).
 - A formula whose result is an array of references (`INDEX(r,{1;2})`, `OFFSET(A1,{0;1},0)`) stored a
@@ -167,6 +146,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `Infinity`, `1_000`, `+5` and `0x10`, which Python reads and Excel refuses, make the file a
   `PackageError`; a number too large for a double is `#NULL!`; a negative shared-string index
   no longer reads the last string. Calculation settings that are not numbers are ignored.
+
+### Security
+- A small file could make the engine allocate without bound: a legacy array formula declared
+  over the whole sheet, or `SUMPRODUCT(D!A:XFD*1)` over a sheet of two cells, made arrays of 17
+  billion cells. See `max_array_cells` above.
+- `SUMIFS` and `COUNTIFS` listed every position of their ranges before testing a criterion, so a
+  small file with `SUMIFS(D!A:XFD,D!A:XFD,">0")` used memory without bound, past any limit. They
+  now make no such list; nor does `SUMIF`, which refused such a range when blank cells matched.
+- The refusal of a DTD in a package part could be bypassed: it matched the prolog's bytes, so a
+  `<!DOCTYPE>` after a long comment (200 KB) or processing instruction (900 KB), in UTF-16, or in
+  a worksheet part whose name does not end in `.xml` (`data.bin`) was accepted. expat now reads
+  each part's prolog with a handler that refuses a doctype declaration and stops at the first
+  element, for every part read, whatever its name. An entity expansion that got through was
+  stopped only by expat's amplification limit, a ratio that depends on expat's version.
+- A part stated in the archive as smaller than it is was read cut short, silently when its CRC
+  matched the shorter part; bytes hidden past a part's stated size were ignored. A part must now
+  inflate to exactly its stated size and CRC. Encrypted parts and compression methods other than
+  stored and deflated (bzip2 and LZMA were read) are refused, as Excel refuses them.
+- A cell reference to a column past XFD gave a key that collided with another cell; the cell is
+  placed by position, as Excel places it.
 
 ## [0.1.0] - 2026-11-02
 

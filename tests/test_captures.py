@@ -400,15 +400,17 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
             55,
             56,
             93,
+            131,
             169,
+            207,
             245,
         )
     },
     **{
         ("database_family", case): _VARIANCE_NOISE
         for case in (
-            127,
             203,
+            209,
         )
     },
     **{("modern", case): _REGEX for case in (1384, 1417)},
@@ -695,11 +697,12 @@ def test_stated_evidence_is_the_capture_run(page):
     text = " ".join((Path(__file__).parents[1] / page).read_text(encoding="utf-8").split())
     found = re.search(
         r"([\d,]+) formulas computed by Excel.*?([\d,]+) match.*?"
-        r"([\d,]+) known deviations.*?([\d,]+) not evaluated",
+        r"([\d,]+) known deviations.*?(?:([\d,]+) not evaluated|Every one of them is evaluated)",
         text,
     )
     assert found, f"{page}: the evidence sentence is missing"
-    stated, matched, listed, skipped = map(_figure, found.groups())
+    stated, matched, listed = map(_figure, found.groups()[:3])
+    skipped = _figure(found[4]) if found[4] else 0
     assert matched == total["match"] + total["ulps"] + total["rel"]
     assert listed == total["listed"]
     assert skipped == total["not evaluated"]

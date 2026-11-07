@@ -39,7 +39,7 @@ people's workbooks are used.
 | `whitespace` | 15 | whitespace at the ends of inline and shared strings without `xml:space="preserve"` ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §9.1) |
 | `value_forms` | 26 | number forms Excel never writes in `<v>` (`nan`, `INF`, `1e400`, `1_000`, `+5`...) and rows and columns off its grid: which files Excel refuses and how it reads the others (`capture/value_probe.py`) |
 | `array_size` | 6 | declared arrays over one, ten and every column, and `SUMPRODUCT` over another sheet's whole columns: whether Excel opens and recalculates them, how long it takes and what memory it uses (`capture/array_size_probe.py`; it ends Excel past 8 GB, the one exception to never ending Excel, as a safety limit, and it starts only with no workbook open) |
-| `modern` | 2,230 | `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS`, `MINIFS`, `LARGE`, `SMALL`, `PERCENTILE`, `QUARTILE`, `MODE`, `IFS`, `SWITCH`, `TEXTJOIN`, `CONCAT`, `XLOOKUP`, `XMATCH` across argument kinds, edges and modes; how text compares, every pair of 40 characters |
+| `modern` | 2,230 | `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS`, `MINIFS`, `LARGE`, `SMALL`, `PERCENTILE`, `QUARTILE`, `MODE`, `IFS`, `SWITCH`, `TEXTJOIN`, `CONCAT`, `XLOOKUP`, `XMATCH` across argument kinds, edges and modes; how text compares, every pair of 39 characters |
 | `iteration` | 1,337 | `IRR`, `RATE`, `XIRR` from 20 guesses over flows of many shapes, and over a double root with guesses 2^k away, which shows the iteration's limit and stopping test; `YIELD` over a grid of bonds. Evidence for inferring Excel's iteration: not compared by `tests/test_captures.py` yet |
 | `iterate_open` | 55 | what Excel does on opening a file with iterative calculation on: a counter, a loop that converges, a dependent, a control and a loop with no cached values, across settings, a file `recalculate` wrote and a copy Excel saved (`capture/iterate_open_probe.py`) |
 | `circular_cached` | 410 | a real loop, iteration off, in a file holding sentinel cached values: in a file openpyxl built or Excel saved, with and without `fullCalcOnLoad`, on opening, after a recalculation, a full one and a rebuild, in what Excel shows and what it saves; edits of the loop (`capture/circular_cached_probe.py`) |
@@ -61,7 +61,7 @@ people's workbooks are used.
 | `combin_limit` | 164 | `COMBIN` and `PERMUT` at powers of 2 and of 10 up to 2^33: 2,147,483,646 is computed and 2,147,483,647 is `#NUM!` |
 | `index_range` | 38 | ranges built with `INDEX`, lookups and aggregates over a formula's own column: which Excel calls circular |
 | `static_cycle` | 37 | loops of references through a branch not taken, and real loops as controls: which Excel calls circular |
-| `array_refs` | 8,954 cells | `ROW`, `COLUMN`, `CELL`, ranges and arrays as a criterion or a lookup key, and arrays of references, each as a legacy formula, a legacy array formula and a dynamic array |
+| `array_refs` | 8,602 cells | `ROW`, `COLUMN`, `CELL`, ranges and arrays as a criterion or a lookup key, and arrays of references, each as a legacy formula, a legacy array formula and a dynamic array |
 | `array_functions` | 41 | the `SUMIF` family, `DSUM`, `CORREL` and `ROW` times `COLUMN` over one column, ten and every column of another sheet, with Excel's memory: Excel's value, or the file's value kept |
 | `circular`, `circular_alerts` | 16 each | circular references with iteration off: what Excel saves and shows, alerts off and on (the second interactive; [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §7.2) |
 
@@ -92,8 +92,8 @@ go at the end of their suite so earlier case numbers stay stable; a recapture th
 (hostile packages, huge ranges, extreme numbers) runs in a child process under the memory watchdog
 of `tests/watchdog.py`, which kills it at 4 GB: `bounded` for a test, `uv run python -m
 tests.watchdog -- COMMAND` for anything else. A time limit alone does not bound memory, and
-`ulimit -v` is no limit on macOS; a sweep without the watchdog once used 82 GB on a 24 GB Mac,
-and macOS paused every application, Excel included. A killed run (return code 137, or a missing
+`ulimit -v` is no limit on macOS; a sweep without the watchdog can use several times the
+machine's memory, and macOS then pauses every application, Excel included. A killed run (return code 137, or a missing
 result) is a finding: find out why before running it again. No such sweep runs while Excel
 captures, and a capture starts only once Excel answers (for example `osascript -e 'tell
 application "Microsoft Excel" to get version'`).
@@ -159,13 +159,13 @@ Each Excel step there has a time limit (`tests/excel_steps.py`); when Excel then
 run ends with a message naming the test, and Excel is left for the person using it to look at. The pipeline
 has a limit too, 600 s and 0.1 s per case, and so do the probes that open a workbook and save a copy.
 
-**When Excel stops answering.** It has happened twice: Excel answers `version` but not questions about its
-workbooks, at 0% CPU, with no dialog, and its menus work; a Quit clears it, and the same work then passes. So ask
+**When Excel stops answering.** Excel can answer `version` but not questions about its
+workbooks, at 0% CPU, with no dialog, and with its menus working; a Quit clears it, and the same work then passes. So ask
 about workbooks to tell whether it is alive (`tests/excel_steps.py`). The cause is unknown. A locked screen, a
 display that is off and system sleep are each ruled out as enough by themselves, the first two even with a file
 Excel refuses. Not tested: a request long after the lock, a session up for hours after many opens and saves,
-and rapid repeated opens. Whether a hang clears by itself is unknown too. It costs one Quit and a stopped pass, which
-does not justify tests of its own. Never end Excel: the person using it decides.
+and rapid repeated opens. Whether a hang clears by itself is unknown too. The tools never end Excel, since the person using it may have
+work open in it: they report, and leave the decision to that person.
 
 So the next one explains itself: past a limit, `capture/excel_watch.py` saves a record under
 `capture/build/excel_hangs/` (Excel's `sample`, uptime, CPU and memory, the display's last change, the request and its

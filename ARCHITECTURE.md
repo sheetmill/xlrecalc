@@ -477,8 +477,8 @@ correct for any graph, and what `_engine.py` does.
 ### 7.2 Circular references
 
 Detected during evaluation: a chain of cells, each stopped by reading the next, that closes on
-itself (capture `static_cycle`). A loop of references through a branch not taken is none, wherever
-its cells sit: Excel finds cycles through the references a formula evaluates, so `=IF(FALSE,A13,5)`
+itself (capture `static_cycle`). A loop of references through a branch not taken is not a cycle,
+wherever its cells sit: Excel finds cycles through the references a formula evaluates, so `=IF(FALSE,A13,5)`
 in A13 is 5, and so does the engine. A static cycle is a suspect, evaluated with every read checked,
 and only a read of a cell on the current path is circular (§6.3).
 
@@ -776,13 +776,14 @@ Excel for Windows uses Windows-1252; there is no setting for it yet),
 `DCOUNT`, `DMAX`, `DMIN` (a text condition matches by prefix; computed criteria are not
 supported) (capture `misc`);
 `INDEX` with a 0 index gives a whole row or column, and into a range returns a reference.
+`SUBTOTAL` reads the rows the file marks hidden: codes 101 to 111 leave out every hidden row, and 1 to
+11 do too when a filter is hiding rows on a sheet the call names (capture `hidden_rows`).
 `CELL`'s kinds that depend on formatting (`format`, `width`, `prefix`, `protect`, `color`,
-`parentheses`) are reported unsupported, since styles are not read. Not yet: `SUBTOTAL`
-codes 101 to 111 leaving out hidden rows and 1 to 11 too when a filter is hiding rows on a sheet the call names,
-structured references, 3-D references.
+`parentheses`) are reported unsupported, since styles are not read. Not yet: structured
+references, 3-D references.
 
 Each registered function declares a status: `implemented`, or `partial` with a note on what
-is missing (`SUBTOTAL`, `CELL`, `LINEST`, the database functions); a function Excel has that is
+is missing (`CELL`, `FORMULATEXT`, `LINEST`, `XLOOKUP`, `XMATCH`, the database functions); a function Excel has that is
 not registered is absent. Excel's function list (`capture/functions_list.py`, the names the
 `formula_bar` capture typed) lets the matrix list the absent ones too.
 
@@ -793,7 +794,7 @@ up), `SMALL` (`k` rounded down), `PERCENTILE`, `QUARTILE`, `MODE` and their name
 `CONCAT`; `XLOOKUP` and `XMATCH`, with every search mode and the match modes but regular expressions
 (mode 3, reported). `XLOOKUP`'s result is a reference, so `XLOOKUP(...):A9` is a range. Their
 next-smaller and next-larger order numbers, text, logicals and a blank key last; a blank key finds
-a blank cell. `PERCENTILE.EXC`, `QUARTILE.EXC` and `MODE.MULT` are not implemented.
+a blank cell. `MODE.MULT` is not implemented.
 
 ### 8.3 The xlformat seam
 
@@ -905,14 +906,14 @@ fetches anything a file names:
   defaults never refuse a workbook Excel opens; parts are streamed, so memory does not grow with
   them. The real protection is streaming and the DTD refusal below; the limits bound time.
   `load` and `recalculate` take `limits=ReadLimits(...)` (`max_parts`, `max_part_bytes`,
-  `max_total_bytes`); a service that accepts files from untrusted users should lower them to
+  `max_total_bytes`, and `max_array_cells`, which bounds computing, §7.7); a service that accepts files from untrusted users should lower them to
   what it is willing to spend on one file. Sizes
   are counted while decompressing, and a part must inflate to exactly the size and CRC the
   archive states, or it is refused (`zipfile` stopped at the stated size, so bytes past it were
   dropped silently). A compression ratio is not a usable test: real sheet parts
   compress about 5:1, but a legitimately repetitive one reaches 400:1, close to deflate's
   limit. Duplicate part names, encrypted parts and compression methods other than stored and
-  deflated are refused, as Excel refuses them (sheetpeek's capture `package`).
+  deflated are refused, as Excel refuses them (sheetpeek's capture [`package`](https://github.com/sheetmill/sheetpeek/blob/main/tests/captures/package.tsv)).
 - *Content Excel refuses*: a number in `<v>` that Excel does not read (`nan`, `INF`, `1_000`,
   `+5`, `0x10`; a value too large for a double is `#NULL!`, as Excel reads it), a row off the
   grid, more cells in a row than columns, a shared string or shared-formula index that is not
@@ -1204,11 +1205,11 @@ One workbook is used from one thread at a time.
    iterateDelta>`), designed from captures of its calculation order, stopping test, starting
    values and behavior on opening.
 6. 0.2: the functions still absent, by family, each family's captures first. An order, not a promise
-   or a date: the families with direct rules (text, date and time, logical and information, engineering
-   bases, descriptive statistics, database, closed-form finance) and the functions of item 3 are
-   required; the other families follow as far as they get; those with large questions of their own
-   (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable. `docs/coverage.md`
-   lists what exists.
+   or a date: the functions of item 3 are required; the other families (distributions and their
+   inverses, complex numbers, Bessel functions and `CONVERT`, bonds with odd periods, the array and
+   matrix functions) follow as far as they get; those with large questions of their own (regular
+   expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable. `docs/coverage.md` lists what
+   exists.
 7. `xlrecalc.evaluate(text)` for one formula outside a workbook, custom functions, and `LET` and `LAMBDA` with its helpers are designed together,
    from a list of what an editor built on the package needs.
 8. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
