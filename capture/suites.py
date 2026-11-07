@@ -3183,6 +3183,12 @@ _EMPTY_TABLE: dict[str, Input] = {
     **{f"AA{i + 1}": v for i, v in enumerate((1.0, 2.0, 4.0, 8.0))},
     **{f"AB{i + 1}": v for i, v in enumerate((3.0, 5.0, 6.0, 9.0))},
     "AC1": "a", "AC2": "b", "AD1": "a", "AD2": 2.0,
+    **{f"AE{i + 1}": v for i, v in enumerate((-100.0, 50.0, 60.0, 70.0))},
+    **{f"AF{i + 1}": v for i, v in enumerate((0.1, 0.2, 0.3, 0.4))},
+    **{f"AH{i + 1}": v for i, v in enumerate((40000.0, 40100.0, 40200.0, 40300.0))},
+    "AG1": FormulaInput("=1+1"),
+    "BA1": "K", "BB1": "N", "BA2": "a", "BB2": 1.0, "BA3": "b", "BB3": 2.0, "BA4": "c", "BB4": 3.0,
+    "BD1": "N", "BD2": ">1", "BE1": "N", "BE2": ">2",
 }  # fmt: skip
 _EMPTY_SKIP = frozenset(
     {"_XLFN.ANCHORARRAY", "_XLFN.SINGLE", "RAND", "RANDBETWEEN", "NOW", "TODAY"}
@@ -3205,9 +3211,70 @@ _EMPTY_VALID: dict[str, tuple[str, ...]] = {
     "1"),
     "CHOOSE": ("1", "2", "3"), "IF": ("TRUE", "2", "3"), "PERCENTRANK": (_R, "2", "3"),
     "_XLFN.PERCENTRANK.INC": (_R, "2", "3"), "_XLFN.PERCENTRANK.EXC": (_R, "2", "3"),
+    **dict.fromkeys(("COUPDAYBS", "COUPDAYS", "COUPDAYSNC", "COUPNCD", "COUPNUM", "COUPPCD"),
+    ("40000", "41000", "2", "1")),
+    **dict.fromkeys(("DISC", "INTRATE", "YIELDDISC"), ("40000", "41000", "97", "100", "1")),
+    "RECEIVED": ("40000", "41000", "100", "0.05", "1"),
+    "PRICEDISC": ("40000", "41000", "0.05", "100", "1"),
+    **dict.fromkeys(("DURATION", "MDURATION"), ("40000", "41000", "0.05", "0.06", "2", "1")),
+    "PRICE": ("40000", "41000", "0.05", "0.06", "100", "2", "1"),
+    "YIELD": ("40000", "41000", "0.05", "95", "100", "2", "1"),
+    "TBILLEQ": ("40000", "40100", "0.05"), "TBILLPRICE": ("40000", "40100", "0.05"),
+    "TBILLYIELD": ("40000", "40100", "98"),
+    "CUMIPMT": ("0.01", "12", "1000", "1", "2", "0"), "CUMPRINC": ("0.01", "12", "1000", "1",
+    "2", "0"),
+    "DATEDIF": ("40000", "41000", '"D"'), "DATEVALUE": ('"1/1/2021"',), "TIMEVALUE": ('"12:30"',),
+    "IRR": ("$AE$1:$AE$4", "0.1"), "MIRR": ("$AE$1:$AE$4", "0.1", "0.1"),
+    "XIRR": ("$AE$1:$AE$4", "$AH$1:$AH$4", "0.1"), "XNPV": ("0.1", "$AE$1:$AE$4", "$AH$1:$AH$4"),
+    "RATE": ("12", "-100", "1000", "0", "0", "0.1"),
+    "CONFIDENCE": ("0.05", "2", "50"), "_XLFN.CONFIDENCE.NORM": ("0.05", "2", "50"),
+    "NORMINV": ("0.5", "2", "2"), "_XLFN.NORM.INV": ("0.5", "2", "2"),
+    "NORMSINV": ("0.5",), "_XLFN.NORM.S.INV": ("0.5",),
+    "PERCENTILE": (_R, "0.5"), "_XLFN.PERCENTILE.INC": (_R, "0.5"), "_XLFN.PERCENTILE.EXC": (_R,
+    "0.5"),
+    "TRIMMEAN": (_R, "0.25"), "PROB": (_R, "$AF$1:$AF$4", "2", "4"),
+    **dict.fromkeys(("FIND", "FINDB", "SEARCH", "SEARCHB"), ('"a"', '"abc"', "1")),
+    "ACOS": ("0.5",), "ASIN": ("0.5",), "ATANH": ("0.5",), "FISHER": ("0.5",),
+    "BIN2DEC": ('"101"',), "BIN2HEX": ('"101"', "8"), "BIN2OCT": ('"101"', "8"),
+    "ERROR.TYPE": ("1/0",), "_XLFN.ARABIC": ('"XI"',), "_XLFN.DECIMAL": ('"11"', "2"),
+    "_XLFN.NUMBERVALUE": ('"1.5"', '"."', '","'), "_XLFN.ARRAYTOTEXT": (_R, "0"),
+    "_XLFN.VALUETOTEXT": ("2", "0"), "_XLFN.FORMULATEXT": ("$AG$1",), "_XLFN.ISFORMULA": ("$AG$1",),
+    **dict.fromkeys(("DSUM", "DAVERAGE", "DCOUNT", "DMAX", "DMIN", "DCOUNTA", "DPRODUCT",
+    "DSTDEV", "DSTDEVP", "DVAR", "DVARP"), ("$BA$1:$BB$4", '"N"', "$BD$1:$BD$2")),
+    "DGET": ("$BA$1:$BB$4", '"N"', "$BE$1:$BE$2"),
+    "FIXED": ("2", "2", "TRUE"),
+    "NETWORKDAYS.INTL": ("40000", "40100", "1", "$AH$1:$AH$2"),
+    "_XLFN.NETWORKDAYS.INTL": ("40000", "40100", "1", "$AH$1:$AH$2"),
+    "WORKDAY.INTL": ("40000", "5", "1", "$AH$1:$AH$2"),
+    "_XLFN.WORKDAY.INTL": ("40000", "5", "1", "$AH$1:$AH$2"),
+    "_XLFN.TEXTJOIN": ('","', "TRUE", _R),
+    "_XLFN.XLOOKUP": ("2", _R, _S, '"x"', "0", "1"),
+    "_XLFN.XMATCH": ("2", _R, "0", "1"),
     "EDATE": ("40000", "2"), "EOMONTH": ("40000", "2"), "MROUND": ("5", "2"), "QUOTIENT": ("5",
     "2"),
 }  # fmt: skip
+
+
+# A repeating tail: what comes before it, and one group of it.
+_EMPTY_REPEATING: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
+    "COUNTIFS": ((), (_R, '">1"')),
+    "SUMIFS": ((_S,), (_R, '">1"')),
+    "AVERAGEIFS": ((_S,), (_R, '">1"')),
+    "_XLFN.MAXIFS": ((_S,), (_R, '">1"')),
+    "_XLFN.MINIFS": ((_S,), (_R, '">1"')),
+    "_XLFN.IFS": ((), ("FALSE", "2")),
+    "_XLFN.SWITCH": (("2",), ("1", "3")),
+}
+
+
+def _empty_repeating(key: str) -> list[list[str]]:
+    """One and two groups: nothing empty, and each position empty in turn, in either group."""
+    head, group = _EMPTY_REPEATING[key]
+    lists = []
+    for full in ([*head, *group], [*head, *group, *group]):
+        lists.append(full)
+        lists += [[*full[:i], "", *full[i + 1 :]] for i in range(len(full))]
+    return lists
 
 
 def empty_args_all() -> list[Case]:
@@ -3219,11 +3286,15 @@ def empty_args_all() -> list[Case]:
         if key in _EMPTY_SKIP or not spec.kinds:
             continue
         name = "_xlfn." + key[6:] if key.startswith("_XLFN.") else key
+        if key in _EMPTY_REPEATING:
+            for args in _empty_repeating(key):
+                cases.append(Case(key.lower().replace("_xlfn.", ""), f"{name}({','.join(args)})"))
+            continue
         count = len(spec.kinds) + (1 if spec.max_args is None else 0)
         full = [_EMPTY_VALUE[spec.kinds[min(i, len(spec.kinds) - 1)]] for i in range(count)]
         valid = _EMPTY_VALID.get(key, ())
         full[: len(valid)] = valid[:count]
-        lists = [[*full[:i], "", *full[i + 1 :]] for i in range(count)]
+        lists = [full, *([*full[:i], "", *full[i + 1 :]] for i in range(count))]
         if spec.min_args < count:
             lists.append([*full[: spec.min_args], *[""] * (count - spec.min_args)])
             lists.append([*full[: spec.min_args], ""])  # one empty past the required

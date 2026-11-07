@@ -577,6 +577,10 @@ A change that removes the reliance (the formula replaced) takes the cells out of
 workbook holding such a formula only. A run that trusts cached values and evaluates nothing names
 nothing; one that evaluates a cell names it and the formula it rests on.
 
+A formula set through `set_formula` is taken as the formula bar takes it: without its `_xlfn.` prefix it computes and is written with
+it. The same text read from a file is what Excel reads there, a name it does not know: `#NAME?`, reported under the name as the file
+holds it.
+
 Cells without a computable value (an unsupported function and no cached value, a caught exception),
 and every cell depending on them, are **uncomputed**: the report lists them, and the writer
 leaves their cached values as they were (§9.2). The report (`Report`) also lists circular

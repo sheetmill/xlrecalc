@@ -95,6 +95,8 @@ SPECS: dict[str, Spec] = {}
 # empty required argument, whatever the others hold: mostly the old Analysis ToolPak functions.
 _EMPTY_REQUIRED_IS_NA = frozenset(
     [
+        "NETWORKDAYS.INTL",
+        "_XLFN.NETWORKDAYS.INTL",
         "BIN2HEX",
         "BIN2OCT",
         "COUPDAYBS",
@@ -146,18 +148,16 @@ _EMPTY_REQUIRED_IS_NA = frozenset(
         "_XLFN.WORKDAY.INTL",
     ]
 )
-# These give #N/A only in their leading arguments, the dates; a later one is checked as 0.
-_EMPTY_NA_LEADING = dict.fromkeys(
-    ("COUPDAYBS", "COUPDAYS", "COUPDAYSNC", "COUPNCD", "COUPNUM", "COUPPCD"), 2
-)
 # These give #VALUE! for an empty argument where a range belongs, at these positions.
 _EMPTY_IS_VALUE: dict[str, tuple[int, ...]] = {
     "INDEX": (0,), "IRR": (0,), "LINEST": (0,), "LOOKUP": (1, 2), "MIRR": (0,), "PROB": (0, 1),
+    "_XLFN.XMATCH": (1,),
     "SUMX2MY2": (0, 1), "SUMX2PY2": (0, 1), "SUMXMY2": (0, 1),
 }  # fmt: skip
 # These take an empty optional argument as if it were left out. Others take it as 0 or FALSE.
 _EMPTY_OPTIONAL_IS_DEFAULT = frozenset(
     [
+        "PROB",
         "ADDRESS",
         "BIN2HEX",
         "BIN2OCT",
@@ -217,7 +217,6 @@ def function(
         plain = not any(lifted_kinds) and all(_CONVERT.get(k) is None for k in kinds)
 
         required_na = name.upper() in _EMPTY_REQUIRED_IS_NA
-        leading = _EMPTY_NA_LEADING.get(name.upper(), lo)
         value_at = _EMPTY_IS_VALUE.get(name.upper(), ())
         defaults = (
             [p.default for p in list(inspect.signature(core).parameters.values())[1:]]
@@ -229,7 +228,7 @@ def function(
             n = len(args)
             if n < lo or (hi is not None and n > hi):
                 return VALUE
-            if required_na and any(a is MISSING for a in args[:leading]):
+            if required_na and any(a is MISSING for a in args[:lo]):
                 return ErrorValue.NA
             if value_at and any(i < n and args[i] is MISSING for i in value_at):
                 return VALUE

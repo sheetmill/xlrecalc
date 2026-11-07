@@ -53,7 +53,7 @@ _EMPTY_REFUSED: dict[str, tuple[int, ...]] = {
     "ATAN": (0,),
     "ATANH": (0,),
     "AVERAGEIF": (0, 2),
-    "AVERAGEIFS": (0, 1, 2, 3),
+    "AVERAGEIFS": (0, 1),
     "BIN2DEC": (0,),
     "CELL": (1,),
     "CHAR": (0,),
@@ -66,7 +66,7 @@ _EMPTY_REFUSED: dict[str, tuple[int, ...]] = {
     "COTH": (0,),
     "COUNTBLANK": (0,),
     "COUNTIF": (0,),
-    "COUNTIFS": (0, 1, 2),
+    "COUNTIFS": (0,),
     "CSC": (0,),
     "CSCH": (0,),
     "DATEVALUE": (0,),
@@ -95,7 +95,6 @@ _EMPTY_REFUSED: dict[str, tuple[int, ...]] = {
     "GAUSS": (0,),
     "HEX2DEC": (0,),
     "HOUR": (0,),
-    "IFS": (0, 1, 2),
     "INT": (0,),
     "ISBLANK": (0,),
     "ISERR": (0,),
@@ -115,8 +114,8 @@ _EMPTY_REFUSED: dict[str, tuple[int, ...]] = {
     "LN": (0,),
     "LOG10": (0,),
     "LOWER": (0,),
-    "MAXIFS": (0, 1, 2, 3),
-    "MINIFS": (0, 1, 2, 3),
+    "MAXIFS": (0, 1),
+    "MINIFS": (0, 1),
     "MINUTE": (0,),
     "MONTH": (0,),
     "N": (0,),
@@ -144,7 +143,7 @@ _EMPTY_REFUSED: dict[str, tuple[int, ...]] = {
     "SQRTPI": (0,),
     "SUBTOTAL": (1, 2),
     "SUMIF": (0, 2),
-    "SUMIFS": (0, 1, 2, 3),
+    "SUMIFS": (0, 1),
     "T": (0,),
     "TAN": (0,),
     "TANH": (0,),
@@ -160,13 +159,27 @@ _EMPTY_REFUSED: dict[str, tuple[int, ...]] = {
 }
 
 
+# A repeating tail: arguments before it, and the size of a group. A position in a later group
+# counts as the same position of the first (capture empty_args).
+_EMPTY_REPEATING = {
+    "COUNTIFS": (0, 2), "SUMIFS": (1, 2), "AVERAGEIFS": (1, 2), "MAXIFS": (1, 2), "MINIFS": (1, 2),
+    "IFS": (0, 2), "SWITCH": (1, 2),
+}  # fmt: skip
+
+
+def _empty_is_refused(name: str, position: int) -> bool:
+    head, size = _EMPTY_REPEATING.get(name, (position + 1, 1))
+    at = position if position < head else head + (position - head) % size
+    return at in _EMPTY_REFUSED.get(name, ())
+
+
 def _refused_empty(toks: Iterable[Token]) -> str | None:
     """The function whose empty argument Excel refuses, as a reason, or ``None``."""
     stack: list[list[Any]] = []  # [function or None, position, nothing seen in this argument]
     previous = None
     for tok in toks:
         if stack and tok.kind is Kind.COMMA and stack[-1][0] is not None:
-            if stack[-1][2] and stack[-1][1] in _EMPTY_REFUSED.get(stack[-1][0], ()):
+            if stack[-1][2] and _empty_is_refused(stack[-1][0], stack[-1][1]):
                 return f"an empty argument of {stack[-1][0]}"
             stack[-1][1] += 1
             stack[-1][2] = True
@@ -174,7 +187,7 @@ def _refused_empty(toks: Iterable[Token]) -> str | None:
             continue
         if tok.kind is Kind.CLOSE and stack:
             closed, position, empty = stack.pop()
-            if closed is not None and empty and position in _EMPTY_REFUSED.get(closed, ()):
+            if closed is not None and empty and _empty_is_refused(closed, position):
                 return f"an empty argument of {closed}"
         if stack and tok.kind is not Kind.COMMA:
             stack[-1][2] = False

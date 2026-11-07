@@ -283,6 +283,10 @@ def test_a_changed_formula_makes_its_dependents_stale_for_reads():
     assert value(e, "C1") == 21.0  # read directly, without recalculate()
 
 
+# What is left gives an error by design: no condition met, no case matched, an array in one cell.
+_BASELINE_IS_AN_ERROR = ("_xlfn.IFS(FALSE", "_xlfn.SWITCH(2,1", "TRANSPOSE(")
+
+
 def test_refused_in_file_agrees_with_excel_on_empty_arguments():
     """Every formula with an empty argument Excel refused is refused, and none it computed."""
     captures = Path(__file__).parent / "captures"
@@ -305,3 +309,19 @@ def test_a_lone_surrogate_is_written_as_excel_stores_it(tmp_path):
     recalculate(source, out, full=True)
     with zipfile.ZipFile(out) as written:
         assert "<v>_xDE00_a</v>" in written.read("xl/worksheets/sheet1.xml").decode("utf-8")
+
+
+def test_every_empty_argument_row_has_a_baseline_that_is_no_error():
+    """A row can only show what its empty argument does if the rest of the call is valid."""
+    rows = (Path(__file__).parent / "captures" / "empty_args.tsv").read_text(encoding="utf-8")
+    baselines = {}
+    for row in rows.split("\n"):
+        if row.startswith("empty_args\t"):
+            fields = row.split("\t")
+            if ",," not in fields[3] and "(," not in fields[3] and ",)" not in fields[3]:
+                baselines.setdefault(fields[1], []).append((fields[3], fields[5], fields[6]))
+    assert len(baselines) > 300
+    errors = [
+        f for rows in baselines.values() if all(r[1] == "e" for r in rows) for f, _, _ in rows
+    ]
+    assert [f for f in errors if not f.startswith(_BASELINE_IS_AN_ERROR)] == []
