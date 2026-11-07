@@ -211,6 +211,9 @@ _WEEKNUM_ODD_CASES = (
     1327,
     1348,
 )
+_NUMBERVALUE_GROUP = (
+    "NUMBERVALUE reads a group separator after the decimal one as a digit when both are digits"
+)
 _MULTINOMIAL = (
     "Excel's result carries noise from its logarithm of the gamma function (279.99999999999966)"
 )
@@ -227,6 +230,7 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     ("info_family", 468): _AT_SIGN,
     **{("dates_family", case): _WEEKNUM_ODD_TYPE for case in _WEEKNUM_ODD_CASES},
     ("dates_family", 2004): _DATEDIF_MARCH,
+    ("text_family", 1761): _NUMBERVALUE_GROUP,
     **{("modern", case): _REGEX for case in (1384, 1417)},
     **{("finance", case): _IPMT_TAIL for case in (359, 367, 368, 371, 373, 397)},
     **{("iterative", case): _ITER_NEAR_ZERO for case in _ITER_NEAR_ZERO_CASES},
@@ -292,6 +296,7 @@ SUITES = [
     "math_integers",
     "info_family",
     "dates_family",
+    "text_family",
 ]
 
 

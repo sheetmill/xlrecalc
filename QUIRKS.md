@@ -113,6 +113,14 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 - `WEEKNUM` with a type the documentation lacks (-1, 22) gives `#NUM!` here. Excel gives `#NUM!` on some weekdays and a
   week number on others, with no rule found; 36 rows of capture `dates_family`. `DATEDIF` from December 31, 1900 to March
   1, 2000 in `YD` is 60 here and 61 in Excel, where every neighbor fits the rule (one row).
+- `FINDB`, `SEARCHB`, `LEFTB`, `RIGHTB`, `MIDB`, `LENB` and `REPLACEB` behave as this English Excel for Mac computes
+  them, counting no text double (capture `text_family`). With a double-byte language as the default, Excel documents
+  them counting such text as two; that belongs to localization, which the package does not do (ARCHITECTURE.md §1.2).
+- `ENCODEURL`, `FILTERXML` and `EUROCONVERT` give `#NAME?` in Excel 16 for Mac in every file form (capture `mac_gaps`),
+  so there is no reference for them here: they are not implemented, and a cell using one keeps its cached value and is
+  reported.
+- `NUMBERVALUE` with digits as separators reads a group separator after the decimal one as a digit: `NUMBERVALUE(" 1 2 ",1,2)`
+  is 0.2 in Excel and `#VALUE!` here (one row of capture `text_family`).
 - How text orders is captured only in part: every pair of 40 ASCII characters and 24 pairs of words,
   on Excel 16 for Mac (capture `modern`). Those give one consistent order, marks and symbols before
   digits before letters, with accents after their base letter. The rest is approximated: other

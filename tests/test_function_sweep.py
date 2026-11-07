@@ -109,10 +109,11 @@ def test_the_other_functions_over_a_whole_sheet():
         "MULTINOMIAL(1E15,1E15)",
         '_xlfn.DECIMAL(REPT("Z",255),36)',
         "_xlfn.BASE(9007199254740991,2,255)",
+        'SUBSTITUTE(REPT("a",32767),"a",REPT("b",32767))',
     ],
 )
 @bounded
 def test_integer_functions_stay_bounded_on_huge_arguments(formula: str) -> None:
-    """They use exact integers, which a formula must not be able to make huge."""
+    """They use exact integers or texts, which a formula must not be able to make huge."""
     engine = Engine.from_cells({"S": {"A1": "=" + formula}})
     assert engine.get(0, 0, 0) is not None

@@ -2361,6 +2361,76 @@ def text_family() -> list[Case]:
         for n in (0.0, 1.0, 2.0, -1.0, 100.0, None)
         for new in ("X", "", 1.0, NA)
     ]
+    # Noncharacters, and how the older functions count a character outside the first plane.
+    cases += _one(["UNICHAR"], (64976.0, 65007.0, 131070.0, 131071.0, 1048574.0, 1048576.0))
+    astral = ("😀", "😀x", "x😀", "a😀b😀c", "😀😀")
+    cases += _one(["LEN", "UPPER", "LOWER", "TRIM", "CODE"], astral)
+    for t in astral:
+        for n in (0.0, 1.0, 2.0, 3.0, 4.0):
+            cases.append(Case("astral_left", "LEFT({1},{2})", (t, n)))
+            cases.append(Case("astral_right", "RIGHT({1},{2})", (t, n)))
+            for st in (1.0, 2.0, 3.0, 4.0):
+                cases.append(Case("astral_mid", "MID({1},{2},{3})", (t, st, n)))
+                cases.append(Case("astral_replace", 'REPLACE({1},{2},{3},"Z")', (t, st, n)))
+        for f in ("😀", "x", "b", "c"):
+            cases.append(Case("astral_find", "FIND({1},{2})", (f, t)))
+            cases.append(Case("astral_search", "SEARCH({1},{2})", (f, t)))
+            cases.append(Case("astral_find", "FIND({1},{2},2)", (f, t)))
+            cases.append(Case("astral_search", "SEARCH({1},{2},2)", (f, t)))
+    cases += [Case("astral_search", 'SEARCH("?x",{1})', (t,)) for t in astral]
+    cases += [Case("astral_search", 'SEARCH("x?",{1})', (t,)) for t in astral]
+    cases += [Case("astral_rept", "LEN(REPT({1},3))", (t,)) for t in astral]
+    huge = (1e15, 1e20, 1e50, 1e100, 1e120, 1e125, 1e126, 1e127, 1e128, 1e150, 1e200, 1e250, 1e299)
+    for name in ("USDOLLAR", "DOLLAR"):
+        cases += [Case("huge_" + name.lower(), f"LEN({name}({{1}}))", (x,)) for x in huge]
+        cases += [Case("huge_" + name.lower(), f"LEN({name}({{1}},0))", (x,)) for x in huge]
+    cases += [
+        Case("right_past", "RIGHT({1},{2})", (t, n))
+        for t in ("ab", "abc", "a", "")
+        for n in (1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0)
+    ]
+    # Results at the limit of a text, 32,767.
+    for over in (32766, 32767, 32768):
+        cases += [
+            Case("limit_substitute", f'LEN(SUBSTITUTE(REPT("ab",{over // 2}),"a","x"))'),
+            Case("limit_substitute", f'LEN(SUBSTITUTE("a","a",REPT("b",{over})))'),
+            Case("limit_substitute", f'LEN(SUBSTITUTE(REPT("a",100),"a",REPT("b",{over // 100})))'),
+            Case(
+                "limit_substitute",
+                f'LEN(SUBSTITUTE(REPT("a",100),"a",REPT("b",{over // 100 + 1})))',
+            ),
+            Case(
+                "limit_substitute",
+                f'LEN(SUBSTITUTE(REPT("a",100),"a",REPT("b",{over // 100 + 1}),1))',
+            ),
+            Case("limit_valuetotext", f'LEN(_xlfn.VALUETOTEXT(REPT("a",{over - 2}),1))'),
+            Case("limit_valuetotext", f'LEN(_xlfn.VALUETOTEXT(REPT("a",{over}),1))'),
+            Case("limit_arraytotext", f'LEN(_xlfn.ARRAYTOTEXT(REPT("a",{over - 2}),1))'),
+            Case("limit_arraytotext", f'LEN(_xlfn.ARRAYTOTEXT({{1,2}}&REPT("a",{over // 2}),0))'),
+            Case(
+                "limit_arraytotext", f'LEN(_xlfn.ARRAYTOTEXT({{1,2}}&REPT("a",{over // 2 - 2}),0))'
+            ),
+            Case(
+                "limit_arraytotext", f'LEN(_xlfn.ARRAYTOTEXT({{1,2}}&REPT("a",{over // 2 - 2}),1))'
+            ),
+            Case("limit_replace", f'LEN(REPLACE(REPT("a",{over}),1,1,"b"))'),
+            Case("limit_replace", f'LEN(REPLACE(REPT("a",32767),1,1,REPT("b",{over - 32766})))'),
+        ]
+    cases += [
+        Case("numbervalue_more", "_xlfn.NUMBERVALUE({1})", (t,))
+        for t in (
+            "1/2",
+            "1/2/2021",
+            "12:30",
+            "5%%%",
+            "%5",
+            "1e5%",
+            "$1,000",
+            "($1,000.50)",
+            "-$5",
+            "€5",
+        )
+    ]
     return cases
 
 

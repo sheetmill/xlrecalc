@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `CEILING`, `FLOOR` and their `.MATH` and `.PRECISE` forms, `ISO.CEILING`, `MROUND`, `EVEN`, `ODD`, `QUOTIENT`,
   `FACT`, `FACTDOUBLE`, `GCD`, `LCM`, `COMBIN`, `COMBINA`, `PERMUT`, `PERMUTATIONA`, `MULTINOMIAL`, `SERIESSUM`,
   `SUMX2MY2`, `SUMX2PY2`, `SUMXMY2`, `ROMAN`, `ARABIC`, `BASE`, `DECIMAL`.
+- Functions, captured from Excel: `SEARCH`, `SUBSTITUTE`, `PROPER`, `CLEAN`, `T`, `UNICHAR`, `UNICODE`, `NUMBERVALUE`,
+  `USDOLLAR`, `VALUETOTEXT`, `ARRAYTOTEXT`, `TEXTBEFORE`, `TEXTAFTER`, and `FINDB`, `SEARCHB`, `LEFTB`, `RIGHTB`, `MIDB`,
+  `LENB` and `REPLACEB`, as they behave in an English language setting.
 - Functions, captured from Excel: `DAYS`, `ISOWEEKNUM`, `WEEKNUM`, `DATEDIF`.
 - Functions, captured from Excel: `XOR`, `ISEVEN`, `ISODD`, `ISNONTEXT`, `ISREF`, `ISFORMULA`, `ERROR.TYPE`, `TYPE`,
   `SHEET`, `SHEETS`, `AREAS` and `HYPERLINK`, whose result is the text it shows and which follows nothing.
@@ -66,6 +69,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- `RIGHT` with a count past the text's length but less than twice it gave too little: `RIGHT("ab",3)` was `b`.
+- `LEN`, `MID`, `FIND` and `REPLACE` count a character outside the first plane, such as an emoji, as two, as Excel does:
+  `LEN("😀")` is 2 and `FIND("b","a😀b")` is 4; `MID` can cut one in two (capture `text_family`).
+- `DOLLAR` of a number whose result is longer than 255 characters is `#VALUE!`.
 - **A workbook with iterative calculation on lost its values.** Version 0.1.0 treats a deliberate
   loop, such as circular interest in a financial model, as a circular reference with iteration
   off, so `recalculate` replaced the values Excel had iterated to, on the loop and on every cell

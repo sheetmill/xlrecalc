@@ -9537,3 +9537,508 @@ text_family	replaceb	9524	REPLACEB({1},{2},{3},{4})	(ErrorValue('#N/A'), ErrorVa
 text_family	replaceb	9525	REPLACEB({1},{2},{3},{4})	(ErrorValue('#N/A'), ErrorValue('#N/A'), None, '')	e	#N/A
 text_family	replaceb	9526	REPLACEB({1},{2},{3},{4})	(ErrorValue('#N/A'), ErrorValue('#N/A'), None, 1.0)	e	#N/A
 text_family	replaceb	9527	REPLACEB({1},{2},{3},{4})	(ErrorValue('#N/A'), ErrorValue('#N/A'), None, ErrorValue('#N/A'))	e	#N/A
+text_family	unichar	9528	_xlfn.UNICHAR({1})	(64976.0,)	e	#N/A
+text_family	unichar	9529	_xlfn.UNICHAR({1})	(65007.0,)	e	#N/A
+text_family	unichar	9530	_xlfn.UNICHAR({1})	(131070.0,)	e	#N/A
+text_family	unichar	9531	_xlfn.UNICHAR({1})	(131071.0,)	e	#N/A
+text_family	unichar	9532	_xlfn.UNICHAR({1})	(1048574.0,)	e	#N/A
+text_family	unichar	9533	_xlfn.UNICHAR({1})	(1048576.0,)	str	'\U00100000'
+text_family	len	9534	LEN({1})	('😀',)	n	2.0
+text_family	len	9535	LEN({1})	('😀x',)	n	3.0
+text_family	len	9536	LEN({1})	('x😀',)	n	3.0
+text_family	len	9537	LEN({1})	('a😀b😀c',)	n	7.0
+text_family	len	9538	LEN({1})	('😀😀',)	n	4.0
+text_family	upper	9539	UPPER({1})	('😀',)	str	'😀'
+text_family	upper	9540	UPPER({1})	('😀x',)	str	'😀X'
+text_family	upper	9541	UPPER({1})	('x😀',)	str	'X😀'
+text_family	upper	9542	UPPER({1})	('a😀b😀c',)	str	'A😀B😀C'
+text_family	upper	9543	UPPER({1})	('😀😀',)	str	'😀😀'
+text_family	lower	9544	LOWER({1})	('😀',)	str	'😀'
+text_family	lower	9545	LOWER({1})	('😀x',)	str	'😀x'
+text_family	lower	9546	LOWER({1})	('x😀',)	str	'x😀'
+text_family	lower	9547	LOWER({1})	('a😀b😀c',)	str	'a😀b😀c'
+text_family	lower	9548	LOWER({1})	('😀😀',)	str	'😀😀'
+text_family	trim	9549	TRIM({1})	('😀',)	str	'😀'
+text_family	trim	9550	TRIM({1})	('😀x',)	str	'😀x'
+text_family	trim	9551	TRIM({1})	('x😀',)	str	'x😀'
+text_family	trim	9552	TRIM({1})	('a😀b😀c',)	str	'a😀b😀c'
+text_family	trim	9553	TRIM({1})	('😀😀',)	str	'😀😀'
+text_family	code	9554	CODE({1})	('😀',)	n	95.0
+text_family	code	9555	CODE({1})	('😀x',)	n	95.0
+text_family	code	9556	CODE({1})	('x😀',)	n	120.0
+text_family	code	9557	CODE({1})	('a😀b😀c',)	n	97.0
+text_family	code	9558	CODE({1})	('😀😀',)	n	95.0
+text_family	astral_left	9559	LEFT({1},{2})	('😀', 0.0)	str	''
+text_family	astral_right	9560	RIGHT({1},{2})	('😀', 0.0)	str	''
+text_family	astral_mid	9561	MID({1},{2},{3})	('😀', 1.0, 0.0)	str	''
+text_family	astral_replace	9562	REPLACE({1},{2},{3},"Z")	('😀', 1.0, 0.0)	str	'Z😀'
+text_family	astral_mid	9563	MID({1},{2},{3})	('😀', 2.0, 0.0)	str	''
+text_family	astral_replace	9564	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 0.0)	str	'_xD83D_Z_xDE00_'
+text_family	astral_mid	9565	MID({1},{2},{3})	('😀', 3.0, 0.0)	str	''
+text_family	astral_replace	9566	REPLACE({1},{2},{3},"Z")	('😀', 3.0, 0.0)	str	'😀Z'
+text_family	astral_mid	9567	MID({1},{2},{3})	('😀', 4.0, 0.0)	str	''
+text_family	astral_replace	9568	REPLACE({1},{2},{3},"Z")	('😀', 4.0, 0.0)	str	'😀Z'
+text_family	astral_left	9569	LEFT({1},{2})	('😀', 1.0)	str	'😀'
+text_family	astral_right	9570	RIGHT({1},{2})	('😀', 1.0)	str	'😀'
+text_family	astral_mid	9571	MID({1},{2},{3})	('😀', 1.0, 1.0)	str	'_xD83D_'
+text_family	astral_replace	9572	REPLACE({1},{2},{3},"Z")	('😀', 1.0, 1.0)	str	'Z_xDE00_'
+text_family	astral_mid	9573	MID({1},{2},{3})	('😀', 2.0, 1.0)	str	'_xDE00_'
+text_family	astral_replace	9574	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 1.0)	str	'_xD83D_Z'
+text_family	astral_mid	9575	MID({1},{2},{3})	('😀', 3.0, 1.0)	str	''
+text_family	astral_replace	9576	REPLACE({1},{2},{3},"Z")	('😀', 3.0, 1.0)	str	'😀Z'
+text_family	astral_mid	9577	MID({1},{2},{3})	('😀', 4.0, 1.0)	str	''
+text_family	astral_replace	9578	REPLACE({1},{2},{3},"Z")	('😀', 4.0, 1.0)	str	'😀Z'
+text_family	astral_left	9579	LEFT({1},{2})	('😀', 2.0)	str	'😀'
+text_family	astral_right	9580	RIGHT({1},{2})	('😀', 2.0)	str	'😀'
+text_family	astral_mid	9581	MID({1},{2},{3})	('😀', 1.0, 2.0)	str	'😀'
+text_family	astral_replace	9582	REPLACE({1},{2},{3},"Z")	('😀', 1.0, 2.0)	str	'Z'
+text_family	astral_mid	9583	MID({1},{2},{3})	('😀', 2.0, 2.0)	str	'_xDE00_'
+text_family	astral_replace	9584	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 2.0)	str	'_xD83D_Z'
+text_family	astral_mid	9585	MID({1},{2},{3})	('😀', 3.0, 2.0)	str	''
+text_family	astral_replace	9586	REPLACE({1},{2},{3},"Z")	('😀', 3.0, 2.0)	str	'😀Z'
+text_family	astral_mid	9587	MID({1},{2},{3})	('😀', 4.0, 2.0)	str	''
+text_family	astral_replace	9588	REPLACE({1},{2},{3},"Z")	('😀', 4.0, 2.0)	str	'😀Z'
+text_family	astral_left	9589	LEFT({1},{2})	('😀', 3.0)	str	'😀'
+text_family	astral_right	9590	RIGHT({1},{2})	('😀', 3.0)	str	'😀'
+text_family	astral_mid	9591	MID({1},{2},{3})	('😀', 1.0, 3.0)	str	'😀'
+text_family	astral_replace	9592	REPLACE({1},{2},{3},"Z")	('😀', 1.0, 3.0)	str	'Z'
+text_family	astral_mid	9593	MID({1},{2},{3})	('😀', 2.0, 3.0)	str	'_xDE00_'
+text_family	astral_replace	9594	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 3.0)	str	'_xD83D_Z'
+text_family	astral_mid	9595	MID({1},{2},{3})	('😀', 3.0, 3.0)	str	''
+text_family	astral_replace	9596	REPLACE({1},{2},{3},"Z")	('😀', 3.0, 3.0)	str	'😀Z'
+text_family	astral_mid	9597	MID({1},{2},{3})	('😀', 4.0, 3.0)	str	''
+text_family	astral_replace	9598	REPLACE({1},{2},{3},"Z")	('😀', 4.0, 3.0)	str	'😀Z'
+text_family	astral_left	9599	LEFT({1},{2})	('😀', 4.0)	str	'😀'
+text_family	astral_right	9600	RIGHT({1},{2})	('😀', 4.0)	str	'😀'
+text_family	astral_mid	9601	MID({1},{2},{3})	('😀', 1.0, 4.0)	str	'😀'
+text_family	astral_replace	9602	REPLACE({1},{2},{3},"Z")	('😀', 1.0, 4.0)	str	'Z'
+text_family	astral_mid	9603	MID({1},{2},{3})	('😀', 2.0, 4.0)	str	'_xDE00_'
+text_family	astral_replace	9604	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 4.0)	str	'_xD83D_Z'
+text_family	astral_mid	9605	MID({1},{2},{3})	('😀', 3.0, 4.0)	str	''
+text_family	astral_replace	9606	REPLACE({1},{2},{3},"Z")	('😀', 3.0, 4.0)	str	'😀Z'
+text_family	astral_mid	9607	MID({1},{2},{3})	('😀', 4.0, 4.0)	str	''
+text_family	astral_replace	9608	REPLACE({1},{2},{3},"Z")	('😀', 4.0, 4.0)	str	'😀Z'
+text_family	astral_find	9609	FIND({1},{2})	('😀', '😀')	n	1.0
+text_family	astral_search	9610	SEARCH({1},{2})	('😀', '😀')	n	1.0
+text_family	astral_find	9611	FIND({1},{2},2)	('😀', '😀')	e	#VALUE!
+text_family	astral_search	9612	SEARCH({1},{2},2)	('😀', '😀')	e	#VALUE!
+text_family	astral_find	9613	FIND({1},{2})	('x', '😀')	e	#VALUE!
+text_family	astral_search	9614	SEARCH({1},{2})	('x', '😀')	e	#VALUE!
+text_family	astral_find	9615	FIND({1},{2},2)	('x', '😀')	e	#VALUE!
+text_family	astral_search	9616	SEARCH({1},{2},2)	('x', '😀')	e	#VALUE!
+text_family	astral_find	9617	FIND({1},{2})	('b', '😀')	e	#VALUE!
+text_family	astral_search	9618	SEARCH({1},{2})	('b', '😀')	e	#VALUE!
+text_family	astral_find	9619	FIND({1},{2},2)	('b', '😀')	e	#VALUE!
+text_family	astral_search	9620	SEARCH({1},{2},2)	('b', '😀')	e	#VALUE!
+text_family	astral_find	9621	FIND({1},{2})	('c', '😀')	e	#VALUE!
+text_family	astral_search	9622	SEARCH({1},{2})	('c', '😀')	e	#VALUE!
+text_family	astral_find	9623	FIND({1},{2},2)	('c', '😀')	e	#VALUE!
+text_family	astral_search	9624	SEARCH({1},{2},2)	('c', '😀')	e	#VALUE!
+text_family	astral_left	9625	LEFT({1},{2})	('😀x', 0.0)	str	''
+text_family	astral_right	9626	RIGHT({1},{2})	('😀x', 0.0)	str	''
+text_family	astral_mid	9627	MID({1},{2},{3})	('😀x', 1.0, 0.0)	str	''
+text_family	astral_replace	9628	REPLACE({1},{2},{3},"Z")	('😀x', 1.0, 0.0)	str	'Z😀x'
+text_family	astral_mid	9629	MID({1},{2},{3})	('😀x', 2.0, 0.0)	str	''
+text_family	astral_replace	9630	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 0.0)	str	'_xD83D_Z_xDE00_x'
+text_family	astral_mid	9631	MID({1},{2},{3})	('😀x', 3.0, 0.0)	str	''
+text_family	astral_replace	9632	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 0.0)	str	'😀Zx'
+text_family	astral_mid	9633	MID({1},{2},{3})	('😀x', 4.0, 0.0)	str	''
+text_family	astral_replace	9634	REPLACE({1},{2},{3},"Z")	('😀x', 4.0, 0.0)	str	'😀xZ'
+text_family	astral_left	9635	LEFT({1},{2})	('😀x', 1.0)	str	'😀'
+text_family	astral_right	9636	RIGHT({1},{2})	('😀x', 1.0)	str	'x'
+text_family	astral_mid	9637	MID({1},{2},{3})	('😀x', 1.0, 1.0)	str	'_xD83D_'
+text_family	astral_replace	9638	REPLACE({1},{2},{3},"Z")	('😀x', 1.0, 1.0)	str	'Z_xDE00_x'
+text_family	astral_mid	9639	MID({1},{2},{3})	('😀x', 2.0, 1.0)	str	'_xDE00_'
+text_family	astral_replace	9640	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 1.0)	str	'_xD83D_Zx'
+text_family	astral_mid	9641	MID({1},{2},{3})	('😀x', 3.0, 1.0)	str	'x'
+text_family	astral_replace	9642	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 1.0)	str	'😀Z'
+text_family	astral_mid	9643	MID({1},{2},{3})	('😀x', 4.0, 1.0)	str	''
+text_family	astral_replace	9644	REPLACE({1},{2},{3},"Z")	('😀x', 4.0, 1.0)	str	'😀xZ'
+text_family	astral_left	9645	LEFT({1},{2})	('😀x', 2.0)	str	'😀x'
+text_family	astral_right	9646	RIGHT({1},{2})	('😀x', 2.0)	str	'😀x'
+text_family	astral_mid	9647	MID({1},{2},{3})	('😀x', 1.0, 2.0)	str	'😀'
+text_family	astral_replace	9648	REPLACE({1},{2},{3},"Z")	('😀x', 1.0, 2.0)	str	'Zx'
+text_family	astral_mid	9649	MID({1},{2},{3})	('😀x', 2.0, 2.0)	str	'_xDE00_x'
+text_family	astral_replace	9650	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 2.0)	str	'_xD83D_Z'
+text_family	astral_mid	9651	MID({1},{2},{3})	('😀x', 3.0, 2.0)	str	'x'
+text_family	astral_replace	9652	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 2.0)	str	'😀Z'
+text_family	astral_mid	9653	MID({1},{2},{3})	('😀x', 4.0, 2.0)	str	''
+text_family	astral_replace	9654	REPLACE({1},{2},{3},"Z")	('😀x', 4.0, 2.0)	str	'😀xZ'
+text_family	astral_left	9655	LEFT({1},{2})	('😀x', 3.0)	str	'😀x'
+text_family	astral_right	9656	RIGHT({1},{2})	('😀x', 3.0)	str	'😀x'
+text_family	astral_mid	9657	MID({1},{2},{3})	('😀x', 1.0, 3.0)	str	'😀x'
+text_family	astral_replace	9658	REPLACE({1},{2},{3},"Z")	('😀x', 1.0, 3.0)	str	'Z'
+text_family	astral_mid	9659	MID({1},{2},{3})	('😀x', 2.0, 3.0)	str	'_xDE00_x'
+text_family	astral_replace	9660	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 3.0)	str	'_xD83D_Z'
+text_family	astral_mid	9661	MID({1},{2},{3})	('😀x', 3.0, 3.0)	str	'x'
+text_family	astral_replace	9662	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 3.0)	str	'😀Z'
+text_family	astral_mid	9663	MID({1},{2},{3})	('😀x', 4.0, 3.0)	str	''
+text_family	astral_replace	9664	REPLACE({1},{2},{3},"Z")	('😀x', 4.0, 3.0)	str	'😀xZ'
+text_family	astral_left	9665	LEFT({1},{2})	('😀x', 4.0)	str	'😀x'
+text_family	astral_right	9666	RIGHT({1},{2})	('😀x', 4.0)	str	'😀x'
+text_family	astral_mid	9667	MID({1},{2},{3})	('😀x', 1.0, 4.0)	str	'😀x'
+text_family	astral_replace	9668	REPLACE({1},{2},{3},"Z")	('😀x', 1.0, 4.0)	str	'Z'
+text_family	astral_mid	9669	MID({1},{2},{3})	('😀x', 2.0, 4.0)	str	'_xDE00_x'
+text_family	astral_replace	9670	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 4.0)	str	'_xD83D_Z'
+text_family	astral_mid	9671	MID({1},{2},{3})	('😀x', 3.0, 4.0)	str	'x'
+text_family	astral_replace	9672	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 4.0)	str	'😀Z'
+text_family	astral_mid	9673	MID({1},{2},{3})	('😀x', 4.0, 4.0)	str	''
+text_family	astral_replace	9674	REPLACE({1},{2},{3},"Z")	('😀x', 4.0, 4.0)	str	'😀xZ'
+text_family	astral_find	9675	FIND({1},{2})	('😀', '😀x')	n	1.0
+text_family	astral_search	9676	SEARCH({1},{2})	('😀', '😀x')	n	1.0
+text_family	astral_find	9677	FIND({1},{2},2)	('😀', '😀x')	e	#VALUE!
+text_family	astral_search	9678	SEARCH({1},{2},2)	('😀', '😀x')	e	#VALUE!
+text_family	astral_find	9679	FIND({1},{2})	('x', '😀x')	n	3.0
+text_family	astral_search	9680	SEARCH({1},{2})	('x', '😀x')	n	3.0
+text_family	astral_find	9681	FIND({1},{2},2)	('x', '😀x')	n	3.0
+text_family	astral_search	9682	SEARCH({1},{2},2)	('x', '😀x')	n	3.0
+text_family	astral_find	9683	FIND({1},{2})	('b', '😀x')	e	#VALUE!
+text_family	astral_search	9684	SEARCH({1},{2})	('b', '😀x')	e	#VALUE!
+text_family	astral_find	9685	FIND({1},{2},2)	('b', '😀x')	e	#VALUE!
+text_family	astral_search	9686	SEARCH({1},{2},2)	('b', '😀x')	e	#VALUE!
+text_family	astral_find	9687	FIND({1},{2})	('c', '😀x')	e	#VALUE!
+text_family	astral_search	9688	SEARCH({1},{2})	('c', '😀x')	e	#VALUE!
+text_family	astral_find	9689	FIND({1},{2},2)	('c', '😀x')	e	#VALUE!
+text_family	astral_search	9690	SEARCH({1},{2},2)	('c', '😀x')	e	#VALUE!
+text_family	astral_left	9691	LEFT({1},{2})	('x😀', 0.0)	str	''
+text_family	astral_right	9692	RIGHT({1},{2})	('x😀', 0.0)	str	''
+text_family	astral_mid	9693	MID({1},{2},{3})	('x😀', 1.0, 0.0)	str	''
+text_family	astral_replace	9694	REPLACE({1},{2},{3},"Z")	('x😀', 1.0, 0.0)	str	'Zx😀'
+text_family	astral_mid	9695	MID({1},{2},{3})	('x😀', 2.0, 0.0)	str	''
+text_family	astral_replace	9696	REPLACE({1},{2},{3},"Z")	('x😀', 2.0, 0.0)	str	'xZ😀'
+text_family	astral_mid	9697	MID({1},{2},{3})	('x😀', 3.0, 0.0)	str	''
+text_family	astral_replace	9698	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 0.0)	str	'x_xD83D_Z_xDE00_'
+text_family	astral_mid	9699	MID({1},{2},{3})	('x😀', 4.0, 0.0)	str	''
+text_family	astral_replace	9700	REPLACE({1},{2},{3},"Z")	('x😀', 4.0, 0.0)	str	'x😀Z'
+text_family	astral_left	9701	LEFT({1},{2})	('x😀', 1.0)	str	'x'
+text_family	astral_right	9702	RIGHT({1},{2})	('x😀', 1.0)	str	'😀'
+text_family	astral_mid	9703	MID({1},{2},{3})	('x😀', 1.0, 1.0)	str	'x'
+text_family	astral_replace	9704	REPLACE({1},{2},{3},"Z")	('x😀', 1.0, 1.0)	str	'Z😀'
+text_family	astral_mid	9705	MID({1},{2},{3})	('x😀', 2.0, 1.0)	str	'_xD83D_'
+text_family	astral_replace	9706	REPLACE({1},{2},{3},"Z")	('x😀', 2.0, 1.0)	str	'xZ_xDE00_'
+text_family	astral_mid	9707	MID({1},{2},{3})	('x😀', 3.0, 1.0)	str	'_xDE00_'
+text_family	astral_replace	9708	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 1.0)	str	'x_xD83D_Z'
+text_family	astral_mid	9709	MID({1},{2},{3})	('x😀', 4.0, 1.0)	str	''
+text_family	astral_replace	9710	REPLACE({1},{2},{3},"Z")	('x😀', 4.0, 1.0)	str	'x😀Z'
+text_family	astral_left	9711	LEFT({1},{2})	('x😀', 2.0)	str	'x😀'
+text_family	astral_right	9712	RIGHT({1},{2})	('x😀', 2.0)	str	'x😀'
+text_family	astral_mid	9713	MID({1},{2},{3})	('x😀', 1.0, 2.0)	str	'x_xD83D_'
+text_family	astral_replace	9714	REPLACE({1},{2},{3},"Z")	('x😀', 1.0, 2.0)	str	'Z_xDE00_'
+text_family	astral_mid	9715	MID({1},{2},{3})	('x😀', 2.0, 2.0)	str	'😀'
+text_family	astral_replace	9716	REPLACE({1},{2},{3},"Z")	('x😀', 2.0, 2.0)	str	'xZ'
+text_family	astral_mid	9717	MID({1},{2},{3})	('x😀', 3.0, 2.0)	str	'_xDE00_'
+text_family	astral_replace	9718	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 2.0)	str	'x_xD83D_Z'
+text_family	astral_mid	9719	MID({1},{2},{3})	('x😀', 4.0, 2.0)	str	''
+text_family	astral_replace	9720	REPLACE({1},{2},{3},"Z")	('x😀', 4.0, 2.0)	str	'x😀Z'
+text_family	astral_left	9721	LEFT({1},{2})	('x😀', 3.0)	str	'x😀'
+text_family	astral_right	9722	RIGHT({1},{2})	('x😀', 3.0)	str	'x😀'
+text_family	astral_mid	9723	MID({1},{2},{3})	('x😀', 1.0, 3.0)	str	'x😀'
+text_family	astral_replace	9724	REPLACE({1},{2},{3},"Z")	('x😀', 1.0, 3.0)	str	'Z'
+text_family	astral_mid	9725	MID({1},{2},{3})	('x😀', 2.0, 3.0)	str	'😀'
+text_family	astral_replace	9726	REPLACE({1},{2},{3},"Z")	('x😀', 2.0, 3.0)	str	'xZ'
+text_family	astral_mid	9727	MID({1},{2},{3})	('x😀', 3.0, 3.0)	str	'_xDE00_'
+text_family	astral_replace	9728	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 3.0)	str	'x_xD83D_Z'
+text_family	astral_mid	9729	MID({1},{2},{3})	('x😀', 4.0, 3.0)	str	''
+text_family	astral_replace	9730	REPLACE({1},{2},{3},"Z")	('x😀', 4.0, 3.0)	str	'x😀Z'
+text_family	astral_left	9731	LEFT({1},{2})	('x😀', 4.0)	str	'x😀'
+text_family	astral_right	9732	RIGHT({1},{2})	('x😀', 4.0)	str	'x😀'
+text_family	astral_mid	9733	MID({1},{2},{3})	('x😀', 1.0, 4.0)	str	'x😀'
+text_family	astral_replace	9734	REPLACE({1},{2},{3},"Z")	('x😀', 1.0, 4.0)	str	'Z'
+text_family	astral_mid	9735	MID({1},{2},{3})	('x😀', 2.0, 4.0)	str	'😀'
+text_family	astral_replace	9736	REPLACE({1},{2},{3},"Z")	('x😀', 2.0, 4.0)	str	'xZ'
+text_family	astral_mid	9737	MID({1},{2},{3})	('x😀', 3.0, 4.0)	str	'_xDE00_'
+text_family	astral_replace	9738	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 4.0)	str	'x_xD83D_Z'
+text_family	astral_mid	9739	MID({1},{2},{3})	('x😀', 4.0, 4.0)	str	''
+text_family	astral_replace	9740	REPLACE({1},{2},{3},"Z")	('x😀', 4.0, 4.0)	str	'x😀Z'
+text_family	astral_find	9741	FIND({1},{2})	('😀', 'x😀')	n	2.0
+text_family	astral_search	9742	SEARCH({1},{2})	('😀', 'x😀')	n	2.0
+text_family	astral_find	9743	FIND({1},{2},2)	('😀', 'x😀')	n	2.0
+text_family	astral_search	9744	SEARCH({1},{2},2)	('😀', 'x😀')	n	2.0
+text_family	astral_find	9745	FIND({1},{2})	('x', 'x😀')	n	1.0
+text_family	astral_search	9746	SEARCH({1},{2})	('x', 'x😀')	n	1.0
+text_family	astral_find	9747	FIND({1},{2},2)	('x', 'x😀')	e	#VALUE!
+text_family	astral_search	9748	SEARCH({1},{2},2)	('x', 'x😀')	e	#VALUE!
+text_family	astral_find	9749	FIND({1},{2})	('b', 'x😀')	e	#VALUE!
+text_family	astral_search	9750	SEARCH({1},{2})	('b', 'x😀')	e	#VALUE!
+text_family	astral_find	9751	FIND({1},{2},2)	('b', 'x😀')	e	#VALUE!
+text_family	astral_search	9752	SEARCH({1},{2},2)	('b', 'x😀')	e	#VALUE!
+text_family	astral_find	9753	FIND({1},{2})	('c', 'x😀')	e	#VALUE!
+text_family	astral_search	9754	SEARCH({1},{2})	('c', 'x😀')	e	#VALUE!
+text_family	astral_find	9755	FIND({1},{2},2)	('c', 'x😀')	e	#VALUE!
+text_family	astral_search	9756	SEARCH({1},{2},2)	('c', 'x😀')	e	#VALUE!
+text_family	astral_left	9757	LEFT({1},{2})	('a😀b😀c', 0.0)	str	''
+text_family	astral_right	9758	RIGHT({1},{2})	('a😀b😀c', 0.0)	str	''
+text_family	astral_mid	9759	MID({1},{2},{3})	('a😀b😀c', 1.0, 0.0)	str	''
+text_family	astral_replace	9760	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 1.0, 0.0)	str	'Za😀b😀c'
+text_family	astral_mid	9761	MID({1},{2},{3})	('a😀b😀c', 2.0, 0.0)	str	''
+text_family	astral_replace	9762	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 0.0)	str	'aZ😀b😀c'
+text_family	astral_mid	9763	MID({1},{2},{3})	('a😀b😀c', 3.0, 0.0)	str	''
+text_family	astral_replace	9764	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 0.0)	str	'a_xD83D_Z_xDE00_b😀c'
+text_family	astral_mid	9765	MID({1},{2},{3})	('a😀b😀c', 4.0, 0.0)	str	''
+text_family	astral_replace	9766	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 0.0)	str	'a😀Zb😀c'
+text_family	astral_left	9767	LEFT({1},{2})	('a😀b😀c', 1.0)	str	'a'
+text_family	astral_right	9768	RIGHT({1},{2})	('a😀b😀c', 1.0)	str	'c'
+text_family	astral_mid	9769	MID({1},{2},{3})	('a😀b😀c', 1.0, 1.0)	str	'a'
+text_family	astral_replace	9770	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 1.0, 1.0)	str	'Z😀b😀c'
+text_family	astral_mid	9771	MID({1},{2},{3})	('a😀b😀c', 2.0, 1.0)	str	'_xD83D_'
+text_family	astral_replace	9772	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 1.0)	str	'aZ_xDE00_b😀c'
+text_family	astral_mid	9773	MID({1},{2},{3})	('a😀b😀c', 3.0, 1.0)	str	'_xDE00_'
+text_family	astral_replace	9774	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 1.0)	str	'a_xD83D_Zb😀c'
+text_family	astral_mid	9775	MID({1},{2},{3})	('a😀b😀c', 4.0, 1.0)	str	'b'
+text_family	astral_replace	9776	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 1.0)	str	'a😀Z😀c'
+text_family	astral_left	9777	LEFT({1},{2})	('a😀b😀c', 2.0)	str	'a😀'
+text_family	astral_right	9778	RIGHT({1},{2})	('a😀b😀c', 2.0)	str	'😀c'
+text_family	astral_mid	9779	MID({1},{2},{3})	('a😀b😀c', 1.0, 2.0)	str	'a_xD83D_'
+text_family	astral_replace	9780	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 1.0, 2.0)	str	'Z_xDE00_b😀c'
+text_family	astral_mid	9781	MID({1},{2},{3})	('a😀b😀c', 2.0, 2.0)	str	'😀'
+text_family	astral_replace	9782	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 2.0)	str	'aZb😀c'
+text_family	astral_mid	9783	MID({1},{2},{3})	('a😀b😀c', 3.0, 2.0)	str	'_xDE00_b'
+text_family	astral_replace	9784	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 2.0)	str	'a_xD83D_Z😀c'
+text_family	astral_mid	9785	MID({1},{2},{3})	('a😀b😀c', 4.0, 2.0)	str	'b_xD83D_'
+text_family	astral_replace	9786	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 2.0)	str	'a😀Z_xDE00_c'
+text_family	astral_left	9787	LEFT({1},{2})	('a😀b😀c', 3.0)	str	'a😀b'
+text_family	astral_right	9788	RIGHT({1},{2})	('a😀b😀c', 3.0)	str	'b😀c'
+text_family	astral_mid	9789	MID({1},{2},{3})	('a😀b😀c', 1.0, 3.0)	str	'a😀'
+text_family	astral_replace	9790	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 1.0, 3.0)	str	'Zb😀c'
+text_family	astral_mid	9791	MID({1},{2},{3})	('a😀b😀c', 2.0, 3.0)	str	'😀b'
+text_family	astral_replace	9792	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 3.0)	str	'aZ😀c'
+text_family	astral_mid	9793	MID({1},{2},{3})	('a😀b😀c', 3.0, 3.0)	str	'_xDE00_b_xD83D_'
+text_family	astral_replace	9794	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 3.0)	str	'a_xD83D_Z_xDE00_c'
+text_family	astral_mid	9795	MID({1},{2},{3})	('a😀b😀c', 4.0, 3.0)	str	'b😀'
+text_family	astral_replace	9796	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 3.0)	str	'a😀Zc'
+text_family	astral_left	9797	LEFT({1},{2})	('a😀b😀c', 4.0)	str	'a😀b😀'
+text_family	astral_right	9798	RIGHT({1},{2})	('a😀b😀c', 4.0)	str	'😀b😀c'
+text_family	astral_mid	9799	MID({1},{2},{3})	('a😀b😀c', 1.0, 4.0)	str	'a😀b'
+text_family	astral_replace	9800	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 1.0, 4.0)	str	'Z😀c'
+text_family	astral_mid	9801	MID({1},{2},{3})	('a😀b😀c', 2.0, 4.0)	str	'😀b_xD83D_'
+text_family	astral_replace	9802	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 4.0)	str	'aZ_xDE00_c'
+text_family	astral_mid	9803	MID({1},{2},{3})	('a😀b😀c', 3.0, 4.0)	str	'_xDE00_b😀'
+text_family	astral_replace	9804	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 4.0)	str	'a_xD83D_Zc'
+text_family	astral_mid	9805	MID({1},{2},{3})	('a😀b😀c', 4.0, 4.0)	str	'b😀c'
+text_family	astral_replace	9806	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 4.0)	str	'a😀Z'
+text_family	astral_find	9807	FIND({1},{2})	('😀', 'a😀b😀c')	n	2.0
+text_family	astral_search	9808	SEARCH({1},{2})	('😀', 'a😀b😀c')	n	2.0
+text_family	astral_find	9809	FIND({1},{2},2)	('😀', 'a😀b😀c')	n	2.0
+text_family	astral_search	9810	SEARCH({1},{2},2)	('😀', 'a😀b😀c')	n	2.0
+text_family	astral_find	9811	FIND({1},{2})	('x', 'a😀b😀c')	e	#VALUE!
+text_family	astral_search	9812	SEARCH({1},{2})	('x', 'a😀b😀c')	e	#VALUE!
+text_family	astral_find	9813	FIND({1},{2},2)	('x', 'a😀b😀c')	e	#VALUE!
+text_family	astral_search	9814	SEARCH({1},{2},2)	('x', 'a😀b😀c')	e	#VALUE!
+text_family	astral_find	9815	FIND({1},{2})	('b', 'a😀b😀c')	n	4.0
+text_family	astral_search	9816	SEARCH({1},{2})	('b', 'a😀b😀c')	n	4.0
+text_family	astral_find	9817	FIND({1},{2},2)	('b', 'a😀b😀c')	n	4.0
+text_family	astral_search	9818	SEARCH({1},{2},2)	('b', 'a😀b😀c')	n	4.0
+text_family	astral_find	9819	FIND({1},{2})	('c', 'a😀b😀c')	n	7.0
+text_family	astral_search	9820	SEARCH({1},{2})	('c', 'a😀b😀c')	n	7.0
+text_family	astral_find	9821	FIND({1},{2},2)	('c', 'a😀b😀c')	n	7.0
+text_family	astral_search	9822	SEARCH({1},{2},2)	('c', 'a😀b😀c')	n	7.0
+text_family	astral_left	9823	LEFT({1},{2})	('😀😀', 0.0)	str	''
+text_family	astral_right	9824	RIGHT({1},{2})	('😀😀', 0.0)	str	''
+text_family	astral_mid	9825	MID({1},{2},{3})	('😀😀', 1.0, 0.0)	str	''
+text_family	astral_replace	9826	REPLACE({1},{2},{3},"Z")	('😀😀', 1.0, 0.0)	str	'Z😀😀'
+text_family	astral_mid	9827	MID({1},{2},{3})	('😀😀', 2.0, 0.0)	str	''
+text_family	astral_replace	9828	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 0.0)	str	'_xD83D_Z_xDE00_😀'
+text_family	astral_mid	9829	MID({1},{2},{3})	('😀😀', 3.0, 0.0)	str	''
+text_family	astral_replace	9830	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 0.0)	str	'😀Z😀'
+text_family	astral_mid	9831	MID({1},{2},{3})	('😀😀', 4.0, 0.0)	str	''
+text_family	astral_replace	9832	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 0.0)	str	'😀_xD83D_Z_xDE00_'
+text_family	astral_left	9833	LEFT({1},{2})	('😀😀', 1.0)	str	'😀'
+text_family	astral_right	9834	RIGHT({1},{2})	('😀😀', 1.0)	str	'😀'
+text_family	astral_mid	9835	MID({1},{2},{3})	('😀😀', 1.0, 1.0)	str	'_xD83D_'
+text_family	astral_replace	9836	REPLACE({1},{2},{3},"Z")	('😀😀', 1.0, 1.0)	str	'Z_xDE00_😀'
+text_family	astral_mid	9837	MID({1},{2},{3})	('😀😀', 2.0, 1.0)	str	'_xDE00_'
+text_family	astral_replace	9838	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 1.0)	str	'_xD83D_Z😀'
+text_family	astral_mid	9839	MID({1},{2},{3})	('😀😀', 3.0, 1.0)	str	'_xD83D_'
+text_family	astral_replace	9840	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 1.0)	str	'😀Z_xDE00_'
+text_family	astral_mid	9841	MID({1},{2},{3})	('😀😀', 4.0, 1.0)	str	'_xDE00_'
+text_family	astral_replace	9842	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 1.0)	str	'😀_xD83D_Z'
+text_family	astral_left	9843	LEFT({1},{2})	('😀😀', 2.0)	str	'😀😀'
+text_family	astral_right	9844	RIGHT({1},{2})	('😀😀', 2.0)	str	'😀😀'
+text_family	astral_mid	9845	MID({1},{2},{3})	('😀😀', 1.0, 2.0)	str	'😀'
+text_family	astral_replace	9846	REPLACE({1},{2},{3},"Z")	('😀😀', 1.0, 2.0)	str	'Z😀'
+text_family	astral_mid	9847	MID({1},{2},{3})	('😀😀', 2.0, 2.0)	str	'_xDE00__xD83D_'
+text_family	astral_replace	9848	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 2.0)	str	'_xD83D_Z_xDE00_'
+text_family	astral_mid	9849	MID({1},{2},{3})	('😀😀', 3.0, 2.0)	str	'😀'
+text_family	astral_replace	9850	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 2.0)	str	'😀Z'
+text_family	astral_mid	9851	MID({1},{2},{3})	('😀😀', 4.0, 2.0)	str	'_xDE00_'
+text_family	astral_replace	9852	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 2.0)	str	'😀_xD83D_Z'
+text_family	astral_left	9853	LEFT({1},{2})	('😀😀', 3.0)	str	'😀😀'
+text_family	astral_right	9854	RIGHT({1},{2})	('😀😀', 3.0)	str	'😀😀'
+text_family	astral_mid	9855	MID({1},{2},{3})	('😀😀', 1.0, 3.0)	str	'😀_xD83D_'
+text_family	astral_replace	9856	REPLACE({1},{2},{3},"Z")	('😀😀', 1.0, 3.0)	str	'Z_xDE00_'
+text_family	astral_mid	9857	MID({1},{2},{3})	('😀😀', 2.0, 3.0)	str	'_xDE00_😀'
+text_family	astral_replace	9858	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 3.0)	str	'_xD83D_Z'
+text_family	astral_mid	9859	MID({1},{2},{3})	('😀😀', 3.0, 3.0)	str	'😀'
+text_family	astral_replace	9860	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 3.0)	str	'😀Z'
+text_family	astral_mid	9861	MID({1},{2},{3})	('😀😀', 4.0, 3.0)	str	'_xDE00_'
+text_family	astral_replace	9862	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 3.0)	str	'😀_xD83D_Z'
+text_family	astral_left	9863	LEFT({1},{2})	('😀😀', 4.0)	str	'😀😀'
+text_family	astral_right	9864	RIGHT({1},{2})	('😀😀', 4.0)	str	'😀😀'
+text_family	astral_mid	9865	MID({1},{2},{3})	('😀😀', 1.0, 4.0)	str	'😀😀'
+text_family	astral_replace	9866	REPLACE({1},{2},{3},"Z")	('😀😀', 1.0, 4.0)	str	'Z'
+text_family	astral_mid	9867	MID({1},{2},{3})	('😀😀', 2.0, 4.0)	str	'_xDE00_😀'
+text_family	astral_replace	9868	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 4.0)	str	'_xD83D_Z'
+text_family	astral_mid	9869	MID({1},{2},{3})	('😀😀', 3.0, 4.0)	str	'😀'
+text_family	astral_replace	9870	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 4.0)	str	'😀Z'
+text_family	astral_mid	9871	MID({1},{2},{3})	('😀😀', 4.0, 4.0)	str	'_xDE00_'
+text_family	astral_replace	9872	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 4.0)	str	'😀_xD83D_Z'
+text_family	astral_find	9873	FIND({1},{2})	('😀', '😀😀')	n	1.0
+text_family	astral_search	9874	SEARCH({1},{2})	('😀', '😀😀')	n	1.0
+text_family	astral_find	9875	FIND({1},{2},2)	('😀', '😀😀')	n	3.0
+text_family	astral_search	9876	SEARCH({1},{2},2)	('😀', '😀😀')	n	3.0
+text_family	astral_find	9877	FIND({1},{2})	('x', '😀😀')	e	#VALUE!
+text_family	astral_search	9878	SEARCH({1},{2})	('x', '😀😀')	e	#VALUE!
+text_family	astral_find	9879	FIND({1},{2},2)	('x', '😀😀')	e	#VALUE!
+text_family	astral_search	9880	SEARCH({1},{2},2)	('x', '😀😀')	e	#VALUE!
+text_family	astral_find	9881	FIND({1},{2})	('b', '😀😀')	e	#VALUE!
+text_family	astral_search	9882	SEARCH({1},{2})	('b', '😀😀')	e	#VALUE!
+text_family	astral_find	9883	FIND({1},{2},2)	('b', '😀😀')	e	#VALUE!
+text_family	astral_search	9884	SEARCH({1},{2},2)	('b', '😀😀')	e	#VALUE!
+text_family	astral_find	9885	FIND({1},{2})	('c', '😀😀')	e	#VALUE!
+text_family	astral_search	9886	SEARCH({1},{2})	('c', '😀😀')	e	#VALUE!
+text_family	astral_find	9887	FIND({1},{2},2)	('c', '😀😀')	e	#VALUE!
+text_family	astral_search	9888	SEARCH({1},{2},2)	('c', '😀😀')	e	#VALUE!
+text_family	astral_search	9889	SEARCH("?x",{1})	('😀',)	e	#VALUE!
+text_family	astral_search	9890	SEARCH("?x",{1})	('😀x',)	n	2.0
+text_family	astral_search	9891	SEARCH("?x",{1})	('x😀',)	e	#VALUE!
+text_family	astral_search	9892	SEARCH("?x",{1})	('a😀b😀c',)	e	#VALUE!
+text_family	astral_search	9893	SEARCH("?x",{1})	('😀😀',)	e	#VALUE!
+text_family	astral_search	9894	SEARCH("x?",{1})	('😀',)	e	#VALUE!
+text_family	astral_search	9895	SEARCH("x?",{1})	('😀x',)	e	#VALUE!
+text_family	astral_search	9896	SEARCH("x?",{1})	('x😀',)	n	1.0
+text_family	astral_search	9897	SEARCH("x?",{1})	('a😀b😀c',)	e	#VALUE!
+text_family	astral_search	9898	SEARCH("x?",{1})	('😀😀',)	e	#VALUE!
+text_family	astral_rept	9899	LEN(REPT({1},3))	('😀',)	n	6.0
+text_family	astral_rept	9900	LEN(REPT({1},3))	('😀x',)	n	9.0
+text_family	astral_rept	9901	LEN(REPT({1},3))	('x😀',)	n	9.0
+text_family	astral_rept	9902	LEN(REPT({1},3))	('a😀b😀c',)	n	21.0
+text_family	astral_rept	9903	LEN(REPT({1},3))	('😀😀',)	n	12.0
+text_family	huge_usdollar	9904	LEN(USDOLLAR({1}))	(1000000000000000.0,)	n	25.0
+text_family	huge_usdollar	9905	LEN(USDOLLAR({1}))	(1e+20,)	n	31.0
+text_family	huge_usdollar	9906	LEN(USDOLLAR({1}))	(1e+50,)	n	71.0
+text_family	huge_usdollar	9907	LEN(USDOLLAR({1}))	(1e+100,)	n	138.0
+text_family	huge_usdollar	9908	LEN(USDOLLAR({1}))	(1e+120,)	n	165.0
+text_family	huge_usdollar	9909	LEN(USDOLLAR({1}))	(1e+125,)	n	171.0
+text_family	huge_usdollar	9910	LEN(USDOLLAR({1}))	(1e+126,)	n	173.0
+text_family	huge_usdollar	9911	LEN(USDOLLAR({1}))	(1e+127,)	n	174.0
+text_family	huge_usdollar	9912	LEN(USDOLLAR({1}))	(1e+128,)	n	175.0
+text_family	huge_usdollar	9913	LEN(USDOLLAR({1}))	(1e+150,)	n	205.0
+text_family	huge_usdollar	9914	LEN(USDOLLAR({1}))	(1e+200,)	e	#VALUE!
+text_family	huge_usdollar	9915	LEN(USDOLLAR({1}))	(1e+250,)	e	#VALUE!
+text_family	huge_usdollar	9916	LEN(USDOLLAR({1}))	(1e+299,)	e	#VALUE!
+text_family	huge_usdollar	9917	LEN(USDOLLAR({1},0))	(1000000000000000.0,)	n	22.0
+text_family	huge_usdollar	9918	LEN(USDOLLAR({1},0))	(1e+20,)	n	28.0
+text_family	huge_usdollar	9919	LEN(USDOLLAR({1},0))	(1e+50,)	n	68.0
+text_family	huge_usdollar	9920	LEN(USDOLLAR({1},0))	(1e+100,)	n	135.0
+text_family	huge_usdollar	9921	LEN(USDOLLAR({1},0))	(1e+120,)	n	162.0
+text_family	huge_usdollar	9922	LEN(USDOLLAR({1},0))	(1e+125,)	n	168.0
+text_family	huge_usdollar	9923	LEN(USDOLLAR({1},0))	(1e+126,)	n	170.0
+text_family	huge_usdollar	9924	LEN(USDOLLAR({1},0))	(1e+127,)	n	171.0
+text_family	huge_usdollar	9925	LEN(USDOLLAR({1},0))	(1e+128,)	n	172.0
+text_family	huge_usdollar	9926	LEN(USDOLLAR({1},0))	(1e+150,)	n	202.0
+text_family	huge_usdollar	9927	LEN(USDOLLAR({1},0))	(1e+200,)	e	#VALUE!
+text_family	huge_usdollar	9928	LEN(USDOLLAR({1},0))	(1e+250,)	e	#VALUE!
+text_family	huge_usdollar	9929	LEN(USDOLLAR({1},0))	(1e+299,)	e	#VALUE!
+text_family	huge_dollar	9930	LEN(DOLLAR({1}))	(1000000000000000.0,)	n	25.0
+text_family	huge_dollar	9931	LEN(DOLLAR({1}))	(1e+20,)	n	31.0
+text_family	huge_dollar	9932	LEN(DOLLAR({1}))	(1e+50,)	n	71.0
+text_family	huge_dollar	9933	LEN(DOLLAR({1}))	(1e+100,)	n	138.0
+text_family	huge_dollar	9934	LEN(DOLLAR({1}))	(1e+120,)	n	165.0
+text_family	huge_dollar	9935	LEN(DOLLAR({1}))	(1e+125,)	n	171.0
+text_family	huge_dollar	9936	LEN(DOLLAR({1}))	(1e+126,)	n	173.0
+text_family	huge_dollar	9937	LEN(DOLLAR({1}))	(1e+127,)	n	174.0
+text_family	huge_dollar	9938	LEN(DOLLAR({1}))	(1e+128,)	n	175.0
+text_family	huge_dollar	9939	LEN(DOLLAR({1}))	(1e+150,)	n	205.0
+text_family	huge_dollar	9940	LEN(DOLLAR({1}))	(1e+200,)	e	#VALUE!
+text_family	huge_dollar	9941	LEN(DOLLAR({1}))	(1e+250,)	e	#VALUE!
+text_family	huge_dollar	9942	LEN(DOLLAR({1}))	(1e+299,)	e	#VALUE!
+text_family	huge_dollar	9943	LEN(DOLLAR({1},0))	(1000000000000000.0,)	n	22.0
+text_family	huge_dollar	9944	LEN(DOLLAR({1},0))	(1e+20,)	n	28.0
+text_family	huge_dollar	9945	LEN(DOLLAR({1},0))	(1e+50,)	n	68.0
+text_family	huge_dollar	9946	LEN(DOLLAR({1},0))	(1e+100,)	n	135.0
+text_family	huge_dollar	9947	LEN(DOLLAR({1},0))	(1e+120,)	n	162.0
+text_family	huge_dollar	9948	LEN(DOLLAR({1},0))	(1e+125,)	n	168.0
+text_family	huge_dollar	9949	LEN(DOLLAR({1},0))	(1e+126,)	n	170.0
+text_family	huge_dollar	9950	LEN(DOLLAR({1},0))	(1e+127,)	n	171.0
+text_family	huge_dollar	9951	LEN(DOLLAR({1},0))	(1e+128,)	n	172.0
+text_family	huge_dollar	9952	LEN(DOLLAR({1},0))	(1e+150,)	n	202.0
+text_family	huge_dollar	9953	LEN(DOLLAR({1},0))	(1e+200,)	e	#VALUE!
+text_family	huge_dollar	9954	LEN(DOLLAR({1},0))	(1e+250,)	e	#VALUE!
+text_family	huge_dollar	9955	LEN(DOLLAR({1},0))	(1e+299,)	e	#VALUE!
+text_family	right_past	9956	RIGHT({1},{2})	('ab', 1.0)	str	'b'
+text_family	right_past	9957	RIGHT({1},{2})	('ab', 2.0)	str	'ab'
+text_family	right_past	9958	RIGHT({1},{2})	('ab', 3.0)	str	'ab'
+text_family	right_past	9959	RIGHT({1},{2})	('ab', 4.0)	str	'ab'
+text_family	right_past	9960	RIGHT({1},{2})	('ab', 5.0)	str	'ab'
+text_family	right_past	9961	RIGHT({1},{2})	('ab', 6.0)	str	'ab'
+text_family	right_past	9962	RIGHT({1},{2})	('ab', 7.0)	str	'ab'
+text_family	right_past	9963	RIGHT({1},{2})	('abc', 1.0)	str	'c'
+text_family	right_past	9964	RIGHT({1},{2})	('abc', 2.0)	str	'bc'
+text_family	right_past	9965	RIGHT({1},{2})	('abc', 3.0)	str	'abc'
+text_family	right_past	9966	RIGHT({1},{2})	('abc', 4.0)	str	'abc'
+text_family	right_past	9967	RIGHT({1},{2})	('abc', 5.0)	str	'abc'
+text_family	right_past	9968	RIGHT({1},{2})	('abc', 6.0)	str	'abc'
+text_family	right_past	9969	RIGHT({1},{2})	('abc', 7.0)	str	'abc'
+text_family	right_past	9970	RIGHT({1},{2})	('a', 1.0)	str	'a'
+text_family	right_past	9971	RIGHT({1},{2})	('a', 2.0)	str	'a'
+text_family	right_past	9972	RIGHT({1},{2})	('a', 3.0)	str	'a'
+text_family	right_past	9973	RIGHT({1},{2})	('a', 4.0)	str	'a'
+text_family	right_past	9974	RIGHT({1},{2})	('a', 5.0)	str	'a'
+text_family	right_past	9975	RIGHT({1},{2})	('a', 6.0)	str	'a'
+text_family	right_past	9976	RIGHT({1},{2})	('a', 7.0)	str	'a'
+text_family	right_past	9977	RIGHT({1},{2})	('', 1.0)	str	''
+text_family	right_past	9978	RIGHT({1},{2})	('', 2.0)	str	''
+text_family	right_past	9979	RIGHT({1},{2})	('', 3.0)	str	''
+text_family	right_past	9980	RIGHT({1},{2})	('', 4.0)	str	''
+text_family	right_past	9981	RIGHT({1},{2})	('', 5.0)	str	''
+text_family	right_past	9982	RIGHT({1},{2})	('', 6.0)	str	''
+text_family	right_past	9983	RIGHT({1},{2})	('', 7.0)	str	''
+text_family	limit_substitute	9984	LEN(SUBSTITUTE(REPT("ab",16383),"a","x"))	()	n	32766.0
+text_family	limit_substitute	9985	LEN(SUBSTITUTE("a","a",REPT("b",32766)))	()	n	32766.0
+text_family	limit_substitute	9986	LEN(SUBSTITUTE(REPT("a",100),"a",REPT("b",327)))	()	n	32700.0
+text_family	limit_substitute	9987	LEN(SUBSTITUTE(REPT("a",100),"a",REPT("b",328)))	()	e	#VALUE!
+text_family	limit_substitute	9988	LEN(SUBSTITUTE(REPT("a",100),"a",REPT("b",328),1))	()	n	427.0
+text_family	limit_valuetotext	9989	LEN(_xlfn.VALUETOTEXT(REPT("a",32764),1))	()	n	32766.0
+text_family	limit_valuetotext	9990	LEN(_xlfn.VALUETOTEXT(REPT("a",32766),1))	()	e	#VALUE!
+text_family	limit_arraytotext	9991	LEN(_xlfn.ARRAYTOTEXT(REPT("a",32764),1))	()	e	#VALUE!
+text_family	limit_arraytotext	9992	LEN(_xlfn.ARRAYTOTEXT({1,2}&REPT("a",16383),0))	()	e	#VALUE!
+text_family	limit_arraytotext	9993	LEN(_xlfn.ARRAYTOTEXT({1,2}&REPT("a",16381),0))	()	n	32766.0
+text_family	limit_arraytotext	9994	LEN(_xlfn.ARRAYTOTEXT({1,2}&REPT("a",16381),1))	()	e	#VALUE!
+text_family	limit_replace	9995	LEN(REPLACE(REPT("a",32766),1,1,"b"))	()	n	32766.0
+text_family	limit_replace	9996	LEN(REPLACE(REPT("a",32767),1,1,REPT("b",0)))	()	n	32766.0
+text_family	limit_substitute	9997	LEN(SUBSTITUTE(REPT("ab",16383),"a","x"))	()	n	32766.0
+text_family	limit_substitute	9998	LEN(SUBSTITUTE("a","a",REPT("b",32767)))	()	n	32767.0
+text_family	limit_substitute	9999	LEN(SUBSTITUTE(REPT("a",100),"a",REPT("b",327)))	()	n	32700.0
+text_family	limit_substitute	10000	LEN(SUBSTITUTE(REPT("a",100),"a",REPT("b",328)))	()	e	#VALUE!
+text_family	limit_substitute	10001	LEN(SUBSTITUTE(REPT("a",100),"a",REPT("b",328),1))	()	n	427.0
+text_family	limit_valuetotext	10002	LEN(_xlfn.VALUETOTEXT(REPT("a",32765),1))	()	n	32767.0
+text_family	limit_valuetotext	10003	LEN(_xlfn.VALUETOTEXT(REPT("a",32767),1))	()	e	#VALUE!
+text_family	limit_arraytotext	10004	LEN(_xlfn.ARRAYTOTEXT(REPT("a",32765),1))	()	e	#VALUE!
+text_family	limit_arraytotext	10005	LEN(_xlfn.ARRAYTOTEXT({1,2}&REPT("a",16383),0))	()	e	#VALUE!
+text_family	limit_arraytotext	10006	LEN(_xlfn.ARRAYTOTEXT({1,2}&REPT("a",16381),0))	()	n	32766.0
+text_family	limit_arraytotext	10007	LEN(_xlfn.ARRAYTOTEXT({1,2}&REPT("a",16381),1))	()	e	#VALUE!
+text_family	limit_replace	10008	LEN(REPLACE(REPT("a",32767),1,1,"b"))	()	n	32767.0
+text_family	limit_replace	10009	LEN(REPLACE(REPT("a",32767),1,1,REPT("b",1)))	()	n	32767.0
+text_family	limit_substitute	10010	LEN(SUBSTITUTE(REPT("ab",16384),"a","x"))	()	e	#VALUE!
+text_family	limit_substitute	10011	LEN(SUBSTITUTE("a","a",REPT("b",32768)))	()	e	#VALUE!
+text_family	limit_substitute	10012	LEN(SUBSTITUTE(REPT("a",100),"a",REPT("b",327)))	()	n	32700.0
+text_family	limit_substitute	10013	LEN(SUBSTITUTE(REPT("a",100),"a",REPT("b",328)))	()	e	#VALUE!
+text_family	limit_substitute	10014	LEN(SUBSTITUTE(REPT("a",100),"a",REPT("b",328),1))	()	n	427.0
+text_family	limit_valuetotext	10015	LEN(_xlfn.VALUETOTEXT(REPT("a",32766),1))	()	e	#VALUE!
+text_family	limit_valuetotext	10016	LEN(_xlfn.VALUETOTEXT(REPT("a",32768),1))	()	n	7.0
+text_family	limit_arraytotext	10017	LEN(_xlfn.ARRAYTOTEXT(REPT("a",32766),1))	()	e	#VALUE!
+text_family	limit_arraytotext	10018	LEN(_xlfn.ARRAYTOTEXT({1,2}&REPT("a",16384),0))	()	e	#VALUE!
+text_family	limit_arraytotext	10019	LEN(_xlfn.ARRAYTOTEXT({1,2}&REPT("a",16382),0))	()	e	#VALUE!
+text_family	limit_arraytotext	10020	LEN(_xlfn.ARRAYTOTEXT({1,2}&REPT("a",16382),1))	()	e	#VALUE!
+text_family	limit_replace	10021	LEN(REPLACE(REPT("a",32768),1,1,"b"))	()	e	#VALUE!
+text_family	limit_replace	10022	LEN(REPLACE(REPT("a",32767),1,1,REPT("b",2)))	()	e	#VALUE!
+text_family	numbervalue_more	10023	_xlfn.NUMBERVALUE({1})	('1/2',)	n	46024.0
+text_family	numbervalue_more	10024	_xlfn.NUMBERVALUE({1})	('1/2/2021',)	n	44198.0
+text_family	numbervalue_more	10025	_xlfn.NUMBERVALUE({1})	('12:30',)	n	0.5208333333333334
+text_family	numbervalue_more	10026	_xlfn.NUMBERVALUE({1})	('5%%%',)	n	5e-06
+text_family	numbervalue_more	10027	_xlfn.NUMBERVALUE({1})	('%5',)	n	0.05
+text_family	numbervalue_more	10028	_xlfn.NUMBERVALUE({1})	('1e5%',)	n	1000.0
+text_family	numbervalue_more	10029	_xlfn.NUMBERVALUE({1})	('$1,000',)	n	1000.0
+text_family	numbervalue_more	10030	_xlfn.NUMBERVALUE({1})	('($1,000.50)',)	n	-1000.5
+text_family	numbervalue_more	10031	_xlfn.NUMBERVALUE({1})	('-$5',)	n	-5.0
+text_family	numbervalue_more	10032	_xlfn.NUMBERVALUE({1})	('€5',)	n	5.0
