@@ -58,7 +58,7 @@ def SUM(ctx: Context, *args: Any) -> float | ErrorValue:
 def PRODUCT(ctx: Context, *args: Any) -> float | ErrorValue:
     """Product of numbers; 0 when there are none."""
     p, seen = 1.0, False
-    for v in numbers(args, ctx):
+    for v in numbers(args, ctx, skip_empty=True):
         if isinstance(v, ErrorValue):
             return v
         p *= v
@@ -977,9 +977,13 @@ def PERMUTATIONA(ctx: Context, n: float, k: float) -> float | ErrorValue:
 
 def _whole_numbers(args: tuple[Any, ...], ctx: Context) -> list[int] | ErrorValue:
     """The integer parts of the arguments, text in a cell converted, a logical ``#VALUE!``."""
+    if args[0] is MISSING:  # an empty first argument, and later ones are passed over
+        return ErrorValue.NA
     out = []
     negative = False
     for arg in args:
+        if arg is MISSING:
+            continue
         for v in arg.values() if isinstance(arg, Ref) else (arg,):
             x = _strict(v, ctx)
             if isinstance(x, ErrorValue):

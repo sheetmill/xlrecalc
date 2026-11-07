@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `CEILING`, `FLOOR` and their `.MATH` and `.PRECISE` forms, `ISO.CEILING`, `MROUND`, `EVEN`, `ODD`, `QUOTIENT`,
   `FACT`, `FACTDOUBLE`, `GCD`, `LCM`, `COMBIN`, `COMBINA`, `PERMUT`, `PERMUTATIONA`, `MULTINOMIAL`, `SERIESSUM`,
   `SUMX2MY2`, `SUMX2PY2`, `SUMXMY2`, `ROMAN`, `ARABIC`, `BASE`, `DECIMAL`.
+- Functions, captured from Excel: `AVEDEV`, `DEVSQ`, `GEOMEAN`, `HARMEAN`, `KURT`, `SKEW`, `SKEW.P`, `PEARSON`, `RSQ`, `SLOPE`,
+  `INTERCEPT`, `STEYX`, `FORECAST`, `FORECAST.LINEAR`, `COVAR`, `COVARIANCE.P`, `COVARIANCE.S`, `TRIMMEAN`, `STANDARDIZE`,
+  `FISHER`, `FISHERINV`, `PHI`, `GAUSS`, `PERCENTRANK` and its `.INC` and `.EXC` forms, `PERCENTILE.EXC`, `QUARTILE.EXC`,
+  `PROB`, `CONFIDENCE`, `CONFIDENCE.NORM`.
 - Functions, captured from Excel: the twelve conversions between `BIN`, `OCT`, `DEC` and `HEX`, `BITAND`, `BITOR`, `BITXOR`,
   `BITLSHIFT`, `BITRSHIFT`, `DELTA`, `GESTEP`.
 - Functions, captured from Excel: `DCOUNTA`, `DGET`, `DPRODUCT`, `DSTDEV`, `DSTDEVP`, `DVAR`, `DVARP`.
@@ -74,6 +78,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- **An empty argument was passed over, giving a wrong value with no report.** It is 0 in `AVERAGE`, `COUNT`, `COUNTA`, `MIN`,
+  `MAX`, `MEDIAN`, the variances and standard deviations and their `A` forms, and FALSE in `AND`, `OR` and `XOR`:
+  `AVERAGE(1,,3)` is 1.33, not 2, and `AND(1,,3)` is FALSE. `PRODUCT` passes over it, as does `GCD`, `LCM` and
+  `MULTINOMIAL`, but for an empty first argument, which is `#N/A` (capture `statistics_family`).
 - `RIGHT` with a count past the text's length but less than twice it gave too little: `RIGHT("ab",3)` was `b`.
 - `LEN`, `MID`, `FIND` and `REPLACE` count a character outside the first plane, such as an emoji, as two, as Excel does:
   `LEN("😀")` is 2 and `FIND("b","a😀b")` is 4; `MID` can cut one in two (capture `text_family`).

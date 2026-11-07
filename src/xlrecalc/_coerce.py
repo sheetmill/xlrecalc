@@ -110,12 +110,12 @@ def to_bool(v: Raw, ctx: Context) -> bool | ErrorValue:
 
 
 def numbers(
-    args: tuple[Raw, ...], ctx: Context, *, direct_text: str = "convert"
+    args: tuple[Raw, ...], ctx: Context, *, direct_text: str = "convert", skip_empty: bool = False
 ) -> Iterator[float | ErrorValue]:
     """The numbers an aggregate (``SUM``, ``AVERAGE``, ``MIN``...) takes from its arguments.
 
     Inside references only numbers count; text, logicals and blanks are skipped, errors are
-    yielded. A direct argument is converted: a logical is 1 or 0, an omitted argument is
+    yielded. A direct argument is converted: a logical is 1 or 0, an empty argument is
     skipped, and text is converted (``direct_text="convert"``, an error when it is not a
     number) or skipped when it is not a number (``"skip"``, as ``COUNT``).
     """
@@ -124,8 +124,9 @@ def numbers(
             for v in arg.values():
                 if isinstance(v, float | ErrorValue):
                     yield v
-        elif arg is MISSING:
-            continue
+        elif arg is MISSING:  # an empty argument is 0, but for PRODUCT (capture statistics_family)
+            if not skip_empty:
+                yield 0.0
         elif isinstance(arg, bool):
             yield float(arg)
         elif isinstance(arg, float | ErrorValue):

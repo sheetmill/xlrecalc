@@ -121,6 +121,9 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   reported.
 - `NUMBERVALUE` with digits as separators reads a group separator after the decimal one as a digit: `NUMBERVALUE(" 1 2 ",1,2)`
   is 0.2 in Excel and `#VALUE!` here (one row of capture `text_family`).
+- Declared tolerances, `statistics_family`: the sums of powers and regressions (`AVEDEV`, `DEVSQ`, `GEOMEAN`, `HARMEAN`,
+  `KURT`, `SKEW`, `SKEW.P`, `TRIMMEAN`, `FISHER`, `FISHERINV`, the regression family, `PHI`, `GAUSS`, `CONFIDENCE`) within
+  4 units in the last place; `GEOMEAN` near 1E150 and `KURT` and `FORECAST` on a few rows are further, and listed.
 - How text orders is captured only in part: every pair of 40 ASCII characters and 24 pairs of words,
   on Excel 16 for Mac (capture `modern`). Those give one consistent order, marks and symbols before
   digits before letters, with accents after their base letter. The rest is approximated: other

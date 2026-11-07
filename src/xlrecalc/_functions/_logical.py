@@ -26,7 +26,9 @@ def _logicals(args: tuple[Any, ...], ctx: Context) -> list[bool] | ErrorValue:
     """The logicals AND and OR combine: in references logicals and numbers, text skipped."""
     out: list[bool] = []
     for arg in args:
-        if isinstance(arg, Ref):
+        if arg is MISSING:  # an empty argument is FALSE (capture statistics_family)
+            out.append(False)
+        elif isinstance(arg, Ref):
             for _, _, v in arg.cells():
                 if isinstance(v, ErrorValue):
                     return v

@@ -80,7 +80,7 @@ def COUNTA(ctx: Context, *args: Any) -> float:
             n += sum(1 for _ in arg.cells())
         elif isinstance(arg, tuple):
             n += sum(len(row) for row in arg)
-        elif arg is not MISSING:
+        else:
             n += 1
     return float(n)
 
@@ -103,7 +103,9 @@ def _values_a(
     """The values of the A forms: in references text is 0 and logicals 1 or 0, blanks skipped."""
     out: list[float] = []
     for arg in args:
-        if isinstance(arg, Ref):
+        if arg is MISSING:  # an empty argument is 0 (capture statistics_family)
+            out.append(0.0)
+        elif isinstance(arg, Ref):
             for _, _, v in arg.cells():
                 if isinstance(v, ErrorValue):
                     return v
@@ -582,3 +584,364 @@ def MODE(ctx: Context, *args: Any) -> float | ErrorValue:
     if best < 2:
         return NA
     return next(v for v, n in counts.items() if n == best)
+
+
+# Descriptive statistics and regression (capture statistics_family) -----------------------------
+
+_SUMS = "Excel's sums of powers differ in the last bits; within 4 units in the last place"
+
+
+def _moments(values: list[float], power: int) -> float:
+    n = len(values)
+    mean = _plain(values) / n
+    return _plain([(v - mean) ** power for v in values])
+
+
+def _standard_powers(values: list[float], sd: float, power: int) -> float:
+    """The sum of a power of each value's distance from the mean, in standard deviations."""
+    mean = _plain(values) / len(values)
+    return _plain([((v - mean) / sd) ** power for v in values])
+
+
+@function("AVEDEV", "raw", min_args=1, variadic=True, category=S, ulps=4, ulps_reason=_SUMS)
+def AVEDEV(ctx: Context, *args: Any) -> float | ErrorValue:
+    """Mean of the absolute deviations from the mean."""
+    values = _numbers(args, ctx)
+    if isinstance(values, ErrorValue):
+        return values
+    if not values:
+        return NUM
+    mean = _plain(values) / len(values)
+    return _plain([abs(v - mean) for v in values]) / len(values)
+
+
+@function("DEVSQ", "raw", min_args=1, variadic=True, category=S, ulps=4, ulps_reason=_SUMS)
+def DEVSQ(ctx: Context, *args: Any) -> float | ErrorValue:
+    """Sum of the squares of the deviations from the mean."""
+    values = _numbers(args, ctx)
+    if isinstance(values, ErrorValue):
+        return values
+    return _finite(_moments(values, 2)) if values else NUM
+
+
+@function("GEOMEAN", "raw", min_args=1, variadic=True, category=S, ulps=4, ulps_reason=_SUMS)
+def GEOMEAN(ctx: Context, *args: Any) -> float | ErrorValue:
+    """The geometric mean of positive numbers."""
+    values = _numbers(args, ctx)
+    if isinstance(values, ErrorValue):
+        return values
+    if not values or min(values) <= 0:
+        return NUM
+    return math.exp(_plain([math.log(v) for v in values]) / len(values))
+
+
+@function("HARMEAN", "raw", min_args=1, variadic=True, category=S, ulps=4, ulps_reason=_SUMS)
+def HARMEAN(ctx: Context, *args: Any) -> float | ErrorValue:
+    """The harmonic mean of positive numbers."""
+    values = _numbers(args, ctx)
+    if isinstance(values, ErrorValue):
+        return values
+    if not values:
+        return NA
+    if min(values) <= 0:
+        return NUM
+    return _finite(len(values) / _plain([1 / v for v in values]))
+
+
+def _finite(x: float) -> float | ErrorValue:
+    return x if math.isfinite(x) else NUM
+
+
+def _standardized(values: list[float], lost: int) -> float | None:
+    """The standard deviation, or ``None`` when it is 0 or there are too few numbers."""
+    n = len(values)
+    if n <= lost:
+        return None
+    sd = math.sqrt(_moments(values, 2) / (n - lost))
+    return sd if sd > 0 else None
+
+
+@function("KURT", "raw", min_args=1, variadic=True, category=S, ulps=4, ulps_reason=_SUMS)
+def KURT(ctx: Context, *args: Any) -> float | ErrorValue:
+    """Excess kurtosis of a sample."""
+    values = _numbers(args, ctx)
+    if isinstance(values, ErrorValue):
+        return values
+    n, sd = len(values), _standardized(values, 1)
+    if n < 4 or sd is None:
+        return DIV0
+    fourth = _standard_powers(values, sd, 4)
+    return n * (n + 1) / ((n - 1) * (n - 2) * (n - 3)) * fourth - 3 * (n - 1) ** 2 / (
+        (n - 2) * (n - 3)
+    )
+
+
+@function("SKEW", "raw", min_args=1, variadic=True, category=S, ulps=4, ulps_reason=_SUMS)
+def SKEW(ctx: Context, *args: Any) -> float | ErrorValue:
+    """Skewness of a sample."""
+    values = _numbers(args, ctx)
+    if isinstance(values, ErrorValue):
+        return values
+    n, sd = len(values), _standardized(values, 1)
+    if n < 3 or sd is None:
+        return DIV0
+    return n / ((n - 1) * (n - 2)) * _standard_powers(values, sd, 3)
+
+
+@function("_xlfn.SKEW.P", "raw", min_args=1, variadic=True, category=S, ulps=4, ulps_reason=_SUMS)
+def SKEW_P(ctx: Context, *args: Any) -> float | ErrorValue:
+    """Skewness of a population."""
+    values = _numbers(args, ctx)
+    if isinstance(values, ErrorValue):
+        return values
+    n, sd = len(values), _standardized(values, 0)
+    if n < 3 or sd is None:
+        return DIV0
+    return _standard_powers(values, sd, 3) / n
+
+
+def _regression(ys: Any, xs: Any, least: int) -> tuple[float, ...] | ErrorValue:
+    """N and the means, and the sums of products, of paired numbers: ``#DIV/0!`` if too few."""
+    pairs = _pairs(ys, xs)
+    if isinstance(pairs, ErrorValue):
+        return pairs
+    py, px = pairs
+    n = len(px)
+    if n == 0 and len(_cells(ys)) == 1:  # one blank cell (capture statistics_family)
+        return VALUE
+    if n < least:
+        return DIV0
+    my, mx = _plain(py) / n, _plain(px) / n
+    sxy = sxx = syy = 0.0
+    for x, y in zip(px, py, strict=True):
+        dx, dy = x - mx, y - my
+        sxy += dx * dy
+        sxx += dx * dx
+        syy += dy * dy
+    return float(n), my, mx, sxy, sxx, syy
+
+
+def _pair_function(name: str, least: int, doc: str, result: Any) -> None:
+    @function(name, "array", "array", category=S, ulps=4, ulps_reason=_REGRESSION)
+    def paired(ctx: Context, ys: Any, xs: Any) -> float | ErrorValue:
+        sums = _regression(ys, xs, least)
+        return sums if isinstance(sums, ErrorValue) else result(*sums)
+
+    paired.__doc__ = doc
+
+
+def _divide(a: float, b: float) -> float | ErrorValue:
+    return DIV0 if b == 0 else _finite(a / b)
+
+
+def _correlation(n: float, my: float, mx: float, sxy: float, sxx: float, syy: float) -> Any:
+    return DIV0 if sxx == 0 or syy == 0 else _finite(sxy / math.sqrt(sxx * syy))
+
+
+def _r_squared(n: float, my: float, mx: float, sxy: float, sxx: float, syy: float) -> Any:
+    r = _correlation(n, my, mx, sxy, sxx, syy)
+    return r if isinstance(r, ErrorValue) else r * r
+
+
+def _slope(n: float, my: float, mx: float, sxy: float, sxx: float, syy: float) -> Any:
+    return _divide(sxy, sxx)
+
+
+def _intercept(n: float, my: float, mx: float, sxy: float, sxx: float, syy: float) -> Any:
+    return DIV0 if sxx == 0 else _finite(my - sxy / sxx * mx)
+
+
+def _steyx(n: float, my: float, mx: float, sxy: float, sxx: float, syy: float) -> Any:
+    if sxx == 0:
+        return DIV0
+    return _finite(math.sqrt(max(syy - sxy * sxy / sxx, 0.0) / (n - 2)))
+
+
+_pair_function("PEARSON", 2, "Pearson correlation.", _correlation)
+_pair_function("RSQ", 2, "Square of the Pearson correlation.", _r_squared)
+_pair_function("SLOPE", 2, "Slope of the line of best fit.", _slope)
+_pair_function("INTERCEPT", 2, "Intercept of the line of best fit.", _intercept)
+_pair_function("STEYX", 3, "Standard error of a predicted y.", _steyx)
+_pair_function("COVAR", 1, "Population covariance.", lambda n, _a, _b, sxy, _c, _d: sxy / n)
+_pair_function(
+    "_xlfn.COVARIANCE.P", 1, "Population covariance.", lambda n, _a, _b, sxy, _c, _d: sxy / n
+)
+_pair_function(
+    "_xlfn.COVARIANCE.S", 2, "Sample covariance.", lambda n, _a, _b, sxy, _c, _d: sxy / (n - 1)
+)
+
+
+@function("FORECAST", "number", "array", "array", category=S, ulps=4, ulps_reason=_REGRESSION)
+@function(
+    "_xlfn.FORECAST.LINEAR", "number", "array", "array", category=S, ulps=4, ulps_reason=_REGRESSION
+)
+def FORECAST(ctx: Context, at: float, ys: Any, xs: Any) -> float | ErrorValue:
+    """A y on the line of best fit."""
+    sums = _regression(ys, xs, 2)
+    if isinstance(sums, ErrorValue):
+        return sums
+    _, my, mx, sxy, sxx, _ = sums
+    return DIV0 if sxx == 0 else _finite(my + sxy / sxx * (at - mx))
+
+
+@function("TRIMMEAN", "raw", "number", category=S, ulps=4, ulps_reason=_SUMS)
+def TRIMMEAN(ctx: Context, a: Any, fraction: float) -> float | ErrorValue:
+    """The mean without a fraction of the numbers, half from each end."""
+    values = _array_numbers(a, ctx)
+    if isinstance(values, ErrorValue):
+        return values
+    if not values or fraction < 0 or fraction >= 1:
+        return NUM
+    cut = math.floor(len(values) * fraction / 2)
+    kept = sorted(values)[cut : len(values) - cut]
+    return _plain(kept) / len(kept)
+
+
+@function("STANDARDIZE", "number", "number", "number", category=S)
+def STANDARDIZE(ctx: Context, x: float, mean: float, sd: float) -> float | ErrorValue:
+    """A value in standard deviations from a mean."""
+    return NUM if sd <= 0 else _finite((x - mean) / sd)
+
+
+@function("FISHER", "number", category=S, ulps=4, ulps_reason=_SUMS)
+def FISHER(ctx: Context, x: float) -> float | ErrorValue:
+    """The Fisher transformation."""
+    return NUM if abs(x) >= 1 else 0.5 * math.log((1 + x) / (1 - x))
+
+
+@function("FISHERINV", "number", category=S, ulps=4, ulps_reason=_SUMS)
+def FISHERINV(ctx: Context, y: float) -> float | ErrorValue:
+    """The inverse of the Fisher transformation."""
+    e = math.exp(2 * y) if y < 355 else math.inf
+    return 1.0 if e == math.inf else (e - 1) / (e + 1)
+
+
+@function("_xlfn.PHI", "number", category=S, ulps=4, ulps_reason=_NORMAL)
+def PHI(ctx: Context, x: float) -> float | ErrorValue:
+    """The density of the standard normal distribution."""
+    if not math.isfinite(x * x):
+        return NUM
+    return math.exp(-x * x / 2) / math.sqrt(2 * math.pi)
+
+
+@function("_xlfn.GAUSS", "number", category=S, ulps=4, ulps_reason=_NORMAL)
+def GAUSS(ctx: Context, z: float) -> float:
+    """The probability between the mean and ``z`` standard deviations."""
+    return _phi(z) - 0.5
+
+
+def _cut_digits(x: float, significance: float) -> float:
+    """``x`` cut, not rounded, to a number of digits after the point."""
+    scale = 10.0 ** math.trunc(significance)
+    return math.floor(float(f"{x:.15g}") * scale) / scale
+
+
+def _percent_rank(a: Any, x: float, significance: float, ctx: Context, inclusive: bool) -> Any:
+    values = _array_numbers(a, ctx)
+    if isinstance(values, ErrorValue):
+        return values
+    if not values:
+        return NA
+    values.sort()
+    n = len(values)
+    if x < values[0] or x > values[-1]:
+        return NA
+    if math.trunc(significance) < 1:
+        return NUM
+    below = sum(v < x for v in values)
+    if below < n and values[below] == x:
+        rank = float(below)
+    else:
+        low, high = values[below - 1], values[below]
+        rank = below - 1 + (x - low) / (high - low)
+    share = (1.0 if n == 1 else rank / (n - 1)) if inclusive else (rank + 1) / (n + 1)
+    return _cut_digits(share, significance)
+
+
+@function("PERCENTRANK", "raw", "number", "number", min_args=2, category=S)
+@function("_xlfn.PERCENTRANK.INC", "raw", "number", "number", min_args=2, category=S)
+def PERCENTRANK(ctx: Context, a: Any, x: float, significance: float = 3.0) -> Any:
+    """A value's rank in a set as a share of it, 0 to 1 inclusive."""
+    return _percent_rank(a, x, significance, ctx, True)
+
+
+@function("_xlfn.PERCENTRANK.EXC", "raw", "number", "number", min_args=2, category=S)
+def PERCENTRANK_EXC(ctx: Context, a: Any, x: float, significance: float = 3.0) -> Any:
+    """A value's rank in a set as a share of it, 0 to 1 exclusive."""
+    return _percent_rank(a, x, significance, ctx, False)
+
+
+def _percentile_exc(a: Any, k: float, ctx: Context) -> float | ErrorValue:
+    values = _array_numbers(a, ctx)
+    if isinstance(values, ErrorValue):
+        return values
+    n = len(values)
+    if not values or k <= 0 or k >= 1:
+        return NUM
+    rank = k * (n + 1)
+    low = math.floor(rank)
+    if low < 1 or rank > n:
+        return NUM
+    values.sort()
+    if low in (rank, n):
+        return values[low - 1]
+    return values[low - 1] + (rank - low) * (values[low] - values[low - 1])
+
+
+@function("_xlfn.PERCENTILE.EXC", "raw", "number", category=S)
+def PERCENTILE_EXC(ctx: Context, a: Any, k: float) -> float | ErrorValue:
+    """A percentile, with ``k`` between 0 and 1 exclusive."""
+    return _percentile_exc(a, k, ctx)
+
+
+@function("_xlfn.QUARTILE.EXC", "raw", "number", category=S)
+def QUARTILE_EXC(ctx: Context, a: Any, q: float) -> float | ErrorValue:
+    """A quartile, with ``q`` 1, 2 or 3."""
+    k = math.trunc(q)
+    if k < 1 or k > 3:
+        values = _array_numbers(a, ctx)
+        return values if isinstance(values, ErrorValue) else NUM
+    return _percentile_exc(a, k / 4, ctx)
+
+
+@function("PROB", "array", "array", "number", "value", min_args=3, category=S)
+def PROB(ctx: Context, xs: Any, ps: Any, low: float, high: Any = MISSING) -> Any:
+    """The probability that a value lies between two limits."""
+    a, b = _cells(xs), _cells(ps)
+    if len(a) != len(b):
+        return ErrorValue.NA
+    top = low
+    if high is not MISSING:
+        converted = to_number(high, ctx)
+        if isinstance(converted, ErrorValue):
+            return converted
+        top = converted
+    total = in_range = 0.0
+    for x, p in zip(a, b, strict=True):
+        if isinstance(x, ErrorValue):
+            return x
+        if isinstance(p, ErrorValue):
+            return p
+        if type(p) is not float:
+            return ErrorValue.VALUE
+        if type(x) is not float or p <= 0 or p > 1:
+            return NUM
+        total += p
+        if low <= x <= top:
+            in_range += p
+    if abs(total - 1) > 1e-12:
+        return NUM
+    return in_range
+
+
+@function("CONFIDENCE", "number", "number", "number", category=S, ulps=4, ulps_reason=_NORMAL)
+@function(
+    "_xlfn.CONFIDENCE.NORM", "number", "number", "number", category=S, ulps=4, ulps_reason=_NORMAL
+)
+def CONFIDENCE(ctx: Context, alpha: float, sd: float, size: float) -> Any:
+    """The half width of a normal confidence interval."""
+    n = math.trunc(size)
+    if not 0 < alpha < 1 or sd <= 0 or n < 1:
+        return NUM
+    z = NORMSINV(ctx, 1 - alpha / 2)
+    return z if isinstance(z, ErrorValue) else z * sd / math.sqrt(n)

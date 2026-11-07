@@ -54,7 +54,8 @@ people's workbooks are used.
 | `dates_family` | 5,028 | `DAYS`, `DATEDIF` in every unit over month ends and the 1900 leap day, `ISOWEEKNUM`, `WEEKNUM` of every type, argument kinds and the limits of the calendar |
 | `database_family` | 1,490 | `DCOUNTA`, `DGET`, `DPRODUCT`, `DSTDEV`, `DSTDEVP`, `DVAR`, `DVARP` over the criteria of `misc`; all twelve D functions over a table with a blank row and every kind of value, over whole columns and with whole columns as criteria |
 | `engineering_family` | 3,220 | the base conversions over every width, two's complement, digits Excel refuses and `places`; `BITAND`, `BITOR`, `BITXOR`, `BITLSHIFT`, `BITRSHIFT` to the limits of 2^48 and 53; `DELTA`, `GESTEP` across kinds |
-| `statistics_family`, `finance_family` | 4,265, 15,513 | captured before they are implemented; not compared by `tests/test_captures.py` yet |
+| `statistics_family` | 4,475 | the descriptive and regression functions over spread, mixed kinds, errors, zeros, values near 1E150 and 1E-150; `TRIMMEAN`, `PERCENTRANK` and its forms with `significance`, `PERCENTILE.EXC`, `QUARTILE.EXC`, `PROB`, `CONFIDENCE`; an empty argument in every function taking many |
+| `finance_family` | 15,513 | captured before it is implemented; not compared by `tests/test_captures.py` yet |
 | `index_range` | 38 | ranges built with `INDEX`, lookups and aggregates over a formula's own column: which Excel calls circular |
 | `static_cycle` | 37 | loops of references through a branch not taken, and real loops as controls: which Excel calls circular |
 | `array_refs` | 8,954 cells | `ROW`, `COLUMN`, `CELL`, ranges and arrays as a criterion or a lookup key, and arrays of references, each as a legacy formula, a legacy array formula and a dynamic array |

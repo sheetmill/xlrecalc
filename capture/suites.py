@@ -2926,6 +2926,18 @@ def statistics_family() -> list[Case]:
             for sd in (1.0, 2.5, 0.0, -1.0, "2", True, None, NA)
             for n in (1.0, 50.0, 1.9, 0.5, 0.0, -1.0, "2", True, None, NA)
         ]
+    # An empty argument, in the functions that take many.
+    for name in (
+        "AVERAGE", "AVERAGEA", "COUNT", "COUNTA", "MIN", "MINA", "MAX", "MAXA", "SUM", "PRODUCT",
+        "STDEV",
+        "STDEVP", "STDEVA", "STDEVPA", "VAR", "VARP", "VARA", "VARPA", "MEDIAN", "SUMSQ", "MODE",
+        "AND",
+        "OR", "XOR", "CONCATENATE", "GCD", "LCM", "MULTINOMIAL", "STDEV.S",
+        "STDEV.P", "VAR.S", "VAR.P", "MODE.SNGL", "CONCAT", "NPV",
+    ):  # fmt: skip
+        call = _file(name)
+        for args in ("1,,3", "-1,,-3", ",1,3", "1,3,", "2,,2,4", ","):
+            cases.append(Case("empty_" + name.lower().replace(".", "_"), f"{call}({args})"))
     return cases
 
 

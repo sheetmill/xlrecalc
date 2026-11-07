@@ -218,6 +218,10 @@ _VARIANCE_NOISE = (
     "DVAR and DSTDEV: past the declared 4 units in the last place, for a sum of squares no tried "
     "form reproduces (seven forms; each misses other rows by more)"
 )
+_MOMENT_NOISE = (
+    "GEOMEAN near 1E150, and KURT and FORECAST on two rows each, are past the declared 4 units in "
+    "the last place, for sums no tried order reproduces"
+)
 _MULTINOMIAL = (
     "Excel's result carries noise from its logarithm of the gamma function (279.99999999999966)"
 )
@@ -235,6 +239,8 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("dates_family", case): _WEEKNUM_ODD_TYPE for case in _WEEKNUM_ODD_CASES},
     ("dates_family", 2004): _DATEDIF_MARCH,
     ("text_family", 1761): _NUMBERVALUE_GROUP,
+    **{("statistics_family", case): _MOMENT_NOISE for case in (65, 66, 118, 141, 414, 582)},
+    ("statistics_family", 4432): _MULTINOMIAL,
     **{
         ("database_family", case): _COMPUTED_CRITERIA
         for case in (
@@ -322,6 +328,7 @@ SUITES = [
     "text_family",
     "database_family",
     "engineering_family",
+    "statistics_family",
 ]
 
 

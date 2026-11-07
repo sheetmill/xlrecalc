@@ -77,9 +77,9 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
   financial and bond functions, the database functions. The
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 42,095 formulas computed by Excel and compared with xlrecalc's results: 41,902
+- **Evidence**: 46,570 formulas computed by Excel and compared with xlrecalc's results: 46,370
   match, bit for bit or within a small tolerance declared per function (a few units in the last
-  place, or a relative 1E-9 for the iterative functions), 193 known deviations, each listed
+  place, or a relative 1E-9 for the iterative functions), 200 known deviations, each listed
   with its reason in
   [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md), and 0 not
   evaluated. The largest group of deviations is the
