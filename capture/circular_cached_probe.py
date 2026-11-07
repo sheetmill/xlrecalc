@@ -20,13 +20,13 @@ from __future__ import annotations
 
 import datetime as dt
 import re
-import subprocess
 import sys
 import zipfile
 from pathlib import Path
 
 import openpyxl
 
+from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from capture.repair_probe import saved_cells
 
@@ -110,12 +110,7 @@ def plain(path: Path, cases: list[Case]) -> None:
 
 
 def osascript(*args: str) -> str:
-    try:
-        result = subprocess.run(
-            ["osascript", *args], capture_output=True, text=True, timeout=STEP_LIMIT
-        )
-    except subprocess.TimeoutExpired:
-        sys.exit(f"Excel did not finish within {STEP_LIMIT} s: {args[0]}. Excel is left as it is.")
+    result = osascript_or_exit(*args, seconds=STEP_LIMIT)
     if result.returncode:
         sys.exit(f"osascript failed: {result.stderr.strip()}")
     return result.stdout.rstrip("\n")

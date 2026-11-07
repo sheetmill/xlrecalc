@@ -144,7 +144,8 @@ person typed formulas into and saved (AppleScript can only enter legacy formulas
 Files the package writes are opened by Excel in `tests/test_excel_live.py`, which runs only with
 `pytest --tier excel`, under the same rules as the captures.
 Each Excel step there has a time limit (`tests/excel_steps.py`); when Excel then does not answer, the
-run ends with a message naming the test, and Excel is left for the person using it to look at.
+run ends with a message naming the test, and Excel is left for the person using it to look at. The pipeline
+has a limit too, 600 s and 0.1 s per case, and so do the probes that open a workbook and save a copy.
 
 **When Excel stops answering.** It has happened twice: Excel answers `version` but not questions about its
 workbooks, at 0% CPU, with no dialog, and its menus work; a Quit clears it, and the same work then passes. So ask
@@ -153,6 +154,12 @@ display that is off and system sleep are each ruled out as enough by themselves,
 Excel refuses. Not tested: a request long after the lock, a session up for hours after many opens and saves,
 and rapid repeated opens. Whether a hang clears by itself is unknown too. It costs one Quit and a stopped pass, which
 does not justify tests of its own. Never end Excel: the person using it decides.
+
+So the next one explains itself: past a limit, `capture/excel_watch.py` saves a record under
+`capture/build/excel_hangs/` (Excel's `sample`, uptime, CPU and memory, the display's last change, the request and its
+file) and asks about workbooks at once and after 1 and 5 minutes. `uv run python -m capture.excel_watch` asks again and adds
+the answer to the record: run it before anyone quits Excel. `capture/array_size_probe.py` and `capture/value_probe.py` keep
+limits of their own: there, running past one is a result.
 
 The probes behind the design (`capture/writeback_probe.py`, `capture/semantics_probe.py`,
 `capture/formula_forms.py`) use the same conventions; their results are in [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md)

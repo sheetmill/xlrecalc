@@ -21,7 +21,6 @@ from __future__ import annotations
 
 import datetime as dt
 import re
-import subprocess
 import sys
 import zipfile
 from pathlib import Path
@@ -29,6 +28,7 @@ from pathlib import Path
 import openpyxl
 
 import xlrecalc
+from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER, excel_version, read_results, result_repr
 
 HERE = Path(__file__).resolve().parent
@@ -93,12 +93,7 @@ def build(path: Path, calc: str, cases: list[tuple[str, str, str | None]]) -> No
 
 
 def osascript(*args: str) -> str:
-    try:
-        result = subprocess.run(
-            ["osascript", *args], capture_output=True, text=True, timeout=STEP_LIMIT
-        )
-    except subprocess.TimeoutExpired:
-        sys.exit(f"Excel did not finish within {STEP_LIMIT} s: {args[0]}. Excel is left as it is.")
+    result = osascript_or_exit(*args, seconds=STEP_LIMIT)
     if result.returncode:
         sys.exit(f"osascript failed: {result.stderr.strip()}")
     return result.stdout.rstrip("\n")

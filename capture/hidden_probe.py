@@ -12,12 +12,12 @@ calculates and saves a copy, from which each value is read. Writes
 from __future__ import annotations
 
 import datetime as dt
-import subprocess
 import sys
 from pathlib import Path
 
 import openpyxl
 
+from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from xlrecalc._xlsx import Book
 
@@ -119,15 +119,7 @@ def main() -> None:
         p.unlink(missing_ok=True)
     build(src)
     version = excel_version()
-    try:
-        result = subprocess.run(
-            ["osascript", str(HERE / "save_copy.applescript"), str(src), str(copy)],
-            capture_output=True,
-            text=True,
-            timeout=90,
-        )
-    except subprocess.TimeoutExpired:
-        sys.exit("Excel did not finish within 90 s. Excel is left as it is.")
+    result = osascript_or_exit(str(HERE / "save_copy.applescript"), str(src), str(copy), seconds=90)
     if result.returncode:
         sys.exit(f"Excel did not open the workbook: {result.stderr.strip()}")
     with Book(copy) as book:

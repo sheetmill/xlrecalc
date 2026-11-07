@@ -24,7 +24,6 @@ import datetime as dt
 import math
 import os
 import re
-import subprocess
 import sys
 import xml.etree.ElementTree as ET
 import zipfile
@@ -34,6 +33,7 @@ from pathlib import Path
 import openpyxl
 from openpyxl.utils import get_column_letter
 
+from capture.excel_watch import osascript_or_exit
 from xlrecalc._values import ErrorValue
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +41,7 @@ HERE = Path(__file__).resolve().parent
 CAPTURES = ROOT / "tests" / "captures"
 CONTAINER = Path.home() / "Library/Containers/com.microsoft.Excel/Data/Documents/xlrecalc"
 NS = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
+VERSION_SECONDS = 120.0  # Excel may have to start
 COLUMNS = ("suite", "tag", "case", "formula", "inputs", "expected_type", "expected_repr")
 
 
@@ -158,6 +159,11 @@ def read_results(path: Path, count: int) -> list[Result | None]:
     return out
 
 
+def capture_limit(cases: int) -> float:
+    """Seconds Excel may take over a suite: generous, since a limit must not end a real capture."""
+    return 600.0 + 0.1 * cases
+
+
 def run_excel(
     cases: list[Case], name: str, date1904: bool = False, fixed: dict[str, Input] | None = None
 ) -> list[Result | None]:
@@ -167,10 +173,8 @@ def run_excel(
     for p in (src, copy):
         p.unlink(missing_ok=True)
     build(src, cases, date1904, fixed)
-    result = subprocess.run(
-        ["osascript", str(HERE / "save_copy.applescript"), str(src), str(copy)],
-        capture_output=True,
-        text=True,
+    result = osascript_or_exit(
+        str(HERE / "save_copy.applescript"), str(src), str(copy), seconds=capture_limit(len(cases))
     )
     if result.returncode:
         raise RuntimeError(result.stderr.strip())
@@ -182,10 +186,8 @@ def run_excel(
 
 
 def excel_version() -> str:
-    result = subprocess.run(
-        ["osascript", "-e", 'tell application "Microsoft Excel" to version'],
-        capture_output=True,
-        text=True,
+    result = osascript_or_exit(
+        "-e", 'tell application "Microsoft Excel" to version', seconds=VERSION_SECONDS
     )
     return result.stdout.strip()
 
