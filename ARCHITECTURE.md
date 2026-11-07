@@ -562,15 +562,16 @@ numbers and template ids, side dicts for text and errors) are planned for a late
 
 ### 7.6 Errors and the report
 
-Errors propagate through operators and most functions; `IFERROR`, `ISERROR`, `IFNA`, `AGGREGATE`
+Errors propagate through operators and most functions; `IFERROR`, `ISERROR`, `IFNA`
 and the `IS` functions inspect them. An internal exception in a function is caught per cell,
 becomes `#VALUE!`, and is recorded in the report with the exception, so one bug never aborts a
 recalculation. An unsupported function is listed in the report. A cell using one keeps its cached value when the file
 holds one, since Excel computed it, in a full load too, and what depends on it is computed from that.
 `Report.from_kept` names them all, so "which values rest on something not computed here?" has one
 answer. A change upstream of the formula puts its kept value out of date: it and what depends on it
-are not evaluated, keep the values they hold, and move to `uncomputed`. A formula using `OFFSET` or
-`INDIRECT` is never evaluated, so what it reads is not known, and any change counts as upstream of it.
+are not evaluated, keep the values they hold, and move to `uncomputed`. A function not implemented whose
+formula reads through `OFFSET` or `INDIRECT` is never evaluated, so what it reads is not known, and any
+change counts as upstream of it. A dependent that reads through them is evaluated, and its reads are recorded.
 A change that removes the reliance (the formula replaced) takes the cells out of both. A read through
 `OFFSET` or `INDIRECT` of such a cell has no static edge, so each evaluation records its boxes, in a
 workbook holding such a formula only. A run that trusts cached values and evaluates nothing names
@@ -709,7 +710,9 @@ exactly or be a listed deviation. A tolerance is a test concept only; the engine
 value. `QUIRKS.md` lists each one as a known deviation. Today `PRICE` declares 8 units and
 `PMT`, `IPMT`, `PPMT`, `NPV`, `VDB`, `DURATION`, `MDURATION`, the variances and standard deviations,
 `CORREL`, `LINEST` and the normal-distribution functions 4, for Excel's `exp`, `log1p`,
-`expm1` and `erfc` and its summations. The iterative functions (`IRR`, `XIRR`, `RATE`,
+`expm1` and `erfc` and its summations; trigonometry, hyperbolics, logarithms and `SERIESSUM` declare 4 for
+Excel's math library, `FACT` and `FACTDOUBLE` 8 and `COMBIN`, `COMBINA` and `PERMUT` 4 for the order it
+multiplies in. The iterative functions (`IRR`, `XIRR`, `RATE`,
 `YIELD`) declare a relative tolerance instead (`rel=1e-9`), since Excel itself guarantees
 their results only to its documented stopping tolerance; rows within it are counted apart
 from exact and ulp matches, under the same guard.
@@ -1097,7 +1100,9 @@ the capture tooling writes a fresh workbook with openpyxl holding only that form
 constant inputs it refers to; before writing, `capture/corpus_filter.py` drops and counts DDE
 formulas (`app|'topic'!item`), references to other workbooks, and calls of functions with side
 effects or file or network access (`WEBSERVICE`, `FILTERXML`, `RTD`, `CALL`, `REGISTER.ID`,
-`INFO`, `CELL`) or `HYPERLINK` (harmless, but kept out of captures).
+`INFO`, `CELL`) or `HYPERLINK` (harmless, but not worth capturing from such a formula). The
+exclusion covers formulas taken from those workbooks. Capture suites written for this package call
+`CELL`, `HYPERLINK`, `FILTERXML` and the like directly, with fixed local input.
 
 **Other tests.** Tokenizer and printer round trip over the formula corpus; normalizer (template keys,
 anchors, sheets); code generation safety (§5.4); dependency index (property tests: reverse
@@ -1185,8 +1190,7 @@ One workbook is used from one thread at a time.
    values on demand, and after the caller edits the workbook rebuild only the cells whose value
    or formula changed (`engine.refresh()`, or `engine.changed("Sheet1!A1", ...)` naming them).
    It would answer code, not persist values: saving with values stays `recalculate`. openpyxl
-   would be an optional extra, imported when the adapter is used. Beside it,
-   `xlrecalc.evaluate(text)` for one formula outside a workbook.
+   would be an optional extra, imported when the adapter is used.
 3. 0.2: the functions that make arrays: `FILTER`, `UNIQUE`, `SORT`, `SORTBY`, `SEQUENCE` and
    `MMULT`, with the `#CALC!` error they produce. Spill, `#SPILL!`, `A1#` and `@` are in place
    (§7.7).
@@ -1195,8 +1199,16 @@ One workbook is used from one thread at a time.
 5. 0.2: iterative calculation with the workbook's settings (`<calcPr iterate iterateCount
    iterateDelta>`), designed from captures of its calculation order, stopping test, starting
    values and behavior on opening.
-6. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
-   vectorized templates (numpy as an optional extra), `LET`, `LAMBDA` and its helpers, a setting for
+6. 0.2: the functions still absent, by family, each family's captures first. An order, not a promise
+   or a date: the families with direct rules (text, date and time, logical and information, engineering
+   bases, descriptive statistics, database, closed-form finance) and the functions of item 3 are
+   required; the other families follow as far as they get; those with large questions of their own
+   (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable. `docs/coverage.md`
+   lists what exists.
+7. `xlrecalc.evaluate(text)` for one formula outside a workbook, custom functions, and `LET` and `LAMBDA` with its helpers are designed together,
+   from a list of what an editor built on the package needs.
+8. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
+   vectorized templates (numpy as an optional extra), a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,
    parallel evaluation of independent template columns on free-threaded Python, and a compiled
    core only if profiling demands it.
