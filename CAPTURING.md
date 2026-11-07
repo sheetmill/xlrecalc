@@ -146,6 +146,14 @@ Files the package writes are opened by Excel in `tests/test_excel_live.py`, whic
 Each Excel step there has a time limit (`tests/excel_steps.py`); when Excel then does not answer, the
 run ends with a message naming the test, and Excel is left for the person using it to look at.
 
+**When Excel stops answering.** It has happened twice: Excel answers `version` but not questions about its
+workbooks, at 0% CPU, with no dialog, and its menus work; a Quit clears it, and the same work then passes. So ask
+about workbooks to tell whether it is alive (`tests/excel_steps.py`). The cause is unknown. A locked screen, a
+display that is off and system sleep are each ruled out as enough by themselves, the first two even with a file
+Excel refuses. Not tested: a request long after the lock, a session up for hours after many opens and saves,
+and rapid repeated opens. Whether a hang clears by itself is unknown too. It costs one Quit and a stopped pass, which
+does not justify tests of its own. Never end Excel: the person using it decides.
+
 The probes behind the design (`capture/writeback_probe.py`, `capture/semantics_probe.py`,
 `capture/formula_forms.py`) use the same conventions; their results are in [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md)
 §5.2 and §9.4.

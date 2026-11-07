@@ -37,6 +37,13 @@ Excel's results are captured for the tests. Measured numbers are in `bench/resul
 - Rendering or formatting cells; the companion packages do that.
 - VBA, macros, pivot tables, charts, data tables (`t="dataTable"`), what-if analysis, Power
   Query, cube functions (they keep their cached values).
+- Reaching outside the workbook. `WEBSERVICE`, `STOCKHISTORY`, `TRANSLATE`, `IMAGE`, `RTD` and the `CUBE`
+  functions need a provider: the engine never reaches out by itself, by default or from anything a
+  workbook says, and they keep their cached values and are reported, as an absent function does. Whether
+  a caller can supply one under that name is for the design of custom functions (§12).
+- `CALL` and `REGISTER.ID` stay unsupported: a workbook must not be able to name native code for the
+  package to run. This can be revisited if a legitimate use and a safe way appear, and someone's own
+  extension, running on their own system, may implement them.
 - Evaluating links to external workbooks: their cached values in the file are constants.
 - Localized function names or separators: English names, `,` between arguments, `.` as the
   decimal point; locale-dependent parsing and formatting follow en-US.
@@ -1163,6 +1170,7 @@ One workbook is used from one thread at a time.
 
 | question | leaning |
 |---|---|
+| custom functions | a design of their own: registration per workbook or engine, not process-wide; a rule for a file naming a function not installed; they take references too, so unions and arrays of references are designed with them |
 | the `_xlsx` subpackage's future | extracted into its own package once a second user (sheetpeek) needs its API |
 | numpy | optional extra, never required |
 
