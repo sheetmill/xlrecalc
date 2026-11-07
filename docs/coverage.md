@@ -130,14 +130,14 @@ library differs in the last bits; the rows that match either way do not.
 | `DATE` | date and time | implemented | 40 | 40 | 0 | 0 | 0 |  |  |
 | `DATEDIF` | date and time | implemented | 3652 | 3651 | 0 | 0 | 1 |  |  |
 | `DATEVALUE` | date and time | implemented | 137 | 137 | 0 | 0 | 0 |  |  |
-| `DAVERAGE` | database | partial | 130 | 129 | 0 | 0 | 1 |  | computed criteria are not supported |
+| `DAVERAGE` | database | partial | 140 | 139 | 0 | 0 | 1 |  | computed criteria are not supported |
 | `DAY` | date and time | implemented | 37 | 37 | 0 | 0 | 0 |  |  |
 | `DAYS` | date and time | implemented | 393 | 393 | 0 | 0 | 0 |  |  |
 | `DAYS360` | date and time | implemented | 401 | 401 | 0 | 0 | 0 |  |  |
 | `DB` | financial | implemented | 1493 | 1455 | 38 | 0 | 0 | 8 ulps |  |
 | `DBCS` | | absent | | | | | | | |
-| `DCOUNT` | database | partial | 131 | 130 | 0 | 0 | 1 |  | computed criteria are not supported |
-| `DCOUNTA` | database | partial | 143 | 141 | 0 | 0 | 2 |  | computed criteria are not supported |
+| `DCOUNT` | database | partial | 141 | 140 | 0 | 0 | 1 |  | computed criteria are not supported |
+| `DCOUNTA` | database | partial | 153 | 151 | 0 | 0 | 2 |  | computed criteria are not supported |
 | `DDB` | financial | implemented | 1196 | 1180 | 16 | 0 | 0 | 8 ulps |  |
 | `DEC2BIN` | engineering | implemented | 312 | 312 | 0 | 0 | 0 |  |  |
 | `DEC2HEX` | engineering | implemented | 312 | 312 | 0 | 0 | 0 |  |  |
@@ -146,21 +146,21 @@ library differs in the last bits; the rows that match either way do not.
 | `DEGREES` | math | implemented | 30 | 30 | 0 | 0 | 0 |  |  |
 | `DELTA` | engineering | implemented | 135 | 135 | 0 | 0 | 0 |  |  |
 | `DEVSQ` | statistical | implemented | 32 | 32 | 0 | 0 | 0 | 4 ulps |  |
-| `DGET` | database | partial | 143 | 141 | 0 | 0 | 2 |  | computed criteria are not supported |
+| `DGET` | database | partial | 153 | 151 | 0 | 0 | 2 |  | computed criteria are not supported |
 | `DISC` | financial | implemented | 380 | 348 | 32 | 0 | 0 | 4 ulps |  |
-| `DMAX` | database | partial | 130 | 129 | 0 | 0 | 1 |  | computed criteria are not supported |
-| `DMIN` | database | partial | 130 | 129 | 0 | 0 | 1 |  | computed criteria are not supported |
+| `DMAX` | database | partial | 140 | 139 | 0 | 0 | 1 |  | computed criteria are not supported |
+| `DMIN` | database | partial | 140 | 139 | 0 | 0 | 1 |  | computed criteria are not supported |
 | `DOLLAR` | text | implemented | 237 | 237 | 0 | 0 | 0 |  |  |
 | `DOLLARDE` | financial | implemented | 224 | 224 | 0 | 0 | 0 |  |  |
 | `DOLLARFR` | financial | implemented | 224 | 224 | 0 | 0 | 0 |  |  |
-| `DPRODUCT` | database | partial | 143 | 142 | 0 | 0 | 1 |  | computed criteria are not supported |
+| `DPRODUCT` | database | partial | 153 | 152 | 0 | 0 | 1 |  | computed criteria are not supported |
 | `DROP` | | absent | | | | | | | |
-| `DSTDEV` | database | partial | 143 | 130 | 12 | 0 | 1 | 4 ulps | computed criteria are not supported |
-| `DSTDEVP` | database | partial | 143 | 142 | 0 | 0 | 1 | 4 ulps | computed criteria are not supported |
-| `DSUM` | database | partial | 131 | 130 | 0 | 0 | 1 |  | computed criteria are not supported |
+| `DSTDEV` | database | partial | 153 | 140 | 12 | 0 | 1 | 4 ulps | computed criteria are not supported |
+| `DSTDEVP` | database | partial | 153 | 152 | 0 | 0 | 1 | 4 ulps | computed criteria are not supported |
+| `DSUM` | database | partial | 141 | 140 | 0 | 0 | 1 |  | computed criteria are not supported |
 | `DURATION` | financial | implemented | 108 | 53 | 54 | 0 | 1 | 4 ulps |  |
-| `DVAR` | database | partial | 143 | 130 | 10 | 0 | 3 | 4 ulps | computed criteria are not supported |
-| `DVARP` | database | partial | 143 | 132 | 10 | 0 | 1 | 4 ulps | computed criteria are not supported |
+| `DVAR` | database | partial | 153 | 140 | 10 | 0 | 3 | 4 ulps | computed criteria are not supported |
+| `DVARP` | database | partial | 153 | 142 | 10 | 0 | 1 | 4 ulps | computed criteria are not supported |
 | `EDATE` | date and time | implemented | 41 | 41 | 0 | 0 | 0 |  |  |
 | `EFFECT` | financial | implemented | 147 | 147 | 0 | 0 | 0 | 4 ulps |  |
 | `ENCODEURL` | | absent | | | | | | | |

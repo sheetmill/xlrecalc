@@ -298,6 +298,20 @@ def test_refused_in_file_agrees_with_excel_on_empty_arguments():
     assert [f for f in computed if refused_in_file(f) is not None] == []
 
 
+def test_refused_in_file_agrees_with_excel_on_database_arguments():
+    """A database function's first argument must be a reference or ``#REF!``, as Excel requires."""
+    captures = Path(__file__).parent / "captures"
+    refused = (captures / "database_refused.tsv").read_text(encoding="utf-8").split("\n")[1:]
+    assert len([f for f in refused if f]) == 192
+    assert [f for f in refused if f and refused_in_file(f) is None] == []
+    rows = (captures / "database_family.tsv").read_text(encoding="utf-8").split("\n")
+    computed = [
+        r.split("\t")[3].replace("{1}", "B1") for r in rows if r.startswith("database_family\t")
+    ]
+    assert len(computed) > 1600
+    assert [f for f in computed if refused_in_file(f) is not None] == []
+
+
 def test_a_lone_surrogate_is_written_as_excel_stores_it(tmp_path):
     """``MID`` can cut a character in two; the file holds ``_xDE00_``, as Excel saves it."""
     openpyxl = pytest.importorskip("openpyxl")

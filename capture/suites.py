@@ -2668,6 +2668,32 @@ def database_family() -> list[Case]:
             cases.append(Case(fn.lower(), f"{fn}(FA:FC,{field},FD:FD)"))
             cases.append(Case(fn.lower(), f"{fn}(FA:FC,{field},FG:FG)"))
             cases.append(Case(fn.lower(), f"{fn}(FA1:FC1048576,{field},FE:FE)"))
+    path = Path(__file__).resolve().parents[1] / "tests/captures/database_refused.tsv"
+    refused = {line for line in path.read_text(encoding="utf-8").split("\n")[1:] if line}
+    return cases + [case for case in database_errors_all() if case.formula not in refused]
+
+
+def database_errors_all() -> list[Case]:
+    """Errors and values that are not ranges in each argument, alone and together."""
+    cases = []
+    for fn in (*_DATABASES, *_DATABASES_NEW):
+        for db in ("#REF!", "#N/A", "#DIV/0!", "1", '"x"', "{1;2}", '{"Score";1}'):
+            cases.append(Case(fn.lower(), f'{fn}({db},"Score",DU1:DU2)'))
+            cases.append(Case(fn.lower(), f'{fn}({db},"Num",FD1:FD2)'))
+        cases += [
+            Case(fn.lower(), f'{fn}({{1}},"Score",DU1:DU2)', (NA,)),
+            Case(fn.lower(), f"{fn}(DP1:DS7,#REF!,DU1:DU2)"),
+            Case(fn.lower(), f"{fn}(FA1:FC7,#NUM!,FD1:FD2)"),
+            Case(fn.lower(), f'{fn}(DP1:DS7,"Score",#REF!)'),
+            Case(fn.lower(), f'{fn}(FA1:FC7,"Num",#N/A)'),
+            Case(fn.lower(), f'{fn}(DP1:DS7,"Score",1)'),
+            Case(fn.lower(), f"{fn}(#N/A,#REF!,DU1:DU2)"),
+            Case(fn.lower(), f'{fn}(#REF!,"Score",#N/A)'),
+            Case(fn.lower(), f"{fn}(DP1:DS7,#N/A,#REF!)"),
+            Case(fn.lower(), f"{fn}(#DIV/0!,#N/A,#REF!)"),
+            Case(fn.lower(), f"{fn}(1,#N/A,DU1:DU2)"),
+            Case(fn.lower(), f'{fn}(1,"Score",#N/A)'),
+        ]
     return cases
 
 

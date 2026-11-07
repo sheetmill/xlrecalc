@@ -35,7 +35,12 @@ _FILE_ERRORS = frozenset(
 )
 
 
-_REFERENCE_ONLY = frozenset({"AREAS", "ISFORMULA", "FORMULATEXT"})
+# The first argument must be a reference or #REF!: a constant, an array or another error makes
+# Excel refuse the file (capture info_family, tests/captures/database_refused.tsv).
+_REFERENCE_ONLY = frozenset({
+    "AREAS", "ISFORMULA", "FORMULATEXT", "DAVERAGE", "DCOUNT", "DCOUNTA", "DGET", "DMAX", "DMIN",
+    "DPRODUCT", "DSTDEV", "DSTDEVP", "DSUM", "DVAR", "DVARP",
+})  # fmt: skip
 
 
 # An empty argument at these positions makes Excel refuse a file, and F() is position 0 (capture
@@ -223,7 +228,7 @@ def refused_in_file(text: str) -> str | None:
             and before.text.upper() == "OFFSET"
         ):
             return "a constant as OFFSET's reference"
-        if (  # AREAS(1), ISFORMULA({1,2}): capture info_family, the file does not open
+        if (  # AREAS(1), ISFORMULA({1,2}), DSUM(1,"a",A1:A2): the file does not open
             (
                 tok.kind in (Kind.NUMBER, Kind.STRING, Kind.BOOL, Kind.ARRAY_OPEN)
                 or (tok.kind is Kind.ERROR and tok.text != "#REF!")

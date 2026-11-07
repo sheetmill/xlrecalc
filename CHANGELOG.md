@@ -59,6 +59,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- A database function given an error, such as a name defined as `#REF!`, gave `#VALUE!`; the error is the result, the first
+  in argument order (database, field, criteria), as in Excel. A file whose formula gives one a database that is no reference
+  (`DSUM(1,"a",A1:A2)`, or an error other than `#REF!`) keeps the value it holds, in `Report.refused`, since Excel refuses
+  the file (capture `database_family`).
 - **An empty argument gave a wrong value with no report.** What it does differs by function, and each now follows a generated
   capture over every implemented function (`empty_args`): `AVERAGE(1,,3)` is 1.33, not 2, and `AND(1,,3)` is FALSE, not TRUE;
   `TEXTBEFORE("a-b","-",)` and `TEXTAFTER("abc","z",,,,"none")` take the default of what is empty, as `DEC2BIN(5,)`, `WEEKNUM(d,)` and

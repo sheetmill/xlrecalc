@@ -48,8 +48,12 @@ def _matching(db: Any, field: Any, crit: Any, ctx: Context) -> tuple[list[Any], 
     """The field's values in the records that match, and how many more match with it blank.
 
     This walks the non-blank cells: a blank record and a blank criteria row are each tested once
-    and counted, so a range over whole columns costs what its cells cost.
+    and counted, so a range over whole columns costs what its cells cost. An error given as an
+    argument is the result, the first in argument order (capture ``database_family``).
     """
+    for arg in (db, field, crit):
+        if isinstance(arg, ErrorValue):
+            return arg
     if not isinstance(db, Ref) or not isinstance(crit, Ref):
         return VALUE
     if db.rows < 2 or crit.rows < 2:
