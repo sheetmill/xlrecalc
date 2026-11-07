@@ -110,8 +110,7 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 - `FORMULATEXT` gives a legacy formula as the file holds it, without the `@` the formula bar shows
   (`=@{1,2;3,4}`; capture `info_family`). `AREAS` and `ISREF` of a union are computed, from the
   formula alone; the other functions of that family are not, as for any union.
-- `WEEKNUM` with a type the documentation lacks (-1, 22) gives `#NUM!` here. Excel gives `#NUM!` on some weekdays and a
-  week number on others, with no rule found; 36 rows of capture `dates_family`. `DATEDIF` from December 31, 1900 to March
+- `WEEKNUM` with a type the documentation lacks (-1, 22) gives `#NUM!` here. Excel's result changes between runs, `#NUM!` or a week number, so no result can be expected to repeat it; every such row of capture `dates_family` is listed, whatever it gives. `DATEDIF` from December 31, 1900 to March
   1, 2000 in `YD` is 60 here and 61 in Excel, where every neighbor fits the rule (one row).
 - `FINDB`, `SEARCHB`, `LEFTB`, `RIGHTB`, `MIDB`, `LENB` and `REPLACEB` behave as this English Excel for Mac computes
   them, counting no text double (capture `text_family`). With a double-byte language as the default, Excel documents

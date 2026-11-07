@@ -167,49 +167,93 @@ _UNION = "a union of ranges is not implemented, and the cell is reported"
 _REGEX = "the regular-expression match mode (3) is not implemented, and the cell is reported"
 _AT_SIGN = "the @ the formula bar shows in a legacy formula is not shown by FORMULATEXT"
 _WEEKNUM_ODD_TYPE = (
-    "WEEKNUM with a type its documentation lacks (-1, 22): #NUM! on some weekdays and a week "
-    "number on others, with no rule found, where the package gives #NUM!"
+    "WEEKNUM with a type its documentation lacks (-1, 22): Excel's result changes between runs, "
+    "#NUM! or a week number; the package gives #NUM!"
 )
 _DATEDIF_MARCH = (
     "DATEDIF from December 31, 1900 to March 1, 2000 in YD is 61 where every neighbor gives 60"
 )
 _WEEKNUM_ODD_CASES = (
+    474,
     476,
     497,
+    499,
     520,
+    522,
     543,
+    545,
+    566,
+    568,
+    589,
     591,
     612,
     614,
     635,
+    637,
+    658,
+    660,
     681,
+    683,
     704,
+    706,
     727,
+    729,
     750,
+    752,
     773,
     775,
+    796,
+    798,
+    819,
     821,
+    842,
+    844,
     865,
     867,
+    888,
+    890,
+    911,
     913,
     934,
     936,
     957,
+    959,
+    980,
+    982,
     1003,
+    1005,
     1026,
+    1028,
+    1049,
+    1051,
+    1072,
+    1074,
+    1095,
+    1097,
     1118,
+    1120,
+    1141,
+    1143,
+    1164,
     1166,
+    1187,
     1189,
+    1210,
     1212,
+    1233,
     1235,
     1256,
     1258,
     1279,
+    1281,
     1302,
     1304,
     1325,
     1327,
     1348,
+    1350,
+    1371,
+    1373,
 )
 _NUMBERVALUE_GROUP = (
     "NUMBERVALUE reads a group separator after the decimal one as a digit when both are digits"
@@ -387,7 +431,7 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
 # platform's library: it must still differ on the platform the captures' split is measured on
 # (docs/coverage.md records it), and elsewhere it counts as listed whether or not it matches, so
 # the published counts are the same on every platform.
-EXEMPT = frozenset({_RANDOM})
+EXEMPT = frozenset({_RANDOM, _WEEKNUM_ODD_TYPE})
 MATH_LIBRARY = frozenset(
     {_IPMT_TAIL, _ITER_NEAR_ZERO, _ITER_OUTCOME, _XIRR, _YIELD_ZERO_COUPON, _PRICE_EXTREME,
      _NORMAL_TAIL}

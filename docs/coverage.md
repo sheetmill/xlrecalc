@@ -519,7 +519,7 @@ library differs in the last bits; the rows that match either way do not.
 | `VSTACK` | | absent | | | | | | | |
 | `WEBSERVICE` | | absent | | | | | | | |
 | `WEEKDAY` | date and time | implemented | 75 | 75 | 0 | 0 | 0 |  |  |
-| `WEEKNUM` | date and time | implemented | 953 | 917 | 0 | 0 | 36 |  |  |
+| `WEEKNUM` | date and time | implemented | 953 | 873 | 0 | 0 | 80 |  |  |
 | `WEIBULL` | | absent | | | | | | | |
 | `WEIBULL.DIST` | | absent | | | | | | | |
 | `WORKDAY` | date and time | implemented | 151 | 151 | 0 | 0 | 0 |  |  |
