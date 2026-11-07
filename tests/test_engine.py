@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import io
+from pathlib import Path
 
 import pytest
 
@@ -278,3 +279,14 @@ def test_a_changed_formula_makes_its_dependents_stale_for_reads():
     assert value(e, "C1") == 7.0
     e.set_formula(0, 0, 1, "A1*10")
     assert value(e, "C1") == 21.0  # read directly, without recalculate()
+
+
+def test_refused_in_file_agrees_with_excel_on_empty_arguments():
+    """Every formula with an empty argument Excel refused is refused, and none it computed."""
+    captures = Path(__file__).parent / "captures"
+    refused = (captures / "empty_args_refused.tsv").read_text(encoding="utf-8").split("\n")[1:]
+    assert [f for f in refused if f and refused_in_file(f) is None] == []
+    rows = (captures / "empty_args.tsv").read_text(encoding="utf-8").split("\n")
+    computed = [r.split("\t")[3] for r in rows if r.startswith("empty_args\t")]
+    assert len(computed) > 500
+    assert [f for f in computed if refused_in_file(f) is not None] == []

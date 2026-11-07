@@ -80,10 +80,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
-- **An empty argument was passed over, giving a wrong value with no report.** It is 0 in `AVERAGE`, `COUNT`, `COUNTA`, `MIN`,
-  `MAX`, `MEDIAN`, the variances and standard deviations and their `A` forms, and FALSE in `AND`, `OR` and `XOR`:
-  `AVERAGE(1,,3)` is 1.33, not 2, and `AND(1,,3)` is FALSE. `PRODUCT` passes over it, as does `GCD`, `LCM` and
-  `MULTINOMIAL`, but for an empty first argument, which is `#N/A` (capture `statistics_family`).
+- **An empty argument gave a wrong value with no report.** What it does differs by function, and each now follows a generated
+  capture over every implemented function (`empty_args`): `AVERAGE(1,,3)` is 1.33, not 2, and `AND(1,,3)` is FALSE, not TRUE;
+  `TEXTBEFORE("a-b","-",)` and `TEXTAFTER("abc","z",,,,"none")` take the default of what is empty, as `DEC2BIN(5,)`, `WEEKNUM(d,)` and
+  `PERCENTRANK(r,3,)` do; `EDATE(d,)`, `MROUND(5,)` and other older functions are `#N/A`, and `LOOKUP(10,r,)` is `#VALUE!`. A file with a
+  formula Excel refuses for an empty argument, such as `ABS()` or `SUMIF(r,10,)`, keeps the value it holds, in `Report.refused`.
 - `RIGHT` with a count past the text's length but less than twice it gave too little: `RIGHT("ab",3)` was `b`.
 - `LEN`, `MID`, `FIND` and `REPLACE` count a character outside the first plane, such as an emoji, as two, as Excel does:
   `LEN("😀")` is 2 and `FIND("b","a😀b")` is 4; `MID` can cut one in two (capture `text_family`).

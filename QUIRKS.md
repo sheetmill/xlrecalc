@@ -130,6 +130,8 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   of periods nor a difference of balances reproduces; one row of `TBILLEQ` too.
   `CUMIPMT` and `CUMPRINC` over a million periods or more, and `DB` past a million, are `#NUM!` here, a bound Excel's
   behavior was not captured at.
+- An empty argument, five rows of `empty_args` in all: `VDB` with an empty `factor` is `#DIV/0!` in Excel and 0 here (two rows), `WORKDAY.INTL` with a
+  range as its weekend and empty holidays is `#NUM!` there and `#VALUE!` here (two rows), and one `MULTINOMIAL` row carries its known noise.
 - How text orders is captured only in part: every pair of 40 ASCII characters and 24 pairs of words,
   on Excel 16 for Mac (capture `modern`). Those give one consistent order, marks and symbols before
   digits before letters, with accents after their base letter. The rest is approximated: other

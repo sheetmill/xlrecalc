@@ -9,6 +9,7 @@ from __future__ import annotations
 import math
 from collections.abc import Callable
 from dataclasses import dataclass
+from pathlib import Path
 
 from capture.pipeline import EMPTY_TEXT, Case, FormulaInput, Input
 from xlrecalc._formula._prefixes import PREFIXES
@@ -3178,6 +3179,67 @@ def finance_family() -> list[Case]:
     return cases
 
 
+_EMPTY_TABLE: dict[str, Input] = {
+    **{f"AA{i + 1}": v for i, v in enumerate((1.0, 2.0, 4.0, 8.0))},
+    **{f"AB{i + 1}": v for i, v in enumerate((3.0, 5.0, 6.0, 9.0))},
+    "AC1": "a", "AC2": "b", "AD1": "a", "AD2": 2.0,
+}  # fmt: skip
+_EMPTY_SKIP = frozenset(
+    {"_XLFN.ANCHORARRAY", "_XLFN.SINGLE", "RAND", "RANDBETWEEN", "NOW", "TODAY"}
+)
+_EMPTY_VALUE = {
+    "number": "2", "text": '"a"', "logical": "TRUE", "value": "2", "branch": "2",
+    "raw": "$AA$1:$AA$4", "array": "$AA$1:$AA$4", "matrix": "$AA$1:$AA$4", "key": "2",
+}  # fmt: skip
+_R, _S = "$AA$1:$AA$4", "$AB$1:$AB$4"
+_EMPTY_VALID: dict[str, tuple[str, ...]] = {
+    "_XLFN.TEXTBEFORE": ('"a-b-c"', '"-"', "1", "0", "0", '"none"'),
+    "_XLFN.TEXTAFTER": ('"a-b-c"', '"-"', "1", "0", "0", '"none"'),
+    "SUMIF": (_R, '">1"', _S), "COUNTIF": (_R, '">1"'), "AVERAGEIF": (_R, '">1"', _S),
+    "SUMIFS": (_S, _R, '">1"'), "COUNTIFS": (_R, '">1"'), "AVERAGEIFS": (_S, _R, '">1"'),
+    "VLOOKUP": ("2", "$AA$1:$AB$4", "2", "FALSE"), "HLOOKUP": ("1", "$AA$1:$AB$4", "2", "FALSE"),
+    "MATCH": ("2", _R, "0"), "LOOKUP": ("2", _R, _S), "SUBTOTAL": ("9", _R),
+    "OFFSET": ("$AA$1", "1", "0", "1", "1"), "INDIRECT": ('"AA1"', "TRUE"),
+    "INDEX": ("$AA$1:$AB$4", "2", "1"),
+    "CELL": ('"row"', "$AA$1"), "WEEKNUM": ("40000", "2"), "XLOOKUP": ("2", _R, _S, '"x"', "0",
+    "1"),
+    "CHOOSE": ("1", "2", "3"), "IF": ("TRUE", "2", "3"), "PERCENTRANK": (_R, "2", "3"),
+    "_XLFN.PERCENTRANK.INC": (_R, "2", "3"), "_XLFN.PERCENTRANK.EXC": (_R, "2", "3"),
+    "EDATE": ("40000", "2"), "EOMONTH": ("40000", "2"), "MROUND": ("5", "2"), "QUOTIENT": ("5",
+    "2"),
+}  # fmt: skip
+
+
+def empty_args_all() -> list[Case]:
+    """From the registry: each argument empty in turn, and all optional ones empty together."""
+    from xlrecalc._functions import SPECS
+
+    cases = []
+    for key, spec in sorted(SPECS.items()):
+        if key in _EMPTY_SKIP or not spec.kinds:
+            continue
+        name = "_xlfn." + key[6:] if key.startswith("_XLFN.") else key
+        count = len(spec.kinds) + (1 if spec.max_args is None else 0)
+        full = [_EMPTY_VALUE[spec.kinds[min(i, len(spec.kinds) - 1)]] for i in range(count)]
+        valid = _EMPTY_VALID.get(key, ())
+        full[: len(valid)] = valid[:count]
+        lists = [[*full[:i], "", *full[i + 1 :]] for i in range(count)]
+        if spec.min_args < count:
+            lists.append([*full[: spec.min_args], *[""] * (count - spec.min_args)])
+            lists.append([*full[: spec.min_args], ""])  # one empty past the required
+            if spec.min_args + 1 < count:  # a later optional set past an empty one
+                lists.append([*full[: spec.min_args], "", full[spec.min_args + 1]])
+        for args in lists:
+            cases.append(Case(key.lower().replace("_xlfn.", ""), f"{name}({','.join(args)})"))
+    return list(dict.fromkeys(cases))
+
+
+def empty_args() -> list[Case]:
+    path = Path(__file__).resolve().parents[1] / "tests/captures/empty_args_refused.tsv"
+    refused = {line for line in path.read_text(encoding="utf-8").split("\n")[1:] if line}
+    return [case for case in empty_args_all() if case.formula not in refused]
+
+
 def mac_gaps() -> list[Case]:
     """Whether Excel for Mac computes functions a source says it lacks, in each file form."""
     url = '("a b&c=d/é")'
@@ -3225,6 +3287,7 @@ SUITES = {
     "math_integers": Suite(math_integers, fixed=_INTEGERS_TABLE),
     "iteration": Suite(iteration),
     "mac_gaps": Suite(mac_gaps),
+    "empty_args": Suite(empty_args, fixed=_EMPTY_TABLE),
     "database_family": Suite(database_family, fixed={**MISC_TABLE, **_DB_EXTRA}),
     "engineering_family": Suite(engineering_family),
     "statistics_family": Suite(statistics_family, fixed=_STATS_FAMILY_TABLE),

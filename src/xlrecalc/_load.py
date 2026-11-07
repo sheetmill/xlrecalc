@@ -11,11 +11,12 @@ from __future__ import annotations
 
 import datetime as dt
 import os
+from collections.abc import Iterable
 from typing import Any, BinaryIO
 
 from xlrecalc._dates import date_serial
 from xlrecalc._engine import Engine, node
-from xlrecalc._formula import FormulaSyntaxError, Kind, TokenizeError, tokenize
+from xlrecalc._formula import FormulaSyntaxError, Kind, Token, TokenizeError, tokenize
 from xlrecalc._formula._fastkey import raw_key
 from xlrecalc._numtext import DBL_MIN
 from xlrecalc._quirks import Quirks
@@ -35,6 +36,155 @@ _FILE_ERRORS = frozenset(
 
 
 _REFERENCE_ONLY = frozenset({"AREAS", "ISFORMULA", "FORMULATEXT"})
+
+
+# An empty argument at these positions makes Excel refuse a file, and F() is position 0 (capture
+# empty_args, refused rows in tests/captures/empty_args_refused.tsv).
+_EMPTY_REFUSED: dict[str, tuple[int, ...]] = {
+    "ABS": (0,),
+    "ACOS": (0,),
+    "ACOSH": (0,),
+    "ACOT": (0,),
+    "ACOTH": (0,),
+    "ARABIC": (0,),
+    "AREAS": (0,),
+    "ASIN": (0,),
+    "ASINH": (0,),
+    "ATAN": (0,),
+    "ATANH": (0,),
+    "AVERAGEIF": (0, 2),
+    "AVERAGEIFS": (0, 1, 2, 3),
+    "BIN2DEC": (0,),
+    "CELL": (1,),
+    "CHAR": (0,),
+    "CLEAN": (0,),
+    "CODE": (0,),
+    "COLUMNS": (0,),
+    "COS": (0,),
+    "COSH": (0,),
+    "COT": (0,),
+    "COTH": (0,),
+    "COUNTBLANK": (0,),
+    "COUNTIF": (0,),
+    "COUNTIFS": (0, 1, 2),
+    "CSC": (0,),
+    "CSCH": (0,),
+    "DATEVALUE": (0,),
+    "DAVERAGE": (0,),
+    "DAY": (0,),
+    "DCOUNT": (0,),
+    "DCOUNTA": (0,),
+    "DEGREES": (0,),
+    "DGET": (0,),
+    "DMAX": (0,),
+    "DMIN": (0,),
+    "DPRODUCT": (0,),
+    "DSTDEV": (0,),
+    "DSTDEVP": (0,),
+    "DSUM": (0,),
+    "DVAR": (0,),
+    "DVARP": (0,),
+    "ERROR.TYPE": (0,),
+    "EVEN": (0,),
+    "EXP": (0,),
+    "FACT": (0,),
+    "FACTDOUBLE": (0,),
+    "FISHER": (0,),
+    "FISHERINV": (0,),
+    "FORMULATEXT": (0,),
+    "GAUSS": (0,),
+    "HEX2DEC": (0,),
+    "HOUR": (0,),
+    "IFS": (0, 1, 2),
+    "INT": (0,),
+    "ISBLANK": (0,),
+    "ISERR": (0,),
+    "ISERROR": (0,),
+    "ISEVEN": (0,),
+    "ISFORMULA": (0,),
+    "ISLOGICAL": (0,),
+    "ISNA": (0,),
+    "ISNONTEXT": (0,),
+    "ISNUMBER": (0,),
+    "ISODD": (0,),
+    "ISOWEEKNUM": (0,),
+    "ISREF": (0,),
+    "ISTEXT": (0,),
+    "LEN": (0,),
+    "LENB": (0,),
+    "LN": (0,),
+    "LOG10": (0,),
+    "LOWER": (0,),
+    "MAXIFS": (0, 1, 2, 3),
+    "MINIFS": (0, 1, 2, 3),
+    "MINUTE": (0,),
+    "MONTH": (0,),
+    "N": (0,),
+    "NORM.S.INV": (0,),
+    "NORMSDIST": (0,),
+    "NORMSINV": (0,),
+    "NOT": (0,),
+    "OCT2DEC": (0,),
+    "ODD": (0,),
+    "OFFSET": (0,),
+    "PHI": (0,),
+    "PROPER": (0,),
+    "RADIANS": (0,),
+    "RANK": (1,),
+    "RANK.AVG": (1,),
+    "RANK.EQ": (1,),
+    "ROWS": (0,),
+    "SEC": (0,),
+    "SECH": (0,),
+    "SECOND": (0,),
+    "SIGN": (0,),
+    "SIN": (0,),
+    "SINH": (0,),
+    "SQRT": (0,),
+    "SQRTPI": (0,),
+    "SUBTOTAL": (1, 2),
+    "SUMIF": (0, 2),
+    "SUMIFS": (0, 1, 2, 3),
+    "T": (0,),
+    "TAN": (0,),
+    "TANH": (0,),
+    "TIMEVALUE": (0,),
+    "TRANSPOSE": (0,),
+    "TRIM": (0,),
+    "TYPE": (0,),
+    "UNICHAR": (0,),
+    "UNICODE": (0,),
+    "UPPER": (0,),
+    "VALUE": (0,),
+    "YEAR": (0,),
+}
+
+
+def _refused_empty(toks: Iterable[Token]) -> str | None:
+    """The function whose empty argument Excel refuses, as a reason, or ``None``."""
+    stack: list[list[Any]] = []  # [function or None, position, nothing seen in this argument]
+    previous = None
+    for tok in toks:
+        if stack and tok.kind is Kind.COMMA and stack[-1][0] is not None:
+            if stack[-1][2] and stack[-1][1] in _EMPTY_REFUSED.get(stack[-1][0], ()):
+                return f"an empty argument of {stack[-1][0]}"
+            stack[-1][1] += 1
+            stack[-1][2] = True
+            previous = tok
+            continue
+        if tok.kind is Kind.CLOSE and stack:
+            closed, position, empty = stack.pop()
+            if closed is not None and empty and position in _EMPTY_REFUSED.get(closed, ()):
+                return f"an empty argument of {closed}"
+        if stack and tok.kind is not Kind.COMMA:
+            stack[-1][2] = False
+        if tok.kind is Kind.OPEN:
+            name = None
+            if previous is not None and previous.kind is Kind.FUNCTION:
+                name = previous.text.upper().removeprefix("_XLFN.")
+            stack.append([name, 0, True])
+        previous = tok
+    return None
 
 
 def refused_in_file(text: str) -> str | None:
@@ -80,7 +230,7 @@ def refused_in_file(text: str) -> str | None:
         ):
             return "an argument list of spaces"
         before, previous = previous, tok
-    return None
+    return _refused_empty(toks)
 
 
 def _filled_by(boxes: list[tuple[int, int, int, int, int]], row: int, col: int) -> int | None:

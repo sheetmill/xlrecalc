@@ -253,6 +253,8 @@ def _plain(values: list[float]) -> float:
 
 def _pairs(xs: Any, ys: Any) -> tuple[list[float], list[float]] | ErrorValue:
     """Paired numbers of two ranges of the same size; other pairs are left out."""
+    if xs is MISSING or ys is MISSING:  # capture empty_args
+        return VALUE
     a, b = _cells(xs), _cells(ys)
     if len(a) != len(b):
         return ErrorValue.NA

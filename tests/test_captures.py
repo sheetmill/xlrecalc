@@ -313,6 +313,9 @@ _CUMULATIVE_CASES = (
     4805,
     4807,
 )
+_EMPTY_ODD = (
+    "an empty argument with no rule found: VDB's factor, WORKDAY.INTL over a range as weekend"
+)
 _MULTINOMIAL = (
     "Excel's result carries noise from its logarithm of the gamma function (279.99999999999966)"
 )
@@ -330,6 +333,8 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("dates_family", case): _WEEKNUM_ODD_TYPE for case in _WEEKNUM_ODD_CASES},
     ("dates_family", 2004): _DATEDIF_MARCH,
     ("text_family", 1761): _NUMBERVALUE_GROUP,
+    ("empty_args", 296): _MULTINOMIAL,
+    **{("empty_args", case): _EMPTY_ODD for case in (522, 523, 538, 702)},
     **{("finance_family", case): _CUMULATIVE_NOISE for case in _CUMULATIVE_CASES},
     ("finance_family", 10952): _TBILLEQ_NOISE,
     **{("statistics_family", case): _MOMENT_NOISE for case in (65, 66, 118, 141, 414, 582)},
@@ -423,6 +428,7 @@ SUITES = [
     "engineering_family",
     "statistics_family",
     "finance_family",
+    "empty_args",
 ]
 
 

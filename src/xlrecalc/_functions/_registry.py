@@ -42,12 +42,14 @@ counted apart from both.
 
 from __future__ import annotations
 
+import inspect
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
 from xlrecalc._arrays import broadcast, to_array
 from xlrecalc._coerce import Context, scalar, to_bool, to_number, to_text
+from xlrecalc._formula import MISSING
 from xlrecalc._formula._codegen import kind_at
 from xlrecalc._values import ErrorValue, Ref
 
@@ -89,6 +91,101 @@ REGISTRY: dict[str, Callable[..., Any]] = {}
 SPECS: dict[str, Spec] = {}
 
 
+# What an empty argument does differs by function (capture empty_args). These give #N/A for an
+# empty required argument, whatever the others hold: mostly the old Analysis ToolPak functions.
+_EMPTY_REQUIRED_IS_NA = frozenset(
+    [
+        "BIN2HEX",
+        "BIN2OCT",
+        "COUPDAYBS",
+        "COUPDAYS",
+        "COUPDAYSNC",
+        "COUPNCD",
+        "COUPNUM",
+        "COUPPCD",
+        "CUMIPMT",
+        "CUMPRINC",
+        "DEC2BIN",
+        "DEC2HEX",
+        "DEC2OCT",
+        "DELTA",
+        "DISC",
+        "DOLLARDE",
+        "DOLLARFR",
+        "DURATION",
+        "EDATE",
+        "EFFECT",
+        "EOMONTH",
+        "FVSCHEDULE",
+        "GESTEP",
+        "HEX2BIN",
+        "HEX2OCT",
+        "INTRATE",
+        "MDURATION",
+        "MROUND",
+        "NETWORKDAYS",
+        "NOMINAL",
+        "OCT2BIN",
+        "OCT2HEX",
+        "PRICE",
+        "PRICEDISC",
+        "QUOTIENT",
+        "RECEIVED",
+        "SERIESSUM",
+        "TBILLEQ",
+        "TBILLPRICE",
+        "TBILLYIELD",
+        "WEEKNUM",
+        "WORKDAY",
+        "WORKDAY.INTL",
+        "XIRR",
+        "XNPV",
+        "YEARFRAC",
+        "YIELD",
+        "YIELDDISC",
+        "_XLFN.WORKDAY.INTL",
+    ]
+)
+# These give #N/A only in their leading arguments, the dates; a later one is checked as 0.
+_EMPTY_NA_LEADING = dict.fromkeys(
+    ("COUPDAYBS", "COUPDAYS", "COUPDAYSNC", "COUPNCD", "COUPNUM", "COUPPCD"), 2
+)
+# These give #VALUE! for an empty argument where a range belongs, at these positions.
+_EMPTY_IS_VALUE: dict[str, tuple[int, ...]] = {
+    "INDEX": (0,), "IRR": (0,), "LINEST": (0,), "LOOKUP": (1, 2), "MIRR": (0,), "PROB": (0, 1),
+    "SUMX2MY2": (0, 1), "SUMX2PY2": (0, 1), "SUMXMY2": (0, 1),
+}  # fmt: skip
+# These take an empty optional argument as if it were left out. Others take it as 0 or FALSE.
+_EMPTY_OPTIONAL_IS_DEFAULT = frozenset(
+    [
+        "ADDRESS",
+        "BIN2HEX",
+        "BIN2OCT",
+        "DEC2BIN",
+        "DEC2HEX",
+        "DEC2OCT",
+        "HEX2BIN",
+        "HEX2OCT",
+        "ISO.CEILING",
+        "LINEST",
+        "OCT2BIN",
+        "OCT2HEX",
+        "PERCENTRANK",
+        "WEEKNUM",
+        "WORKDAY.INTL",
+        "_XLFN.CEILING.MATH",
+        "_XLFN.CEILING.PRECISE",
+        "_XLFN.FLOOR.MATH",
+        "_XLFN.FLOOR.PRECISE",
+        "_XLFN.PERCENTRANK.EXC",
+        "_XLFN.PERCENTRANK.INC",
+        "_XLFN.TEXTAFTER",
+        "_XLFN.TEXTBEFORE",
+        "_XLFN.WORKDAY.INTL",
+    ]
+)
+
+
 def function(
     name: str,
     *kinds: str,
@@ -119,10 +216,30 @@ def function(
         lifted_kinds = [k in _LIFTED for k in kinds]
         plain = not any(lifted_kinds) and all(_CONVERT.get(k) is None for k in kinds)
 
+        required_na = name.upper() in _EMPTY_REQUIRED_IS_NA
+        leading = _EMPTY_NA_LEADING.get(name.upper(), lo)
+        value_at = _EMPTY_IS_VALUE.get(name.upper(), ())
+        defaults = (
+            [p.default for p in list(inspect.signature(core).parameters.values())[1:]]
+            if name.upper() in _EMPTY_OPTIONAL_IS_DEFAULT
+            else None
+        )
+
         def call(ctx: Context, *args: Any) -> Any:
             n = len(args)
             if n < lo or (hi is not None and n > hi):
                 return VALUE
+            if required_na and any(a is MISSING for a in args[:leading]):
+                return ErrorValue.NA
+            if value_at and any(i < n and args[i] is MISSING for i in value_at):
+                return VALUE
+            if defaults is not None:
+                args = tuple(
+                    defaults[i]
+                    if a is MISSING and i >= lo and defaults[i] is not inspect.Parameter.empty
+                    else a
+                    for i, a in enumerate(args)
+                )
             if plain:  # every argument passed as it is (SUM, COUNT, ...): nothing to coerce
                 return core(ctx, *args)
             lifted = [kind_at(kinds, i, cycle) in _LIFTED for i in range(n)]
@@ -139,7 +256,9 @@ def function(
             coerced = []
             for i, arg in enumerate(args):
                 convert = _CONVERT.get(kind_at(kinds, i, cycle))
-                if convert is None:
+                if convert is None or (
+                    defaults is not None and i >= lo and (arg is MISSING or arg is None)
+                ):
                     coerced.append(arg)
                     continue
                 value = convert(arg, ctx)
