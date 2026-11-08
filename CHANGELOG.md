@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     number is the one before plus the step; an array argument gives each element's first number.
   - `MMULT`: every element must be a number (`#VALUE!` for a text, a blank or a logical, the error for an error) and the
     sizes must fit; each element is summed in order, as Excel adds.
+  - `UNIQUE`: rows, or columns with `by_col`, in the order they first appear, text compared without regard to case and
+    kept as first written, numbers and numbers as text apart, `exactly_once`; none left is `#CALC!`.
 
   A formula calling one of them, set through `set_formula`, is written as a dynamic array whatever the size of its
   result, so that it spills when its data grows.

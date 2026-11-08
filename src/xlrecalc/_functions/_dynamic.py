@@ -7,10 +7,12 @@ Each returns rows of values that a dynamic-array formula spills. The rules come 
 from __future__ import annotations
 
 import math
+from functools import cmp_to_key
 from typing import Any
 
 from xlrecalc._arrays import ArrayLimitError, broadcast, to_array
-from xlrecalc._coerce import scalar, to_number
+from xlrecalc._coerce import scalar, to_bool, to_number
+from xlrecalc._compare import compare
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._registry import function
 from xlrecalc._values import BLANK, ErrorValue, Ref
@@ -131,3 +133,102 @@ def MMULT(ctx: Any, a: Any, b: Any) -> Any:
             cells.append(total if math.isfinite(total) else ErrorValue.NUM)
         out.append(tuple(cells))
     return tuple(out)
+
+
+# Order and equality, as SORT, SORTBY and UNIQUE see values ---------------------------------------
+
+
+def _rank(v: Any) -> int:
+    """Numbers, then text, then logicals, then errors; a blank after everything."""
+    if v is BLANK or v is MISSING:
+        return 4
+    if isinstance(v, bool):
+        return 2
+    if isinstance(v, float):
+        return 0
+    if isinstance(v, ErrorValue):
+        return 3
+    return 1
+
+
+def _order(a: Any, b: Any, ctx: Any) -> int:
+    """-1, 0 or 1 for two non-blank values of the same rank, ascending."""
+    if isinstance(a, ErrorValue):
+        x, y = _ERROR_ORDER.get(str(a), 99), _ERROR_ORDER.get(str(b), 99)
+        return (x > y) - (x < y)
+    if isinstance(a, str):
+        if compare(a, b, "<", ctx.quirks) is True:
+            return -1
+        return 1 if compare(a, b, ">", ctx.quirks) is True else 0
+    return int((a > b) - (a < b))
+
+
+def _sorted(items: list[Any], keys: list[tuple[list[Any], int]], ctx: Any) -> list[Any]:
+    """``items`` in the order of ``keys``, each (one value per item, 1 or -1).
+
+    Equal keys keep their order; a blank comes last in either order.
+    """
+
+    def cmp(i: int, j: int) -> int:
+        for values, direction in keys:
+            a, b = values[i], values[j]
+            ra, rb = _rank(a), _rank(b)
+            if ra == 4 or rb == 4:
+                if ra != rb:
+                    return 1 if ra == 4 else -1
+                continue
+            d = (ra > rb) - (ra < rb) if ra != rb else _order(a, b, ctx)
+            if d:
+                return d * direction
+        return 0
+
+    return [items[i] for i in sorted(range(len(items)), key=cmp_to_key(cmp))]
+
+
+def _same_key(v: Any) -> tuple[Any, ...]:
+    """A key equal for values UNIQUE takes as the same: text without regard to case."""
+    rank = _rank(v)
+    if rank == 1:
+        return (1, v.casefold())
+    if rank == 3:
+        return (3, str(v))
+    if rank == 4:
+        return (4,)
+    return (rank, v)
+
+
+def _flag(v: Any, ctx: Any) -> bool | ErrorValue:
+    """``by_col`` or ``exactly_once``: empty is FALSE, a number is TRUE unless 0, text #VALUE!."""
+    if isinstance(v, Ref):
+        v = scalar(v, ctx)
+    if v is MISSING or v is BLANK:
+        return False
+    if isinstance(v, str):
+        return VALUE
+    return to_bool(v, ctx)
+
+
+# UNIQUE ----------------------------------------------------------------------------------------
+
+
+@function("_XLFN.UNIQUE", "array", "raw", "raw", min_args=1, category=C)
+def UNIQUE(ctx: Any, array: Any, by_col: Any = MISSING, exactly_once: Any = MISSING) -> Any:
+    """Distinct rows (or columns) in the order they first appear; text compares without case."""
+    cols, once = _flag(by_col, ctx), _flag(exactly_once, ctx)
+    if isinstance(cols, ErrorValue):
+        return cols
+    if isinstance(once, ErrorValue):
+        return once
+    grid = _grid(array)
+    lines = list(zip(*grid, strict=True)) if cols else list(grid)
+    counts: dict[tuple[Any, ...], int] = {}
+    first: dict[tuple[Any, ...], tuple[Any, ...]] = {}
+    for line in lines:
+        key = tuple(_same_key(v) for v in line)
+        counts[key] = counts.get(key, 0) + 1
+        first.setdefault(key, line)
+    kept = [first[k] for k in first if not once or counts[k] == 1]
+    if not kept:
+        return CALC
+    out = tuple(tuple(_shown(v) for v in line) for line in kept)
+    return tuple(zip(*out, strict=True)) if cols else out
