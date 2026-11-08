@@ -77,13 +77,14 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
   financial and bond functions, the database functions. The
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 64,155 formulas computed by Excel and compared with xlrecalc's results: 63,813
+- **Evidence**: 64,335 formulas computed by Excel and compared with xlrecalc's results: 63,848
   match, bit for bit or within a small tolerance declared per function (a few units in the last
-  place, or a relative 1E-9 for the iterative functions), 342 known deviations, each listed
+  place, or a relative 1E-9 for the iterative functions), 487 known deviations, each listed
   with its reason in
   [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md). Every one of
-  them is evaluated. The largest group of deviations is the
-  iterative functions: from some starting guesses Excel's `IRR` and `RATE` reach another root
+  them is evaluated. The largest group of deviations is `VDB`
+  over a fractional start or end period (145 rows). Among the others, from some starting guesses
+  Excel's `IRR` and `RATE` reach another root
   than xlrecalc, or a rate where xlrecalc gives `#NUM!`, and `XIRR` stops about 1E-8 from the
   root; 73 of the 271 captured rows of `IRR`, `XIRR` and `RATE` differ that way.
 - **Excel's behavior**: coercion between kinds, error values, the 15-digit rules, the 1900

@@ -514,7 +514,7 @@ library differs in the last bits; the rows that match either way do not.
 | `VARA` | statistical | implemented | 37 | 32 | 5 | 0 | 0 | 4 ulps |  |
 | `VARP` | statistical | implemented | 37 | 34 | 3 | 0 | 0 | 4 ulps |  |
 | `VARPA` | statistical | implemented | 37 | 33 | 4 | 0 | 0 | 4 ulps |  |
-| `VDB` | financial | implemented | 187 | 174 | 6 | 0 | 7 | 4 ulps |  |
+| `VDB` | financial | implemented | 367 | 196 | 19 | 0 | 152 | 4 ulps |  |
 | `VLOOKUP` | lookup and reference | implemented | 68 | 68 | 0 | 0 | 0 |  |  |
 | `VSTACK` | | absent | | | | | | | |
 | `WEBSERVICE` | | absent | | | | | | | |

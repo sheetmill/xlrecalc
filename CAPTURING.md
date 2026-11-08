@@ -20,7 +20,7 @@ people's workbooks are used.
 | `dynrefs` | 90 | `OFFSET`, `INDIRECT`, `CELL`, `INDEX` as a reference, and dependencies only evaluation finds ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §6.3) |
 | `cell_noref` | 36 | `CELL` without a reference in workbooks differing in the active sheet and cells |
 | `n_lookup` | 56 | `N` and `LOOKUP` across argument kinds, both forms of `LOOKUP`, short result ranges |
-| `finance` | 931 | `PV`, `FV`, `PMT`, `IPMT`, `PPMT`, `NPER`, `NPV`, `XNPV`, `SLN`, `VDB` over signs, sizes, fractional and negative periods, both payment types and argument kinds; cash flows and dates as fixed cells |
+| `finance` | 1,111 | `PV`, `FV`, `PMT`, `IPMT`, `PPMT`, `NPER`, `NPV`, `XNPV`, `SLN`, `VDB` over signs, sizes, fractional and negative periods, both payment types and argument kinds; cash flows and dates as fixed cells; at the end, `VDB` over fractional start and end periods around a corpus call, with `no_switch` both ways, on two sets of values |
 | `iterative` | 271 | `IRR`, `XIRR`, `RATE` over 18 cash-flow shapes (two roots, a double root, no sign change, huge and tiny rates), 11 guesses, date orders and argument kinds |
 | `bonds` | 2,377 | `DAYS360` and `YEARFRAC` over every pair of 14 dates (month ends, February in leap and common years) in all bases; the six `COUP` functions, `PRICE`, `YIELD`, `DURATION`, `MDURATION` over six bonds, three frequencies and five bases; argument errors |
 | `workdays` | 481 | `WORKDAY`, `NETWORKDAYS` and their `.INTL` forms over starts on weekdays, weekends and holidays, every weekend code and masks, holidays with duplicates, text and errors; `HOUR`, `MINUTE`, `SECOND` around rounding to the second |

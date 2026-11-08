@@ -740,6 +740,26 @@ def finance() -> list[Case]:
         Case("vdb", "VDB(1000,0,1,0,1)"),
         Case("vdb", "VDB(1000,100,5,1,1.0001)"),
     ]
+    # VDB with fractional start and end periods, near the end of a life and earlier, with and
+    # without the switch to straight line: a corpus call (78714.55552 over 15 years at 1.5 from
+    # 14.43) and a second set of values.
+    for cost, salvage, life, factor, starts in (
+        (78714.55552, 0.0, 15.0, 1.5, (14.43013698630137, 14.0, 13.5, 13.2, 10.7, 7.3, 0.5, 0.25)),
+        (10000.0, 500.0, 7.0, 2.0, (0.3, 2.6, 5.5, 6.2)),
+        (10000.0, 500.0, 7.0, 1.25, (0.3, 2.6, 5.5, 6.2)),
+    ):
+        for start in starts:
+            ends = sorted(
+                {min(life, start + 1), min(life, start + 0.5), life, max(start, life - 0.1)}
+            )
+            for end in ends:
+                for switch in ("", ",FALSE", ",TRUE"):
+                    cases.append(
+                        Case(
+                            "vdb",
+                            f"VDB({cost!r},{salvage!r},{life!r},{start!r},{end!r},{factor!r}{switch})",
+                        )
+                    )
     return cases
 
 
