@@ -22,6 +22,7 @@ xlrecalc is part of the [sheetmill](https://github.com/sheetmill) project, with
 :maxdepth: 2
 
 usage
+iteration
 coverage
 quirks
 capturing
