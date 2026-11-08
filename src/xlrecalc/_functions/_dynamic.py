@@ -308,3 +308,33 @@ def SORTBY(ctx: Any, array: Any, *rest: Any) -> Any:
     lines = list(zip(*grid, strict=True)) if by_col else list(grid)
     out = tuple(tuple(_shown(v) for v in line) for line in _sorted(lines, keys, ctx))
     return tuple(zip(*out, strict=True)) if by_col else out
+
+
+# FILTER ----------------------------------------------------------------------------------------
+
+
+@function("_XLFN._XLWS.FILTER", "array", "array", "array", min_args=2, category=C)
+def FILTER(ctx: Any, array: Any, include: Any, if_empty: Any = MISSING) -> Any:
+    """The rows (or columns) whose ``include`` is TRUE or a number other than 0."""
+    grid, test = _grid(array), _grid(include)
+    if len(test[0]) == 1 and len(test) == len(grid):
+        flags, cols = [row[0] for row in test], False
+    elif len(test) == 1 and len(test[0]) == len(grid[0]):
+        flags, cols = list(test[0]), True
+    else:
+        return VALUE
+    keep = []
+    for v in flags:
+        if isinstance(v, ErrorValue):
+            return v
+        if isinstance(v, str):
+            return VALUE
+        keep.append(v is not BLANK and v is not MISSING and bool(v))
+    lines = list(zip(*grid, strict=True)) if cols else list(grid)
+    kept = [line for line, k in zip(lines, keep, strict=True) if k]
+    if not kept:
+        if if_empty is MISSING:
+            return CALC
+        return if_empty if not isinstance(if_empty, Ref) else to_array(if_empty)
+    out = tuple(tuple(_shown(v) for v in line) for line in kept)
+    return tuple(zip(*out, strict=True)) if cols else out

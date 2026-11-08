@@ -1235,6 +1235,7 @@ One workbook is used from one thread at a time.
 | custom functions | a design of their own: registration per workbook or engine, not process-wide; a rule for a file naming a function not installed; they take references too, so unions and arrays of references are designed with them |
 | the `_xlsx` subpackage's future | extracted into its own package once a second user (sheetpeek) needs its API |
 | numpy | optional extra, never required |
+| a formula set through the API that calls a function making arrays and has a one-cell result | written with the dynamic-array marker, so that it spills when its data grows (Excel opens it so); whether Excel marks such a typed formula needs a capture typed in the formula bar |
 
 ## 13. Roadmap
 
@@ -1248,20 +1249,17 @@ One workbook is used from one thread at a time.
    or formula changed (`engine.refresh()`, or `engine.changed("Sheet1!A1", ...)` naming them).
    It would answer code, not persist values: saving with values stays `recalculate`. openpyxl
    would be an optional extra, imported when the adapter is used.
-3. 0.2: the functions that make arrays: `FILTER`, `UNIQUE`, `SORT`, `SORTBY`, `SEQUENCE` and
-   `MMULT`, with the `#CALC!` error they produce. Spill, `#SPILL!`, `A1#` and `@` are in place
-   (§7.7).
-4. 0.2: unions of ranges together with arrays of references, which QUIRKS.md lists as not
+3. 0.2: unions of ranges together with arrays of references, which QUIRKS.md lists as not
    computed.
-5. 0.2: the functions still absent, by family, each family's captures first. An order, not a promise
-   or a date: the functions of item 3 are required; the other families (distributions and their
+4. 0.2: the functions still absent, by family, each family's captures first. An order, not a promise
+   or a date: the families (distributions and their
    inverses, complex numbers, Bessel functions and `CONVERT`, bonds with odd periods, the array and
    matrix functions) follow as far as they get; those with large questions of their own (regular
    expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable. `docs/coverage.md` lists what
    exists.
-6. `xlrecalc.evaluate(text)` for one formula outside a workbook, custom functions, and `LET` and `LAMBDA` with its helpers are designed together,
+5. `xlrecalc.evaluate(text)` for one formula outside a workbook, custom functions, and `LET` and `LAMBDA` with its helpers are designed together,
    from a list of what an editor built on the package needs.
-7. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
+6. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
    vectorized templates (numpy as an optional extra), a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,
    parallel evaluation of independent template columns on free-threaded Python, and a compiled

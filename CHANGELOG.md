@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     last in either direction; equal keys keep their order; several keys with their own orders, `by_col`.
   - `SORTBY`: the same order over other rows or columns, each with its own direction; a key of another length or shape is
     `#VALUE!`.
+  - `FILTER`: the rows, or columns, whose include is TRUE or a number other than 0 (a text is `#VALUE!`, an include of
+    another length or two-dimensional is `#VALUE!`); when none is left, `if_empty`, an array included, or `#CALC!`.
 
   A formula calling one of them, set through `set_formula`, is written as a dynamic array whatever the size of its
   result, so that it spills when its data grows.

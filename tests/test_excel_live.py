@@ -402,3 +402,44 @@ def test_dynamic_references_written_here_match_excel(container):
     assert len(report.circular) == 2  # INDIRECT("C1") in C1, OFFSET(C4,-1,0) in C3
     src.unlink()
     copy.unlink()
+
+
+def test_array_functions_set_through_the_api(container):
+    """Every case of the dyn_* captures set through set_formula: Excel opens the file and agrees."""
+    import openpyxl
+    from capture.dynamic_suites import DATA, SUITES, anchor_of
+
+    for suite, cases in SUITES.items():
+        src = container / f"xlrecalc_live_dyn_{suite}.xlsx"
+        copy = container / f"xlrecalc_live_dyn_{suite}_saved.xlsx"
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        for letters, values in DATA.items():
+            for r, v in enumerate(values, 1):
+                if v is None or (isinstance(v, str) and v.startswith("=")):
+                    continue
+                cell = ws[f"{letters}{r}"]
+                cell.value = str(v) if isinstance(v, ErrorValue) else v
+                if isinstance(v, ErrorValue):
+                    cell.data_type = "e"
+        for i, case in enumerate(cases):
+            row, col = anchor_of(i)
+            for (dr, dc), v in case.way.items():
+                ws.cell(row + dr, col + dc, v)
+        wb.save(src)
+        book = xlrecalc.load(src)
+        for i, case in enumerate(cases):
+            row, col = anchor_of(i)
+            bar = case.formula.replace("_xlfn._xlws.", "").replace("_xlfn.", "")
+            book.set_formula(f"B{row}", "=" + bar)
+        book.save()
+        save_copy(src, copy)
+        ours, excel = _all_values(src), _all_values(copy)
+        differ = {
+            k: (ours.get(k), excel.get(k))
+            for k in set(ours) | set(excel)
+            if not same(ours.get(k), excel.get(k))
+        }
+        assert not differ, (suite, differ)
+        src.unlink()
+        copy.unlink()
