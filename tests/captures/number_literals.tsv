@@ -1,0 +1,30 @@
+# suite: number_literals
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-08
+# generator: capture/literal_probe.py (each formula alone in a workbook)
+# columns: formula as written, opens or refused, formula Excel saved, type:value
+9.99999999999999E+307	opens	9.99999999999999E+307	n:9.99999999999999E+307
+9.99999999999999E+307*1	opens	9.99999999999999E+307*1	n:9.99999999999999E+307
+9.999999999999999E+307	opens	9.99999999999999E+307	n:9.99999999999999E+307
+9.999999999999995E+307	opens	9.99999999999999E+307	n:9.99999999999999E+307
+1E+308	refused		
+1E308	refused		
+-1E+308	refused		
+1.7976931348623157E+308	refused		
+1E+309	refused		
+2*1E+308	refused		
+"1E+308"*1	opens	"1E+308"*1	e:#VALUE!
+1E-307	opens	1E-307	n:1E-307
+2.2250738585072014E-308	opens	0	n:0
+1E-308	opens	0	n:0
+1E-320	refused		
+1E-400	refused		
+9.9999999999999999E+307	opens	9.99999999999999E+307	n:9.99999999999999E+307
+1.5E+308	refused		
+99999999999999E+294	opens	9.9999999999999E+307	n:9.9999999999999E+307
+999999999999999E+293	opens	9.99999999999999E+307	n:9.99999999999999E+307
+0.1E+309	refused		
+9E-309	opens	0	n:0
+1E-309	opens	0	n:0
+1E-310	refused		
+1E-315	refused		

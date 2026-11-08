@@ -10,6 +10,7 @@ Excel refuses in a file is dropped and its cell keeps its cached value, as Excel
 from __future__ import annotations
 
 import datetime as dt
+import decimal
 import os
 from collections.abc import Iterable
 from typing import Any, BinaryIO
@@ -259,6 +260,20 @@ def _refused_count(toks: Iterable[Token]) -> str | None:
     return None
 
 
+def _out_of_range(text: str) -> bool:
+    """A number literal Excel refuses in a file (capture ``number_literals``).
+
+    Its exponent in scientific form must lie between -309 and 307: Excel keeps 15 significant
+    digits, cut, not rounded (``9.9999999999999999E+307`` is accepted), which leaves the exponent
+    as written, so ``1E+308`` and ``1E-310`` are refused and ``1E-309`` is accepted (as 0).
+    """
+    try:
+        number = decimal.Decimal(text)
+    except decimal.InvalidOperation:
+        return False
+    return bool(number) and not -309 <= number.adjusted() <= 307
+
+
 def refused_in_file(text: str) -> str | None:
     """Why Excel refuses this formula in a file (``formula_forms`` capture), or ``None``."""
     try:
@@ -273,6 +288,8 @@ def refused_in_file(text: str) -> str | None:
             return f"the error literal {tok.text}"
         if tok.kind is Kind.OPERATOR and tok.text == "#":
             return "the spill operator"
+        if tok.kind is Kind.NUMBER and _out_of_range(tok.text):
+            return f"the number {tok.text}, outside 1E-309 to 9.99999999999999E+307"
         if (  # OFFSET(5,0,0): capture dynrefs, the file does not open
             tok.kind in (Kind.NUMBER, Kind.STRING, Kind.BOOL)
             and previous is not None

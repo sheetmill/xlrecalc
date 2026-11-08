@@ -93,6 +93,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- A number literal Excel refuses in a file formula, from `1E+308` up (the largest Excel takes is 9.99999999999999E+307) or
+  below `1E-309`, was computed; the formula keeps the value it holds and is in `Report.refused`, as Excel refuses the file
+  (capture `number_literals`).
 - `A1#` of a dynamic array that cannot spill was the `#SPILL!` error; it is the anchor cell alone, which holds `#SPILL!`,
   so `ROWS(A1#)` is 1 and `SUM(A1#)` is `#SPILL!`, as in Excel (capture `dyn_sequence`).
 - `VDB` with a fractional start or end period gave values far from Excel's (`VDB(78714.55552,0,15,14.43,15,1.5)` was 1,509.41

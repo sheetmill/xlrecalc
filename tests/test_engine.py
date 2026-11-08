@@ -401,3 +401,30 @@ def test_a_bare_prefixed_name_in_a_file_is_reported_with_its_fix(tmp_path):
     }
     wb = xlrecalc.load(tmp_path / "out.xlsx")
     assert wb.value("D1") == 1.0
+
+
+def test_number_literals_as_excel_takes_them_in_a_file():
+    """A literal from 1E+308 up, or below 1E-309, makes Excel refuse the file; others are read as
+    Excel reads them, 15 digits cut, a value below the smallest double as 0 (number_literals)."""
+    import io
+
+    from tests.test_captures import same
+    from tests.test_xlsx import package
+    from xlrecalc._load import load, refused_in_file
+    from xlrecalc._values import ErrorValue
+    from xlrecalc._xlsx._write import text_escape
+
+    lines = (Path(__file__).parent / "captures" / "number_literals.tsv").read_text("utf-8")
+    rows = [line.split("\t") for line in lines.splitlines() if not line.startswith("#")]
+    assert len(rows) >= 25
+    for formula, outcome, _saved, value in rows:
+        if outcome == "refused":
+            assert refused_in_file(formula), formula
+            continue
+        assert refused_in_file(formula) is None, formula
+        sheet = f'<row r="1"><c r="A1"><f>{text_escape(formula)}</f></c></row>'
+        engine = load(io.BytesIO(package(sheet)))
+        engine.recalculate()
+        kind, _, text = value.partition(":")
+        want = float(text) if kind == "n" else ErrorValue(text)
+        assert same(engine.get(0, 0, 0), want), (formula, engine.get(0, 0, 0), want)
