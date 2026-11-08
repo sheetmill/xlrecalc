@@ -98,3 +98,36 @@ def SEQUENCE(
         values.append(v if math.isfinite(v) else ErrorValue.NUM)
         v += by
     return tuple(tuple(values[i * c : (i + 1) * c]) for i in range(r))
+
+
+# MMULT -----------------------------------------------------------------------------------------
+
+
+@function("MMULT", "array", "array", category=L)
+def MMULT(ctx: Any, a: Any, b: Any) -> Any:
+    """The matrix product: every element a number, as many columns in ``a`` as rows in ``b``."""
+    x, y = _grid(a), _grid(b)
+    for m in (x, y):
+        for row in m:
+            for v in row:
+                if isinstance(v, ErrorValue):
+                    return v
+    for m in (x, y):
+        for row in m:
+            for v in row:
+                if type(v) is not float:
+                    return VALUE
+    n = len(x[0])
+    if n != len(y):
+        return VALUE
+    _limit(ctx, len(x), len(y[0]))
+    out = []
+    for row in x:
+        cells = []
+        for j in range(len(y[0])):
+            total = 0.0
+            for k in range(n):
+                total += row[k] * y[k][j]
+            cells.append(total if math.isfinite(total) else ErrorValue.NUM)
+        out.append(tuple(cells))
+    return tuple(out)

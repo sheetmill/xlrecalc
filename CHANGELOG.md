@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Functions that make arrays, captured from Excel as dynamic arrays (captures `dyn_*`, two sets of values each):
   - `SEQUENCE`: counts are truncated, an empty one is 1, 0 is `#CALC!` and a negative or too large one `#VALUE!`; each
     number is the one before plus the step; an array argument gives each element's first number.
+  - `MMULT`: every element must be a number (`#VALUE!` for a text, a blank or a logical, the error for an error) and the
+    sizes must fit; each element is summed in order, as Excel adds.
 
   A formula calling one of them, set through `set_formula`, is written as a dynamic array whatever the size of its
   result, so that it spills when its data grows.
