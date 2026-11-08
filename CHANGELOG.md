@@ -68,6 +68,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- A cell whose formula refers to another workbook (`[1]Sheet1!A1`, `[1]!Rate`) or across sheets (`SUM(S1:S3!A1)`), which
+  is not computed, held `#NAME?` in a full recalculation, so `Workbook.value` and what was computed from it, an iterated
+  loop included, disagreed with the written file, which kept the file's values. It keeps the value the file holds, as a
+  cell calling a function not implemented does, and is named in `Report.from_kept` with what is computed from it; it is
+  still reported under `external or 3-D reference`. Without a cached value it is `#NAME?` and uncomputed, as before.
 - A name qualified by the workbook itself, `[0]!Rate` as Excel writes it, gave `#REF!`: it is the workbook-level name, from any
   sheet, even one with a sheet-level name of its own (capture `workbook_name`). One qualified by another workbook (`[1]!Rate`)
   is reported as an external reference and keeps the value the file holds, as a cell reference into another workbook did.

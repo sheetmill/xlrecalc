@@ -613,7 +613,10 @@ Errors propagate through operators and most functions; `IFERROR`, `ISERROR`, `IF
 and the `IS` functions inspect them. An internal exception in a function is caught per cell,
 becomes `#VALUE!`, and is recorded in the report with the exception, so one bug never aborts a
 recalculation. An unsupported function is listed in the report. A cell using one keeps its cached value when the file
-holds one, since Excel computed it, in a full load too, and what depends on it is computed from that.
+holds one, since Excel computed it, in a full load too, and what depends on it is computed from that. So does a cell
+whose formula uses a reference form not implemented, found when the formula is compiled: a reference into another
+workbook (`[1]Sheet1!A1`, `[1]!Rate`) or across sheets (`Sheet1:Sheet3!A1`); `[0]!Rate` is the workbook's own name.
+A lazy read, a full recalculation and the written file then agree on its value.
 `Report.from_kept` names them all, so "which values rest on something not computed here?" has one
 answer. A change upstream of the formula puts its kept value out of date: it and what depends on it
 are not evaluated, keep the values they hold, and move to `uncomputed`. A function not implemented whose

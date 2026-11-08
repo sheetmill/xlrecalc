@@ -35,7 +35,7 @@ from xlrecalc._compare import compare
 from xlrecalc._deps import DependencyIndex, Runs
 from xlrecalc._formula import MISSING, FormulaSyntaxError, TokenizeError, compile_formula, parse
 from xlrecalc._formula import template_key as _template_key
-from xlrecalc._formula._codegen import RefSpec
+from xlrecalc._formula._codegen import EXTERNAL, RefSpec
 from xlrecalc._formula._fastkey import raw_key, translate
 from xlrecalc._formula._template import Axis
 from xlrecalc._functions import REGISTRY, SPECS
@@ -1360,7 +1360,7 @@ class Engine:
         if sheet is None:
             return self.sheet
         if "[" in sheet or ":" in sheet:
-            return self.unsupported("external or 3-D reference")  # type: ignore[return-value]
+            return self.unsupported(EXTERNAL)  # type: ignore[return-value]
         index = self.sheet_index(sheet)
         return REF if index is None else index
 
@@ -1420,7 +1420,7 @@ class Engine:
     def name(self, sheet: str | None, name: str) -> Any:
         workbook = sheet == "[0]"  # [0]!Rate: this workbook's own name (capture workbook_name)
         if sheet is not None and "[" in sheet and not workbook:  # [1]!Rate: another workbook's
-            return self.unsupported("external or 3-D reference")
+            return self.unsupported(EXTERNAL)
         scope = self.sheet if sheet is None or workbook else self.sheet_index(sheet)
         if scope is None:
             return REF

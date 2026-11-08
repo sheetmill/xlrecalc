@@ -249,3 +249,53 @@ def test_recalculating_a_written_file_again_is_stable(tmp_path: Path) -> None:
     second = xlrecalc.recalculate(path)
     assert in_file(path) == held
     assert second.from_kept == first.from_kept
+
+
+# A reference form not implemented: into another workbook, or across sheets ---------------------
+
+REACHING_OUT = ["[1]Other!F1", "[1]!Rate", "SUM(Data:Data2!F1)", "'[2]My Sheet'!F1*1"]
+
+
+@pytest.mark.parametrize("formula", REACHING_OUT)
+def test_an_external_or_3d_reference_keeps_its_value(tmp_path: Path, formula: str) -> None:
+    """It keeps the file's value in the store as an absent function does, so a lazy read, a full
+    recalculation and the written file agree, and what is computed from it is named."""
+    source = book(tmp_path, chain(formula))
+    lazy = xlrecalc.load(source, trust_cached=False)
+    assert [lazy.value(a) for a in ("C1", "A1", "B1", "D1")] == [21.0, 10.0, 20.0, 23.0]
+    full = xlrecalc.load(source, trust_cached=False)
+    full.recalculate()
+    assert values(full, "A1", "B1", "C1", "D1", "E1") == [10.0, 20.0, 21.0, 23.0, 4.0]
+    assert full.report.from_kept == refs("A1", "B1", "C1", "D1")
+    assert full.report.unsupported["external or 3-D reference"] == 1
+    out = tmp_path / "out.xlsx"
+    report = xlrecalc.recalculate(source, out, full=True)
+    assert report.from_kept == refs("A1", "B1", "C1", "D1")
+    assert not report.uncomputed
+    written = in_file(out)
+    assert [written[a] for a in ("A1", "B1", "C1", "D1")] == [10.0, 20.0, 21.0, 23.0]
+
+
+@pytest.mark.parametrize("formula", REACHING_OUT[:3])
+def test_an_external_or_3d_reference_without_a_value_is_uncomputed(
+    tmp_path: Path, formula: str
+) -> None:
+    wb = xlrecalc.load(book(tmp_path, chain(formula, cached=None)))
+    assert values(wb, "A1", "B1", "C1", "D1") == [ErrorValue.NAME] * 4
+    assert wb.report.uncomputed == refs("A1", "B1", "C1", "D1")
+    assert not wb.report.from_kept
+
+
+def test_the_workbooks_own_name_is_not_external(tmp_path: Path) -> None:
+    wb = xlrecalc.load(book(tmp_path, chain("[0]!Rate"), calc=FLAG))
+    assert wb.value("A1") is ErrorValue.NAME  # no such name here: computed, not kept
+    assert "external or 3-D reference" not in wb.report.unsupported
+
+
+def test_a_loop_reading_an_external_reference_iterates_from_its_value(tmp_path: Path) -> None:
+    """Iteration on: the loop reads the kept value, not #NAME?."""
+    cells = cell("A1", "[1]Other!F1", "10") + cell("B1", "A1+C1/2", "0") + cell("C1", "B1/2", "0")
+    wb = xlrecalc.load(book(tmp_path, cells, calc='<calcPr fullCalcOnLoad="1" iterate="1"/>'))
+    assert wb.value("B1") == pytest.approx(40 / 3, abs=0.01)
+    assert wb.value("C1") == pytest.approx(20 / 3, abs=0.01)
+    assert CellRef("Data", 1, 2) in wb.report.from_kept

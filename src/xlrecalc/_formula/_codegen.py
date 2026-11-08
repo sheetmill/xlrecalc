@@ -282,8 +282,13 @@ class _Generator:
             self.function_index[id(fn)] = index
         return f"F[{index:d}]"
 
-    def sheet(self, prefix: Token | None) -> str:
-        return "None" if prefix is None else self.constant(sheet_text(prefix))
+    def sheet(self, prefix: Token | None, *, name: bool = False) -> str:
+        if prefix is None:
+            return "None"
+        text = sheet_text(prefix)
+        if reaches_out(text, name=name):  # kept, as a function not implemented is (§7.6)
+            self.features.add(EXTERNAL)
+        return self.constant(text)
 
     def axis(self, axis: Axis, var: str) -> str:
         if axis.absolute:
@@ -373,7 +378,7 @@ class _Generator:
         return self.emit(f"ctx.box({sheet}, {rows}, {self.axis(c2, 'c')})")
 
     def reference(self, token: Token, prefix: Token | None) -> str:
-        sheet = self.sheet(prefix)
+        sheet = self.sheet(prefix, name=token.kind is Kind.NAME)
         where = sheet_text(prefix) if prefix is not None else None
         if token.kind is Kind.CELL:
             r, c = cell_axes(token.text, self.row, self.col)
@@ -544,6 +549,21 @@ def _boxable(node: Binary) -> bool:
         and right.token.kind is Kind.CELL
         and right.prefix is None
     )
+
+
+EXTERNAL = "external or 3-D reference"
+"""The report's label for a reference into another workbook or across sheets."""
+
+
+def reaches_out(sheet: str, *, name: bool = False) -> bool:
+    """A prefix naming another workbook (``[1]``) or several sheets (``S1:S3``).
+
+    ``[0]!Rate`` is this workbook's own name (capture ``workbook_name``), so for a name ``[0]``
+    is not another workbook.
+    """
+    if ":" in sheet:
+        return True
+    return "[" in sheet and not (name and sheet == "[0]")
 
 
 def sheet_text(prefix: Token) -> str:
