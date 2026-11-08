@@ -2,7 +2,8 @@
 
 With iterative calculation off, as Excel's default, the cells on a circular reference and those
 depending on one keep the values the file holds, as Excel keeps them, and the report lists them in
-`circular`. With it on (File > Options > Formulas, saved in the file), xlrecalc iterates as Excel
+`circular`. With it on (in Excel's calculation options: Excel > Preferences > Calculation on a Mac, File >
+Options > Formulas on Windows; the setting is saved in the file), xlrecalc iterates as Excel
 does: the same order of cells, the same `iterateCount` and `iterateDelta`, the same stopping test,
 and the same starting values, checked against Excel's results for each case it was captured on.
 
