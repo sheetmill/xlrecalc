@@ -202,6 +202,7 @@ class Engine:
         self._iteration_due = False
         self._iterated: set[int] = set()  # kept cells a run computed: the writer writes them
         self._before_pass: dict[int, Value] = {}  # with iteration on: values before this pass
+        self._partial = False  # a pass with formula cells not stale: a loop may be met late
         self.max_array_cells = max_array_cells
         """The largest array a formula may make (``ReadLimits.max_array_cells``)."""
         self.reference_array: Any = None
@@ -662,6 +663,8 @@ class Engine:
         else:
             self._evaluate(list(targets))
         self._settle()
+        if targets is None:
+            self._before_pass.clear()  # nothing is left stale: no later pass can need them
         self._report_held_back()
         self._taint()
         self._report_from_kept()
@@ -719,6 +722,10 @@ class Engine:
         static path alone does not show one, since a formula may not follow a reference.
         """
         pending = self.stale
+        # Only where some formula is not stale can a loop's cell be computed before its cycle
+        # shows itself (it reads a loop cell that is not stale): keep the values a run starts
+        # from then, and not in a full pass, where they would cost an entry per formula.
+        self._partial = self.iterate and len(pending) < self.formula_count()
         on_stack: dict[int, int] = {}  # node -> its position on the current path
         path: list[int] = []
         suspects: set[int] = set()  # on a static cycle: evaluated with every read checked
@@ -995,7 +1002,7 @@ class Engine:
         if self._absent:
             self._evaluated.add(n)
             self._dynamic_reads.pop(n, None)
-        if self.iterate and not self._iterating and n not in self._before_pass:
+        if self._partial and not self._iterating and n not in self._before_pass:
             self._before_pass[n] = s.values.get(key, BLANK)  # a run starts from it (§7.2)
         self.sheet, self.row, self.col = sheet, row, col
         self.reference_array = None
