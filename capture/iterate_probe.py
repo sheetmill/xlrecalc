@@ -36,7 +36,7 @@ STEP_LIMIT = 90  # seconds
 NS = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
 REL = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id"
 
-Cell = tuple[str, str, str]  # (cell, formula, cached value)
+Cell = tuple[str, str, str | None]  # (cell, formula, cached value or None)
 Sheets = list[tuple[str, list[Cell]]]
 
 
@@ -211,7 +211,7 @@ def build(path: Path, calc: str, sheets: Sheets) -> None:
             if found:
                 text = data.decode()
                 for ref, formula, cached in sheets[int(found[1]) - 1][1]:
-                    if not formula:
+                    if not formula or cached is None:  # None: no cached value, as openpyxl writes
                         continue
                     text, n = re.subn(
                         rf'(<c r="{ref}"[^>]*>\s*<f>[^<]*</f>)\s*<v\s*/>',

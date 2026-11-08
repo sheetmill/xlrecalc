@@ -1,0 +1,93 @@
+# suite: iterate_uncached
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-07
+# generator: capture/iterate_uncached_probe.py
+# method: each variant as three files: no cached values with fullCalcOnLoad and
+#   openpyxl's calcId (flag), no cached values without it (no_flag), every formula
+#   cached 0 (cached_0); shown after opening, calculated after one calculate, saved
+#   the value in a copy saved after opening again
+# columns: variant form calcPr cell formula shown calculated saved_type saved
+self_plain	flag	iterateCount="5"	s!A1	A1+1	missing value	missing value	e	#VALUE!
+self_plain	no_flag	iterateCount="5"	s!A1	A1+1	missing value	missing value	e	#VALUE!
+self_plain	cached_0	iterateCount="5"	s!A1	A1+1	5.0	10.0	n	10
+self_iferror	flag	iterateCount="5"	s!A1	IFERROR(A1,0)+1	missing value	5.0	n	5
+self_iferror	no_flag	iterateCount="5"	s!A1	IFERROR(A1,0)+1	missing value	5.0	n	5
+self_iferror	cached_0	iterateCount="5"	s!A1	IFERROR(A1,0)+1	5.0	10.0	n	10
+self_isnumber	flag	iterateCount="5"	s!A1	IF(ISNUMBER(A1),A1+1,0)	0.0	5.0	n	5
+self_isnumber	no_flag	iterateCount="5"	s!A1	IF(ISNUMBER(A1),A1+1,0)	0.0	5.0	n	5
+self_isnumber	cached_0	iterateCount="5"	s!A1	IF(ISNUMBER(A1),A1+1,0)	5.0	10.0	n	10
+self_iferror_d10	flag	iterateCount="5" iterateDelta="10"	s!A1	IFERROR(A1,0)+3	missing value	3.0	n	3
+self_iferror_d10	no_flag	iterateCount="5" iterateDelta="10"	s!A1	IFERROR(A1,0)+3	missing value	3.0	n	3
+self_iferror_d10	cached_0	iterateCount="5" iterateDelta="10"	s!A1	IFERROR(A1,0)+3	3.0	6.0	n	6
+self_iferror_d2	flag	iterateCount="5" iterateDelta="2"	s!A1	IFERROR(A1,0)+3	missing value	15.0	n	15
+self_iferror_d2	no_flag	iterateCount="5" iterateDelta="2"	s!A1	IFERROR(A1,0)+3	missing value	15.0	n	15
+self_iferror_d2	cached_0	iterateCount="5" iterateDelta="2"	s!A1	IFERROR(A1,0)+3	15.0	30.0	n	30
+pair_plain	flag	iterateCount="5"	s!A1	A2+1	missing value	missing value	e	#VALUE!
+pair_plain	flag	iterateCount="5"	s!A2	A1+1	missing value	missing value	e	#VALUE!
+pair_plain	no_flag	iterateCount="5"	s!A1	A2+1	missing value	missing value	e	#VALUE!
+pair_plain	no_flag	iterateCount="5"	s!A2	A1+1	missing value	missing value	e	#VALUE!
+pair_plain	cached_0	iterateCount="5"	s!A1	A2+1	9.0	19.0	n	19
+pair_plain	cached_0	iterateCount="5"	s!A2	A1+1	10.0	20.0	n	20
+pair_first	flag	iterateCount="5"	s!A1	IFERROR(A2,0)+1	missing value	9.0	n	9
+pair_first	flag	iterateCount="5"	s!A2	A1+1	missing value	10.0	n	10
+pair_first	no_flag	iterateCount="5"	s!A1	IFERROR(A2,0)+1	missing value	9.0	n	9
+pair_first	no_flag	iterateCount="5"	s!A2	A1+1	missing value	10.0	n	10
+pair_first	cached_0	iterateCount="5"	s!A1	IFERROR(A2,0)+1	9.0	19.0	n	19
+pair_first	cached_0	iterateCount="5"	s!A2	A1+1	10.0	20.0	n	20
+pair_second	flag	iterateCount="5"	s!A1	A2+1	8.0	18.0	n	18
+pair_second	flag	iterateCount="5"	s!A2	IFERROR(A1,0)+1	9.0	19.0	n	19
+pair_second	no_flag	iterateCount="5"	s!A1	A2+1	8.0	18.0	n	18
+pair_second	no_flag	iterateCount="5"	s!A2	IFERROR(A1,0)+1	9.0	19.0	n	19
+pair_second	cached_0	iterateCount="5"	s!A1	A2+1	9.0	19.0	n	19
+pair_second	cached_0	iterateCount="5"	s!A2	IFERROR(A1,0)+1	10.0	20.0	n	20
+pair_both	flag	iterateCount="5"	s!A1	IFERROR(A2,0)+1	8.0	18.0	n	18
+pair_both	flag	iterateCount="5"	s!A2	IFERROR(A1,0)+1	9.0	19.0	n	19
+pair_both	no_flag	iterateCount="5"	s!A1	IFERROR(A2,0)+1	8.0	18.0	n	18
+pair_both	no_flag	iterateCount="5"	s!A2	IFERROR(A1,0)+1	9.0	19.0	n	19
+pair_both	cached_0	iterateCount="5"	s!A1	IFERROR(A2,0)+1	9.0	19.0	n	19
+pair_both	cached_0	iterateCount="5"	s!A2	IFERROR(A1,0)+1	10.0	20.0	n	20
+pair_first_d10	flag	iterateCount="5" iterateDelta="10"	s!A1	IFERROR(A2,0)+1	missing value	1.0	n	1
+pair_first_d10	flag	iterateCount="5" iterateDelta="10"	s!A2	A1+1	missing value	2.0	n	2
+pair_first_d10	no_flag	iterateCount="5" iterateDelta="10"	s!A1	IFERROR(A2,0)+1	missing value	1.0	n	1
+pair_first_d10	no_flag	iterateCount="5" iterateDelta="10"	s!A2	A1+1	missing value	2.0	n	2
+pair_first_d10	cached_0	iterateCount="5" iterateDelta="10"	s!A1	IFERROR(A2,0)+1	1.0	3.0	n	3
+pair_first_d10	cached_0	iterateCount="5" iterateDelta="10"	s!A2	A1+1	2.0	4.0	n	4
+pair_first_count1	flag	iterateCount="1"	s!A1	IFERROR(A2,0)+1	missing value	1.0	n	1
+pair_first_count1	flag	iterateCount="1"	s!A2	A1+1	missing value	2.0	n	2
+pair_first_count1	no_flag	iterateCount="1"	s!A1	IFERROR(A2,0)+1	missing value	1.0	n	1
+pair_first_count1	no_flag	iterateCount="1"	s!A2	A1+1	missing value	2.0	n	2
+pair_first_count1	cached_0	iterateCount="1"	s!A1	IFERROR(A2,0)+1	1.0	3.0	n	3
+pair_first_count1	cached_0	iterateCount="1"	s!A2	A1+1	2.0	4.0	n	4
+dep_self	flag	iterateCount="5" iterateDelta="10"	s!A1	IFERROR(A1,0)+3	missing value	3.0	n	3
+dep_self	flag	iterateCount="5" iterateDelta="10"	s!B1	A1*2	missing value	6.0	n	6
+dep_self	no_flag	iterateCount="5" iterateDelta="10"	s!A1	IFERROR(A1,0)+3	missing value	3.0	n	3
+dep_self	no_flag	iterateCount="5" iterateDelta="10"	s!B1	A1*2	missing value	6.0	n	6
+dep_self	cached_0	iterateCount="5" iterateDelta="10"	s!A1	IFERROR(A1,0)+3	3.0	6.0	n	6
+dep_self	cached_0	iterateCount="5" iterateDelta="10"	s!B1	A1*2	6.0	12.0	n	12
+three_below	flag	iterateCount="5"	s!A1	A3*2	missing value	16.0	n	16
+three_below	flag	iterateCount="5"	s!A2	IFERROR(A3,0)+1	missing value	9.0	n	9
+three_below	flag	iterateCount="5"	s!A3	A2+1	missing value	10.0	n	10
+three_below	no_flag	iterateCount="5"	s!A1	A3*2	missing value	16.0	n	16
+three_below	no_flag	iterateCount="5"	s!A2	IFERROR(A3,0)+1	missing value	9.0	n	9
+three_below	no_flag	iterateCount="5"	s!A3	A2+1	missing value	10.0	n	10
+three_below	cached_0	iterateCount="5"	s!A1	A3*2	16.0	36.0	n	36
+three_below	cached_0	iterateCount="5"	s!A2	IFERROR(A3,0)+1	9.0	19.0	n	19
+three_below	cached_0	iterateCount="5"	s!A3	A2+1	10.0	20.0	n	20
+isblank_self	flag	iterateCount="5"	s!A1	IF(ISBLANK(A1),"blank",IF(ISERROR(A1),"error",A1+1))	missing value	error	str	error
+isblank_self	no_flag	iterateCount="5"	s!A1	IF(ISBLANK(A1),"blank",IF(ISERROR(A1),"error",A1+1))	missing value	error	str	error
+isblank_self	cached_0	iterateCount="5"	s!A1	IF(ISBLANK(A1),"blank",IF(ISERROR(A1),"error",A1+1))	5.0	10.0	n	10
+type_self	flag	iterateCount="3"	s!A1	TYPE(A1)*10+IFERROR(A1,0)	missing value	180.0	n	180
+type_self	no_flag	iterateCount="3"	s!A1	TYPE(A1)*10+IFERROR(A1,0)	missing value	180.0	n	180
+type_self	cached_0	iterateCount="3"	s!A1	TYPE(A1)*10+IFERROR(A1,0)	30.0	60.0	n	60
+type_other	flag	iterateCount="3"	s!A1	TYPE(A2)	1.0	1.0	n	1
+type_other	flag	iterateCount="3"	s!A2	A1+0	1.0	1.0	n	1
+type_other	no_flag	iterateCount="3"	s!A1	TYPE(A2)	1.0	1.0	n	1
+type_other	no_flag	iterateCount="3"	s!A2	A1+0	1.0	1.0	n	1
+type_other	cached_0	iterateCount="3"	s!A1	TYPE(A2)	1.0	1.0	n	1
+type_other	cached_0	iterateCount="3"	s!A2	A1+0	1.0	1.0	n	1
+half_iferror	flag	iterateCount="100"	s!A1	IFERROR(A2,0)/2+1	missing value	1.9990234375	n	1.9990234375
+half_iferror	flag	iterateCount="100"	s!A2	A1	missing value	1.9990234375	n	1.9990234375
+half_iferror	no_flag	iterateCount="100"	s!A1	IFERROR(A2,0)/2+1	missing value	1.9990234375	n	1.9990234375
+half_iferror	no_flag	iterateCount="100"	s!A2	A1	missing value	1.9990234375	n	1.9990234375
+half_iferror	cached_0	iterateCount="100"	s!A1	IFERROR(A2,0)/2+1	1.9990234375	1.99951171875	n	1.99951171875
+half_iferror	cached_0	iterateCount="100"	s!A2	A1	1.9990234375	1.99951171875	n	1.99951171875
