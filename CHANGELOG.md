@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Functions that make arrays, captured from Excel as dynamic arrays (captures `dyn_*`, two sets of values each):
+  - `SEQUENCE`: counts are truncated, an empty one is 1, 0 is `#CALC!` and a negative or too large one `#VALUE!`; each
+    number is the one before plus the step; an array argument gives each element's first number.
+
+  A formula calling one of them, set through `set_formula`, is written as a dynamic array whatever the size of its
+  result, so that it spills when its data grows.
 - Iterative calculation, for a workbook with iteration on (`<calcPr iterate="1">`), as Excel does it (captures
   `iterate_calc`, `calc_chain`, `iterate_open`): a run of up to `iterateCount` iterations from the values the cells hold, each
   computing the cells on and after circular references in place, in Excel's order (sheets by name, then row, then column),
@@ -68,6 +74,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- `A1#` of a dynamic array that cannot spill was the `#SPILL!` error; it is the anchor cell alone, which holds `#SPILL!`,
+  so `ROWS(A1#)` is 1 and `SUM(A1#)` is `#SPILL!`, as in Excel (capture `dyn_sequence`).
 - `VDB` with a fractional start or end period gave values far from Excel's (`VDB(78714.55552,0,15,14.43,15,1.5)` was 1,509.41
   where Excel gives 2,648.73). Without the switch to straight line, each period's depreciation is taken in proportion to the
   part of it the span covers; with it, the value left at a fractional start comes from periods aligned to that start, the

@@ -232,7 +232,8 @@ class Workbook:
             # As Excel 365 takes a typed formula: a dynamic array, which spills (§7.7). Its
             # text read as a legacy formula (an @ written out as _xlfn.SINGLE) tells whether
             # the file needs the dynamic-array marker: an implicit intersection anywhere else.
-            intersects = engine.templates[engine.template_for(text, row, col)].intersects
+            template = engine.templates[engine.template_for(text, row, col)]
+            intersects = template.intersects or bool(template.calls & _ARRAY_MAKERS)
             engine.set_formula(sheet, row, col, text, array=(True, (row, col, row, col)))
         except (FormulaSyntaxError, TokenizeError) as exc:
             raise FormulaError(f"{formula!r}: {exc}") from exc
@@ -328,6 +329,20 @@ class Workbook:
             full_calc_on_load=full_calc_on_load,
             limits=self._limits,
         )
+
+
+# A formula calling one of these is written as a dynamic array whatever the size of its result,
+# so that it spills when its data grows (Excel opens it so: captures dyn_*).
+_ARRAY_MAKERS = frozenset(
+    {
+        "_XLFN.SEQUENCE",
+        "MMULT",
+        "_XLFN.UNIQUE",
+        "_XLFN._XLWS.SORT",
+        "_XLFN.SORTBY",
+        "_XLFN._XLWS.FILTER",
+    }
+)
 
 
 def _file_formula(formula: str, dynamic: bool = False) -> str:

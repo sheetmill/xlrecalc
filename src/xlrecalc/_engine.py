@@ -621,8 +621,8 @@ class Engine:
         anchor = self.anchors.get(node(ref.sheet, ref.r1, ref.c1))
         if anchor is None or not anchor.dynamic:
             return REF
-        if anchor.wanted is not None:
-            return SPILL
+        if anchor.wanted is not None:  # blocked: the anchor alone, holding #SPILL! (dyn_sequence)
+            return Ref(self.cells, ref.sheet, ref.r1, ref.c1, ref.r1, ref.c1)
         r1, c1, r2, c2 = anchor.box
         return Ref(self.cells, ref.sheet, r1, c1, r2, c2)
 
