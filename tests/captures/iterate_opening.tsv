@@ -1,0 +1,81 @@
+# suite: iterate_opening
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-07
+# generator: capture/iterate_opening_probe.py
+# method: each variant as three files: no cached values with fullCalcOnLoad and
+#   openpyxl's calcId (flag), no cached values without it (no_flag), every formula
+#   cached 0 (cached_0); shown after opening, calculated after one calculate, saved
+#   the value in a copy saved after opening again
+# columns: variant form calcPr cell formula shown calculated saved_type saved
+pf_rows	flag	iterateCount="5"	s!A1	IFERROR(A2,0)+1	missing value	9.0	n	9
+pf_rows	flag	iterateCount="5"	s!A2	A1+1	missing value	10.0	n	10
+ps_rows	flag	iterateCount="5"	s!A1	A2+1	8.0	18.0	n	18
+ps_rows	flag	iterateCount="5"	s!A2	IFERROR(A1,0)+1	9.0	19.0	n	19
+pf_far	flag	iterateCount="5"	s!A1	IFERROR(A9,0)+1	missing value	9.0	n	9
+pf_far	flag	iterateCount="5"	s!A9	A1+1	missing value	10.0	n	10
+ps_far	flag	iterateCount="5"	s!A1	A9+1	8.0	18.0	n	18
+ps_far	flag	iterateCount="5"	s!A9	IFERROR(A1,0)+1	9.0	19.0	n	19
+pf_cols	flag	iterateCount="5"	s!A1	IFERROR(B1,0)+1	missing value	9.0	n	9
+pf_cols	flag	iterateCount="5"	s!B1	A1+1	missing value	10.0	n	10
+ps_cols	flag	iterateCount="5"	s!A1	B1+1	8.0	18.0	n	18
+ps_cols	flag	iterateCount="5"	s!B1	IFERROR(A1,0)+1	9.0	19.0	n	19
+pf_written_reversed	flag	iterateCount="5"	s!A2	A1+1	missing value	10.0	n	10
+pf_written_reversed	flag	iterateCount="5"	s!A1	IFERROR(A2,0)+1	missing value	9.0	n	9
+pf_constant_in	flag	iterateCount="5"	s!C1		5.0	5.0	none	
+pf_constant_in	flag	iterateCount="5"	s!A1	IFERROR(A2,0)+C1	missing value	29.0	n	29
+pf_constant_in	flag	iterateCount="5"	s!A2	A1+1	missing value	30.0	n	30
+ps_constant_in	flag	iterateCount="5"	s!C1		5.0	5.0	none	
+ps_constant_in	flag	iterateCount="5"	s!A1	A2+C1	24.0	54.0	n	54
+ps_constant_in	flag	iterateCount="5"	s!A2	IFERROR(A1,0)+1	25.0	55.0	n	55
+pf_formula_in	flag	iterateCount="5"	s!C1	2+3	5.0	5.0	n	5
+pf_formula_in	flag	iterateCount="5"	s!A1	IFERROR(A2,0)+C1	missing value	29.0	n	29
+pf_formula_in	flag	iterateCount="5"	s!A2	A1+1	missing value	30.0	n	30
+ps_formula_in	flag	iterateCount="5"	s!C1	2+3	5.0	5.0	n	5
+ps_formula_in	flag	iterateCount="5"	s!A1	A2+C1	24.0	54.0	n	54
+ps_formula_in	flag	iterateCount="5"	s!A2	IFERROR(A1,0)+1	25.0	55.0	n	55
+pf_formula_below	flag	iterateCount="5"	s!A1	IFERROR(A2,0)+A9	missing value	29.0	n	29
+pf_formula_below	flag	iterateCount="5"	s!A2	A1+1	missing value	30.0	n	30
+pf_formula_below	flag	iterateCount="5"	s!A9	2+3	5.0	5.0	n	5
+t1	flag	iterateCount="5"	s!A1	IFERROR(A3,0)+1	missing value	13.0	n	13
+t1	flag	iterateCount="5"	s!A2	A1+1	missing value	14.0	n	14
+t1	flag	iterateCount="5"	s!A3	A2+1	missing value	15.0	n	15
+t2	flag	iterateCount="5"	s!A1	A3+1	12.0	27.0	n	27
+t2	flag	iterateCount="5"	s!A2	IFERROR(A1,0)+1	13.0	28.0	n	28
+t2	flag	iterateCount="5"	s!A3	A2+1	14.0	29.0	n	29
+t3	flag	iterateCount="5"	s!A1	A3+1	11.0	26.0	n	26
+t3	flag	iterateCount="5"	s!A2	A1+1	12.0	27.0	n	27
+t3	flag	iterateCount="5"	s!A3	IFERROR(A2,0)+1	13.0	28.0	n	28
+self_iserror	flag	iterateCount="5"	s!A1	IF(ISERROR(A1),0,A1)+1	missing value	5.0	n	5
+self_isnumber_late	flag	iterateCount="5"	s!A1	IF(ISNUMBER(A1+0),A1+1,0)	0.0	5.0	n	5
+self_if_first	flag	iterateCount="5"	s!A1	IF(TRUE,IFERROR(A1,0)+1)	missing value	5.0	n	5
+ps_count_1	flag	iterateCount="1"	s!A1	A2+1	missing value	2.0	n	2
+ps_count_1	flag	iterateCount="1"	s!A2	IFERROR(A1,0)+1	1.0	3.0	n	3
+ps_count_2	flag	iterateCount="2"	s!A1	A2+1	2.0	6.0	n	6
+ps_count_2	flag	iterateCount="2"	s!A2	IFERROR(A1,0)+1	3.0	7.0	n	7
+ps_count_3	flag	iterateCount="3"	s!A1	A2+1	4.0	10.0	n	10
+ps_count_3	flag	iterateCount="3"	s!A2	IFERROR(A1,0)+1	5.0	11.0	n	11
+isnum_count_1	flag	iterateCount="1"	s!A1	IF(ISNUMBER(A1),A1+1,0)	0.0	1.0	n	1
+isnum_count_2	flag	iterateCount="2"	s!A1	IF(ISNUMBER(A1),A1+1,0)	0.0	2.0	n	2
+isnum_count_3	flag	iterateCount="3"	s!A1	IF(ISNUMBER(A1),A1+1,0)	0.0	3.0	n	3
+tl_kind2	flag	iterateCount="100"	s!A1	IFERROR(A2,0)+1	missing value	199.0	n	199
+tl_kind2	flag	iterateCount="100"	s!A2	A1+1	missing value	200.0	n	200
+tl_conv	flag	iterateCount="100"	s!B1		3.0	3.0	none	
+tl_conv	flag	iterateCount="100"	s!A1	0.5*IFERROR(A2,0)+10	missing value	15.3330078125	n	15.3330078125
+tl_conv	flag	iterateCount="100"	s!A2	A1/2+B1	missing value	10.66650390625	n	10.66650390625
+tl_interest	flag	iterateCount="100"	s!B1		1000.0	1000.0	none	
+tl_interest	flag	iterateCount="100"	s!B2	IFERROR(B4,0)*0.05	missing value	25.641015625	n	25.641015625000001
+tl_interest	flag	iterateCount="100"	s!B3	B1+B2	missing value	1025.641015625	n	1025.6410156249999
+tl_interest	flag	iterateCount="100"	s!B4	B3*0.5	missing value	512.8205078125	n	512.82050781249995
+tl_count1	flag	iterateCount="1"	s!A1	IFERROR(A2,0)+1	missing value	1.0	n	1
+tl_count1	flag	iterateCount="1"	s!A2	A1*2	missing value	2.0	n	2
+tl_sumself	flag	iterateCount="50"	s!A1		1.0	1.0	none	
+tl_sumself	flag	iterateCount="50"	s!A2		2.0	2.0	none	
+tl_sumself	flag	iterateCount="50"	s!A3		3.0	3.0	none	
+tl_sumself	flag	iterateCount="50"	s!A4		4.0	4.0	none	
+tl_sumself	flag	iterateCount="50"	s!A5	SUM(A1:A4)+IFERROR(A5,0)*0.1	missing value	11.1111	n	11.1111
+tl_selfinc	flag	iterateCount="100"	s!A1	IF(ISNUMBER(A1),A1+1,0)	0.0	100.0	n	100
+tl_bigdelta	flag	iterateCount="100" iterateDelta="10"	s!A1	IFERROR(A1,0)+3	missing value	3.0	n	3
+tl_bigdelta	flag	iterateCount="100" iterateDelta="10"	s!B1	A1*2	missing value	6.0	n	6
+tl_below	flag	iterateCount="100"	s!A1	A3*2	missing value	396.0	n	396
+tl_below	flag	iterateCount="100"	s!A2	IFERROR(A3,0)+1	missing value	199.0	n	199
+tl_below	flag	iterateCount="100"	s!A3	A2+1	missing value	200.0	n	200

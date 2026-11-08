@@ -70,7 +70,12 @@ CALC = {
 }
 
 
-def main() -> None:
+def main(
+    variants: list[tuple[str, str, Sheets]] = VARIANTS,
+    forms: dict[str, str] = CALC,
+    suite: str = "iterate_uncached",
+    generator: str = "capture/iterate_uncached_probe.py",
+) -> None:
     count = osascript("-e", 'tell application "Microsoft Excel" to count of workbooks')
     if count != "0":
         sys.exit(f"Excel has {count} workbooks open: iteration is taken from the first one opened")
@@ -78,8 +83,8 @@ def main() -> None:
     body: list[str] = []
     made = []
     try:
-        for name, attrs, sheets in VARIANTS:
-            for form, calc in CALC.items():
+        for name, attrs, sheets in variants:
+            for form, calc in forms.items():
                 cells = sheets
                 if form == "cached_0":
                     cells = [(s, [(r, f, "0") for r, f, _ in cs]) for s, cs in sheets]
@@ -110,17 +115,17 @@ def main() -> None:
         for path in made:
             path.unlink(missing_ok=True)
     header = [
-        "# suite: iterate_uncached",
+        f"# suite: {suite}",
         f"# excel: {excel_version()} for Mac, locale en_US",
         f"# captured: {dt.date.today().isoformat()}",
-        "# generator: capture/iterate_uncached_probe.py",
+        f"# generator: {generator}",
         "# method: each variant as three files: no cached values with fullCalcOnLoad and",
         "#   openpyxl's calcId (flag), no cached values without it (no_flag), every formula",
         "#   cached 0 (cached_0); shown after opening, calculated after one calculate, saved",
         "#   the value in a copy saved after opening again",
         "# columns: variant form calcPr cell formula shown calculated saved_type saved",
     ]
-    out = CAPTURES / "iterate_uncached.tsv"
+    out = CAPTURES / f"{suite}.tsv"
     out.write_text("\n".join([*header, *body]) + "\n", encoding="utf-8")
     print(f"-> {out.name}, {len(body)} rows")
 
