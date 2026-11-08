@@ -72,8 +72,11 @@ class ReadLimits:
             the cells on and after circular references times the iterations made, up to the
             file's ``iterateCount`` (at most 32,767). A run that would pass it leaves those cells
             with the values they held, reported (``Report.uncomputed``, and
-            ``Report.unsupported`` names the limit). The default is more than ten times what any
-            workbook of the corpora the package is checked against needs.
+            ``Report.unsupported`` names the limit). It counts evaluations, not their cost
+            (``max_array_cells`` bounds what one evaluation may make). The default is more than
+            ten times what any workbook of the corpora the package is checked against needs
+            (8.3 million); at about 0.9 million evaluations a second for the simplest formula,
+            it allows about two minutes a run, so a service should lower it.
     """
 
     max_parts: int = 100_000
