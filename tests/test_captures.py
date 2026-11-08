@@ -125,6 +125,12 @@ _XIRR_CASES = (
     180,
     181,
     182,
+    301,  # values holding a number as text, or a blank, which XIRR reads as 0
+    306,
+    341,
+    371,
+    376,
+    396,
 )
 _YIELD_ZERO_COUPON = (
     "YIELD of a zero-coupon bond over 20 periods: Excel's iteration stops 1.3E-9 (relative) "

@@ -68,6 +68,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- `XIRR` gave `#VALUE!` for values holding a blank or a number as text; a blank is 0 and the text is read as its number, as
+  in Excel, while other text and a logical stay `#VALUE!` (capture `iterative`: `IRR`, `NPV`, `MIRR` and `XIRR` over flows
+  holding an error, a text or a blank, where `IRR` gives `#VALUE!` for any error and the others give the error).
 - A cell whose formula refers to another workbook (`[1]Sheet1!A1`, `[1]!Rate`) or across sheets (`SUM(S1:S3!A1)`), which
   is not computed, held `#NAME?` in a full recalculation, so `Workbook.value` and what was computed from it, an iterated
   loop included, disagreed with the written file, which kept the file's values. It keeps the value the file holds, as a

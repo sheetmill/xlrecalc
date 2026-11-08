@@ -182,8 +182,8 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 - `IRR`, `XIRR`, `RATE`, `YIELD` ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1, §8.2): a relative tolerance of
   1E-9, declared per function, since Excel's Newton iterates rest on its own NPV, whose last
   bits are not reproduced, and Excel guarantees its result only to its documented stopping
-  tolerance. Of the 271 rows of `iterative`, 198 match, exactly or within the relative
-  tolerance, and 73 are listed: from some guesses Excel's `IRR` and `RATE` reach another root,
+  tolerance. Of the 402 rows of `iterative`, 323 match, exactly or within the relative
+  tolerance, and 79 are listed: from some guesses Excel's `IRR` and `RATE` reach another root,
   a rate where the package gives `#NUM!`, or the reverse; `XIRR` stops about 1E-8 from the
   root (sometimes after what looks like a bracketing search); and three `IRR` results at a
   rate of 0 differ by less than 1E-14, where a relative tolerance cannot apply. Tried, at most

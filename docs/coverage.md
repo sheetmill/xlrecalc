@@ -269,7 +269,7 @@ library differs in the last bits; the rows that match either way do not.
 | `INTERCEPT` | statistical | implemented | 24 | 24 | 0 | 0 | 0 | 4 ulps |  |
 | `INTRATE` | financial | implemented | 380 | 341 | 39 | 0 | 0 | 4 ulps |  |
 | `IPMT` | financial | implemented | 91 | 66 | 17 | 0 | 8 | 4 ulps |  |
-| `IRR` | financial | implemented | 132 | 40 | 0 | 59 | 33 | 1e-09 relative |  |
+| `IRR` | financial | implemented | 182 | 76 | 0 | 73 | 33 | 1e-09 relative |  |
 | `ISBLANK` | information | implemented | 31 | 31 | 0 | 0 | 0 |  |  |
 | `ISERR` | information | implemented | 17 | 17 | 0 | 0 | 0 |  |  |
 | `ISERROR` | information | implemented | 20 | 20 | 0 | 0 | 0 |  |  |
@@ -323,7 +323,7 @@ library differs in the last bits; the rows that match either way do not.
 | `MINIFS` | math | implemented | 86 | 86 | 0 | 0 | 0 |  |  |
 | `MINUTE` | date and time | implemented | 26 | 26 | 0 | 0 | 0 |  |  |
 | `MINVERSE` | | absent | | | | | | | |
-| `MIRR` | financial | implemented | 571 | 563 | 8 | 0 | 0 | 8 ulps |  |
+| `MIRR` | financial | implemented | 596 | 588 | 8 | 0 | 0 | 8 ulps |  |
 | `MMULT` | | absent | | | | | | | |
 | `MOD` | math | implemented | 14 | 14 | 0 | 0 | 0 |  |  |
 | `MODE` | statistical | implemented | 35 | 35 | 0 | 0 | 0 |  |  |
@@ -351,7 +351,7 @@ library differs in the last bits; the rows that match either way do not.
 | `NOT` | logical | implemented | 17 | 17 | 0 | 0 | 0 |  |  |
 | `NOW` | date and time | implemented | 0 | 0 | 0 | 0 | 0 |  |  |
 | `NPER` | financial | implemented | 119 | 119 | 0 | 0 | 0 |  |  |
-| `NPV` | financial | implemented | 62 | 47 | 15 | 0 | 0 | 4 ulps |  |
+| `NPV` | financial | implemented | 87 | 60 | 27 | 0 | 0 | 4 ulps |  |
 | `NUMBERVALUE` | text | implemented | 520 | 519 | 0 | 0 | 1 |  |  |
 | `OCT2BIN` | engineering | implemented | 305 | 305 | 0 | 0 | 0 |  |  |
 | `OCT2DEC` | engineering | implemented | 22 | 22 | 0 | 0 | 0 |  |  |
@@ -526,7 +526,7 @@ library differs in the last bits; the rows that match either way do not.
 | `WORKDAY.INTL` | date and time | implemented | 76 | 76 | 0 | 0 | 0 |  |  |
 | `WRAPCOLS` | | absent | | | | | | | |
 | `WRAPROWS` | | absent | | | | | | | |
-| `XIRR` | financial | implemented | 59 | 27 | 0 | 3 | 29 | 1e-09 relative |  |
+| `XIRR` | financial | implemented | 90 | 52 | 0 | 3 | 35 | 1e-09 relative |  |
 | `XLOOKUP` | lookup and reference | partial | 325 | 324 | 0 | 0 | 1 |  | the regular-expression match mode is not implemented |
 | `XMATCH` | lookup and reference | partial | 463 | 462 | 0 | 0 | 1 |  | the regular-expression match mode is not implemented |
 | `XNPV` | financial | implemented | 31 | 31 | 0 | 0 | 0 |  |  |

@@ -897,6 +897,81 @@ def iterative() -> list[Case]:
         Case("rate", "RATE({48,24},-200,8000)"),
         Case("rate", "RATE(48,-200,8000)*12"),
     ]
+    cases += _odd_flow_cases()
+    return cases
+
+
+def _odd_column(k: int) -> str:
+    """Columns CC, CD, ... for the odd cash flows (clear of the iterative suite's tables)."""
+    n = 2 * 26 + 2 + k  # CC is the 81st column, 0-based 80
+    first, second = divmod(n + 26, 26)
+    return chr(64 + first) + chr(65 + second)
+
+
+_ODD = ErrorValue
+_ODD_SET1 = [-10000.0, 3000.0, 4200.0, 6800.0, 1500.0]  # BA's flows, dates BU
+_ODD_SET2 = [-70000.0, 12000.0, 15000.0, 18000.0, 21000.0, 26000.0]  # BB's flows, dates BV
+_ODD_DATES1 = [39448.0, 39508.0, 39751.0, 39859.0, 39904.0]
+_ODD_DATES2 = [39448.0, 39813.0, 40178.0, 40543.0, 40909.0, 41274.0]
+
+
+def _odd_variants() -> list[tuple[str, list[Input], str]]:
+    """(kind, values, dates column) for each cash flow holding an error, a text or a blank."""
+    out: list[tuple[str, list[Input], str]] = []
+
+    def put(base: list[float], at: int, value: Input, dates: str) -> None:
+        values: list[Input] = list(base)
+        values[at] = value
+        out.append(("flow", values, dates))
+
+    middle: list[Input] = [_ODD.DIV0, _ODD.NAME, _ODD.REF, _ODD.NA, "abc", "5", None, True]
+    for v in middle:
+        put(_ODD_SET1, 2, v, "BU")
+    for at in (0, 4):
+        for v in (_ODD.DIV0, "abc", None):
+            put(_ODD_SET1, at, v, "BU")
+    two: list[Input] = list(_ODD_SET1)
+    two[1], two[3] = _ODD.NA, _ODD.DIV0  # two errors: which one is the result
+    out.append(("flow", two, "BU"))
+    for v in [_ODD.DIV0, _ODD.NAME, _ODD.NA, "xyz", "7", None, False]:
+        put(_ODD_SET2, 1, v, "BV")
+    for v in (_ODD.REF, "xyz", None):
+        put(_ODD_SET2, 5, v, "BV")
+    for v in (_ODD.DIV0, "abc", None):
+        dates: list[Input] = list(_ODD_DATES1)
+        dates[2] = v
+        out.append(("dates", dates, "BA"))
+    for v in (_ODD.NA, "xyz", None):
+        dates = list(_ODD_DATES2)
+        dates[3] = v
+        out.append(("dates", dates, "BB"))
+    return out
+
+
+ODD_FLOW_TABLE: dict[str, Input] = {
+    f"{_odd_column(k)}{i}": v
+    for k, (_, values, _d) in enumerate(_odd_variants())
+    for i, v in enumerate(values, 1)
+    if v is not None
+}
+
+
+def _odd_flow_cases() -> list[Case]:
+    """IRR, NPV, MIRR and XIRR over cash flows or dates holding an error, a text or a blank."""
+    cases: list[Case] = []
+    for k, (kind, values, other) in enumerate(_odd_variants()):
+        col = _odd_column(k)
+        rng = f"{col}1:{col}{len(values)}"
+        if kind == "dates":
+            cases.append(Case("xirr", f"XIRR({other}1:{other}{len(values)},{rng})"))
+            continue
+        cases += [
+            Case("irr", f"IRR({rng})"),
+            Case("irr", f"IRR({rng},0.2)"),
+            Case("npv", f"NPV(0.1,{rng})"),
+            Case("mirr", f"MIRR({rng},0.1,0.12)"),
+            Case("xirr", f"XIRR({rng},{other}1:{other}{len(values)})"),
+        ]
     return cases
 
 
@@ -3444,7 +3519,7 @@ SUITES = {
     "literals": Suite(literals),
     "n_lookup": Suite(n_lookup, fixed=TABLE),
     "finance": Suite(finance, fixed=FIN_TABLE),
-    "iterative": Suite(iterative, fixed={**FIN_TABLE, **ITER_TABLE}),
+    "iterative": Suite(iterative, fixed={**FIN_TABLE, **ITER_TABLE, **ODD_FLOW_TABLE}),
     "bonds": Suite(bonds),
     "workdays": Suite(workdays, fixed=WORK_TABLE),
     "statistics": Suite(statistics, fixed=STAT_TABLE),

@@ -457,7 +457,8 @@ def XIRR(ctx: Context, values: Any, dates: Any, guess: Any = MISSING) -> Any:
     """Internal rate of return of flows on dates, over 365-day years.
 
     Unlike XNPV, dates after the first may come in any order and text dates are read; a
-    blank guess is 0 and a logical one ``#VALUE!``.
+    blank guess is 0 and a logical one ``#VALUE!``. Among the values, a blank is 0 and a
+    number as text is that number; other text and a logical are ``#VALUE!``.
     """
     if isinstance(guess, bool):
         return VALUE
@@ -474,9 +475,15 @@ def XIRR(ctx: Context, values: Any, dates: Any, guess: Any = MISSING) -> Any:
     if len(vs) != len(ds):
         return NUM
     nums: list[float] = []
-    for v in vs:
+    for v in vs:  # a blank is 0 and a text is read as a number (capture iterative)
         if isinstance(v, ErrorValue):
             return v
+        if v is BLANK:
+            v = 0.0
+        elif isinstance(v, str):
+            v = to_number(v, ctx)
+            if isinstance(v, ErrorValue):
+                return v
         if not isinstance(v, float) or isinstance(v, bool):
             return VALUE
         nums.append(v)
