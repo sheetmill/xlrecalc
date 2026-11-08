@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     kept as first written, numbers and numbers as text apart, `exactly_once`; none left is `#CALC!`.
   - `SORT`: numbers, then text in Excel's order without regard to case, then logicals, then errors by their code, blanks
     last in either direction; equal keys keep their order; several keys with their own orders, `by_col`.
+  - `SORTBY`: the same order over other rows or columns, each with its own direction; a key of another length or shape is
+    `#VALUE!`.
 
   A formula calling one of them, set through `set_formula`, is written as a dynamic array whatever the size of its
   result, so that it spills when its data grows.

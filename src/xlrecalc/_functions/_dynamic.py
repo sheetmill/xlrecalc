@@ -280,3 +280,31 @@ def SORT(
         keys.append(([line[int(index) - 1] for line in lines], int(order)))
     out = tuple(tuple(_shown(v) for v in line) for line in _sorted(lines, keys, ctx))
     return tuple(zip(*out, strict=True)) if cols else out
+
+
+@function("_XLFN.SORTBY", "array", "array", "raw", variadic=True, min_args=2, cycle=2, category=C)
+def SORTBY(ctx: Any, array: Any, *rest: Any) -> Any:
+    """Rows (or columns) of ``array`` in order of other arrays, each with its own direction."""
+    grid = _grid(array)
+    keys: list[tuple[list[Any], int]] = []
+    by_col: bool | None = None
+    for k in range(0, len(rest), 2):
+        by = _grid(rest[k])
+        order = _count(rest[k + 1], ctx, 1.0) if k + 1 < len(rest) else 1.0
+        if isinstance(order, ErrorValue):
+            return order
+        if math.trunc(order) not in (1, -1):
+            return VALUE
+        if len(by) == 1 and len(by[0]) == len(grid[0]) and len(grid[0]) > 1:
+            cols, values = True, list(by[0])
+        elif len(by[0]) == 1 and len(by) == len(grid):
+            cols, values = False, [row[0] for row in by]
+        else:
+            return VALUE
+        if by_col is not None and cols != by_col:
+            return VALUE
+        by_col = cols
+        keys.append((values, math.trunc(order)))
+    lines = list(zip(*grid, strict=True)) if by_col else list(grid)
+    out = tuple(tuple(_shown(v) for v in line) for line in _sorted(lines, keys, ctx))
+    return tuple(zip(*out, strict=True)) if by_col else out
