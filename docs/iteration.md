@@ -7,10 +7,10 @@ Options > Formulas on Windows; the setting is saved in the file), xlrecalc itera
 does: the same order of cells, the same `iterateCount` and `iterateDelta`, the same stopping test,
 and the same starting values, checked against Excel's results for each case it was captured on.
 
-- `recalculate(path)` gives what Excel would save after opening the file: Excel's opening runs the
-  loop once and its saving once more, and so does `recalculate`, whether or not the file holds
-  cached values (with `full=True`, or a file that asks for a full calculation, or formulas without
-  values, as openpyxl writes them).
+- For a file it evaluates (with `full=True`, a file that asks for a full calculation, or formulas
+  without values, as openpyxl writes them), `recalculate(path)` gives what Excel would save after
+  opening the file: Excel's opening runs the loop once and its saving once more, and so does
+  `recalculate`, whether or not the loop holds cached values.
 - A trusting load (`load(path)`, or `recalculate(path)` of a file whose values are trusted) changes
   nothing, though Excel would run the loop once more on opening the file.
 - Each edit and each save runs the loop once, as in Excel, so `save()` changes the values in memory
