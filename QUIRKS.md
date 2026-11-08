@@ -100,9 +100,6 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 - A formula set through the API that reads a cycle in a workbook whose cached values are trusted, before
   any evaluation has reached the cycle, is computed from the cycle's cached value; Excel gives 0 (capture
   `circular_cached`). Once evaluation has met the cycle, the formula is 0, as in Excel.
-- Iterative calculation is not implemented. In a workbook with iteration on, cells on a circular
-  reference and cells depending on one keep the values the file holds and are reported under
-  `iterative calculation`, once evaluation reaches them (ARCHITECTURE.md §7.2).
 - `XLOOKUP` and `XMATCH` with the regular-expression match mode (3) are not computed, and are
   reported. Nor is a union of ranges (`LARGE((A1:A3,C1:C3),1)`, `SUM((A1,B2))`): the formula keeps
   the value the file holds and is reported (capture `modern`). `ROW` and `COLUMN` of a union are

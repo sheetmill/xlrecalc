@@ -490,16 +490,44 @@ the report lists them as circular. After an edit, Excel keeps the values of a lo
 it reads changes, and calculates its cells when the loop is broken; a formula entered on a loop or
 reading one is 0, not the empty text (capture `circular_cached`).
 
-With iterative calculation on (`<calcPr iterate="1">`), which is not implemented, the cells are kept
-in the same way, and the report lists them as uncomputed under the label `iterative calculation`,
-not as circular. A cell without a cached value is the empty text, and the file leaves it without one.
-
 When a cycle closes, its cells and every cell depending on them leave the stale set at once, so
 evaluation replaces none of their values and `Workbook.value` and the written file agree. They share
 one walk (`DependencyIndex.spread`), so that many cycles reading into one chain visit it once. A full
 evaluation holds a file's cached values in the store for this. After a change, these cells are
 evaluated again, since an edit may have broken the loop. A run that trusts cached values evaluates
 nothing, so it changes nothing and reports nothing, whether or not the workbook holds a cycle.
+
+**Iterative calculation** (`<calcPr iterate="1" iterateCount iterateDelta>`; captures `iterate_open`,
+`iterate_calc`, `calc_chain`, checked cell by cell in `tests/test_iteration.py`). With iteration on,
+the cells kept when a cycle closes (the cycle's and every cell depending on it) are iterated once the
+evaluation pass ends, as Excel does:
+
+- A **run** is up to `iterateCount` iterations (100 by default, at most 32,767) and at least one. It
+  starts from the values the cells held before the recalculation; a cell with none reads as
+  `#VALUE!`, so a loop with no cached values ends there, as in Excel.
+- Each iteration computes every one of those cells **in place**, in Excel's order: sheets by name in
+  Excel's text order (`a` before `B`, `10` before `9`, `é` before `f`; not tab order or sheet id),
+  then by row, then by column. A cell reads what the others hold at that moment, the ones before it
+  already updated. Excel's `calcChain.xml` does not change this order (capture `calc_chain`), so the
+  engine does not read it, and the writer may drop it. A precedent outside the cycle is computed
+  before the run; a cell depending on the cycle is one of the iterated cells, and its change counts.
+- A run **stops** after the first iteration in which no number changed by `iterateDelta` (0.001 by
+  default) or more: the largest absolute change, over every iterated cell of the workbook, strictly
+  below it. A change between kinds (to text, an error, a logical) does not count.
+- Excel runs once on opening, on every recalculation and on saving: it marks a formula on a loop
+  "calculate always" (`<f ca="1">`). So every recalculation of the engine, `Workbook.save` included,
+  is a run, and any edit is followed by one, whether or not the loop reads the edited cell.
+- A run may make at most `ReadLimits.max_iteration_evaluations` cell evaluations (100,000,000 by
+  default; the corpora's largest need is 8,256 cells at 1,000 iterations). Past it, the cells keep
+  the values they held and are reported as uncomputed under a label naming the limit.
+
+A run that trusts cached values does not iterate: the file's values are the ones Excel saved, and
+Excel itself would run once more on opening it. `full=True` runs once from those values.
+
+What matches Excel exactly: each cell's arithmetic is the engine's, so a run gives Excel's doubles
+wherever every function on the loop does; where a function in it is within a declared tolerance,
+the result is within that tolerance, and for a loop that converges the stopping iteration can move
+when a change lands within a few units in the last place of `iterateDelta`.
 
 Excel recalculates a workbook with iteration on every time it opens it, whatever
 `fullCalcOnLoad` says, starting from the cached values (capture `iterate_open`): a cell adding 1
@@ -907,7 +935,8 @@ fetches anything a file names:
   defaults never refuse a workbook Excel opens; parts are streamed, so memory does not grow with
   them. The real protection is streaming and the DTD refusal below; the limits bound time.
   `load` and `recalculate` take `limits=ReadLimits(...)` (`max_parts`, `max_part_bytes`,
-  `max_total_bytes`, and `max_array_cells`, which bounds computing, §7.7); a service that accepts files from untrusted users should lower them to
+  `max_total_bytes`, and two that bound computing: `max_array_cells`, §7.7, and
+  `max_iteration_evaluations`, §7.2); a service that accepts files from untrusted users should lower them to
   what it is willing to spend on one file. Sizes
   are counted while decompressing, and a part must inflate to exactly the size and CRC the
   archive states, or it is refused (`zipfile` stopped at the stated size, so bytes past it were
@@ -1202,18 +1231,15 @@ One workbook is used from one thread at a time.
    (§7.7).
 4. 0.2: unions of ranges together with arrays of references, which QUIRKS.md lists as not
    computed.
-5. 0.2: iterative calculation with the workbook's settings (`<calcPr iterate iterateCount
-   iterateDelta>`), designed from captures of its calculation order, stopping test, starting
-   values and behavior on opening.
-6. 0.2: the functions still absent, by family, each family's captures first. An order, not a promise
+5. 0.2: the functions still absent, by family, each family's captures first. An order, not a promise
    or a date: the functions of item 3 are required; the other families (distributions and their
    inverses, complex numbers, Bessel functions and `CONVERT`, bonds with odd periods, the array and
    matrix functions) follow as far as they get; those with large questions of their own (regular
    expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable. `docs/coverage.md` lists what
    exists.
-7. `xlrecalc.evaluate(text)` for one formula outside a workbook, custom functions, and `LET` and `LAMBDA` with its helpers are designed together,
+6. `xlrecalc.evaluate(text)` for one formula outside a workbook, custom functions, and `LET` and `LAMBDA` with its helpers are designed together,
    from a list of what an editor built on the package needs.
-8. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
+7. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
    vectorized templates (numpy as an optional extra), a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,
    parallel evaluation of independent template columns on free-threaded Python, and a compiled

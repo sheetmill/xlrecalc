@@ -1,12 +1,10 @@
-"""With iterative calculation on, a cycle keeps its values and is reported (ARCHITECTURE.md §7.2).
+"""Iterative calculation through files, ``load`` and edits (ARCHITECTURE.md §7.2).
 
-Iterative calculation is not implemented. Whenever evaluation reaches a cycle in a workbook with
-``<calcPr iterate="1">``, by any path, its cells and their dependents keep their cached values, are
-uncomputed under the label ``iterative calculation``, and are not ``circular``. A run that trusts
-the file's values evaluates nothing, changes nothing and reports nothing.
-
-The cached values here differ from what one evaluation would give (``B1`` holds 7 where ``A1/2``
-is 2.5, ``C1`` holds 999 where ``A1+100`` is 105), so a value computed and not restored shows.
+The workbook: a loop of two cells (``A1 = B1+F1``, ``B1 = A1/2``), a dependent (``C1``), an
+unrelated formula (``D1``). With iteration on, a recalculation that reaches the loop makes one run
+from the values the cells hold, as Excel does on opening (captures ``iterate_open``,
+``iterate_calc``, checked cell by cell in ``tests/test_iteration.py``). A run that trusts the
+file's values evaluates nothing, changes nothing and reports nothing.
 """
 
 from __future__ import annotations
@@ -20,7 +18,9 @@ import pytest
 
 import xlrecalc
 from tests.test_xlsx import package
+from xlrecalc._engine import ITERATION_LIMIT
 from xlrecalc._report import CellRef, column_letters
+from xlrecalc._values import ErrorValue
 from xlrecalc._xlsx import Book
 
 FLAG = '<calcPr iterate="1" fullCalcOnLoad="1"/>'
@@ -28,7 +28,6 @@ TRUST = '<calcPr iterate="1"/>'
 OFF = '<calcPr fullCalcOnLoad="1"/>'
 LOOP = {"A1": 5.0, "B1": 7.0, "C1": 999.0}
 LABEL = "iterative calculation"
-REPORTED = {CellRef("Data", 1, 1), CellRef("Data", 1, 2), CellRef("Data", 1, 3)}
 
 
 def cell(address: str, formula: str | None, value: str | None) -> str:
@@ -66,44 +65,59 @@ def has_cached(path: Path, address: str) -> bool:
     return re.search(r"<v>[^<]+</v>", found[1]) is not None
 
 
-def assert_kept(report: xlrecalc.Report) -> None:
-    assert report.uncomputed == REPORTED
-    assert report.unsupported[LABEL] == 3
+def run(a: float, b: float, c: float, f: float = 0.0, runs: int = 1) -> dict[str, float]:
+    """The captured rule, restated: in place, row order, until no change reaches 0.001."""
+    for _ in range(runs):
+        for _ in range(100):
+            na = b + f
+            nb = na / 2
+            nc = na + 100
+            change = max(abs(na - a), abs(nb - b), abs(nc - c))
+            a, b, c = na, nb, nc
+            if change < 0.001:
+                break
+    return {"A1": a, "B1": b, "C1": c}
+
+
+ONE_RUN = run(5.0, 7.0, 999.0)
+
+
+def assert_computed(report: xlrecalc.Report) -> None:
+    assert not report.uncomputed
     assert not report.circular
+    assert LABEL not in report.unsupported
 
 
 def test_a_file_asking_for_a_full_calculation(tmp_path: Path) -> None:
     source = book(tmp_path, FLAG)
     out = tmp_path / "out.xlsx"
-    assert_kept(xlrecalc.recalculate(source, out))
-    assert written(out) == {**LOOP, "D1": 1.0, "F1": 0.0}
+    assert_computed(xlrecalc.recalculate(source, out))
+    assert written(out) == {**ONE_RUN, "D1": 1.0, "F1": 0.0}
 
 
-def test_full_recalculation(tmp_path: Path) -> None:
+def test_full_recalculation_runs_once_from_the_cached_values(tmp_path: Path) -> None:
     source = book(tmp_path, TRUST)
     out = tmp_path / "out.xlsx"
-    assert_kept(xlrecalc.recalculate(source, out, full=True))
-    assert written(out) == {**LOOP, "D1": 1.0, "F1": 0.0}
+    assert_computed(xlrecalc.recalculate(source, out, full=True))
+    assert written(out) == {**ONE_RUN, "D1": 1.0, "F1": 0.0}
 
 
 def test_a_trusting_run_changes_nothing_and_claims_nothing(tmp_path: Path) -> None:
     source = book(tmp_path, TRUST)
     out = tmp_path / "out.xlsx"
-    report = xlrecalc.recalculate(source, out)
-    assert not report.uncomputed
-    assert not report.circular
-    assert LABEL not in report.unsupported
+    assert_computed(xlrecalc.recalculate(source, out))
     assert written(out) == {**LOOP, "D1": 77.0, "F1": 0.0}
 
 
-def test_the_second_run_of_a_written_file(tmp_path: Path) -> None:
-    """The first run writes ``fullCalcOnLoad``, so the second evaluates every formula."""
+def test_each_run_of_a_written_file_starts_from_what_it_holds(tmp_path: Path) -> None:
+    """The first run writes ``fullCalcOnLoad``, so each later one evaluates every formula."""
     path = book(tmp_path, TRUST)
     xlrecalc.recalculate(path)
-    assert_kept(xlrecalc.recalculate(path))
-    assert written(path) == {**LOOP, "D1": 1.0, "F1": 0.0}
-    assert_kept(xlrecalc.recalculate(path))
-    assert written(path) == {**LOOP, "D1": 1.0, "F1": 0.0}
+    assert written(path)["A1"] == 5.0
+    assert_computed(xlrecalc.recalculate(path))
+    assert written(path) == {**ONE_RUN, "D1": 1.0, "F1": 0.0}
+    xlrecalc.recalculate(path)
+    assert written(path) == {**run(5.0, 7.0, 999.0, runs=2), "D1": 1.0, "F1": 0.0}
 
 
 @pytest.mark.parametrize(
@@ -111,19 +125,19 @@ def test_the_second_run_of_a_written_file(tmp_path: Path) -> None:
     [(TRUST, False), (FLAG, True), (FLAG, False)],
     ids=["no_trust", "flag", "both"],
 )
-def test_value_gives_the_cached_values(tmp_path: Path, calc: str, trust: bool) -> None:
-    """Evaluation replaced them before the cycle closed: they must come back."""
+def test_value_gives_one_run(tmp_path: Path, calc: str, trust: bool) -> None:
     wb = xlrecalc.load(book(tmp_path, calc), trust_cached=trust)
     wb.recalculate()
-    assert [wb.value(a) for a in ("A1", "B1", "C1", "D1")] == [5.0, 7.0, 999.0, 1.0]
-    assert_kept(wb.report)
+    assert {a: wb.value(a) for a in ONE_RUN} == ONE_RUN
+    assert wb.value("D1") == 1.0
+    assert_computed(wb.report)
 
 
 @pytest.mark.parametrize("order", [("C1", "A1", "B1"), ("B1", "C1", "A1"), ("A1", "C1", "B1")])
 def test_value_on_demand_in_any_order(tmp_path: Path, order: tuple[str, str, str]) -> None:
     wb = xlrecalc.load(book(tmp_path, FLAG))
-    assert {a: wb.value(a) for a in order} == LOOP
-    assert_kept(wb.report)
+    assert {a: wb.value(a) for a in order} == ONE_RUN
+    assert_computed(wb.report)
 
 
 def test_a_trusting_load_gives_the_cached_values_without_evaluating(tmp_path: Path) -> None:
@@ -132,72 +146,71 @@ def test_a_trusting_load_gives_the_cached_values_without_evaluating(tmp_path: Pa
     assert not wb.report.uncomputed
 
 
-def test_recalculating_again_counts_the_cells_once(tmp_path: Path) -> None:
+def test_each_recalculation_is_a_run(tmp_path: Path) -> None:
+    """As Excel's ``calculate``: the loop's cells are calculated on every recalculation."""
     wb = xlrecalc.load(book(tmp_path, FLAG))
     wb.recalculate()
     wb.recalculate()
+    assert {a: wb.value(a) for a in LOOP} == run(5.0, 7.0, 999.0, runs=2)
     wb.recalculate(full=True)
-    assert_kept(wb.report)
-    assert {a: wb.value(a) for a in LOOP} == LOOP
+    assert {a: wb.value(a) for a in LOOP} == run(5.0, 7.0, 999.0, runs=3)
+    assert_computed(wb.report)
 
 
-def test_an_edit_reaching_the_loop(tmp_path: Path) -> None:
+def test_an_edit_runs_once_from_the_cached_values(tmp_path: Path) -> None:
     source = book(tmp_path, TRUST)
     wb = xlrecalc.load(source)
     wb.set("F1", 1.0)
-    assert [wb.value(a) for a in ("A1", "B1", "C1", "D1")] == [5.0, 7.0, 999.0, 2.0]
-    assert_kept(wb.report)
+    expected = run(5.0, 7.0, 999.0, f=1.0)
+    assert {a: wb.value(a) for a in LOOP} == expected
+    assert wb.value("D1") == 2.0
+    assert_computed(wb.report)
     out = tmp_path / "out.xlsx"
-    wb.save(out)
-    assert written(out) == {**LOOP, "D1": 2.0, "F1": 1.0}
+    wb.save(out)  # saving recalculates, so the loop runs once more, as Excel's saving does
+    assert written(out) == {**run(5.0, 7.0, 999.0, f=1.0, runs=2), "D1": 2.0, "F1": 1.0}
 
 
-def test_a_formula_set_into_the_loop_has_no_cached_value(tmp_path: Path) -> None:
-    source = book(tmp_path, TRUST)
-    wb = xlrecalc.load(source)
+def test_a_formula_set_into_the_loop(tmp_path: Path) -> None:
+    """It reads ``B1``'s value, not its own, so its missing cached value is never read."""
+    wb = xlrecalc.load(book(tmp_path, TRUST))
     wb.set_formula("A1", "=B1+F1+1")
-    assert [wb.value(a) for a in ("A1", "B1", "C1")] == ["", 7.0, 999.0]
-    assert_kept(wb.report)
-    out = tmp_path / "out.xlsx"
-    wb.save(out)
-    assert not has_cached(out, "A1")
-    assert written(out)["B1"] == 7.0
-    assert written(out)["C1"] == 999.0
+    a, b = wb.value("A1"), wb.value("B1")
+    assert isinstance(a, float)
+    assert isinstance(b, float)
+    assert abs(a - 2.0) < 0.002
+    assert b == a / 2
+    assert_computed(wb.report)
 
 
 def test_an_edit_breaking_the_loop_computes_its_cells(tmp_path: Path) -> None:
     wb = xlrecalc.load(book(tmp_path, FLAG))
     wb.recalculate()
-    assert_kept(wb.report)
     wb.set("A1", 10.0)
     assert [wb.value(a) for a in ("A1", "B1", "C1")] == [10.0, 5.0, 110.0]
-    assert not wb.report.uncomputed
-    assert LABEL not in wb.report.unsupported
+    assert_computed(wb.report)
     out = tmp_path / "out.xlsx"
     wb.save(out)
     assert written(out) == {"A1": 10.0, "B1": 5.0, "C1": 110.0, "D1": 1.0, "F1": 0.0}
 
 
-def test_a_cycle_without_cached_values_claims_nothing(tmp_path: Path) -> None:
+def test_a_loop_without_cached_values_ends_at_value_error(tmp_path: Path) -> None:
+    """As in Excel (capture ``iterate_open``): what nothing calculated yet reads is ``#VALUE!``."""
     cells = cell("A1", "B1+0", None) + cell("B1", "A1/2", None) + cell("C1", "A1+100", None)
     source = book(tmp_path, FLAG, cells)
     wb = xlrecalc.load(source)
-    assert [wb.value(a) for a in ("A1", "B1", "C1")] == ["", "", ""]
-    assert_kept(wb.report)
-    out = tmp_path / "out.xlsx"
-    xlrecalc.recalculate(source, out)
-    assert not any(has_cached(out, a) for a in ("A1", "B1", "C1"))
+    assert [wb.value(a) for a in ("A1", "B1", "C1")] == [ErrorValue.VALUE] * 3
+    assert_computed(wb.report)
 
 
-def test_a_volatile_cell_in_a_loop_is_reached_by_a_trusting_run(tmp_path: Path) -> None:
+def test_a_volatile_cell_in_a_loop_makes_a_trusting_run_reach_it(tmp_path: Path) -> None:
     cells = cell("A1", "B1+RAND()*0", "5") + cell("B1", "A1/2", "7") + cell("C1", "A1+100", "999")
     source = book(tmp_path, TRUST, cells)
     out = tmp_path / "out.xlsx"
-    assert_kept(xlrecalc.recalculate(source, out))
-    assert written(out) == LOOP
+    assert_computed(xlrecalc.recalculate(source, out))
+    assert written(out) == ONE_RUN
 
 
-def test_an_array_formula_depending_on_a_loop_keeps_its_range(tmp_path: Path) -> None:
+def test_an_array_formula_depending_on_a_loop_is_iterated_with_it(tmp_path: Path) -> None:
     cells = (
         cell("A1", "B1+0", "5")
         + cell("B1", "A1/2", "7")
@@ -205,19 +218,12 @@ def test_an_array_formula_depending_on_a_loop_keeps_its_range(tmp_path: Path) ->
         + '<c r="D1"><v>22</v></c><c r="E1"><v>33</v></c>'
         + cell("F1", "D1+1", "44")
     )
-    source = book(tmp_path, FLAG, cells)
-    wb = xlrecalc.load(source)
+    wb = xlrecalc.load(book(tmp_path, FLAG, cells))
     wb.recalculate()
-    assert [wb.value(a) for a in ("A1", "B1", "C1", "D1", "E1", "F1")] == [5, 7, 11, 22, 33, 44]
-    assert wb.report.uncomputed == {
-        CellRef("Data", 1, 1),
-        CellRef("Data", 1, 2),
-        CellRef("Data", 1, 3),
-        CellRef("Data", 1, 6),
-    }
-    out = tmp_path / "out.xlsx"
-    xlrecalc.recalculate(source, out)
-    assert written(out) == {"A1": 5, "B1": 7, "C1": 11, "D1": 22, "E1": 33, "F1": 44}
+    a = wb.value("A1")
+    assert isinstance(a, float)
+    assert [wb.value(x) for x in ("C1", "D1", "E1", "F1")] == [a, 2 * a, 3 * a, 2 * a + 1]
+    assert_computed(wb.report)
 
 
 def test_a_loop_through_a_branch_not_taken_is_computed(tmp_path: Path) -> None:
@@ -225,17 +231,16 @@ def test_a_loop_through_a_branch_not_taken_is_computed(tmp_path: Path) -> None:
     source = book(tmp_path, FLAG, cells)
     wb = xlrecalc.load(source)
     assert [wb.value("A1"), wb.value("B1")] == [1.0, 2.0]
-    assert not wb.report.uncomputed
-    assert LABEL not in wb.report.unsupported
+    assert_computed(wb.report)
 
 
 def test_a_file_written_by_openpyxl_with_cached_values_added(tmp_path: Path) -> None:
-    """openpyxl sets ``fullCalcOnLoad`` on every file, which is what made the default path wipe."""
+    """openpyxl sets ``fullCalcOnLoad`` on every file: one run from the values added."""
     openpyxl = pytest.importorskip("openpyxl")
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "Data"
-    ws["A1"], ws["B1"], ws["C1"], ws["D1"], ws["F1"] = "=B1+0", "=A1/2", "=A1+100", "=F1+1", 1
+    ws["A1"], ws["B1"], ws["C1"], ws["D1"], ws["F1"] = "=B1+F1", "=A1/2", "=A1+100", "=F1+1", 1
     wb.calculation.iterate = True
     plain = tmp_path / "plain.xlsx"
     wb.save(plain)
@@ -257,8 +262,76 @@ def test_a_file_written_by_openpyxl_with_cached_values_added(tmp_path: Path) -> 
     assert 'fullCalcOnLoad="1"' in zipfile.ZipFile(source).read("xl/workbook.xml").decode()
     in_place = tmp_path / "in_place.xlsx"
     shutil.copy(source, in_place)
-    assert_kept(xlrecalc.recalculate(in_place))
-    assert written(in_place) == {**LOOP, "D1": 2.0, "F1": 1.0}
+    assert_computed(xlrecalc.recalculate(in_place))
+    assert written(in_place) == {**run(5.0, 7.0, 999.0, f=1.0), "D1": 2.0, "F1": 1.0}
+
+
+def loop(tmp_path: Path, a1: str, extra: str = "") -> Path:
+    cells = cell("A1", a1, "5") + cell("B1", "A1/2", "7") + cell("C1", "A1+100", "999") + extra
+    return book(tmp_path, FLAG, cells)
+
+
+def test_an_absent_function_in_a_loop_keeps_its_value_and_the_rest_rests_on_it(
+    tmp_path: Path,
+) -> None:
+    wb = xlrecalc.load(loop(tmp_path, "B1+0*BESSELJ(1,1)"))
+    wb.recalculate()
+    assert [wb.value(a) for a in ("A1", "B1", "C1")] == [5.0, 2.5, 105.0]
+    assert wb.report.from_kept == {CellRef("Data", 1, c) for c in (1, 2, 3)}
+    assert not wb.report.uncomputed
+
+
+def test_a_refused_formula_in_a_loop_is_a_constant_and_breaks_it(tmp_path: Path) -> None:
+    wb = xlrecalc.load(loop(tmp_path, "B1+ABS()"))
+    wb.recalculate()
+    assert [wb.value(a) for a in ("A1", "B1", "C1")] == [5.0, 2.5, 105.0]
+    assert set(wb.report.refused) == {CellRef("Data", 1, 1)}
+
+
+def test_an_error_entering_a_loop_fills_it(tmp_path: Path) -> None:
+    wb = xlrecalc.load(loop(tmp_path, "B1+F1", '<c r="F1" t="e"><v>#N/A</v></c>'))
+    wb.recalculate()
+    assert [wb.value(a) for a in ("A1", "B1", "C1")] == [ErrorValue.NA] * 3
+    assert_computed(wb.report)
+
+
+def test_two_loops_sharing_a_cell_are_one_run(tmp_path: Path) -> None:
+    """``A1`` is on both; every cell is computed in order each iteration, until none changes."""
+    cells = (
+        cell("A1", "B1/2+D1/4+1", "0")
+        + cell("B1", "A1", "0")
+        + cell("C1", "A1+100", "0")
+        + cell("D1", "A1", "0")
+    )
+    wb = xlrecalc.load(book(tmp_path, FLAG, cells))
+    wb.recalculate()
+    a = b = c = d = 0.0
+    for _ in range(100):
+        na = b / 2 + d / 4 + 1
+        nb, nc, nd = na, na + 100, na
+        change = max(abs(na - a), abs(nb - b), abs(nc - c), abs(nd - d))
+        a, b, c, d = na, nb, nc, nd
+        if change < 0.001:
+            break
+    assert [wb.value(x) for x in ("A1", "B1", "C1", "D1")] == [a, b, c, d]
+    assert_computed(wb.report)
+
+
+def test_a_run_past_the_limit_keeps_the_values_and_names_the_limit(tmp_path: Path) -> None:
+    """Three cells, 100 iterations at most: 300 evaluations would pass a limit of 200."""
+    source = book(tmp_path, '<calcPr iterate="1" iterateDelta="0" fullCalcOnLoad="1"/>')
+    limits = xlrecalc.ReadLimits(max_iteration_evaluations=200)
+    wb = xlrecalc.load(source, limits=limits)
+    wb.recalculate()
+    assert {a: wb.value(a) for a in LOOP} == LOOP
+    assert wb.report.uncomputed == {CellRef("Data", 1, c) for c in (1, 2, 3)}
+    assert wb.report.unsupported[ITERATION_LIMIT] == 3
+    out = tmp_path / "out.xlsx"
+    xlrecalc.recalculate(source, out, limits=limits)
+    assert written(out) == {**LOOP, "D1": 1.0, "F1": 0.0}
+    wb = xlrecalc.load(source, limits=xlrecalc.ReadLimits(max_iteration_evaluations=300))
+    wb.recalculate()
+    assert_computed(wb.report)
 
 
 def _iterate_open() -> dict[tuple[str, str], tuple[str, str]]:

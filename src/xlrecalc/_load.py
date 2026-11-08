@@ -305,6 +305,11 @@ def _iso_serial(text: str, date1904: bool, quirks: Quirks) -> Value:
     return days + seconds / 86400
 
 
+def _iterate_count(count: int | None) -> int:
+    """The file's ``iterateCount`` in Excel's range, 1 to 32,767; 100 when absent or unreadable."""
+    return 100 if count is None or count < 1 else min(count, 32_767)
+
+
 def load(
     source: str | os.PathLike[str] | BinaryIO,
     *,
@@ -321,6 +326,9 @@ def load(
             today,
             (limits or ReadLimits()).max_array_cells,
             book.calc.iterate,
+            _iterate_count(book.calc.iterate_count),
+            book.calc.iterate_delta if book.calc.iterate_delta is not None else 0.001,
+            (limits or ReadLimits()).max_iteration_evaluations,
         )
         if isinstance(source, (str, os.PathLike)):
             engine.path = os.path.abspath(os.fspath(source))

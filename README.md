@@ -90,8 +90,7 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
   leap-year bug and the 1904 date system, arrays, dynamic arrays and spill, implicit
   intersection, circular references (left uncalculated, as Excel does with iteration off).
   Four quirks can be turned off (`Quirks`).
-- **Not yet**: iterative calculation of circular references (with iteration on, those cells
-  keep the values the file holds and are reported); the array-making functions
+- **Not yet**: the array-making functions
   (`SEQUENCE`, `FILTER`, `SORT`, `UNIQUE`, `LAMBDA` and its helpers); structured
   (table) references and 3-D references; `CELL`'s formatting kinds; computed criteria in the
   database functions; `LINEST` with several regressors; inserting or deleting rows and

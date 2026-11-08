@@ -17,6 +17,7 @@ import traceback
 from collections import defaultdict
 from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
+from functools import cmp_to_key
 from typing import Any
 
 from xlrecalc._arith import flush
@@ -30,6 +31,7 @@ from xlrecalc._arrays import (
     to_array,
 )
 from xlrecalc._coerce import intersect
+from xlrecalc._compare import compare
 from xlrecalc._deps import DependencyIndex, Runs
 from xlrecalc._formula import MISSING, FormulaSyntaxError, TokenizeError, compile_formula, parse
 from xlrecalc._formula import template_key as _template_key
@@ -50,6 +52,7 @@ KEY_MASK = (1 << SHEET_SHIFT) - 1
 NAME, REF, VALUE = ErrorValue.NAME, ErrorValue.REF, ErrorValue.VALUE
 SPILL = ErrorValue("#SPILL!")
 ITERATIVE = "iterative calculation"  # the report's label for cells kept (§7.2)
+ITERATION_LIMIT = "iterative calculation past ReadLimits.max_iteration_evaluations"
 _VOLATILE = frozenset(n for n, s in SPECS.items() if s.volatile)
 
 
@@ -181,10 +184,23 @@ class Engine:
         today: dt.date | None = None,
         max_array_cells: int | None = 10_485_760,
         iterate: bool = False,
+        iterate_count: int = 100,
+        iterate_delta: float = 0.001,
+        max_iteration_evaluations: int | None = 100_000_000,
     ) -> None:
         self.quirks = quirks or Quirks.EXCEL
         self.iterate = iterate
         """The workbook has iterative calculation on (``<calcPr iterate>``): §7.2."""
+        self.iterate_count = max(1, iterate_count)
+        """Iterations a run makes at most (``iterateCount``)."""
+        self.iterate_delta = iterate_delta
+        """A run stops once no iterating cell changes by this much (``iterateDelta``)."""
+        self.max_iteration_evaluations = max_iteration_evaluations
+        """Cell evaluations one run may make (``ReadLimits.max_iteration_evaluations``)."""
+        self._iterating = False  # within a run: kept cells are computed
+        self._iteration_due = False
+        self._iterated: set[int] = set()  # kept cells a run computed: the writer writes them
+        self._before_pass: dict[int, Value] = {}  # with iteration on: values before this pass
         self.max_array_cells = max_array_cells
         """The largest array a formula may make (``ReadLimits.max_array_cells``)."""
         self.reference_array: Any = None
@@ -676,6 +692,8 @@ class Engine:
         if self._changed and self._volatile:
             self.stale |= self._volatile
             self._unclosed.extend(self._volatile)
+        if self._changed:
+            self._before_pass.clear()  # a recalculation starts from what the cells hold now
         if self._changed and self._kept:
             self._reconsider_kept()
         if self._changed and (self._absent or self._held_back):
@@ -764,6 +782,9 @@ class Engine:
                         suspects.update(path[marked_to:last])
                     marked_to = last
 
+        if self._iteration_due and not self._iterating:
+            self._iterate()
+
     def _check(self, sheet: int, row: int, col: int) -> None:
         """Stop the formula being evaluated if this cell is not evaluated yet (§6.3)."""
         n = node(sheet, row, col)
@@ -837,15 +858,86 @@ class Engine:
         self._kept[n] = held
         where = CellRef(s.name, row + 1, col + 1)
         self.stale.discard(n)  # final: a later read must not compute it again
-        if self.iterate:
+        if self.iterate:  # iterated once the pass ends; with no value, #VALUE! (iterate_open)
             if not held:
-                s.values[key] = ""
-            self.report.unsupported[ITERATIVE] += 1
-            self.report.uncomputed.add(where)
+                s.values[key] = VALUE
+            self._iteration_due = True
         else:
             if not held:  # from a file, the empty text; entered, 0 (capture circular_cached)
                 s.values[key] = 0.0 if n in self.entered else ""
             self.report.circular.add(where)
+
+    def _iteration_order(self, cells: Iterable[int]) -> list[int]:
+        """Excel's order: sheets by name in its text order, then row, then column (§7.2)."""
+        names = [s.name for s in self.sheets]
+
+        def before(a: int, b: int) -> int:
+            if compare(names[a], names[b], "<") is True:
+                return -1
+            return 1 if compare(names[a], names[b], ">") is True else 0
+
+        by_name = sorted(range(len(names)), key=cmp_to_key(before))
+        rank = {sheet: i for i, sheet in enumerate(by_name)}
+        return sorted(cells, key=lambda n: (rank[n >> SHEET_SHIFT], n & KEY_MASK))
+
+    def _iterate(self) -> None:
+        """One run of iterative calculation over the cells kept on and after cycles (§7.2).
+
+        Each iteration computes every one in Excel's order, in place, reading what the others
+        hold; the run stops after ``iterate_count`` iterations, or after the first in which no
+        number changed by ``iterate_delta`` or more (a change between kinds does not count).
+        Past ``max_iteration_evaluations`` the cells keep the values they held before the run.
+        """
+        self._iteration_due = False
+        members = [
+            n
+            for n in self._iteration_order(self._kept)
+            if self.sheets[n >> SHEET_SHIFT].templates.at(*divmod(n & KEY_MASK, COLS)) is not None
+        ]
+        stores = [(self.sheets[n >> SHEET_SHIFT].values, (n & KEY_MASK)) for n in members]
+        for n, (values, key) in zip(members, stores, strict=True):
+            if n in self._before_pass:  # computed before the cycle showed itself
+                old = self._before_pass.pop(n)
+                values[key] = VALUE if old is BLANK else old  # no value: #VALUE! (iterate_open)
+        before = [values.get(key, BLANK) for values, key in stores]
+        limit = self.max_iteration_evaluations
+        delta = self.iterate_delta
+        stopped = False
+        evaluations = 0
+        self._iterating = True
+        try:
+            for _ in range(self.iterate_count):
+                evaluations += len(members)
+                if limit is not None and evaluations > limit:
+                    stopped = True
+                    break
+                largest = 0.0
+                for n, (values, key) in zip(members, stores, strict=True):
+                    old = values.get(key, BLANK)
+                    self._compute(n)
+                    new = values.get(key, BLANK)
+                    if type(old) is float and type(new) is float:
+                        change = abs(new - old)
+                        if change > largest:
+                            largest = change
+                if largest < delta:
+                    break
+        except _NotEvaluatedError:  # a read the pass did not see: keep what was held
+            stopped = True
+        finally:
+            self._iterating = False
+        for n, (values, key), value in zip(members, stores, before, strict=True):
+            if stopped:
+                if value is BLANK:
+                    values.pop(key, None)
+                else:
+                    values[key] = value
+                sheet, row, col = unpack(n)
+                self.report.unsupported[ITERATION_LIMIT] += 1
+                self.report.uncomputed.add(CellRef(self.sheets[sheet].name, row + 1, col + 1))
+            else:
+                self._iterated.add(n)
+            self._kept[n] = True  # what it holds now is its value until a change
 
     def _reconsider_kept(self) -> None:
         """After a change, kept cells are evaluated again: an edit may have broken the loop."""
@@ -862,13 +954,15 @@ class Engine:
                 if not held:
                     s.values.pop(key, None)
         del report.unsupported[ITERATIVE]
+        del report.unsupported[ITERATION_LIMIT]
+        self._iterated.clear()
         self._kept.clear()
         self._kept_runs.clear()
 
     def kept_with_values(self) -> Iterator[tuple[str, int, int]]:
         """Cells on a cycle or after one holding the file's value, as (sheet, row, col), 1-based."""
         for n, held in self._kept.items():
-            if held:
+            if held and n not in self._iterated:
                 sheet, row, col = unpack(n)
                 yield self.sheets[sheet].name, row + 1, col + 1
 
@@ -879,7 +973,7 @@ class Engine:
         tid = s.templates.at(row, col)
         if tid is None:
             return
-        if self._kept and n in self._kept:  # until a change makes it stale again
+        if self._kept and n in self._kept and not self._iterating:  # until a change
             return
         template = self.templates[tid]
         where = CellRef(s.name, row + 1, col + 1)
@@ -899,6 +993,8 @@ class Engine:
         if self._absent:
             self._evaluated.add(n)
             self._dynamic_reads.pop(n, None)
+        if self.iterate and not self._iterating and n not in self._before_pass:
+            self._before_pass[n] = s.values.get(key, BLANK)  # a run starts from it (§7.2)
         self.sheet, self.row, self.col = sheet, row, col
         self.reference_array = None
         try:

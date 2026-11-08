@@ -63,9 +63,9 @@ class Report:
     values.
 
     Attributes:
-        unsupported: Unsupported function or feature, and the number of cells using it.
-            ``"iterative calculation"`` counts the cells of ``uncomputed`` that are on a circular
-            reference, or depend on one, in a workbook with iterative calculation on.
+        unsupported: Unsupported function or feature, and the number of cells using it. A run
+            of iterative calculation that would pass ``ReadLimits.max_iteration_evaluations``
+            counts its cells under a label naming that limit.
         exceptions: Cells where an internal error was caught, with the error; such a cell is
             ``#VALUE!`` and uncomputed.
         circular: Cells on a circular reference or depending on one, with iterative calculation
@@ -80,8 +80,8 @@ class Report:
             cached value and are written as they were; Excel's repair turns each into a
             constant holding that value when it opens the file.
         uncomputed: Cells whose value could not be computed (an unsupported function or
-            feature without a cached value, a caught internal error, a circular reference with
-            iterative calculation on, or an uncomputed precedent). A written file keeps their
+            feature without a cached value, a caught internal error, a run of iterative
+            calculation past its limit, or an uncomputed precedent). A written file keeps their
             cached values as they were. An array formula is named by its first cell, and the
             cells of its range keep their values with it.
     """

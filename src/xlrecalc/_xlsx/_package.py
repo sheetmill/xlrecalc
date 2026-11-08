@@ -68,12 +68,19 @@ class ReadLimits:
             value the file holds and is reported (``Report.uncomputed``, and
             ``Report.unsupported`` names the limit). The default is ten full columns, which
             the package computes in about 2 GiB.
+        max_iteration_evaluations: Cell evaluations one run of iterative calculation may make:
+            the cells on and after circular references times the iterations made, up to the
+            file's ``iterateCount`` (at most 32,767). A run that would pass it leaves those cells
+            with the values they held, reported (``Report.uncomputed``, and
+            ``Report.unsupported`` names the limit). The default is more than ten times what any
+            workbook of the corpora the package is checked against needs.
     """
 
     max_parts: int = 100_000
     max_part_bytes: int = 16 * _GIB
     max_total_bytes: int = 64 * _GIB
     max_array_cells: int = 10_485_760
+    max_iteration_evaluations: int = 100_000_000
 
 
 class _RootReachedError(Exception):

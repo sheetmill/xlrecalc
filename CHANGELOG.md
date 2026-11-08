@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Iterative calculation, for a workbook with iteration on (`<calcPr iterate="1">`), as Excel does it (captures
+  `iterate_calc`, `calc_chain`, `iterate_open`): a run of up to `iterateCount` iterations from the values the cells hold, each
+  computing the cells on and after circular references in place, in Excel's order (sheets by name, then row, then column),
+  until the largest change of a number is below `iterateDelta`. Every recalculation, an edit's and a save's included, is a
+  run, as in Excel. `ReadLimits.max_iteration_evaluations` (100,000,000 by default) bounds the cell evaluations of one run;
+  past it, the cells keep their values and are reported.
 - `Report.from_kept`: a cell holding the cached value of a function or feature not implemented, and every
   cell computed from one. After a change upstream of the formula they move to `uncomputed` and keep the
   values they hold; a change that removes the reliance takes them out.
@@ -44,6 +50,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   any range, whole sheets included (capture `array_functions`).
 
 ### Changed
+- In a workbook with iteration on, the cells on and after a circular reference are computed, not kept and reported as
+  uncomputed under `iterative calculation`.
 - The database functions read a range's non-blank cells, not every cell, so they are computed over whole columns and
   sheets, and `DCOUNT` passes over an error in its field, as Excel does (capture `database_family`).
 - A cell naming a function not implemented keeps its cached value in a full recalculation too, as it
