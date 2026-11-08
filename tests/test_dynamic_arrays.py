@@ -1,0 +1,182 @@
+"""The functions that make arrays against Excel (captures ``dyn_*``; ARCHITECTURE.md §7.7).
+
+Each workbook ``capture/dynamic_probe.py`` gave Excel is rebuilt from the capture's input rows
+(data, constants in a result's way, dynamic-array formulas with the dynamic-array metadata,
+plain formulas reading them), loaded, recalculated, and every cell Excel saved must hold the
+same value here, and every dynamic array must spill over the range Excel recorded. A known
+deviation is listed in ``KNOWN`` with its reason, strictly: a listed cell that matches fails.
+"""
+
+from __future__ import annotations
+
+import ast
+import io
+import xml.etree.ElementTree as ET
+import zipfile
+from pathlib import Path
+
+import pytest
+from capture.dynamic_suites import BLOCK, REFUSED
+
+from tests.test_arrays import DOC, _cell, _metadata
+from tests.test_captures import same
+from tests.test_xlsx import package
+from xlrecalc._engine import node
+from xlrecalc._load import load
+from xlrecalc._values import BLANK, ErrorValue
+from xlrecalc._xlsx._write import text_escape
+
+CAPTURES = Path(__file__).with_name("captures")
+SUITES = ("sequence", "mmult", "unique", "sort", "sortby", "filter")
+RICH = "{http://schemas.microsoft.com/office/spreadsheetml/2017/richdata}"
+_ERROR_TYPES = {"8": "#SPILL!", "13": "#CALC!"}
+
+# (suite, cell) -> reason
+KNOWN: dict[tuple[str, str], str] = {}
+
+
+def _rows(suite: str) -> list[list[str]]:
+    text = (CAPTURES / f"dyn_{suite}.tsv").read_text(encoding="utf-8")
+    return [line.split("\t") for line in text.splitlines() if not line.startswith("#")]
+
+
+def _rich_errors(suite: str) -> dict[str, str]:
+    """vm (1-based, as cells carry it) -> the error its rich value holds."""
+    structures = ET.parse(CAPTURES / f"dyn_{suite}_rdrichvaluestructure.xml").getroot()
+    keys = [[k.get("n") for k in s.iter(f"{RICH}k")] for s in structures.iter(f"{RICH}s")]
+    values = ET.parse(CAPTURES / f"dyn_{suite}_rdrichvalue.xml").getroot()
+    out = {}
+    for i, rv in enumerate(values.iter(f"{RICH}rv"), 1):
+        fields = dict(
+            zip(keys[int(rv.get("s", "0"))], (v.text for v in rv.iter(f"{RICH}v")), strict=False)
+        )
+        out[str(i)] = _ERROR_TYPES.get(fields.get("errorType") or "", "?")
+    return out
+
+
+def workbook(suite: str) -> bytes:
+    """The probe's workbook for a suite, from the capture's input rows."""
+    cells: dict[tuple[int, int], str] = {}
+    for _, kind, where, text in (r for r in _rows(suite) if r[0] == "input"):
+        value = ast.literal_eval(text)
+        r, c = _cell(where)
+        if kind == "dynamic":
+            f = text_escape(value)
+            cells[r, c] = f'<c r="{where}" cm="1"><f t="array" ref="{where}">{f}</f></c>'
+        elif kind in ("legacy", "reader"):
+            cells[r, c] = f'<c r="{where}"><f>{text_escape(value)}</f></c>'
+        elif value.startswith("ErrorValue("):
+            code = ast.literal_eval(value[len("ErrorValue(") : -1])
+            cells[r, c] = f'<c r="{where}" t="e"><v>{text_escape(code)}</v></c>'
+        else:
+            constant = ast.literal_eval(value)
+            if isinstance(constant, bool):
+                cells[r, c] = f'<c r="{where}" t="b"><v>{int(constant)}</v></c>'
+            elif isinstance(constant, float):
+                cells[r, c] = f'<c r="{where}"><v>{constant!r}</v></c>'
+            else:
+                t = text_escape(constant)
+                cells[r, c] = f'<c r="{where}" t="inlineStr"><is><t>{t}</t></is></c>'
+    rows: dict[int, list[str]] = {}
+    for (r, _c), xml in sorted(cells.items()):
+        rows.setdefault(r, []).append(xml)
+    sheet_data = "".join(f'<row r="{r}">{"".join(x)}</row>' for r, x in sorted(rows.items()))
+    data = package(sheet_data, extra_parts={"xl/metadata.xml": _metadata()})
+    with zipfile.ZipFile(io.BytesIO(data)) as z:
+        parts = {n: z.read(n) for n in z.namelist()}
+    rels = parts["xl/_rels/workbook.xml.rels"].decode()
+    rels = rels.replace(
+        "</Relationships>",
+        f'<Relationship Id="rId8" Type="{DOC}/sheetMetadata" Target="metadata.xml"/>'
+        "</Relationships>",
+    )
+    parts["xl/_rels/workbook.xml.rels"] = rels.encode()
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+        for n, d in parts.items():
+            z.writestr(n, d)
+    return buf.getvalue()
+
+
+_ENGINES: dict[str, object] = {}
+
+
+def engine_for(suite: str):  # type: ignore[no-untyped-def]
+    if suite not in _ENGINES:
+        e = load(io.BytesIO(workbook(suite)))
+        e.recalculate()
+        _ENGINES[suite] = e
+    return _ENGINES[suite]
+
+
+def expected(cell: list[str], rich: dict[str, str]) -> object:
+    _, _, kind, text, _formula, _t, _ref, _cm, vm = cell
+    value = ast.literal_eval(text)
+    if kind == "e":
+        return ErrorValue(rich[vm] if vm else value)
+    if kind == "n":
+        return float(value)
+    if kind == "b":
+        return bool(value)
+    return value
+
+
+def _case_cells() -> list[tuple[str, str]]:
+    out = []
+    for suite in SUITES:  # results and readers, not the data in columns AA on
+        out.extend((suite, r[1]) for r in _rows(suite) if r[0] == "cell" and _cell(r[1])[1] < 27)
+    return out
+
+
+def _case(address: str) -> int:
+    return (_cell(address)[0] - 1) // BLOCK
+
+
+@pytest.mark.parametrize(("suite", "address"), _case_cells(), ids=lambda x: str(x))
+def test_cell_matches_excel(suite: str, address: str) -> None:
+    e = engine_for(suite)
+    cells = {r[1]: r for r in _rows(suite) if r[0] == "cell"}
+    row, col = _cell(address)
+    tid = e.sheets[0].templates.at(_case(address) * BLOCK, 1)  # the case's formula, in B
+    if tid is not None and e.templates[tid].unsupported:
+        names = ", ".join(sorted(e.templates[tid].unsupported))
+        pytest.skip(f"not implemented: {names}")
+    got = e.get(0, row - 1, col - 1)
+    want = expected(cells[address], _rich_errors(suite))
+    ok = got is BLANK if want is None else same(got, want)
+    reason = KNOWN.get((suite, address))
+    if reason is not None:
+        assert not ok, f"{suite} {address}: listed ({reason}) but matches Excel"
+        return
+    assert ok, (suite, address, cells[address][4], got, want)
+
+
+@pytest.mark.parametrize("suite", SUITES)
+def test_spill_ranges_match_excel(suite: str) -> None:
+    """Each dynamic array spills over the range Excel recorded in its ``ref``."""
+    e = engine_for(suite)
+    cells = {r[1]: r for r in _rows(suite) if r[0] == "cell"}
+    wrong = []
+    for _, kind, where, _text in (r for r in _rows(suite) if r[0] == "input"):
+        if kind != "dynamic":
+            continue
+        r, c = _cell(where)
+        tid = e.sheets[0].templates.at(r - 1, c - 1)
+        if tid is not None and e.templates[tid].unsupported:
+            continue
+        first, _, last = cells[where][6].partition(":")
+        r2, c2 = _cell(last or first)
+        box = e.anchors[node(0, r - 1, c - 1)].box
+        if box != (r - 1, c - 1, r2 - 1, c2 - 1) and (suite, where) not in KNOWN:
+            wrong.append((where, box, cells[where][6]))
+    assert not wrong
+
+
+def test_refused_forms_are_refused() -> None:
+    """A file holding a form Excel refuses keeps the value it holds and reports it."""
+    for formula in REFUSED:
+        sheet = f'<row r="1"><c r="B1"><f>{text_escape(formula)}</f><v>7</v></c></row>'
+        e = load(io.BytesIO(package(sheet)))
+        e.recalculate()
+        assert e.report.refused, formula
+        assert e.get(0, 0, 1) == 7.0, formula

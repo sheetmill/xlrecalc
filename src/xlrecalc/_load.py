@@ -205,6 +205,57 @@ def _refused_empty(toks: Iterable[Token]) -> str | None:
     return None
 
 
+# Argument counts of the functions that make arrays, outside which Excel refuses the file
+# (capture dyn_*); SORTBY takes an array and pairs of a key and its order, the last order optional.
+_ARRAY_COUNTS = {
+    "_XLFN.SEQUENCE": (1, 4), "_XLFN.UNIQUE": (1, 3), "_XLFN._XLWS.SORT": (1, 4),
+    "_XLFN._XLWS.FILTER": (2, 3), "MMULT": (2, 2),
+}  # fmt: skip
+# Without its prefix in a file, SORT or FILTER makes Excel refuse it; UNIQUE, SORTBY and
+# SEQUENCE are names it does not know (capture dyn_*).
+_BARE_REFUSED = frozenset({"SORT", "FILTER"})
+
+
+def _count_refused(name: str, count: int) -> bool:
+    if name == "_XLFN.SORTBY":
+        return count < 2 or (count > 3 and count % 2 == 0)
+    bounds = _ARRAY_COUNTS.get(name)
+    return bounds is not None and not bounds[0] <= count <= bounds[1]
+
+
+def _refused_count(toks: Iterable[Token]) -> str | None:
+    """The function called with a number of arguments Excel refuses, as a reason, or ``None``."""
+    stack: list[list[Any]] = []  # [function or None, commas, anything seen]
+    previous = None
+    braces = 0  # inside an array constant, a comma separates elements
+    for tok in toks:
+        if tok.kind is Kind.ARRAY_OPEN:
+            braces += 1
+        elif tok.kind is Kind.ARRAY_CLOSE:
+            braces -= 1
+        if braces and tok.kind is Kind.COMMA:
+            continue
+        if tok.kind is Kind.FUNCTION and tok.text.upper() in _BARE_REFUSED:
+            return f"{tok.text} without its prefix"
+        if tok.kind is Kind.OPEN:
+            name = None
+            if previous is not None and previous.kind is Kind.FUNCTION:
+                name = previous.text.upper()
+            stack.append([name, 0, False])
+        elif tok.kind is Kind.CLOSE and stack:
+            name, commas, seen = stack.pop()
+            count = commas + 1 if (commas or seen) else 0
+            if name is not None and _count_refused(name, count):
+                return f"{name} with {count} arguments"
+        elif stack:
+            if tok.kind is Kind.COMMA:
+                stack[-1][1] += 1
+            else:
+                stack[-1][2] = True
+        previous = tok
+    return None
+
+
 def refused_in_file(text: str) -> str | None:
     """Why Excel refuses this formula in a file (``formula_forms`` capture), or ``None``."""
     try:
@@ -248,7 +299,7 @@ def refused_in_file(text: str) -> str | None:
         ):
             return "an argument list of spaces"
         before, previous = previous, tok
-    return _refused_empty(toks)
+    return _refused_empty(toks) or _refused_count(toks)
 
 
 def _filled_by(boxes: list[tuple[int, int, int, int, int]], row: int, col: int) -> int | None:

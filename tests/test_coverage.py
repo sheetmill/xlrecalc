@@ -29,7 +29,7 @@ def test_every_registered_function_appears():
 
     text = OUTPUT.read_text(encoding="utf-8")
     for name in SPECS:
-        bare = name.removeprefix("_XLFN.")
+        bare = name.removeprefix("_XLFN.").removeprefix("_XLWS.")  # _xlfn._xlws.SORT too
         assert f"| `{bare}` |" in text, name
 
 

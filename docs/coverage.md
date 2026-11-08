@@ -418,7 +418,7 @@ library differs in the last bits; the rows that match either way do not.
 | `ROUNDDOWN` | math | implemented | 677 | 677 | 0 | 0 | 0 |  |  |
 | `ROUNDUP` | math | implemented | 677 | 677 | 0 | 0 | 0 |  |  |
 | `ROW` | lookup and reference | implemented | 5 | 5 | 0 | 0 | 0 |  |  |
-| `ROWS` | lookup and reference | implemented | 5 | 5 | 0 | 0 | 0 |  |  |
+| `ROWS` | lookup and reference | implemented | 6 | 5 | 0 | 0 | 0 |  |  |
 | `RRI` | financial | implemented | 644 | 641 | 3 | 0 | 0 | 4 ulps |  |
 | `RSQ` | statistical | implemented | 24 | 20 | 4 | 0 | 0 | 4 ulps |  |
 | `RTD` | | absent | | | | | | | |
@@ -456,7 +456,7 @@ library differs in the last bits; the rows that match either way do not.
 | `STOCKHISTORY` | | absent | | | | | | | |
 | `SUBSTITUTE` | text | implemented | 496 | 496 | 0 | 0 | 0 |  |  |
 | `SUBTOTAL` | math | implemented | 16 | 16 | 0 | 0 | 0 |  |  |
-| `SUM` | math | implemented | 93 | 92 | 1 | 0 | 0 |  |  |
+| `SUM` | math | implemented | 95 | 92 | 1 | 0 | 0 |  |  |
 | `SUMIF` | math | implemented | 86 | 86 | 0 | 0 | 0 |  |  |
 | `SUMIFS` | math | implemented | 43 | 43 | 0 | 0 | 0 |  |  |
 | `SUMPRODUCT` | math | implemented | 10 | 10 | 0 | 0 | 0 |  |  |

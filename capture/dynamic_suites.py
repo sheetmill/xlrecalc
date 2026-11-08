@@ -1,0 +1,345 @@
+"""Cases for ``capture/dynamic_probe.py``: the functions that make arrays.
+
+Each case is a dynamic-array formula in file form at the anchor of its own block of ``BLOCK``
+rows in column B; it may put constants in its way (``way``: offsets from the anchor), read it
+from plain formulas in column N (``readers``: ``{a}`` is the anchor), or be written as a plain
+formula without the dynamic-array marker (``legacy``). The data, in columns AA on, holds a
+first and a second set of values for each kind of input. New cases go at the end of a suite.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+
+from xlrecalc._values import ErrorValue
+
+BLOCK = 12
+NA, DIV0 = ErrorValue.NA, ErrorValue.DIV0
+
+SEQ = "_xlfn.SEQUENCE"
+UNQ = "_xlfn.UNIQUE"
+SRT = "_xlfn._xlws.SORT"
+SBY = "_xlfn.SORTBY"
+FLT = "_xlfn._xlws.FILTER"
+ANC = "_xlfn.ANCHORARRAY"
+
+
+@dataclass(frozen=True)
+class DynCase:
+    formula: str
+    way: dict[tuple[int, int], object] = field(default_factory=dict)
+    readers: tuple[str, ...] = ()
+    legacy: bool = False
+
+
+# Data: column letter -> values from row 1 (None is a blank; "=..." is a plain formula).
+DATA: dict[str, list[object]] = {
+    # first set
+    "AA": [3.0, 1.0, 4.0, 1.0, 5.0, 9.0, 2.0, 6.0],
+    "AB": ["pear", "Apple", "apple", "Pear", "fig", "APPLE", "kiwi", "fig"],
+    "AC": [2.0, "b", True, NA, None, "A", -1.0, False, "a", 10.0, DIV0, '=""'],
+    "AD": ["b", "a", "c", "a", "b", "a"],
+    "AE": [1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
+    "AF": ["1", 1.0, "1", 2.0, True, "TRUE", 1.0],
+    # a table by rows for by_col: AG1:AL2
+    "AG": [3.0, 1.0],
+    "AH": ["x", 2.0],
+    "AI": [1.0, 1.0],
+    "AJ": [3.0, 1.0],
+    "AK": ["X", 2.0],
+    "AL": [2.0, 3.0],
+    # matrices: AN1:AO2, AP1:AR2, AS1:AS3, and 2x2 ones holding a text, a blank, a logical,
+    # an error, a number as text
+    "AN": [1.0, 3.0],
+    "AO": [2.0, 4.0],
+    "AP": [1.0, -1.0],
+    "AQ": [0.0, 3.0],
+    "AR": [2.0, 1.0],
+    "AS": [2.0, 0.5, -1.0],
+    "AT": [1.0, 3.0],
+    "AU": ["x", 4.0],
+    "AV": [1.0, 3.0],
+    "AW": [None, 4.0],
+    "AX": [1.0, 3.0],
+    "AY": [True, 4.0],
+    "AZ": [1.0, 3.0],
+    "BA": [NA, 4.0],
+    "BB": ["1", 3.0],
+    "BC": [2.0, 4.0],
+    # second set
+    "BE": [0.5, -2.0, 7.0, 7.0, 0.0, -2.0, 1e10, 3.25, 0.5, -0.1],
+    "BF": ["Zeta", "alpha", "Beta", "zeta", "ALPHA", "beta", "gamma", "Gamma", "delta", "Delta"],
+    "BG": [2.0, 1.0, 2.0, 3.0, 1.0, 2.0],
+    "BH": ["p", "q", "r", "s", "t", "u"],
+    "BJ": [2.0, -1.0, 0.0],
+    "BK": [-1.0, 2.0, -1.0],
+    "BL": [0.0, -1.0, 2.0],
+    "BM": [0.1, 0.2, 0.3],
+    "BN": [0.3],
+    "BO": [0.2],
+    "BP": [0.1],
+    "BR": [True, "x", 5.0, None, NA, '=""', -3.0, False, "X", 5.0],
+}
+
+
+READ = (f"SUM({ANC}({{a}}))", f"ROWS({ANC}({{a}}))", f"COLUMNS({ANC}({{a}}))")
+
+SEQUENCE = [
+    DynCase(f"{SEQ}(3)", readers=READ),
+    DynCase(f"{SEQ}(3,2)"),
+    DynCase(f"{SEQ}(2,3,10,5)"),
+    DynCase(f"{SEQ}(4,1,-1,-0.5)"),
+    DynCase(f"{SEQ}(1,5,0,0)"),
+    DynCase(f"{SEQ}(2.7)"),
+    DynCase(f"{SEQ}(3,2.9)"),
+    DynCase(f"{SEQ}(0)"),
+    DynCase(f"{SEQ}(-1)"),
+    DynCase(f'{SEQ}("3")'),
+    DynCase(f"{SEQ}(TRUE)"),
+    DynCase(f"{SEQ}(3,,5)"),
+    DynCase(f"{SEQ}(,3)"),
+    DynCase(f"{SEQ}(3,1,AA1)"),
+    DynCase(f"{SEQ}(AA2:AA3)"),
+    DynCase(f"{SEQ}({{2,3}})"),
+    DynCase(f"{SEQ}(1048577)"),
+    DynCase(f"{SEQ}(2,2,9E+307,9E+307)"),
+    DynCase(f'{SEQ}(3,1,"a")'),
+    DynCase(f"{SEQ}(#N/A)"),
+    DynCase(f"{SEQ}(5)", way={(2, 0): "in the way"}, readers=READ),
+    DynCase(f"{SEQ}(3)*2"),
+    DynCase(f"SUM({SEQ}(10))"),
+    DynCase(f"{SEQ}(3)", legacy=True),
+    DynCase("SEQUENCE(3)"),
+    # second set
+    DynCase(f"{SEQ}(5,1,100,-7)", readers=READ),
+    DynCase(f"{SEQ}(2,4,0.5,0.25)"),
+    DynCase(f"{SEQ}(1,1,7,3)"),
+    DynCase(f"{SEQ}(2,3)", way={(1, 2): 0.0}),
+    DynCase(f"{SEQ}(0.5)"),
+    DynCase(f"{SEQ}(2,0)"),
+    DynCase(f"{SEQ}(3,1,1,0.1)"),
+]
+
+MMULT = [
+    DynCase("MMULT(AN1:AO2,AN1:AO2)", readers=READ),
+    DynCase("MMULT(AN1:AO2,AP1:AR2)"),
+    DynCase("MMULT(AP1:AR2,AN1:AO2)"),
+    DynCase("MMULT(AP1:AR2,AS1:AS3)"),
+    DynCase("MMULT({1,2},{3;4})"),
+    DynCase("MMULT({1,2;3,4},{5;6})"),
+    DynCase("MMULT(AT1:AU2,AN1:AO2)"),
+    DynCase("MMULT(AV1:AW2,AN1:AO2)"),
+    DynCase("MMULT(AX1:AY2,AN1:AO2)"),
+    DynCase("MMULT(AZ1:BA2,AN1:AO2)"),
+    DynCase("MMULT(BB1:BC2,AN1:AO2)"),
+    DynCase('MMULT({"1",2;3,4},{1;1})'),
+    DynCase("MMULT({1,TRUE},{1;1})"),
+    DynCase("MMULT(2,3)"),
+    DynCase("MMULT(AN1,AO1)"),
+    DynCase("MMULT({9E+307,9E+307},{10;10})"),
+    DynCase("MMULT(AN1:AO2,AN1:AO2)", way={(1, 1): "x"}),
+    DynCase("MMULT(AN1:AO2,AN1:AO2)", legacy=True),
+    DynCase("SUM(MMULT(AN1:AO2,AN1:AO2))"),
+    DynCase("MMULT(#N/A,AN1:AO2)"),
+    DynCase("MMULT(AN1:AO2,AS1:AS3)"),
+    # second set
+    DynCase("MMULT(BJ1:BL3,BJ1:BL3)", readers=READ),
+    DynCase("MMULT(BJ1:BL3,BM1:BM3)"),
+    DynCase("MMULT(BN1:BP1,BM1:BM3)"),
+    DynCase("MMULT(BM1:BM3,BN1:BP1)"),
+    DynCase("MMULT(BN1:BP1,BJ1:BL3)"),
+    DynCase("MMULT({0.1,0.2,0.3},{0.3;0.2;0.1})"),
+    DynCase("MMULT(BJ1:BL3,BN1:BP1)"),
+]
+
+UNIQUE = [
+    DynCase(f"{UNQ}(AA1:AA8)", readers=READ),
+    DynCase(f"{UNQ}(AB1:AB8)"),
+    DynCase(f"{UNQ}(AA1:AA8,,TRUE)"),
+    DynCase(f"{UNQ}(AB1:AB8,FALSE,TRUE)"),
+    DynCase(f"{UNQ}(AD1:AE6)"),
+    DynCase(f"{UNQ}(AD1:AD6)"),
+    DynCase(f"{UNQ}(AG1:AL2,TRUE)"),
+    DynCase(f"{UNQ}(AG1:AL1,TRUE)"),
+    DynCase(f"{UNQ}(AG1:AL1,TRUE,TRUE)"),
+    DynCase(f"{UNQ}(AC1:AC12)"),
+    DynCase(f"{UNQ}(AF1:AF7)"),
+    DynCase(f"{UNQ}({{1,1,2}})"),
+    DynCase(f"{UNQ}({{1;1;2}})"),
+    DynCase(f"{UNQ}({{1,1,2}},TRUE)"),
+    DynCase(f"{UNQ}({{1;1;2;2}},,TRUE)"),
+    DynCase(f'{UNQ}(AA1:AA8,"x")'),
+    DynCase(f"{UNQ}(5)"),
+    DynCase(f"{UNQ}(AA1:AA8)", way={(3, 0): 1.0}),
+    DynCase(f"{UNQ}(AA1:AA8)", legacy=True),
+    DynCase(f"ROWS({UNQ}(AB1:AB8))"),
+    DynCase(f"{UNQ}(AA1:AA8,1,0)"),
+    # second set
+    DynCase(f"{UNQ}(BE1:BE10)", readers=READ),
+    DynCase(f"{UNQ}(BF1:BF10)"),
+    DynCase(f"{UNQ}(BF1:BF10,,TRUE)"),
+    DynCase(f"{UNQ}(BG1:BH6)"),
+    DynCase(f"{UNQ}(BG1:BG6,,TRUE)"),
+    DynCase(f"{UNQ}(BR1:BR10)"),
+    DynCase(f"{UNQ}(BR1:BR10,,TRUE)"),
+    DynCase("UNIQUE(AA1:AA8)"),
+]
+
+SORT = [
+    DynCase(f"{SRT}(AA1:AA8)", readers=READ),
+    DynCase(f"{SRT}(AA1:AA8,,-1)"),
+    DynCase(f"{SRT}(AB1:AB8)"),
+    DynCase(f"{SRT}(AC1:AC12)"),
+    DynCase(f"{SRT}(AC1:AC12,,-1)"),
+    DynCase(f"{SRT}(AD1:AE6)"),
+    DynCase(f"{SRT}(AD1:AE6,2,-1)"),
+    DynCase(f"{SRT}(AD1:AE6,{{1,2}},{{1,-1}})"),
+    DynCase(f"{SRT}(AD1:AE6,{{1,2}},-1)"),
+    DynCase(f"{SRT}(AG1:AL2,1,1,TRUE)"),
+    DynCase(f"{SRT}(AG1:AL2,2,-1,TRUE)"),
+    DynCase(f"{SRT}(AD1:AE6,3)"),
+    DynCase(f"{SRT}(AD1:AE6,0)"),
+    DynCase(f"{SRT}(AD1:AE6,1,0)"),
+    DynCase(f"{SRT}(AD1:AE6,1,2)"),
+    DynCase(f'{SRT}(AD1:AE6,"1")'),
+    DynCase(f"{SRT}({{3,1,2}})"),
+    DynCase(f"{SRT}({{3,1,2}},1,1,TRUE)"),
+    DynCase(f"{SRT}({{3;1;2}})"),
+    DynCase(f"{SRT}(AF1:AF7)"),
+    DynCase(f"{SRT}(5)"),
+    DynCase(f"{SRT}(AA1:AA8)", way={(4, 0): "x"}),
+    DynCase(f"{SRT}(AA1:AA8)", legacy=True),
+    DynCase(f"{SRT}(AD1:AE6,1.9)"),
+    # second set
+    DynCase(f"{SRT}(BE1:BE10)", readers=READ),
+    DynCase(f"{SRT}(BF1:BF10)"),
+    DynCase(f"{SRT}(BF1:BF10,,-1)"),
+    DynCase(f"{SRT}(BG1:BH6)"),
+    DynCase(f"{SRT}(BG1:BH6,1,-1)"),
+    DynCase(f"{SRT}(BR1:BR10)"),
+    DynCase(f"{SRT}(BR1:BR10,,-1)"),
+]
+
+SORTBY = [
+    DynCase(f"{SBY}(AE1:AE6,AD1:AD6)", readers=READ),
+    DynCase(f"{SBY}(AE1:AE6,AD1:AD6,-1)"),
+    DynCase(f"{SBY}(AD1:AE6,AD1:AD6,1,AE1:AE6,-1)"),
+    DynCase(f"{SBY}(AD1:AE6,AD1:AD6,-1,AE1:AE6,1)"),
+    DynCase(f"{SBY}(AB1:AB8,AA1:AA8)"),
+    DynCase(f"{SBY}(AA1:AA8,AB1:AB8)"),
+    DynCase(f"{SBY}(AG1:AL2,AG2:AL2)"),
+    DynCase(f"{SBY}(AG1:AL2,AG1:AL1,-1)"),
+    DynCase(f"{SBY}(AE1:AE6,AD1:AD5)"),
+    DynCase(f"{SBY}(AE1:AE6,AG1:AL1)"),
+    DynCase(f"{SBY}(AE1:AE6,{{3;1;2;6;5;4}})"),
+    DynCase(f"{SBY}({{10;20;30}},{{3;1;2}})"),
+    DynCase(f"{SBY}(AE1:AE6,AD1:AD6,0)"),
+    DynCase(f"{SBY}(AE1:AE6,AD1:AD6,2)"),
+    DynCase(f"{SBY}(AC1:AC12,AC1:AC12)"),
+    DynCase(f"{SBY}(AE1:AE6,AD1:AD6)", way={(1, 0): 0.0}),
+    DynCase(f"{SBY}(AE1:AE6,AD1:AD6)", legacy=True),
+    DynCase(f"{SBY}(AE1:AE6,AD1:AE6)"),
+    # second set
+    DynCase(f"{SBY}(BH1:BH6,BG1:BG6)", readers=READ),
+    DynCase(f"{SBY}(BH1:BH6,BG1:BG6,-1)"),
+    DynCase(f"{SBY}(BF1:BF10,BE1:BE10)"),
+    DynCase(f"{SBY}(BE1:BE10,BF1:BF10,-1)"),
+    DynCase(f"{SBY}(BR1:BR10,BR1:BR10,-1)"),
+    DynCase(f"{SBY}(BG1:BH6,BG1:BG6,1,BH1:BH6,-1)"),
+    DynCase("SORTBY(AE1:AE6,AD1:AD6)"),
+]
+
+FILTER = [
+    DynCase(f"{FLT}(AD1:AE6,AE1:AE6>2)", readers=READ),
+    DynCase(f'{FLT}(AE1:AE6,AD1:AD6="a")'),
+    DynCase(f"{FLT}(AE1:AE6,AE1:AE6>10)"),
+    DynCase(f'{FLT}(AE1:AE6,AE1:AE6>10,"none")'),
+    DynCase(f"{FLT}(AE1:AE6,AE1:AE6>10,{{1,2}})"),
+    DynCase(f"{FLT}(AE1:AE6,AE1:AE6>10,AA1:AA3)"),
+    DynCase(f"{FLT}(AE1:AE6,AE1:AE6-3)"),
+    DynCase(f"{FLT}(AE1:AE6,AD1:AD6)"),
+    DynCase(f"{FLT}(AA1:AA8,AC1:AC8)"),
+    DynCase(f"{FLT}(AE1:AE6,AE1:AE5>2)"),
+    DynCase(f"{FLT}(AG1:AL2,AG2:AL2=1)"),
+    DynCase(f"{FLT}(AG1:AL2,AG1:AL1=3)"),
+    DynCase(f"{FLT}({{1;2;3}},{{TRUE;FALSE;TRUE}})"),
+    DynCase(f"{FLT}({{1,2,3}},{{1,0,1}})"),
+    DynCase(f"{FLT}(AD1:AE6,AD1:AE6=1)"),
+    DynCase(f"{FLT}(AE1:AE6,TRUE)"),
+    DynCase(f'{SRT}({FLT}(AE1:AE6,AD1:AD6<>"b"),,-1)'),
+    DynCase(f'{FLT}(AE1:AE6,(AD1:AD6="a")*(AE1:AE6>2))'),
+    DynCase(f"{FLT}(AE1:AE6,AE1:AE6>2)", way={(1, 0): "x"}),
+    DynCase(f"{FLT}(AE1:AE6,AE1:AE6>2)", legacy=True),
+    DynCase(f"{FLT}(AE1:AE6,AE1:AE6>10,#N/A)"),
+    DynCase(f'{FLT}(AE1:AE6,AE1:AE6>10,"")'),
+    # second set
+    DynCase(f"{FLT}(BG1:BH6,BG1:BG6=2)", readers=READ),
+    DynCase(f"{FLT}(BF1:BF10,BE1:BE10>0)"),
+    DynCase(f"{FLT}(BE1:BE10,BE1:BE10>1E11)"),
+    DynCase(f"{FLT}(BE1:BE10,BE1:BE10>1E11,0)"),
+    DynCase(f"{FLT}(BR1:BR10,BE1:BE10>0)"),
+    DynCase(f"{FLT}(BE1:BE10,BR1:BR10)"),
+]
+
+# Formulas that make Excel refuse the file (error -50 on opening, each alone in a workbook):
+# SORT and FILTER without their prefix (UNIQUE, SORTBY and SEQUENCE without theirs open), and
+# argument counts the functions do not take.
+REFUSED = (
+    "SORT(AA1:AA8)",
+    "FILTER(AE1:AE6,AE1:AE6>2)",
+    f"{SBY}(AE1:AE6)",
+    f"{SBY}(AE1:AE6,AD1:AD6,1,AE1:AE6)",
+    f"{SBY}(AE1:AE6,AD1:AD6,1,AE1:AE6,1,AE1:AE6)",
+    f"{FLT}(AE1:AE6)",
+    f"{SRT}()",
+    f"{UNQ}()",
+    f"{SEQ}()",
+)
+
+SUITES: dict[str, list[DynCase]] = {
+    "sequence": SEQUENCE,
+    "mmult": MMULT,
+    "unique": UNIQUE,
+    "sort": SORT,
+    "sortby": SORTBY,
+    "filter": FILTER,
+}
+
+
+def _letter(n: int) -> str:
+    s = ""
+    while n:
+        n, r = divmod(n - 1, 26)
+        s = chr(65 + r) + s
+    return s
+
+
+def anchor_of(i: int) -> tuple[int, int]:
+    """The anchor of case ``i``: (row, column), 1-based."""
+    return 1 + i * BLOCK, 2
+
+
+def layout(suite: str) -> list[tuple[str, str, str]]:
+    """(kind, cell, text) for a suite: data and way constants as reprs, formulas in file form."""
+    out: list[tuple[str, str, str]] = []
+    for letters, values in DATA.items():
+        for r, v in enumerate(values, 1):
+            if v is None:
+                continue
+            where = f"{letters}{r}"
+            if isinstance(v, str) and v.startswith("="):
+                out.append(("legacy", where, v[1:]))
+            else:
+                out.append(("data", where, repr(v)))
+    for i, case in enumerate(SUITES[suite]):
+        row, col = anchor_of(i)
+        anchor = f"{_letter(col)}{row}"
+        for (dr, dc), v in case.way.items():
+            out.append(("way", f"{_letter(col + dc)}{row + dr}", repr(v)))
+        out.append(("legacy" if case.legacy else "dynamic", anchor, case.formula))
+        for j, text in enumerate(case.readers):
+            out.append(("reader", f"N{row + j}", text.replace("{a}", anchor)))
+    return out
+
+
+__all__ = ["BLOCK", "DATA", "REFUSED", "SUITES", "DynCase", "anchor_of", "layout"]

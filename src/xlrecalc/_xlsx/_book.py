@@ -26,7 +26,7 @@ _RELS = (
 )
 _TRUE = ("1", "true")
 # Rich-value error types, as captured (capture arrays: a blocked spill is errorType 8).
-_RICH_ERRORS = {"8": "#SPILL!"}
+_RICH_ERRORS = {"8": "#SPILL!", "13": "#CALC!"}  # captures arrays, dyn_filter
 
 
 @dataclass(frozen=True, slots=True)

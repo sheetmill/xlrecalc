@@ -91,7 +91,44 @@ def evidence() -> dict[str, Evidence]:
                 e.rows += 1
                 if outcome:
                     setattr(e, outcome, getattr(e, outcome) + 1)
+    _dynamic_evidence(found)
     return found
+
+
+def _dynamic_evidence(found: dict[str, Evidence]) -> None:
+    """The functions that make arrays (captures ``dyn_*``): a case is a row, exact when every
+    cell of its result and its readers matches Excel."""
+    from tests import test_dynamic_arrays as dyn
+
+    for suite in dyn.SUITES:
+        e = dyn.engine_for(suite)
+        rich = dyn._rich_errors(suite)
+        rows = dyn._rows(suite)
+        cells = {r[1]: r for r in rows if r[0] == "cell"}
+        for _, kind, where, text in (r for r in rows if r[0] == "input"):
+            if kind not in ("dynamic", "legacy") or dyn._cell(where)[1] != 2:
+                continue
+            case = dyn._case(where)
+            names = {n for n in _CALL.findall(text) if n.upper() in SPECS}  # not a bare new name
+            called = {display(n) for n in names}
+            if not called:
+                continue
+            mine = [a for a in cells if dyn._cell(a)[1] < 27 and dyn._case(a) == case]
+            if any((suite, a) in dyn.KNOWN for a in mine):
+                outcome = "listed"
+            else:
+                ok = True
+                for a in mine:
+                    r, c = dyn._cell(a)
+                    want = dyn.expected(cells[a], rich)
+                    got = e.get(0, r - 1, c - 1)
+                    ok = ok and (got is dyn.BLANK if want is None else same(got, want))
+                outcome = "exact" if ok else ""
+            for fn in called:
+                ev = found[fn]
+                ev.rows += 1
+                if outcome:
+                    setattr(ev, outcome, getattr(ev, outcome) + 1)
 
 
 def _declared(spec: object) -> str:
