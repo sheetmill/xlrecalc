@@ -367,3 +367,37 @@ def test_a_name_in_another_workbook_is_reported_like_any_external_reference():
     assert engine.get(0, 0, 0) == engine.get(0, 1, 0) == ErrorValue.NAME
     assert engine.report.unsupported["external or 3-D reference"] == 2
     assert {str(c) for c in engine.report.uncomputed} == {"S!A1", "S!A2"}
+
+
+def test_a_bare_prefixed_name_in_a_file_is_reported_with_its_fix(tmp_path):
+    """A function written without the prefix Excel gives it in a file is a name Excel does not know.
+
+    Excel shows #NAME? for UNIQUE, SORTBY and SEQUENCE written so, and refuses the file for SORT
+    and FILTER (captures dyn_*). The report names the cause and the prefix to write.
+    """
+    import xlrecalc
+    from tests.test_xlsx import package
+
+    cells = (
+        '<c r="A1"><v>1</v></c>'
+        '<c r="B1"><f>XLOOKUP(1,A1:A1,A1:A1)</f></c>'
+        '<c r="C1"><f>TEXTJOIN(",",TRUE,A1)</f></c>'
+        '<c r="D1"><f>_xlfn.XLOOKUP(1,A1:A1,A1:A1)</f></c>'
+        '<c r="E1"><f>NOSUCHFN(A1)</f></c>'
+        '<c r="F1"><f>SORT(A1:A1)</f><v>1</v></c>'
+    )
+    path = tmp_path / "bare.xlsx"
+    path.write_bytes(package(f'<row r="1">{cells}</row>'))
+    report = xlrecalc.recalculate(path, tmp_path / "out.xlsx")
+    assert report.unsupported == {
+        "XLOOKUP written without Excel's file prefix (_xlfn.): Excel shows #NAME?": 1,
+        "TEXTJOIN written without Excel's file prefix (_xlfn.): Excel shows #NAME?": 1,
+        "NOSUCHFN": 1,
+    }
+    assert report.refused == {
+        xlrecalc.CellRef("Data", 1, 6): (
+            "SORT written without Excel's file prefix (_xlfn._xlws.): Excel refuses the file"
+        )
+    }
+    wb = xlrecalc.load(tmp_path / "out.xlsx")
+    assert wb.value("D1") == 1.0

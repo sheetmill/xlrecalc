@@ -628,8 +628,8 @@ workbook holding such a formula only. A run that trusts cached values and evalua
 nothing; one that evaluates a cell names it and the formula it rests on.
 
 A formula set through `set_formula` is taken as the formula bar takes it: without its `_xlfn.` prefix it computes and is written with
-it. The same text read from a file is what Excel reads there, a name it does not know: `#NAME?`, reported under the name as the file
-holds it.
+it. The same text read from a file is what Excel reads there, a name it does not know: `#NAME?`, reported under a label that names the prefix Excel writes (`XLOOKUP written without Excel's file prefix
+(_xlfn.): Excel shows #NAME?`); `SORT` and `FILTER` written so make Excel refuse the file (captures `dyn_*`).
 
 Cells without a computable value (an unsupported function and no cached value, a caught exception),
 and every cell depending on them, are **uncomputed**: the report lists them, and the writer

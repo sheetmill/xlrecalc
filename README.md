@@ -45,6 +45,25 @@ byte. By default the file also asks Excel to recalculate when it opens it, so a 
 xlrecalc got wrong never persists in what Excel shows (`full_calc_on_load=False` leaves the
 file's setting alone).
 
+### Functions newer than Excel 2007, written with openpyxl
+
+In a file, Excel writes a function added since Excel 2007 with a prefix, and openpyxl writes a
+formula as it is given. Without the prefix, Excel does not know the name: `=UNIQUE(A1:A9)`
+shows `#NAME?`, and `=SORT(A1:A9)` or `=FILTER(...)` make Excel refuse the file. Write the
+prefix with openpyxl:
+
+```
+ws["B1"] = "=_xlfn.XLOOKUP(5,A1:A9,C1:C9)"
+ws["D1"] = "=_xlfn.UNIQUE(A1:A9)"
+ws["E1"] = "=_xlfn._xlws.SORT(A1:A9)"      # SORT and FILTER take _xlfn._xlws.
+```
+
+xlrecalc reads such a file as Excel does and names the cause in the report:
+`Report.unsupported` holds `UNIQUE written without Excel's file prefix (_xlfn.): Excel shows
+#NAME?`, and a bare `SORT` or `FILTER` is in `Report.refused`. `Workbook.set_formula` takes the
+names as typed in Excel and writes the prefix itself, and for a function that makes an array,
+the marker that lets the result spill.
+
 ## Working with a workbook
 
 `load` reads a workbook into memory. Reading a value computes what it needs; changing a cell

@@ -37,6 +37,7 @@ from xlrecalc._formula import MISSING, FormulaSyntaxError, TokenizeError, compil
 from xlrecalc._formula import template_key as _template_key
 from xlrecalc._formula._codegen import EXTERNAL, RefSpec
 from xlrecalc._formula._fastkey import raw_key, translate
+from xlrecalc._formula._prefixes import PREFIXES
 from xlrecalc._formula._template import Axis
 from xlrecalc._functions import REGISTRY, SPECS
 from xlrecalc._ops import Ops
@@ -356,7 +357,8 @@ class Engine:
         compiled = compile_formula(
             formula, row, col, REGISTRY, self.ops, self.quirks, array_mode, as_reference
         )
-        unsupported = {c for c in compiled.calls if c not in REGISTRY} | compiled.features
+        unsupported = {bare_label(c) for c in compiled.calls if c not in REGISTRY}
+        unsupported |= compiled.features
         template = Template(
             key,
             compiled.fn,
@@ -1458,6 +1460,23 @@ class Engine:
     def is_subtotal(self, sheet: int, row: int, col: int) -> bool:
         tid = self.sheets[sheet].templates.at(row, col)
         return tid is not None and self.templates[tid].subtotal
+
+
+def bare_label(name: str) -> str:
+    """The report's label for a function the registry does not have.
+
+    A name Excel writes with a prefix in a file (``_xlfn.XLOOKUP``), found there without it, is
+    a name Excel does not know: the label says so and gives the prefix. Otherwise the name.
+    """
+    prefix = PREFIXES.get(name)
+    if not prefix:
+        return name
+    if name in _BARE_REFUSED_NAMES:
+        return f"{name} written without Excel's file prefix ({prefix}): Excel refuses the file"
+    return f"{name} written without Excel's file prefix ({prefix}): Excel shows #NAME?"
+
+
+_BARE_REFUSED_NAMES = frozenset({"SORT", "FILTER"})  # capture dyn_*: the file does not open
 
 
 def _at(axis: Axis | None, base: int) -> int:

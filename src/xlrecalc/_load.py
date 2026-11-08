@@ -18,6 +18,7 @@ from xlrecalc._dates import date_serial
 from xlrecalc._engine import Engine, node
 from xlrecalc._formula import FormulaSyntaxError, Kind, Token, TokenizeError, tokenize
 from xlrecalc._formula._fastkey import raw_key
+from xlrecalc._formula._prefixes import PREFIXES
 from xlrecalc._numtext import DBL_MIN
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef
@@ -236,7 +237,9 @@ def _refused_count(toks: Iterable[Token]) -> str | None:
         if braces and tok.kind is Kind.COMMA:
             continue
         if tok.kind is Kind.FUNCTION and tok.text.upper() in _BARE_REFUSED:
-            return f"{tok.text} without its prefix"
+            bare = tok.text.upper()
+            prefix = PREFIXES[bare]
+            return f"{bare} written without Excel's file prefix ({prefix}): Excel refuses the file"
         if tok.kind is Kind.OPEN:
             name = None
             if previous is not None and previous.kind is Kind.FUNCTION:

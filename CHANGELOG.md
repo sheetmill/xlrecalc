@@ -74,6 +74,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   any range, whole sheets included (capture `array_functions`).
 
 ### Changed
+- A function written in a file without the prefix Excel gives it (`XLOOKUP` for `_xlfn.XLOOKUP`, as openpyxl writes what it
+  is given) is still a name Excel does not know, `#NAME?`; the report now says so and names the prefix:
+  `XLOOKUP written without Excel's file prefix (_xlfn.): Excel shows #NAME?`. The README shows how to write these names
+  with openpyxl.
 - The database functions read a range's non-blank cells, not every cell, so they are computed over whole columns and
   sheets, and `DCOUNT` passes over an error in its field, as Excel does (capture `database_family`).
 - A cell naming a function not implemented keeps its cached value in a full recalculation too, as it
