@@ -53,8 +53,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   any range, whole sheets included (capture `array_functions`).
 
 ### Changed
-- In a workbook with iteration on, the cells on and after a circular reference are computed, not kept and reported as
-  uncomputed under `iterative calculation`.
 - The database functions read a range's non-blank cells, not every cell, so they are computed over whole columns and
   sheets, and `DCOUNT` passes over an error in its field, as Excel does (capture `database_family`).
 - A cell naming a function not implemented keeps its cached value in a full recalculation too, as it
@@ -94,10 +92,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   depending on it, with the empty text, in the source file itself unless a destination was given,
   and reported them only as `circular`. This happened with `full=True`, in a file with
   `fullCalcOnLoad` set (openpyxl sets it on every file), and on the second `recalculate` of any such
-  file, since the first writes that flag. Iterative calculation is not implemented yet: these
-  cells now keep their cached values and are reported as uncomputed, under `iterative calculation`
-  in `Report.unsupported`, and not in `Report.circular`. A file already run through 0.1.0 has lost
-  those values until Excel calculates it again.
+  file, since the first writes that flag. These cells are now iterated as Excel iterates them (see
+  Added) and are not in `Report.circular`. A file already run through 0.1.0 has lost those values
+  until Excel calculates it again.
 - **A circular reference with iteration off lost its values too.** A file holding values for cells on a
   loop, or depending on one, had them replaced with the empty text, whenever those cells were
   evaluated: the same paths as above. The rule came from captures of files with no cached values. Excel
