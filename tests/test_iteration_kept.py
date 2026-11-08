@@ -359,3 +359,19 @@ def test_excel_recalculates_on_opening_whatever_the_flag_says() -> None:
 def test_excel_leaves_a_loop_without_cached_values_at_value_error() -> None:
     seen = _iterate_open()
     assert seen["flag", "6"] == ("missing value", "#VALUE!")
+
+
+def test_a_run_reading_a_cell_its_pass_did_not_evaluate_is_undone_and_says_why() -> None:
+    """A lazy read evaluates only what it needs; ``INDIRECT`` may then reach further in a run."""
+    from xlrecalc._engine import ITERATION_UNREAD, Engine
+
+    engine = Engine.from_cells(
+        {"S": {"C1": "=1+0", "C2": "=2+0", "A1": '=A2+INDIRECT(IF(A2>0,"C2","C1"))', "A2": "=A1"}},
+        iterate=True,
+        iterate_count=3,
+    )
+    engine.sheets[0].values[0] = engine.sheets[0].values[16384] = 0.0  # cached A1 and A2
+    assert engine.get(0, 0, 0) == 0.0
+    assert engine.report.unsupported[ITERATION_UNREAD] == 2
+    assert ITERATION_LIMIT not in engine.report.unsupported
+    assert {str(c) for c in engine.report.uncomputed} == {"S!A1", "S!A2"}

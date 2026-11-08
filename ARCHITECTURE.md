@@ -519,7 +519,9 @@ evaluation pass ends, as Excel does:
   is a run, and any edit is followed by one, whether or not the loop reads the edited cell.
 - A run may make at most `ReadLimits.max_iteration_evaluations` cell evaluations (100,000,000 by
   default; the corpora's largest need is 8,256 cells at 1,000 iterations). Past it, the cells keep
-  the values they held and are reported as uncomputed under a label naming the limit.
+  the values they held and are reported as uncomputed under a label naming the limit. A run that
+  reaches, through `INDIRECT` or `OFFSET`, a formula its pass did not evaluate (a lazy read
+  evaluates only what it needs) is undone the same way, under a label saying so.
 
 A run that trusts cached values does not iterate: the file's values are the ones Excel saved, and
 Excel itself would run once more on opening it. `full=True` runs once from those values.

@@ -53,6 +53,7 @@ NAME, REF, VALUE = ErrorValue.NAME, ErrorValue.REF, ErrorValue.VALUE
 SPILL = ErrorValue("#SPILL!")
 ITERATIVE = "iterative calculation"  # the report's label for cells kept (§7.2)
 ITERATION_LIMIT = "iterative calculation past ReadLimits.max_iteration_evaluations"
+ITERATION_UNREAD = "iterative calculation reading a cell its pass did not evaluate"
 _VOLATILE = frozenset(n for n, s in SPECS.items() if s.volatile)
 
 
@@ -902,14 +903,14 @@ class Engine:
         before = [values.get(key, BLANK) for values, key in stores]
         limit = self.max_iteration_evaluations
         delta = self.iterate_delta
-        stopped = False
+        stopped: str | None = None  # why the run was undone: the report's label
         evaluations = 0
         self._iterating = True
         try:
             for _ in range(self.iterate_count):
                 evaluations += len(members)
                 if limit is not None and evaluations > limit:
-                    stopped = True
+                    stopped = ITERATION_LIMIT
                     break
                 largest = 0.0
                 for n, (values, key) in zip(members, stores, strict=True):
@@ -923,7 +924,7 @@ class Engine:
                 if largest < delta:
                     break
         except _NotEvaluatedError:  # a read the pass did not see: keep what was held
-            stopped = True
+            stopped = ITERATION_UNREAD
         finally:
             self._iterating = False
         for n, (values, key), value in zip(members, stores, before, strict=True):
@@ -933,7 +934,7 @@ class Engine:
                 else:
                     values[key] = value
                 sheet, row, col = unpack(n)
-                self.report.unsupported[ITERATION_LIMIT] += 1
+                self.report.unsupported[stopped] += 1
                 self.report.uncomputed.add(CellRef(self.sheets[sheet].name, row + 1, col + 1))
             else:
                 self._iterated.add(n)
@@ -955,6 +956,7 @@ class Engine:
                     s.values.pop(key, None)
         del report.unsupported[ITERATIVE]
         del report.unsupported[ITERATION_LIMIT]
+        del report.unsupported[ITERATION_UNREAD]
         self._iterated.clear()
         self._kept.clear()
         self._kept_runs.clear()
