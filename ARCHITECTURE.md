@@ -503,8 +503,18 @@ the cells kept when a cycle closes (the cycle's and every cell depending on it) 
 evaluation pass ends, as Excel does:
 
 - A **run** is up to `iterateCount` iterations (100 by default, at most 32,767) and at least one. It
-  starts from the values the cells held before the recalculation; a cell with none reads as
-  `#VALUE!`, so a loop with no cached values ends there, as in Excel.
+  starts from the values the cells held before the recalculation. A cell with none holds the empty
+  text, as an uncalculated circular cell does in Excel: arithmetic on it is `#VALUE!`, and
+  `IFERROR` and `ISERROR` see no error in it, while `ISNUMBER` says FALSE (capture `iterate_opening`).
+  So `A1+1` alone ends at `#VALUE!`, and a loop whose first cell is `IFERROR(A2,0)+1` ends its first
+  iteration with every cell `#VALUE!`, unchanged, and stops there.
+- **A file with no cached values gets two runs**, Excel's opening (from the empty text) and its
+  saving (from what the opening left, real errors that `IFERROR` catches), because that is what a
+  file holds once Excel has been through it, and what pandas and openpyxl readers see; what Excel
+  shows just after opening is a passing state it never stores (captures `iterate_uncached`,
+  `iterate_opening`, checked end to end in `tests/test_iteration.py`: an openpyxl file, then
+  `recalculate(path)`, against Excel's saved copy, bit for bit). A file with cached values keeps the
+  rule below: a trusting run changes nothing, and `full=True` runs once.
 - Each iteration computes every one of those cells **in place**, in Excel's order: sheets by name in
   Excel's text order (`a` before `B`, `10` before `9`, `é` before `f`; not tab order or sheet id),
   then by row, then by column. A cell reads what the others hold at that moment, the ones before it
@@ -513,7 +523,9 @@ evaluation pass ends, as Excel does:
   before the run; a cell depending on the cycle is one of the iterated cells, and its change counts.
 - A run **stops** after the first iteration in which no number changed by `iterateDelta` (0.001 by
   default) or more: the largest absolute change, over every iterated cell of the workbook, strictly
-  below it. A change between kinds (to text, an error, a logical) does not count.
+  below it. A cell's change is `|new - old|`, where an old value that is not a number (an error,
+  text, the empty text) counts as 0, and a new value that is not a number is no change: so
+  `IFERROR(A1,0)+3` from an error stops after one iteration at a delta of 10 and goes on at 0.001.
 - Excel runs once on opening, on every recalculation and on saving: it marks a formula on a loop
   "calculate always" (`<f ca="1">`). So every recalculation of the engine, `Workbook.save` included,
   is a run, and any edit is followed by one, whether or not the loop reads the edited cell.

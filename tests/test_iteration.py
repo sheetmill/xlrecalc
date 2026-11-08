@@ -123,3 +123,64 @@ def test_an_edit_runs_once_more(variant: str) -> None:
     engine.set_value(index, row, col, float(number))
     engine.recalculate()
     assert [r[2] for r in cells if not shown_matches(value(engine, r[2]), r[7])] == []
+
+
+def _public_cases() -> list[tuple[str, str, str, list[list[str]]]]:
+    """(suite, variant, form, rows) of the captures of files with no cached values."""
+    out = []
+    for suite in ("iterate_uncached", "iterate_opening"):
+        grouped: dict[tuple[str, str], list[list[str]]] = defaultdict(list)
+        for line in (CAPTURES / f"{suite}.tsv").read_text(encoding="utf-8").splitlines():
+            if line and not line.startswith("#"):
+                fields = line.split("\t")
+                if fields[1] in ("flag", "no_flag"):
+                    grouped[(fields[0], fields[1])].append(fields)
+        out += [(suite, v, f, rows) for (v, f), rows in grouped.items()]
+    return out
+
+
+@pytest.mark.parametrize(
+    ("suite", "variant", "form", "cells"),
+    _public_cases(),
+    ids=[f"{s}:{v}:{f}" for s, v, f, _ in _public_cases()],
+)
+def test_the_public_path_gives_excels_saved_copy(
+    tmp_path: Path, suite: str, variant: str, form: str, cells: list[list[str]]
+) -> None:
+    """An openpyxl file without cached values, then ``recalculate(path)``: Excel's saved copy.
+
+    Bit for bit. That copy is Excel's opening and its saving: two runs, the first from the empty
+    text.
+    """
+    pytest.importorskip("openpyxl")
+    from capture.iterate_probe import build
+    from capture.iterate_uncached_probe import CALC
+
+    import xlrecalc
+    from xlrecalc._report import column_letters
+    from xlrecalc._xlsx import Book
+
+    constants = {"tl_conv": {"B1": "3"}, "tl_interest": {"B1": "1000"}}
+    constants["tl_sumself"] = {"A1": "1", "A2": "2", "A3": "3", "A4": "4"}
+    sheets: dict[str, list[tuple[str, str, str | None]]] = {}
+    for row in cells:
+        sheet, ref = row[3].split("!")
+        value = constants.get(variant, {}).get(ref, "5")
+        sheets.setdefault(sheet, []).append((ref, row[4], None if row[4] else value))
+    path = tmp_path / "book.xlsx"
+    build(path, CALC[form].format(cells[0][2]), list(sheets.items()))
+    report = xlrecalc.recalculate(path)
+    assert not report.uncomputed
+    with Book(path) as book:  # the written file's cached values, as a reader sees them
+        written = {
+            f"s!{column_letters(c.column)}{c.row}": ErrorValue(c.value)
+            if c.type == "e"
+            else c.value
+            for c in book.cells("s")
+        }
+    wrong = [
+        (row[3], written.get(row[3]), row[8])
+        for row in cells
+        if row[4] and not saved_matches(written.get(row[3], BLANK), row[7], row[8])
+    ]
+    assert wrong == []

@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Iterative calculation, for a workbook with iteration on (`<calcPr iterate="1">`), as Excel does it (captures
   `iterate_calc`, `calc_chain`, `iterate_open`): a run of up to `iterateCount` iterations from the values the cells hold, each
   computing the cells on and after circular references in place, in Excel's order (sheets by name, then row, then column),
-  until the largest change of a number is below `iterateDelta`. Every recalculation, an edit's and a save's included, is a
+  until the largest change of a number is below `iterateDelta`. A file whose loop has no cached values, as openpyxl writes
+  it, gets what Excel saves after opening it: two runs, the first from the empty text (captures `iterate_uncached`,
+  `iterate_opening`). Every recalculation, an edit's and a save's included, is a
   run, as in Excel. `ReadLimits.max_iteration_evaluations` (100,000,000 by default) bounds the cell evaluations of one run;
   past it, the cells keep their values and are reported.
 - `Report.from_kept`: a cell holding the cached value of a function or feature not implemented, and every

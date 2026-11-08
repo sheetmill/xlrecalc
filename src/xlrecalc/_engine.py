@@ -866,9 +866,9 @@ class Engine:
         self._kept[n] = held
         where = CellRef(s.name, row + 1, col + 1)
         self.stale.discard(n)  # final: a later read must not compute it again
-        if self.iterate:  # iterated once the pass ends; with no value, #VALUE! (iterate_open)
+        if self.iterate:  # iterated once the pass ends; with no value, the empty text (§7.2)
             if not held:
-                s.values[key] = VALUE
+                s.values[key] = ""
             self._iteration_due = True
         else:
             if not held:  # from a file, the empty text; entered, 0 (capture circular_cached)
@@ -903,32 +903,40 @@ class Engine:
             if self.sheets[n >> SHEET_SHIFT].templates.at(*divmod(n & KEY_MASK, COLS)) is not None
         ]
         stores = [(self.sheets[n >> SHEET_SHIFT].values, (n & KEY_MASK)) for n in members]
+        unvalued = any(not self._kept[n] for n in members)
         for n, (values, key) in zip(members, stores, strict=True):
             if n in self._before_pass:  # computed before the cycle showed itself
                 old = self._before_pass.pop(n)
-                values[key] = VALUE if old is BLANK else old  # no value: #VALUE! (iterate_open)
+                unvalued = unvalued or old is BLANK
+                values[key] = "" if old is BLANK else old  # no value: the empty text, as Excel
         before = [values.get(key, BLANK) for values, key in stores]
+        # Excel's saved copy of a loop with no values is two runs: its opening's, from the empty
+        # text, and its saving's (captures iterate_uncached, iterate_opening).
+        runs = 2 if unvalued else 1
         limit = self.max_iteration_evaluations
         delta = self.iterate_delta
         stopped: str | None = None  # why the run was undone: the report's label
         evaluations = 0
         self._iterating = True
         try:
-            for _ in range(self.iterate_count):
-                evaluations += len(members)
-                if limit is not None and evaluations > limit:
-                    stopped = ITERATION_LIMIT
-                    break
-                largest = 0.0
-                for n, (values, key) in zip(members, stores, strict=True):
-                    old = values.get(key, BLANK)
-                    self._compute(n)
-                    new = values.get(key, BLANK)
-                    if type(old) is float and type(new) is float:
-                        change = abs(new - old)
-                        if change > largest:
-                            largest = change
-                if largest < delta:
+            for _ in range(runs):
+                for _ in range(self.iterate_count):
+                    evaluations += len(members)
+                    if limit is not None and evaluations > limit:
+                        stopped = ITERATION_LIMIT
+                        break
+                    largest = 0.0
+                    for n, (values, key) in zip(members, stores, strict=True):
+                        old = values.get(key, BLANK)
+                        self._compute(n)
+                        new = values.get(key, BLANK)
+                        if type(new) is float:  # an old value not a number counts as 0
+                            change = abs(new - old) if type(old) is float else abs(new)
+                            if change > largest:
+                                largest = change
+                    if largest < delta:
+                        break
+                if stopped:
                     break
         except _NotEvaluatedError:  # a read the pass did not see: keep what was held
             stopped = ITERATION_UNREAD
