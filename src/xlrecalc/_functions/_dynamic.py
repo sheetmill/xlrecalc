@@ -232,3 +232,51 @@ def UNIQUE(ctx: Any, array: Any, by_col: Any = MISSING, exactly_once: Any = MISS
         return CALC
     out = tuple(tuple(_shown(v) for v in line) for line in kept)
     return tuple(zip(*out, strict=True)) if cols else out
+
+
+# SORT and SORTBY -------------------------------------------------------------------------------
+
+
+def _index_list(v: Any, ctx: Any, default: float) -> list[float] | ErrorValue:
+    values = [x for row in _grid(v) for x in row] if isinstance(v, tuple | Ref) else [v]
+    out = []
+    for x in values:
+        n = _count(x, ctx, default)
+        if isinstance(n, ErrorValue):
+            return n
+        out.append(float(math.trunc(n)))
+    return out
+
+
+@function("_XLFN._XLWS.SORT", "array", "raw", "raw", "raw", min_args=1, category=C)
+def SORT(
+    ctx: Any,
+    array: Any,
+    sort_index: Any = MISSING,
+    sort_order: Any = MISSING,
+    by_col: Any = MISSING,
+) -> Any:
+    """Rows (or columns) in order of the values at ``sort_index``, ascending unless ``-1``."""
+    cols = _flag(by_col, ctx)
+    if isinstance(cols, ErrorValue):
+        return cols
+    grid = _grid(array)
+    lines = list(zip(*grid, strict=True)) if cols else list(grid)
+    indexes = _index_list(sort_index, ctx, 1.0)
+    orders = _index_list(sort_order, ctx, 1.0)
+    if isinstance(indexes, ErrorValue):
+        return indexes
+    if isinstance(orders, ErrorValue):
+        return orders
+    if len(orders) == 1:
+        orders = orders * len(indexes)
+    if len(orders) != len(indexes):
+        return VALUE
+    width = len(lines[0])
+    keys = []
+    for index, order in zip(indexes, orders, strict=True):
+        if not 1 <= index <= width or order not in (1.0, -1.0):
+            return VALUE
+        keys.append(([line[int(index) - 1] for line in lines], int(order)))
+    out = tuple(tuple(_shown(v) for v in line) for line in _sorted(lines, keys, ctx))
+    return tuple(zip(*out, strict=True)) if cols else out

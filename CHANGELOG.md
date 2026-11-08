@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     sizes must fit; each element is summed in order, as Excel adds.
   - `UNIQUE`: rows, or columns with `by_col`, in the order they first appear, text compared without regard to case and
     kept as first written, numbers and numbers as text apart, `exactly_once`; none left is `#CALC!`.
+  - `SORT`: numbers, then text in Excel's order without regard to case, then logicals, then errors by their code, blanks
+    last in either direction; equal keys keep their order; several keys with their own orders, `by_col`.
 
   A formula calling one of them, set through `set_formula`, is written as a dynamic array whatever the size of its
   result, so that it spills when its data grows.
