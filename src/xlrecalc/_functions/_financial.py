@@ -332,29 +332,57 @@ def SLN(ctx: Context, cost: float, salvage: float, life: float) -> Any:
 
 
 def _declining(
-    book: float, salvage: float, life: float, t0: float, t1: float, factor: float, switch: bool
+    book: float,
+    salvage: float,
+    life: float,
+    t0: float,
+    t1: float,
+    factor: float,
+    switch: bool,
+    first: float | None = None,
 ) -> float:
     """Depreciation from time ``t0`` to ``t1`` of an asset worth ``book`` at ``t0``.
 
-    Period by period from ``t0``: the declining balance at ``factor / life``, or straight line
-    over the remaining life once that is larger (unless ``switch`` is off), never below the
-    salvage value, the last period taken by its fraction after that limit.
+    Period by period from ``t0`` (the first period ``first`` long when given): the declining
+    balance at ``factor / life``, or straight line over the remaining life once that is larger
+    (unless ``switch`` is off), never below the salvage value. A declining-balance period is
+    capped before a part of it is taken, a straight-line one after (capture ``finance``).
     """
     rate = factor / life
     total, t, straight = 0.0, t0, False
+    step_first = first
     while t1 - t > 1e-12:
-        step = min(1.0, t1 - t)
+        step = min(1.0, t1 - t) if step_first is None else step_first
+        step_first = None
         full = book * rate
         if switch:
             remaining = life - t
             line = (book - salvage) / remaining if remaining > 0 else book - salvage
             if straight or line > full:
                 straight, full = True, line
-        full = min(full, max(book - salvage, 0.0))
-        dep = full * step
+        left = max(book - salvage, 0.0)
+        dep = min(full * step, left) if straight else min(full, left) * step
         total += dep
         book -= dep
         t += step
+    return total
+
+
+def _interpolated(
+    cost: float, salvage: float, life: float, start: float, end: float, factor: float
+) -> float:
+    """Declining balance without the switch: whole periods, a part of one in proportion.
+
+    Summed period by period over the span, as Excel's last bits show.
+    """
+    rate = factor / life
+    book, total = cost, 0.0
+    for k in range(math.ceil(end)):
+        dep = min(book * rate, max(book - salvage, 0.0))
+        low, high = max(start, k), min(end, k + 1)
+        if high > low:
+            total += dep if (low == k and high == k + 1) else dep * (high - low)
+        book -= dep
     return total
 
 
@@ -374,15 +402,20 @@ def VDB(
 ) -> Any:
     """Declining-balance depreciation between two periods, switching to straight line.
 
-    Excel depreciates from ``start`` an asset worth what is left at ``start`` (capture
-    ``finance``); a fractional last period is that fraction of the period's depreciation.
+    Without the switch, each period's depreciation is taken in proportion to the part of it
+    the span covers. With it, Excel depreciates from ``start`` an asset worth what is left
+    there, period by period from ``start``; the value left at a fractional start comes from
+    periods aligned to it, the fractional part first (capture ``finance``).
     """
     if start < 0 or end < start or end > life or cost < 0 or salvage < 0 or factor < 0:
         return NUM
     if life <= 0:
         return NUM
-    before = _declining(cost, salvage, life, 0.0, start, factor, not no_switch)
-    return _result(_declining(cost - before, salvage, life, start, end, factor, not no_switch))
+    if no_switch:
+        return _result(_interpolated(cost, salvage, life, start, end, factor))
+    part = start - math.floor(start)
+    before = _declining(cost, salvage, life, 0.0, start, factor, True, part or None)
+    return _result(_declining(cost - before, salvage, life, start, end, factor, True))
 
 
 # Iterative functions -------------------------------------------------------------------------

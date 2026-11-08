@@ -128,12 +128,10 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   function's declared tolerance) and differ on another, where a last-bit difference in `erfc`, `exp`, `log1p` or `expm1` survives a cancellation: `GAUSS(1E-5)`, which
   subtracts 0.5 from the normal distribution (as Excel's own result shows), and two rows of `IPMT` with payments due in
   advance (`empty_args`). They are listed on every platform, so the published counts do not depend on it.
-- `VDB` with a fractional start or end period differs on 145 of 180 rows of `finance` (a sweep around a corpus
-  call, `VDB(78714.55552,0,15,14.43,15,1.5)`: Excel 2,648.73, here 1,509.41). What the rows show: with `no_switch` TRUE,
-  Excel takes each period's declining-balance depreciation in proportion to the span's part of that period; with the
-  switch on, a span from a fractional start in the straight-line stretch is that fraction of the constant straight-line
-  amount, where the engine caps the period at the remaining book value before taking the fraction; near the switch
-  (from 5.5 of 7 years) Excel's book value at the start is not yet reproduced. Listed in `tests/test_captures.py`.
+- `VDB` from a fractional start, or late in a schedule, differs in its last bits on 75 of the 317 rows of `finance` that
+  sweep fractional periods (5 to 1,131 units in the last place, Excel's rule otherwise reproduced): the book value carried
+  period by period rounds differently from Excel's, and a straight-line amount computed once or a closed-form book value
+  fit no more rows. Listed in `tests/test_captures.py`.
 - An empty argument: `VDB` with an empty `factor` is `#DIV/0!` in Excel and 0 here (two rows of `empty_args`). Four others there carry the known noise of `MULTINOMIAL`, `CUMIPMT` and `XIRR`.
 - How text orders is captured only in part: every pair of 39 ASCII characters and 24 pairs of words,
   on Excel 16 for Mac (capture `modern`). Those give one consistent order, marks and symbols before

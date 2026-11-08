@@ -760,6 +760,37 @@ def finance() -> list[Case]:
                             f"VDB({cost!r},{salvage!r},{life!r},{start!r},{end!r},{factor!r}{switch})",
                         )
                     )
+    cases += _vdb_switch_cases()
+    return cases
+
+
+def _vdb_switch_cases() -> list[Case]:
+    """VDB from fractional starts around the switch to straight line, on two assets.
+
+    For each start s: from 0 to s, from s to the end of the life, from s to the next whole
+    period, from the previous whole period to s, and from 0 to s without the switch; and each
+    asset's whole periods, one at a time and from 0.
+    """
+    cases: list[Case] = []
+    assets = (
+        (10000.0, 500.0, 7.0, 2.0, (4.3, 4.7, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 6.5)),
+        (25000.0, 2000.0, 9.0, 1.75, (5.3, 5.7, 6.1, 6.3, 6.5, 6.7, 6.9, 7.4, 8.2)),
+    )
+    for cost, salvage, life, factor, starts in assets:
+        head = f"VDB({cost!r},{salvage!r},{life!r},"
+        for k in range(int(life)):
+            cases.append(Case("vdb", f"{head}{k},{k + 1},{factor!r})"))
+            cases.append(Case("vdb", f"{head}0,{k + 1},{factor!r})"))
+        for start in starts:
+            low, high = math.floor(start), math.ceil(start)
+            for a, b, tail in (
+                (0, start, ""),
+                (start, life, ""),
+                (start, high, ""),
+                (low, start, ""),
+                (0, start, ",TRUE"),
+            ):
+                cases.append(Case("vdb", f"{head}{a!r},{b!r},{factor!r}{tail})"))
     return cases
 
 

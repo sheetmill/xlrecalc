@@ -68,6 +68,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- `VDB` with a fractional start or end period gave values far from Excel's (`VDB(78714.55552,0,15,14.43,15,1.5)` was 1,509.41
+  where Excel gives 2,648.73). Without the switch to straight line, each period's depreciation is taken in proportion to the
+  part of it the span covers; with it, the value left at a fractional start comes from periods aligned to that start, the
+  fractional part first, and a straight-line period is capped after its part is taken, a declining-balance one before
+  (capture `finance`: a sweep of fractional periods and 137 rows around the switch on two assets). 75 rows differ in their
+  last bits.
 - `XIRR` gave `#VALUE!` for values holding a blank or a number as text; a blank is 0 and the text is read as its number, as
   in Excel, while other text and a logical stay `#VALUE!` (capture `iterative`: `IRR`, `NPV`, `MIRR` and `XIRR` over flows
   holding an error, a text or a blank, where `IRR` gives `#VALUE!` for any error and the others give the error).
