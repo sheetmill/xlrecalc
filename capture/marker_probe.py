@@ -1,6 +1,7 @@
 """Which typed formulas Excel marks as dynamic arrays in a file (ARCHITECTURE.md §7.7).
 
     uv run python -m capture.marker_probe [value|formula_local]
+    uv run python -m capture.marker_probe --typed-workbook PATH
     uv run python -m capture.marker_probe --typed PATH
 
 Non-interactive. Formulas are entered into cells of a workbook openpyxl wrote (data in
@@ -58,6 +59,16 @@ TYPED = [
     "=INDEX(Z1:Z3,2)",
     "=ABS(Z1:Z3)",
     "=Z1:Z3",
+    # functions that make arrays, each with a one-cell result, and wrapped in another function
+    "=SEQUENCE(1)",
+    "=SEQUENCE(1,1,5)",
+    "=MMULT(Z1,Z2)",
+    "=UNIQUE(Z1)",
+    "=SORT(Z2)",
+    "=SORTBY(Z1,Z2)",
+    "=FILTER(Z1:Z3,Z1:Z3=2)",
+    "=SUM(SEQUENCE(3))",
+    "=ROWS(UNIQUE(Z1:Z3))",
 ]
 
 
@@ -103,6 +114,9 @@ def read_typed(path: Path) -> None:
 def main() -> None:
     if sys.argv[1:2] == ["--typed"]:
         read_typed(Path(sys.argv[2]))
+        return
+    if sys.argv[1:2] == ["--typed-workbook"]:
+        typed_workbook(Path(sys.argv[2]))
         return
     way = sys.argv[1] if len(sys.argv) > 1 else "value"
     CONTAINER.mkdir(parents=True, exist_ok=True)
