@@ -150,6 +150,47 @@ VARIANTS: list[tuple[str, str, Sheets]] = [
     ("overflow", 'iterateCount="400"', one(("A1", "A1*10+1", "0"))),
     # Already converged when opened.
     ("converged", 'iterateCount="100" iterateDelta="0.3"', one(("A1", "A1/2+1", "2"))),
+    # Round 2. A dependent outside the loop: does its change count, is it recalculated each time.
+    (
+        "dependent_change",
+        'iterateCount="100" iterateDelta="0.3"',
+        one(HALF, ("B1", "A1*1000", "0")),
+    ),
+    (
+        "dependent_read",
+        'iterateCount="3"',
+        one(COUNTER, ("B1", "A1*2", "0"), ("C1", "C1+B1", "0")),
+    ),
+    # A change between kinds, with a delta no number reaches: a number alone stops at once.
+    ("kind_number", 'iterateCount="7" iterateDelta="1E9"', one(("A1", "1-A1", "0"))),
+    ("kind_text", 'iterateCount="7" iterateDelta="1E9"', one(("A1", 'IF(A1=0,"x",0)', "0"))),
+    (
+        "kind_error",
+        'iterateCount="7" iterateDelta="1E9"',
+        one(("A1", "IF(ISERROR(A1),0,1/0)", "0")),
+    ),
+    ("kind_logical", 'iterateCount="7" iterateDelta="1E9"', one(("A1", "IF(A1=0,TRUE,0)", "0"))),
+    # Sheet names in case, digits and beyond ASCII.
+    *[
+        (
+            f"names_{label}",
+            'iterateCount="1"',
+            [(x, [("A1", f"'{y}'!A1+1", "0")]), (y, [("A1", f"'{x}'!A1+10", "0")])],
+        )
+        for label, x, y in (("case", "B", "a"), ("digits", "10", "9"), ("accent", "f", "é"))
+    ],
+    # Loops found only through INDIRECT and OFFSET.
+    ("indirect", 'iterateCount="1"', one(("A1", 'INDIRECT("A5")+1', "0"), ("A5", "A1+10", "0"))),
+    ("offset", 'iterateCount="1"', one(("A1", "OFFSET(A5,0,0)+1", "0"), ("A5", "A1+10", "0"))),
+    # Round 3. A dependent above its loop: calculated in row order with it, a step behind, or after.
+    ("dependent_before", 'iterateCount="3"', one(("A1", "A5*2", "0"), ("A5", "A5+1", "0"))),
+]
+
+
+# (name, cell to edit, number entered, sheets): iterateCount 3, a run on opening.
+EDITS: list[tuple[str, str, str, Sheets]] = [
+    ("edit_read", "s!B9", "2", one(("A1", "A1+B9", "0"), ("B9", "", "1"))),
+    ("edit_unread", "s!C9", "2", one(("A1", "A1+B9", "0"), ("B9", "", "1"), ("C9", "", "1"))),
 ]
 
 
@@ -159,8 +200,8 @@ def build(path: Path, calc: str, sheets: Sheets) -> None:
     wb.remove(wb.active)
     for name, cells in sheets:
         ws = wb.create_sheet(name)
-        for ref, formula, _ in cells:
-            ws[ref] = "=" + formula
+        for ref, formula, cached in cells:
+            ws[ref] = "=" + formula if formula else float(cached)  # "" is a constant
     plain = path.with_name("xlrecalc_iterate_probe_plain.xlsx")
     wb.save(plain)
     with zipfile.ZipFile(plain) as zin, zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as zout:
@@ -169,7 +210,9 @@ def build(path: Path, calc: str, sheets: Sheets) -> None:
             found = re.fullmatch(r"xl/worksheets/sheet(\d+)\.xml", item.filename)
             if found:
                 text = data.decode()
-                for ref, _, cached in sheets[int(found[1]) - 1][1]:
+                for ref, formula, cached in sheets[int(found[1]) - 1][1]:
+                    if not formula:
+                        continue
                     text, n = re.subn(
                         rf'(<c r="{ref}"[^>]*>\s*<f>[^<]*</f>)\s*<v\s*/>',
                         rf"\g<1><v>{cached}</v>",
@@ -257,6 +300,25 @@ def main() -> None:
             )
         path.unlink()
         copy.unlink()
+    # An edit: a constant the loop reads, and a cell nothing reads.
+    for name, target, number, sheets in EDITS:
+        path = CONTAINER / f"xlrecalc_iterate_probe_{name}.xlsx"
+        build(path, '<calcPr calcId="191029" iterate="1" iterateCount="3"/>', sheets)
+        refs = [f"{sheet}!{ref}" for sheet, cells in sheets for ref, _, _ in cells]
+        fields = osascript(
+            str(HERE / "iterate_edit.applescript"), str(path), target, number, *refs
+        ).split(US)
+        if fields[0] != "open":
+            sys.exit(f"{path.name} did not open: {fields}")
+        before, after = fields[1 : 1 + len(refs)], fields[2 + len(refs) :]
+        cells = [(f"{sheet}!{ref}", f, c) for sheet, cs in sheets for ref, f, c in cs]
+        for i, (ref, formula, cached) in enumerate(cells):
+            row = [name, f"edit {target}={number}", ref, formula, cached, before[i], ""]
+            body.append("\t".join([*row, after[i], "", "none", ""]))
+            print(
+                f"{name:18} {ref:8} {formula:12} before {before[i]:>8} after {after[i]}", flush=True
+            )
+        path.unlink()
     out = CAPTURES / "iterate_calc.tsv"
     out.write_text("\n".join([*header, *body]) + "\n", encoding="utf-8")
     print(f"{len(VARIANTS)} variants -> {out.name}")

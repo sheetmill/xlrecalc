@@ -67,3 +67,29 @@ oscillate_100	iterateCount="100"	s!A1	1-A1	0	0.0	0	0.0	0	n	0
 oscillate_7	iterateCount="7"	s!A1	1-A1	0	1.0	1	0.0	0	n	0
 overflow	iterateCount="400"	s!A1	A1*10+1	0	missing value	#NUM!	missing value	#NUM!	e	#NUM!
 converged	iterateCount="100" iterateDelta="0.3"	s!A1	A1/2+1	2	2.0	2	2.0	2	n	2
+dependent_change	iterateCount="100" iterateDelta="0.3"	s!A1	A1/2+1	0	1.999755859375	1.999756	1.999877929688	1.999878	n	1.9998779296875
+dependent_change	iterateCount="100" iterateDelta="0.3"	s!B1	A1*1000	0	1999.755859375	1999.756	1999.8779296875	1999.878	n	1999.8779296875
+dependent_read	iterateCount="3"	s!A1	A1+1	0	3.0	3	6.0	6	n	6
+dependent_read	iterateCount="3"	s!B1	A1*2	0	6.0	6	12.0	12	n	12
+dependent_read	iterateCount="3"	s!C1	C1+B1	0	12.0	12	42.0	42	n	42
+kind_number	iterateCount="7" iterateDelta="1E9"	s!A1	1-A1	0	1.0	1	0.0	0	n	0
+kind_text	iterateCount="7" iterateDelta="1E9"	s!A1	IF(A1=0,"x",0)	0	x	x	0.0	0	n	0
+kind_error	iterateCount="7" iterateDelta="1E9"	s!A1	IF(ISERROR(A1),0,1/0)	0	missing value	#DIV/0!	0.0	0	n	0
+kind_logical	iterateCount="7" iterateDelta="1E9"	s!A1	IF(A1=0,TRUE,0)	0	true	TRUE	0.0	0	n	0
+names_case	iterateCount="1"	B!A1	'a'!A1+1	0	11.0	11	22.0	22	n	22
+names_case	iterateCount="1"	a!A1	'B'!A1+10	0	10.0	10	21.0	21	n	21
+names_digits	iterateCount="1"	10!A1	'9'!A1+1	0	1.0	1	12.0	12	n	12
+names_digits	iterateCount="1"	9!A1	'10'!A1+10	0	11.0	11	22.0	22	n	22
+names_accent	iterateCount="1"	f!A1	'é'!A1+1	0	11.0	11	22.0	22	n	22
+names_accent	iterateCount="1"	é!A1	'f'!A1+10	0	10.0	10	21.0	21	n	21
+indirect	iterateCount="1"	s!A1	INDIRECT("A5")+1	0	1.0	1	12.0	12	n	12
+indirect	iterateCount="1"	s!A5	A1+10	0	11.0	11	22.0	22	n	22
+offset	iterateCount="1"	s!A1	OFFSET(A5,0,0)+1	0	1.0	1	12.0	12	n	12
+offset	iterateCount="1"	s!A5	A1+10	0	11.0	11	22.0	22	n	22
+dependent_before	iterateCount="3"	s!A1	A5*2	0	4.0	4	10.0	10	n	10
+dependent_before	iterateCount="3"	s!A5	A5+1	0	3.0	3	6.0	6	n	6
+edit_read	edit s!B9=2	s!A1	A1+B9	0	3.0		9.0		none	
+edit_read	edit s!B9=2	s!B9		1	1.0		2.0		none	
+edit_unread	edit s!C9=2	s!A1	A1+B9	0	3.0		6.0		none	
+edit_unread	edit s!C9=2	s!B9		1	1.0		1.0		none	
+edit_unread	edit s!C9=2	s!C9		1	1.0		2.0		none	
