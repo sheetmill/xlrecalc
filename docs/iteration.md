@@ -19,3 +19,8 @@ and the same starting values, checked against Excel's results for each case it w
 - `ReadLimits.max_iteration_evaluations` (100,000,000 by default, about two minutes) bounds the cell
   evaluations of one run; past it the cells keep their values and are reported. A service that
   accepts workbooks from others should lower it.
+- After a trusting load, an edit finds a loop through the file's own marking: Excel marks a loop's
+  formulas "calculate always" (`ca="1"`) when it saves. A file with cached loop values but no such
+  marking, as another tool might write it, does not run its loop on an edit, unless the edit
+  reaches a cell the loop reads, or until a full recalculation (`full=True`). openpyxl writes no
+  cached values at all, so its files are always evaluated and are not affected.

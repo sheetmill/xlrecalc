@@ -264,3 +264,34 @@ def test_an_edit_after_a_trusting_load_runs_the_loop(tmp_path: Path) -> None:
     assert (wb.value("S!A1"), wb.value("S!A2")) == (199.0, 200.0)
     wb.set("S!C1", 1)
     assert (wb.value("S!A1"), wb.value("S!A2")) == (399.0, 400.0)
+
+
+def test_limitation_a_loop_without_excels_calculate_always_marking_does_not_run_on_an_edit(
+    tmp_path: Path,
+) -> None:
+    """Pins a known limitation (ARCHITECTURE.md §7.2): without ``ca="1"``, nothing marks the loop.
+
+    Excel's own file with the marking removed, as another tool might write it: after a trusting
+    load an edit to a cell the loop does not read leaves it as it was, where Excel would run it.
+    A full recalculation still runs it.
+    """
+    import zipfile
+
+    import xlrecalc
+
+    path = tmp_path / "x.xlsx"
+    with (
+        zipfile.ZipFile(CAPTURES / "iterate_cached.xlsx") as zin,
+        zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as zout,
+    ):
+        for item in zin.infolist():
+            data = zin.read(item.filename)
+            if item.filename.startswith("xl/worksheets/"):
+                assert b' ca="1"' in data
+                data = data.replace(b' ca="1"', b"")
+            zout.writestr(item, data)
+    wb = xlrecalc.load(path)
+    wb.set("S!C1", 1)
+    assert (wb.value("S!A1"), wb.value("S!A2")) == (199.0, 200.0)
+    wb.recalculate(full=True)
+    assert (wb.value("S!A1"), wb.value("S!A2")) == (399.0, 400.0)

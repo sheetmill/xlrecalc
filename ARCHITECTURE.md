@@ -531,6 +531,11 @@ evaluation pass ends, as Excel does:
   what it shows. `recalculate(path)` is a load and a save: for a file it evaluates, two runs, which
   is Excel's saved copy after opening the file, what pandas and openpyxl readers then see (checked
   end to end in `tests/test_iteration.py`, from openpyxl files and from a file Excel saved).
+  A limitation: after a trusting load, an edit finds a loop only through the file's `ca="1"`
+  marking. A file with cached loop values but no marking, as another tool might write it, does not
+  run its loop on an edit unless the edit reaches a cell the loop reads, or until a full
+  recalculation (a test pins this, named for the limitation). openpyxl writes no cached values, so
+  its files are always evaluated and are not affected.
 - A run may make at most `ReadLimits.max_iteration_evaluations` cell evaluations (100,000,000 by
   default; the corpora's largest need is 8,256 cells at 1,000 iterations). Past it, the cells keep
   the values they held and are reported as uncomputed under a label naming the limit. A run that
