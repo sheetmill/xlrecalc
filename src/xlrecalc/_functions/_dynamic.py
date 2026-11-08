@@ -63,25 +63,26 @@ def _count(v: Any, ctx: Any, default: float) -> float | ErrorValue:
 # SEQUENCE --------------------------------------------------------------------------------------
 
 
-@function("_XLFN.SEQUENCE", "raw", "raw", "raw", "raw", min_args=1, category=L)
-def SEQUENCE(
-    ctx: Any, rows: Any, cols: Any = MISSING, start: Any = MISSING, step: Any = MISSING
-) -> Any:
-    """Numbers from ``start`` by ``step``, row by row, in ``rows`` by ``cols`` cells.
+def _sequence(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
+    """SEQUENCE over its four arguments.
 
-    An array given for an argument is taken element by element, each giving the first number
-    of its sequence (capture ``dyn_sequence``).
+    An array (and with ``ranges``, in an array context, a range) is taken element by element,
+    each giving the first number of its sequence; in a plain formula a range is intersected
+    instead (captures ``dyn_sequence``, ``empty_args``).
     """
-    given = (rows, cols, start, step)
-    if any(type(a) is tuple or (isinstance(a, Ref) and not a.is_cell()) for a in given):
-        spread = [to_array(a) if isinstance(a, Ref) and not a.is_cell() else a for a in given]
+    if any(type(a) is tuple or (ranges and isinstance(a, Ref) and not a.is_cell()) for a in given):
+        spread = [
+            to_array(a) if ranges and isinstance(a, Ref) and not a.is_cell() else a for a in given
+        ]
+        lifted = [type(a) is tuple for a in spread]
 
         def leading(*xs: Any) -> Any:
-            v = SEQUENCE(ctx, *xs)
+            v = _sequence(ctx, xs, ranges)
             return v[0][0] if isinstance(v, tuple) else v
 
         limit = getattr(ctx, "max_array_cells", None)
-        return broadcast(leading, spread, [True] * 4, limit)
+        return broadcast(leading, spread, lifted, limit)
+    rows, cols, start, step = given
     args = [_count(rows, ctx, 1.0), _count(cols, ctx, 1.0)]
     args += [_count(start, ctx, 1.0), _count(step, ctx, 1.0)]
     for a in args:
@@ -100,6 +101,22 @@ def SEQUENCE(
         values.append(v if math.isfinite(v) else ErrorValue.NUM)
         v += by
     return tuple(tuple(values[i * c : (i + 1) * c]) for i in range(r))
+
+
+def _sequence_array(
+    ctx: Any, rows: Any, cols: Any = MISSING, start: Any = MISSING, step: Any = MISSING
+) -> Any:
+    return _sequence(ctx, (rows, cols, start, step), True)
+
+
+@function(
+    "_XLFN.SEQUENCE", "raw", "raw", "raw", "raw", min_args=1, category=L, in_array=_sequence_array
+)
+def SEQUENCE(
+    ctx: Any, rows: Any, cols: Any = MISSING, start: Any = MISSING, step: Any = MISSING
+) -> Any:
+    """Numbers from ``start`` by ``step``, row by row, in ``rows`` by ``cols`` cells."""
+    return _sequence(ctx, (rows, cols, start, step), False)
 
 
 # MMULT -----------------------------------------------------------------------------------------
@@ -316,6 +333,8 @@ def SORTBY(ctx: Any, array: Any, *rest: Any) -> Any:
 @function("_XLFN._XLWS.FILTER", "array", "array", "array", min_args=2, category=C)
 def FILTER(ctx: Any, array: Any, include: Any, if_empty: Any = MISSING) -> Any:
     """The rows (or columns) whose ``include`` is TRUE or a number other than 0."""
+    if include is MISSING:
+        return VALUE
     grid, test = _grid(array), _grid(include)
     if len(test[0]) == 1 and len(test) == len(grid):
         flags, cols = [row[0] for row in test], False

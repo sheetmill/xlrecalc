@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Functions that make arrays, captured from Excel as dynamic arrays (captures `dyn_*`, two sets of values each):
   - `SEQUENCE`: counts are truncated, an empty one is 1, 0 is `#CALC!` and a negative or too large one `#VALUE!`; each
-    number is the one before plus the step; an array argument gives each element's first number.
+    number is the one before plus the step; an array argument gives each element's first number, a range too in a
+    dynamic array, where a plain formula intersects it.
   - `MMULT`: every element must be a number (`#VALUE!` for a text, a blank or a logical, the error for an error) and the
     sizes must fit; each element is summed in order, as Excel adds.
   - `UNIQUE`: rows, or columns with `by_col`, in the order they first appear, text compared without regard to case and
@@ -24,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
   A formula calling one of them, set through `set_formula`, is written as a dynamic array whatever the size of its
   result, so that it spills when its data grows.
+  A file holding `SORT` or `FILTER` without its `_xlfn._xlws.` prefix, or one of these functions with an argument count
+  it does not take, does not open in Excel: such a formula keeps the value it holds and is reported in `Report.refused`.
+  `UNIQUE`, `SORTBY` and `SEQUENCE` without their prefix are names Excel does not know, `#NAME?`. A `#CALC!` Excel
+  caches (as `#VALUE!` with a rich value) is read as `#CALC!`.
 - Iterative calculation, for a workbook with iteration on (`<calcPr iterate="1">`), as Excel does it (captures
   `iterate_calc`, `calc_chain`, `iterate_open`): a run of up to `iterateCount` iterations from the values the cells hold, each
   computing the cells on and after circular references in place, in Excel's order (sheets by name, then row, then column),

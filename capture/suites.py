@@ -3366,6 +3366,8 @@ _EMPTY_VALUE = {
 }  # fmt: skip
 _R, _S = "$AA$1:$AA$4", "$AB$1:$AB$4"
 _EMPTY_VALID: dict[str, tuple[str, ...]] = {
+    "MMULT": ("{1,2}", "{3;4}"), "_XLFN.SEQUENCE": ("2", "2", "1", "1"),
+    "_XLFN.UNIQUE": (_R, "FALSE", "FALSE"), "_XLFN._XLWS.SORT": (_R, "1", "1", "FALSE"),
     "_XLFN.TEXTBEFORE": ('"a-b-c"', '"-"', "1", "0", "0", '"none"'),
     "_XLFN.TEXTAFTER": ('"a-b-c"', '"-"', "1", "0", "0", '"none"'),
     "SUMIF": (_R, '">1"', _S), "COUNTIF": (_R, '">1"'), "AVERAGEIF": (_R, '">1"', _S),
@@ -3444,15 +3446,30 @@ def _empty_repeating(key: str) -> list[list[str]]:
     return lists
 
 
+# Functions registered after the suite was first captured, in the order they were added: their
+# cases go at the end, so that earlier case numbers stay as they are.
+_EMPTY_ADDED = (
+    "MMULT", "_XLFN.SEQUENCE", "_XLFN.UNIQUE", "_XLFN._XLWS.SORT", "_XLFN.SORTBY",
+    "_XLFN._XLWS.FILTER",
+)  # fmt: skip
+
+
 def empty_args_all() -> list[Case]:
     """From the registry: each argument empty in turn, and all optional ones empty together."""
     from xlrecalc._functions import SPECS
 
+    def order(item: tuple[str, object]) -> tuple[int, str]:
+        key = item[0]
+        return (_EMPTY_ADDED.index(key) + 1 if key in _EMPTY_ADDED else 0, key)
+
     cases = []
-    for key, spec in sorted(SPECS.items()):
+    for key, spec in sorted(SPECS.items(), key=order):
         if key in _EMPTY_SKIP or not spec.kinds:
             continue
-        name = "_xlfn." + key[6:] if key.startswith("_XLFN.") else key
+        name = key
+        for upper, lower in (("_XLFN.", "_xlfn."), ("_XLWS.", "_xlws.")):
+            if name.startswith(upper) or name.startswith("_xlfn." + upper):
+                name = name.replace(upper, lower, 1)
         if key in _EMPTY_REPEATING:
             for args in _empty_repeating(key):
                 cases.append(Case(key.lower().replace("_xlfn.", ""), f"{name}({','.join(args)})"))

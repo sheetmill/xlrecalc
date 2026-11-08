@@ -1,7 +1,7 @@
 # suite: empty_args
 # excel: 16.114.3 for Mac, locale en_US
 # date_system: 1900
-# captured: 2026-11-07
+# captured: 2026-11-08
 # generator: capture/suites.py:empty_args
 # method: openpyxl writes the formula in column A and the inputs in B onward (floats as
 #   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
@@ -1106,3 +1106,33 @@ empty_args	xmatch	1093	_xlfn.XMATCH(2,$AA$1:$AA$4,)	()	n	2.0
 empty_args	xor	1094	_xlfn.XOR($AA$1:$AA$4,$AA$1:$AA$4)	()	b	False
 empty_args	xor	1095	_xlfn.XOR(,$AA$1:$AA$4)	()	b	False
 empty_args	xor	1096	_xlfn.XOR($AA$1:$AA$4,)	()	b	False
+empty_args	mmult	1097	MMULT({1,2},{3;4})	()	n	11.0
+empty_args	mmult	1098	MMULT(,{3;4})	()	e	#VALUE!
+empty_args	mmult	1099	MMULT({1,2},)	()	e	#VALUE!
+empty_args	sequence	1100	_xlfn.SEQUENCE(2,2,1,1)	()	n	1.0
+empty_args	sequence	1101	_xlfn.SEQUENCE(,2,1,1)	()	n	1.0
+empty_args	sequence	1102	_xlfn.SEQUENCE(2,,1,1)	()	n	1.0
+empty_args	sequence	1103	_xlfn.SEQUENCE(2,2,,1)	()	n	1.0
+empty_args	sequence	1104	_xlfn.SEQUENCE(2,2,1,)	()	n	1.0
+empty_args	sequence	1105	_xlfn.SEQUENCE(2,,,)	()	n	1.0
+empty_args	sequence	1106	_xlfn.SEQUENCE(2,)	()	n	1.0
+empty_args	sequence	1107	_xlfn.SEQUENCE(2,,1)	()	n	1.0
+empty_args	unique	1108	_xlfn.UNIQUE($AA$1:$AA$4,FALSE,FALSE)	()	n	1.0
+empty_args	unique	1109	_xlfn.UNIQUE(,FALSE,FALSE)	()	n	0.0
+empty_args	unique	1110	_xlfn.UNIQUE($AA$1:$AA$4,,FALSE)	()	n	1.0
+empty_args	unique	1111	_xlfn.UNIQUE($AA$1:$AA$4,FALSE,)	()	n	1.0
+empty_args	unique	1112	_xlfn.UNIQUE($AA$1:$AA$4,,)	()	n	1.0
+empty_args	unique	1113	_xlfn.UNIQUE($AA$1:$AA$4,)	()	n	1.0
+empty_args	_xlws.sort	1114	_xlfn._xlws.SORT($AA$1:$AA$4,1,1,FALSE)	()	n	1.0
+empty_args	_xlws.sort	1115	_xlfn._xlws.SORT(,1,1,FALSE)	()	n	0.0
+empty_args	_xlws.sort	1116	_xlfn._xlws.SORT($AA$1:$AA$4,,1,FALSE)	()	n	1.0
+empty_args	_xlws.sort	1117	_xlfn._xlws.SORT($AA$1:$AA$4,1,,FALSE)	()	n	1.0
+empty_args	_xlws.sort	1118	_xlfn._xlws.SORT($AA$1:$AA$4,1,1,)	()	n	1.0
+empty_args	_xlws.sort	1119	_xlfn._xlws.SORT($AA$1:$AA$4,,,)	()	n	1.0
+empty_args	_xlws.sort	1120	_xlfn._xlws.SORT($AA$1:$AA$4,)	()	n	1.0
+empty_args	_xlws.sort	1121	_xlfn._xlws.SORT($AA$1:$AA$4,,1)	()	n	1.0
+empty_args	sortby	1122	_xlfn.SORTBY($AA$1:$AA$4,$AA$1:$AA$4,)	()	n	1.0
+empty_args	_xlws.filter	1123	_xlfn._xlws.FILTER($AA$1:$AA$4,$AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	_xlws.filter	1124	_xlfn._xlws.FILTER(,$AA$1:$AA$4,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	_xlws.filter	1125	_xlfn._xlws.FILTER($AA$1:$AA$4,,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	_xlws.filter	1126	_xlfn._xlws.FILTER($AA$1:$AA$4,$AA$1:$AA$4,)	()	n	1.0

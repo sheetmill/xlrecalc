@@ -186,7 +186,7 @@ library differs in the last bits; the rows that match either way do not.
 | `FACTDOUBLE` | math | implemented | 36 | 36 | 0 | 0 | 0 | 8 ulps |  |
 | `FALSE` | logical | implemented | 0 | 0 | 0 | 0 | 0 |  |  |
 | `FDIST` | | absent | | | | | | | |
-| `FILTER` | lookup and reference | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
+| `FILTER` | lookup and reference | implemented | 32 | 32 | 0 | 0 | 0 |  |  |
 | `FILTERXML` | | absent | | | | | | | |
 | `FIND` | text | implemented | 51 | 51 | 0 | 0 | 0 |  |  |
 | `FINDB` | text | implemented | 352 | 352 | 0 | 0 | 0 |  |  |
@@ -324,7 +324,7 @@ library differs in the last bits; the rows that match either way do not.
 | `MINUTE` | date and time | implemented | 26 | 26 | 0 | 0 | 0 |  |  |
 | `MINVERSE` | | absent | | | | | | | |
 | `MIRR` | financial | implemented | 596 | 588 | 8 | 0 | 0 | 8 ulps |  |
-| `MMULT` | math | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
+| `MMULT` | math | implemented | 31 | 31 | 0 | 0 | 0 |  |  |
 | `MOD` | math | implemented | 14 | 14 | 0 | 0 | 0 |  |  |
 | `MODE` | statistical | implemented | 35 | 35 | 0 | 0 | 0 |  |  |
 | `MODE.MULT` | | absent | | | | | | | |
@@ -428,7 +428,7 @@ library differs in the last bits; the rows that match either way do not.
 | `SEC` | math | implemented | 30 | 30 | 0 | 0 | 0 | 4 ulps |  |
 | `SECH` | math | implemented | 30 | 30 | 0 | 0 | 0 | 4 ulps |  |
 | `SECOND` | date and time | implemented | 26 | 26 | 0 | 0 | 0 |  |  |
-| `SEQUENCE` | math | implemented | 31 | 31 | 0 | 0 | 0 |  |  |
+| `SEQUENCE` | math | implemented | 39 | 39 | 0 | 0 | 0 |  |  |
 | `SERIESSUM` | math | implemented | 68 | 66 | 2 | 0 | 0 | 4 ulps |  |
 | `SHEET` | information | implemented | 24 | 22 | 0 | 0 | 2 |  |  |
 | `SHEETS` | information | implemented | 24 | 22 | 0 | 0 | 2 |  |  |
@@ -441,8 +441,8 @@ library differs in the last bits; the rows that match either way do not.
 | `SLN` | financial | implemented | 40 | 40 | 0 | 0 | 0 |  |  |
 | `SLOPE` | statistical | implemented | 24 | 24 | 0 | 0 | 0 | 4 ulps |  |
 | `SMALL` | statistical | implemented | 31 | 30 | 0 | 0 | 1 |  |  |
-| `SORT` | lookup and reference | implemented | 32 | 32 | 0 | 0 | 0 |  |  |
-| `SORTBY` | lookup and reference | implemented | 24 | 24 | 0 | 0 | 0 |  |  |
+| `SORT` | lookup and reference | implemented | 40 | 40 | 0 | 0 | 0 |  |  |
+| `SORTBY` | lookup and reference | implemented | 25 | 25 | 0 | 0 | 0 |  |  |
 | `SQRT` | math | implemented | 17 | 17 | 0 | 0 | 0 |  |  |
 | `SQRTPI` | math | implemented | 30 | 30 | 0 | 0 | 0 |  |  |
 | `STANDARDIZE` | statistical | implemented | 820 | 820 | 0 | 0 | 0 |  |  |
@@ -503,7 +503,7 @@ library differs in the last bits; the rows that match either way do not.
 | `TYPE` | information | implemented | 58 | 57 | 0 | 0 | 1 |  |  |
 | `UNICHAR` | text | implemented | 38 | 38 | 0 | 0 | 0 |  |  |
 | `UNICODE` | text | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
-| `UNIQUE` | lookup and reference | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
+| `UNIQUE` | lookup and reference | implemented | 34 | 34 | 0 | 0 | 0 |  |  |
 | `UPPER` | text | implemented | 22 | 22 | 0 | 0 | 0 |  |  |
 | `USDOLLAR` | text | implemented | 197 | 197 | 0 | 0 | 0 |  |  |
 | `VALUE` | text | implemented | 149 | 149 | 0 | 0 | 0 |  |  |
