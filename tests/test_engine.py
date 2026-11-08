@@ -339,3 +339,12 @@ def test_every_empty_argument_row_has_a_baseline_that_is_no_error():
         f for rows in baselines.values() if all(r[1] == "e" for r in rows) for f, _, _ in rows
     ]
     assert [f for f in errors if not f.startswith(_BASELINE_IS_AN_ERROR)] == []
+
+
+def test_a_name_in_another_workbook_is_reported_like_any_external_reference():
+    """``[0]!Rate`` was a silent ``#REF!``; ``[1]Other!B2`` was already reported."""
+    engine = Engine.from_cells({"S": {"A1": "=[0]!_XX1/100", "A2": "=[1]Other!B2"}})
+    engine.recalculate(full=True)
+    assert engine.get(0, 0, 0) == engine.get(0, 1, 0) == ErrorValue.NAME
+    assert engine.report.unsupported["external or 3-D reference"] == 2
+    assert {str(c) for c in engine.report.uncomputed} == {"S!A1", "S!A2"}

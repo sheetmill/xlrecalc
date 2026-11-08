@@ -1388,6 +1388,8 @@ class Engine:
         return self._name_text(name, self.sheet)
 
     def name(self, sheet: str | None, name: str) -> Any:
+        if sheet is not None and "[" in sheet:  # [1]!Rate: a name in another workbook
+            return self.unsupported("external or 3-D reference")
         scope = self.sheet if sheet is None else self.sheet_index(sheet)
         if scope is None:
             return REF

@@ -67,6 +67,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- A name in another workbook (`[1]!Rate`) gave a silent `#REF!`; it is reported as an external reference and keeps the value
+  the file holds, as a cell reference into another workbook already did.
 - `INDEX` takes its fourth argument, the area: with one area, 1 is that area, a number below 1 is `#VALUE!` and above it
   `#REF!`, as in Excel (capture `functions`). It was `#VALUE!` for every area.
 - A database function given an error, such as a name defined as `#REF!`, gave `#VALUE!`; the error is the result, the first
