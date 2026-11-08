@@ -184,3 +184,15 @@ def test_the_public_path_gives_excels_saved_copy(
         if row[4] and not saved_matches(written.get(row[3], BLANK), row[7], row[8])
     ]
     assert wrong == []
+
+
+def test_an_edit_after_a_trusting_load_runs_the_loop(tmp_path: Path) -> None:
+    """Excel marks a loop's formulas ``ca="1"``; an edit to a cell nothing reads runs the loop."""
+    import xlrecalc
+
+    path = tmp_path / "x.xlsx"
+    path.write_bytes((CAPTURES / "iterate_cached.xlsx").read_bytes())
+    wb = xlrecalc.load(path)
+    assert (wb.value("S!A1"), wb.value("S!A2")) == (199.0, 200.0)
+    wb.set("S!C1", 1)
+    assert (wb.value("S!A1"), wb.value("S!A2")) == (399.0, 400.0)

@@ -203,6 +203,9 @@ class Engine:
         self._iterated: set[int] = set()  # kept cells a run computed: the writer writes them
         self._before_pass: dict[int, Value] = {}  # with iteration on: values before this pass
         self._partial = False  # a pass with formula cells not stale: a loop may be met late
+        self.calc_always: set[int] = set()
+        """With iteration on, formulas the file marks calculate-always (``<f ca="1">``), as Excel
+        marks a loop's: an edit makes them stale, so it runs a loop a trusting load never met."""
         self.max_array_cells = max_array_cells
         """The largest array a formula may make (``ReadLimits.max_array_cells``)."""
         self.reference_array: Any = None
@@ -1067,6 +1070,9 @@ class Engine:
         if self._absent:
             self._outdated |= self._absent & self.dependents([n])
             self._outdated |= self._absent & self._volatile
+        if self.calc_always and not self._kept:  # any edit runs Excel's loops (iterate_calc)
+            self.stale |= self.calc_always
+            self._unclosed.extend(self.calc_always)
 
     def _closure(self, seeds: set[int]) -> set[int]:
         """Formula cells depending on the seeds, through static edges and the reads recorded."""

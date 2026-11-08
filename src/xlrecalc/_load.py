@@ -418,6 +418,8 @@ def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
         if f.kind == "shared" and f.si is not None:
             masters[f.si] = tid
         engine.set_formula(index, row, col, template=tid, cached=cached, stale=full)
+        if engine.iterate and f.attributes.get("ca") in ("1", "true"):
+            engine.calc_always.add(node(index, row, col))
     s.hidden_rows = frozenset(r - 1 for r in rows.hidden)
     s.filter_mode = rows.filter_mode
     for row, col, si, cached in dependents:
