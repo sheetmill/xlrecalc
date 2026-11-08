@@ -113,7 +113,15 @@ def test_circular_with_iteration_off_and_on(tmp_path: Path) -> None:
         "circular_alone_matches": 1,
         "circular_alone_differs": 1,
     }
-    assert counts(tmp_path, held, '<calcPr iterate="1"/>')["counts"] == {"iterating": 2}
+    iterate = '<calcPr iterate="1"/>'
+    moving = counts(tmp_path, held, iterate)  # diverges: moves on every run, by design
+    assert moving["counts"] == {"iterating_count_differs": 2}
+    assert moving["iteration"]["stops"] == ["count", "count"]
+    assert moving["iteration"]["cycle_cells"] == moving["iteration"]["held_back"] == 2
+    fixed = cell("A1", "B1/2+1", "1.3333333333333333") + cell("B1", "A1/2", "0.6666666666666666")
+    settled = counts(tmp_path, fixed, iterate)  # at its fixed point, as Excel saved it
+    assert settled["counts"] == {"iterating_converged_matches": 2}
+    assert settled["iteration"]["stops"] == ["delta", "delta"]
 
 
 def test_an_array_formula_compares_its_whole_range(tmp_path: Path) -> None:

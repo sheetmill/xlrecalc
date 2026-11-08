@@ -24,7 +24,13 @@ Categories, the first that applies to a formula cell:
   here means a result that depends on when or where it is computed (``NOW``, ``TODAY``, ``RAND``,
   ``RANDBETWEEN``, ``RANDARRAY``, ``INFO``, ``CELL``), not ``OFFSET`` or ``INDIRECT``, which
   are compared.
-- ``iterating``: on or after a cycle with iteration on; it keeps its cached value.
+- ``iterating_converged_matches``, ``iterating_converged_differs``, ``iterating_count_matches``,
+  ``iterating_count_differs``, ``iterating_stopped``: on or after a cycle with iteration on,
+  computed as ``recalculate(path, full=True)`` computes it (an evaluating run, then the save's
+  run, Excel's saved copy) and compared with the cache in the full recalculation only. Split by
+  why the save's run ended: on ``iterateDelta`` (a converging loop, which should match the state
+  Excel saved), on ``iterateCount`` (a loop that moves on every run and differs by design), or
+  stopped by a limit or an unread cell (kept, reported). Matches are any of the grades below.
 - ``circular_empty``, ``circular_alone_matches``, ``circular_alone_differs``: on or after a cycle
   with iteration off. The first is what Excel saves for such a cell. In the others the cache holds
   a value, so the cache is older than the cycle or the engine calls circular what Excel does not.
@@ -86,7 +92,11 @@ SET_ASIDE = (
     "volatile_dependent",
     "external",
     "external_dependent",
-    "iterating",
+    "iterating_converged_matches",
+    "iterating_converged_differs",
+    "iterating_count_matches",
+    "iterating_count_differs",
+    "iterating_stopped",
     "circular_empty",
     "circular_alone_matches",
     "circular_alone_differs",
@@ -193,7 +203,24 @@ def compare_workbook(path: str) -> dict[str, Any]:
     engine = load(path, trust_cached=False)
     cached = _cached_values(engine, path)
     formulas = [(index << 34) | key for index, s in enumerate(engine.sheets) for key in s.templates]
+    chains: list[int] = []
+    keep_cycle = engine._keep_cycle
+
+    def counted(chain: set[int]) -> None:
+        chains.append(len(chain))
+        keep_cycle(chain)
+
+    engine._keep_cycle = counted  # type: ignore[method-assign]
     engine.recalculate(full=True)
+    held_back = len(engine._kept) if engine.iterate else 0
+    cycles, cycle_cells = len(chains), sum(chains)  # the opening's run only
+    stops: list[str] = []  # why each run ended: "delta", "count" or the report's label
+    for run in (None, engine.save_run):  # as recalculate(path): the opening's run, the save's
+        if run is not None:
+            engine._last_stop = None
+            run()
+        if engine.iterate and engine._kept and engine._last_stop is not None:
+            stops.append(engine._last_stop)
     report = engine.report
     circular = {node(_index(engine, c), c.row - 1, c.col - 1) for c in report.circular}
     uncomputed = {node(_index(engine, c), c.row - 1, c.col - 1) for c in report.uncomputed}
@@ -249,6 +276,7 @@ def compare_workbook(path: str) -> dict[str, Any]:
     exceptions: Counter[str] = Counter()
     mismatches: dict[tuple[str, str, str], dict[str, Any]] = {}
     alone_differs: list[int] = []
+    iteration_samples: list[dict[str, str]] = []
     for n in formulas:
         sheet, row, col = unpack(n)
         store = engine.sheets[sheet]
@@ -265,7 +293,26 @@ def compare_workbook(path: str) -> dict[str, Any]:
         elif n in outside_after:
             counts["external_dependent"] += 1
         elif n in kept:
-            counts["iterating"] += 1
+            last = stops[-1] if stops else None
+            kind = {"delta": "converged", "count": "count"}.get(last or "", "stopped")
+            if kind == "stopped":
+                counts["iterating_stopped"] += 1
+                continue
+            whole = compare(value, full[n])
+            for r, c in _members(engine, n) if n in engine.anchors else ():
+                m = node(sheet, r, c)
+                whole = _worse(whole, compare(cached.get(m, BLANK), full[m]))
+            matched = whole != "differ"
+            counts[f"iterating_{kind}_{'matches' if matched else 'differs'}"] += 1
+            if not matched and len(iteration_samples) < 5:
+                iteration_samples.append(
+                    {
+                        "cell": str(CellRef(store.name, row + 1, col + 1)),
+                        "formula": (engine.formula_text(sheet, row, col) or "")[:200],
+                        "cached": _short(value),
+                        "got": _short(full[n]),
+                    }
+                )
         elif n in circular and value == "":
             counts["circular_empty"] += 1
         else:
@@ -323,6 +370,17 @@ def compare_workbook(path: str) -> dict[str, Any]:
         "calc_mode": calc.calc_mode,
         "flag": calc.full_calc_on_load,
         "iterate": calc.iterate,
+        "iteration": {
+            "cycles": cycles,
+            "cycle_cells": cycle_cells,
+            "held_back": held_back,
+            "stops": stops,
+            "count": engine.iterate_count,
+            "delta": engine.iterate_delta,
+            "samples": iteration_samples,
+        }
+        if held_back or calc.iterate
+        else None,
         "mismatches": list(mismatches.values()),
     }
 
@@ -561,6 +619,40 @@ def summarize(out: Path, paths: set[str] | None = None) -> None:
     lines.append(f"{'refused formulas':26} {sum(r['refused'] for r in good):>12,}")
     lines.append(f"{'named in from_kept':26} {sum(r.get('from_kept', 0) for r in good):>12,}")
     lines.append(f"{'data tables':26} {sum(r['data_tables'] for r in good):>12,}")
+    lines.append("")
+
+    iterating = [r for r in good if r.get("iteration")]
+    reaching = [r for r in iterating if r["iteration"]["held_back"]]
+    lines.append("iteration, workbooks with <calcPr iterate> (cells counted in the opening's run):")
+    lines.append(f"  with iteration on                          {len(iterating):>10,}")
+    lines.append(f"  reaching a cycle (a cell held back)        {len(reaching):>10,}")
+    lines.append(
+        "  cycle cells (the cycles' cells as found)   "
+        f"{sum(r['iteration']['cycle_cells'] for r in reaching):>10,}"
+    )
+    lines.append(
+        "  held back (on or after a cycle, iterated)  "
+        f"{sum(r['iteration']['held_back'] for r in reaching):>10,}"
+    )
+    lines.append(
+        "  by workbook: held back, why each run ended (opening, save), count, delta, categories"
+    )
+    for row in sorted(reaching, key=lambda r: -r["iteration"]["held_back"]):
+        it = row["iteration"]
+        parts = " ".join(
+            f"{k.removeprefix('iterating_')}={v}"
+            for k, v in sorted(row["counts"].items())
+            if k.startswith("iterating_")
+        )
+        lines.append(
+            f"    {Path(row['path']).name[:50]:50} {it['held_back']:>7,} "
+            f"{'/'.join(it['stops']):24} {it['count']:>6} {it['delta']:<8g} {parts}"
+        )
+        for sample in it["samples"]:
+            lines.append(
+                f"      {sample['cell']}: cached {sample['cached']}, got {sample['got']}"
+                f"  {sample['formula'][:100]}"
+            )
     lines.append("")
 
     own = Counter[str]()

@@ -201,6 +201,7 @@ class Engine:
         self._iterating = False  # within a run: kept cells are computed
         self._iteration_due = False
         self._iterated: set[int] = set()  # kept cells a run computed: the writer writes them
+        self._last_stop: str | None = None  # why the last run ended: "delta", "count" or a label
         self._before_pass: dict[int, Value] = {}  # with iteration on: values before this pass
         self._partial = False  # a pass with formula cells not stale: a loop may be met late
         self.calc_always: set[int] = set()
@@ -941,11 +942,16 @@ class Engine:
                         if change > largest:
                             largest = change
                 if largest < delta:
+                    self._last_stop = "delta"
                     break
+            else:
+                self._last_stop = "count"
         except _NotEvaluatedError:  # a read the pass did not see: keep what was held
             stopped = ITERATION_UNREAD
         finally:
             self._iterating = False
+        if stopped:
+            self._last_stop = stopped
         for n, (values, key), value in zip(members, stores, before, strict=True):
             if stopped:
                 if value is BLANK:
