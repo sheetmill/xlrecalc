@@ -272,6 +272,10 @@ class Workbook:
         Every part the changes do not touch is copied from the source file byte for byte; see
         :func:`recalculate` for ``full_calc_on_load``.
 
+        With iterative calculation on, saving runs a loop once more, as Excel's saving does, once
+        the loop has run (an evaluating load, an edit): the values in memory change with the
+        file's. A trusting load with no edit runs nothing (ARCHITECTURE.md §7.2).
+
         Args:
             path: Where to write; by default the file the workbook was loaded from.
             full_calc_on_load: Ask Excel to recalculate when it opens the file.
@@ -284,7 +288,10 @@ class Workbook:
                 raise ValueError("a workbook loaded from a file object needs a path to save to")
             path = self._source
         engine = self._engine
-        engine.recalculate()
+        live = engine.loop_live()
+        engine.recalculate()  # with a live loop, this is the save's run
+        if not live:
+            engine.save_run()  # the recalculation was the opening's: the save's run follows
         uncomputed = {(c.sheet.casefold(), c.row, c.col) for c in engine.report.uncomputed}
         edits: dict[str, dict[tuple[int, int], Edit]] = {}
         for sheet, cells in self._edits.items():

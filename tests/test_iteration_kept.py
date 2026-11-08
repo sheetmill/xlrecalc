@@ -80,6 +80,7 @@ def run(a: float, b: float, c: float, f: float = 0.0, runs: int = 1) -> dict[str
 
 
 ONE_RUN = run(5.0, 7.0, 999.0)
+SAVED = run(5.0, 7.0, 999.0, runs=2)  # recalculate(path): an opening and a save, as Excel's copy
 
 
 def assert_computed(report: xlrecalc.Report) -> None:
@@ -92,14 +93,14 @@ def test_a_file_asking_for_a_full_calculation(tmp_path: Path) -> None:
     source = book(tmp_path, FLAG)
     out = tmp_path / "out.xlsx"
     assert_computed(xlrecalc.recalculate(source, out))
-    assert written(out) == {**ONE_RUN, "D1": 1.0, "F1": 0.0}
+    assert written(out) == {**SAVED, "D1": 1.0, "F1": 0.0}
 
 
-def test_full_recalculation_runs_once_from_the_cached_values(tmp_path: Path) -> None:
+def test_full_recalculation_is_an_opening_and_a_save(tmp_path: Path) -> None:
     source = book(tmp_path, TRUST)
     out = tmp_path / "out.xlsx"
     assert_computed(xlrecalc.recalculate(source, out, full=True))
-    assert written(out) == {**ONE_RUN, "D1": 1.0, "F1": 0.0}
+    assert written(out) == {**SAVED, "D1": 1.0, "F1": 0.0}
 
 
 def test_a_trusting_run_changes_nothing_and_claims_nothing(tmp_path: Path) -> None:
@@ -115,9 +116,9 @@ def test_each_run_of_a_written_file_starts_from_what_it_holds(tmp_path: Path) ->
     xlrecalc.recalculate(path)
     assert written(path)["A1"] == 5.0
     assert_computed(xlrecalc.recalculate(path))
-    assert written(path) == {**ONE_RUN, "D1": 1.0, "F1": 0.0}
+    assert written(path) == {**SAVED, "D1": 1.0, "F1": 0.0}
     xlrecalc.recalculate(path)
-    assert written(path) == {**run(5.0, 7.0, 999.0, runs=2), "D1": 1.0, "F1": 0.0}
+    assert written(path) == {**run(5.0, 7.0, 999.0, runs=4), "D1": 1.0, "F1": 0.0}
 
 
 @pytest.mark.parametrize(
@@ -207,7 +208,7 @@ def test_a_volatile_cell_in_a_loop_makes_a_trusting_run_reach_it(tmp_path: Path)
     source = book(tmp_path, TRUST, cells)
     out = tmp_path / "out.xlsx"
     assert_computed(xlrecalc.recalculate(source, out))
-    assert written(out) == ONE_RUN
+    assert written(out) == SAVED
 
 
 def test_an_array_formula_depending_on_a_loop_is_iterated_with_it(tmp_path: Path) -> None:
@@ -235,7 +236,7 @@ def test_a_loop_through_a_branch_not_taken_is_computed(tmp_path: Path) -> None:
 
 
 def test_a_file_written_by_openpyxl_with_cached_values_added(tmp_path: Path) -> None:
-    """openpyxl sets ``fullCalcOnLoad`` on every file: one run from the values added."""
+    """openpyxl sets ``fullCalcOnLoad`` on every file: an opening and a save, from the values."""
     openpyxl = pytest.importorskip("openpyxl")
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -263,7 +264,7 @@ def test_a_file_written_by_openpyxl_with_cached_values_added(tmp_path: Path) -> 
     in_place = tmp_path / "in_place.xlsx"
     shutil.copy(source, in_place)
     assert_computed(xlrecalc.recalculate(in_place))
-    assert written(in_place) == {**run(5.0, 7.0, 999.0, f=1.0), "D1": 2.0, "F1": 1.0}
+    assert written(in_place) == {**run(5.0, 7.0, 999.0, f=1.0, runs=2), "D1": 2.0, "F1": 1.0}
 
 
 def loop(tmp_path: Path, a1: str, extra: str = "") -> Path:

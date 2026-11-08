@@ -11,10 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Iterative calculation, for a workbook with iteration on (`<calcPr iterate="1">`), as Excel does it (captures
   `iterate_calc`, `calc_chain`, `iterate_open`): a run of up to `iterateCount` iterations from the values the cells hold, each
   computing the cells on and after circular references in place, in Excel's order (sheets by name, then row, then column),
-  until the largest change of a number is below `iterateDelta`. A file whose loop has no cached values, as openpyxl writes
-  it, gets what Excel saves after opening it: two runs, the first from the empty text (captures `iterate_uncached`,
-  `iterate_opening`). Every recalculation, an edit's and a save's included, is a
-  run, as in Excel. `ReadLimits.max_iteration_evaluations` (100,000,000 by default) bounds the cell evaluations of one run;
+  until the largest change of a number is below `iterateDelta`. A run happens where Excel runs one: an evaluating load
+  (as an opening), each edit, each recalculation and each save, so `Workbook.save` changes the values in memory too; a
+  trusting load runs nothing. `recalculate(path)` of a file it evaluates is a load and a save, two runs, which is what Excel
+  saves after opening the file, whether or not the loop has cached values; a loop with none starts from the empty text, as
+  in Excel (captures `iterate_uncached`, `iterate_opening`, `iterate_cached`). `ReadLimits.max_iteration_evaluations` (100,000,000 by default) bounds the cell evaluations of one run;
   past it, the cells keep their values and are reported.
 - `Report.from_kept`: a cell holding the cached value of a function or feature not implemented, and every
   cell computed from one. After a change upstream of the formula they move to `uncomputed` and keep the

@@ -59,6 +59,7 @@ def recalculate(
     """
     engine = load(source, quirks=quirks, limits=limits, trust_cached=not full)
     engine.recalculate(full=full)
+    engine.save_run()  # an opening, then a save: Excel's saved copy (§7.2)
     target = source if destination is None else destination
     edits, fills = array_edits(engine)
     write(

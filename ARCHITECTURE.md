@@ -508,13 +508,6 @@ evaluation pass ends, as Excel does:
   `IFERROR` and `ISERROR` see no error in it, while `ISNUMBER` says FALSE (capture `iterate_opening`).
   So `A1+1` alone ends at `#VALUE!`, and a loop whose first cell is `IFERROR(A2,0)+1` ends its first
   iteration with every cell `#VALUE!`, unchanged, and stops there.
-- **A file with no cached values gets two runs**, Excel's opening (from the empty text) and its
-  saving (from what the opening left, real errors that `IFERROR` catches), because that is what a
-  file holds once Excel has been through it, and what pandas and openpyxl readers see; what Excel
-  shows just after opening is a passing state it never stores (captures `iterate_uncached`,
-  `iterate_opening`, checked end to end in `tests/test_iteration.py`: an openpyxl file, then
-  `recalculate(path)`, against Excel's saved copy, bit for bit). A file with cached values keeps the
-  rule below: a trusting run changes nothing, and `full=True` runs once.
 - Each iteration computes every one of those cells **in place**, in Excel's order: sheets by name in
   Excel's text order (`a` before `B`, `10` before `9`, `é` before `f`; not tab order or sheet id),
   then by row, then by column. A cell reads what the others hold at that moment, the ones before it
@@ -526,17 +519,24 @@ evaluation pass ends, as Excel does:
   below it. A cell's change is `|new - old|`, where an old value that is not a number (an error,
   text, the empty text) counts as 0, and a new value that is not a number is no change: so
   `IFERROR(A1,0)+3` from an error stops after one iteration at a delta of 10 and goes on at 0.001.
-- Excel runs once on opening, on every recalculation and on saving: it marks a formula on a loop
-  "calculate always" (`<f ca="1">`). So every recalculation of the engine, `Workbook.save` included,
-  is a run, and any edit is followed by one, whether or not the loop reads the edited cell.
+- **When a run happens.** Excel runs a loop once on opening (it marks a loop's formulas "calculate
+  always", `<f ca="1">`), once for every edit, whether or not the loop reads the edited cell, once for
+  every `calculate`, and once on saving (captures `iterate_calc`, `iterate_cached`). The engine runs
+  where Excel does, with one departure: a trusting load runs nothing, so the file's values are the
+  ones Excel saved, though Excel would run once more on opening it. An evaluating load (`full=True`,
+  `trust_cached=False`, `fullCalcOnLoad`, or a loop without cached values) runs once, as an opening;
+  each edit runs once (the file's `ca="1"` formulas become stale, so a loop a trusting load never
+  met runs too); each recalculation runs once; and `Workbook.save` runs once more once a loop has
+  run, so saving changes the values in memory as well as the file's, as Excel's saving changes
+  what it shows. `recalculate(path)` is a load and a save: for a file it evaluates, two runs, which
+  is Excel's saved copy after opening the file, what pandas and openpyxl readers then see (checked
+  end to end in `tests/test_iteration.py`, from openpyxl files and from a file Excel saved).
 - A run may make at most `ReadLimits.max_iteration_evaluations` cell evaluations (100,000,000 by
   default; the corpora's largest need is 8,256 cells at 1,000 iterations). Past it, the cells keep
   the values they held and are reported as uncomputed under a label naming the limit. A run that
   reaches, through `INDIRECT` or `OFFSET`, a formula its pass did not evaluate (a lazy read
   evaluates only what it needs) is undone the same way, under a label saying so.
 
-A run that trusts cached values does not iterate: the file's values are the ones Excel saved, and
-Excel itself would run once more on opening it. `full=True` runs once from those values.
 
 What matches Excel exactly: each cell's arithmetic is the engine's, so a run gives Excel's doubles
 wherever every function on the loop does; where a function in it is within a declared tolerance,

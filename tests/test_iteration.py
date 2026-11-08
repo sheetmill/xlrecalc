@@ -186,6 +186,74 @@ def test_the_public_path_gives_excels_saved_copy(
     assert wrong == []
 
 
+def _cached_steps() -> dict[str, tuple[float, float]]:
+    rows = (CAPTURES / "iterate_cached.tsv").read_text(encoding="utf-8").splitlines()
+    fields = [r.split("\t") for r in rows if r and not r.startswith("#")]
+    steps: dict[str, list[float]] = defaultdict(list)
+    for step, _, _, v in fields:
+        steps[step].append(float(v))
+    return {k: (v[0], v[1]) for k, v in steps.items()}
+
+
+def _loop_values(path: Path) -> tuple[object, object]:
+    from xlrecalc._xlsx import Book
+
+    with Book(path) as book:
+        cells = {(c.row, c.column): c.value for c in book.cells("S")}
+    return cells[(1, 1)], cells[(2, 1)]
+
+
+@pytest.fixture
+def excel_saved(tmp_path: Path) -> Path:
+    """Excel's saved copy of an openpyxl loop: its cached values, chain and ``<f ca="1">``."""
+    path = tmp_path / "x.xlsx"
+    path.write_bytes((CAPTURES / "iterate_cached.xlsx").read_bytes())
+    return path
+
+
+def test_a_file_excel_saved_holds_what_the_capture_says(excel_saved: Path) -> None:
+    assert _loop_values(excel_saved) == _cached_steps()["x"]
+
+
+def test_a_trusting_recalculation_of_it_changes_nothing(excel_saved: Path) -> None:
+    import xlrecalc
+
+    xlrecalc.recalculate(excel_saved)
+    assert _loop_values(excel_saved) == _cached_steps()["x"]
+
+
+def test_a_full_recalculation_of_it_is_excels_opening_and_saving(excel_saved: Path) -> None:
+    import xlrecalc
+
+    xlrecalc.recalculate(excel_saved, full=True)
+    assert _loop_values(excel_saved) == _cached_steps()["open_save"]
+
+
+def test_an_untrusting_load_then_save_is_excels_opening_and_saving(excel_saved: Path) -> None:
+    import xlrecalc
+
+    wb = xlrecalc.load(excel_saved, trust_cached=False)
+    wb.save(excel_saved)
+    assert _loop_values(excel_saved) == _cached_steps()["open_save"]
+
+
+def test_an_edit_and_a_save_after_a_trusting_load_each_run_the_loop(excel_saved: Path) -> None:
+    """An edit to a cell the loop does not read runs it, as in Excel; so does the save.
+
+    Excel's own copy has one run more, its opening's: a trusting load does not run (§7.2).
+    """
+    import xlrecalc
+
+    wb = xlrecalc.load(excel_saved)
+    wb.set("S!C1", 1)
+    assert (wb.value("S!A1"), wb.value("S!A2")) == (399.0, 400.0)
+    wb.save(excel_saved)
+    assert (wb.value("S!A1"), wb.value("S!A2")) == _cached_steps()["open_save"]
+    assert _loop_values(excel_saved) == _cached_steps()["open_save"]
+    edit_save = _cached_steps()["open_edit_save"]
+    assert (edit_save[0] - 200, edit_save[1] - 200) == _cached_steps()["open_save"]
+
+
 def test_an_edit_after_a_trusting_load_runs_the_loop(tmp_path: Path) -> None:
     """Excel marks a loop's formulas ``ca="1"``; an edit to a cell nothing reads runs the loop."""
     import xlrecalc
