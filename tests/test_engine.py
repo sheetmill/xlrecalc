@@ -341,9 +341,28 @@ def test_every_empty_argument_row_has_a_baseline_that_is_no_error():
     assert [f for f in errors if not f.startswith(_BASELINE_IS_AN_ERROR)] == []
 
 
+def test_a_workbook_qualified_name_against_excel():
+    """``[0]!Rate`` is the workbook-level name, from any sheet (capture ``workbook_name``)."""
+    engine = Engine.from_cells({"s": {"B1": 3.0, "B2": 4.0, "B3": 5.0}, "t": {"B1": 50.0}})
+    engine.define_name("Rate", "s!$B$1")
+    engine.define_name("Range", "s!$B$1:$B$3")
+    engine.define_name("Rate", "t!$B$1", 1)
+    lines = (Path(__file__).parent / "captures" / "workbook_name.tsv").read_text(encoding="utf-8")
+    rows = [line.split("\t") for line in lines.splitlines() if not line.startswith("#")]
+    assert len(rows) == 7
+    for sheet, row, formula, *_ in rows:
+        engine.set_formula(engine.sheet_index(sheet), int(row) - 1, 0, formula)
+    engine.recalculate(full=True)
+    for sheet, row, formula, _, kind, value in rows:
+        got = engine.get(engine.sheet_index(sheet), int(row) - 1, 0)
+        expected = ErrorValue(value) if kind == "e" else float(value)
+        assert got == expected, (sheet, row, formula)
+    assert not engine.report.uncomputed
+
+
 def test_a_name_in_another_workbook_is_reported_like_any_external_reference():
-    """``[0]!Rate`` was a silent ``#REF!``; ``[1]Other!B2`` was already reported."""
-    engine = Engine.from_cells({"S": {"A1": "=[0]!_XX1/100", "A2": "=[1]Other!B2"}})
+    """``[1]!Rate`` names another workbook's name; ``[1]Other!B2`` was already reported."""
+    engine = Engine.from_cells({"S": {"A1": "=[1]!Rate/100", "A2": "=[1]Other!B2"}})
     engine.recalculate(full=True)
     assert engine.get(0, 0, 0) == engine.get(0, 1, 0) == ErrorValue.NAME
     assert engine.report.unsupported["external or 3-D reference"] == 2

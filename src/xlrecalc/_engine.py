@@ -1361,11 +1361,11 @@ class Engine:
     def rows(self, sheet: str | None, r1: int, r2: int) -> Ref | ErrorValue:
         return self.box(sheet, r1, 0, r2, MAX_COL)
 
-    def _name_text(self, name: str, sheet: int) -> str | None:
+    def _name_text(self, name: str, sheet: int | None) -> str | None:
         folded = name.casefold()
         return self.names.get((sheet, folded), self.names.get((None, folded)))
 
-    def _name_template(self, name: str, sheet: int) -> Template | None:
+    def _name_template(self, name: str, sheet: int | None) -> Template | None:
         key = (sheet, name.casefold())
         if key not in self._name_templates:
             text = self._name_text(name, sheet)
@@ -1388,12 +1388,13 @@ class Engine:
         return self._name_text(name, self.sheet)
 
     def name(self, sheet: str | None, name: str) -> Any:
-        if sheet is not None and "[" in sheet:  # [1]!Rate: a name in another workbook
+        workbook = sheet == "[0]"  # [0]!Rate: this workbook's own name (capture workbook_name)
+        if sheet is not None and "[" in sheet and not workbook:  # [1]!Rate: another workbook's
             return self.unsupported("external or 3-D reference")
-        scope = self.sheet if sheet is None else self.sheet_index(sheet)
+        scope = self.sheet if sheet is None or workbook else self.sheet_index(sheet)
         if scope is None:
             return REF
-        template = self._name_template(name, scope)
+        template = self._name_template(name, None if workbook else scope)
         if template is None:
             return NAME
         if template.unsupported:
