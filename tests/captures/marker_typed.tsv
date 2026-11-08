@@ -1,6 +1,6 @@
 # suite: marker_typed
 # excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-01
+# captured: 2026-11-08
 # generator: capture/marker_probe.py --typed (a person typed each formula into the
 #   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3; formula k in A<4k+1>)
 # columns: typed, file form, cm, f_t, f_ref, value (Python repr)
@@ -14,3 +14,12 @@
 '=INDEX(Z1:Z3,2)'	'INDEX(Z1:Z3,2)'	None	'normal'	None	2.0
 '=ABS(Z1:Z3)'	'ABS(Z1:Z3)'	'1'	'array'	'A33:A35'	1.0
 '=Z1:Z3'	'Z1:Z3'	'1'	'array'	'A37:A39'	1.0
+'=SEQUENCE(1)'	'_xlfn.SEQUENCE(1)'	'1'	'array'	'A41'	1.0
+'=SEQUENCE(1,1,5)'	'_xlfn.SEQUENCE(1,1,5)'	'1'	'array'	'A45'	5.0
+'=MMULT(Z1,Z2)'	'MMULT(Z1,Z2)'	'1'	'array'	'A49'	2.0
+'=UNIQUE(Z1)'	'_xlfn.UNIQUE(Z1)'	'1'	'array'	'A53'	1.0
+'=SORT(Z2)'	'_xlfn._xlws.SORT(Z2)'	'1'	'array'	'A57'	2.0
+'=SORTBY(Z1,Z2)'	'_xlfn.SORTBY(Z1,Z2)'	'1'	'array'	'A61'	1.0
+'=FILTER(Z1:Z3,Z1:Z3=2)'	'_xlfn._xlws.FILTER(Z1:Z3,Z1:Z3=2)'	'1'	'array'	'A65'	2.0
+'=SUM(SEQUENCE(3))'	'SUM(_xlfn.SEQUENCE(3))'	None	'normal'	None	6.0
+'=ROWS(UNIQUE(Z1:Z3))'	'ROWS(_xlfn.UNIQUE(Z1:Z3))'	None	'normal'	None	3.0

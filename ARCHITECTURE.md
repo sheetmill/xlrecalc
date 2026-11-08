@@ -1235,7 +1235,6 @@ One workbook is used from one thread at a time.
 | custom functions | a design of their own: registration per workbook or engine, not process-wide; a rule for a file naming a function not installed; they take references too, so unions and arrays of references are designed with them |
 | the `_xlsx` subpackage's future | extracted into its own package once a second user (sheetpeek) needs its API |
 | numpy | optional extra, never required |
-| a formula set through the API that calls a function making arrays and has a one-cell result | written with the dynamic-array marker, so that it spills when its data grows (Excel opens it so); whether Excel marks such a typed formula needs a capture typed in the formula bar |
 
 ## 13. Roadmap
 

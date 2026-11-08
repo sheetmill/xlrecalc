@@ -10,9 +10,10 @@ import re
 from typing import BinaryIO, TypeAlias
 
 from xlrecalc._engine import Engine, node
-from xlrecalc._formula import FormulaSyntaxError, TokenizeError, tokenize
+from xlrecalc._formula import FormulaSyntaxError, TokenizeError, parse, tokenize
 from xlrecalc._formula._fastkey import translate
 from xlrecalc._formula._fileform import display_form, file_form
+from xlrecalc._formula._nodes import Call, Group
 from xlrecalc._formula._tokens import Kind, column_number
 from xlrecalc._load import load as _load_engine
 from xlrecalc._load import refused_in_file
@@ -233,7 +234,7 @@ class Workbook:
             # text read as a legacy formula (an @ written out as _xlfn.SINGLE) tells whether
             # the file needs the dynamic-array marker: an implicit intersection anywhere else.
             template = engine.templates[engine.template_for(text, row, col)]
-            intersects = template.intersects or bool(template.calls & _ARRAY_MAKERS)
+            intersects = template.intersects or _makes_array(text)
             engine.set_formula(sheet, row, col, text, array=(True, (row, col, row, col)))
         except (FormulaSyntaxError, TokenizeError) as exc:
             raise FormulaError(f"{formula!r}: {exc}") from exc
@@ -248,7 +249,9 @@ class Workbook:
         A formula set here is a dynamic array; as Excel writes a typed formula (capture
         ``marker_typed``), it is marked when a legacy formula would mean something else: it
         spills, or takes an implicit intersection other than an explicit ``@`` (``=@A1:A3`` is
-        written as the plain ``A1:A3``). A dynamic array read from the file stays one.
+        written as the plain ``A1:A3``), or its outermost call makes an array, whatever the size of
+        the result (``SEQUENCE(1)``, not ``SUM(SEQUENCE(3))``). A dynamic array read from the file
+        stays one.
         """
         anchor = self._engine.anchors.get(node(sheet, row, col))
         if anchor is None:
@@ -331,8 +334,9 @@ class Workbook:
         )
 
 
-# A formula calling one of these is written as a dynamic array whatever the size of its result,
-# so that it spills when its data grows (Excel opens it so: captures dyn_*).
+# A formula whose outermost call is one of these is written as a dynamic array whatever the
+# size of its result, as Excel writes it typed; one wrapped in another function, such as
+# SUM(SEQUENCE(3)), is not (capture marker_typed).
 _ARRAY_MAKERS = frozenset(
     {
         "_XLFN.SEQUENCE",
@@ -343,6 +347,20 @@ _ARRAY_MAKERS = frozenset(
         "_XLFN._XLWS.FILTER",
     }
 )
+
+
+def _makes_array(text: str) -> bool:
+    """Whether a formula (file form) is a call of a function that makes an array."""
+    try:
+        root = parse(text).root
+    except (FormulaSyntaxError, TokenizeError):
+        return False
+    while isinstance(root, Group):
+        root = root.inner
+    if not isinstance(root, Call):
+        return False
+    name = (root.prefix.text if root.prefix is not None else "") + root.name.text
+    return name.upper() in _ARRAY_MAKERS
 
 
 def _file_formula(formula: str, dynamic: bool = False) -> str:

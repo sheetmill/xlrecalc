@@ -23,8 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `FILTER`: the rows, or columns, whose include is TRUE or a number other than 0 (a text is `#VALUE!`, an include of
     another length or two-dimensional is `#VALUE!`); when none is left, `if_empty`, an array included, or `#CALC!`.
 
-  A formula calling one of them, set through `set_formula`, is written as a dynamic array whatever the size of its
-  result, so that it spills when its data grows.
+  A formula set through `set_formula` whose outermost call is one of them is written as a dynamic array whatever the size
+  of its result, as Excel writes it typed, so that it spills when its data grows; wrapped in another function, as in
+  `SUM(SEQUENCE(3))`, it is not (capture `marker_typed`).
   A file holding `SORT` or `FILTER` without its `_xlfn._xlws.` prefix, or one of these functions with an argument count
   it does not take, does not open in Excel: such a formula keeps the value it holds and is reported in `Report.refused`.
   `UNIQUE`, `SORTBY` and `SEQUENCE` without their prefix are names Excel does not know, `#NAME?`. A `#CALC!` Excel
