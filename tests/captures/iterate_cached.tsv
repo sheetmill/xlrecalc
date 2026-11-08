@@ -1,0 +1,14 @@
+# suite: iterate_cached
+# excel: 16.114.3 for Mac, locale en_US
+# captured: 2026-11-07
+# generator: capture/iterate_cached_probe.py
+# method: x is Excel's saved copy of the openpyxl loop (kept as iterate_cached.xlsx);
+#   open_save is Excel opening x and saving a copy; open_edit_save is Excel opening x,
+#   entering 1 in S!C1 (read by nothing) and saving a copy
+# columns: step cell type value
+x	S!A1	n	199
+x	S!A2	n	200
+open_save	S!A1	n	599
+open_save	S!A2	n	600
+open_edit_save	S!A1	n	799
+open_edit_save	S!A2	n	800
