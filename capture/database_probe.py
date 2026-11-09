@@ -13,7 +13,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from capture.pipeline import CAPTURES, Case, run_excel
+from capture.edition import edition_line
+from capture.pipeline import CAPTURES, Case, excel_version, run_excel
 from capture.suites import _DB_EXTRA, MISC_TABLE, database_errors_all
 
 FIXED = {**MISC_TABLE, **_DB_EXTRA}
@@ -52,7 +53,12 @@ def main() -> None:
                     raise SystemExit(f"{case.formula}: accepted where DSUM's form was refused")
                 refused.append(case.formula)
     path: Path = CAPTURES / "database_refused.tsv"
-    lines = ["# formulas Excel refuses in a file (capture/database_probe.py)", *refused]
+    lines = [
+        "# formulas Excel refuses in a file (capture/database_probe.py)",
+        f"# excel: {excel_version()} for Mac, locale en_US",
+        edition_line(),
+        *refused,
+    ]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"{len(cases)} formulas, {count} opens, {len(refused)} refused -> {path.name}")
 

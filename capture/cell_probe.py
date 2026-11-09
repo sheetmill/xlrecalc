@@ -20,6 +20,7 @@ from pathlib import Path
 
 import openpyxl
 
+from capture.edition import edition_line
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from xlrecalc._xlsx import Book
 
@@ -85,6 +86,7 @@ def main() -> None:
     header = [
         "# suite: cell_noref",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/cell_probe.py",
         "# method: three workbooks differing in the active sheet and the sheets' active cells;",

@@ -2811,7 +2811,8 @@ def database_family() -> list[Case]:
             cases.append(Case(fn.lower(), f"{fn}(FA:FC,{field},FG:FG)"))
             cases.append(Case(fn.lower(), f"{fn}(FA1:FC1048576,{field},FE:FE)"))
     path = Path(__file__).resolve().parents[1] / "tests/captures/database_refused.tsv"
-    refused = {line for line in path.read_text(encoding="utf-8").split("\n")[1:] if line}
+    lines = path.read_text(encoding="utf-8").split("\n")
+    refused = {line for line in lines if line and not line.startswith("# ")}
     return cases + [case for case in database_errors_all() if case.formula not in refused]
 
 
@@ -3504,7 +3505,8 @@ def empty_args_all() -> list[Case]:
 
 def empty_args() -> list[Case]:
     path = Path(__file__).resolve().parents[1] / "tests/captures/empty_args_refused.tsv"
-    refused = {line for line in path.read_text(encoding="utf-8").split("\n")[1:] if line}
+    lines = path.read_text(encoding="utf-8").split("\n")
+    refused = {line for line in lines if line and not line.startswith("# ")}
     return [case for case in empty_args_all() if case.formula not in refused]
 
 

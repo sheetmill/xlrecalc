@@ -17,6 +17,7 @@ from pathlib import Path
 
 import openpyxl
 
+from capture.edition import edition_line
 from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from xlrecalc._xlsx import Book
@@ -127,6 +128,7 @@ def main() -> None:
     header = [
         "# suite: hidden_rows",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/hidden_probe.py",
         "# method: rows hidden by a filter (filterMode, a filter column) or by hand; Excel",

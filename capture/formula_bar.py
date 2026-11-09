@@ -25,6 +25,7 @@ import sys
 from pathlib import Path
 
 from capture.corpus_filter import SIDE_EFFECTS
+from capture.edition import edition_line
 from capture.formula_forms import CONTAINER, build, corpus, excel_version, saved_formulas
 from capture.functions_list import FUNCTIONS
 from xlrecalc._formula._fileform import display_form
@@ -109,6 +110,7 @@ def main() -> None:
     header = [
         f"# suite: {output.stem}",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/formula_bar.py (corpus in display form, and one call per function)",
         "# method: each formula is set as a cell's formula through AppleScript, as typed in the",

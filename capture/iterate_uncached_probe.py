@@ -19,6 +19,7 @@ from __future__ import annotations
 import datetime as dt
 import sys
 
+from capture.edition import edition_line
 from capture.iterate_probe import HERE, US, Sheets, build, osascript, saved_values
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 
@@ -117,6 +118,7 @@ def main(
     header = [
         f"# suite: {suite}",
         f"# excel: {excel_version()} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         f"# generator: {generator}",
         "# method: each variant as three files: no cached values with fullCalcOnLoad and",

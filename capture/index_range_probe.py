@@ -19,6 +19,7 @@ from pathlib import Path
 import openpyxl
 from openpyxl.utils import get_column_letter
 
+from capture.edition import edition_line
 from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from xlrecalc._xlsx import Book
@@ -109,6 +110,7 @@ def main() -> None:
     rows = [
         "# suite: index_range",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/index_range_probe.py",
         "# columns: formula, cell, type, value (repr), in the copy Excel saved",

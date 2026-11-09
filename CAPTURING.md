@@ -74,8 +74,8 @@ people's workbooks are used.
 | `array_functions` | 41 | the `SUMIF` family, `DSUM`, `CORREL` and `ROW` times `COLUMN` over one column, ten and every column of another sheet, with Excel's memory: Excel's value, or the file's value kept |
 | `circular`, `circular_alerts` | 16 each | circular references with iteration off: what Excel saves and shows, alerts off and on (the second interactive; [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §7.2) |
 
-All live in `tests/captures/` as TSV files with a header: suite, Excel build and locale, date
-system, capture date, generator and method. `tests/test_captures.py` and
+All live in `tests/captures/` as TSV files with a header: suite, Excel build and locale, edition
+and update channel (§2), date system, capture date, generator and method. `tests/test_captures.py` and
 `tests/test_formula_forms.py` compare the package with them: each suite becomes one engine
 sheet laid out as Excel's workbook was, and every formula cell must equal what Excel saved.
 
@@ -134,6 +134,16 @@ error"), which is how probes detect a repair prompt without a person at the keyb
 captures: they open a file with alerts on and wait for a person to accept the repair or
 dismiss the circular-reference warning. `capture/marker_probe.py --typed` reads a workbook a
 person typed formulas into and saved (AppleScript can only enter legacy formulas).
+
+**The edition is part of the evidence.** The build number does not say which functions Excel has:
+Office Home & Business 2021 for Mac at 16.114.4 lacks `LAMBDA` and its helpers, which Microsoft 365
+and Excel 2024 at the same build have. Every capture header records the edition and the update
+channel beside the build (`# edition: Office Home & Business 2021, update channel Current`;
+`capture/edition.py`). No file on the Mac states the license plainly, so the person capturing
+states the edition, as shown in Excel > About Excel, in `capture/build/excel_edition.txt` or the
+variable `XLRECALC_EXCEL_EDITION`, and a capture refuses to run without it; the channel is
+Microsoft AutoUpdate's. A capture without the line was made before the rule, under Office Home &
+Business 2021 for Mac.
 
 **Facts the method relies on** (openpyxl 3.1.5, Excel 16.114.3):
 

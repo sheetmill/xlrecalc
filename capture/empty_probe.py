@@ -14,7 +14,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from capture.pipeline import CAPTURES, Case, run_excel
+from capture.edition import edition_line
+from capture.pipeline import CAPTURES, Case, excel_version, run_excel
 from capture.suites import _EMPTY_TABLE, empty_args_all
 
 BATCH = 60
@@ -54,7 +55,12 @@ def main() -> None:
     for start in range(0, len(cases), BATCH):
         walk(cases[start : start + BATCH])
     path: Path = CAPTURES / "empty_args_refused.tsv"
-    lines = ["# formulas Excel refuses in a file (capture/empty_probe.py)", *refused]
+    lines = [
+        "# formulas Excel refuses in a file (capture/empty_probe.py)",
+        f"# excel: {excel_version()} for Mac, locale en_US",
+        edition_line(),
+        *refused,
+    ]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"{len(cases)} formulas, {opens} opens, {len(refused)} refused -> {path.name}")
 

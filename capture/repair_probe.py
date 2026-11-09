@@ -31,6 +31,7 @@ from pathlib import Path
 import openpyxl
 from openpyxl.worksheet.table import Table
 
+from capture.edition import edition_line
 from capture.pipeline import CAPTURES, CONTAINER, NS, excel_version
 
 HERE = Path(__file__).resolve().parent
@@ -149,6 +150,7 @@ def main() -> None:
     header = [
         f"# suite: {suite}",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/repair_probe.py",
         "# method: openpyxl writes each formula into column A with the cached value 100+row and",

@@ -26,6 +26,7 @@ from pathlib import Path
 
 import openpyxl
 
+from capture.edition import edition_line
 from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from capture.repair_probe import saved_cells
@@ -180,6 +181,7 @@ def main() -> None:
     header = [
         "# suite: circular_cached",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/circular_cached_probe.py",
         "# method: iteration off; a real loop whose file holds sentinel cached values, in a file",

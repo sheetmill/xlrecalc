@@ -33,6 +33,7 @@ from pathlib import Path
 import openpyxl
 from openpyxl.utils import get_column_letter
 
+from capture.edition import edition_line
 from capture.excel_watch import osascript_or_exit
 from xlrecalc._values import ErrorValue
 
@@ -214,6 +215,7 @@ def write_suite(
     header = [
         f"# suite: {name}",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# date_system: {'1904' if date1904 else '1900'}",
         f"# captured: {dt.date.today().isoformat()}",
         f"# generator: {generator}",

@@ -25,6 +25,8 @@ import openpyxl
 from openpyxl.workbook.defined_name import DefinedName
 from openpyxl.worksheet.table import Table
 
+from capture.edition import edition_line
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
@@ -136,6 +138,7 @@ def write(path: Path, rows: list[tuple[str, str | None]], version: str) -> None:
     header = [
         "# suite: formula_forms",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         "# generator: capture/formula_forms.py (formulas from tests/formula_corpus.py)",
         "# method: openpyxl writes each formula into <f>; Excel opens the workbook and saves a",
         "#   copy; the column excel is the <f> text of the copy, or REFUSED when Excel refuses",

@@ -23,6 +23,7 @@ from pathlib import Path
 import openpyxl
 from openpyxl.workbook.defined_name import DefinedName
 
+from capture.edition import edition_line
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from xlrecalc._xlsx import Book
 
@@ -163,6 +164,7 @@ def main() -> None:
     header = [
         "# suite: dynrefs",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/dynref_probe.py",
         "# method: legacy formulas written by openpyxl (column A, and placed cells in column C);",

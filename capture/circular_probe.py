@@ -26,6 +26,7 @@ from pathlib import Path
 
 import openpyxl
 
+from capture.edition import edition_line
 from capture.pipeline import CAPTURES, CONTAINER, excel_version, read_results, result_repr
 from capture.repair_probe import saved_cells
 
@@ -133,6 +134,7 @@ def interactive() -> None:
     header = [
         "# suite: circular_alerts",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/circular_probe.py --interactive",
         "# method: openpyxl writes the formulas into column A (constants in B, no cached values,",
@@ -177,6 +179,7 @@ def main() -> None:
     header = [
         "# suite: circular",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/circular_probe.py",
         "# method: openpyxl writes the formulas into column A (constants in B, no cached values,",

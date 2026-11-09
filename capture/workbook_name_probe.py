@@ -21,6 +21,7 @@ from xml.etree import ElementTree as ET
 import openpyxl
 from openpyxl.workbook.defined_name import DefinedName
 
+from capture.edition import edition_line
 from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 
@@ -82,6 +83,7 @@ def main() -> None:
     lines = [
         "# suite: workbook_name",
         f"# excel: {excel_version()} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/workbook_name_probe.py",
         "# method: workbook-level Rate (s!$B$1 = 3) and Range (s!$B$1:$B$3 = 3, 4, 5),",

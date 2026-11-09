@@ -20,6 +20,7 @@ from pathlib import Path
 import openpyxl
 from openpyxl.workbook.defined_name import DefinedName
 
+from capture.edition import edition_line
 from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from xlrecalc._report import column_letters
@@ -195,6 +196,7 @@ def main() -> None:
     header = [
         "# suite: names",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/name_probe.py",
         "# method: legacy formulas written by openpyxl into column A; Excel calculates and saves a",

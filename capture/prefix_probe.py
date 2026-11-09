@@ -18,6 +18,7 @@ from pathlib import Path
 
 import openpyxl
 
+from capture.edition import edition_line
 from capture.pipeline import CAPTURES, CONTAINER, excel_version, read_results, result_repr
 
 HERE = Path(__file__).resolve().parent
@@ -92,6 +93,7 @@ def main() -> None:
     header = [
         "# suite: prefixes",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/prefix_probe.py",
         "# method: each call written by openpyxl with and without _xlfn.; Excel calculates and",

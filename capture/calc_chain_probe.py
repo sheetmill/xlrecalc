@@ -24,6 +24,7 @@ import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
+from capture.edition import edition_line
 from capture.iterate_probe import HERE, NS, REL, US, Sheets, build, osascript, saved_values
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 
@@ -144,6 +145,7 @@ def run(made: list[Path]) -> None:
     header = [
         "# suite: calc_chain",
         f"# excel: {excel_version()} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/calc_chain_probe.py",
         "# method: a loop saved by Excel, then its chain kept, reversed or removed, cached values",

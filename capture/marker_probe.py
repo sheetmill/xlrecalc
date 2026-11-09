@@ -27,6 +27,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from capture.edition import edition_line
 from capture.strip import strip
 from xlrecalc._xlsx import Book
 
@@ -193,6 +194,7 @@ def read_typed(*paths: Path) -> None:
     header = [
         "# suite: marker_typed",
         f"# excel: {excel_version()} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/marker_probe.py --typed (a person typed each formula into the",
         "#   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3; formula k in A<4k+1>;",
@@ -272,6 +274,7 @@ def main() -> None:
     header = [
         f"# suite: marker_{way}",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/marker_probe.py",
         f"# method: each formula entered through AppleScript's {way} of a cell, as typed; Excel",

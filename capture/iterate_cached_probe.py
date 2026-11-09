@@ -17,6 +17,7 @@ from __future__ import annotations
 import datetime as dt
 import sys
 
+from capture.edition import edition_line
 from capture.iterate_probe import HERE, build, osascript, saved_values
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from capture.strip import strip
@@ -53,6 +54,7 @@ def main() -> None:
     header = [
         "# suite: iterate_cached",
         f"# excel: {excel_version()} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/iterate_cached_probe.py",
         "# method: x is Excel's saved copy of the openpyxl loop (kept as iterate_cached.xlsx);",

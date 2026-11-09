@@ -35,6 +35,7 @@ from openpyxl.workbook.defined_name import DefinedName
 from openpyxl.worksheet.formula import ArrayFormula
 
 from capture.array_probe import add_dynamic
+from capture.edition import edition_line
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from xlrecalc._xlsx import Book
 from xlrecalc._xlsx._write import number_text
@@ -288,6 +289,7 @@ def main() -> None:
     header = [
         "# suite: array_refs",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/array_ref_probe.py",
         "# method: plain, legacy array and dynamic-array formulas over a data block; Excel",

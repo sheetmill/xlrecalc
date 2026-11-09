@@ -21,6 +21,7 @@ from pathlib import Path
 
 import openpyxl
 
+from capture.edition import edition_line
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from xlrecalc._xlsx import Book
 
@@ -114,6 +115,7 @@ def main() -> None:
     header = [
         "# suite: whitespace",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/space_probe.py",
         "# method: each case written without xml:space as an inline string (column A) and a",

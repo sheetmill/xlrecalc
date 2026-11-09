@@ -24,6 +24,8 @@ from pathlib import Path
 
 import openpyxl
 
+from capture.edition import edition_line
+
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 CONTAINER = Path.home() / "Library/Containers/com.microsoft.Excel/Data/Documents/xlrecalc"
@@ -142,6 +144,7 @@ def main() -> None:
         print(rows[-1], flush=True)
     header = [
         f"# suite: value_forms (capture.value_probe); Excel {version} for Mac, en_US",
+        edition_line(),
         f"# captured: {datetime.date.today()}; method: openpyxl's workbook with A1 rewritten in "
         "the sheet XML, opened with alerts off and saved as a copy",
         "# A1 = 111 rewritten as the case says, B1 = A1*2; values as type:value from Excel's copy; "

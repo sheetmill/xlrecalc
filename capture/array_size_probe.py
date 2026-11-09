@@ -33,6 +33,8 @@ import zipfile
 from pathlib import Path
 from xml.sax.saxutils import escape
 
+from capture.edition import edition_line
+
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 CONTAINER = Path.home() / "Library/Containers/com.microsoft.Excel/Data/Documents/xlrecalc"
@@ -256,6 +258,7 @@ def main() -> None:
     header = [
         f"# suite: {'array_functions' if functions else 'array_size'} "
         f"(capture.array_size_probe); Excel {version} for Mac, en_US",
+        edition_line(),
         f"# captured: {datetime.date.today()}; each step: result (seconds, Excel's peak "
         "physical footprint during the step); smallest case first, the run ends at a step "
         "past its time limit or Excel past 8 GB",

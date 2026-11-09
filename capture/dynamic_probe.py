@@ -24,6 +24,7 @@ import openpyxl
 
 from capture.array_probe import add_dynamic
 from capture.dynamic_suites import BLOCK, SUITES, anchor_of, layout
+from capture.edition import edition_line
 from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from xlrecalc._values import ErrorValue
@@ -89,6 +90,7 @@ def run(suite: str) -> None:
     header = [
         f"# suite: dyn_{suite}",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/dynamic_probe.py",
         "# method: dynamic-array formulas (cm=1 with the XLDAPR metadata), one per block of "

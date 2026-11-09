@@ -28,6 +28,7 @@ from pathlib import Path
 import openpyxl
 
 import xlrecalc
+from capture.edition import edition_line
 from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER, excel_version, read_results, result_repr
 
@@ -122,6 +123,7 @@ def main() -> None:
     header = [
         "# suite: iterate_open",
         f"# excel: {version} for Mac, locale en_US",
+        edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/iterate_open_probe.py",
         "# method: a workbook per variant, cached values written into its XML, opened alone with",
