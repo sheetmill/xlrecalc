@@ -100,8 +100,9 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
   match, bit for bit or within a small tolerance declared per function (a few units in the last
   place, or a relative 1E-9 for the iterative functions), 423 known deviations, each listed
   with its reason in
-  [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md). Every one of
-  them is evaluated. The largest group of deviations is `CUMIPMT` and `CUMPRINC` at tiny rates
+  [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md). Each listed
+  deviation is still computed and compared with Excel on every test run, and one that starts to
+  match fails the run, so the list cannot go stale. The largest group of deviations is `CUMIPMT` and `CUMPRINC` at tiny rates
   and in tiny principals, where Excel's result carries noise past their tolerance (85 rows).
   Among the others, from some starting guesses
   Excel's `IRR` and `RATE` reach another root

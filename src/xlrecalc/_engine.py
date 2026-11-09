@@ -907,7 +907,8 @@ class Engine:
 
         Each iteration computes every one in Excel's order, in place, reading what the others
         hold; the run stops after ``iterate_count`` iterations, or after the first in which no
-        number changed by ``iterate_delta`` or more (a change between kinds does not count).
+        number changed by ``iterate_delta`` or more (an old value that is not a number counts as 0,
+        and a new one that is not a number is no change).
         Past ``max_iteration_evaluations`` the cells keep the values they held before the run.
         """
         self._iteration_due = False

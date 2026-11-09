@@ -789,7 +789,8 @@ def test_stated_evidence_is_the_capture_run(page):
     text = " ".join((Path(__file__).parents[1] / page).read_text(encoding="utf-8").split())
     found = re.search(
         r"([\d,]+) formulas computed by Excel.*?([\d,]+) match.*?"
-        r"([\d,]+) known deviations.*?(?:([\d,]+) not evaluated|Every one of them is evaluated)",
+        r"([\d,]+) known deviations.*?"
+        r"(?:([\d,]+) not evaluated|Each listed deviation is still computed)",
         text,
     )
     assert found, f"{page}: the evidence sentence is missing"
