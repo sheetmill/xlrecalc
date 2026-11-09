@@ -396,7 +396,7 @@ library differs in the last bits; the rows that match either way do not.
 | `QUOTIENT` | math | implemented | 207 | 207 | 0 | 0 | 0 |  |  |
 | `RADIANS` | math | implemented | 30 | 30 | 0 | 0 | 0 |  |  |
 | `RAND` | math | implemented | 3 | 2 | 0 | 0 | 1 |  |  |
-| `RANDARRAY` | math | implemented | 25 | 15 | 0 | 0 | 4 |  |  |
+| `RANDARRAY` | math | implemented | 27 | 17 | 0 | 0 | 4 |  |  |
 | `RANDBETWEEN` | math | implemented | 8 | 6 | 0 | 0 | 2 |  |  |
 | `RANK` | statistical | implemented | 20 | 20 | 0 | 0 | 0 |  |  |
 | `RANK.AVG` | statistical | implemented | 20 | 20 | 0 | 0 | 0 |  |  |

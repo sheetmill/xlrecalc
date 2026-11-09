@@ -184,8 +184,12 @@ def _randarray(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
 
     Counts are truncated, 0 is ``#CALC!`` and a negative one ``#VALUE!``; ``min`` above ``max``,
     or bounds that are not whole with ``whole_number``, are ``#VALUE!`` (capture
-    ``dyn_randarray``). New at every calculation.
+    ``dyn_randarray``); an array of counts or bounds is taken element by element. New at every
+    calculation.
     """
+    lifted = _spread(ctx, _randarray, given, (0, 1, 2, 3), ranges)
+    if lifted is not None:
+        return lifted
     padded: list[Any] = [*given, *[MISSING] * (5 - len(given))]
     rows, cols, low, high, whole = padded
     numbers = [

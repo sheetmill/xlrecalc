@@ -791,6 +791,9 @@ RANDARRAY = [
         ),
     ),
     DynCase(f"{RA}(2,1,0,0,TRUE)"),
+    # counts given as arrays, the bounds leaving one value
+    DynCase(f"{RA}({{2,3}},1,5,5)"),
+    DynCase(f"{RA}(2,{{1,2}},5,5)"),
 ]
 
 # Formulas that make Excel refuse the file (error -50 on opening, each alone in a workbook):

@@ -250,8 +250,10 @@ input	dynamic	B181	'_xlfn.RANDARRAY(1,4,-3,-1,TRUE)'
 input	reader	N181	'COLUMNS(_xlfn.ANCHORARRAY(B181))'
 input	reader	N182	'SUMPRODUCT((_xlfn.ANCHORARRAY(B181)>=-3)*(_xlfn.ANCHORARRAY(B181)<=-1)*(INT(_xlfn.ANCHORARRAY(B181))=_xlfn.ANCHORARRAY(B181)))'
 input	dynamic	B193	'_xlfn.RANDARRAY(2,1,0,0,TRUE)'
-cell	B1	n	'0.26591645728496305'	'_xlfn.RANDARRAY(3,2)'	array	B1:C3	1	
-cell	C1	n	'0.1207875990005014'	None	normal			
+input	dynamic	B205	'_xlfn.RANDARRAY({2,3},1,5,5)'
+input	dynamic	B217	'_xlfn.RANDARRAY(2,{1,2},5,5)'
+cell	B1	n	'0.8984356520276948'	'_xlfn.RANDARRAY(3,2)'	array	B1:C3	1	
+cell	C1	n	'0.3119569720193467'	None	normal			
 cell	N1	n	'3'	'ROWS(_xlfn.ANCHORARRAY(B1))'	normal			
 cell	AA1	n	'3'	None				
 cell	AB1	s	'pear'	None				
@@ -306,8 +308,8 @@ cell	CF1	n	'0'	None
 cell	CG1	n	'1'	None				
 cell	CH1	s	'a,b,c'	None				
 cell	CI1	s	','	None				
-cell	B2	n	'0.017520978184104807'	None	normal			
-cell	C2	n	'0.19828507303816134'	None	normal			
+cell	B2	n	'0.6356944588710196'	None	normal			
+cell	C2	n	'0.3871108603602629'	None	normal			
 cell	N2	n	'2'	'COLUMNS(_xlfn.ANCHORARRAY(B1))'	normal			
 cell	AA2	n	'1'	None				
 cell	AB2	s	'Apple'	None				
@@ -359,8 +361,8 @@ cell	CF2	n	'2.5'	None
 cell	CG2	n	'2'	None				
 cell	CH2	s	'x;y,z'	None				
 cell	CI2	s	';'	None				
-cell	B3	n	'0.11564559872386648'	None	normal			
-cell	C3	n	'0.6453543025675612'	None	normal			
+cell	B3	n	'0.45154296291166784'	None	normal			
+cell	C3	n	'0.1552372921843066'	None	normal			
 cell	N3	n	'6'	'SUMPRODUCT((_xlfn.ANCHORARRAY(B1)>=0)*(_xlfn.ANCHORARRAY(B1)<1))'	normal			
 cell	AA3	n	'4'	None				
 cell	AB3	s	'apple'	None				
@@ -467,31 +469,31 @@ cell	CC10	s	'x'	None
 cell	AC11	e	'#DIV/0!'	None				
 cell	AC12	str	''	'""'	normal			
 cell	CC12	b	True	None				
-cell	B13	n	'0.3607500931653591'	'_xlfn.RANDARRAY()'	array	B13	1	
+cell	B13	n	'0.6122627020508722'	'_xlfn.RANDARRAY()'	array	B13	1	
 cell	N13	n	'1'	'ROWS(_xlfn.ANCHORARRAY(B13))'	normal			
 cell	CC13	n	'70'	None				
 cell	N14	n	'1'	'COLUMNS(_xlfn.ANCHORARRAY(B13))'	normal			
 cell	N15	n	'1'	'SUMPRODUCT((_xlfn.ANCHORARRAY(B13)>=0)*(_xlfn.ANCHORARRAY(B13)<1))'	normal			
-cell	B25	n	'5.530202908224926'	'_xlfn.RANDARRAY(2,3,5,7)'	array	B25:D26	1	
-cell	C25	n	'6.904261435395663'	None	normal			
-cell	D25	n	'6.803364328187857'	None	normal			
+cell	B25	n	'5.60331801592788'	'_xlfn.RANDARRAY(2,3,5,7)'	array	B25:D26	1	
+cell	C25	n	'5.120768341072808'	None	normal			
+cell	D25	n	'6.938716656584357'	None	normal			
 cell	N25	n	'2'	'ROWS(_xlfn.ANCHORARRAY(B25))'	normal			
-cell	B26	n	'5.825588652479736'	None	normal			
-cell	C26	n	'5.4328415730682895'	None	normal			
-cell	D26	n	'5.725037427537171'	None	normal			
+cell	B26	n	'6.774792861479383'	None	normal			
+cell	C26	n	'5.2755585219068415'	None	normal			
+cell	D26	n	'5.885295423964542'	None	normal			
 cell	N26	n	'3'	'COLUMNS(_xlfn.ANCHORARRAY(B25))'	normal			
 cell	N27	n	'6'	'SUMPRODUCT((_xlfn.ANCHORARRAY(B25)>=5)*(_xlfn.ANCHORARRAY(B25)<=7))'	normal			
-cell	B37	n	'6'	'_xlfn.RANDARRAY(4,2,1,6,TRUE)'	array	B37:C40	1	
-cell	C37	n	'2'	None	normal			
+cell	B37	n	'2'	'_xlfn.RANDARRAY(4,2,1,6,TRUE)'	array	B37:C40	1	
+cell	C37	n	'1'	None	normal			
 cell	N37	n	'4'	'ROWS(_xlfn.ANCHORARRAY(B37))'	normal			
 cell	B38	n	'3'	None	normal			
-cell	C38	n	'4'	None	normal			
+cell	C38	n	'6'	None	normal			
 cell	N38	n	'8'	'SUMPRODUCT((_xlfn.ANCHORARRAY(B37)>=1)*(_xlfn.ANCHORARRAY(B37)<=6))'	normal			
-cell	B39	n	'4'	None	normal			
-cell	C39	n	'3'	None	normal			
+cell	B39	n	'5'	None	normal			
+cell	C39	n	'5'	None	normal			
 cell	N39	n	'8'	'SUMPRODUCT(--(INT(_xlfn.ANCHORARRAY(B37))=_xlfn.ANCHORARRAY(B37)))'	normal			
-cell	B40	n	'6'	None	normal			
-cell	C40	n	'1'	None	normal			
+cell	B40	n	'1'	None	normal			
+cell	C40	n	'2'	None	normal			
 cell	B49	n	'5'	'_xlfn.RANDARRAY(2,2,5,5)'	array	B49:C50	1	
 cell	C49	n	'5'	None	normal			
 cell	B50	n	'5'	None	normal			
@@ -502,19 +504,23 @@ cell	B85	e	'#VALUE!'	'_xlfn.RANDARRAY(2,2,5,1)'	array	B85	1
 cell	B97	e	'#VALUE!'	'_xlfn.RANDARRAY(2,2,1.5,2.5,TRUE)'	array	B97	1	
 cell	B109	e	'#VALUE!'	'_xlfn.RANDARRAY("a")'	array	B109	1	
 cell	B121	e	'#N/A'	'_xlfn.RANDARRAY(#N/A)'	array	B121	1	
-cell	B133	n	'0.03306207541169659'	'_xlfn.RANDARRAY(2.7)'	array	B133:B134	1	
+cell	B133	n	'0.5010238671066245'	'_xlfn.RANDARRAY(2.7)'	array	B133:B134	1	
 cell	N133	n	'2'	'ROWS(_xlfn.ANCHORARRAY(B133))'	normal			
-cell	B134	n	'0.9343632071331536'	None	normal			
+cell	B134	n	'0.3637775794381488'	None	normal			
 cell	N134	n	'1'	'COLUMNS(_xlfn.ANCHORARRAY(B133))'	normal			
 cell	B145	n	'5'	'_xlfn.RANDARRAY(1,1,5,5)'	normal			
 cell	B157	e	'#VALUE!'	'_xlfn.RANDARRAY(2,2)'	array	B157	1	2
 cell	C158	s	'in the way'	None				
 cell	B169	e	'#NAME?'	'_xludf.RANDARRAY(2)'	array	B169	1	
-cell	B181	n	'-2'	'_xlfn.RANDARRAY(1,4,-3,-1,TRUE)'	array	B181:E181	1	
-cell	C181	n	'-2'	None	normal			
-cell	D181	n	'-3'	None	normal			
-cell	E181	n	'-1'	None	normal			
+cell	B181	n	'-3'	'_xlfn.RANDARRAY(1,4,-3,-1,TRUE)'	array	B181:E181	1	
+cell	C181	n	'-1'	None	normal			
+cell	D181	n	'-1'	None	normal			
+cell	E181	n	'-3'	None	normal			
 cell	N181	n	'4'	'COLUMNS(_xlfn.ANCHORARRAY(B181))'	normal			
 cell	N182	n	'4'	'SUMPRODUCT((_xlfn.ANCHORARRAY(B181)>=-3)*(_xlfn.ANCHORARRAY(B181)<=-1)*(INT(_xlfn.ANCHORARRAY(B181))=_xlfn.ANCHORARRAY(B181)))'	normal			
 cell	B193	n	'0'	'_xlfn.RANDARRAY(2,1,0,0,TRUE)'	array	B193:B194	1	
 cell	B194	n	'0'	None	normal			
+cell	B205	n	'5'	'_xlfn.RANDARRAY({2,3},1,5,5)'	array	B205:C205	1	
+cell	C205	n	'5'	None	normal			
+cell	B217	n	'5'	'_xlfn.RANDARRAY(2,{1,2},5,5)'	array	B217:C217	1	
+cell	C217	n	'5'	None	normal			
