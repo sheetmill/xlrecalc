@@ -642,7 +642,7 @@ kinds of formula over a block of data: legacy formulas (as openpyxl writes them)
 data's rows and outside them; legacy array formulas (`t="array"` over a declared range, entered
 with Ctrl+Shift+Enter); and dynamic-array formulas (`cm` pointing at the dynamic-array cell
 metadata, `XLDAPR`), as Excel 365 writes a typed formula. The package computes every one of the
-311 captured cells as Excel does.
+310 captured cells as Excel does.
 
 An array is a tuple of rows (`_arrays.py`). An operation between arrays takes the larger size in
 each dimension; a dimension of 1 repeats, and a position past the end of the other operand is
