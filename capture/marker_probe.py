@@ -26,12 +26,11 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import openpyxl
-
-from capture.pipeline import CAPTURES, CONTAINER, excel_version
+from capture.strip import strip
 from xlrecalc._xlsx import Book
 
 HERE = Path(__file__).resolve().parent
+CAPTURES = HERE.parent / "tests" / "captures"  # as capture.pipeline, which needs openpyxl
 RS = "\x1e"
 FORMULAS = [
     "=Z1:Z3*2",
@@ -74,9 +73,9 @@ TYPED = [
     "=ROWS(UNIQUE(Z1:Z3))",
 ]
 FIRST_BATCH = len(TYPED)
-"""Formulas before this index were typed into one workbook, the rest into a second."""
+"""Formulas before this index went into the first of three typed workbooks."""
 TYPED += [
-    # the outermost call reached through other forms
+    # a function that makes an array under a branch, an explicit @ and an operator
     "=IF(TRUE,SEQUENCE(1))",
     "=@SEQUENCE(3)",
     "=-SEQUENCE(1)",
@@ -107,6 +106,7 @@ TYPED += [
     "=WRAPCOLS(1,1)",
 ]
 THIRD_BATCH = len(TYPED)
+"""Formulas from here on went into the third workbook; those from ``FIRST_BATCH``, the second."""
 TYPED += [
     # an array carried through a lifted function, an operator, a branch; consumed by SUM
     "=ABS(SEQUENCE(1))",
@@ -129,6 +129,8 @@ def typed_workbook(path: Path, start: int = 0) -> None:
     Only formulas from ``start`` on are listed, each still at ``A<4k+1>``, so that a later batch
     goes into a workbook of its own and the one typed before is left as Excel saved it.
     """
+    import openpyxl
+
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "probe"
@@ -139,22 +141,37 @@ def typed_workbook(path: Path, start: int = 0) -> None:
     wb.save(path)
 
 
+KEPT = tuple(CAPTURES / f"marker_typed{n}.xlsx" for n in ("", "2", "3"))
+"""The typed workbooks as committed, without who saved them or where: the capture's evidence."""
+
+
 def read_typed(*paths: Path) -> None:
-    """``marker_typed.tsv`` from the typed workbooks: each cell from the first that has it."""
+    """Keep the typed workbooks (``KEPT``) and write ``marker_typed.tsv`` from the kept copies."""
+    from capture.pipeline import excel_version
+
+    for path, kept in zip(paths, KEPT, strict=True):
+        strip(path, kept)
+    header = [
+        "# suite: marker_typed",
+        f"# excel: {excel_version()} for Mac, locale en_US",
+        f"# captured: {dt.date.today().isoformat()}",
+        "# generator: capture/marker_probe.py --typed (a person typed each formula into the",
+        "#   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3; formula k in A<4k+1>;",
+        "#   the workbooks are kept as marker_typed.xlsx, marker_typed2.xlsx, marker_typed3.xlsx)",
+        "# columns: typed, file form, cm, f_t, f_ref, value (Python repr)",
+    ]
+    body = typed_rows(*KEPT)
+    (CAPTURES / "marker_typed.tsv").write_text("\n".join([*header, *body]) + "\n", "utf-8")
+
+
+def typed_rows(*paths: Path) -> list[str]:
+    """The capture's rows from the typed workbooks: each cell from the first that has it."""
     cells: dict[tuple[int, int], Any] = {}
     for path in paths:
         with Book(path) as book:
             for cell in book.cells("probe"):
                 if cell.formula is not None:
                     cells.setdefault((cell.row, cell.column), cell)
-    header = [
-        "# suite: marker_typed",
-        f"# excel: {excel_version()} for Mac, locale en_US",
-        f"# captured: {dt.date.today().isoformat()}",
-        "# generator: capture/marker_probe.py --typed (a person typed each formula into the",
-        "#   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3; formula k in A<4k+1>)",
-        "# columns: typed, file form, cm, f_t, f_ref, value (Python repr)",
-    ]
     body = []
     for k, typed in enumerate(TYPED):
         c = cells.get((4 * k + 1, 1))
@@ -168,7 +185,7 @@ def read_typed(*paths: Path) -> None:
             c.value if c else None,
         ]
         body.append("\t".join(map(repr, row)))
-    (CAPTURES / "marker_typed.tsv").write_text("\n".join([*header, *body]) + "\n", "utf-8")
+    return body
 
 
 def main() -> None:
@@ -179,12 +196,16 @@ def main() -> None:
         typed_workbook(Path(sys.argv[2]), int(sys.argv[3]) if len(sys.argv) > 3 else 0)
         return
     way = sys.argv[1] if len(sys.argv) > 1 else "value"
+    from capture.pipeline import CONTAINER, excel_version
+
     CONTAINER.mkdir(parents=True, exist_ok=True)
     src = CONTAINER / f"xlrecalc_marker_{way}.xlsx"
     copy = CONTAINER / f"xlrecalc_marker_{way}_saved.xlsx"
     listing = CONTAINER / "xlrecalc_marker.txt"
     for p in (src, copy):
         p.unlink(missing_ok=True)
+    import openpyxl
+
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "probe"

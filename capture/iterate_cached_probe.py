@@ -15,36 +15,14 @@ Needs Excel with no workbook open, and refuses to run otherwise.
 from __future__ import annotations
 
 import datetime as dt
-import re
 import sys
-import zipfile
-from pathlib import Path
 
 from capture.iterate_probe import HERE, build, osascript, saved_values
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
+from capture.strip import strip
 
 CALC = '<calcPr calcId="124519" iterate="1" iterateCount="100" fullCalcOnLoad="1"/>'
 LOOP = [("S", [("A1", "IFERROR(A2,0)+1", None), ("A2", "A1+1", None)])]
-
-
-def strip(source: Path, target: Path) -> None:
-    """``source`` without the folder it was saved in or the user who saved it."""
-    with zipfile.ZipFile(source) as zin, zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as out:
-        for item in zin.infolist():
-            data = zin.read(item.filename)
-            if item.filename == "xl/workbook.xml":
-                data = re.sub(
-                    rb"<mc:AlternateContent[^>]*>.*?absPath.*?</mc:AlternateContent>",
-                    b"",
-                    data,
-                    flags=re.S,
-                )
-                data = re.sub(rb"<x15ac:absPath[^>]*/>", b"", data)
-            if item.filename == "docProps/core.xml":
-                data = re.sub(
-                    rb"<cp:lastModifiedBy>[^<]*</cp:lastModifiedBy>|<cp:lastModifiedBy/>", b"", data
-                )
-            out.writestr(item, data)
 
 
 def main() -> None:

@@ -294,6 +294,13 @@ MARKER = [
 ]
 
 
+def test_marker_typed_is_what_the_kept_workbooks_hold():
+    """Capture marker_typed is derived from the typed workbooks kept beside it, row for row."""
+    from capture.marker_probe import KEPT, typed_rows
+
+    assert typed_rows(*KEPT) == ["\t".join(row) for row in MARKER]
+
+
 @pytest.mark.excel
 @pytest.mark.parametrize("row", MARKER, ids=lambda r: r[0])
 def test_set_formula_writes_what_excel_writes_for_a_typed_formula(tmp_path, row):

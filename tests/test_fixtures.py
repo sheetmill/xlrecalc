@@ -26,8 +26,8 @@ FILLED = re.compile(rb"<(Company|Manager)>[^<]+</")
 COMMENTS = re.compile(r"(^|/)(comments?\d*|threadedComment\w*|persons?|commentAuthors)\.xml$", re.I)
 
 
-def documents() -> list[Path]:
-    """Every committed Office document: the tracked ones, or under an sdist the files it holds."""
+def committed(suffixes: tuple[str, ...]) -> list[Path]:
+    """Committed files with these suffixes: tracked ones, or under an sdist the files it holds."""
     try:
         listed = subprocess.run(
             ["git", "ls-files"], cwd=ROOT, capture_output=True, text=True, check=True
@@ -35,10 +35,22 @@ def documents() -> list[Path]:
         files = [ROOT / name for name in listed]
     except (OSError, subprocess.CalledProcessError):
         files = [p for p in ROOT.rglob("*") if ".venv" not in p.parts]
-    return sorted(p for p in files if p.suffix.lower() in SUFFIXES and p.is_file())
+    return sorted(p for p in files if p.suffix.lower() in suffixes and p.is_file())
 
 
-DOCUMENTS = documents()
+DOCUMENTS = committed(SUFFIXES)
+# Parts taken out of a workbook Excel saved and committed alone, such as the rich-value parts of
+# the dyn_* captures.
+PARTS = [p for p in committed((".xml",)) if "captures" in p.parts]
+
+
+def _check_part(name: str, data: bytes) -> None:
+    for marker in MARKERS:
+        assert marker not in data, f"{name} contains {marker.decode()}"
+    assert not FILLED.search(data), f"{name} names a company or manager"
+    assert not HOME.search(data), f"{name} holds a home-directory path"
+    for creator in CREATOR.findall(data):
+        assert creator.strip() in TOOLS, f"{name}: dc:creator {creator.decode()!r}"
 
 
 @pytest.mark.parametrize("path", DOCUMENTS, ids=lambda p: p.relative_to(ROOT).as_posix())
@@ -48,13 +60,17 @@ def test_no_personal_data(path):
         assert "docProps/custom.xml" not in names, "custom document properties"
         for name in names:
             assert not COMMENTS.search(name), f"{name}: comments name their authors"
-            data = archive.read(name)
-            for marker in MARKERS:
-                assert marker not in data, f"{name} contains {marker.decode()}"
-            assert not FILLED.search(data), f"{name} names a company or manager"
-            assert not HOME.search(data), f"{name} holds a home-directory path"
-            for creator in CREATOR.findall(data):
-                assert creator.strip() in TOOLS, f"{name}: dc:creator {creator.decode()!r}"
+            _check_part(name, archive.read(name))
+
+
+@pytest.mark.parametrize("path", PARTS, ids=lambda p: p.relative_to(ROOT).as_posix())
+def test_no_personal_data_in_a_loose_part(path):
+    assert not COMMENTS.search(path.name), f"{path.name}: comments name their authors"
+    _check_part(path.name, path.read_bytes())
+
+
+def test_loose_parts_are_found():
+    assert any(p.name.startswith("dyn_") and p.name.endswith("_rdrichvalue.xml") for p in PARTS)
 
 
 def test_a_person_as_creator_is_found():

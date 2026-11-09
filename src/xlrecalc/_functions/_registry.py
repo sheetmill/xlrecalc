@@ -208,9 +208,10 @@ def function(
 ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """Register a function under its file-form name.
 
-    ``makes_array``: a formula whose outermost call is this function is written with the
-    dynamic-array marker whatever the size of its result, as Excel writes it typed (captures
-    ``marker_typed`` and ``dyn_*``).
+    ``makes_array``: the function makes an array (or, as ``INDIRECT``, may make a range), so a
+    formula whose text carries a call of it to the result is written with the dynamic-array
+    marker whatever the size of its result, as Excel writes it typed (captures ``marker_typed``
+    and ``dyn_*``; the rule is ``_workbook._may_be_array``).
     """
     if (ulps and not ulps_reason) or (rel and not rel_reason):
         raise ValueError(f"{name}: a tolerance needs its reason")

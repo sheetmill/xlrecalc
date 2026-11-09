@@ -355,14 +355,15 @@ CHOOSE = [
     DynCase(f"{CC}(BX1:BX3,1,1,1)"),
     DynCase(f"{CR}({{1;2;3}},-1,-2,-3)"),
     DynCase(f"{CC}({T2},BY2)"),
-    # follow-up: plain formulas over whole columns, lifting, direct errors
+    # plain formulas over a whole column; a two-dimensional array of indexes; an error as the array,
+    # inside it and in a cell given as it
     DynCase(f"{CC}(BT:BT,1)", legacy=True),
     DynCase(f"{CR}(BT:BT,1)", legacy=True),
     DynCase(f"{CC}({T1},{{1,2;3,1}})"),
     DynCase(f"{CC}(#N/A,1)"),
     DynCase(f"{CR}({{1,#N/A;3,4}},2)"),
     DynCase(f"{CC}(BY2,1)"),
-    # follow-up: an empty array argument
+    # an empty array argument
     DynCase(f"{CC}(,1)"),
     DynCase(f"{CR}(,-1)"),
 ]
@@ -438,7 +439,8 @@ DROPTAKE = [
     DynCase(f"{EX}(BX1:BX3,3,2,TRUE)"),
     DynCase(f"{TK}(BY1:BY3,-2)"),
     DynCase(f"{DR}({T2},{{1;2}})"),
-    # follow-up: plain formulas over whole columns, lifting, direct errors
+    # plain formulas over constants, ranges and whole columns (TAKE and DROP give ranges); counts
+    # given as arrays over constants; an error as the array; EXPAND's empty pad_with
     DynCase(f"{TK}({{1,2;3,4}},1)", legacy=True),
     DynCase(f"{TK}(BT:BT,2)", legacy=True),
     DynCase(f"{DR}({T1},0)", legacy=True),
@@ -451,7 +453,7 @@ DROPTAKE = [
     DynCase(f"{EX}(#N/A,2)"),
     DynCase(f"{EX}({{1,2}},2,3,)"),
     DynCase(f"{DR}(BT:BT,1)", legacy=True),
-    # follow-up: an empty array argument
+    # an empty array argument
     DynCase(f'{EX}(,2,2,"x")'),
     DynCase(f"{EX}(,1)"),
     DynCase(f"{TK}(,,)"),
@@ -489,7 +491,8 @@ STACK = [
     DynCase(f"{VS}(BX1:CA1,BX3:CA3)"),
     DynCase(f"{HS}(BZ1:BZ3,{{1;2}})"),
     DynCase(f"{VS}(BY1:BY3,BX2)"),
-    # follow-up: plain formulas over whole columns, lifting, direct errors
+    # plain formulas over a range; errors given directly, by reference and inside an array; an
+    # empty argument
     DynCase(f"{VS}({T1})", legacy=True),
     DynCase(f"{HS}({T1})", legacy=True),
     DynCase(f"{VS}(1,#N/A)"),
@@ -497,7 +500,7 @@ STACK = [
     DynCase(f"{VS}(BY2,1)"),
     DynCase(f"{VS}({{1,#N/A}})"),
     DynCase(f"{HS}(1,)"),
-    # follow-up: an empty array argument
+    # an empty array argument
     DynCase(f"{VS}(,)"),
     DynCase(f"{HS}(,{{1;2}})"),
 ]
@@ -535,12 +538,13 @@ TOCOL = [
     DynCase(f"{TR}({T2},2)"),
     DynCase(f"{TR}(BZ1:BZ3,1)"),
     DynCase(f"{TC}(BY1:BZ3,1,1)"),
-    # follow-up: plain formulas over whole columns, lifting, direct errors
+    # plain formulas over a range and a whole column; an error cell and an error inside an array,
+    # ignored
     DynCase(f"{TR}({T1})", legacy=True),
     DynCase(f"{TC}(BY2,2)"),
     DynCase(f"{TC}({{1,#N/A}},2)"),
     DynCase(f"{TC}(BT:BT,1)", legacy=True),
-    # follow-up: an empty array argument
+    # an empty array argument
     DynCase(f"{TC}(,0)"),
     DynCase(f"{TR}(,1,TRUE)"),
 ]
@@ -582,7 +586,8 @@ WRAP = [
     DynCase(f"{WC}(BY1:BY3,2)"),
     DynCase(f"{WR}(BZ1:BZ3,2)"),
     DynCase(f"{WC}(CA1:CA3,1)"),
-    # follow-up: plain formulas over whole columns, lifting, direct errors
+    # plain formulas over a range; pad_with empty and an array; an error as the vector; counts as
+    # an array and fractional
     DynCase(f"{WR}(BT1:BT4,2)", legacy=True),
     DynCase(f"{WC}(BT1:BT4,2)", legacy=True),
     DynCase(f"{WC}({{1,2,3}},2,)"),
@@ -590,7 +595,7 @@ WRAP = [
     DynCase(f"{WC}({{1,2,3}},2,{{8,9}})"),
     DynCase(f"{WR}({{1,2,3}},{{2;3}})"),
     DynCase(f"{WR}(BX1:CA1,2.5)"),
-    # follow-up: an empty array argument
+    # an empty array argument
     DynCase(f"{WR}(,1)"),
     DynCase(f"{WC}(,3,0)"),
 ]
@@ -609,7 +614,7 @@ INDEX = [
     # second set
     DynCase("INDEX(BX1:BX3,0,1)", readers=READ),
     DynCase("INDEX(BX2:CA2,0,4)"),
-    # follow-up: a column index of 0 given, against one left out
+    # a column index of 0 given, against one left out
     DynCase("INDEX(BT1:BV1,2,0)"),
     DynCase("INDEX(BT1:BT4,2,0)"),
     DynCase("INDEX(BT1:BV1,2)"),
