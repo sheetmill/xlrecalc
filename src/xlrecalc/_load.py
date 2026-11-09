@@ -209,9 +209,11 @@ def _refused_empty(toks: Iterable[Token]) -> str | None:
 
 # Argument counts of the functions that make arrays, outside which Excel refuses the file
 # (capture dyn_*); SORTBY takes an array and pairs of a key and its order, the last order optional.
-_ARRAY_COUNTS = {
+_ARRAY_COUNTS: dict[str, tuple[int, int | None]] = {
     "_XLFN.SEQUENCE": (1, 4), "_XLFN.UNIQUE": (1, 3), "_XLFN._XLWS.SORT": (1, 4),
     "_XLFN._XLWS.FILTER": (2, 3), "MMULT": (2, 2),
+    "_XLFN.CHOOSECOLS": (2, None),
+    "_XLFN.CHOOSEROWS": (2, None),
 }  # fmt: skip
 # Without its prefix in a file, SORT or FILTER makes Excel refuse it; UNIQUE, SORTBY and
 # SEQUENCE are names it does not know (capture dyn_*).
@@ -222,7 +224,10 @@ def _count_refused(name: str, count: int) -> bool:
     if name == "_XLFN.SORTBY":
         return count < 2 or (count > 3 and count % 2 == 0)
     bounds = _ARRAY_COUNTS.get(name)
-    return bounds is not None and not bounds[0] <= count <= bounds[1]
+    if bounds is None:
+        return False
+    lo, hi = bounds
+    return count < lo or (hi is not None and count > hi)
 
 
 def _refused_count(toks: Iterable[Token]) -> str | None:

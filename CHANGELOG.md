@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     `#VALUE!`.
   - `FILTER`: the rows, or columns, whose include is TRUE or a number other than 0 (a text is `#VALUE!`, an include of
     another length or two-dimensional is `#VALUE!`); when none is left, `if_empty`, an array included, or `#CALC!`.
+  - `CHOOSECOLS`, `CHOOSEROWS`: the columns or rows at the indexes given, negative ones from the end, repeats kept; a row
+    or column of indexes picks several, a two-dimensional one, or an index of 0 or past the size, is `#VALUE!`.
+
+  Each takes its array argument whole in every formula; an error given as the array is the result, and an empty one
+  `#VALUE!`.
 
   A formula set through `set_formula` whose outermost call is one of them is written as a dynamic array whatever the size
   of its result, as Excel writes it typed, so that it spills when its data grows; wrapped in another function, as in

@@ -11,6 +11,7 @@ from xlrecalc._functions import (
     _lookup,
     _math,
     _reference,
+    _reshape,
     _statistical,
     _text,
 )
@@ -29,6 +30,7 @@ del (
     _lookup,
     _math,
     _reference,
+    _reshape,
     _statistical,
     _text,
 )

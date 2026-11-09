@@ -1,5 +1,5 @@
 # suite: empty_args
-# excel: 16.114.3 for Mac, locale en_US
+# excel: 16.114.4 for Mac, locale en_US
 # date_system: 1900
 # captured: 2026-11-08
 # generator: capture/suites.py:empty_args
@@ -1136,3 +1136,11 @@ empty_args	_xlws.filter	1123	_xlfn._xlws.FILTER($AA$1:$AA$4,$AA$1:$AA$4,$AA$1:$A
 empty_args	_xlws.filter	1124	_xlfn._xlws.FILTER(,$AA$1:$AA$4,$AA$1:$AA$4)	()	e	#VALUE!
 empty_args	_xlws.filter	1125	_xlfn._xlws.FILTER($AA$1:$AA$4,,$AA$1:$AA$4)	()	e	#VALUE!
 empty_args	_xlws.filter	1126	_xlfn._xlws.FILTER($AA$1:$AA$4,$AA$1:$AA$4,)	()	n	1.0
+empty_args	choosecols	1127	_xlfn.CHOOSECOLS($AA$1:$AA$4,1,1)	()	n	1.0
+empty_args	choosecols	1128	_xlfn.CHOOSECOLS(,1,1)	()	e	#VALUE!
+empty_args	choosecols	1129	_xlfn.CHOOSECOLS($AA$1:$AA$4,,1)	()	e	#VALUE!
+empty_args	choosecols	1130	_xlfn.CHOOSECOLS($AA$1:$AA$4,1,)	()	e	#VALUE!
+empty_args	chooserows	1131	_xlfn.CHOOSEROWS($AA$1:$AA$4,2,1)	()	n	2.0
+empty_args	chooserows	1132	_xlfn.CHOOSEROWS(,2,1)	()	e	#VALUE!
+empty_args	chooserows	1133	_xlfn.CHOOSEROWS($AA$1:$AA$4,,1)	()	e	#VALUE!
+empty_args	chooserows	1134	_xlfn.CHOOSEROWS($AA$1:$AA$4,2,)	()	e	#VALUE!

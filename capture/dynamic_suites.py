@@ -79,6 +79,14 @@ DATA: dict[str, list[object]] = {
     "BO": [0.2],
     "BP": [0.1],
     "BR": [True, "x", 5.0, None, NA, '=""', -3.0, False, "X", 5.0],
+    # tables for the reshaping functions: BT1:BV4 (first set), BX1:CA3 (second set)
+    "BT": [1.0, 2.0, 3.0, 4.0],
+    "BU": ["a", None, "c", '=""'],
+    "BV": [True, NA, False, 0.5],
+    "BX": [-1.5, 0.0, 1e10],
+    "BY": ["x", DIV0, False],
+    "BZ": [7.0, "z", None],
+    "CA": ["Y", 8.0, "w"],
 }
 
 
@@ -281,9 +289,87 @@ FILTER = [
     DynCase(f"{FLT}(BE1:BE10,BR1:BR10)"),
 ]
 
+# The reshaping functions, over BT1:BV4 (T1, first set) and BX1:CA3 (T2, second set).
+T1, T2 = "BT1:BV4", "BX1:CA3"
+CC, CR = "_xlfn.CHOOSECOLS", "_xlfn.CHOOSEROWS"
+TK, DR, EX = "_xlfn.TAKE", "_xlfn.DROP", "_xlfn.EXPAND"
+VS, HS = "_xlfn.VSTACK", "_xlfn.HSTACK"
+TC, TR = "_xlfn.TOCOL", "_xlfn.TOROW"
+WR, WC = "_xlfn.WRAPROWS", "_xlfn.WRAPCOLS"
+
+CHOOSE = [
+    DynCase(f"{CC}({T1},1)", readers=READ),
+    DynCase(f"{CC}({T1},1,3)"),
+    DynCase(f"{CC}({T1},-1)"),
+    DynCase(f"{CC}({T1},-3)"),
+    DynCase(f"{CC}({T1},0)"),
+    DynCase(f"{CC}({T1},4)"),
+    DynCase(f"{CC}({T1},-4)"),
+    DynCase(f"{CC}({T1},{{1,1,-1}})"),
+    DynCase(f"{CC}({T1},{{2;3}})"),
+    DynCase(f"{CC}({T1},2.9)"),
+    DynCase(f"{CC}({T1},-1.9)"),
+    DynCase(f'{CC}({T1},"2")'),
+    DynCase(f"{CC}({T1},TRUE)"),
+    DynCase(f"{CC}({T1},#N/A)"),
+    DynCase(f"{CC}({T1},)"),
+    DynCase(f"{CC}({T1},BT1:BT2)"),
+    DynCase(f"{CC}({T1},BT1:BT2)", legacy=True),
+    DynCase(f"{CC}({T1},1)", legacy=True),
+    DynCase(f"{CC}(5,1)"),
+    DynCase(f"{CC}({{1,2,3;4,5,6}},{{3,1}})"),
+    DynCase(f"{CC}({T1},1,{{2,3}})"),
+    DynCase(f"{CC}({T1},{{1,0}})"),
+    DynCase(f"{CC}({T1},{{1,#N/A}})"),
+    DynCase(f"{CC}({T1},BU2)"),
+    DynCase(f"{CC}({T1},2)", way={(1, 0): "in the way"}),
+    DynCase(f"CHOOSECOLS({T1},1)"),
+    DynCase(f'{CC}({T1},"x")'),
+    DynCase(f"{CC}({T1},BT1)"),
+    DynCase(f"SUM({CC}({T1},1))"),
+    DynCase(f"{CR}({T1},1)", readers=READ),
+    DynCase(f"{CR}({T1},2)"),
+    DynCase(f"{CR}({T1},-1)"),
+    DynCase(f"{CR}({T1},{{1;1;-1}})"),
+    DynCase(f"{CR}({T1},{{2,4}})"),
+    DynCase(f"{CR}({T1},0)"),
+    DynCase(f"{CR}({T1},5)"),
+    DynCase(f"{CR}({T1},-5)"),
+    DynCase(f"{CR}({T1},1.5)"),
+    DynCase(f"{CR}({T1},-1.5)"),
+    DynCase(f"{CR}({T1},0.5)"),
+    DynCase(f'{CR}("x",1)'),
+    DynCase(f'{CR}("x",2)'),
+    DynCase(f"{CR}({T1},{{1,#N/A}})"),
+    DynCase(f"{CR}({T1},BT1:BT2)"),
+    DynCase(f"{CR}({T1},3)", legacy=True),
+    DynCase(f"CHOOSEROWS({T1},1)"),
+    # second set
+    DynCase(f"{CC}({T2},-2,2)", readers=READ),
+    DynCase(f"{CR}({T2},3,1)"),
+    DynCase(f"{CR}({T2},-3)"),
+    DynCase(f"{CC}({T2},{{4,4}})"),
+    DynCase(f"{CR}({T2},{{2;2}},1)"),
+    DynCase(f"{CC}({T2},5)"),
+    DynCase(f"{CR}({T2},4)"),
+    DynCase(f"{CC}(BX1:BX3,1,1,1)"),
+    DynCase(f"{CR}({{1;2;3}},-1,-2,-3)"),
+    DynCase(f"{CC}({T2},BY2)"),
+    # follow-up: plain formulas over whole columns, lifting, direct errors
+    DynCase(f"{CC}(BT:BT,1)", legacy=True),
+    DynCase(f"{CR}(BT:BT,1)", legacy=True),
+    DynCase(f"{CC}({T1},{{1,2;3,1}})"),
+    DynCase(f"{CC}(#N/A,1)"),
+    DynCase(f"{CR}({{1,#N/A;3,4}},2)"),
+    DynCase(f"{CC}(BY2,1)"),
+    # follow-up: an empty array argument
+    DynCase(f"{CC}(,1)"),
+    DynCase(f"{CR}(,-1)"),
+]
+
 # Formulas that make Excel refuse the file (error -50 on opening, each alone in a workbook):
 # SORT and FILTER without their prefix (UNIQUE, SORTBY and SEQUENCE without theirs open), and
-# argument counts the functions do not take.
+# argument counts the functions do not take. The reshaping functions without their prefix open.
 REFUSED = (
     "SORT(AA1:AA8)",
     "FILTER(AE1:AE6,AE1:AE6>2)",
@@ -294,6 +380,9 @@ REFUSED = (
     f"{SRT}()",
     f"{UNQ}()",
     f"{SEQ}()",
+    # the reshaping functions with too few or too many arguments (capture/refusal_probe.py)
+    f"{CC}({T1})",
+    f"{CR}({T1})",
 )
 
 SUITES: dict[str, list[DynCase]] = {
@@ -303,6 +392,7 @@ SUITES: dict[str, list[DynCase]] = {
     "sort": SORT,
     "sortby": SORTBY,
     "filter": FILTER,
+    "choose": CHOOSE,
 }
 
 
