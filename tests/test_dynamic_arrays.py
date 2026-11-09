@@ -23,7 +23,7 @@ from tests.test_captures import same
 from tests.test_xlsx import package
 from xlrecalc._engine import Engine, node
 from xlrecalc._formula import parse
-from xlrecalc._formula._nodes import Call, Group
+from xlrecalc._formula._nodes import Call, Group, Leaf, Reference
 from xlrecalc._functions import SPECS
 from xlrecalc._load import load
 from xlrecalc._quirks import Quirks
@@ -201,15 +201,17 @@ def _outermost(text: str) -> str | None:
     return ((root.prefix.text if root.prefix is not None else "") + root.name.text).upper()
 
 
-_SIZED = ("INDEX", "OFFSET")  # spill or not by their arguments, flagged or not
+_SIZED = ("INDEX", "OFFSET")  # marked or not by their arguments (_workbook._may_be_array)
 
 
 def test_array_makers_are_flagged_as_the_captures_show() -> None:
     """``makes_array`` holds exactly for the functions the captures show making arrays.
 
     Evidence for a flag: a dynamic array whose outermost call spilled over more than one cell
-    (``dyn_*``), or a formula Excel marked when typed although it neither spills nor intersects
-    (``marker_typed``). Evidence against: a typed formula Excel did not mark.
+    (``dyn_*``), or a typed call of the function on literals and references alone that Excel
+    marked although it neither spills nor intersects (``marker_typed``). Evidence against: such
+    a call Excel did not mark. ``INDEX`` and ``OFFSET``, marked or not by their arguments, are
+    left to ``test_api``'s end-to-end test of every typed formula.
     """
     flagged = {name for name, spec in SPECS.items() if spec.makes_array}
     makes, plain = set(), set()
@@ -226,9 +228,14 @@ def test_array_makers_are_flagged_as_the_captures_show() -> None:
     for line in (CAPTURES / "marker_typed.tsv").read_text(encoding="utf-8").splitlines():
         if line.startswith("#"):
             continue
-        _typed, form, cm, _kind, ref, _value = map(ast.literal_eval, line.split("\t"))
+        typed, form, cm, _kind, ref, _value = map(ast.literal_eval, line.split("\t"))
+        if typed.startswith("=@"):  # the file drops an explicit @: =@SEQUENCE(3) is SEQUENCE(3)
+            continue
         name = _outermost(form)
-        if name is None:
+        root = parse(form).root
+        if name is None or name in _SIZED or not isinstance(root, Call):
+            continue
+        if not all(isinstance(a, Leaf | Reference) for a in root.args):
             continue
         if cm is None:
             plain.add(name)

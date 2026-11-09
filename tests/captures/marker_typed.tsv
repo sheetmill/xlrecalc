@@ -1,5 +1,5 @@
 # suite: marker_typed
-# excel: 16.114.3 for Mac, locale en_US
+# excel: 16.114.4 for Mac, locale en_US
 # captured: 2026-11-08
 # generator: capture/marker_probe.py --typed (a person typed each formula into the
 #   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3; formula k in A<4k+1>)
@@ -23,3 +23,39 @@
 '=FILTER(Z1:Z3,Z1:Z3=2)'	'_xlfn._xlws.FILTER(Z1:Z3,Z1:Z3=2)'	'1'	'array'	'A65'	2.0
 '=SUM(SEQUENCE(3))'	'SUM(_xlfn.SEQUENCE(3))'	None	'normal'	None	6.0
 '=ROWS(UNIQUE(Z1:Z3))'	'ROWS(_xlfn.UNIQUE(Z1:Z3))'	None	'normal'	None	3.0
+'=IF(TRUE,SEQUENCE(1))'	'IF(TRUE,_xlfn.SEQUENCE(1))'	'1'	'array'	'A77'	1.0
+'=@SEQUENCE(3)'	'_xlfn.SEQUENCE(3)'	None	'normal'	None	1.0
+'=-SEQUENCE(1)'	'-_xlfn.SEQUENCE(1)'	'1'	'array'	'A85'	-1.0
+'=TRANSPOSE(Z1)'	'TRANSPOSE(Z1)'	'1'	'array'	'A89'	1.0
+'=TRANSPOSE(Z1:Z3)'	'TRANSPOSE(Z1:Z3)'	'1'	'array'	'A93:C93'	1.0
+'=LINEST("a")'	'LINEST("a")'	'1'	'array'	'A97'	'#VALUE!'
+'=LINEST(Z1:Z3)'	'LINEST(Z1:Z3)'	'1'	'array'	'A101:B101'	1.0
+'=XLOOKUP(2,Z1:Z3,Z1:Z3)'	'_xlfn.XLOOKUP(2,Z1:Z3,Z1:Z3)'	None	'normal'	None	2.0
+'=ROW(Z1)'	'ROW(Z1)'	None	'normal'	None	1.0
+'=COLUMN(Z1)'	'COLUMN(Z1)'	None	'normal'	None	26.0
+'=ISFORMULA(Z1)'	'_xlfn.ISFORMULA(Z1)'	None	'normal'	None	False
+'=FORMULATEXT(Z1)'	'_xlfn.FORMULATEXT(Z1)'	None	'normal'	None	'#N/A'
+'=INDEX(Z1:Z1,0,1)'	'INDEX(Z1:Z1,0,1)'	'1'	'array'	'A125'	1.0
+'=OFFSET(Z1,0,0)'	'OFFSET(Z1,0,0)'	None	'normal'	None	1.0
+'=INDIRECT("Z1")'	'INDIRECT("Z1")'	'1'	'array'	'A133'	1.0
+'=CHOOSECOLS(Z1,1)'	'_xlfn.CHOOSECOLS(Z1,1)'	'1'	'array'	'A137'	1.0
+'=CHOOSEROWS(Z1,1)'	'_xlfn.CHOOSEROWS(Z1,1)'	'1'	'array'	'A141'	1.0
+'=TAKE({1,2},1,1)'	'_xlfn.TAKE({1,2},1,1)'	'1'	'array'	'A145'	1.0
+'=DROP({1,2},,1)'	'_xlfn.DROP({1,2},,1)'	'1'	'array'	'A149'	2.0
+'=EXPAND(1,1)'	'_xlfn.EXPAND(1,1)'	'1'	'array'	'A153'	1.0
+'=VSTACK(1)'	'_xlfn.VSTACK(1)'	'1'	'array'	'A157'	1.0
+'=HSTACK(1)'	'_xlfn.HSTACK(1)'	'1'	'array'	'A161'	1.0
+'=TOCOL(1)'	'_xlfn.TOCOL(1)'	'1'	'array'	'A165'	1.0
+'=TOROW(1)'	'_xlfn.TOROW(1)'	'1'	'array'	'A169'	1.0
+'=WRAPROWS(1,1)'	'_xlfn.WRAPROWS(1,1)'	'1'	'array'	'A173'	1.0
+'=WRAPCOLS(1,1)'	'_xlfn.WRAPCOLS(1,1)'	'1'	'array'	'A177'	1.0
+'=ABS(SEQUENCE(1))'	'ABS(_xlfn.SEQUENCE(1))'	'1'	'array'	'A181'	1.0
+'=IFERROR(SEQUENCE(1),0)'	'IFERROR(_xlfn.SEQUENCE(1),0)'	'1'	'array'	'A185'	1.0
+'=SEQUENCE(1)&""'	'_xlfn.SEQUENCE(1)&""'	'1'	'array'	'A189'	'1'
+'=SUM(SEQUENCE(1))+0'	'SUM(_xlfn.SEQUENCE(1))+0'	None	'normal'	None	1.0
+'=INDEX(Z1:Z1,1,1)'	'INDEX(Z1:Z1,1,1)'	None	'normal'	None	1.0
+'=INDEX(Z1:Z1,0)'	'INDEX(Z1:Z1,0)'	'1'	'array'	'A201'	1.0
+'=INDEX(Z1:Z1,Z1)'	'INDEX(Z1:Z1,Z1)'	'1'	'array'	'A205'	1.0
+'=OFFSET(Z1,0,0,1,1)'	'OFFSET(Z1,0,0,1,1)'	None	'normal'	None	1.0
+'=OFFSET(Z1,0,0,Z1,1)'	'OFFSET(Z1,0,0,Z1,1)'	'1'	'array'	'A213'	1.0
+'=INDIRECT("Z1:Z1")'	'INDIRECT("Z1:Z1")'	'1'	'array'	'A217'	1.0

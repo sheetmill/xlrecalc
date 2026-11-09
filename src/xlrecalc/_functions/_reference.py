@@ -135,7 +135,16 @@ def _parse(text: str, a1: bool, row: int, col: int) -> tuple[str | None, tuple[i
     return ""
 
 
-@function("INDIRECT", "text", "logical", min_args=1, volatile=True, reference=True, category=L)
+@function(
+    "INDIRECT",
+    "text",
+    "logical",
+    min_args=1,
+    volatile=True,
+    reference=True,
+    category=L,
+    makes_array=True,
+)
 def INDIRECT(ctx: Any, text: str, a1: bool = True) -> Any:
     """The reference a text names: A1 (``"Sheet2!A1"``), R1C1 with ``a1`` false, or a name.
 
@@ -226,7 +235,7 @@ def CELL(ctx: Any, info: str, ref: Any = MISSING) -> Any:
     return VALUE
 
 
-@function("TRANSPOSE", "matrix", category=L)
+@function("TRANSPOSE", "matrix", category=L, makes_array=True)
 def TRANSPOSE(ctx: Any, a: Any) -> Any:
     """Rows as columns. A range in a legacy formula is intersected first, as in Excel."""
     if not isinstance(a, tuple):

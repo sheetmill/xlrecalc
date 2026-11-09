@@ -1,8 +1,8 @@
 """Which typed formulas Excel marks as dynamic arrays in a file (ARCHITECTURE.md §7.7).
 
     uv run python -m capture.marker_probe [value|formula_local]
-    uv run python -m capture.marker_probe --typed-workbook PATH
-    uv run python -m capture.marker_probe --typed PATH
+    uv run python -m capture.marker_probe --typed-workbook PATH [START]
+    uv run python -m capture.marker_probe --typed PATH [PATH ...]
 
 Non-interactive. Formulas are entered into cells of a workbook openpyxl wrote (data in
 Z1:Z3), through AppleScript's ``value`` of a cell or its ``formula local`` (``marker_probe
@@ -11,9 +11,11 @@ the cell carries the dynamic-array marker (``cm``) and the formula's ``t`` and `
 Writes ``tests/captures/marker_<way>.tsv``. Both ways enter legacy formulas (no marker, implicit
 intersection), so AppleScript cannot enter a formula as Excel 365's formula bar does.
 
-``--typed PATH`` reads instead a workbook in which a person typed ``TYPED[k]`` into cell
-``A<4k+1>`` in Excel's formula bar and saved it (``xlrecalc_marker_typed.xlsx``, built by
-``typed_workbook``), and writes ``tests/captures/marker_typed.tsv``.
+``--typed PATH ...`` reads instead the workbooks in which a person typed ``TYPED[k]`` into cell
+``A<4k+1>`` in Excel's formula bar and saved them (``xlrecalc_marker_typed.xlsx`` for the first
+``FIRST_BATCH`` formulas, ``xlrecalc_marker_typed2.xlsx`` up to ``THIRD_BATCH``,
+``xlrecalc_marker_typed3.xlsx`` for the rest, each built by ``typed_workbook`` from its first
+formula on), and writes ``tests/captures/marker_typed.tsv``.
 """
 
 from __future__ import annotations
@@ -22,6 +24,7 @@ import datetime as dt
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
 import openpyxl
 
@@ -70,23 +73,80 @@ TYPED = [
     "=SUM(SEQUENCE(3))",
     "=ROWS(UNIQUE(Z1:Z3))",
 ]
+FIRST_BATCH = len(TYPED)
+"""Formulas before this index were typed into one workbook, the rest into a second."""
+TYPED += [
+    # the outermost call reached through other forms
+    "=IF(TRUE,SEQUENCE(1))",
+    "=@SEQUENCE(3)",
+    "=-SEQUENCE(1)",
+    # other functions that can give an array, with a one-cell result, and one that spills
+    "=TRANSPOSE(Z1)",
+    "=TRANSPOSE(Z1:Z3)",
+    '=LINEST("a")',
+    "=LINEST(Z1:Z3)",
+    "=XLOOKUP(2,Z1:Z3,Z1:Z3)",
+    "=ROW(Z1)",
+    "=COLUMN(Z1)",
+    "=ISFORMULA(Z1)",
+    "=FORMULATEXT(Z1)",
+    "=INDEX(Z1:Z1,0,1)",
+    "=OFFSET(Z1,0,0)",
+    '=INDIRECT("Z1")',
+    # the reshaping functions, each with a one-cell result
+    "=CHOOSECOLS(Z1,1)",
+    "=CHOOSEROWS(Z1,1)",
+    "=TAKE({1,2},1,1)",
+    "=DROP({1,2},,1)",
+    "=EXPAND(1,1)",
+    "=VSTACK(1)",
+    "=HSTACK(1)",
+    "=TOCOL(1)",
+    "=TOROW(1)",
+    "=WRAPROWS(1,1)",
+    "=WRAPCOLS(1,1)",
+]
+THIRD_BATCH = len(TYPED)
+TYPED += [
+    # an array carried through a lifted function, an operator, a branch; consumed by SUM
+    "=ABS(SEQUENCE(1))",
+    "=IFERROR(SEQUENCE(1),0)",
+    '=SEQUENCE(1)&""',
+    "=SUM(SEQUENCE(1))+0",
+    # a reference whose size is known from the text, or not
+    "=INDEX(Z1:Z1,1,1)",
+    "=INDEX(Z1:Z1,0)",
+    "=INDEX(Z1:Z1,Z1)",
+    "=OFFSET(Z1,0,0,1,1)",
+    "=OFFSET(Z1,0,0,Z1,1)",
+    '=INDIRECT("Z1:Z1")',
+]
 
 
-def typed_workbook(path: Path) -> None:
-    """The workbook a person types ``TYPED`` into: data in Z1:Z3, each formula's text beside."""
+def typed_workbook(path: Path, start: int = 0) -> None:
+    """The workbook a person types into: data in Z1:Z3, each formula's text beside its cell.
+
+    Only formulas from ``start`` on are listed, each still at ``A<4k+1>``, so that a later batch
+    goes into a workbook of its own and the one typed before is left as Excel saved it.
+    """
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "probe"
     for r in (1, 2, 3):
         ws.cell(r, 26, float(r))
-    for k, formula in enumerate(TYPED):
+    for k, formula in enumerate(TYPED[start:], start):
         ws.cell(4 * k + 1, 6, f"type into A{4 * k + 1}:  {formula}")
     wb.save(path)
 
 
-def read_typed(path: Path) -> None:
-    with Book(path) as book:
-        cells = {(c.row, c.column): c for c in book.cells("probe")}
+def read_typed(*paths: Path) -> None:
+    """``marker_typed.tsv`` from the typed workbooks: each cell from the first that has it."""
+    cells: dict[tuple[int, int], Any] = {}
+    for path in paths:
+        with Book(path) as book:
+            for cell in book.cells("probe"):
+                if cell.formula is not None:
+                    cells.setdefault((cell.row, cell.column), cell)
     header = [
         "# suite: marker_typed",
         f"# excel: {excel_version()} for Mac, locale en_US",
@@ -113,10 +173,10 @@ def read_typed(path: Path) -> None:
 
 def main() -> None:
     if sys.argv[1:2] == ["--typed"]:
-        read_typed(Path(sys.argv[2]))
+        read_typed(*map(Path, sys.argv[2:]))
         return
     if sys.argv[1:2] == ["--typed-workbook"]:
-        typed_workbook(Path(sys.argv[2]))
+        typed_workbook(Path(sys.argv[2]), int(sys.argv[3]) if len(sys.argv) > 3 else 0)
         return
     way = sys.argv[1] if len(sys.argv) > 1 else "value"
     CONTAINER.mkdir(parents=True, exist_ok=True)

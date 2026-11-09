@@ -734,15 +734,21 @@ An exact search reads only as far as its match, so it is circular only if it rea
 sheet of two cells under the memory watchdog, so one that walks a range by position fails there.
 
 **Formulas set through the API** are dynamic arrays, as Excel 365 takes a typed formula: `=A1:A5*2`
-spills. Capture `marker_typed` (19 formulas a person typed into Excel's formula bar and saved;
+spills. Capture `marker_typed` (55 formulas a person typed into Excel's formula bar and saved;
 `capture/marker_probe.py --typed`) shows when Excel marks one in the file: when it spills, or
 when its legacy reading would take an implicit intersection (`=SUM(Z1:Z3*2)`, a single value,
-is marked), or when its outermost call, through parentheses, makes an array, whatever the size of
-its result (`=SEQUENCE(1)`; not `=SUM(SEQUENCE(3))`); not otherwise (`=SUM(Z1:Z3)`,
-`=INDEX(Z1:Z3,2)`), and not for an explicit `@`, which is the legacy meaning: `=@Z1:Z3` is saved
-as the plain formula `Z1:Z3`. The registry flags such functions (`makes_array`), and a test
-holds the flags to the captures: set exactly for the functions a dynamic array spilled from or
-a typed formula marked although it neither spills nor intersects. The writer does the
+is marked), or when its text may give an array, whatever the size of its result; not otherwise
+(`=SUM(Z1:Z3)`, `=INDEX(Z1:Z3,2)`, `=OFFSET(Z1,0,0)`), and not for an explicit `@`, which is the
+legacy meaning: `=@Z1:Z3` is saved as the plain formula `Z1:Z3`. A text may give an array when it
+calls a function that makes one (`=SEQUENCE(1)`, `=TRANSPOSE(Z1)`, `=INDIRECT("Z1")`) where the
+array is carried to the result: through operators and arguments taken element by element
+(`=-SEQUENCE(1)`, `=IF(TRUE,SEQUENCE(1))`, `=ABS(SEQUENCE(1))`), not through a function that
+takes an array (`=SUM(SEQUENCE(3))`); and when `INDEX` has an index that is not a number other
+than 0, or `OFFSET` a height or width that is not a number, so that the size is not in the text
+(`=INDEX(Z1:Z1,0)`, `=OFFSET(Z1,0,0,Z1,1)`; not `=OFFSET(Z1,0,0,1,1)`). The registry flags the
+functions that make arrays (`makes_array`), and a test holds the flags to the captures: set
+exactly for the functions a dynamic array spilled from or a typed call on literals and references
+marked although it neither spills nor intersects. The writer does the
 same: the intersection test reads the dynamic-array text (where `@x` is `_xlfn.SINGLE(x)`) as a
 legacy formula, and an unmarked formula is written in its legacy form, `@` dropped.
 AppleScript cannot enter such a formula itself: a cell's `formula`, `formula local` and

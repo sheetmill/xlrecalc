@@ -295,7 +295,7 @@ def CORREL(ctx: Context, xs: Any, ys: Any) -> float | ErrorValue:
 
 @function(
     "LINEST", "array", "array", "logical", "logical", min_args=1, category=S,
-    ulps=4, ulps_reason=_REGRESSION, status="partial", note="one regressor only",
+    ulps=4, ulps_reason=_REGRESSION, status="partial", note="one regressor only", makes_array=True,
 )  # fmt: skip
 def LINEST(ctx: Context, ys: Any, xs: Any = MISSING, const: Any = True, stats: Any = False) -> Any:
     """Least-squares line through the points: slope and intercept, with statistics."""

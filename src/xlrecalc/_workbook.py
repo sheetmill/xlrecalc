@@ -11,11 +11,13 @@ from typing import BinaryIO, TypeAlias
 
 from xlrecalc._engine import Engine, node
 from xlrecalc._formula import FormulaSyntaxError, TokenizeError, parse, tokenize
+from xlrecalc._formula._codegen import kind_at
 from xlrecalc._formula._fastkey import translate
 from xlrecalc._formula._fileform import display_form, file_form
-from xlrecalc._formula._nodes import Call, Group
+from xlrecalc._formula._nodes import Binary, Call, Group, Leaf, Missing, Node, Postfix, Prefix
 from xlrecalc._formula._tokens import Kind, column_number
-from xlrecalc._functions import SPECS
+from xlrecalc._functions import REGISTRY, SPECS
+from xlrecalc._functions._registry import _LIFTED
 from xlrecalc._load import load as _load_engine
 from xlrecalc._load import refused_in_file
 from xlrecalc._quirks import Quirks
@@ -235,7 +237,7 @@ class Workbook:
             # text read as a legacy formula (an @ written out as _xlfn.SINGLE) tells whether
             # the file needs the dynamic-array marker: an implicit intersection anywhere else.
             template = engine.templates[engine.template_for(text, row, col)]
-            intersects = template.intersects or _makes_array(text)
+            intersects = template.intersects or _may_be_array(text)
             engine.set_formula(sheet, row, col, text, array=(True, (row, col, row, col)))
         except (FormulaSyntaxError, TokenizeError) as exc:
             raise FormulaError(f"{formula!r}: {exc}") from exc
@@ -250,9 +252,9 @@ class Workbook:
         A formula set here is a dynamic array; as Excel writes a typed formula (capture
         ``marker_typed``), it is marked when a legacy formula would mean something else: it
         spills, or takes an implicit intersection other than an explicit ``@`` (``=@A1:A3`` is
-        written as the plain ``A1:A3``), or its outermost call makes an array, whatever the size of
-        the result (``SEQUENCE(1)``, not ``SUM(SEQUENCE(3))``). A dynamic array read from the file
-        stays one.
+        written as the plain ``A1:A3``), or its text may give an array, whatever the size of the
+        result (``SEQUENCE(1)``, ``-SEQUENCE(1)``, not ``SUM(SEQUENCE(3))``; ``_may_be_array``). A
+        dynamic array read from the file stays one.
         """
         anchor = self._engine.anchors.get(node(sheet, row, col))
         if anchor is None:
@@ -335,19 +337,51 @@ class Workbook:
         )
 
 
-def _makes_array(text: str) -> bool:
-    """Whether a formula (file form) is a call of a function that makes an array."""
+def _may_be_array(text: str) -> bool:
+    """Whether a formula (file form) may give an array, read from its text as Excel reads it.
+
+    Capture ``marker_typed``: a call of a function that makes an array (``makes_array``), carried
+    through operators and through the arguments a function takes element by element (``IF``'s
+    branches, ``ABS``, ``IFERROR``), but not through a function that takes an array (``SUM``,
+    ``ROWS``) nor ``@``; ``INDEX`` with an index that is not a number other than 0, and
+    ``OFFSET`` with a height or width that is not a number, since their size is then not in the
+    text.
+    """
     try:
         root = parse(text).root
     except (FormulaSyntaxError, TokenizeError):
         return False
-    while isinstance(root, Group):
-        root = root.inner
-    if not isinstance(root, Call):
-        return False
-    name = (root.prefix.text if root.prefix is not None else "") + root.name.text
-    spec = SPECS.get(name.upper())
-    return spec is not None and spec.makes_array
+    stack: list[Node] = [root]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, Group):
+            stack.append(node.inner)
+        elif isinstance(node, Prefix | Postfix):
+            stack.append(node.operand)
+        elif isinstance(node, Binary):
+            stack += (node.left, node.right)
+        elif isinstance(node, Call):
+            name = ((node.prefix.text if node.prefix is not None else "") + node.name.text).upper()
+            spec = SPECS.get(name)
+            if spec is None or name == "_XLFN.SINGLE":
+                continue
+            cycle: int = getattr(REGISTRY[name], "cycle", 1)
+            if spec.makes_array:
+                return True
+            if name == "INDEX" and any(not _nonzero_number(a) for a in node.args[1:3]):
+                return True
+            if name == "OFFSET" and any(
+                not isinstance(a, Missing) and not _nonzero_number(a) for a in node.args[3:5]
+            ):
+                return True
+            stack += (
+                a for i, a in enumerate(node.args) if kind_at(spec.kinds, i, cycle) in _LIFTED
+            )
+    return False
+
+
+def _nonzero_number(node: Node) -> bool:
+    return isinstance(node, Leaf) and node.token.kind is Kind.NUMBER and float(node.token.text) != 0
 
 
 def _file_formula(formula: str, dynamic: bool = False) -> str:
