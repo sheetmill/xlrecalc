@@ -66,3 +66,28 @@ def FREQUENCY(ctx: Any, data: Any, bins: Any) -> Any:
         k = bisect.bisect_left(ordered, v)
         counts[order[k] if k < len(ordered) else len(edges)] += 1.0
     return tuple((c,) for c in counts)
+
+
+# MODE.MULT -------------------------------------------------------------------------------------
+
+
+@function("_XLFN.MODE.MULT", "array", min_args=1, variadic=True, category=S, makes_array=True)
+def MODE_MULT(ctx: Any, *args: Any) -> Any:
+    """Every number that occurs most often, at least twice, in the order each first appears.
+
+    Logicals and text are left out, given directly too (capture ``dyn_frequency``); none
+    repeating is ``#N/A``.
+    """
+    counts: dict[float, int] = {}
+    for a in args:
+        if a is MISSING:
+            return VALUE
+        values = _numbers(a)
+        if isinstance(values, ErrorValue):
+            return values
+        for v in values:
+            counts[v] = counts.get(v, 0) + 1
+    best = max(counts.values(), default=0)
+    if best < 2:
+        return ErrorValue.NA
+    return tuple((v,) for v, n in counts.items() if n == best)

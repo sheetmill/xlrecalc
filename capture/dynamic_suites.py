@@ -751,6 +751,7 @@ REFUSED = (
     # FREQUENCY, MODE.MULT, TEXTSPLIT and RANDARRAY with argument counts they do not take
     f"{FQ}(CC1:CC13)",
     f"{FQ}(CC1:CC13,CD1:CD3,1)",
+    f"{MM}()",
 )
 
 SUITES: dict[str, list[DynCase]] = {

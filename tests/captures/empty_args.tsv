@@ -1191,3 +1191,6 @@ empty_args	minverse	1178	MINVERSE({1,2;3,4})	()	n	-1.9999999999999998
 empty_args	frequency	1179	FREQUENCY($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
 empty_args	frequency	1180	FREQUENCY(,$AA$1:$AA$4)	()	e	#VALUE!
 empty_args	frequency	1181	FREQUENCY($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	mode.mult	1182	_xlfn.MODE.MULT({1,1,2},{1,1,2})	()	n	1.0
+empty_args	mode.mult	1183	_xlfn.MODE.MULT(,{1,1,2})	()	e	#VALUE!
+empty_args	mode.mult	1184	_xlfn.MODE.MULT({1,1,2},)	()	e	#VALUE!

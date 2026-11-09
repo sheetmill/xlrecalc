@@ -91,12 +91,12 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
 
 ## What it computes, and what not yet
 
-- **Functions**: 369 of Excel's functions (17 of them partly): math, statistics,
+- **Functions**: 370 of Excel's functions (17 of them partly): math, statistics,
   logic, text, dates, lookup (`VLOOKUP`, `INDEX`, `MATCH`, `OFFSET`, `INDIRECT`...), the
   financial and bond functions, the database functions. The
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 65,048 formulas computed by Excel and compared with xlrecalc's results: 64,625
+- **Evidence**: 65,051 formulas computed by Excel and compared with xlrecalc's results: 64,628
   match, bit for bit or within a small tolerance declared per function (a few units in the last
   place, or a relative 1E-9 for the iterative functions), 423 known deviations, each listed
   with its reason in
