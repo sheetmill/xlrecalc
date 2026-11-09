@@ -91,17 +91,16 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
 
 ## What it computes, and what not yet
 
-- **Functions**: 367 of Excel's functions (17 of them partly): math, statistics,
+- **Functions**: 368 of Excel's functions (17 of them partly): math, statistics,
   logic, text, dates, lookup (`VLOOKUP`, `INDEX`, `MATCH`, `OFFSET`, `INDIRECT`...), the
   financial and bond functions, the database functions. The
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 65,044 formulas computed by Excel and compared with xlrecalc's results: 64,335
+- **Evidence**: 65,045 formulas computed by Excel and compared with xlrecalc's results: 64,622
   match, bit for bit or within a small tolerance declared per function (a few units in the last
   place, or a relative 1E-9 for the iterative functions), 423 known deviations, each listed
   with its reason in
-  [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md); 286 not evaluated, of
-  functions captured before they are computed. Each listed
+  [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md). Each listed
   deviation is still computed and compared with Excel on every test run, and one that starts to
   match fails the run, except a few that can match by chance (a random result, a result Excel
   varies between runs, a row that depends on the platform's math library). The largest group of deviations is `CUMIPMT` and `CUMPRINC` at tiny rates

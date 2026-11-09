@@ -243,6 +243,45 @@ def MDETERM(ctx: Any, a: Any) -> Any:
     return _normal(-det if factored[1] % 2 else det)
 
 
+@function("MINVERSE", "array", category=L, makes_array=True)
+def MINVERSE(ctx: Any, a: Any) -> Any:
+    """The inverse: each column of the identity solved through the factorization.
+
+    Forward and back substitution with sums in increasing order and a division by each pivot;
+    singular is ``#NUM!``.
+    """
+    m = _square(a)
+    if isinstance(m, ErrorValue):
+        return m
+    n = len(m)
+    _limit(ctx, n, n)
+    factored = _lu(m)
+    if factored is None:
+        return ErrorValue.NUM
+    order = factored[0]
+    columns = []
+    for c in range(n):
+        y = [1.0 if order[i] == c else 0.0 for i in range(n)]
+        for i in range(n):
+            t = y[i]
+            for j in range(i):
+                t -= m[i][j] * y[j]
+            y[i] = t
+        x = [0.0] * n
+        for i in range(n - 1, -1, -1):
+            t = y[i]
+            for j in range(i + 1, n):
+                t -= m[i][j] * x[j]
+            x[i] = t / m[i][i]
+        columns.append(x)
+    out = tuple(tuple(_normal(columns[c][r]) for c in range(n)) for r in range(n))
+    for row in out:
+        for v in row:
+            if isinstance(v, ErrorValue):
+                return v
+    return out
+
+
 def _munit(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
     (size,) = given
     if type(size) is tuple or (ranges and isinstance(size, Ref) and not size.is_cell()):

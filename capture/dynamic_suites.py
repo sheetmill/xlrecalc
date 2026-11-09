@@ -692,6 +692,8 @@ REFUSED = (
     # the matrix functions with no argument or two
     f"{MU}()",
     f"{MU}(2,3)",
+    f"{MI}()",
+    f"{MI}(AN1:AO2,AN1:AO2)",
     "MDETERM()",
     "MDETERM(AN1:AO2,AN1:AO2)",
 )

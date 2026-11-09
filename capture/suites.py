@@ -3374,7 +3374,7 @@ _EMPTY_VALID: dict[str, tuple[str, ...]] = {
     "_XLFN.EXPAND": ("{1,2}", "2", "3", "0"), "_XLFN.TOCOL": (_R, "1", "TRUE"),
     "_XLFN.TOROW": (_R, "1", "TRUE"), "_XLFN.WRAPROWS": (_R, "2", "0"),
     "_XLFN.WRAPCOLS": (_R, "2", "0"),
-    "_XLFN.MUNIT": ("2",), "MDETERM": ("{1,2;3,4}",),
+    "_XLFN.MUNIT": ("2",), "MDETERM": ("{1,2;3,4}",), "MINVERSE": ("{1,2;3,4}",),
     "_XLFN.TEXTBEFORE": ('"a-b-c"', '"-"', "1", "0", "0", '"none"'),
     "_XLFN.TEXTAFTER": ('"a-b-c"', '"-"', "1", "0", "0", '"none"'),
     "SUMIF": (_R, '">1"', _S), "COUNTIF": (_R, '">1"'), "AVERAGEIF": (_R, '">1"', _S),
@@ -3459,7 +3459,7 @@ _EMPTY_ADDED = (
     "MMULT", "_XLFN.SEQUENCE", "_XLFN.UNIQUE", "_XLFN._XLWS.SORT", "_XLFN.SORTBY",
     "_XLFN._XLWS.FILTER", "_XLFN.CHOOSECOLS", "_XLFN.CHOOSEROWS", "_XLFN.TAKE", "_XLFN.DROP",
     "_XLFN.EXPAND", "_XLFN.VSTACK", "_XLFN.HSTACK", "_XLFN.TOCOL", "_XLFN.TOROW", "_XLFN.WRAPROWS",
-    "_XLFN.WRAPCOLS", "_XLFN.MUNIT", "MDETERM",
+    "_XLFN.WRAPCOLS", "_XLFN.MUNIT", "MDETERM", "MINVERSE",
 )  # fmt: skip
 
 

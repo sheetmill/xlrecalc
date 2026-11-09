@@ -32,6 +32,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     result, an empty argument `#VALUE!`.
   - `TOCOL`, `TOROW`: the values by rows or by columns, blanks, errors or both ignored; none left is `#CALC!`.
   - `MUNIT`: the identity matrix of a size truncated, read from text or a logical; below 1 `#VALUE!`.
+  - `MINVERSE`: the inverse, through the factorization `MDETERM` uses, each column of the identity solved forward and
+    back with sums in increasing order and a division by each pivot, as Excel computes it bit for bit; a zero pivot is
+    `#NUM!`, and a subnormal result 0 (capture `matrix_family`, 285 elements).
   - `WRAPROWS`, `WRAPCOLS`: a row or column of values in rows or columns of a count no wider than the values, the last
     padded (`#N/A` by default, empty included); a count below 1 is `#NUM!`, a two-dimensional array `#VALUE!`.
 
