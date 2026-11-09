@@ -91,7 +91,7 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
 
 ## What it computes, and what not yet
 
-- **Functions**: 174 of Excel's functions (10 of them partly): math, statistics,
+- **Functions**: 354 of Excel's functions (17 of them partly): math, statistics,
   logic, text, dates, lookup (`VLOOKUP`, `INDEX`, `MATCH`, `OFFSET`, `INDIRECT`...), the
   financial and bond functions, the database functions. The
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
@@ -101,11 +101,12 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
   place, or a relative 1E-9 for the iterative functions), 423 known deviations, each listed
   with its reason in
   [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md). Every one of
-  them is evaluated. The largest group of deviations is `VDB`
-  over a fractional start or end period (145 rows). Among the others, from some starting guesses
+  them is evaluated. The largest group of deviations is `CUMIPMT` and `CUMPRINC` at tiny rates
+  and in tiny principals, where Excel's result carries noise past their tolerance (85 rows).
+  Among the others, from some starting guesses
   Excel's `IRR` and `RATE` reach another root
   than xlrecalc, or a rate where xlrecalc gives `#NUM!`, and `XIRR` stops about 1E-8 from the
-  root; 73 of the 271 captured rows of `IRR`, `XIRR` and `RATE` differ that way.
+  root; 79 of the 352 captured rows of `IRR`, `XIRR` and `RATE` differ that way.
 - **Excel's behavior**: coercion between kinds, error values, the 15-digit rules, the 1900
   leap-year bug and the 1904 date system, arrays, dynamic arrays and spill, implicit
   intersection, circular references (left uncalculated, as Excel does with iteration off).
