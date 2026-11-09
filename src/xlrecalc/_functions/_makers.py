@@ -6,12 +6,15 @@ Each function's rules come from the capture its docstring names, tried on two se
 from __future__ import annotations
 
 import bisect
+import re
 from typing import Any
 
 from xlrecalc._arrays import to_array
+from xlrecalc._coerce import scalar, to_text
 from xlrecalc._formula import MISSING
-from xlrecalc._functions._dynamic import VALUE
+from xlrecalc._functions._dynamic import VALUE, _count, _flag, _limit
 from xlrecalc._functions._registry import function
+from xlrecalc._functions._reshape import _register, _spread
 from xlrecalc._values import ErrorValue, Ref
 
 S = "statistical"
@@ -91,3 +94,81 @@ def MODE_MULT(ctx: Any, *args: Any) -> Any:
     if best < 2:
         return ErrorValue.NA
     return tuple((v,) for v, n in counts.items() if n == best)
+
+
+# TEXTSPLIT -------------------------------------------------------------------------------------
+
+
+def _delimiters(a: Any, ctx: Any) -> list[str] | ErrorValue | None:
+    """The delimiters given, ``None`` for none; an empty one is ``#VALUE!``."""
+    if a is MISSING:
+        return None
+    out = []
+    for v in _elements(a):
+        if isinstance(v, ErrorValue):
+            return v
+        text = to_text(v, ctx)
+        if isinstance(text, ErrorValue):
+            return text
+        if text == "":
+            return VALUE
+        out.append(text)
+    return out
+
+
+def _pieces(text: str, delimiters: list[str] | None, fold: bool, ignore: bool) -> list[str]:
+    if delimiters is None:
+        return [text]
+    pattern = "|".join(re.escape(d) for d in sorted(delimiters, key=len, reverse=True))
+    parts = re.split(pattern, text, flags=re.IGNORECASE if fold else 0)
+    return [p for p in parts if p] if ignore else parts
+
+
+def _textsplit(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
+    """A text split into columns at ``col_delimiter`` and rows at ``row_delimiter``.
+
+    Rows shorter than the longest are padded with ``pad_with`` (``#N/A`` by default); empty
+    pieces are dropped with ``ignore_empty``; ``match_mode`` 1 matches without regard to case;
+    empty text is ``#VALUE!``. A range or array of texts is taken element by element (capture
+    ``dyn_textsplit``).
+    """
+    lifted = _spread(ctx, _textsplit, given, (0,), ranges)
+    if lifted is not None:
+        return lifted
+    padded: list[Any] = [*given, *[MISSING] * (6 - len(given))]
+    text, cols, rows, ignore, mode, pad = padded
+    if isinstance(text, Ref):
+        text = scalar(text, ctx)
+    if isinstance(text, ErrorValue):
+        return text
+    whole = to_text(text, ctx)
+    if isinstance(whole, ErrorValue):
+        return whole
+    if whole == "":
+        return VALUE
+    col_delimiters, row_delimiters = _delimiters(cols, ctx), _delimiters(rows, ctx)
+    for d in (col_delimiters, row_delimiters):
+        if isinstance(d, ErrorValue):
+            return d
+    skip = _flag(ignore, ctx)
+    if isinstance(skip, ErrorValue):
+        return skip
+    fold = _count(mode, ctx, 0.0)
+    if isinstance(fold, ErrorValue):
+        return fold
+    if fold not in (0.0, 1.0):
+        return VALUE
+    filler = ErrorValue.NA if pad is MISSING else scalar(pad, ctx) if isinstance(pad, Ref) else pad
+    lines = [
+        _pieces(line, col_delimiters, fold == 1.0, skip)  # type: ignore[arg-type]
+        for line in _pieces(whole, row_delimiters, fold == 1.0, skip)  # type: ignore[arg-type]
+    ]
+    lines = [line for line in lines if line] or [[""]]
+    width = max(len(line) for line in lines)
+    _limit(ctx, len(lines), width)
+    return tuple(tuple(line) + (filler,) * (width - len(line)) for line in lines)
+
+
+_register(
+    "_XLFN.TEXTSPLIT", _textsplit, "raw", "raw", "raw", "raw", "raw", "raw", min_args=2, category=T
+)

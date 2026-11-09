@@ -709,6 +709,40 @@ FREQUENCY_MODE = [
     DynCase(f'{MM}("1","1")'),
 ]
 
+TEXTSPLIT = [
+    DynCase(f'{TS}("a,b,c",",")', readers=READ),
+    DynCase(f'{TS}("a,b;c,d",",",";")'),
+    DynCase(f'{TS}("a,b;c",",",";")'),
+    DynCase(f'{TS}("a,b;c",",",";",,,"-")'),
+    DynCase(f'{TS}("a,,b",",")'),
+    DynCase(f'{TS}("a,,b",",",,TRUE)'),
+    DynCase(f'{TS}("a1b2c",{{"1","2"}})'),
+    DynCase(f'{TS}("aXbxc","x")'),
+    DynCase(f'{TS}("aXbxc","x",,,1)'),
+    DynCase(f'{TS}("",",")'),
+    DynCase(f'{TS}("abc","")'),
+    DynCase(f'{TS}("abc",",")'),
+    DynCase(f'{TS}("a,b",,";")'),
+    DynCase(f'{TS}("a;b",,";")'),
+    DynCase(f'{TS}(CH1:CH2,",")'),
+    DynCase(f"{TS}(123,2)"),
+    DynCase(f'{TS}("a,b",",")', legacy=True),
+    DynCase(f'{TS}(#N/A,",")'),
+    DynCase(f'{TS}("a,b",#N/A)'),
+    DynCase(f'{TS}("a, b",{{","," "}})'),
+    DynCase(f'{TS}("a,b;c,d;",",",";",TRUE)'),
+    DynCase(f'{TS}("a,b;c,d;",",",";")'),
+    DynCase(f'{TS}("a,b",",")', way={(0, 1): "in the way"}),
+    DynCase(f'{TS}("a,b",",",,,2)'),
+    DynCase(f'{TS}("a,b",",",,"x")'),
+    DynCase('TEXTSPLIT("a,b",",")'),
+    # second set
+    DynCase(f'{TS}(CH5,",")', readers=READ),
+    DynCase(f'{TS}(CH6,"-",,,1)'),
+    DynCase(f'{TS}(CH7,",",";")'),
+    DynCase(f"{TS}(CH4,CI1:CI2)"),
+]
+
 # Formulas that make Excel refuse the file (error -50 on opening, each alone in a workbook):
 # SORT and FILTER without their prefix (UNIQUE, SORTBY and SEQUENCE without theirs open), and
 # argument counts the functions do not take. The reshaping functions without their prefix open.
@@ -752,6 +786,8 @@ REFUSED = (
     f"{FQ}(CC1:CC13)",
     f"{FQ}(CC1:CC13,CD1:CD3,1)",
     f"{MM}()",
+    f'{TS}("a")',
+    f'{TS}("a",",",";",TRUE,0,"-",1)',
 )
 
 SUITES: dict[str, list[DynCase]] = {
@@ -769,6 +805,7 @@ SUITES: dict[str, list[DynCase]] = {
     "index": INDEX,
     "matrix": MATRIX,
     "frequency": FREQUENCY_MODE,
+    "textsplit": TEXTSPLIT,
 }
 
 

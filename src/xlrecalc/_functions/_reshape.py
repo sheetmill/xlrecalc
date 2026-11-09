@@ -93,7 +93,7 @@ def _shown_grid(rows: Sequence[Sequence[Any]]) -> Grid:
     return tuple(tuple(_shown(v) for v in row) for row in rows)
 
 
-def _register(name: str, core: Core, *kinds: str, **options: Any) -> None:
+def _register(name: str, core: Core, *kinds: str, category: str = C, **options: Any) -> None:
     """Register ``core`` under ``name``: plain, and in an array context with ranges lifted."""
 
     def plain(ctx: Any, *given: Any) -> Any:
@@ -104,7 +104,7 @@ def _register(name: str, core: Core, *kinds: str, **options: Any) -> None:
 
     plain.__doc__ = core.__doc__
     plain.__name__ = name.removeprefix("_XLFN.")
-    function(name, *kinds, category=C, in_array=in_array, makes_array=True, **options)(plain)
+    function(name, *kinds, category=category, in_array=in_array, makes_array=True, **options)(plain)
 
 
 # CHOOSECOLS and CHOOSEROWS --------------------------------------------------------------------

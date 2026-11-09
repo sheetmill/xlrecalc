@@ -40,6 +40,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     with no number among the bins there is one bin, 0; an empty argument is `#VALUE!`.
   - `MODE.MULT`: every number that occurs most often, at least twice, in the order each first appears; logicals and text
     are left out, given directly too; none repeating is `#N/A`.
+  - `TEXTSPLIT`: a text split into columns and rows at one or several delimiters, padded with `#N/A` or `pad_with`,
+    empty pieces kept or dropped, matched with or without regard to case; empty text or an empty delimiter is `#VALUE!`;
+    a range or array of texts is taken element by element.
   - `WRAPROWS`, `WRAPCOLS`: a row or column of values in rows or columns of a count no wider than the values, the last
     padded (`#N/A` by default, empty included); a count below 1 is `#NUM!`, a two-dimensional array `#VALUE!`.
 

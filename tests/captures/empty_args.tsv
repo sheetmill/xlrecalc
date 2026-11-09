@@ -1194,3 +1194,13 @@ empty_args	frequency	1181	FREQUENCY($AA$1:$AA$4,)	()	e	#VALUE!
 empty_args	mode.mult	1182	_xlfn.MODE.MULT({1,1,2},{1,1,2})	()	n	1.0
 empty_args	mode.mult	1183	_xlfn.MODE.MULT(,{1,1,2})	()	e	#VALUE!
 empty_args	mode.mult	1184	_xlfn.MODE.MULT({1,1,2},)	()	e	#VALUE!
+empty_args	textsplit	1185	_xlfn.TEXTSPLIT("a,b;c",",",";",FALSE,0,"-")	()	str	'a'
+empty_args	textsplit	1186	_xlfn.TEXTSPLIT(,",",";",FALSE,0,"-")	()	e	#VALUE!
+empty_args	textsplit	1187	_xlfn.TEXTSPLIT("a,b;c",,";",FALSE,0,"-")	()	str	'a,b'
+empty_args	textsplit	1188	_xlfn.TEXTSPLIT("a,b;c",",",,FALSE,0,"-")	()	str	'a'
+empty_args	textsplit	1189	_xlfn.TEXTSPLIT("a,b;c",",",";",,0,"-")	()	str	'a'
+empty_args	textsplit	1190	_xlfn.TEXTSPLIT("a,b;c",",",";",FALSE,,"-")	()	str	'a'
+empty_args	textsplit	1191	_xlfn.TEXTSPLIT("a,b;c",",",";",FALSE,0,)	()	str	'a'
+empty_args	textsplit	1192	_xlfn.TEXTSPLIT("a,b;c",",",,,,)	()	str	'a'
+empty_args	textsplit	1193	_xlfn.TEXTSPLIT("a,b;c",",",)	()	str	'a'
+empty_args	textsplit	1194	_xlfn.TEXTSPLIT("a,b;c",",",,FALSE)	()	str	'a'
