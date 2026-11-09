@@ -7,6 +7,7 @@ numbers stay stable.
 from __future__ import annotations
 
 import math
+import random
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
@@ -3373,6 +3374,7 @@ _EMPTY_VALID: dict[str, tuple[str, ...]] = {
     "_XLFN.EXPAND": ("{1,2}", "2", "3", "0"), "_XLFN.TOCOL": (_R, "1", "TRUE"),
     "_XLFN.TOROW": (_R, "1", "TRUE"), "_XLFN.WRAPROWS": (_R, "2", "0"),
     "_XLFN.WRAPCOLS": (_R, "2", "0"),
+    "_XLFN.MUNIT": ("2",),
     "_XLFN.TEXTBEFORE": ('"a-b-c"', '"-"', "1", "0", "0", '"none"'),
     "_XLFN.TEXTAFTER": ('"a-b-c"', '"-"', "1", "0", "0", '"none"'),
     "SUMIF": (_R, '">1"', _S), "COUNTIF": (_R, '">1"'), "AVERAGEIF": (_R, '">1"', _S),
@@ -3457,7 +3459,7 @@ _EMPTY_ADDED = (
     "MMULT", "_XLFN.SEQUENCE", "_XLFN.UNIQUE", "_XLFN._XLWS.SORT", "_XLFN.SORTBY",
     "_XLFN._XLWS.FILTER", "_XLFN.CHOOSECOLS", "_XLFN.CHOOSEROWS", "_XLFN.TAKE", "_XLFN.DROP",
     "_XLFN.EXPAND", "_XLFN.VSTACK", "_XLFN.HSTACK", "_XLFN.TOCOL", "_XLFN.TOROW", "_XLFN.WRAPROWS",
-    "_XLFN.WRAPCOLS",
+    "_XLFN.WRAPCOLS", "_XLFN.MUNIT",
 )  # fmt: skip
 
 
@@ -3556,6 +3558,175 @@ def mac_gaps() -> list[Case]:
     ]
 
 
+def _matrices() -> list[tuple[str, list[list[Input]]]]:
+    """The matrices of ``matrix_family``: (tag, rows)."""
+    rng = random.Random(20261109)
+    out: list[tuple[str, list[list[Input]]]] = [
+        ("one", [[5.0]]),
+        ("one_zero", [[0.0]]),
+        ("one_neg", [[-3.5]]),
+        ("int2", [[1.0, 2.0], [3.0, 4.0]]),
+        ("perm2", [[0.0, 1.0], [1.0, 0.0]]),
+        ("sing2", [[1.0, 2.0], [2.0, 4.0]]),
+        ("tri3", [[2.0, -1.0, 0.0], [-1.0, 2.0, -1.0], [0.0, -1.0, 2.0]]),
+        ("sing3", [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]]),
+        (
+            "docs4",
+            [
+                [1.0, 3.0, 8.0, 5.0],
+                [1.0, 3.0, 6.0, 1.0],
+                [1.0, 1.0, 1.0, 0.0],
+                [7.0, 3.0, 10.0, 2.0],
+            ],
+        ),
+        ("perm3", [[0.0, 0.0, 1.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0]]),
+        ("near2", [[1.0, 1.0], [1.0, 1.0 + 2.0**-52]]),
+        ("pivot2", [[1e-20, 1.0], [1.0, 1.0]]),
+        ("big2", [[1e200, 2e200], [3e200, 4e200]]),
+        ("tiny2", [[1e-200, 2e-200], [3e-200, 4e-200]]),
+        ("big1", [[1e308]]),
+        ("tiny1", [[1e-308]]),
+    ]
+    for n in range(3, 8):
+        out.append((f"hilbert{n}", [[1.0 / (i + j + 1) for j in range(n)] for i in range(n)]))
+    for n in range(2, 9):
+        out.append((f"rand{n}", [[rng.uniform(-1.0, 1.0) for _ in range(n)] for _ in range(n)]))
+    for n in (3, 5):
+        out.append((f"int{n}", [[float(rng.randint(-9, 9)) for _ in range(n)] for _ in range(n)]))
+    for n in (3, 4):
+        out.append(
+            (
+                f"wide{n}",
+                [
+                    [rng.uniform(-1, 1) * 10.0 ** rng.randint(-8, 8) for _ in range(n)]
+                    for _ in range(n)
+                ],
+            )
+        )
+    # kinds: a text, a blank, a logical, an error, a number as text; and not square
+    out += [
+        ("text", [[1.0, "x"], [3.0, 4.0]]),
+        ("blank", [[1.0, None], [3.0, 4.0]]),
+        ("logical", [[1.0, True], [3.0, 4.0]]),
+        ("error", [[1.0, NA], [3.0, 4.0]]),
+        ("numtext", [["1", 2.0], [3.0, 4.0]]),
+        ("wide", [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]),
+    ]
+    return out
+
+
+def _matrix_layout() -> tuple[dict[str, Input], dict[str, str]]:
+    """The matrices stacked down columns AA on, a blank row between: cells, and tag -> range."""
+    cells: dict[str, Input] = {}
+    ranges: dict[str, str] = {}
+    row = 1
+    for tag, rows in _matrices():
+        for i, line in enumerate(rows):
+            for j, v in enumerate(line):
+                if v is not None:
+                    cells[f"{_letters(27 + j)}{row + i}"] = v
+        ranges[tag] = f"$AA${row}:${_letters(26 + len(rows[0]))}${row + len(rows) - 1}"
+        row += len(rows) + 1
+    return cells, ranges
+
+
+def _letters(n: int) -> str:
+    s = ""
+    while n:
+        n, r = divmod(n - 1, 26)
+        s = chr(65 + r) + s
+    return s
+
+
+def matrix_family() -> list[Case]:
+    """MDETERM, MINVERSE (each element through INDEX) and MUNIT, over the matrices of
+    ``_matrices``: integers, permutations, singular and near-singular ones, Hilbert matrices,
+    random ones up to 8 by 8, magnitudes that overflow or underflow, and other kinds."""
+    _, ranges = _matrix_layout()
+    cases = []
+    for tag, rows in _matrices():
+        r = ranges[tag]
+        cases.append(Case("mdeterm", f"MDETERM({r})"))
+        n, m = len(rows), len(rows[0])
+        if n != m or n > 5:
+            cases.append(Case("minverse", f"INDEX(MINVERSE({r}),1,1)"))
+            continue
+        for i in range(1, n + 1):
+            for j in range(1, n + 1):
+                cases.append(Case("minverse", f"INDEX(MINVERSE({r}),{i},{j})"))
+    for tag in ("hilbert6", "hilbert7", "rand6", "rand7", "rand8"):
+        n = int(tag[-1])
+        cases += [
+            Case("minverse", f"INDEX(MINVERSE({ranges[tag]}),{i},{n + 1 - i})") for i in (1, n)
+        ]
+    cases += [
+        Case("mdeterm", f)
+        for f in (
+            "MDETERM(5)",
+            'MDETERM("5")',
+            "MDETERM(TRUE)",
+            "MDETERM(#N/A)",
+            "MDETERM({1,2;3,4})",
+            "MDETERM({1,2})",
+            "MDETERM({1.0})",
+            "MDETERM($AA$1)",
+            "MDETERM($ZZ$1)",
+            'MDETERM("x")',
+            "MDETERM(_xlfn.MUNIT(3))",
+            f"MDETERM(MMULT({ranges['int2']},{ranges['int2']}))",
+        )
+    ]
+    cases += [
+        Case("minverse", f)
+        for f in (
+            "INDEX(MINVERSE(4),1,1)",
+            "INDEX(MINVERSE({4.0}),1,1)",
+            "INDEX(MINVERSE(0),1,1)",
+            'INDEX(MINVERSE("4"),1,1)',
+            "INDEX(MINVERSE(#N/A),1,1)",
+            "MINVERSE({1,2;3,4})",
+            "INDEX(MINVERSE({1,2;3,4}),2,1)",
+            "ROWS(MINVERSE({1,2;3,4}))",
+            "SUM(MINVERSE(_xlfn.MUNIT(4)))",
+            "INDEX(MINVERSE($ZZ$1),1,1)",
+        )
+    ]
+    cases += [
+        Case("munit", f)
+        for f in (
+            "INDEX(_xlfn.MUNIT(1),1,1)",
+            "INDEX(_xlfn.MUNIT(3),2,2)",
+            "INDEX(_xlfn.MUNIT(3),1,3)",
+            "_xlfn.MUNIT(0)",
+            "_xlfn.MUNIT(-1)",
+            "ROWS(_xlfn.MUNIT(2.7))",
+            'ROWS(_xlfn.MUNIT("3"))',
+            "ROWS(_xlfn.MUNIT(TRUE))",
+            "_xlfn.MUNIT(#N/A)",
+            'ROWS(_xlfn.MUNIT("x"))',
+            "SUM(_xlfn.MUNIT(5))",
+            "ROWS(_xlfn.MUNIT(1000))",
+            "COLUMNS(_xlfn.MUNIT(7))",
+            "_xlfn.MUNIT(0.5)",
+            "_xlfn.MUNIT(1)",
+            "_xlfn.MUNIT($ZZ$1)",
+            "SUM(_xlfn.MUNIT({2,3}))",
+            "ROWS(_xlfn.MUNIT(1E-300))",
+        )
+    ]
+    # a 1 by 1 array, written (a literal, not a placeholder) or computed, against a number
+    cases += [
+        Case("mdeterm", "MDETERM(_xlfn.MUNIT(1))"),
+        Case("minverse", "INDEX(MINVERSE(_xlfn.MUNIT(1)),1,1)"),
+        Case("mdeterm", "MDETERM(_xlfn.SEQUENCE(1))"),
+        Case("mdeterm", "MDETERM(--{5.0})"),
+        Case("mdeterm", "MDETERM(INDEX({5.0},1,1))"),
+        Case("mmult", "MMULT({2.0},{3.0})"),
+        Case("mmult", "MMULT(_xlfn.MUNIT(1),2)"),
+    ]
+    return cases
+
+
 _INTEGERS_TABLE: dict[str, Input] = {
     "AA1": 1.0, "AA2": 2.0, "AA3": 3.0, "AA4": "x", "AA5": NA, "AA6": 2.0,
     "AB1": 4.0, "AB2": 5.0, "AB3": 6.0, "AB4": 7.0, "AB5": 1.0, "AB6": 3.0,
@@ -3597,4 +3768,5 @@ SUITES = {
     "text_family": Suite(text_family, fixed=_TEXT_TABLE),
     "dates_family": Suite(dates_family),
     "info_family": Suite(info_family, fixed=_INFO_TABLE),
+    "matrix_family": Suite(matrix_family, fixed=_matrix_layout()[0]),
 }

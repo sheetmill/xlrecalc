@@ -572,6 +572,7 @@ SUITES = [
     "math_trig",
     "math_integers",
     "info_family",
+    "matrix_family",
     "dates_family",
     "text_family",
     "database_family",

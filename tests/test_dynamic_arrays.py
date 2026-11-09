@@ -33,7 +33,7 @@ from xlrecalc._xlsx._write import text_escape
 CAPTURES = Path(__file__).with_name("captures")
 SUITES = (
     "sequence", "mmult", "unique", "sort", "sortby", "filter",
-    "choose", "droptake", "stack", "tocol", "wrap", "index",
+    "choose", "droptake", "stack", "tocol", "wrap", "index", "matrix",
 )  # fmt: skip
 RICH = "{http://schemas.microsoft.com/office/spreadsheetml/2017/richdata}"
 _ERROR_TYPES = {"8": "#SPILL!", "13": "#CALC!"}
@@ -241,5 +241,6 @@ def test_array_makers_are_flagged_as_the_captures_show() -> None:
             plain.add(name)
         elif ":" not in ref and not engine.templates[engine.template_for(form, 0, 0)].intersects:
             makes.add(name)
+    makes &= SPECS.keys()  # a function captured before it is implemented has no flag yet
     assert not makes & plain
     assert flagged == makes, (sorted(flagged - makes), sorted(makes - flagged))

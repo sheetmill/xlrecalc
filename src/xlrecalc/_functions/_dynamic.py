@@ -134,7 +134,7 @@ def SEQUENCE(
 def MMULT(ctx: Any, a: Any, b: Any) -> Any:
     """The matrix product: every element a number, as many columns in ``a`` as rows in ``b``."""
     x, y = _grid(a), _grid(b)
-    for m in (x, y):
+    for m in (x, y):  # an error in either matrix before a value of another kind in either
         for row in m:
             for v in row:
                 if isinstance(v, ErrorValue):
@@ -158,6 +158,39 @@ def MMULT(ctx: Any, a: Any, b: Any) -> Any:
             cells.append(total if math.isfinite(total) else ErrorValue.NUM)
         out.append(tuple(cells))
     return tuple(out)
+
+
+# Square matrices ---------------------------------------------------------------------------------
+
+
+def _munit(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
+    (size,) = given
+    if type(size) is tuple or (ranges and isinstance(size, Ref) and not size.is_cell()):
+        spread = [to_array(size) if isinstance(size, Ref) else size]
+
+        def leading(x: Any) -> Any:
+            v = _munit(ctx, (x,), ranges)
+            return v[0][0] if isinstance(v, tuple) else v
+
+        return broadcast(leading, spread, [True], getattr(ctx, "max_array_cells", None))
+    n = _count(size, ctx, 0.0)
+    if isinstance(n, ErrorValue):
+        return n
+    k = math.trunc(n)
+    if k < 1:
+        return VALUE
+    _limit(ctx, k, k)  # a size past the limit keeps the cell's value, reported
+    return tuple(tuple(1.0 if j == i else 0.0 for j in range(k)) for i in range(k))
+
+
+def _munit_array(ctx: Any, size: Any) -> Any:
+    return _munit(ctx, (size,), True)
+
+
+@function("_XLFN.MUNIT", "raw", category=L, in_array=_munit_array, makes_array=True)
+def MUNIT(ctx: Any, size: Any) -> Any:
+    """The identity matrix of ``size`` rows and columns."""
+    return _munit(ctx, (size,), False)
 
 
 # Order and equality, as SORT, SORTBY and UNIQUE see values ---------------------------------------

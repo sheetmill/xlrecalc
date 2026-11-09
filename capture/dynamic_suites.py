@@ -621,6 +621,42 @@ INDEX = [
     DynCase("INDEX(BT1:BT4,1,)"),
 ]
 
+MU, MI = "_xlfn.MUNIT", "MINVERSE"
+MATRIX = [
+    DynCase(f"{MU}(3)", readers=READ),
+    DynCase(f"{MU}(1)"),
+    DynCase(f"{MU}(0)"),
+    DynCase(f"{MU}(2.9)"),
+    DynCase(f'{MU}("3")'),
+    DynCase(f"{MU}(TRUE)"),
+    DynCase(f"{MU}(#N/A)"),
+    DynCase(f"{MU}({{1,2}})"),
+    DynCase(f"{MU}(BT1:BT2)"),
+    DynCase(f"{MU}(3)", legacy=True),
+    DynCase(f"{MU}(3)", way={(1, 1): "in the way"}),
+    DynCase("MUNIT(2)"),
+    DynCase(f"{MU}(11)"),
+    DynCase(f"{MI}({{1,2;3,4}})", readers=READ),
+    DynCase(f"{MI}(AN1:AO2)"),
+    DynCase(f"{MI}({{1,2;2,4}})"),
+    DynCase(f"{MI}(AT1:AU2)"),
+    DynCase(f"{MI}(AV1:AW2)"),
+    DynCase(f"{MI}(AX1:AY2)"),
+    DynCase(f"{MI}(AZ1:BA2)"),
+    DynCase(f"{MI}(BB1:BC2)"),
+    DynCase(f"{MI}({{1,2,3}})"),
+    DynCase(f"{MI}(5)"),
+    DynCase(f"{MI}({{1,2;3,4}})", legacy=True),
+    DynCase(f"{MI}({{0,1;1,0}})"),
+    DynCase(f"{MI}({{1,2;3,4}})", way={(1, 0): 0.0}),
+    DynCase("MDETERM(AN1:AO2)"),
+    DynCase(f"{MI}({MU}(3))"),
+    # second set
+    DynCase(f"{MI}(BJ1:BL3)", readers=READ),
+    DynCase(f"{MU}(BJ1)"),
+    DynCase("MDETERM(BJ1:BL3)"),
+]
+
 # Formulas that make Excel refuse the file (error -50 on opening, each alone in a workbook):
 # SORT and FILTER without their prefix (UNIQUE, SORTBY and SEQUENCE without theirs open), and
 # argument counts the functions do not take. The reshaping functions without their prefix open.
@@ -653,6 +689,9 @@ REFUSED = (
     f"{TR}({T1},0,0,0)",
     f"{WC}({{1,2}},1,0,0)",
     f"{WR}({{1,2}},1,0,0)",
+    # the matrix functions with no argument or two
+    f"{MU}()",
+    f"{MU}(2,3)",
 )
 
 SUITES: dict[str, list[DynCase]] = {
@@ -668,6 +707,7 @@ SUITES: dict[str, list[DynCase]] = {
     "tocol": TOCOL,
     "wrap": WRAP,
     "index": INDEX,
+    "matrix": MATRIX,
 }
 
 

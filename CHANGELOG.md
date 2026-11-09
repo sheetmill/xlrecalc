@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `VSTACK`, `HSTACK`: one below another or side by side, padded with `#N/A`; an error given as an argument is the
     result, an empty argument `#VALUE!`.
   - `TOCOL`, `TOROW`: the values by rows or by columns, blanks, errors or both ignored; none left is `#CALC!`.
+  - `MUNIT`: the identity matrix of a size truncated, read from text or a logical; below 1 `#VALUE!`.
   - `WRAPROWS`, `WRAPCOLS`: a row or column of values in rows or columns of a count no wider than the values, the last
     padded (`#N/A` by default, empty included); a count below 1 is `#NUM!`, a two-dimensional array `#VALUE!`.
 
