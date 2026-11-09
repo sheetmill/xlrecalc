@@ -484,7 +484,7 @@ library differs in the last bits; the rows that match either way do not.
 | `TEXTAFTER` | text | implemented | 2426 | 2426 | 0 | 0 | 0 |  |  |
 | `TEXTBEFORE` | text | implemented | 2426 | 2426 | 0 | 0 | 0 |  |  |
 | `TEXTJOIN` | text | implemented | 80 | 80 | 0 | 0 | 0 |  |  |
-| `TEXTSPLIT` | text | implemented | 39 | 39 | 0 | 0 | 0 |  |  |
+| `TEXTSPLIT` | text | implemented | 61 | 61 | 0 | 0 | 0 |  |  |
 | `TIME` | date and time | implemented | 550 | 550 | 0 | 0 | 0 |  |  |
 | `TIMEVALUE` | date and time | implemented | 127 | 127 | 0 | 0 | 0 |  |  |
 | `TINV` | | absent | | | | | | | |

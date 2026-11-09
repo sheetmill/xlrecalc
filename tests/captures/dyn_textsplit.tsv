@@ -216,6 +216,17 @@ input	data	CH6	"'A-b-C'"
 input	data	CH7	"'1,2;3,4'"
 input	data	CI1	"','"
 input	data	CI2	"';'"
+input	data	CJ1	"'p--q-r'"
+input	data	CJ2	"'m-pqr'"
+input	data	CJ3	"'u;;v'"
+input	data	CJ4	"'u,;v'"
+input	data	CJ5	"'u;,v'"
+input	data	CK1	"'-'"
+input	data	CK2	"'--'"
+input	data	CL1	"'--'"
+input	data	CL2	"'-'"
+input	data	CM1	"'-p'"
+input	data	CM2	"'pqr'"
 input	dynamic	B1	'_xlfn.TEXTSPLIT("a,b,c",",")'
 input	reader	N1	'SUM(_xlfn.ANCHORARRAY(B1))'
 input	reader	N2	'ROWS(_xlfn.ANCHORARRAY(B1))'
@@ -253,6 +264,28 @@ input	reader	N315	'COLUMNS(_xlfn.ANCHORARRAY(B313))'
 input	dynamic	B325	'_xlfn.TEXTSPLIT(CH6,"-",,,1)'
 input	dynamic	B337	'_xlfn.TEXTSPLIT(CH7,",",";")'
 input	dynamic	B349	'_xlfn.TEXTSPLIT(CH4,CI1:CI2)'
+input	dynamic	B361	'_xlfn.TEXTSPLIT("a--b-c",{"-","--"})'
+input	dynamic	B373	'_xlfn.TEXTSPLIT("a--b-c",{"--","-"})'
+input	dynamic	B385	'_xlfn.TEXTSPLIT("x-abc",{"-a","abc"})'
+input	dynamic	B397	'_xlfn.TEXTSPLIT("abc",{"bc","ab"})'
+input	dynamic	B409	'_xlfn.TEXTSPLIT("a-->b",{"->","--"})'
+input	dynamic	B421	'_xlfn.TEXTSPLIT("a;;b",";;",";")'
+input	dynamic	B433	'_xlfn.TEXTSPLIT("a;;b",";",";;")'
+input	dynamic	B445	'_xlfn.TEXTSPLIT("a,;b",",;",";")'
+input	dynamic	B457	'_xlfn.TEXTSPLIT("a;b",";",";")'
+input	dynamic	B469	'_xlfn.TEXTSPLIT("aXxb",{"x","XX"},,,1)'
+input	dynamic	B481	'_xlfn.TEXTSPLIT("aXxb",{"x","XX"})'
+input	dynamic	B493	'_xlfn.TEXTSPLIT(CJ1,CK1:CK2)'
+input	dynamic	B505	'_xlfn.TEXTSPLIT(CJ1,CL1:CL2)'
+input	dynamic	B517	'_xlfn.TEXTSPLIT(CJ2,CM1:CM2)'
+input	dynamic	B529	'_xlfn.TEXTSPLIT(CJ3,";;",";")'
+input	dynamic	B541	'_xlfn.TEXTSPLIT(CJ4,",;",";")'
+input	dynamic	B553	'_xlfn.TEXTSPLIT("a;,b",",",";,")'
+input	dynamic	B565	'_xlfn.TEXTSPLIT("a,;b",",",",;")'
+input	dynamic	B577	'_xlfn.TEXTSPLIT("aXb","x","X",,1)'
+input	dynamic	B589	'_xlfn.TEXTSPLIT("a;;b",,{";",";;"})'
+input	dynamic	B601	'_xlfn.TEXTSPLIT("a;;b;c",",",{";;",";"},TRUE)'
+input	dynamic	B613	'_xlfn.TEXTSPLIT(CJ5,",",";,")'
 cell	B1	str	'a'	'_xlfn.TEXTSPLIT("a,b,c",",")'	array	B1:D1	1	
 cell	C1	str	'b'	None				
 cell	D1	str	'c'	None				
@@ -310,6 +343,10 @@ cell	CF1	n	'0'	None
 cell	CG1	n	'1'	None				
 cell	CH1	s	'a,b,c'	None				
 cell	CI1	s	','	None				
+cell	CJ1	s	'p--q-r'	None				
+cell	CK1	s	'-'	None				
+cell	CL1	s	'--'	None				
+cell	CM1	s	'-p'	None				
 cell	N2	n	'1'	'ROWS(_xlfn.ANCHORARRAY(B1))'	normal			
 cell	AA2	n	'1'	None				
 cell	AB2	s	'Apple'	None				
@@ -361,6 +398,10 @@ cell	CF2	n	'2.5'	None
 cell	CG2	n	'2'	None				
 cell	CH2	s	'x;y,z'	None				
 cell	CI2	s	';'	None				
+cell	CJ2	s	'm-pqr'	None				
+cell	CK2	s	'--'	None				
+cell	CL2	s	'-'	None				
+cell	CM2	s	'pqr'	None				
 cell	N3	n	'3'	'COLUMNS(_xlfn.ANCHORARRAY(B1))'	normal			
 cell	AA3	n	'4'	None				
 cell	AB3	s	'apple'	None				
@@ -389,6 +430,7 @@ cell	CD3	n	'90'	None
 cell	CE3	n	'2.5'	None				
 cell	CF3	n	'3'	None				
 cell	CG3	n	'2'	None				
+cell	CJ3	s	'u;;v'	None				
 cell	AA4	n	'1'	None				
 cell	AB4	s	'Pear'	None				
 cell	AC4	e	'#N/A'	None				
@@ -406,6 +448,7 @@ cell	CC4	n	'85'	None
 cell	CE4	n	'-1'	None				
 cell	CG4	n	'3'	None				
 cell	CH4	s	'one'	None				
+cell	CJ4	s	'u,;v'	None				
 cell	AA5	n	'5'	None				
 cell	AB5	s	'fig'	None				
 cell	AD5	s	'b'	None				
@@ -420,6 +463,7 @@ cell	CC5	n	'50'	None
 cell	CE5	n	'0'	None				
 cell	CG5	n	'3'	None				
 cell	CH5	s	'a,,b'	None				
+cell	CJ5	s	'u;,v'	None				
 cell	AA6	n	'9'	None				
 cell	AB6	s	'APPLE'	None				
 cell	AC6	s	'A'	None				
@@ -538,3 +582,53 @@ cell	C337	str	'2'	None
 cell	B338	str	'3'	None				
 cell	C338	str	'4'	None				
 cell	B349	str	'one'	'_xlfn.TEXTSPLIT(CH4,CI1:CI2)'	array	B349	1	
+cell	B361	str	'a'	'_xlfn.TEXTSPLIT("a--b-c",{"-","--"})'	array	B361:D361	1	
+cell	C361	str	'b'	None				
+cell	D361	str	'c'	None				
+cell	B373	str	'a'	'_xlfn.TEXTSPLIT("a--b-c",{"--","-"})'	array	B373:D373	1	
+cell	C373	str	'b'	None				
+cell	D373	str	'c'	None				
+cell	B385	str	'x'	'_xlfn.TEXTSPLIT("x-abc",{"-a","abc"})'	array	B385:C385	1	
+cell	C385	str	'bc'	None				
+cell	B397	str	''	'_xlfn.TEXTSPLIT("abc",{"bc","ab"})'	array	B397:C397	1	
+cell	C397	str	'c'	None				
+cell	B409	str	'a'	'_xlfn.TEXTSPLIT("a-->b",{"->","--"})'	array	B409:C409	1	
+cell	C409	str	'>b'	None				
+cell	B421	str	'a'	'_xlfn.TEXTSPLIT("a;;b",";;",";")'	array	B421:C421	1	
+cell	C421	str	'b'	None				
+cell	B433	str	'a'	'_xlfn.TEXTSPLIT("a;;b",";",";;")'	array	B433:D433	1	
+cell	C433	str	''	None				
+cell	D433	str	'b'	None				
+cell	B445	str	'a'	'_xlfn.TEXTSPLIT("a,;b",",;",";")'	array	B445:C445	1	
+cell	C445	str	'b'	None				
+cell	B457	str	'a'	'_xlfn.TEXTSPLIT("a;b",";",";")'	array	B457:C457	1	
+cell	C457	str	'b'	None				
+cell	B469	str	'a'	'_xlfn.TEXTSPLIT("aXxb",{"x","XX"},,,1)'	array	B469:C469	1	
+cell	C469	str	'b'	None				
+cell	B481	str	'aX'	'_xlfn.TEXTSPLIT("aXxb",{"x","XX"})'	array	B481:C481	1	
+cell	C481	str	'b'	None				
+cell	B493	str	'p'	'_xlfn.TEXTSPLIT(CJ1,CK1:CK2)'	array	B493:D493	1	
+cell	C493	str	'q'	None				
+cell	D493	str	'r'	None				
+cell	B505	str	'p'	'_xlfn.TEXTSPLIT(CJ1,CL1:CL2)'	array	B505:D505	1	
+cell	C505	str	'q'	None				
+cell	D505	str	'r'	None				
+cell	B517	str	'm'	'_xlfn.TEXTSPLIT(CJ2,CM1:CM2)'	array	B517:C517	1	
+cell	C517	str	'qr'	None				
+cell	B529	str	'u'	'_xlfn.TEXTSPLIT(CJ3,";;",";")'	array	B529:C529	1	
+cell	C529	str	'v'	None				
+cell	B541	str	'u'	'_xlfn.TEXTSPLIT(CJ4,",;",";")'	array	B541:C541	1	
+cell	C541	str	'v'	None				
+cell	B553	str	'a'	'_xlfn.TEXTSPLIT("a;,b",",",";,")'	array	B553:B554	1	
+cell	B554	str	'b'	None				
+cell	B565	str	'a'	'_xlfn.TEXTSPLIT("a,;b",",",",;")'	array	B565:C565	1	
+cell	C565	str	';b'	None				
+cell	B577	str	'a'	'_xlfn.TEXTSPLIT("aXb","x","X",,1)'	array	B577:C577	1	
+cell	C577	str	'b'	None				
+cell	B589	str	'a'	'_xlfn.TEXTSPLIT("a;;b",,{";",";;"})'	array	B589:B590	1	
+cell	B590	str	'b'	None				
+cell	B601	str	'a'	'_xlfn.TEXTSPLIT("a;;b;c",",",{";;",";"},TRUE)'	array	B601:B603	1	
+cell	B602	str	'b'	None				
+cell	B603	str	'c'	None				
+cell	B613	str	'u'	'_xlfn.TEXTSPLIT(CJ5,",",";,")'	array	B613:B614	1	
+cell	B614	str	'v'	None				

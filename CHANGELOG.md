@@ -43,6 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `TEXTSPLIT`: a text split into columns and rows at one or several delimiters, padded with `#N/A` or `pad_with`,
     empty pieces kept or dropped, matched with or without regard to case; empty text or an empty delimiter is `#VALUE!`;
     a range or array of texts is taken element by element.
+    The text is read once from the start: where delimiters overlap the first to start is taken, and of several
+    starting at one place a column delimiter before a row delimiter, whatever their lengths, and the longest of one
+    kind (`TEXTSPLIT("a;;b",";",";;")` is one row, `a`, empty, `b`).
   - `RANDARRAY`: random numbers of a shape, between bounds, whole with `whole_number`, an array of counts or bounds
     taken element by element; new at every calculation, as Excel's are (its values are checked through their number,
     bounds and kind).

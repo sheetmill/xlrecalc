@@ -118,21 +118,46 @@ def _delimiters(a: Any, ctx: Any) -> list[str] | ErrorValue | None:
     return out
 
 
-def _pieces(text: str, delimiters: list[str] | None, fold: bool, ignore: bool) -> list[str]:
-    if delimiters is None:
-        return [text]
-    pattern = "|".join(re.escape(d) for d in sorted(delimiters, key=len, reverse=True))
-    parts = re.split(pattern, text, flags=re.IGNORECASE if fold else 0)
-    return [p for p in parts if p] if ignore else parts
+def _alternatives(delimiters: list[str] | None) -> str:
+    """A pattern matching any of the delimiters, the longest first where several start together."""
+    return "|".join(re.escape(d) for d in sorted(delimiters or (), key=len, reverse=True))
+
+
+def _lines(
+    text: str, cols: list[str] | None, rows: list[str] | None, fold: bool, ignore: bool
+) -> list[list[str]]:
+    """The text cut into lines of pieces in one pass from the start (capture ``dyn_textsplit``).
+
+    At each place the first delimiter to start is taken; of several starting there a column
+    delimiter before a row delimiter, whatever their lengths, and the longest of one kind:
+    ``TEXTSPLIT("a;;b",";",";;")`` is one row, ``a``, empty, ``b``. With ``ignore`` empty
+    pieces are dropped, and lines left with none.
+    """
+    parts = [f"(?P<c>{_alternatives(cols)})"] if cols else []
+    parts += [f"(?P<r>{_alternatives(rows)})"] if rows else []
+    lines: list[list[str]] = [[]]
+    start = 0
+    if parts:
+        for found in re.finditer("|".join(parts), text, flags=re.IGNORECASE if fold else 0):
+            lines[-1].append(text[start : found.start()])
+            if found.lastgroup == "r":
+                lines.append([])
+            start = found.end()
+    lines[-1].append(text[start:])
+    if ignore:
+        lines = [kept for kept in ([p for p in line if p] for line in lines) if kept]
+    return lines
 
 
 def _textsplit(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
     """A text split into columns at ``col_delimiter`` and rows at ``row_delimiter``.
 
-    Rows shorter than the longest are padded with ``pad_with`` (``#N/A`` by default); empty
-    pieces are dropped with ``ignore_empty``; ``match_mode`` 1 matches without regard to case;
-    empty text is ``#VALUE!``. A range or array of texts is taken element by element (capture
-    ``dyn_textsplit``).
+    The text is read once from the start: the first delimiter to start is taken, and of
+    several starting at one place a column delimiter before a row delimiter whatever their
+    lengths, the longest of one kind (``_lines``). Rows shorter than the longest are padded with
+    ``pad_with`` (``#N/A`` by default); empty pieces are dropped with ``ignore_empty``;
+    ``match_mode`` 1 matches without regard to case; empty text is ``#VALUE!``. A range or array
+    of texts is taken element by element (capture ``dyn_textsplit``).
     """
     lifted = _spread(ctx, _textsplit, given, (0,), ranges)
     if lifted is not None:
@@ -161,11 +186,7 @@ def _textsplit(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
     if fold not in (0.0, 1.0):
         return VALUE
     filler = ErrorValue.NA if pad is MISSING else scalar(pad, ctx) if isinstance(pad, Ref) else pad
-    lines = [
-        _pieces(line, col_delimiters, fold == 1.0, skip)  # type: ignore[arg-type]
-        for line in _pieces(whole, row_delimiters, fold == 1.0, skip)  # type: ignore[arg-type]
-    ]
-    lines = [line for line in lines if line] or [[""]]
+    lines = _lines(whole, col_delimiters, row_delimiters, fold == 1.0, skip) or [[""]]  # type: ignore[arg-type]
     width = max(len(line) for line in lines)
     _limit(ctx, len(lines), width)
     return tuple(tuple(line) + (filler,) * (width - len(line)) for line in lines)

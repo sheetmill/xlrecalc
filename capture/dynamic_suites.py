@@ -97,6 +97,11 @@ DATA: dict[str, list[object]] = {
     # TEXTSPLIT: texts and delimiters
     "CH": ["a,b,c", "x;y,z", "", "one", "a,,b", "A-b-C", "1,2;3,4"],
     "CI": [",", ";"],
+    # TEXTSPLIT, delimiters that overlap: texts, delimiters in either order or one inside another
+    "CJ": ["p--q-r", "m-pqr", "u;;v", "u,;v", "u;,v"],
+    "CK": ["-", "--"],
+    "CL": ["--", "-"],
+    "CM": ["-p", "pqr"],
 }
 
 
@@ -741,6 +746,34 @@ TEXTSPLIT = [
     DynCase(f'{TS}(CH6,"-",,,1)'),
     DynCase(f'{TS}(CH7,",",";")'),
     DynCase(f"{TS}(CH4,CI1:CI2)"),
+    # delimiters that overlap: the same start in either order, a shorter one starting first, one
+    # inside another, a column and a row delimiter overlapping or the same, case
+    DynCase(f'{TS}("a--b-c",{{"-","--"}})'),
+    DynCase(f'{TS}("a--b-c",{{"--","-"}})'),
+    DynCase(f'{TS}("x-abc",{{"-a","abc"}})'),
+    DynCase(f'{TS}("abc",{{"bc","ab"}})'),
+    DynCase(f'{TS}("a-->b",{{"->","--"}})'),
+    DynCase(f'{TS}("a;;b",";;",";")'),
+    DynCase(f'{TS}("a;;b",";",";;")'),
+    DynCase(f'{TS}("a,;b",",;",";")'),
+    DynCase(f'{TS}("a;b",";",";")'),
+    DynCase(f'{TS}("aXxb",{{"x","XX"}},,,1)'),
+    DynCase(f'{TS}("aXxb",{{"x","XX"}})'),
+    # second set
+    DynCase(f"{TS}(CJ1,CK1:CK2)"),
+    DynCase(f"{TS}(CJ1,CL1:CL2)"),
+    DynCase(f"{TS}(CJ2,CM1:CM2)"),
+    DynCase(f'{TS}(CJ3,";;",";")'),
+    DynCase(f'{TS}(CJ4,",;",";")'),
+    # a row delimiter starting before a column one inside it; the same start, the column one
+    # shorter; the same delimiter in both without regard to case; overlapping row delimiters alone
+    DynCase(f'{TS}("a;,b",",",";,")'),
+    DynCase(f'{TS}("a,;b",",",",;")'),
+    DynCase(f'{TS}("aXb","x","X",,1)'),
+    DynCase(f'{TS}("a;;b",,{{";",";;"}})'),
+    DynCase(f'{TS}("a;;b;c",",",{{";;",";"}},TRUE)'),
+    # second set
+    DynCase(f'{TS}(CJ5,",",";,")'),
 ]
 
 # RANDARRAY's values are random: its anchors are read by formulas that hold whatever it draws,
