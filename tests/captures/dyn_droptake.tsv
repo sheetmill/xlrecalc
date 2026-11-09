@@ -1,0 +1,803 @@
+# suite: dyn_droptake
+# excel: 16.114.4 for Mac, locale en_US
+# captured: 2026-11-08
+# generator: capture/dynamic_probe.py
+# method: dynamic-array formulas (cm=1 with the XLDAPR metadata), one per block of 12 rows in column B, over data in columns AA on; Excel calculates and saves a copy;
+#   every cell of the copy is recorded
+# input rows: input, kind, cell, text (formula in file form, or a constant's repr)
+# cell rows: cell, address, type, value (repr), formula (repr), f_t, f_ref, cm, vm
+input	data	AA1	'3.0'
+input	data	AA2	'1.0'
+input	data	AA3	'4.0'
+input	data	AA4	'1.0'
+input	data	AA5	'5.0'
+input	data	AA6	'9.0'
+input	data	AA7	'2.0'
+input	data	AA8	'6.0'
+input	data	AB1	"'pear'"
+input	data	AB2	"'Apple'"
+input	data	AB3	"'apple'"
+input	data	AB4	"'Pear'"
+input	data	AB5	"'fig'"
+input	data	AB6	"'APPLE'"
+input	data	AB7	"'kiwi'"
+input	data	AB8	"'fig'"
+input	data	AC1	'2.0'
+input	data	AC2	"'b'"
+input	data	AC3	'True'
+input	data	AC4	"ErrorValue('#N/A')"
+input	data	AC6	"'A'"
+input	data	AC7	'-1.0'
+input	data	AC8	'False'
+input	data	AC9	"'a'"
+input	data	AC10	'10.0'
+input	data	AC11	"ErrorValue('#DIV/0!')"
+input	legacy	AC12	'""'
+input	data	AD1	"'b'"
+input	data	AD2	"'a'"
+input	data	AD3	"'c'"
+input	data	AD4	"'a'"
+input	data	AD5	"'b'"
+input	data	AD6	"'a'"
+input	data	AE1	'1.0'
+input	data	AE2	'2.0'
+input	data	AE3	'3.0'
+input	data	AE4	'4.0'
+input	data	AE5	'5.0'
+input	data	AE6	'6.0'
+input	data	AF1	"'1'"
+input	data	AF2	'1.0'
+input	data	AF3	"'1'"
+input	data	AF4	'2.0'
+input	data	AF5	'True'
+input	data	AF6	"'TRUE'"
+input	data	AF7	'1.0'
+input	data	AG1	'3.0'
+input	data	AG2	'1.0'
+input	data	AH1	"'x'"
+input	data	AH2	'2.0'
+input	data	AI1	'1.0'
+input	data	AI2	'1.0'
+input	data	AJ1	'3.0'
+input	data	AJ2	'1.0'
+input	data	AK1	"'X'"
+input	data	AK2	'2.0'
+input	data	AL1	'2.0'
+input	data	AL2	'3.0'
+input	data	AN1	'1.0'
+input	data	AN2	'3.0'
+input	data	AO1	'2.0'
+input	data	AO2	'4.0'
+input	data	AP1	'1.0'
+input	data	AP2	'-1.0'
+input	data	AQ1	'0.0'
+input	data	AQ2	'3.0'
+input	data	AR1	'2.0'
+input	data	AR2	'1.0'
+input	data	AS1	'2.0'
+input	data	AS2	'0.5'
+input	data	AS3	'-1.0'
+input	data	AT1	'1.0'
+input	data	AT2	'3.0'
+input	data	AU1	"'x'"
+input	data	AU2	'4.0'
+input	data	AV1	'1.0'
+input	data	AV2	'3.0'
+input	data	AW2	'4.0'
+input	data	AX1	'1.0'
+input	data	AX2	'3.0'
+input	data	AY1	'True'
+input	data	AY2	'4.0'
+input	data	AZ1	'1.0'
+input	data	AZ2	'3.0'
+input	data	BA1	"ErrorValue('#N/A')"
+input	data	BA2	'4.0'
+input	data	BB1	"'1'"
+input	data	BB2	'3.0'
+input	data	BC1	'2.0'
+input	data	BC2	'4.0'
+input	data	BE1	'0.5'
+input	data	BE2	'-2.0'
+input	data	BE3	'7.0'
+input	data	BE4	'7.0'
+input	data	BE5	'0.0'
+input	data	BE6	'-2.0'
+input	data	BE7	'10000000000.0'
+input	data	BE8	'3.25'
+input	data	BE9	'0.5'
+input	data	BE10	'-0.1'
+input	data	BF1	"'Zeta'"
+input	data	BF2	"'alpha'"
+input	data	BF3	"'Beta'"
+input	data	BF4	"'zeta'"
+input	data	BF5	"'ALPHA'"
+input	data	BF6	"'beta'"
+input	data	BF7	"'gamma'"
+input	data	BF8	"'Gamma'"
+input	data	BF9	"'delta'"
+input	data	BF10	"'Delta'"
+input	data	BG1	'2.0'
+input	data	BG2	'1.0'
+input	data	BG3	'2.0'
+input	data	BG4	'3.0'
+input	data	BG5	'1.0'
+input	data	BG6	'2.0'
+input	data	BH1	"'p'"
+input	data	BH2	"'q'"
+input	data	BH3	"'r'"
+input	data	BH4	"'s'"
+input	data	BH5	"'t'"
+input	data	BH6	"'u'"
+input	data	BJ1	'2.0'
+input	data	BJ2	'-1.0'
+input	data	BJ3	'0.0'
+input	data	BK1	'-1.0'
+input	data	BK2	'2.0'
+input	data	BK3	'-1.0'
+input	data	BL1	'0.0'
+input	data	BL2	'-1.0'
+input	data	BL3	'2.0'
+input	data	BM1	'0.1'
+input	data	BM2	'0.2'
+input	data	BM3	'0.3'
+input	data	BN1	'0.3'
+input	data	BO1	'0.2'
+input	data	BP1	'0.1'
+input	data	BR1	'True'
+input	data	BR2	"'x'"
+input	data	BR3	'5.0'
+input	data	BR5	"ErrorValue('#N/A')"
+input	legacy	BR6	'""'
+input	data	BR7	'-3.0'
+input	data	BR8	'False'
+input	data	BR9	"'X'"
+input	data	BR10	'5.0'
+input	data	BT1	'1.0'
+input	data	BT2	'2.0'
+input	data	BT3	'3.0'
+input	data	BT4	'4.0'
+input	data	BU1	"'a'"
+input	data	BU3	"'c'"
+input	legacy	BU4	'""'
+input	data	BV1	'True'
+input	data	BV2	"ErrorValue('#N/A')"
+input	data	BV3	'False'
+input	data	BV4	'0.5'
+input	data	BX1	'-1.5'
+input	data	BX2	'0.0'
+input	data	BX3	'10000000000.0'
+input	data	BY1	"'x'"
+input	data	BY2	"ErrorValue('#DIV/0!')"
+input	data	BY3	'False'
+input	data	BZ1	'7.0'
+input	data	BZ2	"'z'"
+input	data	CA1	"'Y'"
+input	data	CA2	'8.0'
+input	data	CA3	"'w'"
+input	dynamic	B1	'_xlfn.TAKE(BT1:BV4,2)'
+input	reader	N1	'SUM(_xlfn.ANCHORARRAY(B1))'
+input	reader	N2	'ROWS(_xlfn.ANCHORARRAY(B1))'
+input	reader	N3	'COLUMNS(_xlfn.ANCHORARRAY(B1))'
+input	dynamic	B13	'_xlfn.TAKE(BT1:BV4,-2)'
+input	dynamic	B25	'_xlfn.TAKE(BT1:BV4,,2)'
+input	dynamic	B37	'_xlfn.TAKE(BT1:BV4,2,-1)'
+input	dynamic	B49	'_xlfn.TAKE(BT1:BV4,0)'
+input	dynamic	B61	'_xlfn.TAKE(BT1:BV4,10)'
+input	dynamic	B73	'_xlfn.TAKE(BT1:BV4,-10,-10)'
+input	dynamic	B85	'_xlfn.TAKE(BT1:BV4,1.9)'
+input	dynamic	B97	'_xlfn.TAKE(BT1:BV4,"2")'
+input	dynamic	B109	'_xlfn.TAKE(BT1:BV4,TRUE)'
+input	dynamic	B121	'_xlfn.TAKE(BT1:BV4,#N/A)'
+input	dynamic	B133	'_xlfn.TAKE(BT1:BV4,{1,2})'
+input	dynamic	B145	'_xlfn.TAKE(BT1:BV4,,)'
+input	dynamic	B157	'_xlfn.TAKE(5,1)'
+input	dynamic	B169	'_xlfn.TAKE({1,2,3;4,5,6},-1,2)'
+input	dynamic	B181	'_xlfn.TAKE(BT1:BV4,1,0)'
+input	dynamic	B193	'_xlfn.TAKE(BT1:BV4,-1.9)'
+input	dynamic	B205	'_xlfn.TAKE(BT1:BV4,BT1:BT2)'
+input	legacy	B217	'_xlfn.TAKE(BT1:BV4,2)'
+input	legacy	B229	'_xlfn.TAKE(BT1:BV4,BT1:BT2)'
+input	dynamic	B241	'TAKE(BT1:BV4,1)'
+input	way	C253	"'in the way'"
+input	dynamic	B253	'_xlfn.TAKE(BT1:BV4,2)'
+input	dynamic	B265	'_xlfn.TAKE(BT1:BV4,"x")'
+input	dynamic	B277	'_xlfn.TAKE(BT1:BV4,1048577)'
+input	dynamic	B289	'_xlfn.DROP(BT1:BV4,2)'
+input	reader	N289	'SUM(_xlfn.ANCHORARRAY(B289))'
+input	reader	N290	'ROWS(_xlfn.ANCHORARRAY(B289))'
+input	reader	N291	'COLUMNS(_xlfn.ANCHORARRAY(B289))'
+input	dynamic	B301	'_xlfn.DROP(BT1:BV4,-2)'
+input	dynamic	B313	'_xlfn.DROP(BT1:BV4,,1)'
+input	dynamic	B325	'_xlfn.DROP(BT1:BV4,1,-1)'
+input	dynamic	B337	'_xlfn.DROP(BT1:BV4,0)'
+input	dynamic	B349	'_xlfn.DROP(BT1:BV4,4)'
+input	dynamic	B361	'_xlfn.DROP(BT1:BV4,-4)'
+input	dynamic	B373	'_xlfn.DROP(BT1:BV4,10)'
+input	dynamic	B385	'_xlfn.DROP(BT1:BV4,0,3)'
+input	dynamic	B397	'_xlfn.DROP(BT1:BV4,1.9)'
+input	dynamic	B409	'_xlfn.DROP(BT1:BV4,"x")'
+input	dynamic	B421	'_xlfn.DROP(5,0)'
+input	dynamic	B433	'_xlfn.DROP(5,1)'
+input	dynamic	B445	'_xlfn.DROP(BT1:BV4,{0,1})'
+input	dynamic	B457	'_xlfn.DROP(BT1:BV4,)'
+input	dynamic	B469	'_xlfn.DROP(BT1:BV4,#DIV/0!)'
+input	dynamic	B481	'_xlfn.EXPAND({1,2;3,4},3,3)'
+input	reader	N481	'SUM(_xlfn.ANCHORARRAY(B481))'
+input	reader	N482	'ROWS(_xlfn.ANCHORARRAY(B481))'
+input	reader	N483	'COLUMNS(_xlfn.ANCHORARRAY(B481))'
+input	dynamic	B493	'_xlfn.EXPAND({1,2;3,4},3,3,0)'
+input	dynamic	B505	'_xlfn.EXPAND({1,2;3,4},3,,"x")'
+input	dynamic	B517	'_xlfn.EXPAND({1,2;3,4},,3)'
+input	dynamic	B529	'_xlfn.EXPAND({1,2;3,4},1,2)'
+input	dynamic	B541	'_xlfn.EXPAND({1,2;3,4},2,2)'
+input	dynamic	B553	'_xlfn.EXPAND(BT1:BV4,5,4,"")'
+input	dynamic	B565	'_xlfn.EXPAND(BT1:BV4,5)'
+input	dynamic	B577	'_xlfn.EXPAND(1,2,2)'
+input	dynamic	B589	'_xlfn.EXPAND({1,2},2,2,{9,8})'
+input	dynamic	B601	'_xlfn.EXPAND({1,2},2,2,#DIV/0!)'
+input	dynamic	B613	'_xlfn.EXPAND({1,2},-1)'
+input	dynamic	B625	'_xlfn.EXPAND({1,2},1.5,3.9)'
+input	dynamic	B637	'_xlfn.EXPAND({1,2},2,2,BU2)'
+input	dynamic	B649	'_xlfn.EXPAND({1,2},1048577)'
+input	dynamic	B661	'_xlfn.EXPAND({1,2},2,,)'
+input	dynamic	B673	'_xlfn.EXPAND({1,2},2,0)'
+input	dynamic	B685	'_xlfn.EXPAND({1,2},"2")'
+input	dynamic	B697	'_xlfn.EXPAND({1,2},TRUE)'
+input	dynamic	B709	'_xlfn.EXPAND({1,2},#N/A)'
+input	dynamic	B721	'EXPAND({1,2},2)'
+input	dynamic	B733	'_xlfn.TAKE(BX1:CA3,2,-3)'
+input	reader	N733	'SUM(_xlfn.ANCHORARRAY(B733))'
+input	reader	N734	'ROWS(_xlfn.ANCHORARRAY(B733))'
+input	reader	N735	'COLUMNS(_xlfn.ANCHORARRAY(B733))'
+input	dynamic	B745	'_xlfn.TAKE(BX1:CA3,-1)'
+input	dynamic	B757	'_xlfn.DROP(BX1:CA3,-1,1)'
+input	dynamic	B769	'_xlfn.DROP(BX1:CA3,1,-2)'
+input	dynamic	B781	'_xlfn.EXPAND(BX1:CA3,4,5,"-")'
+input	dynamic	B793	'_xlfn.EXPAND(BX1:BX3,3,2,TRUE)'
+input	dynamic	B805	'_xlfn.TAKE(BY1:BY3,-2)'
+input	dynamic	B817	'_xlfn.DROP(BX1:CA3,{1;2})'
+input	legacy	B829	'_xlfn.TAKE({1,2;3,4},1)'
+input	legacy	B841	'_xlfn.TAKE(BT:BT,2)'
+input	legacy	B853	'_xlfn.DROP(BT1:BV4,0)'
+input	legacy	B865	'_xlfn.EXPAND(BT1:BV4,4)'
+input	dynamic	B877	'_xlfn.TAKE(5,{1,1})'
+input	dynamic	B889	'_xlfn.TAKE({1,2;3,4},{1,2})'
+input	dynamic	B901	'_xlfn.DROP(5,{0,0})'
+input	dynamic	B913	'_xlfn.EXPAND(1,{1,2})'
+input	dynamic	B925	'_xlfn.TAKE(#N/A,1)'
+input	dynamic	B937	'_xlfn.EXPAND(#N/A,2)'
+input	dynamic	B949	'_xlfn.EXPAND({1,2},2,3,)'
+input	legacy	B961	'_xlfn.DROP(BT:BT,1)'
+input	dynamic	B973	'_xlfn.EXPAND(,2,2,"x")'
+input	dynamic	B985	'_xlfn.EXPAND(,1)'
+input	dynamic	B997	'_xlfn.TAKE(,,)'
+input	dynamic	B1009	'_xlfn.DROP(,0)'
+cell	B1	n	'1'	'_xlfn.TAKE(BT1:BV4,2)'	array	B1:D2	1	
+cell	C1	str	'a'	None				
+cell	D1	b	True	None				
+cell	N1	e	'#N/A'	'SUM(_xlfn.ANCHORARRAY(B1))'	normal			
+cell	AA1	n	'3'	None				
+cell	AB1	s	'pear'	None				
+cell	AC1	n	'2'	None				
+cell	AD1	s	'b'	None				
+cell	AE1	n	'1'	None				
+cell	AF1	s	'1'	None				
+cell	AG1	n	'3'	None				
+cell	AH1	s	'x'	None				
+cell	AI1	n	'1'	None				
+cell	AJ1	n	'3'	None				
+cell	AK1	s	'X'	None				
+cell	AL1	n	'2'	None				
+cell	AN1	n	'1'	None				
+cell	AO1	n	'2'	None				
+cell	AP1	n	'1'	None				
+cell	AQ1	n	'0'	None				
+cell	AR1	n	'2'	None				
+cell	AS1	n	'2'	None				
+cell	AT1	n	'1'	None				
+cell	AU1	s	'x'	None				
+cell	AV1	n	'1'	None				
+cell	AX1	n	'1'	None				
+cell	AY1	b	True	None				
+cell	AZ1	n	'1'	None				
+cell	BA1	e	'#N/A'	None				
+cell	BB1	s	'1'	None				
+cell	BC1	n	'2'	None				
+cell	BE1	n	'0.5'	None				
+cell	BF1	s	'Zeta'	None				
+cell	BG1	n	'2'	None				
+cell	BH1	s	'p'	None				
+cell	BJ1	n	'2'	None				
+cell	BK1	n	'-1'	None				
+cell	BL1	n	'0'	None				
+cell	BM1	n	'0.1'	None				
+cell	BN1	n	'0.3'	None				
+cell	BO1	n	'0.2'	None				
+cell	BP1	n	'0.1'	None				
+cell	BR1	b	True	None				
+cell	BT1	n	'1'	None				
+cell	BU1	s	'a'	None				
+cell	BV1	b	True	None				
+cell	BX1	n	'-1.5'	None				
+cell	BY1	s	'x'	None				
+cell	BZ1	n	'7'	None				
+cell	CA1	s	'Y'	None				
+cell	B2	n	'2'	None				
+cell	C2	n	'0'	None				
+cell	D2	e	'#N/A'	None				
+cell	N2	n	'2'	'ROWS(_xlfn.ANCHORARRAY(B1))'	normal			
+cell	AA2	n	'1'	None				
+cell	AB2	s	'Apple'	None				
+cell	AC2	s	'b'	None				
+cell	AD2	s	'a'	None				
+cell	AE2	n	'2'	None				
+cell	AF2	n	'1'	None				
+cell	AG2	n	'1'	None				
+cell	AH2	n	'2'	None				
+cell	AI2	n	'1'	None				
+cell	AJ2	n	'1'	None				
+cell	AK2	n	'2'	None				
+cell	AL2	n	'3'	None				
+cell	AN2	n	'3'	None				
+cell	AO2	n	'4'	None				
+cell	AP2	n	'-1'	None				
+cell	AQ2	n	'3'	None				
+cell	AR2	n	'1'	None				
+cell	AS2	n	'0.5'	None				
+cell	AT2	n	'3'	None				
+cell	AU2	n	'4'	None				
+cell	AV2	n	'3'	None				
+cell	AW2	n	'4'	None				
+cell	AX2	n	'3'	None				
+cell	AY2	n	'4'	None				
+cell	AZ2	n	'3'	None				
+cell	BA2	n	'4'	None				
+cell	BB2	n	'3'	None				
+cell	BC2	n	'4'	None				
+cell	BE2	n	'-2'	None				
+cell	BF2	s	'alpha'	None				
+cell	BG2	n	'1'	None				
+cell	BH2	s	'q'	None				
+cell	BJ2	n	'-1'	None				
+cell	BK2	n	'2'	None				
+cell	BL2	n	'-1'	None				
+cell	BM2	n	'0.2'	None				
+cell	BR2	s	'x'	None				
+cell	BT2	n	'2'	None				
+cell	BV2	e	'#N/A'	None				
+cell	BX2	n	'0'	None				
+cell	BY2	e	'#DIV/0!'	None				
+cell	BZ2	s	'z'	None				
+cell	CA2	n	'8'	None				
+cell	N3	n	'3'	'COLUMNS(_xlfn.ANCHORARRAY(B1))'	normal			
+cell	AA3	n	'4'	None				
+cell	AB3	s	'apple'	None				
+cell	AC3	b	True	None				
+cell	AD3	s	'c'	None				
+cell	AE3	n	'3'	None				
+cell	AF3	s	'1'	None				
+cell	AS3	n	'-1'	None				
+cell	BE3	n	'7'	None				
+cell	BF3	s	'Beta'	None				
+cell	BG3	n	'2'	None				
+cell	BH3	s	'r'	None				
+cell	BJ3	n	'0'	None				
+cell	BK3	n	'-1'	None				
+cell	BL3	n	'2'	None				
+cell	BM3	n	'0.3'	None				
+cell	BR3	n	'5'	None				
+cell	BT3	n	'3'	None				
+cell	BU3	s	'c'	None				
+cell	BV3	b	False	None				
+cell	BX3	n	'10000000000'	None				
+cell	BY3	b	False	None				
+cell	CA3	s	'w'	None				
+cell	AA4	n	'1'	None				
+cell	AB4	s	'Pear'	None				
+cell	AC4	e	'#N/A'	None				
+cell	AD4	s	'a'	None				
+cell	AE4	n	'4'	None				
+cell	AF4	n	'2'	None				
+cell	BE4	n	'7'	None				
+cell	BF4	s	'zeta'	None				
+cell	BG4	n	'3'	None				
+cell	BH4	s	's'	None				
+cell	BT4	n	'4'	None				
+cell	BU4	str	''	'""'	normal			
+cell	BV4	n	'0.5'	None				
+cell	AA5	n	'5'	None				
+cell	AB5	s	'fig'	None				
+cell	AD5	s	'b'	None				
+cell	AE5	n	'5'	None				
+cell	AF5	b	True	None				
+cell	BE5	n	'0'	None				
+cell	BF5	s	'ALPHA'	None				
+cell	BG5	n	'1'	None				
+cell	BH5	s	't'	None				
+cell	BR5	e	'#N/A'	None				
+cell	AA6	n	'9'	None				
+cell	AB6	s	'APPLE'	None				
+cell	AC6	s	'A'	None				
+cell	AD6	s	'a'	None				
+cell	AE6	n	'6'	None				
+cell	AF6	s	'TRUE'	None				
+cell	BE6	n	'-2'	None				
+cell	BF6	s	'beta'	None				
+cell	BG6	n	'2'	None				
+cell	BH6	s	'u'	None				
+cell	BR6	str	''	'""'	normal			
+cell	AA7	n	'2'	None				
+cell	AB7	s	'kiwi'	None				
+cell	AC7	n	'-1'	None				
+cell	AF7	n	'1'	None				
+cell	BE7	n	'10000000000'	None				
+cell	BF7	s	'gamma'	None				
+cell	BR7	n	'-3'	None				
+cell	AA8	n	'6'	None				
+cell	AB8	s	'fig'	None				
+cell	AC8	b	False	None				
+cell	BE8	n	'3.25'	None				
+cell	BF8	s	'Gamma'	None				
+cell	BR8	b	False	None				
+cell	AC9	s	'a'	None				
+cell	BE9	n	'0.5'	None				
+cell	BF9	s	'delta'	None				
+cell	BR9	s	'X'	None				
+cell	AC10	n	'10'	None				
+cell	BE10	n	'-0.1'	None				
+cell	BF10	s	'Delta'	None				
+cell	BR10	n	'5'	None				
+cell	AC11	e	'#DIV/0!'	None				
+cell	AC12	str	''	'""'	normal			
+cell	B13	n	'3'	'_xlfn.TAKE(BT1:BV4,-2)'	array	B13:D14	1	
+cell	C13	str	'c'	None				
+cell	D13	b	False	None				
+cell	B14	n	'4'	None				
+cell	C14	str	''	None				
+cell	D14	n	'0.5'	None				
+cell	B25	n	'1'	'_xlfn.TAKE(BT1:BV4,,2)'	array	B25:C28	1	
+cell	C25	str	'a'	None				
+cell	B26	n	'2'	None				
+cell	C26	n	'0'	None				
+cell	B27	n	'3'	None				
+cell	C27	str	'c'	None				
+cell	B28	n	'4'	None				
+cell	C28	str	''	None				
+cell	B37	b	True	'_xlfn.TAKE(BT1:BV4,2,-1)'	array	B37:B38	1	
+cell	B38	e	'#N/A'	None				
+cell	B49	e	'#VALUE!'	'_xlfn.TAKE(BT1:BV4,0)'	array	B49	1	1
+cell	B61	n	'1'	'_xlfn.TAKE(BT1:BV4,10)'	array	B61:D64	1	
+cell	C61	str	'a'	None				
+cell	D61	b	True	None				
+cell	B62	n	'2'	None				
+cell	C62	n	'0'	None				
+cell	D62	e	'#N/A'	None				
+cell	B63	n	'3'	None				
+cell	C63	str	'c'	None				
+cell	D63	b	False	None				
+cell	B64	n	'4'	None				
+cell	C64	str	''	None				
+cell	D64	n	'0.5'	None				
+cell	B73	n	'1'	'_xlfn.TAKE(BT1:BV4,-10,-10)'	array	B73:D76	1	
+cell	C73	str	'a'	None				
+cell	D73	b	True	None				
+cell	B74	n	'2'	None				
+cell	C74	n	'0'	None				
+cell	D74	e	'#N/A'	None				
+cell	B75	n	'3'	None				
+cell	C75	str	'c'	None				
+cell	D75	b	False	None				
+cell	B76	n	'4'	None				
+cell	C76	str	''	None				
+cell	D76	n	'0.5'	None				
+cell	B85	n	'1'	'_xlfn.TAKE(BT1:BV4,1.9)'	array	B85:D85	1	
+cell	C85	str	'a'	None				
+cell	D85	b	True	None				
+cell	B97	n	'1'	'_xlfn.TAKE(BT1:BV4,"2")'	array	B97:D98	1	
+cell	C97	str	'a'	None				
+cell	D97	b	True	None				
+cell	B98	n	'2'	None				
+cell	C98	n	'0'	None				
+cell	D98	e	'#N/A'	None				
+cell	B109	n	'1'	'_xlfn.TAKE(BT1:BV4,TRUE)'	array	B109:D109	1	
+cell	C109	str	'a'	None				
+cell	D109	b	True	None				
+cell	B121	e	'#N/A'	'_xlfn.TAKE(BT1:BV4,#N/A)'	array	B121	1	
+cell	B133	e	'#VALUE!'	'_xlfn.TAKE(BT1:BV4,{1,2})'	array	B133:C133	1	
+cell	C133	e	'#VALUE!'	None				
+cell	B145	n	'1'	'_xlfn.TAKE(BT1:BV4,,)'	array	B145:D148	1	
+cell	C145	str	'a'	None				
+cell	D145	b	True	None				
+cell	B146	n	'2'	None				
+cell	C146	n	'0'	None				
+cell	D146	e	'#N/A'	None				
+cell	B147	n	'3'	None				
+cell	C147	str	'c'	None				
+cell	D147	b	False	None				
+cell	B148	n	'4'	None				
+cell	C148	str	''	None				
+cell	D148	n	'0.5'	None				
+cell	B157	n	'5'	'_xlfn.TAKE(5,1)'	array	B157	1	
+cell	B169	n	'4'	'_xlfn.TAKE({1,2,3;4,5,6},-1,2)'	array	B169:C169	1	
+cell	C169	n	'5'	None				
+cell	B181	e	'#VALUE!'	'_xlfn.TAKE(BT1:BV4,1,0)'	array	B181	1	1
+cell	B193	n	'4'	'_xlfn.TAKE(BT1:BV4,-1.9)'	array	B193:D193	1	
+cell	C193	str	''	None				
+cell	D193	n	'0.5'	None				
+cell	B205	e	'#VALUE!'	'_xlfn.TAKE(BT1:BV4,BT1:BT2)'	array	B205:B206	1	
+cell	B206	e	'#VALUE!'	None				
+cell	B217	e	'#VALUE!'	'_xlfn.TAKE(BT1:BV4,2)'	normal			
+cell	B229	e	'#VALUE!'	'_xlfn.TAKE(BT1:BV4,BT1:BT2)'	normal			
+cell	B241	e	'#NAME?'	'_xludf.TAKE(BT1:BV4,1)'	array	B241	1	
+cell	B253	e	'#VALUE!'	'_xlfn.TAKE(BT1:BV4,2)'	array	B253	1	2
+cell	C253	s	'in the way'	None				
+cell	B265	e	'#VALUE!'	'_xlfn.TAKE(BT1:BV4,"x")'	array	B265	1	
+cell	B277	n	'1'	'_xlfn.TAKE(BT1:BV4,1048577)'	array	B277:D280	1	
+cell	C277	str	'a'	None				
+cell	D277	b	True	None				
+cell	B278	n	'2'	None				
+cell	C278	n	'0'	None				
+cell	D278	e	'#N/A'	None				
+cell	B279	n	'3'	None				
+cell	C279	str	'c'	None				
+cell	D279	b	False	None				
+cell	B280	n	'4'	None				
+cell	C280	str	''	None				
+cell	D280	n	'0.5'	None				
+cell	B289	n	'3'	'_xlfn.DROP(BT1:BV4,2)'	array	B289:D290	1	
+cell	C289	str	'c'	None				
+cell	D289	b	False	None				
+cell	N289	n	'7.5'	'SUM(_xlfn.ANCHORARRAY(B289))'	normal			
+cell	B290	n	'4'	None				
+cell	C290	str	''	None				
+cell	D290	n	'0.5'	None				
+cell	N290	n	'2'	'ROWS(_xlfn.ANCHORARRAY(B289))'	normal			
+cell	N291	n	'3'	'COLUMNS(_xlfn.ANCHORARRAY(B289))'	normal			
+cell	B301	n	'1'	'_xlfn.DROP(BT1:BV4,-2)'	array	B301:D302	1	
+cell	C301	str	'a'	None				
+cell	D301	b	True	None				
+cell	B302	n	'2'	None				
+cell	C302	n	'0'	None				
+cell	D302	e	'#N/A'	None				
+cell	B313	str	'a'	'_xlfn.DROP(BT1:BV4,,1)'	array	B313:C316	1	
+cell	C313	b	True	None				
+cell	B314	n	'0'	None				
+cell	C314	e	'#N/A'	None				
+cell	B315	str	'c'	None				
+cell	C315	b	False	None				
+cell	B316	str	''	None				
+cell	C316	n	'0.5'	None				
+cell	B325	n	'2'	'_xlfn.DROP(BT1:BV4,1,-1)'	array	B325:C327	1	
+cell	C325	n	'0'	None				
+cell	B326	n	'3'	None				
+cell	C326	str	'c'	None				
+cell	B327	n	'4'	None				
+cell	C327	str	''	None				
+cell	B337	n	'1'	'_xlfn.DROP(BT1:BV4,0)'	array	B337:D340	1	
+cell	C337	str	'a'	None				
+cell	D337	b	True	None				
+cell	B338	n	'2'	None				
+cell	C338	n	'0'	None				
+cell	D338	e	'#N/A'	None				
+cell	B339	n	'3'	None				
+cell	C339	str	'c'	None				
+cell	D339	b	False	None				
+cell	B340	n	'4'	None				
+cell	C340	str	''	None				
+cell	D340	n	'0.5'	None				
+cell	B349	e	'#VALUE!'	'_xlfn.DROP(BT1:BV4,4)'	array	B349	1	1
+cell	B361	e	'#VALUE!'	'_xlfn.DROP(BT1:BV4,-4)'	array	B361	1	1
+cell	B373	e	'#VALUE!'	'_xlfn.DROP(BT1:BV4,10)'	array	B373	1	1
+cell	B385	e	'#VALUE!'	'_xlfn.DROP(BT1:BV4,0,3)'	array	B385	1	1
+cell	B397	n	'2'	'_xlfn.DROP(BT1:BV4,1.9)'	array	B397:D399	1	
+cell	C397	n	'0'	None				
+cell	D397	e	'#N/A'	None				
+cell	B398	n	'3'	None				
+cell	C398	str	'c'	None				
+cell	D398	b	False	None				
+cell	B399	n	'4'	None				
+cell	C399	str	''	None				
+cell	D399	n	'0.5'	None				
+cell	B409	e	'#VALUE!'	'_xlfn.DROP(BT1:BV4,"x")'	array	B409	1	
+cell	B421	n	'5'	'_xlfn.DROP(5,0)'	array	B421	1	
+cell	B433	e	'#VALUE!'	'_xlfn.DROP(5,1)'	array	B433	1	1
+cell	B445	e	'#VALUE!'	'_xlfn.DROP(BT1:BV4,{0,1})'	array	B445:C445	1	
+cell	C445	e	'#VALUE!'	None				
+cell	B457	n	'1'	'_xlfn.DROP(BT1:BV4,)'	array	B457:D460	1	
+cell	C457	str	'a'	None				
+cell	D457	b	True	None				
+cell	B458	n	'2'	None				
+cell	C458	n	'0'	None				
+cell	D458	e	'#N/A'	None				
+cell	B459	n	'3'	None				
+cell	C459	str	'c'	None				
+cell	D459	b	False	None				
+cell	B460	n	'4'	None				
+cell	C460	str	''	None				
+cell	D460	n	'0.5'	None				
+cell	B469	e	'#DIV/0!'	'_xlfn.DROP(BT1:BV4,#DIV/0!)'	array	B469	1	
+cell	B481	n	'1'	'_xlfn.EXPAND({1,2;3,4},3,3)'	array	B481:D483	1	
+cell	C481	n	'2'	None				
+cell	D481	e	'#N/A'	None				
+cell	N481	e	'#N/A'	'SUM(_xlfn.ANCHORARRAY(B481))'	normal			
+cell	B482	n	'3'	None				
+cell	C482	n	'4'	None				
+cell	D482	e	'#N/A'	None				
+cell	N482	n	'3'	'ROWS(_xlfn.ANCHORARRAY(B481))'	normal			
+cell	B483	e	'#N/A'	None				
+cell	C483	e	'#N/A'	None				
+cell	D483	e	'#N/A'	None				
+cell	N483	n	'3'	'COLUMNS(_xlfn.ANCHORARRAY(B481))'	normal			
+cell	B493	n	'1'	'_xlfn.EXPAND({1,2;3,4},3,3,0)'	array	B493:D495	1	
+cell	C493	n	'2'	None				
+cell	D493	n	'0'	None				
+cell	B494	n	'3'	None				
+cell	C494	n	'4'	None				
+cell	D494	n	'0'	None				
+cell	B495	n	'0'	None				
+cell	C495	n	'0'	None				
+cell	D495	n	'0'	None				
+cell	B505	n	'1'	'_xlfn.EXPAND({1,2;3,4},3,,"x")'	array	B505:C507	1	
+cell	C505	n	'2'	None				
+cell	B506	n	'3'	None				
+cell	C506	n	'4'	None				
+cell	B507	str	'x'	None				
+cell	C507	str	'x'	None				
+cell	B517	n	'1'	'_xlfn.EXPAND({1,2;3,4},,3)'	array	B517:D518	1	
+cell	C517	n	'2'	None				
+cell	D517	e	'#N/A'	None				
+cell	B518	n	'3'	None				
+cell	C518	n	'4'	None				
+cell	D518	e	'#N/A'	None				
+cell	B529	e	'#VALUE!'	'_xlfn.EXPAND({1,2;3,4},1,2)'	array	B529	1	
+cell	B541	n	'1'	'_xlfn.EXPAND({1,2;3,4},2,2)'	array	B541:C542	1	
+cell	C541	n	'2'	None				
+cell	B542	n	'3'	None				
+cell	C542	n	'4'	None				
+cell	B553	n	'1'	'_xlfn.EXPAND(BT1:BV4,5,4,"")'	array	B553:E557	1	
+cell	C553	str	'a'	None				
+cell	D553	b	True	None				
+cell	E553	str	''	None				
+cell	B554	n	'2'	None				
+cell	C554	n	'0'	None				
+cell	D554	e	'#N/A'	None				
+cell	E554	str	''	None				
+cell	B555	n	'3'	None				
+cell	C555	str	'c'	None				
+cell	D555	b	False	None				
+cell	E555	str	''	None				
+cell	B556	n	'4'	None				
+cell	C556	str	''	None				
+cell	D556	n	'0.5'	None				
+cell	E556	str	''	None				
+cell	B557	str	''	None				
+cell	C557	str	''	None				
+cell	D557	str	''	None				
+cell	E557	str	''	None				
+cell	B565	n	'1'	'_xlfn.EXPAND(BT1:BV4,5)'	array	B565:D569	1	
+cell	C565	str	'a'	None				
+cell	D565	b	True	None				
+cell	B566	n	'2'	None				
+cell	C566	n	'0'	None				
+cell	D566	e	'#N/A'	None				
+cell	B567	n	'3'	None				
+cell	C567	str	'c'	None				
+cell	D567	b	False	None				
+cell	B568	n	'4'	None				
+cell	C568	str	''	None				
+cell	D568	n	'0.5'	None				
+cell	B569	e	'#N/A'	None				
+cell	C569	e	'#N/A'	None				
+cell	D569	e	'#N/A'	None				
+cell	B577	n	'1'	'_xlfn.EXPAND(1,2,2)'	array	B577:C578	1	
+cell	C577	e	'#N/A'	None				
+cell	B578	e	'#N/A'	None				
+cell	C578	e	'#N/A'	None				
+cell	B589	e	'#VALUE!'	'_xlfn.EXPAND({1,2},2,2,{9,8})'	array	B589	1	
+cell	B601	n	'1'	'_xlfn.EXPAND({1,2},2,2,#DIV/0!)'	array	B601:C602	1	
+cell	C601	n	'2'	None				
+cell	B602	e	'#DIV/0!'	None				
+cell	C602	e	'#DIV/0!'	None				
+cell	B613	e	'#VALUE!'	'_xlfn.EXPAND({1,2},-1)'	array	B613	1	
+cell	B625	n	'1'	'_xlfn.EXPAND({1,2},1.5,3.9)'	array	B625:D625	1	
+cell	C625	n	'2'	None				
+cell	D625	e	'#N/A'	None				
+cell	B637	n	'1'	'_xlfn.EXPAND({1,2},2,2,BU2)'	array	B637:C638	1	
+cell	C637	n	'2'	None				
+cell	B638	n	'0'	None				
+cell	C638	n	'0'	None				
+cell	B649	e	'#NUM!'	'_xlfn.EXPAND({1,2},1048577)'	array	B649	1	
+cell	B661	n	'1'	'_xlfn.EXPAND({1,2},2,,)'	array	B661:C662	1	
+cell	C661	n	'2'	None				
+cell	B662	n	'0'	None				
+cell	C662	n	'0'	None				
+cell	B673	e	'#VALUE!'	'_xlfn.EXPAND({1,2},2,0)'	array	B673	1	
+cell	B685	n	'1'	'_xlfn.EXPAND({1,2},"2")'	array	B685:C686	1	
+cell	C685	n	'2'	None				
+cell	B686	e	'#N/A'	None				
+cell	C686	e	'#N/A'	None				
+cell	B697	n	'1'	'_xlfn.EXPAND({1,2},TRUE)'	array	B697:C697	1	
+cell	C697	n	'2'	None				
+cell	B709	e	'#N/A'	'_xlfn.EXPAND({1,2},#N/A)'	array	B709	1	
+cell	B721	e	'#NAME?'	'_xludf.EXPAND({1,2},2)'	array	B721	1	
+cell	B733	str	'x'	'_xlfn.TAKE(BX1:CA3,2,-3)'	array	B733:D734	1	
+cell	C733	n	'7'	None				
+cell	D733	str	'Y'	None				
+cell	N733	e	'#DIV/0!'	'SUM(_xlfn.ANCHORARRAY(B733))'	normal			
+cell	B734	e	'#DIV/0!'	None				
+cell	C734	str	'z'	None				
+cell	D734	n	'8'	None				
+cell	N734	n	'2'	'ROWS(_xlfn.ANCHORARRAY(B733))'	normal			
+cell	N735	n	'3'	'COLUMNS(_xlfn.ANCHORARRAY(B733))'	normal			
+cell	B745	n	'10000000000'	'_xlfn.TAKE(BX1:CA3,-1)'	array	B745:E745	1	
+cell	C745	b	False	None				
+cell	D745	n	'0'	None				
+cell	E745	str	'w'	None				
+cell	B757	str	'x'	'_xlfn.DROP(BX1:CA3,-1,1)'	array	B757:D758	1	
+cell	C757	n	'7'	None				
+cell	D757	str	'Y'	None				
+cell	B758	e	'#DIV/0!'	None				
+cell	C758	str	'z'	None				
+cell	D758	n	'8'	None				
+cell	B769	n	'0'	'_xlfn.DROP(BX1:CA3,1,-2)'	array	B769:C770	1	
+cell	C769	e	'#DIV/0!'	None				
+cell	B770	n	'10000000000'	None				
+cell	C770	b	False	None				
+cell	B781	n	'-1.5'	'_xlfn.EXPAND(BX1:CA3,4,5,"-")'	array	B781:F784	1	
+cell	C781	str	'x'	None				
+cell	D781	n	'7'	None				
+cell	E781	str	'Y'	None				
+cell	F781	str	'-'	None				
+cell	B782	n	'0'	None				
+cell	C782	e	'#DIV/0!'	None				
+cell	D782	str	'z'	None				
+cell	E782	n	'8'	None				
+cell	F782	str	'-'	None				
+cell	B783	n	'10000000000'	None				
+cell	C783	b	False	None				
+cell	D783	n	'0'	None				
+cell	E783	str	'w'	None				
+cell	F783	str	'-'	None				
+cell	B784	str	'-'	None				
+cell	C784	str	'-'	None				
+cell	D784	str	'-'	None				
+cell	E784	str	'-'	None				
+cell	F784	str	'-'	None				
+cell	B793	n	'-1.5'	'_xlfn.EXPAND(BX1:BX3,3,2,TRUE)'	array	B793:C795	1	
+cell	C793	b	True	None				
+cell	B794	n	'0'	None				
+cell	C794	b	True	None				
+cell	B795	n	'10000000000'	None				
+cell	C795	b	True	None				
+cell	B805	e	'#DIV/0!'	'_xlfn.TAKE(BY1:BY3,-2)'	array	B805:B806	1	
+cell	B806	b	False	None				
+cell	B817	e	'#VALUE!'	'_xlfn.DROP(BX1:CA3,{1;2})'	array	B817:B818	1	
+cell	B818	e	'#VALUE!'	None				
+cell	B829	n	'1'	'_xlfn.TAKE({1,2;3,4},1)'	normal			
+cell	B841	e	'#VALUE!'	'_xlfn.TAKE(BT:BT,2)'	normal			
+cell	B853	e	'#VALUE!'	'_xlfn.DROP(BT1:BV4,0)'	normal			
+cell	B865	n	'1'	'_xlfn.EXPAND(BT1:BV4,4)'	normal			
+cell	B877	n	'5'	'_xlfn.TAKE(5,{1,1})'	array	B877:C877	1	
+cell	C877	n	'5'	None				
+cell	B889	n	'1'	'_xlfn.TAKE({1,2;3,4},{1,2})'	array	B889:C889	1	
+cell	C889	n	'1'	None				
+cell	B901	n	'5'	'_xlfn.DROP(5,{0,0})'	array	B901:C901	1	
+cell	C901	n	'5'	None				
+cell	B913	n	'1'	'_xlfn.EXPAND(1,{1,2})'	array	B913:C913	1	
+cell	C913	n	'1'	None				
+cell	B925	e	'#N/A'	'_xlfn.TAKE(#N/A,1)'	array	B925	1	
+cell	B937	e	'#N/A'	'_xlfn.EXPAND(#N/A,2)'	array	B937	1	
+cell	B949	n	'1'	'_xlfn.EXPAND({1,2},2,3,)'	array	B949:D950	1	
+cell	C949	n	'2'	None				
+cell	D949	n	'0'	None				
+cell	B950	n	'0'	None				
+cell	C950	n	'0'	None				
+cell	D950	n	'0'	None				
+cell	B961	n	'0'	'_xlfn.DROP(BT:BT,1)'	normal			
+cell	B973	n	'0'	'_xlfn.EXPAND(,2,2,"x")'	array	B973:C974	1	
+cell	C973	str	'x'	None				
+cell	B974	str	'x'	None				
+cell	C974	str	'x'	None				
+cell	B985	n	'0'	'_xlfn.EXPAND(,1)'	array	B985	1	
+cell	B997	e	'#VALUE!'	'_xlfn.TAKE(,,)'	array	B997	1	
+cell	B1009	e	'#VALUE!'	'_xlfn.DROP(,0)'	array	B1009	1	

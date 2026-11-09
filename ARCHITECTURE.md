@@ -693,6 +693,14 @@ the dynamic array at A1 spills into; `@x` (`_xlfn.SINGLE(x)`) is the implicit in
 8); the reader decodes it, and the writer writes `#VALUE!` without the rich value, as other
 readers see such a cell.
 
+**Functions that make arrays** (`_functions/_dynamic.py`, `_functions/_reshape.py`; captures
+`dyn_*`) take their array arguments whole in every formula. A count or other one-value argument
+given an array is taken element by element, as an operator is, each element giving the first
+value of its result; a range there is lifted too in an array context and intersected in a legacy
+formula. `TAKE` and `DROP` of a range give a range, as `INDEX` does, so a legacy formula's cell
+intersects it (`=TAKE(Z1:Z4,2)` is Z2's value in row 2 and `#VALUE!` in row 3) and taken element by element they make
+an array of references (`#VALUE!` in each element); the others give arrays.
+
 **In the engine** a formula that fills more than its cell is an *anchor* (`Engine.anchors`) with
 its range; the cells it fills are *members*, found from the anchors' ranges (an index of row
 spans per column, `Engine.member_of`) rather than stored per cell. A formula reading a member

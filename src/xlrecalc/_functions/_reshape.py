@@ -7,6 +7,9 @@ them:
   array (not inside one) is the result, and an empty one is ``#VALUE!``.
 - A count or index is truncated; text is read as a number, a logical as 1 or 0, a blank cell as
   0.
+- An array given where a count belongs (and in a dynamic array, a range) is taken element by
+  element: each element gives the first value of its result, ``#VALUE!`` for a reference. In a
+  plain formula a range there is intersected.
 - A blank in a result shows 0.
 """
 
@@ -20,6 +23,9 @@ from xlrecalc._arrays import broadcast, to_array
 from xlrecalc._coerce import scalar
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._dynamic import (
+    CALC,
+    MAX_COLS,
+    MAX_ROWS,
     VALUE,
     Grid,
     _count,
@@ -28,7 +34,7 @@ from xlrecalc._functions._dynamic import (
     _shown,
 )
 from xlrecalc._functions._registry import function
-from xlrecalc._values import ErrorValue, Ref
+from xlrecalc._values import BLANK, ErrorValue, Ref
 
 C = "lookup and reference"
 
@@ -155,3 +161,116 @@ def _chooserows(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
 
 _register("_XLFN.CHOOSECOLS", _choosecols, "array", "raw", variadic=True, min_args=2)
 _register("_XLFN.CHOOSEROWS", _chooserows, "array", "raw", variadic=True, min_args=2)
+
+
+# TAKE and DROP --------------------------------------------------------------------------------
+# Of a range they give a range, which a plain formula's cell intersects as it does any reference
+# (=TAKE(Z1:Z4,2) is Z2's value in row 2, #VALUE! in row 3).
+
+
+def _span(n: int, size: int, take: bool) -> tuple[int, int]:
+    """The first and past-the-last line kept of ``size`` when taking or dropping ``n``."""
+    if take:
+        n = max(-size, min(size, n))
+        return (0, n) if n >= 0 else (size + n, size)
+    if n >= 0:
+        return min(n, size), size
+    return 0, max(0, size + n)
+
+
+def _take_drop(ctx: Any, given: tuple[Any, ...], ranges: bool, take: bool) -> Any:
+    core = _take if take else _drop
+    lifted = _spread(ctx, core, given, (1, 2), ranges)
+    if lifted is not None:
+        return lifted
+    array = given[0]
+    if isinstance(array, ErrorValue):
+        return array
+    if array is MISSING:
+        return VALUE
+    counts = []
+    for a in given[1:]:
+        n = _number(a, ctx, 0.0) if a is not MISSING else None
+        if isinstance(n, ErrorValue):
+            return n
+        counts.append(n)
+    counts += [None] * (2 - len(counts))
+    if isinstance(array, Ref):
+        size = (array.rows, array.columns)
+    else:
+        array = _grid(array)
+        size = (len(array), len(array[0]))
+    spans = []
+    for n, s in zip(counts, size, strict=True):
+        first, last = (0, s) if n is None else _span(n, s, take)
+        if last <= first:
+            return CALC
+        spans.append((first, last))
+    (r1, r2), (c1, c2) = spans
+    if isinstance(array, Ref):  # a range gives a range, as Excel's TAKE and DROP do
+        return Ref(
+            array.source, array.sheet, array.r1 + r1, array.c1 + c1,
+            array.r1 + r2 - 1, array.c1 + c2 - 1,
+        )  # fmt: skip
+    return _shown_grid([row[c1:c2] for row in array[r1:r2]])
+
+
+def _take(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
+    """The first ``rows`` and ``columns`` of ``array``, or the last for a negative count."""
+    return _take_drop(ctx, given, ranges, take=True)
+
+
+def _drop(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
+    """``array`` without its first ``rows`` and ``columns``, or its last for a negative count."""
+    return _take_drop(ctx, given, ranges, take=False)
+
+
+_register("_XLFN.TAKE", _take, "array", "raw", "raw", min_args=2)
+_register("_XLFN.DROP", _drop, "array", "raw", "raw", min_args=2)
+
+
+# EXPAND ---------------------------------------------------------------------------------------
+# An empty array argument is one blank here, and an empty pad_with is 0 (captures dyn_droptake,
+# empty_args).
+
+
+def _expand(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
+    """``array`` padded to ``rows`` by ``columns`` with ``pad_with`` (``#N/A`` if left out)."""
+    lifted = _spread(ctx, _expand, given, (1, 2), ranges)
+    if lifted is not None:
+        return lifted
+    grid = _whole(BLANK if given[0] is MISSING else given[0])  # empty, it is one blank
+    if isinstance(grid, ErrorValue):
+        return grid
+    size = [len(grid), len(grid[0])]
+    for k, a in enumerate(given[1:3]):
+        if a is MISSING:
+            continue
+        n = _number(a, ctx, 0.0)
+        if isinstance(n, ErrorValue):
+            return n
+        if n > (MAX_ROWS, MAX_COLS)[k]:
+            return ErrorValue.NUM
+        if n < size[k]:
+            return VALUE
+        size[k] = n
+    pad: Any = ErrorValue.NA
+    if len(given) > 3:
+        pad = given[3]
+        if pad is MISSING:
+            pad = 0.0
+        elif isinstance(pad, Ref):
+            if not pad.is_cell() and ranges:
+                return VALUE
+            pad = scalar(pad, ctx)
+        elif type(pad) is tuple:
+            return VALUE
+    rows, cols = size
+    _limit(ctx, rows, cols)
+    width = len(grid[0])
+    out = [tuple(_shown(v) for v in row) + (pad,) * (cols - width) for row in grid]
+    out += [(pad,) * cols] * (rows - len(grid))
+    return _shown_grid(out)
+
+
+_register("_XLFN.EXPAND", _expand, "array", "raw", "raw", "raw", min_args=2)

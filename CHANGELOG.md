@@ -24,9 +24,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     another length or two-dimensional is `#VALUE!`); when none is left, `if_empty`, an array included, or `#CALC!`.
   - `CHOOSECOLS`, `CHOOSEROWS`: the columns or rows at the indexes given, negative ones from the end, repeats kept; a row
     or column of indexes picks several, a two-dimensional one, or an index of 0 or past the size, is `#VALUE!`.
+  - `TAKE`, `DROP`: the first or last rows and columns, or all but them; a count past the size takes all, dropping all
+    or taking none is `#CALC!`. Of a range they give a range, which a plain formula's cell intersects.
+  - `EXPAND`: padded to a size with `pad_with`, `#N/A` when it is left out and 0 when it is empty; a size smaller than
+    the array is `#VALUE!`, one past the sheet `#NUM!`.
 
   Each takes its array argument whole in every formula; an error given as the array is the result, and an empty one
-  `#VALUE!`.
+  `#VALUE!` (`EXPAND` takes it as a blank). A count given an array is taken element by element, each element giving
+  the first value of its result (`#VALUE!` for a reference from `TAKE` or `DROP`); a range there is too in a dynamic
+  array, where a plain formula intersects it.
 
   A formula set through `set_formula` whose outermost call is one of them is written as a dynamic array whatever the size
   of its result, as Excel writes it typed, so that it spills when its data grows; wrapped in another function, as in
