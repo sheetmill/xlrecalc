@@ -68,6 +68,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `CEILING`, `FLOOR` and their `.MATH` and `.PRECISE` forms, `ISO.CEILING`, `MROUND`, `EVEN`, `ODD`, `QUOTIENT`,
   `FACT`, `FACTDOUBLE`, `GCD`, `LCM`, `COMBIN`, `COMBINA`, `PERMUT`, `PERMUTATIONA`, `MULTINOMIAL`, `SERIESSUM`,
   `SUMX2MY2`, `SUMX2PY2`, `SUMXMY2`, `ROMAN`, `ARABIC`, `BASE`, `DECIMAL`.
+- `MDETERM`, captured from Excel (capture `matrix_family`): elimination with partial pivoting, the first largest pivot,
+  the pivots multiplied in order and signed by the swaps, bit for bit over integer, singular, Hilbert and random matrices
+  up to 8 by 8; a zero pivot gives 0, an overflow `#NUM!`. Every element must be a number (`#VALUE!` for a text, a blank
+  or a logical, the error for an error) and the matrix square.
 - Closed-form finance, captured from Excel: `CUMIPMT`, `CUMPRINC`, `DB`, `DDB`, `SYD`, `DISC`, `INTRATE`, `RECEIVED`, `PRICEDISC`, `YIELDDISC`,
   `TBILLEQ`, `TBILLPRICE`, `TBILLYIELD`, `DOLLARDE`, `DOLLARFR`, `EFFECT`, `NOMINAL`, `FVSCHEDULE`, `ISPMT`, `MIRR`, `PDURATION`, `RRI`.
 - Descriptive statistics and regression, captured from Excel: `AVEDEV`, `DEVSQ`, `GEOMEAN`, `HARMEAN`, `KURT`, `SKEW`, `SKEW.P`, `PEARSON`, `RSQ`, `SLOPE`,

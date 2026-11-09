@@ -692,6 +692,8 @@ REFUSED = (
     # the matrix functions with no argument or two
     f"{MU}()",
     f"{MU}(2,3)",
+    "MDETERM()",
+    "MDETERM(AN1:AO2,AN1:AO2)",
 )
 
 SUITES: dict[str, list[DynCase]] = {

@@ -15,6 +15,7 @@ from xlrecalc._coerce import scalar, to_bool, to_number
 from xlrecalc._compare import compare
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._registry import function
+from xlrecalc._numtext import DBL_MIN
 from xlrecalc._values import BLANK, ErrorValue, Ref
 
 C = "lookup and reference"
@@ -130,6 +131,20 @@ def SEQUENCE(
 # MMULT -----------------------------------------------------------------------------------------
 
 
+def _numbers(a: Any) -> Grid | ErrorValue:
+    """A matrix argument: every element a number, the first error otherwise, else ``#VALUE!``."""
+    m = _grid(a)
+    for row in m:
+        for v in row:
+            if isinstance(v, ErrorValue):
+                return v
+    for row in m:
+        for v in row:
+            if type(v) is not float:
+                return VALUE
+    return m
+
+
 @function("MMULT", "array", "array", category=L, makes_array=True)
 def MMULT(ctx: Any, a: Any, b: Any) -> Any:
     """The matrix product: every element a number, as many columns in ``a`` as rows in ``b``."""
@@ -161,6 +176,71 @@ def MMULT(ctx: Any, a: Any, b: Any) -> Any:
 
 
 # Square matrices ---------------------------------------------------------------------------------
+
+
+def _square(a: Any) -> list[list[float]] | ErrorValue:
+    m = _numbers(a)
+    if isinstance(m, ErrorValue):
+        return m
+    if len(m) != len(m[0]):
+        return VALUE
+    return [list(row) for row in m]
+
+
+def _pivot(m: list[list[float]], k: int) -> int:
+    """The row from ``k`` down with the largest magnitude in column ``k``, the first if tied."""
+    best = k
+    for i in range(k + 1, len(m)):
+        if abs(m[i][k]) > abs(m[best][k]):
+            best = i
+    return best
+
+
+def _lu(m: list[list[float]]) -> tuple[list[int], int] | None:
+    """Factor ``m`` in place by elimination with partial pivoting.
+
+    As Excel's ``MDETERM`` and ``MINVERSE`` do (capture ``matrix_family``): ``U`` on and above the
+    diagonal, the multipliers below it. Returns the row order and the number of swaps, or ``None``
+    for a zero pivot.
+    """
+    n = len(m)
+    order, swaps = list(range(n)), 0
+    for k in range(n):
+        p = _pivot(m, k)
+        if m[p][k] == 0.0:
+            return None
+        if p != k:
+            m[k], m[p] = m[p], m[k]
+            order[k], order[p] = order[p], order[k]
+            swaps += 1
+        for i in range(k + 1, n):
+            f = m[i][k] / m[k][k]
+            m[i][k] = f
+            for j in range(k + 1, n):
+                m[i][j] -= f * m[k][j]
+    return order, swaps
+
+
+def _normal(v: float) -> float | ErrorValue:
+    """A result as Excel holds it: no subnormal numbers, no infinity."""
+    if not math.isfinite(v):
+        return ErrorValue.NUM
+    return 0.0 if abs(v) < DBL_MIN else v
+
+
+@function("MDETERM", "array", category=L)
+def MDETERM(ctx: Any, a: Any) -> Any:
+    """The determinant: the pivots of the factorization multiplied in order, signed by swaps."""
+    m = _square(a)
+    if isinstance(m, ErrorValue):
+        return m
+    factored = _lu(m)
+    if factored is None:
+        return 0.0
+    det = 1.0
+    for k in range(len(m)):
+        det *= m[k][k]
+    return _normal(-det if factored[1] % 2 else det)
 
 
 def _munit(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
