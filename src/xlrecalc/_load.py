@@ -226,6 +226,7 @@ _ARRAY_COUNTS: dict[str, tuple[int, int | None]] = {
     "_XLFN.MUNIT": (1, 1),
     "MDETERM": (1, 1),
     "MINVERSE": (1, 1),
+    "FREQUENCY": (2, 2),
 }  # fmt: skip
 # Without its prefix in a file, SORT or FILTER makes Excel refuse it; UNIQUE, SORTBY and
 # SEQUENCE are names it does not know (capture dyn_*).

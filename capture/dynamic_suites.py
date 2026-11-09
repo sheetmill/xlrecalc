@@ -87,6 +87,16 @@ DATA: dict[str, list[object]] = {
     "BY": ["x", DIV0, False],
     "BZ": [7.0, "z", None],
     "CA": ["Y", 8.0, "w"],
+    # FREQUENCY and MODE.MULT: data with a text, a blank and a logical, unsorted bins (first set);
+    # data and bins (second set); a column with two modes
+    "CC": [79.0, 85.0, 78.0, 85.0, 50.0, 81.0, 95.0, 88.0, 97.0, "x", None, True, 70.0],
+    "CD": [80.0, 70.0, 90.0],
+    "CE": [1.5, 2.5, 2.5, -1.0, 0.0, 3.0, 3.0, 3.0, 10.0],
+    "CF": [0.0, 2.5, 3.0],
+    "CG": [1.0, 2.0, 2.0, 3.0, 3.0, 4.0],
+    # TEXTSPLIT: texts and delimiters
+    "CH": ["a,b,c", "x;y,z", "", "one", "a,,b", "A-b-C", "1,2;3,4"],
+    "CI": [",", ";"],
 }
 
 
@@ -657,6 +667,48 @@ MATRIX = [
     DynCase("MDETERM(BJ1:BL3)"),
 ]
 
+FQ, MM, TS, RA = "FREQUENCY", "_xlfn.MODE.MULT", "_xlfn.TEXTSPLIT", "_xlfn.RANDARRAY"
+FREQUENCY_MODE = [
+    DynCase(f"{FQ}(CC1:CC13,CD1:CD3)", readers=READ),
+    DynCase(f"{FQ}(CC1:CC13,{{70;80;90}})"),
+    DynCase(f"{FQ}(CC1:CC13,80)"),
+    DynCase(f"{FQ}(CC1:CC13,{{70,80,90}})"),
+    DynCase(f"{FQ}({{1,2,2,3}},{{2,2}})"),
+    DynCase(f"{FQ}({{1,2,3}},CZ1:CZ2)"),
+    DynCase(f'{FQ}("a",{{1;2}})'),
+    DynCase(f"{FQ}(#N/A,{{1;2}})"),
+    DynCase(f"{FQ}({{1,#N/A}},{{1;2}})"),
+    DynCase(f'{FQ}({{1,2}},"x")'),
+    DynCase(f"{FQ}(CC1:CC13,CD1:CD3)", legacy=True),
+    DynCase(f"{FQ}(CC1:CC13,CD1:CD3)", way={(1, 0): "in the way"}),
+    DynCase(f"{FQ}(5,5)"),
+    DynCase(f"{FQ}({{-1,0,1}},{{0;0.5}})"),
+    DynCase(f"{MM}(CG1:CG6)", readers=READ),
+    DynCase(f"{MM}({{1,2,3}})"),
+    DynCase(f"{MM}({{1,1,2}})"),
+    DynCase(f"{MM}({{3,1,3,1,2}})"),
+    DynCase(f"{MM}(1,1,2,2)"),
+    DynCase(f"{MM}(CC1:CC13)"),
+    DynCase(f'{MM}({{"a","a",1}})'),
+    DynCase(f"{MM}({{1,#N/A,1}})"),
+    DynCase(f"{MM}(CG1:CG6)", legacy=True),
+    DynCase(f"{MM}({{1,1,2,2}},{{3,3}})"),
+    DynCase(f"{MM}(TRUE,TRUE)"),
+    DynCase("MODE.MULT(CG1:CG6)"),
+    # second set
+    DynCase(f"{FQ}(CE1:CE9,CF1:CF3)", readers=READ),
+    DynCase(f"{FQ}(CE1:CE9,{{3;0}})"),
+    DynCase(f"{MM}(CE1:CE9)"),
+    # bins with no number among them, against negative data; logicals and text given directly
+    DynCase(f'{FQ}({{-1,1}},"x")'),
+    DynCase(f"{FQ}({{-1,1}},CZ1)"),
+    DynCase(f"{FQ}({{-2,-1,0.5}},CZ1:CZ3)"),
+    DynCase(f'{FQ}({{1,2}},{{"x";1}})'),
+    DynCase(f"{MM}(TRUE,TRUE,1,1)"),
+    DynCase(f"{MM}({{TRUE,TRUE,1}})"),
+    DynCase(f'{MM}("1","1")'),
+]
+
 # Formulas that make Excel refuse the file (error -50 on opening, each alone in a workbook):
 # SORT and FILTER without their prefix (UNIQUE, SORTBY and SEQUENCE without theirs open), and
 # argument counts the functions do not take. The reshaping functions without their prefix open.
@@ -696,6 +748,9 @@ REFUSED = (
     f"{MI}(AN1:AO2,AN1:AO2)",
     "MDETERM()",
     "MDETERM(AN1:AO2,AN1:AO2)",
+    # FREQUENCY, MODE.MULT, TEXTSPLIT and RANDARRAY with argument counts they do not take
+    f"{FQ}(CC1:CC13)",
+    f"{FQ}(CC1:CC13,CD1:CD3,1)",
 )
 
 SUITES: dict[str, list[DynCase]] = {
@@ -712,6 +767,7 @@ SUITES: dict[str, list[DynCase]] = {
     "wrap": WRAP,
     "index": INDEX,
     "matrix": MATRIX,
+    "frequency": FREQUENCY_MODE,
 }
 
 

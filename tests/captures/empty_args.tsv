@@ -1188,3 +1188,6 @@ empty_args	wrapcols	1175	_xlfn.WRAPCOLS($AA$1:$AA$4,2,)	()	n	1.0
 empty_args	munit	1176	_xlfn.MUNIT(2)	()	n	1.0
 empty_args	mdeterm	1177	MDETERM({1,2;3,4})	()	n	-2.0
 empty_args	minverse	1178	MINVERSE({1,2;3,4})	()	n	-1.9999999999999998
+empty_args	frequency	1179	FREQUENCY($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	frequency	1180	FREQUENCY(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	frequency	1181	FREQUENCY($AA$1:$AA$4,)	()	e	#VALUE!

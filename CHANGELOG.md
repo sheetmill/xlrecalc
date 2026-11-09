@@ -35,6 +35,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `MINVERSE`: the inverse, through the factorization `MDETERM` uses, each column of the identity solved forward and
     back with sums in increasing order and a division by each pivot, as Excel computes it bit for bit; a zero pivot is
     `#NUM!`, and a subnormal result 0 (capture `matrix_family`, 285 elements).
+  - `FREQUENCY`: how many numbers fall in each bin, in the bins' order, and above the largest in a last row; a number
+    counts in the smallest bin at or above it, equal bins in the first; text, logicals and blanks are left out of both;
+    with no number among the bins there is one bin, 0; an empty argument is `#VALUE!`.
   - `WRAPROWS`, `WRAPCOLS`: a row or column of values in rows or columns of a count no wider than the values, the last
     padded (`#N/A` by default, empty included); a count below 1 is `#NUM!`, a two-dimensional array `#VALUE!`.
 
