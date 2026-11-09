@@ -1,6 +1,7 @@
 """Which formulas with an empty argument Excel refuses in a file (``CAPTURING.md`` §1).
 
     uv run python -m capture.empty_probe
+    uv run python -m capture.empty_probe --check FORMULA [FORMULA ...]
 
 Excel refuses a whole file for one such formula (-50),
 so the suite ``empty_args`` is opened in small
@@ -31,7 +32,9 @@ def main() -> None:
             sys.exit(f"more than {MAX_OPENS} opens; so far {len(refused)} refused")
         try:
             run_excel(cases, "empty_probe", False, _EMPTY_TABLE)
-        except RuntimeError:
+        except RuntimeError as exc:
+            if "-50" not in str(exc):  # not a refusal: Excel failed otherwise
+                sys.exit(f"Excel failed otherwise, after {opens} opens: {exc}")
             if len(cases) == 1:
                 refused.append(cases[0].formula)
                 return
@@ -39,6 +42,14 @@ def main() -> None:
             walk(cases[:middle])
             walk(cases[middle:])
 
+    if sys.argv[1:2] == ["--check"]:  # given formulas, each alone, with Excel's message
+        for formula in sys.argv[2:]:
+            try:
+                run_excel([Case("check", formula)], "empty_probe", False, _EMPTY_TABLE)
+                print(f"opens\t{formula}", flush=True)
+            except RuntimeError as exc:
+                print(f"fails\t{formula}\t{exc}", flush=True)
+        return
     cases = empty_args_all()
     for start in range(0, len(cases), BATCH):
         walk(cases[start : start + BATCH])
