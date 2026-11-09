@@ -1165,3 +1165,15 @@ empty_args	vstack	1152	_xlfn.VSTACK($AA$1:$AA$4,)	()	e	#VALUE!
 empty_args	hstack	1153	_xlfn.HSTACK($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
 empty_args	hstack	1154	_xlfn.HSTACK(,$AA$1:$AA$4)	()	e	#VALUE!
 empty_args	hstack	1155	_xlfn.HSTACK($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	tocol	1156	_xlfn.TOCOL($AA$1:$AA$4,1,TRUE)	()	n	1.0
+empty_args	tocol	1157	_xlfn.TOCOL(,1,TRUE)	()	e	#VALUE!
+empty_args	tocol	1158	_xlfn.TOCOL($AA$1:$AA$4,,TRUE)	()	n	1.0
+empty_args	tocol	1159	_xlfn.TOCOL($AA$1:$AA$4,1,)	()	n	1.0
+empty_args	tocol	1160	_xlfn.TOCOL($AA$1:$AA$4,,)	()	n	1.0
+empty_args	tocol	1161	_xlfn.TOCOL($AA$1:$AA$4,)	()	n	1.0
+empty_args	torow	1162	_xlfn.TOROW($AA$1:$AA$4,1,TRUE)	()	n	1.0
+empty_args	torow	1163	_xlfn.TOROW(,1,TRUE)	()	e	#VALUE!
+empty_args	torow	1164	_xlfn.TOROW($AA$1:$AA$4,,TRUE)	()	n	1.0
+empty_args	torow	1165	_xlfn.TOROW($AA$1:$AA$4,1,)	()	n	1.0
+empty_args	torow	1166	_xlfn.TOROW($AA$1:$AA$4,,)	()	n	1.0
+empty_args	torow	1167	_xlfn.TOROW($AA$1:$AA$4,)	()	n	1.0

@@ -29,6 +29,7 @@ from xlrecalc._functions._dynamic import (
     VALUE,
     Grid,
     _count,
+    _flag,
     _grid,
     _limit,
     _shown,
@@ -321,3 +322,56 @@ def HSTACK(ctx: Any, *arrays: Any) -> Any:
                 row.extend([ErrorValue.NA] * len(p[0]))
         out.append(tuple(row))
     return tuple(out)
+
+
+# TOCOL and TOROW ------------------------------------------------------------------------------
+
+
+def _flatten(ctx: Any, given: tuple[Any, ...], ranges: bool) -> list[Any] | ErrorValue:
+    grid = _whole(given[0])
+    if isinstance(grid, ErrorValue):
+        return grid
+    ignore = _number(given[1], ctx, 0.0) if len(given) > 1 else 0
+    if isinstance(ignore, ErrorValue):
+        return ignore
+    if not 0 <= ignore <= 3:
+        return VALUE
+    by_col = _flag(given[2], ctx) if len(given) > 2 else False
+    if isinstance(by_col, ErrorValue):
+        return by_col
+    lines = zip(*grid, strict=True) if by_col else grid
+    values = [
+        _shown(v)
+        for line in lines
+        for v in line
+        if not (ignore & 1 and v is BLANK) and not (ignore & 2 and isinstance(v, ErrorValue))
+    ]
+    return values or CALC
+
+
+def _tocol(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
+    """The values of ``array`` in one column, row by row or by column, some kinds ignored."""
+    lifted = _spread(ctx, _tocol, given, (1, 2), ranges)
+    if lifted is not None:
+        return lifted
+    values = _flatten(ctx, given, ranges)
+    if isinstance(values, ErrorValue):
+        return values
+    _limit(ctx, len(values), 1)
+    return tuple((v,) for v in values)
+
+
+def _torow(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
+    """The values of ``array`` in one row, row by row or by column, some kinds ignored."""
+    lifted = _spread(ctx, _torow, given, (1, 2), ranges)
+    if lifted is not None:
+        return lifted
+    values = _flatten(ctx, given, ranges)
+    if isinstance(values, ErrorValue):
+        return values
+    _limit(ctx, 1, len(values))
+    return (tuple(values),)
+
+
+_register("_XLFN.TOCOL", _tocol, "array", "raw", "raw", min_args=1)
+_register("_XLFN.TOROW", _torow, "array", "raw", "raw", min_args=1)

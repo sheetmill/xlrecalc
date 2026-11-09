@@ -502,6 +502,49 @@ STACK = [
     DynCase(f"{HS}(,{{1;2}})"),
 ]
 
+TOCOL = [
+    DynCase(f"{TC}({T1})", readers=READ),
+    DynCase(f"{TC}({T1},1)"),
+    DynCase(f"{TC}({T1},2)"),
+    DynCase(f"{TC}({T1},3)"),
+    DynCase(f"{TC}({T1},0,TRUE)"),
+    DynCase(f"{TC}({T1},4)"),
+    DynCase(f"{TC}({T1},-1)"),
+    DynCase(f"{TC}({T1},1.5)"),
+    DynCase(f'{TC}({T1},"1")'),
+    DynCase(f"{TC}(5)"),
+    DynCase(f"{TC}(BU2)"),
+    DynCase(f"{TC}(BU2,1)"),
+    DynCase(f"{TC}({{1,2;3,4}},,1)"),
+    DynCase(f"{TC}(#N/A,2)"),
+    DynCase(f'{TC}({T1},0,"x")'),
+    DynCase(f"{TC}({T1},TRUE)"),
+    DynCase(f"{TC}({T1},{{0,1}})"),
+    DynCase(f"{TC}({T1})", legacy=True),
+    DynCase(f"TOCOL({T1})"),
+    DynCase(f"{TC}({{1,2}})", way={(1, 0): "in the way"}),
+    DynCase(f"{TC}({T1},#N/A)"),
+    DynCase(f"{TR}(BT1:BV3)", readers=READ),
+    DynCase(f"{TR}(BT1:BV3,3,TRUE)"),
+    DynCase(f"{TR}({{1,2;3,4}})"),
+    DynCase(f"{TR}(BT1:BV3,1)"),
+    DynCase(f"{TR}(BU1:BU4,1)"),
+    # second set
+    DynCase(f"{TC}({T2})", readers=READ),
+    DynCase(f"{TC}({T2},3,TRUE)"),
+    DynCase(f"{TR}({T2},2)"),
+    DynCase(f"{TR}(BZ1:BZ3,1)"),
+    DynCase(f"{TC}(BY1:BZ3,1,1)"),
+    # follow-up: plain formulas over whole columns, lifting, direct errors
+    DynCase(f"{TR}({T1})", legacy=True),
+    DynCase(f"{TC}(BY2,2)"),
+    DynCase(f"{TC}({{1,#N/A}},2)"),
+    DynCase(f"{TC}(BT:BT,1)", legacy=True),
+    # follow-up: an empty array argument
+    DynCase(f"{TC}(,0)"),
+    DynCase(f"{TR}(,1,TRUE)"),
+]
+
 # Formulas that make Excel refuse the file (error -50 on opening, each alone in a workbook):
 # SORT and FILTER without their prefix (UNIQUE, SORTBY and SEQUENCE without theirs open), and
 # argument counts the functions do not take. The reshaping functions without their prefix open.
@@ -523,9 +566,13 @@ REFUSED = (
     f"{EX}({T1})",
     f"{HS}()",
     f"{VS}()",
+    f"{TC}()",
+    f"{TR}()",
     f"{DR}({T1},1,1,1)",
     f"{TK}({T1},1,1,1)",
     f"{EX}({T1},5,5,0,0)",
+    f"{TC}({T1},0,0,0)",
+    f"{TR}({T1},0,0,0)",
 )
 
 SUITES: dict[str, list[DynCase]] = {
@@ -538,6 +585,7 @@ SUITES: dict[str, list[DynCase]] = {
     "choose": CHOOSE,
     "droptake": DROPTAKE,
     "stack": STACK,
+    "tocol": TOCOL,
 }
 
 

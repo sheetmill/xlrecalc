@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     the array is `#VALUE!`, one past the sheet `#NUM!`.
   - `VSTACK`, `HSTACK`: one below another or side by side, padded with `#N/A`; an error given as an argument is the
     result, an empty argument `#VALUE!`.
+  - `TOCOL`, `TOROW`: the values by rows or by columns, blanks, errors or both ignored; none left is `#CALC!`.
 
   Each takes its array argument whole in every formula; an error given as the array is the result, and an empty one
   `#VALUE!` (`EXPAND` takes it as a blank). A count given an array is taken element by element, each element giving
