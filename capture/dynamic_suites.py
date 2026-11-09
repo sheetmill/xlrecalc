@@ -595,6 +595,27 @@ WRAP = [
     DynCase(f"{WC}(,3,0)"),
 ]
 
+# INDEX with a 0 index over a single row or column (a typed INDEX(Z1:Z1,0,1) is 1).
+INDEX = [
+    DynCase("INDEX(BT1:BT4,0,1)", readers=READ),
+    DynCase("INDEX(BT1:BT4,0,2)"),
+    DynCase("INDEX(BT1:BV1,0,2)"),
+    DynCase("INDEX(BT1:BV1,1,0)"),
+    DynCase("INDEX(BT1:BT1,0,1)"),
+    DynCase("INDEX(BT1:BT4,0,1)", legacy=True),
+    DynCase("INDEX(BT1:BT4,0)"),
+    DynCase("INDEX({1;2;3},0,1)"),
+    DynCase("INDEX({1,2,3},0,3)"),
+    # second set
+    DynCase("INDEX(BX1:BX3,0,1)", readers=READ),
+    DynCase("INDEX(BX2:CA2,0,4)"),
+    # follow-up: a column index of 0 given, against one left out
+    DynCase("INDEX(BT1:BV1,2,0)"),
+    DynCase("INDEX(BT1:BT4,2,0)"),
+    DynCase("INDEX(BT1:BV1,2)"),
+    DynCase("INDEX(BT1:BT4,1,)"),
+]
+
 # Formulas that make Excel refuse the file (error -50 on opening, each alone in a workbook):
 # SORT and FILTER without their prefix (UNIQUE, SORTBY and SEQUENCE without theirs open), and
 # argument counts the functions do not take. The reshaping functions without their prefix open.
@@ -641,6 +662,7 @@ SUITES: dict[str, list[DynCase]] = {
     "stack": STACK,
     "tocol": TOCOL,
     "wrap": WRAP,
+    "index": INDEX,
 }
 
 

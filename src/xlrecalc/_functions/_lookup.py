@@ -188,8 +188,12 @@ def HLOOKUP(ctx: Context, lookup: Any, table: Any, row: float, approximate: Any 
     return _table_lookup(ctx, lookup, table, row, approximate, horizontal=True)
 
 
-def _whole(ref: Any, r: int, c: int) -> Any:
-    """``INDEX`` with a 0 (or omitted) index over a range of several rows and columns."""
+def _whole(ref: Any, r: int, c: int, given: bool) -> Any:
+    """``INDEX`` with a 0 (or omitted) index: a whole row, column or range, or ``None``.
+
+    Over a single row or column a lone index counts along it; with the column index given, 0 or
+    not, the indexes are a row and a column as for any range (capture ``dyn_index``).
+    """
     if isinstance(ref, Ref):
         rows, cols = ref.rows, ref.columns
     elif isinstance(ref, tuple):
@@ -198,7 +202,8 @@ def _whole(ref: Any, r: int, c: int) -> Any:
         return None
     if r == 0 and c == 0:
         return ref
-    if rows == 1 or cols == 1 or (r != 0 and c != 0) or r < 0 or c < 0:
+    single = rows == 1 or cols == 1
+    if (single and not given) or (r != 0 and c != 0) or r < 0 or c < 0:
         return None
     if (r == 0 and c > cols) or (c == 0 and r > rows):
         return REF
@@ -212,7 +217,7 @@ def _whole(ref: Any, r: int, c: int) -> Any:
 
 
 @function("INDEX", "array", "number", "number", "number", min_args=2, reference=True, category=L)
-def INDEX(ctx: Context, ref: Any, row: float, col: float = 0.0, area: float = 1.0) -> Any:
+def INDEX(ctx: Context, ref: Any, row: float, col: float | None = None, area: float = 1.0) -> Any:
     """The value at ``row``, ``col`` (1-based) of a range; one index for a single row or column.
 
     A 0 index gives a whole column (``INDEX(A1:B5,0,1)``) or row, as a reference into a
@@ -225,8 +230,8 @@ def INDEX(ctx: Context, ref: Any, row: float, col: float = 0.0, area: float = 1.
         return ref
     if math.trunc(area) != 1:
         return ErrorValue.VALUE if area < 1 else ErrorValue.REF
-    r, c = math.trunc(row), math.trunc(col)
-    whole = _whole(ref, r, c)
+    r, c = math.trunc(row), math.trunc(col) if col is not None else 0
+    whole = _whole(ref, r, c, col is not None)
     if whole is not None:
         return whole
     if isinstance(ref, tuple):

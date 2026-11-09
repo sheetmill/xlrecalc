@@ -110,6 +110,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- `INDEX` with a row index of 0 and a column index over a single column or row was `#VALUE!`; it is that column
+  (`INDEX(Z1:Z4,0,1)` is Z1:Z4). A column index of 0 given over a single row or column is a row index and a column
+  index as over any range (`INDEX(Z1:AB1,1,0)` is the row, `INDEX(Z1:AB1,2,0)` `#REF!`), where a column index left out
+  counts along the line (`INDEX(Z1:AB1,2)` is AA1) (capture `dyn_index`).
 - A number literal Excel refuses in a file formula, from `1E+308` up (the largest Excel takes is 9.99999999999999E+307) or
   below `1E-309`, was computed; the formula keeps the value it holds and is in `Report.refused`, as Excel refuses the file
   (capture `number_literals`).

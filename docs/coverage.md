@@ -262,7 +262,7 @@ library differs in the last bits; the rows that match either way do not.
 | `IMSUB` | | absent | | | | | | | |
 | `IMSUM` | | absent | | | | | | | |
 | `IMTAN` | | absent | | | | | | | |
-| `INDEX` | lookup and reference | implemented | 149 | 137 | 2 | 0 | 10 |  |  |
+| `INDEX` | lookup and reference | implemented | 164 | 152 | 2 | 0 | 10 |  |  |
 | `INDIRECT` | lookup and reference | implemented | 14 | 14 | 0 | 0 | 0 |  |  |
 | `INFO` | | absent | | | | | | | |
 | `INT` | math | implemented | 18 | 17 | 0 | 0 | 1 |  |  |

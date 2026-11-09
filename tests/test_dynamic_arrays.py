@@ -33,7 +33,7 @@ from xlrecalc._xlsx._write import text_escape
 CAPTURES = Path(__file__).with_name("captures")
 SUITES = (
     "sequence", "mmult", "unique", "sort", "sortby", "filter",
-    "choose", "droptake", "stack", "tocol", "wrap",
+    "choose", "droptake", "stack", "tocol", "wrap", "index",
 )  # fmt: skip
 RICH = "{http://schemas.microsoft.com/office/spreadsheetml/2017/richdata}"
 _ERROR_TYPES = {"8": "#SPILL!", "13": "#CALC!"}
@@ -48,7 +48,9 @@ def _rows(suite: str) -> list[list[str]]:
 
 
 def _rich_errors(suite: str) -> dict[str, str]:
-    """vm (1-based, as cells carry it) -> the error its rich value holds."""
+    """vm (1-based, as cells carry it) -> the error its rich value holds (none without parts)."""
+    if not (CAPTURES / f"dyn_{suite}_rdrichvalue.xml").exists():
+        return {}
     structures = ET.parse(CAPTURES / f"dyn_{suite}_rdrichvaluestructure.xml").getroot()
     keys = [[k.get("n") for k in s.iter(f"{RICH}k")] for s in structures.iter(f"{RICH}s")]
     values = ET.parse(CAPTURES / f"dyn_{suite}_rdrichvalue.xml").getroot()
@@ -199,6 +201,9 @@ def _outermost(text: str) -> str | None:
     return ((root.prefix.text if root.prefix is not None else "") + root.name.text).upper()
 
 
+_SIZED = ("INDEX", "OFFSET")  # spill or not by their arguments, flagged or not
+
+
 def test_array_makers_are_flagged_as_the_captures_show() -> None:
     """``makes_array`` holds exactly for the functions the captures show making arrays.
 
@@ -214,7 +219,7 @@ def test_array_makers_are_flagged_as_the_captures_show() -> None:
             if kind != "dynamic" or ":" not in cells[where][6]:
                 continue
             name = _outermost(ast.literal_eval(text))
-            if name is not None:
+            if name is not None and name not in _SIZED:
                 makes.add(name)
     engine = Engine(Quirks.EXCEL)
     engine.add_sheet("typed")
