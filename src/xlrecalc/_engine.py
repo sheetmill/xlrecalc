@@ -52,7 +52,6 @@ SHEET_SHIFT = 34
 KEY_MASK = (1 << SHEET_SHIFT) - 1
 NAME, REF, VALUE = ErrorValue.NAME, ErrorValue.REF, ErrorValue.VALUE
 SPILL = ErrorValue("#SPILL!")
-ITERATIVE = "iterative calculation"  # the report's label for cells kept (§7.2)
 ITERATION_LIMIT = "iterative calculation past ReadLimits.max_iteration_evaluations"
 ITERATION_UNREAD = "iterative calculation reading a cell its pass did not evaluate"
 _VOLATILE = frozenset(n for n, s in SPECS.items() if s.volatile)
@@ -843,8 +842,8 @@ class Engine:
 
         They leave the stale set at once, so evaluation replaces nothing and never reaches a
         cell depending on them. With iteration off that is what Excel does (capture
-        ``circular_cached``), and the cells are ``circular``; with it on, iterative calculation is
-        not implemented, and they are uncomputed.
+        ``circular_cached``), and the cells are ``circular``; with it on, they are iterated once the
+        pass ends (``_iterate``).
         """
         index = self.index()
         cells: Iterable[int] = chain
@@ -981,7 +980,6 @@ class Engine:
                 self.stale.add(n)
                 if not held:
                     s.values.pop(key, None)
-        del report.unsupported[ITERATIVE]
         del report.unsupported[ITERATION_LIMIT]
         del report.unsupported[ITERATION_UNREAD]
         self._iterated.clear()

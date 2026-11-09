@@ -542,7 +542,6 @@ evaluation pass ends, as Excel does:
   reaches, through `INDIRECT` or `OFFSET`, a formula its pass did not evaluate (a lazy read
   evaluates only what it needs) is undone the same way, under a label saying so.
 
-
 What matches Excel exactly: each cell's arithmetic is the engine's, so a run gives Excel's doubles
 wherever every function on the loop does; where a function in it is within a declared tolerance,
 the result is within that tolerance, and for a loop that converges the stopping iteration can move

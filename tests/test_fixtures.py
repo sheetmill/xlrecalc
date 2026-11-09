@@ -15,6 +15,10 @@ MARKERS = (b"absPath", b"lastModifiedBy")
 # Home-directory paths, in any part: a cached CELL("filename") value, an external link, a
 # saved path. Excel writes / and \ as they are, and XML may escape neither.
 HOME = re.compile(rb"/Users/|/home/|[A-Za-z]:\\Users\\", re.I)
+# The author Excel records (dc:creator in docProps/core.xml) is the user's name; a fixture may
+# name only the tool that wrote it.
+CREATOR = re.compile(rb"<dc:creator>([^<]*)</dc:creator>")
+TOOLS = frozenset({b"", b"openpyxl", b"xlrecalc"})
 # Elements of docProps/app.xml that name an organization or a person when filled in.
 FILLED = re.compile(rb"<(Company|Manager)>[^<]+</")
 # Parts holding comments name their authors: Excel's comments and threaded comments and their
@@ -49,6 +53,14 @@ def test_no_personal_data(path):
                 assert marker not in data, f"{name} contains {marker.decode()}"
             assert not FILLED.search(data), f"{name} names a company or manager"
             assert not HOME.search(data), f"{name} holds a home-directory path"
+            for creator in CREATOR.findall(data):
+                assert creator.strip() in TOOLS, f"{name}: dc:creator {creator.decode()!r}"
+
+
+def test_a_person_as_creator_is_found():
+    found = CREATOR.findall(b"<dc:creator>Jane Doe</dc:creator>")
+    assert found == [b"Jane Doe"]
+    assert found[0] not in TOOLS
 
 
 def test_home_paths_are_found():

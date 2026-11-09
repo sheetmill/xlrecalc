@@ -109,10 +109,12 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
   root; 79 of the 352 captured rows of `IRR`, `XIRR` and `RATE` differ that way.
 - **Excel's behavior**: coercion between kinds, error values, the 15-digit rules, the 1900
   leap-year bug and the 1904 date system, arrays, dynamic arrays and spill, implicit
-  intersection, circular references (left uncalculated, as Excel does with iteration off).
+  intersection, circular references and iterative calculation, as Excel computes them
+  ([circular references](https://xlrecalc.readthedocs.io/en/latest/iteration.html)).
   Four quirks can be turned off (`Quirks`).
 - **Not yet**: `LAMBDA` and its helpers and the functions that reshape arrays (`HSTACK`,
-  `TAKE` and others, `docs/coverage.md`); structured
+  `TAKE` and others, in the
+  [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html)); structured
   (table) references and 3-D references; `CELL`'s formatting kinds; computed criteria in the
   database functions; `LINEST` with several regressors; inserting or deleting rows and
   columns. A formula xlrecalc cannot compute keeps the value the file holds, and the report
