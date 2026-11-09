@@ -776,6 +776,76 @@ TEXTSPLIT = [
     DynCase(f'{TS}(CJ5,",",";,")'),
 ]
 
+LT, PM = "_xlfn.LET", "_xlpm."
+
+
+def _let(*parts: str) -> str:
+    """``_xlfn.LET`` over its parts, a leading ``~`` marking a name (written with ``_xlpm.``)."""
+    return f"{LT}(" + ",".join(PM + p[1:] if p.startswith("~") else p for p in parts) + ")"
+
+
+def _at(i: int) -> str:
+    """The anchor of case ``i`` (``anchor_of``), for a case that reads its own cell."""
+    return f"B{1 + i * BLOCK}"
+
+
+# LET: scoping, defined names shadowed (x is 100, rate 0.5: NAMES), bindings never used, a binding
+# reading the formula's own cell, references bound and spilled, errors in a binding
+LET = [
+    DynCase(_let("~x", "AA1:AA3", "~x"), legacy=True),
+    DynCase(_let("~x", "1", "~x+1")),
+    DynCase(_let("~x", "2", "~y", f"{PM}x*3", f"{PM}x+{PM}y")),
+    DynCase(_let("~x", "1", _let("~x", f"{PM}x+10", f"{PM}x*2"))),
+    DynCase(_let("~x", "1", "~y", _let("~x", "5", "~x"), f"{PM}x+{PM}y")),
+    DynCase(_let("~x", "1", "~X+1")),
+    DynCase("x"),
+    DynCase(_let("~x", "1", "~x")),
+    DynCase(_let("~y", "x", "~x", "2", f"{PM}y+{PM}x")),
+    DynCase(_let("~x", "1", "x+1")),
+    DynCase(_let("~x", "~y", "~y", "1", "~x")),
+    DynCase(_let("~x", "1")),
+    DynCase(_let("~sum", "1", "~sum+1")),
+    DynCase(_let("~a1", "1", "~a1")),
+    DynCase(_let("~x.y", "1", "~x.y")),
+    DynCase(_let("~x", _at(15), "5")),
+    DynCase(_let("~x", _at(16), f"IF(FALSE,{PM}x,5)")),
+    DynCase(_let("~x", "RAND()", f"{PM}x-{PM}x")),
+    DynCase(_let("~x", "AA1:AA3", "~x"), readers=READ),
+    DynCase(_let("~x", "AA1:AA3", f"ROWS({PM}x)")),
+    DynCase(_let("~x", "AA1:AA3", f"ISREF({PM}x)")),
+    DynCase(_let("~x", "AA1", f"ISREF({PM}x)")),
+    DynCase(_let("~x", "AA1:AA3", "~x*2")),
+    DynCase(_let("~x", "AA1:AA3", f"SUM({PM}x)")),
+    DynCase(_let("~x", "AA1:AA3", f"INDEX({PM}x,2)")),
+    DynCase(_let("~x", "AA1", f"SUM({PM}x:AA3)")),
+    DynCase(_let("~x", "{1,2;3,4}", "~x*10")),
+    DynCase(_let("~x", f"{SEQ}(3)", f"SUM({PM}x)")),
+    DynCase(_let("~x", "1/0", "~x+1")),
+    DynCase(_let("~x", "1/0", f"ISERROR({PM}x)")),
+    DynCase(_let("~x", "#N/A", "1")),
+    DynCase(_let("~x", "AA1:AA3*2", "1")),
+    DynCase(_let("~s", '"ab"', f"{PM}s&{PM}s")),
+    DynCase(_let("~x", "1", "~y", f"{PM}x+1", "~z", f"{PM}y+1", "~z")),
+    DynCase(_let("~x", "AA1:AA3", "~x*2"), legacy=True),
+    DynCase(_let("~x", "AA1:AA3", f"SUM({PM}x)"), legacy=True),
+    DynCase(_let("~x", "AA1:AA3", "~x"), way={(1, 0): "in the way"}),
+    DynCase(_let("~x", "ROW(AA1:AA3)", "~x")),
+    DynCase(_let("~x", "AA1:AA3", f"_xlfn.SINGLE({PM}x)")),
+    # second set
+    DynCase(_let("~x", "AE1:AE6", f"SUM({PM}x*{PM}x)")),
+    DynCase(_let("~x", "AB1:AB3", f"UPPER({PM}x)")),
+    DynCase(_let("~n", "AE3", f"{SEQ}({PM}n)")),
+    DynCase(_let("~x", "rate", f"{PM}x*AE2")),
+    DynCase(_let("~x", _at(43), f"IF(TRUE,7,{PM}x)")),
+    DynCase(_let("~x", "AE1:AE6", "~y", f"{PM}x*2", f"INDEX({PM}y,6)")),
+    DynCase(_let("~x", "AE1:AE6", f"MAX({PM}x)-MIN({PM}x)")),
+    # no calculation after the bindings: their last value, or another reading
+    DynCase(_let("~x", "2", "~y", f"{PM}x*3")),
+    DynCase(_let("~x", "AA1:AA3")),
+    DynCase(_let("~x", "1/0")),
+    DynCase(_let("~x", "AE2", "~y", f"{PM}x*AE3")),
+]
+
 # RANDARRAY's values are random: its anchors are read by formulas that hold whatever it draws,
 # counting the elements within the bounds (and whole, with the integer flag).
 SHAPE = (
@@ -894,6 +964,7 @@ SUITES: dict[str, list[DynCase]] = {
     "frequency": FREQUENCY_MODE,
     "textsplit": TEXTSPLIT,
     "randarray": RANDARRAY,
+    "let": LET,
 }
 
 
@@ -910,9 +981,18 @@ def anchor_of(i: int) -> tuple[int, int]:
     return 1 + i * BLOCK, 2
 
 
+NAMES: dict[str, dict[str, str]] = {"let": {"x": "100", "rate": "0.5"}}
+"""Defined names of a suite's workbook, by name, with what they refer to (file form)."""
+
+
 def layout(suite: str) -> list[tuple[str, str, str]]:
-    """(kind, cell, text) for a suite: data and way constants as reprs, formulas in file form."""
-    out: list[tuple[str, str, str]] = []
+    """(kind, cell, text) for a suite: data and way constants as reprs, formulas in file form.
+
+    A defined name is ``("name", name, text)``.
+    """
+    out: list[tuple[str, str, str]] = [
+        ("name", name, text) for name, text in NAMES.get(suite, {}).items()
+    ]
     for letters, values in DATA.items():
         for r, v in enumerate(values, 1):
             if v is None:
@@ -933,4 +1013,4 @@ def layout(suite: str) -> list[tuple[str, str, str]]:
     return out
 
 
-__all__ = ["BLOCK", "DATA", "REFUSED", "SUITES", "DynCase", "anchor_of", "layout"]
+__all__ = ["BLOCK", "DATA", "NAMES", "REFUSED", "SUITES", "DynCase", "anchor_of", "layout"]

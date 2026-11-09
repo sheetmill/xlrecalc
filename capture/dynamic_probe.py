@@ -50,7 +50,11 @@ def build(path: Path, suite: str) -> list[tuple[str, str, str]]:
     ws.title = "probe"
     dynamic = []
     for kind, where, text in inputs:
-        if kind == "dynamic":
+        if kind == "name":
+            from openpyxl.workbook.defined_name import DefinedName
+
+            wb.defined_names[where] = DefinedName(where, attr_text=text)
+        elif kind == "dynamic":
             ws[where] = "=0"  # a placeholder, replaced by the dynamic-array formula
             dynamic.append((kind, where, text))
         elif kind in ("legacy", "reader"):
