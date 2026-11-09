@@ -21,8 +21,12 @@ from capture.dynamic_suites import BLOCK, REFUSED
 from tests.test_arrays import DOC, _cell, _metadata
 from tests.test_captures import same
 from tests.test_xlsx import package
-from xlrecalc._engine import node
+from xlrecalc._engine import Engine, node
+from xlrecalc._formula import parse
+from xlrecalc._formula._nodes import Call, Group
+from xlrecalc._functions import SPECS
 from xlrecalc._load import load
+from xlrecalc._quirks import Quirks
 from xlrecalc._values import BLANK, ErrorValue
 from xlrecalc._xlsx._write import text_escape
 
@@ -180,3 +184,47 @@ def test_refused_forms_are_refused() -> None:
         e.recalculate()
         assert e.report.refused, formula
         assert e.get(0, 0, 1) == 7.0, formula
+
+
+def _outermost(text: str) -> str | None:
+    """The function a formula (file form) calls outermost, through parentheses, or ``None``."""
+    root = parse(text).root
+    while isinstance(root, Group):
+        root = root.inner
+    if not isinstance(root, Call):
+        return None
+    return ((root.prefix.text if root.prefix is not None else "") + root.name.text).upper()
+
+
+def test_array_makers_are_flagged_as_the_captures_show() -> None:
+    """``makes_array`` holds exactly for the functions the captures show making arrays.
+
+    Evidence for a flag: a dynamic array whose outermost call spilled over more than one cell
+    (``dyn_*``), or a formula Excel marked when typed although it neither spills nor intersects
+    (``marker_typed``). Evidence against: a typed formula Excel did not mark.
+    """
+    flagged = {name for name, spec in SPECS.items() if spec.makes_array}
+    makes, plain = set(), set()
+    for suite in SUITES:
+        cells = {r[1]: r for r in _rows(suite) if r[0] == "cell"}
+        for _, kind, where, text in (r for r in _rows(suite) if r[0] == "input"):
+            if kind != "dynamic" or ":" not in cells[where][6]:
+                continue
+            name = _outermost(ast.literal_eval(text))
+            if name is not None:
+                makes.add(name)
+    engine = Engine(Quirks.EXCEL)
+    engine.add_sheet("typed")
+    for line in (CAPTURES / "marker_typed.tsv").read_text(encoding="utf-8").splitlines():
+        if line.startswith("#"):
+            continue
+        _typed, form, cm, _kind, ref, _value = map(ast.literal_eval, line.split("\t"))
+        name = _outermost(form)
+        if name is None:
+            continue
+        if cm is None:
+            plain.add(name)
+        elif ":" not in ref and not engine.templates[engine.template_for(form, 0, 0)].intersects:
+            makes.add(name)
+    assert not makes & plain
+    assert flagged == makes, (sorted(flagged - makes), sorted(makes - flagged))

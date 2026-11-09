@@ -110,7 +110,15 @@ def _sequence_array(
 
 
 @function(
-    "_XLFN.SEQUENCE", "raw", "raw", "raw", "raw", min_args=1, category=L, in_array=_sequence_array
+    "_XLFN.SEQUENCE",
+    "raw",
+    "raw",
+    "raw",
+    "raw",
+    min_args=1,
+    category=L,
+    in_array=_sequence_array,
+    makes_array=True,
 )
 def SEQUENCE(
     ctx: Any, rows: Any, cols: Any = MISSING, start: Any = MISSING, step: Any = MISSING
@@ -122,7 +130,7 @@ def SEQUENCE(
 # MMULT -----------------------------------------------------------------------------------------
 
 
-@function("MMULT", "array", "array", category=L)
+@function("MMULT", "array", "array", category=L, makes_array=True)
 def MMULT(ctx: Any, a: Any, b: Any) -> Any:
     """The matrix product: every element a number, as many columns in ``a`` as rows in ``b``."""
     x, y = _grid(a), _grid(b)
@@ -228,7 +236,7 @@ def _flag(v: Any, ctx: Any) -> bool | ErrorValue:
 # UNIQUE ----------------------------------------------------------------------------------------
 
 
-@function("_XLFN.UNIQUE", "array", "raw", "raw", min_args=1, category=C)
+@function("_XLFN.UNIQUE", "array", "raw", "raw", min_args=1, category=C, makes_array=True)
 def UNIQUE(ctx: Any, array: Any, by_col: Any = MISSING, exactly_once: Any = MISSING) -> Any:
     """Distinct rows (or columns) in the order they first appear; text compares without case."""
     cols, once = _flag(by_col, ctx), _flag(exactly_once, ctx)
@@ -265,7 +273,9 @@ def _index_list(v: Any, ctx: Any, default: float) -> list[float] | ErrorValue:
     return out
 
 
-@function("_XLFN._XLWS.SORT", "array", "raw", "raw", "raw", min_args=1, category=C)
+@function(
+    "_XLFN._XLWS.SORT", "array", "raw", "raw", "raw", min_args=1, category=C, makes_array=True
+)
 def SORT(
     ctx: Any,
     array: Any,
@@ -299,7 +309,17 @@ def SORT(
     return tuple(zip(*out, strict=True)) if cols else out
 
 
-@function("_XLFN.SORTBY", "array", "array", "raw", variadic=True, min_args=2, cycle=2, category=C)
+@function(
+    "_XLFN.SORTBY",
+    "array",
+    "array",
+    "raw",
+    variadic=True,
+    min_args=2,
+    cycle=2,
+    category=C,
+    makes_array=True,
+)
 def SORTBY(ctx: Any, array: Any, *rest: Any) -> Any:
     """Rows (or columns) of ``array`` in order of other arrays, each with its own direction."""
     grid = _grid(array)
@@ -330,7 +350,7 @@ def SORTBY(ctx: Any, array: Any, *rest: Any) -> Any:
 # FILTER ----------------------------------------------------------------------------------------
 
 
-@function("_XLFN._XLWS.FILTER", "array", "array", "array", min_args=2, category=C)
+@function("_XLFN._XLWS.FILTER", "array", "array", "array", min_args=2, category=C, makes_array=True)
 def FILTER(ctx: Any, array: Any, include: Any, if_empty: Any = MISSING) -> Any:
     """The rows (or columns) whose ``include`` is TRUE or a number other than 0."""
     if include is MISSING:

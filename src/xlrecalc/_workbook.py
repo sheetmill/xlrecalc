@@ -15,6 +15,7 @@ from xlrecalc._formula._fastkey import translate
 from xlrecalc._formula._fileform import display_form, file_form
 from xlrecalc._formula._nodes import Call, Group
 from xlrecalc._formula._tokens import Kind, column_number
+from xlrecalc._functions import SPECS
 from xlrecalc._load import load as _load_engine
 from xlrecalc._load import refused_in_file
 from xlrecalc._quirks import Quirks
@@ -334,21 +335,6 @@ class Workbook:
         )
 
 
-# A formula whose outermost call is one of these is written as a dynamic array whatever the
-# size of its result, as Excel writes it typed; one wrapped in another function, such as
-# SUM(SEQUENCE(3)), is not (capture marker_typed).
-_ARRAY_MAKERS = frozenset(
-    {
-        "_XLFN.SEQUENCE",
-        "MMULT",
-        "_XLFN.UNIQUE",
-        "_XLFN._XLWS.SORT",
-        "_XLFN.SORTBY",
-        "_XLFN._XLWS.FILTER",
-    }
-)
-
-
 def _makes_array(text: str) -> bool:
     """Whether a formula (file form) is a call of a function that makes an array."""
     try:
@@ -360,7 +346,8 @@ def _makes_array(text: str) -> bool:
     if not isinstance(root, Call):
         return False
     name = (root.prefix.text if root.prefix is not None else "") + root.name.text
-    return name.upper() in _ARRAY_MAKERS
+    spec = SPECS.get(name.upper())
+    return spec is not None and spec.makes_array
 
 
 def _file_formula(formula: str, dynamic: bool = False) -> str:

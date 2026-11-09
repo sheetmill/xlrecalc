@@ -85,6 +85,7 @@ class Spec:
     note: str = ""
     rel: float = 0.0
     rel_reason: str = ""
+    makes_array: bool = False
 
 
 REGISTRY: dict[str, Callable[..., Any]] = {}
@@ -203,8 +204,14 @@ def function(
     cycle: int = 1,
     in_array: Callable[..., Any] | None = None,
     reference: bool = False,
+    makes_array: bool = False,
 ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
-    """Register a function under its file-form name."""
+    """Register a function under its file-form name.
+
+    ``makes_array``: a formula whose outermost call is this function is written with the
+    dynamic-array marker whatever the size of its result, as Excel writes it typed (captures
+    ``marker_typed`` and ``dyn_*``).
+    """
     if (ulps and not ulps_reason) or (rel and not rel_reason):
         raise ValueError(f"{name}: a tolerance needs its reason")
     if status not in ("implemented", "partial") or (status == "partial") != bool(note):
@@ -280,7 +287,7 @@ def function(
         REGISTRY[upper] = call
         SPECS[upper] = Spec(
             upper, kinds, lo, hi, errors, volatile, category, ulps, ulps_reason, status, note,
-            rel, rel_reason,
+            rel, rel_reason, makes_array,
         )  # fmt: skip
         return core
 
