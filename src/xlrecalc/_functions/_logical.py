@@ -97,6 +97,16 @@ def IFERROR(ctx: Context, value: Any, alternative: Any) -> Any:
     return value
 
 
+@function("_XLFN.LET", "raw", "raw", "raw", min_args=2, variadic=True, cycle=2, category=L)
+def LET(ctx: Context, *args: Any) -> Any:
+    """``LET``: names bound to values for a calculation, compiled by the code generator.
+
+    Its names are resolved when the formula is compiled and its bindings evaluated only when
+    read (``_codegen.let``; capture ``dyn_let``); this core is never called.
+    """
+    raise AssertionError("LET is compiled by the code generator")
+
+
 @function("_XLFN.IFNA", "branch", "branch", errors=True, category=L)
 def IFNA(ctx: Context, value: Any, alternative: Any) -> Any:
     """``alternative`` when ``value`` is ``#N/A``."""

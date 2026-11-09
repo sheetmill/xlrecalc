@@ -53,6 +53,7 @@ _LAZY = {
     "_XLFN.SWITCH": "lazy_switch",
 }
 _SCALAR = frozenset({"number", "text", "logical", "value"})
+_PARAM = "_xlpm."  # a LET or LAMBDA name, as a file writes it
 
 MAX_ROW = 1048575  # 0-based limits of a sheet
 MAX_COL = 16383
@@ -104,6 +105,10 @@ ALLOWED_NAMES = frozenset(
         "union",
         "percent",
         "invoke",
+        "E",
+        "scope",
+        "force",
+        "bind",
         *_LAZY.values(),
         *_BINARY.values(),
         *_PREFIX.values(),
@@ -246,12 +251,28 @@ class _Generator:
         self.array_formula = False  # the formula itself is an array formula
         self.branches: list[str] = []  # functions for the branches of IF and friends
         self.intersects = False
+        self.scopes: list[dict[str, int]] = []  # LET names in scope, innermost last
+        self.values: dict[str, Node] = {}  # what each LET name in scope is bound to
+        self.env = "None"  # the variable holding the innermost LET's environment
+
+    def ranged(self, node: Node) -> bool:
+        """A range a legacy formula intersects; a ``LET`` name is what it is bound to."""
+        seen = 0
+        while (
+            isinstance(node, Reference)
+            and node.prefix is None
+            and node.token.kind is Kind.NAME
+            and node.token.text.casefold() in self.values
+            and seen < 64  # a name bound to the name before it, at most so deep
+        ):
+            node, seen = self.values[node.token.text.casefold()], seen + 1
+        return _is_range(node, ranges_only=True)
 
     def operand(self, node: Node, code: str) -> str:
         """An operator's operand: an array in an array context, else implicitly intersected."""
         if self.arrays:
             return code if isinstance(node, Leaf) else self.emit(f"ctx.arr({code})")
-        if _is_range(node, ranges_only=True):
+        if self.ranged(node):
             self.intersects = True
         return code
 
@@ -401,24 +422,87 @@ class _Generator:
             return self.emit(f"ctx.structured({self.constant(token.text)})")
         if token.kind is Kind.ERROR:
             return self.constant(ErrorValue(token.text))
+        if prefix is None and token.text[:6].casefold() == _PARAM:
+            return self.bound(token.text)
         self.refs.append(RefSpec("name", where, name=token.text))
         return self.emit(f"ctx.name({sheet}, {self.constant(token.text)})")
+
+    def bound(self, text: str) -> str:
+        """A ``LET`` name: its binding, evaluated once when first read (capture ``dyn_let``).
+
+        Resolved here, innermost scope first, into a depth and an index in the environment; a
+        name not bound at this point (bound later, or nowhere) is ``#NAME?``, as in Excel.
+        """
+        folded = text.casefold()
+        for depth, names in enumerate(reversed(self.scopes)):
+            index = names.get(folded)
+            if index is not None:
+                return self.emit(f"ops.force({self.env}, {depth:d}, {index:d})")
+        return self.constant(ErrorValue.NAME)
+
+    def let(self, args: list[Node]) -> str:
+        """``LET``: each binding a function of the environment, evaluated only when read.
+
+        With no calculation after the bindings the last name is the calculation, as Excel
+        writes it back. A binding sees the names before it, the calculation all of them.
+        """
+        self.calls.add("_XLFN.LET")
+        pairs = args if len(args) % 2 == 0 else args[:-1]
+        body = pairs[-2] if len(args) % 2 == 0 else args[-1]
+        names: dict[str, int] = {}
+        self.scopes.append(names)
+        thunks = []
+        outer: list[tuple[str, Node | None]] = []  # what the names shadowed, restored after
+        for k in range(0, len(pairs), 2):
+            name = pairs[k]
+            assert isinstance(name, Reference)  # refused in a file otherwise (_load)
+            thunks.append(self.function_of_env(pairs[k + 1]))
+            names[name.token.text.casefold()] = k // 2
+            outer.append((name.token.text.casefold(), self.values.get(name.token.text.casefold())))
+            self.values[name.token.text.casefold()] = pairs[k + 1]
+        listed = "".join(f"{t}, " for t in thunks)
+        saved = self.env
+        self.env = self.emit(f"ops.scope(ctx, r, c, {saved}, ({listed}))")
+        result = self.argument(body)
+        self.env = saved
+        self.scopes.pop()
+        for folded, value in reversed(outer):
+            if value is None:
+                self.values.pop(folded, None)
+            else:
+                self.values[folded] = value
+        return result
+
+    def function_of_env(self, node: Node) -> str:
+        """A top-level function ``bK(ctx, r, c, E)`` of a value, ``E`` the environment."""
+        saved_lines, saved_env = self.lines, self.env
+        self.lines, self.env = [], "E"
+        code = self.argument(node)
+        body = "".join(f"    {line}\n" for line in self.lines)
+        self.lines, self.env = saved_lines, saved_env
+        name = f"b{len(self.branches):d}"
+        self.branches.append(f"def {name}(ctx, r, c, E):\n{body}    return {code}\n")
+        return name
 
     def branch(self, node: Node, kind: str) -> str:
         """A lazy argument, compiled as a function of its own (``b0(ctx, r, c)``).
 
         The call evaluates it only if it is taken: ``IF(FALSE,A1,5)`` never reads A1.
         """
-        saved = self.lines
+        saved, saved_env = self.lines, self.env
+        scoped = bool(self.scopes)
         self.lines = []
+        if scoped:  # a branch inside LET reads its names through the environment
+            self.env = "E"
         code = self.argument(node)
         if self.arrays and kind in _LIFTED and not isinstance(node, Leaf):
             code = self.emit(f"ctx.arr({code})")
         body = "".join(f"    {line}\n" for line in self.lines)
-        self.lines = saved
+        self.lines, self.env = saved, saved_env
         name = f"b{len(self.branches):d}"
-        self.branches.append(f"def {name}(ctx, r, c):\n{body}    return {code}\n")
-        return name
+        params = "ctx, r, c, E" if scoped else "ctx, r, c"
+        self.branches.append(f"def {name}({params}):\n{body}    return {code}\n")
+        return self.emit(f"ops.bind({name}, {self.env})") if scoped else name
 
     def lazy(self, fn: Callable[..., Any], upper: str, args: list[Node]) -> str:
         """``IF``, ``IFERROR``, ``IFNA`` and ``CHOOSE`` (``ops.lazy_*``).
@@ -435,6 +519,8 @@ class _Generator:
         return self.emit(f"ops.{helper}({self.function(fn)}, {first}, r, c{names})")
 
     def call(self, name: Token, prefix: Token | None, args: list[Node]) -> str:
+        if prefix is None and name.text.upper() == "_XLFN.LET" and len(args) >= 2:
+            return self.let(args)
         fn = self.registry.get(name.text.upper()) if prefix is None else None
         if fn is not None and name.text.upper() in _LAZY and args:
             self.calls.add(name.text.upper())
@@ -457,7 +543,7 @@ class _Generator:
                 code = self.argument(arg)
                 if self.arrays and not isinstance(arg, Leaf):
                     code = self.emit(f"ctx.arr({code})")
-                elif not self.arrays and _is_range(arg, ranges_only=True):
+                elif not self.arrays and self.ranged(arg):
                     self.intersects = True
                 self.arrays = saved
                 parts.append(code)
@@ -468,7 +554,7 @@ class _Generator:
                 if self.arrays:
                     code = code if isinstance(arg, Leaf) else self.emit(f"ctx.arr({code})")
                 else:
-                    self.intersects = self.intersects or _is_range(arg, ranges_only=True)
+                    self.intersects = self.intersects or self.ranged(arg)
                     code = code if isinstance(arg, Leaf) else self.emit(f"ops.single({code})")
                 self.arrays = saved
                 parts.append(code)
@@ -481,7 +567,7 @@ class _Generator:
             code = self.argument(arg)
             if self.arrays and kind in _LIFTED and not isinstance(arg, Leaf):
                 code = self.emit(f"ctx.arr({code})")
-            elif not self.arrays and kind in _SCALAR and _is_range(arg, ranges_only=True):
+            elif not self.arrays and kind in _SCALAR and self.ranged(arg):
                 self.intersects = True
             parts.append(code)
         argv = "".join(f", {code}" for code in parts)

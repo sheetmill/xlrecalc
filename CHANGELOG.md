@@ -68,6 +68,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   it does not take, does not open in Excel: such a formula keeps the value it holds and is reported in `Report.refused`.
   `UNIQUE`, `SORTBY` and `SEQUENCE` without their prefix are names Excel does not know, `#NAME?`. A `#CALC!` Excel
   caches (as `#VALUE!` with a rich value) is read as `#CALC!`.
+- `LET`, captured from Excel (captures `dyn_let`, `let_typed`): names bound to values for a calculation, compared
+  without regard to case, an inner `LET`'s shadowing an outer one's and a defined name; only names written with
+  `_xlpm.` are `LET`'s, as Excel reads a file. A binding is evaluated when first read and once, so one nothing reads
+  is never evaluated (a binding reading the formula's own cell is no circular reference); a name read before it is
+  bound is `#NAME?`. A bound range stays a reference, spills, and is intersected in a plain formula. With no
+  calculation after the bindings the last name is the calculation, as Excel writes it back. A file with a name bound
+  twice, a name without `_xlpm.`, or a number where a name goes does not open in Excel: such a formula keeps the value
+  it holds and is in `Report.refused`. `set_formula` writes `LET` with the dynamic-array marker only where its
+  calculation needs it (`LET(x,SEQUENCE(3),SUM(x))` is a plain formula, as Excel writes it typed).
 - Iterative calculation, for a workbook with iteration on (`<calcPr iterate="1">`), as Excel does it (captures
   `iterate_calc`, `calc_chain`, `iterate_open`): a run of up to `iterateCount` iterations from the values the cells hold, each
   computing the cells on and after circular references in place, in Excel's order (sheets by name, then row, then column),

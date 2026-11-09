@@ -17,8 +17,9 @@ from typing import Any, BinaryIO
 
 from xlrecalc._dates import date_serial
 from xlrecalc._engine import Engine, node
-from xlrecalc._formula import FormulaSyntaxError, Kind, Token, TokenizeError, tokenize
+from xlrecalc._formula import FormulaSyntaxError, Kind, Token, TokenizeError, parse, tokenize
 from xlrecalc._formula._fastkey import raw_key
+from xlrecalc._formula._nodes import Call, Reference
 from xlrecalc._formula._prefixes import PREFIXES
 from xlrecalc._numtext import DBL_MIN
 from xlrecalc._quirks import Quirks
@@ -340,7 +341,52 @@ def refused_in_file(text: str) -> str | None:
         ):
             return "an argument list of spaces"
         before, previous = previous, tok
-    return _refused_empty(toks) or _refused_count(toks)
+    return _refused_empty(toks) or _refused_count(toks) or _refused_let(text)
+
+
+def _refused_let(text: str) -> str | None:
+    """A ``LET`` Excel refuses in a file (capture ``dyn_let``, each form alone in a workbook).
+
+    A name must be written with ``_xlpm.`` (``_xlfn.LET(x,1,x+1)`` is refused), be a name (not
+    ``1``) and be bound once in its call. A call with fewer than two arguments is refused too,
+    uncaptured, so the cell keeps the value it holds.
+    """
+    if "_XLFN.LET(" not in text.upper():
+        return None
+    try:
+        root = parse(text).root
+    except (FormulaSyntaxError, TokenizeError):
+        return None
+    stack: list[Any] = [root]
+    while stack:
+        item = stack.pop()
+        if isinstance(item, list):
+            stack.extend(item)
+            continue
+        if not hasattr(item, "__dataclass_fields__") or isinstance(item, Token):
+            continue
+        stack.extend(getattr(item, f) for f in item.__dataclass_fields__)
+        if not (isinstance(item, Call) and item.prefix is None):
+            continue
+        if item.name.text.upper() != "_XLFN.LET":
+            continue
+        if len(item.args) < 2:
+            return f"LET with {len(item.args)} argument{'s' * (len(item.args) != 1)}"
+        pairs = item.args if len(item.args) % 2 == 0 else item.args[:-1]
+        seen: set[str] = set()
+        for name in pairs[::2]:
+            if not (
+                isinstance(name, Reference)
+                and name.prefix is None
+                and name.token.kind is Kind.NAME
+                and name.token.text[:6].casefold() == "_xlpm."
+            ):
+                return "a LET name that is no name written with _xlpm."
+            folded = name.token.text.casefold()
+            if folded in seen:
+                return f"a LET name bound twice ({name.token.text})"
+            seen.add(folded)
+    return None
 
 
 def _filled_by(boxes: list[tuple[int, int, int, int, int]], row: int, col: int) -> int | None:

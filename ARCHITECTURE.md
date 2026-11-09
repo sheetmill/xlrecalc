@@ -353,6 +353,18 @@ already exceed that. Lazy functions (`IF`, `IFERROR`, `IFNA`, `CHOOSE`) compile 
 function of its own in the same form (`b0(ctx, r, c)`), which `ops.lazy_if` and its siblings
 call only for the branch taken (§6.3).
 
+**`LET`** (capture `dyn_let`) is compiled, not called. Its names are resolved at compile time,
+innermost first, into a depth and an index, so a name costs a lookup in a small environment, and
+only `_xlpm.` names are `LET`'s: a name written without it is a defined name, as Excel reads it.
+Each binding compiles to a function of the environment (`b0(ctx, r, c, E)`), evaluated when first
+read and kept (`ops.scope`, `ops.force`), so a binding nothing reads is never evaluated, as in
+Excel, where one reading the formula's own cell is no circular reference, and one read twice is
+evaluated once. A lazy branch inside `LET` takes the environment too (`ops.bind`). A bound range
+stays a reference; a legacy formula intersects it where it would intersect the range. With no
+calculation after the bindings, the last name is the calculation, as Excel writes it back. A
+name bound twice or written without `_xlpm.`, or a number where a name goes, makes Excel refuse
+the file. Formulas without `LET` compile as before.
+
 **Workbook text never enters generated source.** Strings, numbers, error literals, sheet names,
 defined names and array constants from the formula go into the template's constants table `K`;
 functions are looked up in the registry table `F` by index, never by the name in the file. The
@@ -1275,8 +1287,10 @@ One workbook is used from one thread at a time.
    matrix functions) follow as far as they get; those with large questions of their own (regular
    expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable. `docs/coverage.md` lists what
    exists.
-5. `LET`, `LAMBDA` and its helpers (`MAP`, `REDUCE`, `SCAN`, `BYROW`, `BYCOL`, `MAKEARRAY`, `ISOMITTED`): Excel's own
-   semantics, designed and captured before they are built. `xlrecalc.evaluate(text)` for one formula outside a workbook, and
+5. `LAMBDA` and its helpers (`MAP`, `REDUCE`, `SCAN`, `BYROW`, `BYCOL`, `MAKEARRAY`, `ISOMITTED`): Excel's own
+   semantics, captured before they are built, on an edition of Excel that has them (Office Home & Business 2021 for
+   Mac does not; `CAPTURING.md` §2). They would compile as `LET` does (§5.4), a lambda's body a function of its
+   environment and arguments. `xlrecalc.evaluate(text)` for one formula outside a workbook, and
    callbacks (§12).
 6. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
    vectorized templates (numpy as an optional extra), a setting for

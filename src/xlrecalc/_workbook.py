@@ -366,7 +366,9 @@ def _may_be_array(text: str, name_text: Callable[[str], str | None] | None = Non
     ``_CARRIED``, and through a defined name (``name_text`` gives a name's formula), but not
     through a function that takes an array (``SUM``, ``ROWS``) nor ``@``; ``INDEX`` with an
     index that is not a number other than 0, and ``OFFSET`` with a height or width that is not a
-    number, since their size is then not in the text.
+    number, since their size is then not in the text. ``LET`` carries its calculation, a name in
+    it standing for what it is bound to (capture ``let_typed``: ``LET(x,SEQUENCE(3),SUM(x))`` is
+    not marked).
     """
     try:
         root = parse(text).root
@@ -374,10 +376,27 @@ def _may_be_array(text: str, name_text: Callable[[str], str | None] | None = Non
         return False
     stack: list[Node] = [root]
     seen: set[str] = set()  # names already followed: a name may refer to itself
+    bound: dict[str, Node] = {}  # LET names, by their folded text, to their values
     while stack:
         node = stack.pop()
         if isinstance(node, ArrayConstant):
             return True
+        if isinstance(node, Reference) and node.token.kind is Kind.NAME and node.prefix is None:
+            folded = node.token.text.casefold()
+            if folded in bound:
+                if folded not in seen:
+                    seen.add(folded)
+                    stack.append(bound[folded])
+                continue
+        if isinstance(node, Call) and node.prefix is None and node.name.text.upper() == "_XLFN.LET":
+            args = node.args
+            pairs = args if len(args) % 2 == 0 else args[:-1]
+            for declared, value in zip(pairs[::2], pairs[1::2], strict=True):
+                if isinstance(declared, Reference):
+                    bound[declared.token.text.casefold()] = value
+            if args:
+                stack.append(pairs[-2] if len(args) % 2 == 0 and len(pairs) >= 2 else args[-1])
+            continue
         if isinstance(node, Reference) and node.token.kind is Kind.NAME and name_text is not None:
             folded = node.token.text.casefold()
             definition = name_text(node.token.text) if folded not in seen else None

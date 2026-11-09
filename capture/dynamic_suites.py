@@ -945,6 +945,10 @@ REFUSED = (
     f'{TS}("a")',
     f'{TS}("a",",",";",TRUE,0,"-",1)',
     f"{RA}(1,1,1,1,TRUE,1)",
+    # LET: a name bound twice, names without _xlpm., a number where a name goes
+    _let("~x", "1", "~x", "2", "~x"),
+    f"{LT}(x,1,x+1)",
+    f"{LT}(1,1,1)",
 )
 
 SUITES: dict[str, list[DynCase]] = {

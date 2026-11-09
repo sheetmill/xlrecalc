@@ -404,10 +404,16 @@ def test_dynamic_references_written_here_match_excel(container):
     copy.unlink()
 
 
+# Cases whose file form the formula bar does not take: LET(a1,1,a1) names a cell (not captured
+# in the formula bar; set_formula refuses it as a LET name that is no name).
+BAR_REFUSED = frozenset({("let", 13)})
+
+
 def test_array_functions_set_through_the_api(container):
     """Every case of the dyn_* captures set through set_formula: Excel opens the file and agrees."""
     import openpyxl
-    from capture.dynamic_suites import BLOCK, DATA, SUITES, anchor_of
+    from capture.dynamic_suites import BLOCK, DATA, NAMES, SUITES, anchor_of
+    from openpyxl.workbook.defined_name import DefinedName
 
     from tests.test_dynamic_arrays import RANDOM_CASES
 
@@ -428,11 +434,18 @@ def test_array_functions_set_through_the_api(container):
             row, col = anchor_of(i)
             for (dr, dc), v in case.way.items():
                 ws.cell(row + dr, col + dc, v)
+        for name, text in NAMES.get(suite, {}).items():
+            wb.defined_names[name] = DefinedName(name, attr_text=text)
         wb.save(src)
         book = xlrecalc.load(src)
         for i, case in enumerate(cases):
             row, col = anchor_of(i)
             bar = case.formula.replace("_xlfn._xlws.", "").replace("_xlfn.", "")
+            bar = bar.replace("_xlpm.", "").replace("SINGLE(", "@(")  # LET names, @
+            if (suite, i) in BAR_REFUSED:
+                with pytest.raises(xlrecalc.FormulaError):
+                    book.set_formula(f"B{row}", "=" + bar)
+                continue
             book.set_formula(f"B{row}", "=" + bar)
         book.save()
         save_copy(src, copy)

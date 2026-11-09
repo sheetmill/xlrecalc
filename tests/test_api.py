@@ -356,3 +356,39 @@ def test_randarray_draws_again_after_any_edit(tmp_path):
         draws.add(wb.value("B1"))
     assert all(isinstance(v, float) and 0 <= v < 1 for v in draws)
     assert len(draws) > 1
+
+
+LET_TYPED = [
+    line.split("\t")
+    for line in (Path(__file__).with_name("captures") / "let_typed.tsv")
+    .read_text(encoding="utf-8")
+    .splitlines()
+    if not line.startswith("#")
+]
+
+
+@pytest.mark.excel
+@pytest.mark.parametrize("k", sorted({int(r[1]) for r in LET_TYPED}))
+def test_set_formula_writes_what_excel_writes_for_a_typed_let(tmp_path, k):
+    """Capture let_typed: Excel's file form, marker and range for LET, and every cell's value."""
+    import ast
+
+    rows = [list(map(ast.literal_eval, r)) for r in LET_TYPED if int(r[1]) == k]
+    data = "".join(
+        f'<row r="{r}"><c r="Z{r}"><v>{r}</v></c><c r="AA{r}"><v>{10 * r}</v></c></row>'
+        for r in (1, 2, 3)
+    )
+    src = book(tmp_path, package(data))
+    wb = load(src)
+    anchor = rows[0]
+    wb.set_formula(anchor[3], anchor[2])
+    wb.save()
+    with Book(src) as b:
+        cells = {f"{'ABCD'[c.column - 1]}{c.row}": c for c in b.cells("Data") if c.column <= 4}
+    for _, _, _, where, _, value, form, kind, ref, cm, _ in rows:
+        cell = cells[where]
+        assert cell.value == value, where
+        if form is not None:
+            assert cell.formula is not None
+            assert (cell.formula.text, cell.formula.kind, cell.formula.ref) == (form, kind, ref)
+            assert (cell.cm is not None) is (cm is not None)

@@ -49,20 +49,21 @@ file's setting alone).
 
 In a file, Excel writes a function added since Excel 2007 with a prefix, and openpyxl writes a
 formula as it is given. Without the prefix, Excel does not know the name: `=UNIQUE(A1:A9)`
-shows `#NAME?`, and `=SORT(A1:A9)` or `=FILTER(...)` make Excel refuse the file. Write the
-prefix with openpyxl:
+shows `#NAME?`, and `=SORT(A1:A9)` or `=FILTER(...)` make Excel refuse the file, as does a `LET`
+whose names lack their own prefix, `_xlpm.`. Write the prefixes with openpyxl:
 
 ```
 ws["B1"] = "=_xlfn.XLOOKUP(5,A1:A9,C1:C9)"
 ws["D1"] = "=_xlfn.UNIQUE(A1:A9)"
 ws["E1"] = "=_xlfn._xlws.SORT(A1:A9)"      # SORT and FILTER take _xlfn._xlws.
+ws["F1"] = "=_xlfn.LET(_xlpm.x,A1,_xlpm.x*2)"  # LET's names take _xlpm.
 ```
 
 xlrecalc reads such a file as Excel does and names the cause in the report:
 `Report.unsupported` holds `UNIQUE written without Excel's file prefix (_xlfn.): Excel shows
-#NAME?`, and a bare `SORT` or `FILTER` is in `Report.refused`. `Workbook.set_formula` takes the
-names as typed in Excel and writes the prefix itself, and for a function that makes an array,
-the marker that lets the result spill.
+#NAME?`, and a bare `SORT` or `FILTER`, or a `LET` name without `_xlpm.`, is in
+`Report.refused`. `Workbook.set_formula` takes the names as typed in Excel and writes the
+prefixes itself, and for a function that makes an array, the marker that lets the result spill.
 
 ## Working with a workbook
 
@@ -91,7 +92,7 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
 
 ## What it computes, and what not yet
 
-- **Functions**: 372 of Excel's functions (17 of them partly): math, statistics,
+- **Functions**: 373 of Excel's functions (17 of them partly): math, statistics,
   logic, text, dates, lookup (`VLOOKUP`, `INDEX`, `MATCH`, `OFFSET`, `INDIRECT`...), the
   financial and bond functions, the database functions. The
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
@@ -114,7 +115,7 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
   intersection, circular references and iterative calculation, as Excel computes them
   ([circular references](https://xlrecalc.readthedocs.io/en/latest/iteration.html)).
   Four quirks can be turned off (`Quirks`).
-- **Not yet**: `LET`, `LAMBDA` and its helpers, among the functions the
+- **Not yet**: `LAMBDA` and its helpers, among the functions the
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists as absent;
   unions of ranges; structured (table) references and 3-D references; `CELL`'s formatting
   kinds; computed criteria in the database functions; `LINEST` with several regressors; inserting or deleting rows and

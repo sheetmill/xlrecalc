@@ -144,7 +144,7 @@ NOT_IMPLEMENTED = [
     "SUM(1)(2)",
     "SUM(S:D!A1)",
     "SUM(Table1[a])",
-    "_xlfn.LET(_xlpm.x,1,_xlpm.x+1)",
+    "_xlfn.MAP(D!A1:A2,_xlfn.LAMBDA(_xlpm.v,_xlpm.v*2))",
     "N(OFFSET(D!A1,{0;1},0))",
 ]
 

@@ -302,3 +302,41 @@ class Ops:
 
     def invoke(self, ctx: object, fn: Raw, *args: Raw) -> Value:
         raise NotImplementedFormError("a call of a formula's result")
+
+    # LET (capture dyn_let) ----------------------------------------------------------------------
+
+    @staticmethod
+    def scope(ctx: object, r: int, c: int, parent: Env | None, thunks: tuple[Any, ...]) -> Env:
+        """A ``LET``'s environment: its bindings, none evaluated yet."""
+        return Env(ctx, r, c, parent, thunks)
+
+    @staticmethod
+    def force(env: Env, depth: int, index: int) -> Any:
+        """The value of a binding ``depth`` scopes out, evaluated on its first read only."""
+        for _ in range(depth):
+            env = env.parent  # type: ignore[assignment]
+        value = env.values[index]
+        if value is _UNSET:
+            value = env.thunks[index](env.ctx, env.r, env.c, env)
+            env.values[index] = value
+        return value
+
+    @staticmethod
+    def bind(branch: Any, env: Env) -> Any:
+        """A lazy branch inside ``LET``, called as other branches are: ``branch(ctx, r, c)``."""
+        return lambda ctx, r, c: branch(ctx, r, c, env)
+
+
+_UNSET = object()  # a binding not evaluated yet
+
+
+class Env:
+    """The bindings of one ``LET`` call while it is evaluated, and the scope around it."""
+
+    __slots__ = ("c", "ctx", "parent", "r", "thunks", "values")
+
+    def __init__(
+        self, ctx: object, r: int, c: int, parent: Env | None, thunks: tuple[Any, ...]
+    ) -> None:
+        self.ctx, self.r, self.c, self.parent, self.thunks = ctx, r, c, parent, thunks
+        self.values: list[Any] = [_UNSET] * len(thunks)

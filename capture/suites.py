@@ -3360,8 +3360,8 @@ _EMPTY_TABLE: dict[str, Input] = {
     "BD1": "N", "BD2": ">1", "BE1": "N", "BE2": ">2",
 }  # fmt: skip
 _EMPTY_SKIP = frozenset(
-    {"_XLFN.ANCHORARRAY", "_XLFN.SINGLE", "RAND", "RANDBETWEEN", "NOW", "TODAY"}
-)
+    {"_XLFN.ANCHORARRAY", "_XLFN.SINGLE", "RAND", "RANDBETWEEN", "NOW", "TODAY", "_XLFN.LET"}
+)  # LET: its rows (_EMPTY_EXPLICIT) wait for their capture
 _EMPTY_VALUE = {
     "number": "2", "text": '"a"', "logical": "TRUE", "value": "2", "branch": "2",
     "raw": "$AA$1:$AA$4", "array": "$AA$1:$AA$4", "matrix": "$AA$1:$AA$4", "key": "2",
@@ -3467,6 +3467,20 @@ _EMPTY_ADDED = (
     "_XLFN.TEXTSPLIT", "_XLFN.RANDARRAY",
 )  # fmt: skip
 
+# Functions whose arguments the generator cannot fill (LET's are names): their formulas as given.
+_EMPTY_EXPLICIT = {
+    "_XLFN.LET": (
+        "_xlfn.LET(_xlpm.x,1,_xlpm.x+1)",
+        "_xlfn.LET(,1,2)",
+        "_xlfn.LET(_xlpm.x,,_xlpm.x+1)",
+        "_xlfn.LET(_xlpm.x,1,)",
+        "_xlfn.LET(_xlpm.x,,_xlpm.x)",
+        "_xlfn.LET(_xlpm.x,1,_xlpm.y,,_xlpm.x+_xlpm.y)",
+        "_xlfn.LET(_xlpm.x,,ISBLANK(_xlpm.x))",
+        "_xlfn.LET(_xlpm.x,1,_xlpm.y,)",
+    ),
+}
+
 
 def empty_args_all() -> list[Case]:
     """From the registry: each argument empty in turn, and all optional ones empty together."""
@@ -3479,6 +3493,10 @@ def empty_args_all() -> list[Case]:
     cases = []
     for key, spec in sorted(SPECS.items(), key=order):
         if key in _EMPTY_SKIP or not spec.kinds:
+            continue
+        if key in _EMPTY_EXPLICIT:
+            label = key.lower().replace("_xlfn.", "")
+            cases += [Case(label, formula) for formula in _EMPTY_EXPLICIT[key]]
             continue
         name = key
         for upper, lower in (("_XLFN.", "_xlfn."), ("_XLWS.", "_xlws.")):

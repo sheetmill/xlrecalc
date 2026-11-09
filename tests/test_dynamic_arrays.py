@@ -34,7 +34,7 @@ CAPTURES = Path(__file__).with_name("captures")
 SUITES = (
     "sequence", "mmult", "unique", "sort", "sortby", "filter",
     "choose", "droptake", "stack", "tocol", "wrap", "index", "matrix", "frequency", "textsplit",
-    "randarray",
+    "randarray", "let",
 )  # fmt: skip
 RICH = "{http://schemas.microsoft.com/office/spreadsheetml/2017/richdata}"
 _ERROR_TYPES = {"8": "#SPILL!", "13": "#CALC!"}
@@ -72,8 +72,12 @@ def _rich_errors(suite: str) -> dict[str, str]:
 def workbook(suite: str) -> bytes:
     """The probe's workbook for a suite, from the capture's input rows."""
     cells: dict[tuple[int, int], str] = {}
+    names = ""
     for _, kind, where, text in (r for r in _rows(suite) if r[0] == "input"):
         value = ast.literal_eval(text)
+        if kind == "name":
+            names += f'<definedName name="{where}">{text_escape(value)}</definedName>'
+            continue
         r, c = _cell(where)
         if kind == "dynamic":
             f = text_escape(value)
@@ -96,7 +100,11 @@ def workbook(suite: str) -> bytes:
     for (r, _c), xml in sorted(cells.items()):
         rows.setdefault(r, []).append(xml)
     sheet_data = "".join(f'<row r="{r}">{"".join(x)}</row>' for r, x in sorted(rows.items()))
-    data = package(sheet_data, extra_parts={"xl/metadata.xml": _metadata()})
+    data = package(
+        sheet_data,
+        extra_parts={"xl/metadata.xml": _metadata()},
+        workbook_extra=f"<definedNames>{names}</definedNames>" if names else "",
+    )
     with zipfile.ZipFile(io.BytesIO(data)) as z:
         parts = {n: z.read(n) for n in z.namelist()}
     rels = parts["xl/_rels/workbook.xml.rels"].decode()
@@ -212,6 +220,7 @@ def _outermost(text: str) -> str | None:
 
 
 _SIZED = ("INDEX", "OFFSET")  # marked or not by their arguments (_workbook._may_be_array)
+_SIZED += ("_XLFN.LET",)  # marked or not by its calculation (capture let_typed)
 
 
 def test_array_makers_are_flagged_as_the_captures_show() -> None:
@@ -220,8 +229,8 @@ def test_array_makers_are_flagged_as_the_captures_show() -> None:
     Evidence for a flag: a dynamic array whose outermost call spilled over more than one cell
     (``dyn_*``), or a typed call of the function on literals and references alone that Excel
     marked although it neither spills nor intersects (``marker_typed``). Evidence against: such
-    a call Excel did not mark. ``INDEX`` and ``OFFSET``, marked or not by their arguments, are
-    left to ``test_api``'s end-to-end test of every typed formula.
+    a call Excel did not mark. ``INDEX`` and ``OFFSET``, marked or not by their arguments, and
+    ``LET``, by its calculation, are left to ``test_api``'s end-to-end tests of typed formulas.
     """
     flagged = {name for name, spec in SPECS.items() if spec.makes_array}
     makes, plain = set(), set()
