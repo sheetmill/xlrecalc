@@ -123,7 +123,8 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 - Declared tolerances, `finance_family`: `CUMIPMT`, `CUMPRINC`, `DB`, `DDB`, `MIRR` within 8 units in the last place,
   `EFFECT`, `NOMINAL`, `ISPMT`, `PDURATION`, `RRI`, the discounted securities and Treasury bills within 4. 84 rows of `CUMIPMT`
   and `CUMPRINC` are further, at tiny rates and in tiny principals, where Excel's result carries noise that neither a sum
-  of periods nor a difference of balances reproduces; one row of `TBILLEQ` too.
+  of periods nor a difference of balances reproduces; with one more in `empty_args`, 85 rows in all, the largest group of
+  known deviations; one row of `TBILLEQ` too.
 - The platform's math library: three rows match Excel on the platform `docs/coverage.md` records (bit for bit, or within the
   function's declared tolerance) and differ on another, where a last-bit difference in `erfc`, `exp`, `log1p` or `expm1` survives a cancellation: `GAUSS(1E-5)`, which
   subtracts 0.5 from the normal distribution (as Excel's own result shows), and two rows of `IPMT` with payments due in
@@ -176,7 +177,8 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   logarithms and `SERIESSUM` within 4 units in the last place, for Excel's own math library; `FACT` and `FACTDOUBLE`
   within 8 and `COMBIN`, `COMBINA` and `PERMUT` within 4, for the order Excel multiplies in, which a few tried orders
   did not reproduce. `MULTINOMIAL` is exact, where Excel's result carries noise from its logarithm of the gamma
-  function (279.99999999999966 for 280); 12 rows listed in `tests/test_captures.py`.
+  function (279.99999999999966 for 280); 12 rows of `math_integers` listed in `tests/test_captures.py`, with one of
+  `statistics_family` and one of `empty_args`, 14 in all.
 - `IRR`, `XIRR`, `RATE`, `YIELD` ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1, §8.2): a relative tolerance of
   1E-9, declared per function, since Excel's Newton iterates rest on its own NPV, whose last
   bits are not reproduced, and Excel guarantees its result only to its documented stopping
