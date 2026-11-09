@@ -122,6 +122,34 @@ TYPED += [
     '=INDIRECT("Z1:Z1")',
 ]
 
+NEXT_BATCH = [
+    # Typed next, into xlrecalc_marker_typed4.xlsx at A<4k+1> from k = len(TYPED); joined to TYPED
+    # once captured. Each with the prediction written before it is typed: the forms the rule of
+    # _workbook._may_be_array guesses at, then the functions captured since the third batch.
+    "={1}",  # marked (an array constant); the rule says unmarked
+    "=OFFSET(Z1,{0},0)",  # marked (a lifted array constant); the rule says unmarked
+    "=one_seq",  # marked (a name defined as SEQUENCE(1)); the rule says unmarked
+    "=CHOOSE(1,SEQUENCE(1))",  # marked
+    "=IFS(TRUE,SEQUENCE(1))",  # marked
+    "=SWITCH(1,1,SEQUENCE(1))",  # marked
+    "=N(SEQUENCE(1))",  # marked; the rule says unmarked
+    "=INDEX(SEQUENCE(3),1)",  # unmarked
+    "=SUMPRODUCT(SEQUENCE(1))",  # unmarked
+    "=ROWS(SEQUENCE(1))",  # unmarked
+    '=INDIRECT("Z1")+0',  # marked
+    '=@INDIRECT("Z1")',  # unmarked
+    "=ABS(Z1:Z1)",  # marked
+    "=FREQUENCY(Z1:Z3,Z2)",  # marked (it spills)
+    "=MODE.MULT(Z1,Z1)",  # marked
+    '=TEXTSPLIT("a",",")',  # marked
+    "=RANDARRAY()",  # marked
+    "=MUNIT(1)",  # marked
+    "=MINVERSE(Z1)",  # marked
+    "=MDETERM(Z1)",  # unmarked
+]
+NAMES = {"one_seq": "_xlfn.SEQUENCE(1)"}
+"""Defined names the next batch reads."""
+
 
 def typed_workbook(path: Path, start: int = 0) -> None:
     """The workbook a person types into: data in Z1:Z3, each formula's text beside its cell.
@@ -136,7 +164,12 @@ def typed_workbook(path: Path, start: int = 0) -> None:
     ws.title = "probe"
     for r in (1, 2, 3):
         ws.cell(r, 26, float(r))
-    for k, formula in enumerate(TYPED[start:], start):
+    if start >= len(TYPED):
+        from openpyxl.workbook.defined_name import DefinedName
+
+        for name, text in NAMES.items():
+            wb.defined_names[name] = DefinedName(name, attr_text=text)
+    for k, formula in enumerate([*TYPED, *NEXT_BATCH][start:], start):
         ws.cell(4 * k + 1, 6, f"type into A{4 * k + 1}:  {formula}")
     wb.save(path)
 
