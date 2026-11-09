@@ -123,8 +123,8 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 - Declared tolerances, `finance_family`: `CUMIPMT`, `CUMPRINC`, `DB`, `DDB`, `MIRR` within 8 units in the last place,
   `EFFECT`, `NOMINAL`, `ISPMT`, `PDURATION`, `RRI`, the discounted securities and Treasury bills within 4. 84 rows of `CUMIPMT`
   and `CUMPRINC` are further, at tiny rates and in tiny principals, where Excel's result carries noise that neither a sum
-  of periods nor a difference of balances reproduces; with one more in `empty_args`, 85 rows in all, the largest group of
-  known deviations; one row of `TBILLEQ` too.
+  of periods nor a difference of balances reproduces (with one more in `empty_args`, 85 rows in all, the largest group of
+  known deviations); one row of `TBILLEQ` too.
 - The platform's math library: three rows match Excel on the platform `docs/coverage.md` records (bit for bit, or within the
   function's declared tolerance) and differ on another, where a last-bit difference in `erfc`, `exp`, `log1p` or `expm1` survives a cancellation: `GAUSS(1E-5)`, which
   subtracts 0.5 from the normal distribution (as Excel's own result shows), and two rows of `IPMT` with payments due in

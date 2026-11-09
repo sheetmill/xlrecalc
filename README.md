@@ -102,7 +102,8 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
   with its reason in
   [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md). Each listed
   deviation is still computed and compared with Excel on every test run, and one that starts to
-  match fails the run, so the list cannot go stale. The largest group of deviations is `CUMIPMT` and `CUMPRINC` at tiny rates
+  match fails the run, except a few that can match by chance (a random result, a result Excel
+  varies between runs, a row that depends on the platform's math library). The largest group of deviations is `CUMIPMT` and `CUMPRINC` at tiny rates
   and in tiny principals, where Excel's result carries noise past their tolerance (85 rows).
   Among the others, from some starting guesses
   Excel's `IRR` and `RATE` reach another root

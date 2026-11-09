@@ -1,5 +1,10 @@
-"""Every count QUIRKS.md states is derived here and checked, so it cannot drift from the
-captures, the deviation lists or the README (``tests/test_readme.py``).
+"""Counts QUIRKS.md states, derived from the captures and the deviation lists and checked.
+
+Six groups: the sizes of suites given as ``suite`` (N rows), the CUMIPMT and CUMPRINC rows with
+the group's total (the README's largest group, ``tests/test_readme.py``) and the TBILLEQ row,
+VDB's listed share of its sweeps, the MULTINOMIAL rows, the iterative rows, and the
+empty-argument rows. Other figures there (character pairs, units in the last place, dates) are
+not checked here.
 """
 
 from __future__ import annotations
