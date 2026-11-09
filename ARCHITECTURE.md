@@ -40,7 +40,7 @@ Excel's results are captured for the tests. Measured numbers are in `bench/resul
 - Reaching outside the workbook. `WEBSERVICE`, `STOCKHISTORY`, `TRANSLATE`, `IMAGE`, `RTD` and the `CUBE`
   functions need a provider: the engine never reaches out by itself, by default or from anything a
   workbook says, and they keep their cached values and are reported, as an absent function does. Whether
-  a caller can supply one under that name is for the design of custom functions (§12).
+  a caller can supply one under that name is for the design of callbacks (§12).
 - `CALL` and `REGISTER.ID` stay unsupported: a workbook must not be able to name native code for the
   package to run. This can be revisited if a legitimate use and a safe way appear, and someone's own
   extension, running on their own system, may implement them.
@@ -1251,7 +1251,7 @@ One workbook is used from one thread at a time.
 
 | question | leaning |
 |---|---|
-| custom functions | a design of their own: registration per workbook or engine, not process-wide; a rule for a file naming a function not installed; they take references too, so unions and arrays of references are designed with them |
+| callbacks | what is not Excel's own computation (custom functions, database connections, outside providers) is a callback the caller supplies, never something the engine reaches for; registration per workbook or engine, not process-wide; a rule for a file naming a function not installed. Their API is settled before any function that needs one is built |
 | the `_xlsx` subpackage's future | extracted into its own package once a second user (sheetpeek) needs its API |
 | numpy | optional extra, never required |
 
@@ -1275,8 +1275,9 @@ One workbook is used from one thread at a time.
    matrix functions) follow as far as they get; those with large questions of their own (regular
    expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable. `docs/coverage.md` lists what
    exists.
-5. `xlrecalc.evaluate(text)` for one formula outside a workbook, custom functions, and `LET` and `LAMBDA` with its helpers are designed together,
-   from a list of what an editor built on the package needs.
+5. `LET`, `LAMBDA` and its helpers (`MAP`, `REDUCE`, `SCAN`, `BYROW`, `BYCOL`, `MAKEARRAY`, `ISOMITTED`): Excel's own
+   semantics, designed and captured before they are built. `xlrecalc.evaluate(text)` for one formula outside a workbook, and
+   callbacks (§12).
 6. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
    vectorized templates (numpy as an optional extra), a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,

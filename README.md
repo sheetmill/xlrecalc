@@ -114,11 +114,10 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
   intersection, circular references and iterative calculation, as Excel computes them
   ([circular references](https://xlrecalc.readthedocs.io/en/latest/iteration.html)).
   Four quirks can be turned off (`Quirks`).
-- **Not yet**: `LAMBDA` and its helpers and the functions that reshape arrays (`HSTACK`,
-  `TAKE` and others, in the
-  [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html)); structured
-  (table) references and 3-D references; `CELL`'s formatting kinds; computed criteria in the
-  database functions; `LINEST` with several regressors; inserting or deleting rows and
+- **Not yet**: `LET`, `LAMBDA` and its helpers, among the functions the
+  [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists as absent;
+  unions of ranges; structured (table) references and 3-D references; `CELL`'s formatting
+  kinds; computed criteria in the database functions; `LINEST` with several regressors; inserting or deleting rows and
   columns. A formula xlrecalc cannot compute keeps the value the file holds, and the report
   lists it.
 
