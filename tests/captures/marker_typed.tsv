@@ -1,8 +1,9 @@
 # suite: marker_typed
 # excel: 16.114.4 for Mac, locale en_US
-# captured: 2026-11-08
+# captured: 2026-11-09
 # generator: capture/marker_probe.py --typed (a person typed each formula into the
-#   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3; formula k in A<4k+1>)
+#   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3; formula k in A<4k+1>;
+#   the workbooks are kept as marker_typed.xlsx and marker_typed2.xlsx to 4.xlsx)
 # columns: typed, file form, cm, f_t, f_ref, value (Python repr)
 '=Z1:Z3*2'	'Z1:Z3*2'	'1'	'array'	'A1:A3'	2.0
 '=SUM(Z1:Z3)'	'SUM(Z1:Z3)'	None	'normal'	None	6.0
@@ -59,3 +60,23 @@
 '=OFFSET(Z1,0,0,1,1)'	'OFFSET(Z1,0,0,1,1)'	None	'normal'	None	1.0
 '=OFFSET(Z1,0,0,Z1,1)'	'OFFSET(Z1,0,0,Z1,1)'	'1'	'array'	'A213'	1.0
 '=INDIRECT("Z1:Z1")'	'INDIRECT("Z1:Z1")'	'1'	'array'	'A217'	1.0
+'={1}'	'{1}'	'1'	'array'	'A221'	1.0
+'=OFFSET(Z1,{0},0)'	'OFFSET(Z1,{0},0)'	'1'	'array'	'A225'	'#VALUE!'
+'=one_seq'	'one_seq'	'1'	'array'	'A229'	1.0
+'=CHOOSE(1,SEQUENCE(1))'	'CHOOSE(1,_xlfn.SEQUENCE(1))'	'1'	'array'	'A233'	1.0
+'=IFS(TRUE,SEQUENCE(1))'	'_xlfn.IFS(TRUE,_xlfn.SEQUENCE(1))'	'1'	'array'	'A237'	1.0
+'=SWITCH(1,1,SEQUENCE(1))'	'_xlfn.SWITCH(1,1,_xlfn.SEQUENCE(1))'	'1'	'array'	'A241'	1.0
+'=N(SEQUENCE(1))'	'N(_xlfn.SEQUENCE(1))'	'1'	'array'	'A245'	1.0
+'=INDEX(SEQUENCE(3),1)'	'INDEX(_xlfn.SEQUENCE(3),1)'	'1'	'array'	'A249'	1.0
+'=SUMPRODUCT(SEQUENCE(1))'	'SUMPRODUCT(_xlfn.SEQUENCE(1))'	None	'normal'	None	1.0
+'=ROWS(SEQUENCE(1))'	'ROWS(_xlfn.SEQUENCE(1))'	None	'normal'	None	1.0
+'=INDIRECT("Z1")+0'	'INDIRECT("Z1")+0'	'1'	'array'	'A261'	1.0
+'=@INDIRECT("Z1")'	'INDIRECT("Z1")'	None	'normal'	None	1.0
+'=ABS(Z1:Z1)'	'ABS(Z1:Z1)'	'1'	'array'	'A269'	1.0
+'=FREQUENCY(Z1:Z3,Z2)'	'FREQUENCY(Z1:Z3,Z2)'	'1'	'array'	'A273:A274'	2.0
+'=MODE.MULT(Z1,Z1)'	'_xlfn.MODE.MULT(Z1,Z1)'	'1'	'array'	'A277'	1.0
+'=TEXTSPLIT("a",",")'	'_xlfn.TEXTSPLIT("a",",")'	'1'	'array'	'A281'	'a'
+'=RANDARRAY()'	'_xlfn.RANDARRAY()'	'1'	'array'	'A285'	0.05452499250492959
+'=MUNIT(1)'	'_xlfn.MUNIT(1)'	'1'	'array'	'A289'	1.0
+'=MINVERSE(Z1)'	'MINVERSE(Z1)'	'1'	'array'	'A293'	1.0
+'=MDETERM(Z1)'	'MDETERM(Z1)'	None	'normal'	None	1.0

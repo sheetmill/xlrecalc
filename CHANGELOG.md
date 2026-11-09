@@ -55,11 +55,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   array, where a plain formula intersects it.
 
   A formula set through `set_formula` whose text may give an array is written as a dynamic array whatever the size of
-  its result, as Excel writes it typed, so that it spills when its data grows (capture `marker_typed`, 55 typed
-  formulas): a call of one of them, or of `TRANSPOSE`, `LINEST` or `INDIRECT`, carried through operators and through
-  arguments taken element by element (`-SEQUENCE(1)`, `IF(TRUE,SEQUENCE(1))`, `ABS(SEQUENCE(1))`), but not through a
-  function that takes an array (`SUM(SEQUENCE(3))`) nor an explicit `@`; `INDEX` with an index that is not a number
-  other than 0, and `OFFSET` with a height or width that is not a number.
+  its result, as Excel writes it typed, so that it spills when its data grows (capture `marker_typed`, 75 typed
+  formulas): an array constant (`={1}`) or a call of one of them, or of `TRANSPOSE`, `LINEST` or `INDIRECT`, carried
+  through operators, arguments taken element by element (`-SEQUENCE(1)`, `IF(TRUE,SEQUENCE(1))`, `ABS(SEQUENCE(1))`,
+  `OFFSET(Z1,{0},0)`), `N`'s argument, `INDEX`'s array and defined names, but not through a function that takes an
+  array (`SUM(SEQUENCE(3))`) nor an explicit `@`; `INDEX` with an index that is not a number other than 0, and `OFFSET`
+  with a height or width that is not a number.
   A file holding `SORT` or `FILTER` without its `_xlfn._xlws.` prefix, or one of these functions with an argument count
   it does not take, does not open in Excel: such a formula keeps the value it holds and is reported in `Report.refused`.
   `UNIQUE`, `SORTBY` and `SEQUENCE` without their prefix are names Excel does not know, `#NAME?`. A `#CALC!` Excel

@@ -307,9 +307,11 @@ def test_set_formula_writes_what_excel_writes_for_a_typed_formula(tmp_path, row)
     """Capture marker_typed: Excel's file form, dynamic-array marker and range for each."""
     import ast
 
+    from capture.marker_probe import NAMES
+
     typed, form, cm, kind, ref, value = map(ast.literal_eval, row)
     data = "".join(f'<row r="{r}"><c r="Z{r}"><v>{r}</v></c></row>' for r in (1, 2, 3))
-    src = book(tmp_path, package(data))
+    src = book(tmp_path, _with_names(package(data), NAMES))
     wb = load(src)
     at = 4 * MARKER.index(row) + 1
     wb.set_formula(f"A{at}", typed)
@@ -321,7 +323,26 @@ def test_set_formula_writes_what_excel_writes_for_a_typed_formula(tmp_path, row)
     assert (cell.cm is not None) is (cm is not None)
     assert cell.formula.kind == kind
     assert cell.formula.ref == ref
-    assert cell.value == value
+    if "RANDARRAY(" in typed:  # a random draw: a number in Excel's range, not Excel's number
+        assert isinstance(cell.value, float)
+        assert 0 <= cell.value < 1
+    else:
+        assert cell.value == value
+
+
+def _with_names(data: bytes, names: dict[str, str]) -> bytes:
+    """A package with workbook-level defined names added after its sheets."""
+    defined = "".join(f'<definedName name="{n}">{t}</definedName>' for n, t in names.items())
+    with zipfile.ZipFile(io.BytesIO(data)) as z:
+        parts = {name: z.read(name) for name in z.namelist()}
+    parts["xl/workbook.xml"] = parts["xl/workbook.xml"].replace(
+        b"</sheets>", f"</sheets><definedNames>{defined}</definedNames>".encode()
+    )
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+        for name, part in parts.items():
+            z.writestr(name, part)
+    return buf.getvalue()
 
 
 def test_randarray_draws_again_after_any_edit(tmp_path):

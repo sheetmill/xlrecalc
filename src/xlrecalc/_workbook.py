@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import contextlib
 import enum
 import io
 import math
 import os
 import re
+from collections.abc import Callable
 from typing import BinaryIO, TypeAlias
 
 from xlrecalc._engine import Engine, node
@@ -14,7 +16,18 @@ from xlrecalc._formula import FormulaSyntaxError, TokenizeError, parse, tokenize
 from xlrecalc._formula._codegen import kind_at
 from xlrecalc._formula._fastkey import translate
 from xlrecalc._formula._fileform import display_form, file_form
-from xlrecalc._formula._nodes import Binary, Call, Group, Leaf, Missing, Node, Postfix, Prefix
+from xlrecalc._formula._nodes import (
+    ArrayConstant,
+    Binary,
+    Call,
+    Group,
+    Leaf,
+    Missing,
+    Node,
+    Postfix,
+    Prefix,
+    Reference,
+)
 from xlrecalc._formula._tokens import Kind, column_number
 from xlrecalc._functions import REGISTRY, SPECS
 from xlrecalc._functions._registry import _LIFTED
@@ -237,7 +250,9 @@ class Workbook:
             # text read as a legacy formula (an @ written out as _xlfn.SINGLE) tells whether
             # the file needs the dynamic-array marker: an implicit intersection anywhere else.
             template = engine.templates[engine.template_for(text, row, col)]
-            intersects = template.intersects or _may_be_array(text)
+            intersects = template.intersects or _may_be_array(
+                text, lambda name: engine._name_text(name, sheet)
+            )
             engine.set_formula(sheet, row, col, text, array=(True, (row, col, row, col)))
         except (FormulaSyntaxError, TokenizeError) as exc:
             raise FormulaError(f"{formula!r}: {exc}") from exc
@@ -337,24 +352,40 @@ class Workbook:
         )
 
 
-def _may_be_array(text: str) -> bool:
+# Arguments that carry an array to the result although the registry does not lift them: N's
+# value, and INDEX's array, whose shape the text does not give (capture marker_typed).
+_CARRIED = {"N": (0,), "INDEX": (0,)}
+
+
+def _may_be_array(text: str, name_text: Callable[[str], str | None] | None = None) -> bool:
     """Whether a formula (file form) may give an array, read from its text as Excel reads it.
 
-    Capture ``marker_typed``: a call of a function that makes an array (``makes_array``), carried
-    through operators and through the arguments a function takes element by element (``IF``'s
-    branches, ``ABS``, ``IFERROR``), but not through a function that takes an array (``SUM``,
-    ``ROWS``) nor ``@``; ``INDEX`` with an index that is not a number other than 0, and
-    ``OFFSET`` with a height or width that is not a number, since their size is then not in the
-    text.
+    Capture ``marker_typed``: an array constant, or a call of a function that makes an array
+    (``makes_array``), carried through operators, the arguments a function takes element by
+    element (``IF``'s branches, ``ABS``, ``IFERROR``, ``OFFSET``'s offsets) and those of
+    ``_CARRIED``, and through a defined name (``name_text`` gives a name's formula), but not
+    through a function that takes an array (``SUM``, ``ROWS``) nor ``@``; ``INDEX`` with an
+    index that is not a number other than 0, and ``OFFSET`` with a height or width that is not a
+    number, since their size is then not in the text.
     """
     try:
         root = parse(text).root
     except (FormulaSyntaxError, TokenizeError):
         return False
     stack: list[Node] = [root]
+    seen: set[str] = set()  # names already followed: a name may refer to itself
     while stack:
         node = stack.pop()
-        if isinstance(node, Group):
+        if isinstance(node, ArrayConstant):
+            return True
+        if isinstance(node, Reference) and node.token.kind is Kind.NAME and name_text is not None:
+            folded = node.token.text.casefold()
+            definition = name_text(node.token.text) if folded not in seen else None
+            seen.add(folded)
+            if definition is not None:
+                with contextlib.suppress(FormulaSyntaxError, TokenizeError):
+                    stack.append(parse(definition.removeprefix("=")).root)
+        elif isinstance(node, Group):
             stack.append(node.inner)
         elif isinstance(node, Prefix | Postfix):
             stack.append(node.operand)
@@ -374,8 +405,11 @@ def _may_be_array(text: str) -> bool:
                 not isinstance(a, Missing) and not _nonzero_number(a) for a in node.args[3:5]
             ):
                 return True
+            carried = _CARRIED.get(name, ())
             stack += (
-                a for i, a in enumerate(node.args) if kind_at(spec.kinds, i, cycle) in _LIFTED
+                a
+                for i, a in enumerate(node.args)
+                if i in carried or kind_at(spec.kinds, i, cycle) in _LIFTED
             )
     return False
 

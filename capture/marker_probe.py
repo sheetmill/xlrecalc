@@ -14,8 +14,9 @@ intersection), so AppleScript cannot enter a formula as Excel 365's formula bar 
 ``--typed PATH ...`` reads instead the workbooks in which a person typed ``TYPED[k]`` into cell
 ``A<4k+1>`` in Excel's formula bar and saved them (``xlrecalc_marker_typed.xlsx`` for the first
 ``FIRST_BATCH`` formulas, ``xlrecalc_marker_typed2.xlsx`` up to ``THIRD_BATCH``,
-``xlrecalc_marker_typed3.xlsx`` for the rest, each built by ``typed_workbook`` from its first
-formula on), and writes ``tests/captures/marker_typed.tsv``.
+``xlrecalc_marker_typed3.xlsx`` up to ``FOURTH_BATCH``, ``xlrecalc_marker_typed4.xlsx`` for the
+rest, each built by ``typed_workbook`` from its first formula on), and writes
+``tests/captures/marker_typed.tsv``.
 """
 
 from __future__ import annotations
@@ -122,10 +123,11 @@ TYPED += [
     '=INDIRECT("Z1:Z1")',
 ]
 
-NEXT_BATCH = [
-    # Typed next, into xlrecalc_marker_typed4.xlsx at A<4k+1> from k = len(TYPED); joined to TYPED
-    # once captured. Each with the prediction written before it is typed: the forms the rule of
-    # _workbook._may_be_array guesses at, then the functions captured since the third batch.
+FOURTH_BATCH = len(TYPED)
+"""Formulas from here on went into the fourth workbook."""
+TYPED += [
+    # Each with the prediction written before it was typed: the forms the rule of
+    # _workbook._may_be_array guessed at, then the functions captured since the third batch.
     "={1}",  # marked (an array constant); the rule says unmarked
     "=OFFSET(Z1,{0},0)",  # marked (a lifted array constant); the rule says unmarked
     "=one_seq",  # marked (a name defined as SEQUENCE(1)); the rule says unmarked
@@ -147,6 +149,8 @@ NEXT_BATCH = [
     "=MINVERSE(Z1)",  # marked
     "=MDETERM(Z1)",  # unmarked
 ]
+NEXT_BATCH: list[str] = []
+"""Formulas for the next typed batch, joined to ``TYPED`` once captured."""
 NAMES = {"one_seq": "_xlfn.SEQUENCE(1)"}
 """Defined names the next batch reads."""
 
@@ -174,7 +178,7 @@ def typed_workbook(path: Path, start: int = 0) -> None:
     wb.save(path)
 
 
-KEPT = tuple(CAPTURES / f"marker_typed{n}.xlsx" for n in ("", "2", "3"))
+KEPT = tuple(CAPTURES / f"marker_typed{n}.xlsx" for n in ("", "2", "3", "4"))
 """The typed workbooks as committed, without who saved them or where: the capture's evidence."""
 
 
@@ -190,7 +194,7 @@ def read_typed(*paths: Path) -> None:
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/marker_probe.py --typed (a person typed each formula into the",
         "#   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3; formula k in A<4k+1>;",
-        "#   the workbooks are kept as marker_typed.xlsx, marker_typed2.xlsx, marker_typed3.xlsx)",
+        "#   the workbooks are kept as marker_typed.xlsx and marker_typed2.xlsx to 4.xlsx)",
         "# columns: typed, file form, cm, f_t, f_ref, value (Python repr)",
     ]
     body = typed_rows(*KEPT)
