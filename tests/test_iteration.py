@@ -160,8 +160,8 @@ def test_the_public_path_gives_excels_saved_copy(
     from xlrecalc._report import column_letters
     from xlrecalc._xlsx import Book
 
-    constants = {"tl_conv": {"B1": "3"}, "tl_interest": {"B1": "1000"}}
-    constants["tl_sumself"] = {"A1": "1", "A2": "2", "A3": "3", "A4": "4"}
+    constants = {"probe_conv": {"B1": "3"}, "probe_interest": {"B1": "1000"}}
+    constants["probe_sumself"] = {"A1": "1", "A2": "2", "A3": "3", "A4": "4"}
     sheets: dict[str, list[tuple[str, str, str | None]]] = {}
     for row in cells:
         sheet, ref = row[3].split("!")

@@ -58,34 +58,34 @@ VARIANTS = [
         for n in (1, 2, 3)
     ],
 ]
-# The tech lead's eight, from the public path's first comparison.
+# Eight loops from an earlier probe of openpyxl files, read through the public API.
 B = 'iterateCount="100"'
 VARIANTS += [
-    ("tl_kind2", B, one(("A1", "IFERROR(A2,0)+1"), ("A2", "A1+1"))),
-    ("tl_conv", B, one(("B1", ""), ("A1", "0.5*IFERROR(A2,0)+10"), ("A2", "A1/2+B1"))),
+    ("probe_kind2", B, one(("A1", "IFERROR(A2,0)+1"), ("A2", "A1+1"))),
+    ("probe_conv", B, one(("B1", ""), ("A1", "0.5*IFERROR(A2,0)+10"), ("A2", "A1/2+B1"))),
     (
-        "tl_interest",
+        "probe_interest",
         B,
         one(("B1", ""), ("B2", "IFERROR(B4,0)*0.05"), ("B3", "B1+B2"), ("B4", "B3*0.5")),
     ),
-    ("tl_count1", 'iterateCount="1"', one(("A1", "IFERROR(A2,0)+1"), ("A2", "A1*2"))),
+    ("probe_count1", 'iterateCount="1"', one(("A1", "IFERROR(A2,0)+1"), ("A2", "A1*2"))),
     (
-        "tl_sumself",
+        "probe_sumself",
         'iterateCount="50"',
         one(("A1", ""), ("A2", ""), ("A3", ""), ("A4", ""), ("A5", "SUM(A1:A4)+IFERROR(A5,0)*0.1")),
     ),
-    ("tl_selfinc", B, one(("A1", "IF(ISNUMBER(A1),A1+1,0)"))),
+    ("probe_selfinc", B, one(("A1", "IF(ISNUMBER(A1),A1+1,0)"))),
     (
-        "tl_bigdelta",
+        "probe_bigdelta",
         'iterateCount="100" iterateDelta="10"',
         one(("A1", "IFERROR(A1,0)+3"), ("B1", "A1*2")),
     ),
-    ("tl_below", B, one(("A1", "A3*2"), ("A2", "IFERROR(A3,0)+1"), ("A3", "A2+1"))),
+    ("probe_below", B, one(("A1", "A3*2"), ("A2", "IFERROR(A3,0)+1"), ("A3", "A2+1"))),
 ]
 CONSTANTS = {
-    "tl_conv": {"B1": "3"},
-    "tl_interest": {"B1": "1000"},
-    "tl_sumself": {"A1": "1", "A2": "2", "A3": "3", "A4": "4"},
+    "probe_conv": {"B1": "3"},
+    "probe_interest": {"B1": "1000"},
+    "probe_sumself": {"A1": "1", "A2": "2", "A3": "3", "A4": "4"},
 }
 for i, (name, attrs, sheets) in enumerate(VARIANTS):
     values = CONSTANTS.get(name)

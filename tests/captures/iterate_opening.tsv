@@ -57,25 +57,25 @@ ps_count_3	flag	iterateCount="3"	s!A2	IFERROR(A1,0)+1	5.0	11.0	n	11
 isnum_count_1	flag	iterateCount="1"	s!A1	IF(ISNUMBER(A1),A1+1,0)	0.0	1.0	n	1
 isnum_count_2	flag	iterateCount="2"	s!A1	IF(ISNUMBER(A1),A1+1,0)	0.0	2.0	n	2
 isnum_count_3	flag	iterateCount="3"	s!A1	IF(ISNUMBER(A1),A1+1,0)	0.0	3.0	n	3
-tl_kind2	flag	iterateCount="100"	s!A1	IFERROR(A2,0)+1	missing value	199.0	n	199
-tl_kind2	flag	iterateCount="100"	s!A2	A1+1	missing value	200.0	n	200
-tl_conv	flag	iterateCount="100"	s!B1		3.0	3.0	none	
-tl_conv	flag	iterateCount="100"	s!A1	0.5*IFERROR(A2,0)+10	missing value	15.3330078125	n	15.3330078125
-tl_conv	flag	iterateCount="100"	s!A2	A1/2+B1	missing value	10.66650390625	n	10.66650390625
-tl_interest	flag	iterateCount="100"	s!B1		1000.0	1000.0	none	
-tl_interest	flag	iterateCount="100"	s!B2	IFERROR(B4,0)*0.05	missing value	25.641015625	n	25.641015625000001
-tl_interest	flag	iterateCount="100"	s!B3	B1+B2	missing value	1025.641015625	n	1025.6410156249999
-tl_interest	flag	iterateCount="100"	s!B4	B3*0.5	missing value	512.8205078125	n	512.82050781249995
-tl_count1	flag	iterateCount="1"	s!A1	IFERROR(A2,0)+1	missing value	1.0	n	1
-tl_count1	flag	iterateCount="1"	s!A2	A1*2	missing value	2.0	n	2
-tl_sumself	flag	iterateCount="50"	s!A1		1.0	1.0	none	
-tl_sumself	flag	iterateCount="50"	s!A2		2.0	2.0	none	
-tl_sumself	flag	iterateCount="50"	s!A3		3.0	3.0	none	
-tl_sumself	flag	iterateCount="50"	s!A4		4.0	4.0	none	
-tl_sumself	flag	iterateCount="50"	s!A5	SUM(A1:A4)+IFERROR(A5,0)*0.1	missing value	11.1111	n	11.1111
-tl_selfinc	flag	iterateCount="100"	s!A1	IF(ISNUMBER(A1),A1+1,0)	0.0	100.0	n	100
-tl_bigdelta	flag	iterateCount="100" iterateDelta="10"	s!A1	IFERROR(A1,0)+3	missing value	3.0	n	3
-tl_bigdelta	flag	iterateCount="100" iterateDelta="10"	s!B1	A1*2	missing value	6.0	n	6
-tl_below	flag	iterateCount="100"	s!A1	A3*2	missing value	396.0	n	396
-tl_below	flag	iterateCount="100"	s!A2	IFERROR(A3,0)+1	missing value	199.0	n	199
-tl_below	flag	iterateCount="100"	s!A3	A2+1	missing value	200.0	n	200
+probe_kind2	flag	iterateCount="100"	s!A1	IFERROR(A2,0)+1	missing value	199.0	n	199
+probe_kind2	flag	iterateCount="100"	s!A2	A1+1	missing value	200.0	n	200
+probe_conv	flag	iterateCount="100"	s!B1		3.0	3.0	none	
+probe_conv	flag	iterateCount="100"	s!A1	0.5*IFERROR(A2,0)+10	missing value	15.3330078125	n	15.3330078125
+probe_conv	flag	iterateCount="100"	s!A2	A1/2+B1	missing value	10.66650390625	n	10.66650390625
+probe_interest	flag	iterateCount="100"	s!B1		1000.0	1000.0	none	
+probe_interest	flag	iterateCount="100"	s!B2	IFERROR(B4,0)*0.05	missing value	25.641015625	n	25.641015625000001
+probe_interest	flag	iterateCount="100"	s!B3	B1+B2	missing value	1025.641015625	n	1025.6410156249999
+probe_interest	flag	iterateCount="100"	s!B4	B3*0.5	missing value	512.8205078125	n	512.82050781249995
+probe_count1	flag	iterateCount="1"	s!A1	IFERROR(A2,0)+1	missing value	1.0	n	1
+probe_count1	flag	iterateCount="1"	s!A2	A1*2	missing value	2.0	n	2
+probe_sumself	flag	iterateCount="50"	s!A1		1.0	1.0	none	
+probe_sumself	flag	iterateCount="50"	s!A2		2.0	2.0	none	
+probe_sumself	flag	iterateCount="50"	s!A3		3.0	3.0	none	
+probe_sumself	flag	iterateCount="50"	s!A4		4.0	4.0	none	
+probe_sumself	flag	iterateCount="50"	s!A5	SUM(A1:A4)+IFERROR(A5,0)*0.1	missing value	11.1111	n	11.1111
+probe_selfinc	flag	iterateCount="100"	s!A1	IF(ISNUMBER(A1),A1+1,0)	0.0	100.0	n	100
+probe_bigdelta	flag	iterateCount="100" iterateDelta="10"	s!A1	IFERROR(A1,0)+3	missing value	3.0	n	3
+probe_bigdelta	flag	iterateCount="100" iterateDelta="10"	s!B1	A1*2	missing value	6.0	n	6
+probe_below	flag	iterateCount="100"	s!A1	A3*2	missing value	396.0	n	396
+probe_below	flag	iterateCount="100"	s!A2	IFERROR(A3,0)+1	missing value	199.0	n	199
+probe_below	flag	iterateCount="100"	s!A3	A2+1	missing value	200.0	n	200
