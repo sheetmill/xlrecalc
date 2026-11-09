@@ -1177,3 +1177,11 @@ empty_args	torow	1164	_xlfn.TOROW($AA$1:$AA$4,,TRUE)	()	n	1.0
 empty_args	torow	1165	_xlfn.TOROW($AA$1:$AA$4,1,)	()	n	1.0
 empty_args	torow	1166	_xlfn.TOROW($AA$1:$AA$4,,)	()	n	1.0
 empty_args	torow	1167	_xlfn.TOROW($AA$1:$AA$4,)	()	n	1.0
+empty_args	wraprows	1168	_xlfn.WRAPROWS($AA$1:$AA$4,2,0)	()	n	1.0
+empty_args	wraprows	1169	_xlfn.WRAPROWS(,2,0)	()	e	#VALUE!
+empty_args	wraprows	1170	_xlfn.WRAPROWS($AA$1:$AA$4,,0)	()	e	#NUM!
+empty_args	wraprows	1171	_xlfn.WRAPROWS($AA$1:$AA$4,2,)	()	n	1.0
+empty_args	wrapcols	1172	_xlfn.WRAPCOLS($AA$1:$AA$4,2,0)	()	n	1.0
+empty_args	wrapcols	1173	_xlfn.WRAPCOLS(,2,0)	()	e	#VALUE!
+empty_args	wrapcols	1174	_xlfn.WRAPCOLS($AA$1:$AA$4,,0)	()	e	#NUM!
+empty_args	wrapcols	1175	_xlfn.WRAPCOLS($AA$1:$AA$4,2,)	()	n	1.0

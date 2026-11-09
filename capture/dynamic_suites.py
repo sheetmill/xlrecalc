@@ -545,6 +545,56 @@ TOCOL = [
     DynCase(f"{TR}(,1,TRUE)"),
 ]
 
+WRAP = [
+    DynCase(f"{WR}({{1,2,3,4,5}},2)", readers=READ),
+    DynCase(f"{WR}({{1,2,3,4,5}},2,0)"),
+    DynCase(f"{WR}({{1;2;3;4;5}},3)"),
+    DynCase(f"{WR}({{1,2;3,4}},2)"),
+    DynCase(f"{WR}({{1,2,3}},0)"),
+    DynCase(f"{WR}({{1,2,3}},5)"),
+    DynCase(f"{WR}({{1,2,3}},1.9)"),
+    DynCase(f'{WR}({{1,2,3}},"2")'),
+    DynCase(f'{WR}(BT1:BT4,3,"")'),
+    DynCase(f"{WR}(BU1:BU4,2)"),
+    DynCase(f"{WR}(7,2)"),
+    DynCase(f"{WR}({{1,2,3}},-1)"),
+    DynCase(f"{WR}({{1,2,3}},#N/A)"),
+    DynCase(f"{WR}({{1,2,3}},2,#DIV/0!)"),
+    DynCase(f"{WR}({{1,2,3}},2,{{8,9}})"),
+    DynCase(f"{WR}({{1,2,3}},{{1,2}})"),
+    DynCase(f"{WR}(BT1:BV1,2)"),
+    DynCase(f"{WR}({T1},2)"),
+    DynCase(f"{WR}({{1,2,3}},2)", legacy=True),
+    DynCase("WRAPROWS({1,2,3},2)"),
+    DynCase(f"{WR}({{1,2,3,4}},2)", way={(1, 1): "in the way"}),
+    DynCase(f"{WR}({{1,2,3}},2,)"),
+    DynCase(f"{WR}({{1,2,3}},16385)"),
+    DynCase(f"{WC}({{1,2,3,4,5}},2)", readers=READ),
+    DynCase(f'{WC}({{1,2,3,4,5}},2,"x")'),
+    DynCase(f"{WC}({{1;2;3}},3)"),
+    DynCase(f"{WC}({{1,2;3,4}},2)"),
+    DynCase(f"{WC}({{1,2,3}},0)"),
+    DynCase(f"{WC}(BV1:BV4,3)"),
+    DynCase(f"{WC}({{1,2,3}},5)"),
+    DynCase(f"{WC}({{1,2,3}},1048577)"),
+    # second set
+    DynCase(f'{WR}(BX1:CA1,3,"-")', readers=READ),
+    DynCase(f"{WC}(BY1:BY3,2)"),
+    DynCase(f"{WR}(BZ1:BZ3,2)"),
+    DynCase(f"{WC}(CA1:CA3,1)"),
+    # follow-up: plain formulas over whole columns, lifting, direct errors
+    DynCase(f"{WR}(BT1:BT4,2)", legacy=True),
+    DynCase(f"{WC}(BT1:BT4,2)", legacy=True),
+    DynCase(f"{WC}({{1,2,3}},2,)"),
+    DynCase(f"{WR}(#N/A,1)"),
+    DynCase(f"{WC}({{1,2,3}},2,{{8,9}})"),
+    DynCase(f"{WR}({{1,2,3}},{{2;3}})"),
+    DynCase(f"{WR}(BX1:CA1,2.5)"),
+    # follow-up: an empty array argument
+    DynCase(f"{WR}(,1)"),
+    DynCase(f"{WC}(,3,0)"),
+]
+
 # Formulas that make Excel refuse the file (error -50 on opening, each alone in a workbook):
 # SORT and FILTER without their prefix (UNIQUE, SORTBY and SEQUENCE without theirs open), and
 # argument counts the functions do not take. The reshaping functions without their prefix open.
@@ -568,11 +618,15 @@ REFUSED = (
     f"{VS}()",
     f"{TC}()",
     f"{TR}()",
+    f"{WC}({{1,2}})",
+    f"{WR}({{1,2}})",
     f"{DR}({T1},1,1,1)",
     f"{TK}({T1},1,1,1)",
     f"{EX}({T1},5,5,0,0)",
     f"{TC}({T1},0,0,0)",
     f"{TR}({T1},0,0,0)",
+    f"{WC}({{1,2}},1,0,0)",
+    f"{WR}({{1,2}},1,0,0)",
 )
 
 SUITES: dict[str, list[DynCase]] = {
@@ -586,6 +640,7 @@ SUITES: dict[str, list[DynCase]] = {
     "droptake": DROPTAKE,
     "stack": STACK,
     "tocol": TOCOL,
+    "wrap": WRAP,
 }
 
 

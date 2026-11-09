@@ -375,3 +375,49 @@ def _torow(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
 
 _register("_XLFN.TOCOL", _tocol, "array", "raw", "raw", min_args=1)
 _register("_XLFN.TOROW", _torow, "array", "raw", "raw", min_args=1)
+
+
+# WRAPROWS and WRAPCOLS ------------------------------------------------------------------------
+
+
+def _wrap(ctx: Any, given: tuple[Any, ...], ranges: bool, rows: bool) -> Any:
+    core = _wraprows if rows else _wrapcols
+    lifted = _spread(ctx, core, given, (1, 2), ranges)
+    if lifted is not None:
+        return lifted
+    grid = _whole(given[0])
+    if isinstance(grid, ErrorValue):
+        return grid
+    if len(grid) > 1 and len(grid[0]) > 1:
+        return VALUE
+    values = [_shown(v) for row in grid for v in row]
+    count = _number(given[1], ctx, 0.0)
+    if isinstance(count, ErrorValue):
+        return count
+    if count < 1:
+        return ErrorValue.NUM
+    pad: Any = given[2] if len(given) > 2 else MISSING
+    if pad is MISSING:
+        pad = ErrorValue.NA
+    elif isinstance(pad, Ref):
+        pad = _shown(scalar(pad, ctx))
+    width = min(count, len(values))
+    height = -(-len(values) // width)
+    _limit(ctx, height, width)
+    values += [pad] * (width * height - len(values))
+    out = tuple(tuple(values[i * width : (i + 1) * width]) for i in range(height))
+    return out if rows else tuple(zip(*out, strict=True))
+
+
+def _wraprows(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
+    """A row or column of values in rows of ``wrap_count``, the last padded."""
+    return _wrap(ctx, given, ranges, rows=True)
+
+
+def _wrapcols(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
+    """A row or column of values in columns of ``wrap_count``, the last padded."""
+    return _wrap(ctx, given, ranges, rows=False)
+
+
+_register("_XLFN.WRAPROWS", _wraprows, "array", "raw", "raw", min_args=2)
+_register("_XLFN.WRAPCOLS", _wrapcols, "array", "raw", "raw", min_args=2)
