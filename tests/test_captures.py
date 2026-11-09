@@ -872,3 +872,14 @@ def test_every_listed_deviation_is_a_captured_row():
 
 def test_exemptions_are_listed_reasons():
     assert (EXEMPT | MATH_LIBRARY | OTHER_PLATFORMS).issubset(KNOWN_DEVIATIONS.values())
+
+
+def test_every_suite_generates_its_captured_formulas():
+    """Each suite's generator still gives the formulas its capture holds, in order."""
+    pytest.importorskip("openpyxl")  # capture.suites imports the pipeline, which needs it
+    from capture.suites import SUITES as GENERATORS
+
+    for name in SUITES:
+        captured = [row.formula for row in load(name).rows]
+        generated = [case.formula for case in GENERATORS[name].cases()]
+        assert generated == captured, name
