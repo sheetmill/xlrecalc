@@ -407,7 +407,9 @@ def test_dynamic_references_written_here_match_excel(container):
 def test_array_functions_set_through_the_api(container):
     """Every case of the dyn_* captures set through set_formula: Excel opens the file and agrees."""
     import openpyxl
-    from capture.dynamic_suites import DATA, SUITES, anchor_of
+    from capture.dynamic_suites import BLOCK, DATA, SUITES, anchor_of
+
+    from tests.test_dynamic_arrays import RANDOM_CASES
 
     for suite, cases in SUITES.items():
         src = container / f"xlrecalc_live_dyn_{suite}.xlsx"
@@ -435,10 +437,17 @@ def test_array_functions_set_through_the_api(container):
         book.save()
         save_copy(src, copy)
         ours, excel = _all_values(src), _all_values(copy)
+        # Random values: their readers, in column N, are compared. Set through the formula bar,
+        # the bare RANDARRAY(2) of the capture gets its prefix and draws too.
+        random_cases = RANDOM_CASES | {("randarray", 14)}
+        drawn = {
+            k for k in set(ours) | set(excel)
+            if (suite, (k[0] - 1) // BLOCK) in random_cases and k[1] < 14
+        }  # fmt: skip
         differ = {
             k: (ours.get(k), excel.get(k))
             for k in set(ours) | set(excel)
-            if not same(ours.get(k), excel.get(k))
+            if k not in drawn and not same(ours.get(k), excel.get(k))
         }
         assert not differ, (suite, differ)
         src.unlink()

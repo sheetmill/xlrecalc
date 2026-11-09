@@ -3377,6 +3377,7 @@ _EMPTY_VALID: dict[str, tuple[str, ...]] = {
     "_XLFN.MUNIT": ("2",), "MDETERM": ("{1,2;3,4}",), "MINVERSE": ("{1,2;3,4}",),
     "_XLFN.MODE.MULT": ("{1,1,2}", "{1,1,2}"),
     "_XLFN.TEXTSPLIT": ('"a,b;c"', '","', '";"', "FALSE", "0", '"-"'),
+    "_XLFN.RANDARRAY": ("1", "1", "5", "5", "FALSE"),
     "_XLFN.TEXTBEFORE": ('"a-b-c"', '"-"', "1", "0", "0", '"none"'),
     "_XLFN.TEXTAFTER": ('"a-b-c"', '"-"', "1", "0", "0", '"none"'),
     "SUMIF": (_R, '">1"', _S), "COUNTIF": (_R, '">1"'), "AVERAGEIF": (_R, '">1"', _S),
@@ -3462,7 +3463,7 @@ _EMPTY_ADDED = (
     "_XLFN._XLWS.FILTER", "_XLFN.CHOOSECOLS", "_XLFN.CHOOSEROWS", "_XLFN.TAKE", "_XLFN.DROP",
     "_XLFN.EXPAND", "_XLFN.VSTACK", "_XLFN.HSTACK", "_XLFN.TOCOL", "_XLFN.TOROW", "_XLFN.WRAPROWS",
     "_XLFN.WRAPCOLS", "_XLFN.MUNIT", "MDETERM", "MINVERSE", "FREQUENCY", "_XLFN.MODE.MULT",
-    "_XLFN.TEXTSPLIT",
+    "_XLFN.TEXTSPLIT", "_XLFN.RANDARRAY",
 )  # fmt: skip
 
 

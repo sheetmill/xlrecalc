@@ -58,7 +58,7 @@ from xlrecalc._values import ErrorValue  # noqa: E402
 from xlrecalc._workbook import load as load_book  # noqa: E402
 
 DATA = ROOT / "bench" / "data"
-_UNSTABLE = frozenset({"RAND", "RANDBETWEEN", "NOW"})
+_UNSTABLE = frozenset({"RAND", "RANDBETWEEN", "NOW", "_xlfn.RANDARRAY", "_XLFN.RANDARRAY"})
 
 
 def encode(value: object) -> str:
@@ -187,7 +187,7 @@ def bench(n: int, source: str) -> Iterator[str]:
     yield from _stage(engine, "last A = 5", digest_columns)
 
 
-_VOLATILE_CASE = re.compile(r"\b(RAND|RANDBETWEEN|NOW|TODAY|CELL)\(", re.IGNORECASE)
+_VOLATILE_CASE = re.compile(r"\b(RAND|RANDBETWEEN|RANDARRAY|NOW|TODAY|CELL)\(", re.IGNORECASE)
 FILES = ROOT / "capture" / "build" / "golden_files"  # fixed: CELL-free, but paths stay stable
 
 

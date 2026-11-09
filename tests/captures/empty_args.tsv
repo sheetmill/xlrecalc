@@ -1204,3 +1204,12 @@ empty_args	textsplit	1191	_xlfn.TEXTSPLIT("a,b;c",",",";",FALSE,0,)	()	str	'a'
 empty_args	textsplit	1192	_xlfn.TEXTSPLIT("a,b;c",",",,,,)	()	str	'a'
 empty_args	textsplit	1193	_xlfn.TEXTSPLIT("a,b;c",",",)	()	str	'a'
 empty_args	textsplit	1194	_xlfn.TEXTSPLIT("a,b;c",",",,FALSE)	()	str	'a'
+empty_args	randarray	1195	_xlfn.RANDARRAY(1,1,5,5,FALSE)	()	n	5.0
+empty_args	randarray	1196	_xlfn.RANDARRAY(,1,5,5,FALSE)	()	n	5.0
+empty_args	randarray	1197	_xlfn.RANDARRAY(1,,5,5,FALSE)	()	n	5.0
+empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	1.7318348622566972
+empty_args	randarray	1199	_xlfn.RANDARRAY(1,1,5,,FALSE)	()	e	#VALUE!
+empty_args	randarray	1200	_xlfn.RANDARRAY(1,1,5,5,)	()	n	5.0
+empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.8904271335534248
+empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.858543757343468
+empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.4932457095618017

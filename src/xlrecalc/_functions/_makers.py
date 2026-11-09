@@ -6,13 +6,15 @@ Each function's rules come from the capture its docstring names, tried on two se
 from __future__ import annotations
 
 import bisect
+import math
+import random
 import re
 from typing import Any
 
 from xlrecalc._arrays import to_array
 from xlrecalc._coerce import scalar, to_text
 from xlrecalc._formula import MISSING
-from xlrecalc._functions._dynamic import VALUE, _count, _flag, _limit
+from xlrecalc._functions._dynamic import CALC, MAX_COLS, MAX_ROWS, VALUE, _count, _flag, _limit
 from xlrecalc._functions._registry import function
 from xlrecalc._functions._reshape import _register, _spread
 from xlrecalc._values import ErrorValue, Ref
@@ -171,4 +173,55 @@ def _textsplit(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
 
 _register(
     "_XLFN.TEXTSPLIT", _textsplit, "raw", "raw", "raw", "raw", "raw", "raw", min_args=2, category=T
+)
+
+
+# RANDARRAY -------------------------------------------------------------------------------------
+
+
+def _randarray(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
+    """Random numbers, ``rows`` by ``columns``, from ``min`` up to ``max`` or whole between them.
+
+    Counts are truncated, 0 is ``#CALC!`` and a negative one ``#VALUE!``; ``min`` above ``max``,
+    or bounds that are not whole with ``whole_number``, are ``#VALUE!`` (capture
+    ``dyn_randarray``). New at every calculation.
+    """
+    padded: list[Any] = [*given, *[MISSING] * (5 - len(given))]
+    rows, cols, low, high, whole = padded
+    numbers = [
+        _count(rows, ctx, 1.0), _count(cols, ctx, 1.0), _count(low, ctx, 0.0),
+        _count(high, ctx, 1.0),
+    ]  # fmt: skip
+    for n in numbers:
+        if isinstance(n, ErrorValue):
+            return n
+    integer = _flag(whole, ctx)
+    if isinstance(integer, ErrorValue):
+        return integer
+    r, c = math.trunc(numbers[0]), math.trunc(numbers[1])  # type: ignore[arg-type]
+    lo, hi = float(numbers[2]), float(numbers[3])  # type: ignore[arg-type]
+    if r < 0 or c < 0 or r > MAX_ROWS or c > MAX_COLS or lo > hi:
+        return VALUE
+    if r == 0 or c == 0:
+        return CALC
+    if integer and (lo != math.floor(lo) or hi != math.floor(hi)):
+        return VALUE
+    _limit(ctx, r, c)
+    if integer:
+        a, b = int(lo), int(hi)
+        return tuple(tuple(float(random.randint(a, b)) for _ in range(c)) for _ in range(r))
+    return tuple(tuple(lo + random.random() * (hi - lo) for _ in range(c)) for _ in range(r))
+
+
+_register(
+    "_XLFN.RANDARRAY",
+    _randarray,
+    "raw",
+    "raw",
+    "raw",
+    "raw",
+    "raw",
+    min_args=0,
+    volatile=True,
+    category=M,
 )

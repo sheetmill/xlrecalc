@@ -43,6 +43,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `TEXTSPLIT`: a text split into columns and rows at one or several delimiters, padded with `#N/A` or `pad_with`,
     empty pieces kept or dropped, matched with or without regard to case; empty text or an empty delimiter is `#VALUE!`;
     a range or array of texts is taken element by element.
+  - `RANDARRAY`: random numbers of a shape, between bounds, whole with `whole_number`; new at every calculation, as
+    Excel's are (its values are checked through their number, bounds and kind).
   - `WRAPROWS`, `WRAPCOLS`: a row or column of values in rows or columns of a count no wider than the values, the last
     padded (`#N/A` by default, empty included); a count below 1 is `#NUM!`, a two-dimensional array `#VALUE!`.
 

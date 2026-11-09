@@ -743,6 +743,56 @@ TEXTSPLIT = [
     DynCase(f"{TS}(CH4,CI1:CI2)"),
 ]
 
+# RANDARRAY's values are random: its anchors are read by formulas that hold whatever it draws,
+# counting the elements within the bounds (and whole, with the integer flag).
+SHAPE = (
+    "ROWS(_xlfn.ANCHORARRAY({a}))",
+    "COLUMNS(_xlfn.ANCHORARRAY({a}))",
+    "SUMPRODUCT((_xlfn.ANCHORARRAY({a})>=0)*(_xlfn.ANCHORARRAY({a})<1))",
+)
+RANDARRAY = [
+    DynCase(f"{RA}(3,2)", readers=SHAPE),
+    DynCase(f"{RA}()", readers=SHAPE),
+    DynCase(
+        f"{RA}(2,3,5,7)",
+        readers=(
+            "ROWS(_xlfn.ANCHORARRAY({a}))",
+            "COLUMNS(_xlfn.ANCHORARRAY({a}))",
+            "SUMPRODUCT((_xlfn.ANCHORARRAY({a})>=5)*(_xlfn.ANCHORARRAY({a})<=7))",
+        ),
+    ),
+    DynCase(
+        f"{RA}(4,2,1,6,TRUE)",
+        readers=(
+            "ROWS(_xlfn.ANCHORARRAY({a}))",
+            "SUMPRODUCT((_xlfn.ANCHORARRAY({a})>=1)*(_xlfn.ANCHORARRAY({a})<=6))",
+            "SUMPRODUCT(--(INT(_xlfn.ANCHORARRAY({a}))=_xlfn.ANCHORARRAY({a})))",
+        ),
+    ),
+    DynCase(f"{RA}(2,2,5,5)"),
+    DynCase(f"{RA}(0)"),
+    DynCase(f"{RA}(-1)"),
+    DynCase(f"{RA}(2,2,5,1)"),
+    DynCase(f"{RA}(2,2,1.5,2.5,TRUE)"),
+    DynCase(f'{RA}("a")'),
+    DynCase(f"{RA}(#N/A)"),
+    DynCase(
+        f"{RA}(2.7)", readers=("ROWS(_xlfn.ANCHORARRAY({a}))", "COLUMNS(_xlfn.ANCHORARRAY({a}))")
+    ),
+    DynCase(f"{RA}(1,1,5,5)", legacy=True),
+    DynCase(f"{RA}(2,2)", way={(1, 1): "in the way"}),
+    DynCase("RANDARRAY(2)"),
+    # second set
+    DynCase(
+        f"{RA}(1,4,-3,-1,TRUE)",
+        readers=(
+            "COLUMNS(_xlfn.ANCHORARRAY({a}))",
+            "SUMPRODUCT((_xlfn.ANCHORARRAY({a})>=-3)*(_xlfn.ANCHORARRAY({a})<=-1)*(INT(_xlfn.ANCHORARRAY({a}))=_xlfn.ANCHORARRAY({a})))",
+        ),
+    ),
+    DynCase(f"{RA}(2,1,0,0,TRUE)"),
+]
+
 # Formulas that make Excel refuse the file (error -50 on opening, each alone in a workbook):
 # SORT and FILTER without their prefix (UNIQUE, SORTBY and SEQUENCE without theirs open), and
 # argument counts the functions do not take. The reshaping functions without their prefix open.
@@ -788,6 +838,7 @@ REFUSED = (
     f"{MM}()",
     f'{TS}("a")',
     f'{TS}("a",",",";",TRUE,0,"-",1)',
+    f"{RA}(1,1,1,1,TRUE,1)",
 )
 
 SUITES: dict[str, list[DynCase]] = {
@@ -806,6 +857,7 @@ SUITES: dict[str, list[DynCase]] = {
     "matrix": MATRIX,
     "frequency": FREQUENCY_MODE,
     "textsplit": TEXTSPLIT,
+    "randarray": RANDARRAY,
 }
 
 

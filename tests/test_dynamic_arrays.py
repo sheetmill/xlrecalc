@@ -34,12 +34,18 @@ CAPTURES = Path(__file__).with_name("captures")
 SUITES = (
     "sequence", "mmult", "unique", "sort", "sortby", "filter",
     "choose", "droptake", "stack", "tocol", "wrap", "index", "matrix", "frequency", "textsplit",
+    "randarray",
 )  # fmt: skip
 RICH = "{http://schemas.microsoft.com/office/spreadsheetml/2017/richdata}"
 _ERROR_TYPES = {"8": "#SPILL!", "13": "#CALC!"}
 
 # (suite, cell) -> reason
 KNOWN: dict[tuple[str, str], str] = {}
+# Cases whose values are random draws, exempt from the cell-by-cell check (each must still be a
+# number, as Excel's is); the plain formulas reading them, in column N, count the elements within
+# the bounds, and whole ones with the integer flag, and are checked strictly.
+RANDOM = "RANDARRAY's values are random draws; its readers check their number, bounds and kind"
+RANDOM_CASES = frozenset(("randarray", case) for case in (0, 1, 2, 3, 11, 15))
 
 
 def _rows(suite: str) -> list[list[str]]:
@@ -152,6 +158,10 @@ def test_cell_matches_excel(suite: str, address: str) -> None:
         pytest.skip(f"not implemented: {names}")
     got = e.get(0, row - 1, col - 1)
     want = expected(cells[address], _rich_errors(suite))
+    if (suite, _case(address)) in RANDOM_CASES and col < 14:
+        assert type(want) is float, (RANDOM, address, want)
+        assert type(got) is float, (RANDOM, address, got)
+        return
     ok = got is BLANK if want is None else same(got, want)
     reason = KNOWN.get((suite, address))
     if reason is not None:

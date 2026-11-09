@@ -149,8 +149,10 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 - Database functions (`misc`, `database_family`): a computed criterion is not supported. `DVAR`, `DVARP`, `DSTDEV` and
   `DSTDEVP` declare 4 units in the last place for Excel's sum of squares; two rows are 6 and 10 units away. Blank records
   are counted up to the sheet's last row holding a value, where Excel's used range also counts formatted rows.
-- Random numbers (`misc`): two rows draw them (`RANDBETWEEN(1.5,2.5)`, and two draws
-  compared), so no result can be expected to repeat Excel's; both are listed whatever the draw.
+- Random numbers: two rows of `misc` draw them (`RANDBETWEEN(1.5,2.5)`, and two draws compared), and four of
+  `empty_args` (`RANDARRAY` with bounds that leave a range), so no result can be expected to repeat Excel's; all six are
+  listed whatever the draw. `RANDARRAY`'s dynamic arrays (capture `dyn_randarray`) are checked through plain formulas that
+  count their elements within the bounds, and whole ones with the integer flag.
 - Declared tolerances ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1), statistics: the variances and standard
   deviations (five formulas tried), `CORREL`, `LINEST` and the normal distribution within 4
   units in the last place on every captured row of `statistics` but 21: `LINEST` near

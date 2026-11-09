@@ -229,6 +229,7 @@ _ARRAY_COUNTS: dict[str, tuple[int, int | None]] = {
     "FREQUENCY": (2, 2),
     "_XLFN.MODE.MULT": (1, None),
     "_XLFN.TEXTSPLIT": (2, 6),
+    "_XLFN.RANDARRAY": (0, 5),
 }  # fmt: skip
 # Without its prefix in a file, SORT or FILTER makes Excel refuse it; UNIQUE, SORTBY and
 # SEQUENCE are names it does not know (capture dyn_*).

@@ -322,3 +322,16 @@ def test_set_formula_writes_what_excel_writes_for_a_typed_formula(tmp_path, row)
     assert cell.formula.kind == kind
     assert cell.formula.ref == ref
     assert cell.value == value
+
+
+def test_randarray_draws_again_after_any_edit(tmp_path):
+    """RANDARRAY is volatile: an edit of a cell it does not read makes new draws."""
+    src = book(tmp_path, package('<row r="1"><c r="Z1"><v>1</v></c></row>'))
+    wb = load(src)
+    wb.set_formula("B1", "=RANDARRAY(1,1)")
+    draws = {wb.value("B1")}
+    for n in range(2, 6):
+        wb.set("Z1", float(n))
+        draws.add(wb.value("B1"))
+    assert all(isinstance(v, float) and 0 <= v < 1 for v in draws)
+    assert len(draws) > 1

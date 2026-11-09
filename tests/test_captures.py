@@ -175,7 +175,10 @@ _VDB_EDGES = (
     "VDB: Excel gives #DIV/0! for start = end = life at a rate of 1 per period, and "
     "cost - salvage (a negative value) when salvage exceeds cost; not reproduced"
 )
-_RANDOM = "a random result: RANDBETWEEN(1.5,2.5) is 2 or 3, and two random draws compared"
+_RANDOM = (
+    "a random result: RANDBETWEEN(1.5,2.5) is 2 or 3, two random draws compared, and RANDARRAY's"
+    " draws with bounds that leave a range"
+)
 _COMPUTED_CRITERIA = (
     "a computed criterion (a formula under a name the database lacks, evaluated for each "
     "record) is not supported; it matches no record"
@@ -520,6 +523,7 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("finance", case): _VDB_ROUNDING for case in (785, 786, 787)},
     **{("finance", case): _VDB_EDGES for case in (903, 920)},
     **{("misc", case): _RANDOM for case in (183, 188)},
+    **{("empty_args", case): _RANDOM for case in (1198, 1201, 1202, 1203)},
     **{("misc", case): _COMPUTED_CRITERIA for case in (197, 222, 247, 272, 297)},
     **{
         ("statistics", case): _NORMAL_TAIL
