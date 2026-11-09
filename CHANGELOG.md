@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     or taking none is `#CALC!`. Of a range they give a range, which a plain formula's cell intersects.
   - `EXPAND`: padded to a size with `pad_with`, `#N/A` when it is left out and 0 when it is empty; a size smaller than
     the array is `#VALUE!`, one past the sheet `#NUM!`.
+  - `VSTACK`, `HSTACK`: one below another or side by side, padded with `#N/A`; an error given as an argument is the
+    result, an empty argument `#VALUE!`.
 
   Each takes its array argument whole in every formula; an error given as the array is the result, and an empty one
   `#VALUE!` (`EXPAND` takes it as a blank). A count given an array is taken element by element, each element giving

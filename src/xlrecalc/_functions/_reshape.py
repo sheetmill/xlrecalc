@@ -274,3 +274,50 @@ def _expand(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
 
 
 _register("_XLFN.EXPAND", _expand, "array", "raw", "raw", "raw", min_args=2)
+
+
+# VSTACK and HSTACK ----------------------------------------------------------------------------
+
+
+def _parts(given: Sequence[Any]) -> list[Grid] | ErrorValue:
+    parts = []
+    for a in given:
+        grid = _whole(a)
+        if isinstance(grid, ErrorValue):
+            return grid
+        parts.append(grid)
+    return parts
+
+
+@function("_XLFN.VSTACK", "array", variadic=True, min_args=1, category=C, makes_array=True)
+def VSTACK(ctx: Any, *arrays: Any) -> Any:
+    """The arrays one below another, padded with ``#N/A`` to the widest."""
+    parts = _parts(arrays)
+    if isinstance(parts, ErrorValue):
+        return parts
+    width = max(len(p[0]) for p in parts)
+    _limit(ctx, sum(len(p) for p in parts), width)
+    na = ErrorValue.NA
+    return tuple(
+        tuple(_shown(v) for v in row) + (na,) * (width - len(row)) for p in parts for row in p
+    )
+
+
+@function("_XLFN.HSTACK", "array", variadic=True, min_args=1, category=C, makes_array=True)
+def HSTACK(ctx: Any, *arrays: Any) -> Any:
+    """The arrays side by side, padded with ``#N/A`` to the tallest."""
+    parts = _parts(arrays)
+    if isinstance(parts, ErrorValue):
+        return parts
+    height = max(len(p) for p in parts)
+    _limit(ctx, height, sum(len(p[0]) for p in parts))
+    out = []
+    for i in range(height):
+        row: list[Any] = []
+        for p in parts:
+            if i < len(p):
+                row.extend(_shown(v) for v in p[i])
+            else:
+                row.extend([ErrorValue.NA] * len(p[0]))
+        out.append(tuple(row))
+    return tuple(out)

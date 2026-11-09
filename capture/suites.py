@@ -3454,7 +3454,7 @@ def _empty_repeating(key: str) -> list[list[str]]:
 _EMPTY_ADDED = (
     "MMULT", "_XLFN.SEQUENCE", "_XLFN.UNIQUE", "_XLFN._XLWS.SORT", "_XLFN.SORTBY",
     "_XLFN._XLWS.FILTER", "_XLFN.CHOOSECOLS", "_XLFN.CHOOSEROWS", "_XLFN.TAKE", "_XLFN.DROP",
-    "_XLFN.EXPAND",
+    "_XLFN.EXPAND", "_XLFN.VSTACK", "_XLFN.HSTACK",
 )  # fmt: skip
 
 

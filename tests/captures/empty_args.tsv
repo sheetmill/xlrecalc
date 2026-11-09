@@ -1159,3 +1159,9 @@ empty_args	expand	1146	_xlfn.EXPAND({1,2},2,,0)	()	n	1.0
 empty_args	expand	1147	_xlfn.EXPAND({1,2},2,3,)	()	n	1.0
 empty_args	expand	1148	_xlfn.EXPAND({1,2},2,,)	()	n	1.0
 empty_args	expand	1149	_xlfn.EXPAND({1,2},2,)	()	n	1.0
+empty_args	vstack	1150	_xlfn.VSTACK($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	vstack	1151	_xlfn.VSTACK(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	vstack	1152	_xlfn.VSTACK($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	hstack	1153	_xlfn.HSTACK($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	hstack	1154	_xlfn.HSTACK(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	hstack	1155	_xlfn.HSTACK($AA$1:$AA$4,)	()	e	#VALUE!

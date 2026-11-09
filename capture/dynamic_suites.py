@@ -458,6 +458,50 @@ DROPTAKE = [
     DynCase(f"{DR}(,0)"),
 ]
 
+STACK = [
+    DynCase(f"{VS}({{1,2}},{{3,4}})", readers=READ),
+    DynCase(f"{VS}({{1,2,3}},{{4}})"),
+    DynCase(f'{VS}(1,"a",TRUE)'),
+    DynCase(f"{VS}({T1},BX1:BZ3)"),
+    DynCase(f"{VS}(BT1:BT2,BU1:BU2)"),
+    DynCase(f"{VS}(#N/A,1)"),
+    DynCase(f"{VS}({{1,2}},{{3,4}})", way={(1, 1): 0.0}),
+    DynCase(f"{VS}(BU2:BU2,)"),
+    DynCase(f"{VS}({T1})"),
+    DynCase(f"{VS}({{1;2}},{{3,4,5}})"),
+    DynCase(f'{VS}("",BU4)'),
+    DynCase(f"{VS}({{1,2}},{{3,4}})", legacy=True),
+    DynCase("VSTACK(1,2)"),
+    DynCase(f"SUM({VS}(1,2,3))"),
+    DynCase(f'{VS}({SEQ}(2),{{"a","b"}})'),
+    DynCase(f"{HS}({{1;2}},{{3;4}})", readers=READ),
+    DynCase(f"{HS}({{1;2;3}},5)"),
+    DynCase(f'{HS}(1,"",FALSE)'),
+    DynCase(f"{HS}(BT1:BT3,BV1:BV3)"),
+    DynCase(f"{HS}(BU2)"),
+    DynCase(f"{HS}({{1,2;3,4}},{{5;6;7}})"),
+    DynCase(f"{HS}({T1},{T1})"),
+    DynCase(f'{HS}(#DIV/0!,"x")'),
+    DynCase(f"{HS}({{1;2}},{{3;4}})", way={(1, 0): "in the way"}),
+    DynCase("HSTACK(1,2)"),
+    # second set
+    DynCase(f"{HS}(BX1:BX3,BY1:BY3,CA1:CA3)", readers=READ),
+    DynCase(f"{VS}(BX1:CA1,BX3:CA3)"),
+    DynCase(f"{HS}(BZ1:BZ3,{{1;2}})"),
+    DynCase(f"{VS}(BY1:BY3,BX2)"),
+    # follow-up: plain formulas over whole columns, lifting, direct errors
+    DynCase(f"{VS}({T1})", legacy=True),
+    DynCase(f"{HS}({T1})", legacy=True),
+    DynCase(f"{VS}(1,#N/A)"),
+    DynCase(f"{HS}({{1,2}},#N/A)"),
+    DynCase(f"{VS}(BY2,1)"),
+    DynCase(f"{VS}({{1,#N/A}})"),
+    DynCase(f"{HS}(1,)"),
+    # follow-up: an empty array argument
+    DynCase(f"{VS}(,)"),
+    DynCase(f"{HS}(,{{1;2}})"),
+]
+
 # Formulas that make Excel refuse the file (error -50 on opening, each alone in a workbook):
 # SORT and FILTER without their prefix (UNIQUE, SORTBY and SEQUENCE without theirs open), and
 # argument counts the functions do not take. The reshaping functions without their prefix open.
@@ -477,6 +521,8 @@ REFUSED = (
     f"{DR}({T1})",
     f"{TK}({T1})",
     f"{EX}({T1})",
+    f"{HS}()",
+    f"{VS}()",
     f"{DR}({T1},1,1,1)",
     f"{TK}({T1},1,1,1)",
     f"{EX}({T1},5,5,0,0)",
@@ -491,6 +537,7 @@ SUITES: dict[str, list[DynCase]] = {
     "filter": FILTER,
     "choose": CHOOSE,
     "droptake": DROPTAKE,
+    "stack": STACK,
 }
 
 
