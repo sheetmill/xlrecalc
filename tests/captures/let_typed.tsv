@@ -1,0 +1,16 @@
+# suite: let_typed
+# excel: 16.114.4 for Mac, locale en_US
+# edition: Office Home & Business 2021, update channel Current
+# captured: 2026-11-09
+# generator: capture/lambda_probe.py --typed (a person typed each formula into the
+#   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3 and 10, 20, 30 in AA1:AA3;
+#   formula k in A<5k+1>)
+# cell rows: cell, k, typed, address, type, value, file form, f_t, f_ref, cm, rich error
+'cell'	0	'=LET(x,1,x+1)'	'A1'	'n'	2.0	'_xlfn.LET(_xlpm.x,1,_xlpm.x+1)'	'normal'	None	None	None
+'cell'	1	'=LET(x,Z1:Z3,x*2)'	'A6'	'n'	2.0	'_xlfn.LET(_xlpm.x,Z1:Z3,_xlpm.x*2)'	'array'	'A6:A8'	'1'	None
+'cell'	1	'=LET(x,Z1:Z3,x*2)'	'A7'	'n'	4.0	None	None	None	None	None
+'cell'	1	'=LET(x,Z1:Z3,x*2)'	'A8'	'n'	6.0	None	None	None	None	None
+'cell'	2	'=LET(x,Z1:Z3,SUM(x))'	'A11'	'n'	6.0	'_xlfn.LET(_xlpm.x,Z1:Z3,SUM(_xlpm.x))'	'normal'	None	None	None
+'cell'	3	'=LET(x,SEQUENCE(3),SUM(x))'	'A16'	'n'	6.0	'_xlfn.LET(_xlpm.x,_xlfn.SEQUENCE(3),SUM(_xlpm.x))'	'normal'	None	None	None
+'cell'	4	'=LET(x,2,y,x*3,x+y)'	'A21'	'n'	8.0	'_xlfn.LET(_xlpm.x,2,_xlpm.y,_xlpm.x*3,_xlpm.x+_xlpm.y)'	'normal'	None	None	None
+'cell'	5	'=LET(x,Z1,x)'	'A26'	'n'	1.0	'_xlfn.LET(_xlpm.x,Z1,_xlpm.x)'	'normal'	None	None	None
