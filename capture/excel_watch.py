@@ -15,12 +15,12 @@ turned back on, so a recovered hang leaves nothing behind. Imports only the stan
 that the default test run can import it.
 
 The display is kept awake while a process drives Excel (``caffeinate -d``, from the first request
-until the process ends): every unexplained hang so far happened with the display off. The record
+until the process ends): each unexplained hang recorded came with the display off. The record
 says whether it was.
 
 Before a process's first request, a window of Excel's own open on screen beside its workbooks (the
 About window, Preferences, a dialog) stops the run with a message: such a window blocks every
-request about workbooks, and one left open caused a hang that looked like the others.
+request about workbooks, and the run would look like an unexplained hang.
 """
 
 from __future__ import annotations
@@ -201,8 +201,8 @@ def _alive(pid: int) -> bool:
 def preflight() -> None:
     """Stop before a run when a window of Excel's own blocks its requests, once per process.
 
-    Excel answers nothing about workbooks while a modal window is open (the About window left
-    open hung a run after 78 opens). The windows on screen are compared with the document windows
+    Excel answers nothing about workbooks while a modal window is open (the About window,
+    Preferences, a dialog). The windows on screen are compared with the document windows
     Excel reports; one more, or no answer, names the windows and ends the process.
     """
     global _checked, _began_empty

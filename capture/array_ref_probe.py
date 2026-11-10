@@ -171,7 +171,7 @@ def formulas() -> list[tuple[str, bool]]:
 
 
 def _newer_functions() -> list[tuple[str, bool]]:
-    """The functions added since the first capture, each with a range or array where it may lift."""
+    """The functions not in the first set of cases, each with a range or array where it may lift."""
     x = "_xlfn."
     rows = []
     for k in KEYS:

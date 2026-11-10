@@ -33,11 +33,11 @@ _IPMT_TAIL = (
     "reproduced in the last bits (13 to 109 units in the last place); other rows within 4"
 )
 # IRR, XIRR and RATE: Excel's Newton iterates rest on its own NPV, whose last bits are not
-# reproduced (see NPV's tolerance), so where its iteration stops differs. Tried (at most five
-# hypotheses each): Newton on the rate, on 1 + rate and on 1 / (1 + rate), analytic and
-# numerical derivatives, stopping on the step (absolute, relative, returning either iterate)
-# or on the NPV, 20 to 100 iterations, damping. Kept: Newton on 1 + rate, halving instead of
-# stepping to 1 + rate <= 0, a step below 1E-7.
+# reproduced (see NPV's tolerance), so where its iteration stops differs. Compared with the
+# capture (each in at most five variants): Newton on the rate, on 1 + rate and on
+# 1 / (1 + rate), analytic and numerical derivatives, stopping on the step (absolute, relative,
+# returning either iterate) or on the NPV, 20 to 100 iterations, damping. Kept: Newton on
+# 1 + rate, halving instead of stepping to 1 + rate <= 0, a step below 1E-7.
 _ITER_NEAR_ZERO = (
     "IRR where the rate is 0: Excel's last iterate is within 1E-15 of 0 (-6.7E-16, 1.1E-14) "
     "or exactly 0, where a relative tolerance cannot apply"

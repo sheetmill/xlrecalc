@@ -363,7 +363,7 @@ def test_a_workbook_qualified_name_against_excel():
 
 
 def test_linest_with_several_regressors_is_reported_not_a_wrong_value():
-    """Several x columns used to give #REF! with nothing reported; a wrong size still is #REF!."""
+    """Several x columns are reported, not given as #REF!; an x range of another size is #REF!."""
     e = Engine()
     s = e.add_sheet("s")
     for r, (a, b, c) in enumerate([(1, 2, 3), (2, 1, 5), (3, 4, 8), (4, 3, 9), (5, 6, 13)]):
@@ -380,7 +380,7 @@ def test_linest_with_several_regressors_is_reported_not_a_wrong_value():
 
 
 def test_a_computed_database_criterion_is_reported_not_a_wrong_value():
-    """A formula under a name the database lacks used to match nothing, unreported."""
+    """A formula under a name the database lacks is reported, not taken as matching nothing."""
     e = Engine()
     s = e.add_sheet("s")
     sheet = e.sheets[s]

@@ -790,7 +790,7 @@ from `tools/function_frequency.tsv` (§10), whose counts come from workbooks of 
 nothing about how much functions newer than that are used.
 
 Results are compared with Excel's bit for bit. A function that stays a few units in the last
-place from Excel after a time-boxed attempt at bit-exactness declares a tolerance
+place from Excel after a fixed time spent fitting its last bits declares a tolerance
 (`ulps=4, ulps_reason=...`): the capture tests accept a row within it, count it apart from
 the exact matches, and use the largest tolerance among the functions a formula calls, except
 in a formula that also rounds, compares or formats (`ROUND`, a comparison, `&`, `TEXT`, a

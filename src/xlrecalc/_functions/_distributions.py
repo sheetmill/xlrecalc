@@ -41,7 +41,7 @@ def _ways(n: int, k: int) -> float | None:
     """The number of ways to choose ``k`` of ``n``, exactly, or ``None`` past a double.
 
     Bounded first in logarithms, so that ``math.comb`` never builds an integer of millions of
-    digits for a count such as 1E15 (a call that hung an unguarded comparison of ``COMBIN``).
+    digits for a count such as 1E15, which would take far longer than any formula should.
     """
     if _log_choose(n, k) > 700:
         return None

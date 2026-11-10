@@ -144,7 +144,7 @@ TYPED += [
     '=INDIRECT("Z1")+0',
     '=@INDIRECT("Z1")',
     "=ABS(Z1:Z1)",
-    # the functions captured since the third batch
+    # FREQUENCY, MODE.MULT, TEXTSPLIT, RANDARRAY and the matrix functions
     "=FREQUENCY(Z1:Z3,Z2)",
     "=MODE.MULT(Z1,Z1)",
     '=TEXTSPLIT("a",",")',

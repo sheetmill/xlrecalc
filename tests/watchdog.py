@@ -35,7 +35,7 @@ from typing import Any
 
 GIB = 1 << 30
 LIMIT = 4 * GIB
-"""What anything may use. A run past it is killed, and that is a finding: find out why."""
+"""What anything may use. A run past it is killed; a guard that let it get there has failed."""
 TEST_LIMIT = 1 * GIB
 """What one crafted case may use: far more than a refusal needs, and quickly reached by a bomb."""
 TEST_SECONDS = 120.0

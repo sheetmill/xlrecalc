@@ -58,7 +58,7 @@ VARIANTS = [
         for n in (1, 2, 3)
     ],
 ]
-# Eight loops from an earlier probe of openpyxl files, read through the public API.
+# Eight more loops in files as openpyxl writes them, read through the public API.
 B = 'iterateCount="100"'
 VARIANTS += [
     ("probe_kind2", B, one(("A1", "IFERROR(A2,0)+1"), ("A2", "A1+1"))),
