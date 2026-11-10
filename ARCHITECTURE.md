@@ -735,7 +735,9 @@ memory, and computes `SUMPRODUCT` over whole columns without making the array (c
 `COUNTIF` does, and so do `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS` and `MINIFS`. A blank adds nothing to a sum. In a count, a criterion that rejects a blank
 limits the matches to that range's non-blank cells; otherwise a position fails only where a
 non-blank cell fails its criterion, and every other position counts. Their cost follows the cells
-a sheet holds, and they give Excel's value over a whole sheet (capture `array_functions`).
+a sheet holds, over a whole sheet too. `SUMIF`, `SUMIFS`, `COUNTIF` and `COUNTIFS` give Excel's value there (capture
+`array_functions`: 31 formulas over one column, ten and every column, 10 of them over a whole sheet); the other four
+are captured over smaller ranges only.
 `MATCH`, `VLOOKUP`, `HLOOKUP` and `LOOKUP` read a range's non-blank cells likewise, since neither an
 exact match nor the bisection of cells of the key's type can land on a blank.
 `XLOOKUP` and `XMATCH` do too; a blank key, which finds a blank cell, looks for the first gap.

@@ -140,7 +140,15 @@ def test_the_sumif_family_gives_excels_value_at_any_size():
 
 @bounded
 def test_the_sumif_family_makes_no_array():
-    for formula in ('SUMIFS(D!A:XFD,D!A:XFD,"")', 'COUNTIFS(D!A:XFD,"")', 'SUMIF(D!A:XFD,"")'):
+    for formula in (
+        'SUMIFS(D!A:XFD,D!A:XFD,"")',
+        'COUNTIFS(D!A:XFD,"")',
+        'SUMIF(D!A:XFD,"")',
+        'AVERAGEIF(D!A:XFD,">0")',
+        'AVERAGEIFS(D!B:XFD,D!A:XFC,"")',
+        '_xlfn.MAXIFS(D!B:XFD,D!A:XFC,"")',
+        '_xlfn.MINIFS(D!A:XFD,D!A:XFD,">0")',
+    ):
         book = recalculated(two_sheets(formula), ReadLimits(max_array_cells=4))
         assert not book.report.uncomputed, formula
 
