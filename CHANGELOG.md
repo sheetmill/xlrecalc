@@ -8,6 +8,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Iterative calculation, for a workbook with iteration on (`<calcPr iterate="1">`), as Excel does it (captures
+  `iterate_calc`, `calc_chain`, `iterate_open`): a run of up to `iterateCount` iterations from the values the cells hold, each
+  computing the cells on and after circular references in place, in Excel's order (sheets by name, then row, then column),
+  until the largest change of a number is below `iterateDelta`. A run happens where Excel runs one: an evaluating load
+  (as an opening), each edit and each recalculation, and each save once the loop has run, so `Workbook.save` then changes
+  the values in memory too; a trusting load with no edit runs nothing. `recalculate(path)` of a file it evaluates is a load and a save, two runs, which is what Excel
+  saves after opening the file, whether or not the loop has cached values; a loop with none starts from the empty text, as
+  in Excel (captures `iterate_uncached`, `iterate_opening`, `iterate_cached`). `ReadLimits.max_iteration_evaluations` (100,000,000 by default) bounds the cell evaluations of one run;
+  past it, the cells keep their values and are reported.
+- `LET`, captured from Excel (captures `dyn_let`, `let_typed`): names bound to values for a calculation, compared
+  without regard to case, an inner `LET`'s shadowing an outer one's and a defined name; only names written with
+  `_xlpm.` are `LET`'s, as Excel reads a file. A binding is evaluated when first read and once, so one nothing reads
+  is never evaluated (a binding reading the formula's own cell is no circular reference); a name read before it is
+  bound is `#NAME?`. A bound range stays a reference, spills, and is intersected in a plain formula. With no
+  calculation after the bindings the last name is the calculation, as Excel writes it back. An empty value binds a
+  blank (`LET(x,,ISBLANK(x))` is TRUE, `LET(x,,x+1)` 1) and an empty calculation is 0. A file with a name bound
+  twice, a name without `_xlpm.`, or a number where a name goes does not open in Excel: such a formula keeps the value
+  it holds and is in `Report.refused`. `set_formula` writes `LET` with the dynamic-array marker only where its
+  calculation needs it (`LET(x,SEQUENCE(3),SUM(x))` is a plain formula, as Excel writes it typed).
 - Functions that make arrays, captured from Excel as dynamic arrays (captures `dyn_*`, two sets of values each):
   - `SEQUENCE`: counts are truncated, an empty one is 1, 0 is `#CALC!` and a negative or too large one `#VALUE!`; each
     number is the one before plus the step; an array argument gives each element's first number, a range too in a
@@ -68,28 +87,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   it does not take, does not open in Excel: such a formula keeps the value it holds and is reported in `Report.refused`.
   `UNIQUE`, `SORTBY` and `SEQUENCE` without their prefix are names Excel does not know, `#NAME?`. A `#CALC!` Excel
   caches (as `#VALUE!` with a rich value) is read as `#CALC!`.
-- `LET`, captured from Excel (captures `dyn_let`, `let_typed`): names bound to values for a calculation, compared
-  without regard to case, an inner `LET`'s shadowing an outer one's and a defined name; only names written with
-  `_xlpm.` are `LET`'s, as Excel reads a file. A binding is evaluated when first read and once, so one nothing reads
-  is never evaluated (a binding reading the formula's own cell is no circular reference); a name read before it is
-  bound is `#NAME?`. A bound range stays a reference, spills, and is intersected in a plain formula. With no
-  calculation after the bindings the last name is the calculation, as Excel writes it back. An empty value binds a
-  blank (`LET(x,,ISBLANK(x))` is TRUE, `LET(x,,x+1)` 1) and an empty calculation is 0. A file with a name bound
-  twice, a name without `_xlpm.`, or a number where a name goes does not open in Excel: such a formula keeps the value
-  it holds and is in `Report.refused`. `set_formula` writes `LET` with the dynamic-array marker only where its
-  calculation needs it (`LET(x,SEQUENCE(3),SUM(x))` is a plain formula, as Excel writes it typed).
-- Iterative calculation, for a workbook with iteration on (`<calcPr iterate="1">`), as Excel does it (captures
-  `iterate_calc`, `calc_chain`, `iterate_open`): a run of up to `iterateCount` iterations from the values the cells hold, each
-  computing the cells on and after circular references in place, in Excel's order (sheets by name, then row, then column),
-  until the largest change of a number is below `iterateDelta`. A run happens where Excel runs one: an evaluating load
-  (as an opening), each edit, each recalculation and each save, so `Workbook.save` changes the values in memory too; a
-  trusting load runs nothing. `recalculate(path)` of a file it evaluates is a load and a save, two runs, which is what Excel
-  saves after opening the file, whether or not the loop has cached values; a loop with none starts from the empty text, as
-  in Excel (captures `iterate_uncached`, `iterate_opening`, `iterate_cached`). `ReadLimits.max_iteration_evaluations` (100,000,000 by default) bounds the cell evaluations of one run;
-  past it, the cells keep their values and are reported.
 - `Report.from_kept`: a cell holding the cached value of a function or feature not implemented, and every
   cell computed from one. After a change upstream of the formula they move to `uncomputed` and keep the
   values they hold; a change that removes the reliance takes them out.
+- `ReadLimits.max_array_cells` (default 10,485,760, ten full columns): no formula makes an array
+  with more cells (a range an array formula fills, a reference taken as an array, the result of
+  an operation between arrays); one that would keeps the value the file holds and is reported.
+  `ReadLimits` now bounds computing as well as reading.
 - Functions, each captured from Excel over edge inputs: trigonometry (`SIN`, `COS`, `TAN`, `COT`, `SEC`, `CSC`,
   `ASIN`, `ACOS`, `ATAN`, `ATAN2`, `ACOT`), hyperbolics (`SINH`, `COSH`, `TANH`, `COTH`, `SECH`, `CSCH`, `ASINH`,
   `ACOSH`, `ATANH`, `ACOTH`), `DEGREES`, `RADIANS`, `SIGN`, `TRUNC`, `LOG`, `LOG10`, `SQRTPI`, `EXACT`, `TIME`;
@@ -163,13 +167,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Functions: `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS`, `MINIFS`, `LARGE`, `SMALL`, `PERCENTILE`,
   `PERCENTILE.INC`, `QUARTILE`, `QUARTILE.INC`, `MODE`, `MODE.SNGL`, `IFS`, `SWITCH`, `TEXTJOIN`, `CONCAT`,
   `XLOOKUP` and `XMATCH` (not the regular-expression match mode). Each is captured from Excel.
-- `ReadLimits.max_array_cells` (default 10,485,760, ten full columns): no formula makes an array
-  with more cells (a range an array formula fills, a reference taken as an array, the result of
-  an operation between arrays); one that would keeps the value the file holds and is reported.
-  `ReadLimits` now bounds computing as well as reading.
-- `SUMIF`, `SUMIFS` and `COUNTIFS` visit only a range's non-blank cells, so they are computed over
-  any range without listing its positions; over whole sheets, capture `array_functions` holds Excel's value for 9
-  formulas, and each matches.
 
 ### Changed
 - A function written in a file without the prefix Excel gives it (`XLOOKUP` for `_xlfn.XLOOKUP`, as openpyxl writes what it
@@ -177,7 +174,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `XLOOKUP written without Excel's file prefix (_xlfn.): Excel shows #NAME?`. The README shows how to write these names
   with openpyxl.
 - The database functions read a range's non-blank cells, not every cell, so they are computed over whole columns and
-  sheets, and `DCOUNT` passes over an error in its field, as Excel does (capture `database_family`).
+  sheets (one `DSUM` over ten whole columns of a small sheet took 1.9 s in 0.1.0, and now takes under 0.01 s), and
+  `DCOUNT` passes over an error in its field, as Excel does (capture `database_family`).
 - A cell naming a function not implemented keeps its cached value in a full recalculation too, as it
   did when cached values were trusted, and what depends on it is computed from that, not `#NAME?`.
   `Workbook.value` gives the kept value. Without a cached value it is `#NAME?`, as before.
@@ -320,7 +318,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   billion cells. See `max_array_cells` above.
 - `SUMIFS` and `COUNTIFS` listed every position of their ranges before testing a criterion, so a
   small file with `SUMIFS(D!A:XFD,D!A:XFD,">0")` used memory without bound, past any limit. They
-  now make no such list; nor does `SUMIF`, which refused such a range when blank cells matched.
+  now walk a range's non-blank cells; so does `SUMIF`, which refused such a range when blank cells matched. Over
+  whole sheets, capture `array_functions` holds Excel's value for 9 formulas of these three and `COUNTIF`, and each
+  matches.
+- In 0.1.0 `MATCH`, `VLOOKUP`, `HLOOKUP` and `LOOKUP` read every row of a whole column, so a crafted workbook of such
+  lookups could keep `recalculate` busy for hours; they now read its non-blank cells (figures under Changed).
+- In 0.1.0 the database functions read every cell of their range, so a crafted workbook of them over whole columns
+  could keep `recalculate` busy for hours, at about a second or more a formula; they now read its non-blank cells (figures under
+  Changed).
 - The refusal of a DTD in a package part could be bypassed: it matched the prolog's bytes, so a
   `<!DOCTYPE>` after a long comment (200 KB) or processing instruction (900 KB), in UTF-16, or in
   a worksheet part whose name does not end in `.xml` (`data.bin`) was accepted. expat now reads
@@ -332,7 +337,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   inflate to exactly its stated size and CRC. Encrypted parts and compression methods other than
   stored and deflated (bzip2 and LZMA were read) are refused, as Excel refuses them.
 - A cell reference to a column past XFD gave a key that collided with another cell; the cell is
-  placed by position, as Excel places it.
+  placed by position, as Excel places it. A row number off the sheet, which was stored at a negative row or raised
+  `OverflowError`, and a row holding more cells than the sheet has columns are refused (`PackageError`).
 
 ## [0.1.0] - 2026-11-02
 
