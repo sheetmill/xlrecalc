@@ -109,3 +109,20 @@ def test_every_benchmark_result_is_described():
     summary = (results / "SUMMARY.md").read_text(encoding="utf-8")
     missing = [p.name for p in results.iterdir() if p.is_file() and p.name != "SUMMARY.md"]
     assert [name for name in missing if f"`{name}`" not in summary] == []
+
+
+def test_no_registered_function_is_called_not_implemented():
+    """A sentence of ARCHITECTURE.md or QUIRKS.md saying "not implemented" names no function the
+    registry has: such a sentence goes stale when the function ships."""
+    from xlrecalc._functions import SPECS
+
+    registered = {k.upper().replace("_XLFN.", "").replace("_XLWS.", "") for k in SPECS}
+    stale = []
+    for name in ("ARCHITECTURE.md", "QUIRKS.md"):
+        text = (ROOT / name).read_text(encoding="utf-8")
+        for sentence in re.split(r"(?<=[.;:])\s", text):
+            if "not implemented" in sentence:  # the names said to be so come before it
+                before = sentence[: sentence.index("not implemented")]
+                cited = re.findall(r"`(?:_xlfn\.)?([A-Z][A-Z0-9.]*[A-Z0-9])`", before)
+                stale += [(name, c) for c in cited if c in registered]
+    assert not stale, stale

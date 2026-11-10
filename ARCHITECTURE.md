@@ -818,79 +818,65 @@ reason to raise it.
 
 ### 8.2 Status
 
-Implemented, each against captures (suite `functions`, 1,238 rows): `SUM`, `IF`, `NOW`, `AVERAGE`,
-`VLOOKUP`, `ROUND`, `TODAY`, `SUBTOTAL`, `MIN`, `MAX`, `SUMIF`, `MONTH`, `YEAR`, `AND`,
-`ISNUMBER`, `OR`, `CONCATENATE`, `MATCH`, `ABS`, `EOMONTH`, `WEEKDAY`, `INDEX`, `TEXT`,
-`HLOOKUP`, `NA`, `COUNTA`, `DATE`, `COUNTIF`, `SUMPRODUCT`, `COUNT`, `LEFT`, `ISNA`, `VALUE`,
-`SQRT`, `ISERROR`, `ROWS`, `DAY`, `CHOOSE`, `ISTEXT`, `MID`, `FIND`, `LN`, `DATEVALUE`, `INT`,
-`EDATE`, `EXP`, `LEN`, `ROW`, `TRIM`,
-then `IFERROR`, `SUMIFS`, `COUNTIFS` and `_xlfn.IFNA` from the newer functions, and `NOT`, `TRUE`,
-`FALSE`, `ISBLANK`, `ISERR`, `ISLOGICAL`, `ROUNDUP`, `ROUNDDOWN`, `MOD`, `POWER`, `PI`,
-`PRODUCT`, `RIGHT`, `UPPER`, `LOWER`, `COLUMN`, `COLUMNS`, `TIMEVALUE`, `COUNTBLANK`, and
-`_xlfn.ANCHORARRAY` and `_xlfn.SINGLE` (§7.7), `OFFSET`, `INDIRECT` and `CELL` (§6.3), `N`
-(a range's top-left cell, an array element by element) and `LOOKUP` (vector and array forms;
-a result range extended past its end; capture `n_lookup`), and the financial functions `PV`,
-`FV`, `PMT`, `IPMT`, `PPMT`, `NPER`, `NPV`, `XNPV` and `SLN` (capture `finance`): Excel computes
-the growth factor `(1+rate)^nper` by repeated squaring for a whole number of periods and as
-`exp(nper*ln(1+rate))` otherwise, takes any nonzero type as payments at the start, and gives
-`PPMT` from the closed form `-rate*(pv+fv)*(1+rate)^(per-1)/((1+rate)^nper-1)` rather than as
-`PMT` minus `IPMT`, so late periods at high rates keep their precision; and `IRR`, `XIRR` and
-`RATE` (capture `iterative`) by Newton's method from the guess (0.1 by default) on `1+rate`,
-halving rather than stepping to `1+rate <= 0`, until a step is below 1E-7 (20 iterations, 100
-for `XIRR`), `#NUM!` otherwise; `RATE` iterates on the present-value form of the annuity
-equation. Excel's iterates rest on its own NPV and are not reproduced bit for bit: these
-functions and `YIELD` declare a relative tolerance of 1E-9 (§8.1), and the rows beyond it are
-listed with their reasons;
-`XIRR` reads text dates and dates in any order after the first, unlike `XNPV`; the day counts
-`DAYS360` and `YEARFRAC` (bases 0 to 4; capture `bonds`), the coupon functions `COUPPCD`,
-`COUPNCD`, `COUPNUM`, `COUPDAYBS`, `COUPDAYS` and `COUPDAYSNC`, and `PRICE`, `YIELD`,
-`DURATION` and `MDURATION`: `DAYS360`'s US method and `YEARFRAC` basis 0 differ at the end of
-February, actual/actual takes year lengths from the calendar (1900 has 365 days there),
-coupon dates step back from maturity keeping its day (the month's last day when maturity is
-one), basis-1 `COUPDAYS` is `EDATE` from the previous coupon date, `PRICE` and the
-durations take the days to the next coupon as `COUPDAYS - COUPDAYBS` in every basis, and
-`YIELD` with one period left uses Excel's closed form with A as `COUPDAYBS`, E as the actual
-period in bases 1 to 3, and the days to redemption in the basis's own count;
-`WORKDAY`, `NETWORKDAYS` and their `.INTL` forms (capture `workdays`; weekend codes 1 to 7 and
-11 to 17 or a seven-character mask, holidays as a range or array, logical arguments
-`#VALUE!`, a day count floored; Excel also computes `_xlfn.WORKDAY.INTL`, so both spellings
-are registered, while the file form has no prefix), and `HOUR`, `MINUTE`, `SECOND` (rounded to
-the nearest second);
-the statistics `STDEV`, `STDEVP`, `VAR`, `VARP` and their `_xlfn.` forms `STDEV.S`, `STDEV.P`,
-`VAR.S`, `VAR.P`, the A forms `AVERAGEA`, `MINA`, `MAXA`, `STDEVA`, `STDEVPA`, `VARA`,
-`VARPA` (text in references 0 and logicals 1 or 0; in an array constant only `AVERAGEA` counts
-them), `MEDIAN`, `SUMSQ`, `CORREL`, `LINEST` (one regressor, with its statistics), `RANK`,
-`RANK.EQ`, `RANK.AVG`, and the normal distribution `NORMSDIST`, `NORMDIST`, `NORMSINV`,
-`NORMINV` with `NORM.S.DIST`, `NORM.DIST`, `NORM.S.INV`, `NORM.INV` (capture `statistics`);
-`VDB` (the asset left at the start depreciated period by period from there; capture
-`finance`); and `TRANSPOSE` (registry kind `matrix`: a range in a legacy formula is
-intersected first, even inside `INDEX` or `SUMPRODUCT`, as in Excel), `ADDRESS`, `REPT`,
-`REPLACE`, `CHAR` and `CODE` (the Mac OS Roman set, as Excel for Mac numbers characters;
-Excel for Windows uses Windows-1252; there is no setting for it yet),
-`RAND` and `RANDBETWEEN` (volatile; both bounds rounded up), and `DSUM`, `DAVERAGE`,
-`DCOUNT`, `DMAX`, `DMIN` (a text condition matches by prefix; computed criteria are not
-supported, and are reported) (capture `misc`);
-`INDEX` with a 0 index gives a whole row or column, and into a range returns a reference; its area
-number is 1, since a union is not computed (below 1 `#VALUE!`, above `#REF!`).
-`SUBTOTAL` reads the rows the file marks hidden: codes 101 to 111 leave out every hidden row, and 1 to
-11 do too when a filter is hiding rows on a sheet the call names (capture `hidden_rows`).
-`CELL`'s kinds that depend on formatting (`format`, `width`, `prefix`, `protect`, `color`,
-`parentheses`) are reported unsupported, since styles are not read. Not yet: structured
-references, 3-D references.
+`docs/coverage.md` lists every function Excel has and its status, with the captured evidence for
+each, generated from the registry and the captures (`tools/coverage.py`). Each registered function
+declares a status: `implemented`, or `partial` with a note on what is missing; a function Excel
+has that is not registered is absent. Excel's function list (`capture/functions_list.py`, the
+names the `formula_bar` capture typed) lets the matrix list the absent ones too.
 
-Each registered function declares a status: `implemented`, or `partial` with a note on what
-is missing (`CELL`, `FORMULATEXT`, `LINEST`, `XLOOKUP`, `XMATCH`, the database functions); a function Excel has that is
-not registered is absent. Excel's function list (`capture/functions_list.py`, the names the
-`formula_bar` capture typed) lets the matrix list the absent ones too.
+Behavior that is not the obvious reading, each from its capture:
 
-Newer and criteria functions (capture `modern`, 2,230 rows, and the end of `array_refs`):
-`AVERAGEIF`, `AVERAGEIFS`, `MAXIFS`, `MINIFS` (walking non-blank cells, §7.7); `LARGE` (`k` rounded
-up), `SMALL` (`k` rounded down), `PERCENTILE`, `QUARTILE`, `MODE` and their names `PERCENTILE.INC`,
-`QUARTILE.INC`, `MODE.SNGL`; `IFS` and `SWITCH`, which evaluate only what they take; `TEXTJOIN` and
-`CONCAT`; `XLOOKUP` and `XMATCH`, with every search mode and the match modes but regular expressions
-(mode 3, reported). `XLOOKUP`'s result is a reference, so `XLOOKUP(...):A9` is a range. Their
-next-smaller and next-larger order numbers, text, logicals and a blank key last; a blank key finds
-a blank cell. `MODE.MULT` is not implemented.
+- The financial functions (capture `finance`): Excel computes the growth factor
+  `(1+rate)^nper` by repeated squaring for a whole number of periods and as
+  `exp(nper*ln(1+rate))` otherwise, takes any nonzero type as payments at the start, and gives
+  `PPMT` from the closed form `-rate*(pv+fv)*(1+rate)^(per-1)/((1+rate)^nper-1)` rather than as
+  `PMT` minus `IPMT`, so late periods at high rates keep their precision. `VDB` depreciates the
+  asset left at the start period by period from there.
+- `IRR`, `XIRR` and `RATE` (capture `iterative`): Newton's method from the guess (0.1 by default)
+  on `1+rate`, halving rather than stepping to `1+rate <= 0`, until a step is below 1E-7 (20
+  iterations, 100 for `XIRR`), `#NUM!` otherwise; `RATE` iterates on the present-value form of
+  the annuity equation. Excel's iterates rest on its own NPV and are not reproduced bit for bit:
+  these functions and `YIELD` declare a relative tolerance of 1E-9 (§8.1), and the rows beyond it
+  are listed with their reasons. `XIRR` reads text dates and dates in any order after the first,
+  unlike `XNPV`.
+- Day counts and coupons (capture `bonds`): `DAYS360`'s US method and `YEARFRAC` basis 0 differ at
+  the end of February; actual/actual takes year lengths from the calendar (1900 has 365 days
+  there); coupon dates step back from maturity keeping its day (the month's last day when
+  maturity is one); basis-1 `COUPDAYS` is `EDATE` from the previous coupon date; `PRICE` and the
+  durations take the days to the next coupon as `COUPDAYS - COUPDAYBS` in every basis; and
+  `YIELD` with one period left uses Excel's closed form with A as `COUPDAYBS`, E as the actual
+  period in bases 1 to 3, and the days to redemption in the basis's own count.
+- `WORKDAY`, `NETWORKDAYS` and their `.INTL` forms (capture `workdays`): weekend codes 1 to 7 and
+  11 to 17 or a seven-character mask, holidays as a range or array, logical arguments `#VALUE!`, a
+  day count floored; Excel also computes `_xlfn.WORKDAY.INTL`, so both spellings are registered,
+  while the file form has no prefix. `HOUR`, `MINUTE` and `SECOND` round to the nearest second.
+- The A forms of the statistics (`AVERAGEA`, `MINA`, `MAXA`, `STDEVA`, `STDEVPA`, `VARA`, `VARPA`;
+  capture `statistics`) count text in references as 0 and logicals as 1 or 0; in an array
+  constant only `AVERAGEA` counts them.
+- `TRANSPOSE` (registry kind `matrix`): a range in a legacy formula is intersected first, even
+  inside `INDEX` or `SUMPRODUCT`, as in Excel.
+- `CHAR` and `CODE` use the Mac OS Roman set, as Excel for Mac numbers characters (Excel for
+  Windows uses Windows-1252; there is no setting for it yet). `RAND` and `RANDBETWEEN` are
+  volatile, and `RANDBETWEEN` rounds both bounds up.
+- The database functions (captures `misc`, `database_family`): a text condition matches by prefix;
+  a computed criterion is not supported, and the cell is reported.
+- `INDEX` with a 0 index gives a whole row or column, and into a range returns a reference; its
+  area number is 1, since a union is not computed (below 1 `#VALUE!`, above `#REF!`).
+- `SUBTOTAL` reads the rows the file marks hidden: codes 101 to 111 leave out every hidden row,
+  and 1 to 11 do too when a filter is hiding rows on a sheet the call names (capture
+  `hidden_rows`).
+- `CELL`'s kinds that depend on formatting (`format`, `width`, `prefix`, `protect`, `color`,
+  `parentheses`) are reported unsupported, since styles are not read.
+- `N` takes a range's top-left cell and an array element by element; `LOOKUP` has its vector and
+  array forms and extends a result range past its end (capture `n_lookup`).
+- The newer and criteria functions (capture `modern`): `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS` and
+  `MINIFS` walk non-blank cells (§7.7); `LARGE` rounds `k` up and `SMALL` rounds it down; `IFS`
+  and `SWITCH` evaluate only what they take; `XLOOKUP` and `XMATCH` take every search mode and the
+  match modes but regular expressions (mode 3, reported). `XLOOKUP`'s result is a reference, so
+  `XLOOKUP(...):A9` is a range. Their next-smaller and next-larger searches order numbers, text,
+  logicals and a blank key last; a blank key finds a blank cell.
+
+Not yet: structured references, 3-D references.
 
 ### 8.3 The xlformat seam
 
