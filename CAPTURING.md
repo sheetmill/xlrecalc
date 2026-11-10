@@ -203,8 +203,14 @@ about workbooks to tell whether it is alive (`tests/excel_steps.py`). The cause 
 the display off, though a locked screen, a display that is off and system sleep, each tried deliberately, did not cause
 one. So the display is kept awake while a process drives Excel (`caffeinate -d`, from its first request until it ends,
 after declaring user activity once so that a display already off wakes), and the record says whether it was and how
-the display stood when the run began: a hang with it awake rules the display out. The tools never end Excel, since the
-person using it may have work open in it: they report, and leave the decision to that person.
+the display stood when the run began: a hang with it awake rules the display out. The tools do not end Excel, since the
+person using it may have work open in it: they report, and leave the decision to that person. One exception: a probe
+whose case can keep Excel calculating without end (a function at an extreme input) may let the
+watch end it, and only when nothing of anyone else's can be in it (`may_end` in `capture/excel_watch.py`, tested): the
+run began with Excel not running or holding no workbook, every Excel window on screen is the request's own (no more of
+them than its workbooks, and each title macOS gives one of their names), and one process is named Microsoft Excel.
+Then the watch sends `TERM`, and `KILL` after 10 seconds, records it in the hang record and goes on, and the next
+request checks Excel's windows again (a recovery window would stop the run). In any other state it stops and asks.
 
 One hang that looked the same had a known cause: Excel's About window, left open, blocks every request about workbooks
 (as Preferences or any dialog of Excel's own does), and the run stopped after 78 opens; it is not counted with the three

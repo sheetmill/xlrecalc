@@ -5,7 +5,9 @@
 Past its limit a request is stopped, and what can be learned is saved under ``capture/build``: a
 ``sample`` of Excel, how long it has been up, its CPU and memory, the display's last change, the
 request and its file, and whether Excel answers a question about its workbooks now and after 1 and
-5 minutes. Excel is never ended: it may hold what the person using it needs. When it answers again,
+5 minutes. Excel is ended only when nothing of anyone else's can be in it (``may_end``): the run
+began with no workbook open, and every window of Excel's on screen is the request's own. Otherwise
+it is left as it is, since it may hold what the person using it needs. When it answers again,
 the workbooks the request named in Excel's container are closed without saving and alerts are
 turned back on, so a recovered hang leaves nothing behind. Imports only the standard library, so
 that the default test run can import it.
@@ -24,6 +26,7 @@ from __future__ import annotations
 import datetime as dt
 import os
 import shutil
+import signal
 import subprocess
 import sys
 import time
@@ -33,6 +36,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE = ROOT / "capture" / "build" / "excel_hangs"
 ANSWER_SECONDS = 15.0
+END_GRACE_SECONDS = 10.0  # between TERM and KILL
 """What Excel may take to say how many workbooks it has open."""
 ASK_AGAIN = (60.0, 240.0)
 """Seconds to wait before each further question: 1 minute after the first, then 5."""
@@ -108,23 +112,86 @@ out.join("\n");
 """
 _DOCUMENT_WINDOWS = 'tell application "Microsoft Excel" to count of windows'
 _checked = False
+_began_empty: bool | None = None  # whether this process's run began with no workbook in Excel
 
 
-def excel_windows() -> list[str]:
-    """Excel's windows on screen, as ``width x height`` and a title where macOS gives one."""
+def _window_list() -> list[tuple[str, str, str]] | None:
+    """Excel's windows on screen as width, height and title (empty where macOS gives none).
+
+    None when the window server does not answer: then nothing is known about them.
+    """
     try:
         result = subprocess.run(
             ["osascript", "-l", "JavaScript", "-e", _WINDOWS_JXA],
             capture_output=True, text=True, timeout=10.0,
         )  # fmt: skip
     except subprocess.TimeoutExpired:
-        return []
-    text = result.stdout if result.returncode == 0 else ""
-    out = []
-    for line in filter(None, text.splitlines()):
-        width, height, title = [*line.split("\t"), "", ""][:3]
-        out.append(f"{width} x {height}" + (f" ({title})" if title else ""))
-    return out
+        return None
+    if result.returncode:
+        return None
+    return [
+        (width, height, title)
+        for width, height, title in (
+            [*line.split("\t"), "", ""][:3] for line in result.stdout.splitlines() if line
+        )
+    ]
+
+
+def excel_windows() -> list[str]:
+    """Excel's windows on screen, as ``width x height`` and a title where macOS gives one."""
+    return [
+        f"{width} x {height}" + (f" ({title})" if title else "")
+        for width, height, title in _window_list() or []
+    ]
+
+
+def may_end(
+    began_empty: bool | None, windows: list[tuple[str, str, str]] | None, names: list[str]
+) -> bool:
+    """Whether a request past its limit may end Excel: nothing of anyone else's can be in it.
+
+    The run began with Excel not running or holding no workbook (``began_empty``), and every
+    window of Excel's on screen is the request's own: no more of them than the workbooks it named,
+    and each title macOS gives is one of their names. Anything unknown is a no.
+    """
+    if began_empty is not True or windows is None or not names:
+        return False
+    if len(windows) > len(names):
+        return False
+    stems = {Path(name).stem for name in names} | set(names)
+    return all(not title or title in stems for _, _, title in windows)
+
+
+def end_excel(record: Path) -> bool:
+    """End Excel (TERM, then KILL after a grace period), in the record. Whether it has ended."""
+    found = subprocess.run(["pgrep", "-x", "Microsoft Excel"], capture_output=True, text=True)
+    pids = [int(p) for p in found.stdout.split()]
+    if len(pids) != 1:
+        _log(record, f"not ended: {len(pids)} processes named Microsoft Excel")
+        return False
+    pid = pids[0]
+    os.kill(pid, signal.SIGTERM)
+    deadline = time.monotonic() + END_GRACE_SECONDS
+    while time.monotonic() < deadline and _alive(pid):
+        time.sleep(0.5)
+    how = "TERM"
+    if _alive(pid):
+        os.kill(pid, signal.SIGKILL)
+        how = f"TERM, then KILL after {END_GRACE_SECONDS:.0f} s"
+        time.sleep(1.0)
+    ended = not _alive(pid)
+    _log(record, f"ended Excel (pid {pid}) by {how}: {'ended' if ended else 'still running'}")
+    global _checked
+    _checked = False  # the next request checks Excel's windows again (a recovery window, say)
+    return ended
+
+
+def _alive(pid: int) -> bool:
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    return True
 
 
 def preflight() -> None:
@@ -134,11 +201,13 @@ def preflight() -> None:
     open hung a run after 78 opens). The windows on screen are compared with the document windows
     Excel reports; one more, or no answer, names the windows and ends the process.
     """
-    global _checked
+    global _checked, _began_empty
     if _checked or shutil.which("osascript") is None:
         return
     _checked = True
     if subprocess.run(["pgrep", "-x", "Microsoft Excel"], capture_output=True).returncode:
+        if _began_empty is None:
+            _began_empty = True
         return  # not running: the first request starts it
     on_screen = excel_windows()
     try:
@@ -148,6 +217,8 @@ def preflight() -> None:
         documents = int(result.stdout.strip()) if result.returncode == 0 else None
     except (subprocess.TimeoutExpired, ValueError):
         documents = None
+    if _began_empty is None:
+        _began_empty = documents == 0
     if documents is not None and len(on_screen) <= documents:
         return
     seen = ", ".join(on_screen) or "none listed"
@@ -220,12 +291,16 @@ def _log(record: Path, text: str) -> None:
         file.write(text.rstrip("\n") + "\n")
 
 
-def collect(what: str, arguments: tuple[str, ...], seconds: float) -> tuple[Path, bool]:
+def collect(
+    what: str, arguments: tuple[str, ...], seconds: float, end_allowed: bool = False
+) -> tuple[Path, bool, bool]:
     """Save the evidence for a request past its limit.
 
     Returns:
-        The record's path, and whether Excel answered: at once it is only slow, and later the hang
-        cleared by itself. It waits at most 5 minutes, and stops asking at the first answer.
+        The record's path; whether Excel answered: at once it is only slow, and later the hang
+        cleared by itself (it waits at most 5 minutes, and stops asking at the first answer); and
+        whether Excel was ended, which only a caller allowing it (``end_allowed``) and ``may_end``
+        together permit, at once, without the waits.
     """
     EVIDENCE.mkdir(parents=True, exist_ok=True)
     stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -237,6 +312,15 @@ def collect(what: str, arguments: tuple[str, ...], seconds: float) -> tuple[Path
     _log(record, _state())
     _log(record, awake())
     _log(record, f"sample: {_sample(EVIDENCE / f'{stamp}.sample.txt')}")
+    if not answered and end_allowed:
+        windows = _window_list()
+        names = [Path(a).name for a in arguments if a.endswith(".xlsx") and CONTAINER_MARK in a]
+        allowed = may_end(_began_empty, windows, names)
+        _log(record, f"may end Excel: {allowed} (run began empty: {_began_empty}; windows: "
+                     f"{windows}; the request's workbooks: {names})")  # fmt: skip
+        if allowed:
+            print("Excel: ending it, as nothing else is open in it", file=sys.stderr, flush=True)
+            return record, False, end_excel(record)
     waited = 0.0
     for wait in ASK_AGAIN:
         if answered:
@@ -248,7 +332,7 @@ def collect(what: str, arguments: tuple[str, ...], seconds: float) -> tuple[Path
         _log(record, f"answers after {waited:.0f} s: {answered}")
     if answered:
         _log(record, tidy(arguments))
-    return record, answered
+    return record, answered, False
 
 
 @dataclass
@@ -258,10 +342,13 @@ class ExcelTimeoutError(Exception):
     what: str
     answered: bool
     record: Path
+    ended: bool = False
 
     def __str__(self) -> str:
         state = (
-            "Excel answers now."
+            "Excel was ended: nothing else was open in it."
+            if self.ended
+            else "Excel answers now."
             if self.answered
             else "Excel does not answer, and is left as it is: run `python -m capture.excel_watch` "
             "to ask again before anyone quits it."
@@ -269,8 +356,13 @@ class ExcelTimeoutError(Exception):
         return f"Excel: {self.what}. {state} Evidence: {self.record}"
 
 
-def osascript(*arguments: str, seconds: float) -> subprocess.CompletedProcess[str]:
+def osascript(
+    *arguments: str, seconds: float, end_allowed: bool = False
+) -> subprocess.CompletedProcess[str]:
     """Run ``osascript`` with a time limit.
+
+    ``end_allowed``: past the limit Excel may be ended when ``may_end`` holds, for a probe whose
+    case can keep Excel calculating without end (a function at an extreme input).
 
     Raises:
         ExcelTimeoutError: past the limit, after the evidence is saved.
@@ -283,8 +375,8 @@ def osascript(*arguments: str, seconds: float) -> subprocess.CompletedProcess[st
         )
     except subprocess.TimeoutExpired:
         what = f"{Path(arguments[0]).name} past {seconds:.0f} s"
-        record, answered = collect(what, arguments, seconds)
-        raise ExcelTimeoutError(what, answered, record) from None
+        record, answered, ended = collect(what, arguments, seconds, end_allowed)
+        raise ExcelTimeoutError(what, answered, record, ended) from None
 
 
 def osascript_or_exit(*arguments: str, seconds: float) -> subprocess.CompletedProcess[str]:

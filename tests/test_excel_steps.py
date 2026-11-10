@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import subprocess
 import sys
+from pathlib import Path
 
 import pytest
 from capture import excel_watch
@@ -82,7 +83,7 @@ def test_the_record_holds_the_request_the_state_and_each_answer(monkeypatch, tmp
     monkeypatch.setattr(subprocess, "run", run)
     container = "/Users/u/Library/Containers/com.microsoft.Excel/Data/Documents/xlrecalc/"
     request = ("s.applescript", "book.xlsx", container + "probe.xlsx", container + "copy.xlsx")
-    record, answered = excel_watch.collect("x past 9 s", request, 9.0)
+    record, answered, _ = excel_watch.collect("x past 9 s", request, 9.0)
     text = record.read_text()
     assert answered
     assert waits == [60.0]
@@ -106,7 +107,7 @@ def test_a_failing_command_does_not_lose_the_record(monkeypatch):
 
     monkeypatch.setattr(subprocess, "run", run)
     monkeypatch.setattr(excel_watch, "answers", lambda seconds=0: False)
-    record, answered = excel_watch.collect("x", ("s",), 1.0)
+    record, answered, _ = excel_watch.collect("x", ("s",), 1.0)
     assert not answered
     assert "answers after 300 s: False" in record.read_text()
 
@@ -203,3 +204,46 @@ def test_preflight_passes_with_only_workbook_windows(monkeypatch):
 def test_preflight_stops_on_a_window_of_excels_own(monkeypatch, windows, documents):
     with pytest.raises(SystemExit, match="A window of Excel's own"):
         _preflight(monkeypatch, windows, documents)
+
+
+_BOX = "/Users/u/Library/Containers/com.microsoft.Excel/Data/Documents/xlrecalc/"
+
+
+def test_may_end_only_when_nothing_else_can_be_in_excel():
+    names = ["probe.xlsx", "probe_saved.xlsx"]
+    may_end = excel_watch.may_end
+    assert may_end(True, [("800", "600", "probe")], names)
+    assert may_end(True, [("800", "600", "")], names)  # no title from macOS: counted
+    assert may_end(True, [], names)
+    assert not may_end(False, [("800", "600", "probe")], names)  # a workbook was open at the start
+    assert not may_end(None, [("800", "600", "probe")], names)  # the start is not known
+    assert not may_end(True, None, names)  # the window server did not answer
+    assert not may_end(True, [("800", "600", "Budget")], names)  # a window of someone else's
+    assert not may_end(True, [("1", "1", ""), ("2", "2", ""), ("3", "3", "")], names)  # one more
+    assert not may_end(True, [], [])  # a request naming no workbook of the probe's
+
+
+def test_collect_ends_excel_only_when_allowed_and_may_end_holds(monkeypatch, tmp_path):
+    monkeypatch.setattr(excel_watch, "EVIDENCE", tmp_path)
+    monkeypatch.setattr(excel_watch, "answers", lambda seconds=0: False)
+    monkeypatch.setattr(excel_watch, "_state", lambda: "state")
+    monkeypatch.setattr(excel_watch, "_sample", lambda path: "sample")
+    monkeypatch.setattr(excel_watch, "_window_list", lambda: [("800", "600", "probe")])
+    monkeypatch.setattr(excel_watch.time, "sleep", lambda s: None)
+    ended: list[Path] = []
+    monkeypatch.setattr(excel_watch, "end_excel", lambda record: ended.append(record) or True)
+    request = ("s.applescript", _BOX + "probe.xlsx", _BOX + "probe_saved.xlsx")
+
+    monkeypatch.setattr(excel_watch, "_began_empty", True)
+    record, answered, was_ended = excel_watch.collect("x", request, 1.0, end_allowed=True)
+    assert (answered, was_ended, ended) == (False, True, [record])
+    assert "may end Excel: True" in record.read_text()
+
+    ended.clear()
+    _, _, was_ended = excel_watch.collect("x", request, 1.0)  # the caller does not allow it
+    assert (was_ended, ended) == (False, [])
+
+    monkeypatch.setattr(excel_watch, "_began_empty", False)  # a workbook was open at the start
+    record, _, was_ended = excel_watch.collect("x", request, 1.0, end_allowed=True)
+    assert (was_ended, ended) == (False, [])
+    assert "may end Excel: False" in record.read_text()
