@@ -170,3 +170,36 @@ def test_the_display_is_kept_awake_for_the_process(monkeypatch):
         "display kept awake: yes (caffeinate -d, pid 7); display at the start of the run, "
         "last change: t Display is turned off"
     )
+
+
+class _Ran:
+    def __init__(self, returncode: int, stdout: str = "") -> None:
+        self.returncode, self.stdout = returncode, stdout
+
+
+def _preflight(monkeypatch, windows, documents):
+    """Run the preflight with Excel's windows and its answer to ``count of windows`` given."""
+    monkeypatch.setattr(excel_watch, "_checked", False)
+    monkeypatch.setattr(excel_watch.shutil, "which", lambda tool: "/usr/bin/" + tool)
+    monkeypatch.setattr(excel_watch, "excel_windows", lambda: windows)
+
+    def run(command, **kwargs):
+        if command[0] == "pgrep":
+            return _Ran(0)
+        if documents is None:
+            raise excel_watch.subprocess.TimeoutExpired(command, 10.0)
+        return _Ran(0, f"{documents}\n")
+
+    monkeypatch.setattr(excel_watch.subprocess, "run", run)
+    excel_watch.preflight()
+
+
+def test_preflight_passes_with_only_workbook_windows(monkeypatch):
+    _preflight(monkeypatch, ["1200 x 800"], 1)
+    _preflight(monkeypatch, [], 0)
+
+
+@pytest.mark.parametrize(("windows", "documents"), [(["520 x 300"], 0), (["520 x 300"], None)])
+def test_preflight_stops_on_a_window_of_excels_own(monkeypatch, windows, documents):
+    with pytest.raises(SystemExit, match="A window of Excel's own"):
+        _preflight(monkeypatch, windows, documents)

@@ -11,8 +11,12 @@ turned back on, so a recovered hang leaves nothing behind. Imports only the stan
 that the default test run can import it.
 
 The display is kept awake while a process drives Excel (``caffeinate -d``, from the first request
-until the process ends): every hang so far happened with the display off. The record says whether
-it was.
+until the process ends): every unexplained hang so far happened with the display off. The record
+says whether it was.
+
+Before a process's first request, a window of Excel's own open on screen beside its workbooks (the
+About window, Preferences, a dialog) stops the run with a message: such a window blocks every
+request about workbooks, and one left open caused a hang that looked like the others.
 """
 
 from __future__ import annotations
@@ -84,6 +88,73 @@ def keep_awake() -> None:
         [tool, "-d", "-w", str(os.getpid())],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
+    )
+
+
+_WINDOWS_JXA = r"""
+ObjC.import("CoreGraphics");
+const all = $.CGWindowListCopyWindowInfo($.kCGWindowListOptionOnScreenOnly, 0);
+const list = ObjC.castRefToObject(all);
+const out = [];
+for (let i = 0; i < list.count; i++) {
+  const w = list.objectAtIndex(i);
+  if (ObjC.unwrap(w.objectForKey("kCGWindowOwnerName")) !== "Microsoft Excel") continue;
+  if (ObjC.unwrap(w.objectForKey("kCGWindowLayer")) !== 0) continue;
+  const b = ObjC.deepUnwrap(w.objectForKey("kCGWindowBounds"));
+  const title = ObjC.unwrap(w.objectForKey("kCGWindowName")) || "";
+  out.push([Math.round(b.Width), Math.round(b.Height), title].join("\t"));
+}
+out.join("\n");
+"""
+_DOCUMENT_WINDOWS = 'tell application "Microsoft Excel" to count of windows'
+_checked = False
+
+
+def excel_windows() -> list[str]:
+    """Excel's windows on screen, as ``width x height`` and a title where macOS gives one."""
+    try:
+        result = subprocess.run(
+            ["osascript", "-l", "JavaScript", "-e", _WINDOWS_JXA],
+            capture_output=True, text=True, timeout=10.0,
+        )  # fmt: skip
+    except subprocess.TimeoutExpired:
+        return []
+    text = result.stdout if result.returncode == 0 else ""
+    out = []
+    for line in filter(None, text.splitlines()):
+        width, height, title = [*line.split("\t"), "", ""][:3]
+        out.append(f"{width} x {height}" + (f" ({title})" if title else ""))
+    return out
+
+
+def preflight() -> None:
+    """Stop before a run when a window of Excel's own blocks its requests, once per process.
+
+    Excel answers nothing about workbooks while a modal window is open (the About window left
+    open hung a run after 78 opens). The windows on screen are compared with the document windows
+    Excel reports; one more, or no answer, names the windows and ends the process.
+    """
+    global _checked
+    if _checked or shutil.which("osascript") is None:
+        return
+    _checked = True
+    if subprocess.run(["pgrep", "-x", "Microsoft Excel"], capture_output=True).returncode:
+        return  # not running: the first request starts it
+    on_screen = excel_windows()
+    try:
+        result = subprocess.run(
+            ["osascript", "-e", _DOCUMENT_WINDOWS], capture_output=True, text=True, timeout=10.0
+        )
+        documents = int(result.stdout.strip()) if result.returncode == 0 else None
+    except (subprocess.TimeoutExpired, ValueError):
+        documents = None
+    if documents is not None and len(on_screen) <= documents:
+        return
+    seen = ", ".join(on_screen) or "none listed"
+    state = "does not answer" if documents is None else f"has {documents} workbook windows"
+    sys.exit(
+        f"Excel {state}, with these windows on screen: {seen}. A window of Excel's own (About "
+        "Microsoft Excel, Preferences, a dialog) blocks every request: close it and run again."
     )
 
 
@@ -204,6 +275,7 @@ def osascript(*arguments: str, seconds: float) -> subprocess.CompletedProcess[st
     Raises:
         ExcelTimeoutError: past the limit, after the evidence is saved.
     """
+    preflight()
     keep_awake()
     try:
         return subprocess.run(

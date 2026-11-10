@@ -183,12 +183,18 @@ has a limit too, 600 s and 0.1 s per case, and so do the probes that open a work
 **When Excel stops answering.** Excel can answer `version` but not questions about its
 workbooks, at 0% CPU, with no dialog, and with its menus working, its main thread idle in its event loop: the request
 was not dispatched. A Quit clears it, and the same work then passes; it can also clear by itself, within minutes. So ask
-about workbooks to tell whether it is alive (`tests/excel_steps.py`). The cause is unknown. Every hang so far came with
+about workbooks to tell whether it is alive (`tests/excel_steps.py`). The cause of three is unknown; each came with
 the display off, though a locked screen, a display that is off and system sleep, each tried deliberately, did not cause
 one. So the display is kept awake while a process drives Excel (`caffeinate -d`, from its first request until it ends,
 after declaring user activity once so that a display already off wakes), and the record says whether it was and how
 the display stood when the run began: a hang with it awake rules the display out. The tools never end Excel, since the
 person using it may have work open in it: they report, and leave the decision to that person.
+
+One hang that looked the same had a known cause: Excel's About window, left open, blocks every request about workbooks
+(as Preferences or any dialog of Excel's own does), and the run stopped after 78 opens; it is not counted with the three
+above. So before a process's first request, `capture/excel_watch.py` compares the windows Excel has on screen with the
+document windows it reports, and a window more, or no answer, stops the run with a message naming the windows by size,
+before anything is sent.
 
 So the next one explains itself: past a limit, `capture/excel_watch.py` saves a record under
 `capture/build/excel_hangs/` (Excel's `sample`, uptime, CPU and memory, the display's last change, the request and its
