@@ -9,7 +9,7 @@
 #   and type of A are read from the copy's XML (n: number, str: text, b: logical,
 #   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
 #   error input and FormulaInput('=""') for an input cell holding that formula
-# fixed: {'AA1': 3.1, 'AA2': 4.7, 'AA3': 2.2, 'AA4': 5.9, 'AA5': 4.4, 'AA6': 3.8, 'AB1': 2.5, 'AB2': 6.1, 'AB3': 3.3, 'AB4': 7.0, 'AB5': 4.9, 'AB6': 5.2, 'AC1': 1.0, 'AC2': 'x', 'AC3': 4.0, 'AC4': None, 'AC5': 2.0, 'AD1': 1.0, 'AD2': ErrorValue('#N/A'), 'AD3': 3.0, 'AE1': 10.0, 'AE2': 12.0, 'AE3': 9.0, 'AF1': 11.0, 'AF2': 10.0, 'AF3': 10.0, 'AG1': 10.5, 'AG2': 11.5, 'AG3': 9.5, 'AH1': 10.5, 'AH2': 10.5, 'AH3': 9.0}
+# fixed: {'AA1': 3.1, 'AA2': 4.7, 'AA3': 2.2, 'AA4': 5.9, 'AA5': 4.4, 'AA6': 3.8, 'AB1': 2.5, 'AB2': 6.1, 'AB3': 3.3, 'AB4': 7.0, 'AB5': 4.9, 'AB6': 5.2, 'AC1': 1.0, 'AC2': 'x', 'AC3': 4.0, 'AC4': None, 'AC5': 2.0, 'AD1': 1.0, 'AD2': ErrorValue('#N/A'), 'AD3': 3.0, 'AE1': 10.0, 'AE2': 12.0, 'AE3': 9.0, 'AF1': 11.0, 'AF2': 10.0, 'AF3': 10.0, 'AG1': 10.5, 'AG2': 11.5, 'AG3': 9.5, 'AH1': 10.5, 'AH2': 10.5, 'AH3': 9.0, 'AI1': 12.0, 'AI2': 't', 'AI3': None}
 # columns: suite tag case formula inputs expected_type expected_repr
 continuous_family	beta.dist	1	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.0, 0.5, 0.5, True)	n	0.0
 continuous_family	beta.dist	2	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.0, 0.5, 0.5, False)	e	#NUM!
@@ -5014,3 +5014,59 @@ continuous_family	f.dist	5000	_xlfn.F.DIST({1},{2},{3},{4})	(1e-307, 1.0, 100000
 continuous_family	confidence.t	5001	_xlfn.CONFIDENCE.T({1},{2},{3})	(0.05, 1.0, 1000000000000000.0)	e	#NUM!
 continuous_family	confidence.t	5002	_xlfn.CONFIDENCE.T({1},{2},{3})	(0.05, 1.0, 10000000002.0)	e	#NUM!
 continuous_family	confidence.t	5003	_xlfn.CONFIDENCE.T({1},{2},{3})	(0.05, 1.0, 10000000001.0)	n	1.9599644085189063e-05
+continuous_family	chisq.test	5004	_xlfn.CHISQ.TEST({10,20;30,40},{12,18;28,42})	()	n	0.37299848361348714
+continuous_family	chisq.test	5005	_xlfn.CHISQ.TEST({10;20},{12;18})	()	n	0.45605654025025594
+continuous_family	chisq.test	5006	_xlfn.CHISQ.TEST({10,20},{12,18})	()	n	0.45605654025025594
+continuous_family	chisq.test	5007	_xlfn.CHISQ.TEST({10,20},{12;18})	()	n	0.45605654025025594
+continuous_family	chisq.test	5008	_xlfn.CHISQ.TEST($AE$1:$AE$3,{10;12;9})	()	n	1.0
+continuous_family	chisq.test	5009	_xlfn.CHISQ.TEST({10,"a";30,40},{12,18;28,42})	()	n	0.44969179796889086
+continuous_family	chisq.test	5010	_xlfn.CHISQ.TEST({10,TRUE;30,40},{12,18;28,42})	()	n	0.44969179796889086
+continuous_family	chisq.test	5011	_xlfn.CHISQ.TEST($AE$1:$AE$3,$AI$1:$AI$3)	()	n	0.8464817248906141
+continuous_family	chisq.test	5012	_xlfn.CHISQ.TEST({10;20;30},$AI$1:$AI$3)	()	n	0.8464817248906141
+continuous_family	chisq.test	5013	_xlfn.CHISQ.TEST({10,20,30;40,50,60},{12,18;28,42;50,61})	()	n	0.6669620587372266
+continuous_family	chisq.test	5014	_xlfn.CHISQ.TEST({10,20,30,40},{12,18;28,42})	()	n	0.8509850694672885
+continuous_family	chisq.test	5015	_xlfn.CHISQ.TEST($AE$1:$AE$3,{10,12,9})	()	n	1.0
+continuous_family	chitest	5016	CHITEST({10,20;30,40},{12,18;28,42})	()	n	0.37299848361348714
+continuous_family	chitest	5017	CHITEST({10;20},{12;18})	()	n	0.45605654025025594
+continuous_family	chitest	5018	CHITEST({10,20},{12,18})	()	n	0.45605654025025594
+continuous_family	chitest	5019	CHITEST({10,20},{12;18})	()	n	0.45605654025025594
+continuous_family	chitest	5020	CHITEST($AE$1:$AE$3,{10;12;9})	()	n	1.0
+continuous_family	chitest	5021	CHITEST({10,"a";30,40},{12,18;28,42})	()	n	0.44969179796889086
+continuous_family	chitest	5022	CHITEST({10,TRUE;30,40},{12,18;28,42})	()	n	0.44969179796889086
+continuous_family	chitest	5023	CHITEST($AE$1:$AE$3,$AI$1:$AI$3)	()	n	0.8464817248906141
+continuous_family	chitest	5024	CHITEST({10;20;30},$AI$1:$AI$3)	()	n	0.8464817248906141
+continuous_family	chitest	5025	CHITEST({10,20,30;40,50,60},{12,18;28,42;50,61})	()	n	0.6669620587372266
+continuous_family	chitest	5026	CHITEST({10,20,30,40},{12,18;28,42})	()	n	0.8509850694672885
+continuous_family	chitest	5027	CHITEST($AE$1:$AE$3,{10,12,9})	()	n	1.0
+continuous_family	t.test	5028	_xlfn.T.TEST({1,2,3,4},{2,3,5,9},2,1)	()	n	0.09786343485356984
+continuous_family	t.test	5029	_xlfn.T.TEST({1,2,3,4},{2,3,5,9},2,2)	()	n	0.22825809896897364
+continuous_family	t.test	5030	_xlfn.T.TEST({1,2,3,4},{2,3,5,9},1,3)	()	n	0.1253021159253884
+continuous_family	t.test	5031	_xlfn.T.TEST({1,"a",3,4},{2,3,5,9},2,2)	()	n	0.3396610549529016
+continuous_family	t.test	5032	_xlfn.T.TEST($AC$1:$AC$5,{2;3;5;9;4},2,1)	()	n	0.057190958417936755
+continuous_family	t.test	5033	_xlfn.T.TEST($AC$1:$AC$5,{2;3;5;9;4},2,2)	()	n	0.23925610393319885
+continuous_family	t.test	5034	_xlfn.T.TEST({1,2,3,4},{2;3;5;9},2,1)	()	n	0.09786343485356984
+continuous_family	t.test	5035	_xlfn.T.TEST({1,2,3,4},{2,3;5,9},2,1)	()	n	0.09786343485356984
+continuous_family	t.test	5036	_xlfn.T.TEST({1,2,3},{2,3,5,9},2,1)	()	e	#N/A
+continuous_family	ttest	5037	TTEST({1,2,3,4},{2,3,5,9},2,1)	()	n	0.09786343485356984
+continuous_family	ttest	5038	TTEST({1,2,3,4},{2,3,5,9},2,2)	()	n	0.22825809896897364
+continuous_family	ttest	5039	TTEST({1,2,3,4},{2,3,5,9},1,3)	()	n	0.1253021159253884
+continuous_family	ttest	5040	TTEST({1,"a",3,4},{2,3,5,9},2,2)	()	n	0.3396610549529016
+continuous_family	ttest	5041	TTEST($AC$1:$AC$5,{2;3;5;9;4},2,1)	()	n	0.057190958417936755
+continuous_family	ttest	5042	TTEST($AC$1:$AC$5,{2;3;5;9;4},2,2)	()	n	0.23925610393319885
+continuous_family	ttest	5043	TTEST({1,2,3,4},{2;3;5;9},2,1)	()	n	0.09786343485356984
+continuous_family	ttest	5044	TTEST({1,2,3,4},{2,3;5,9},2,1)	()	n	0.09786343485356984
+continuous_family	ttest	5045	TTEST({1,2,3},{2,3,5,9},2,1)	()	e	#N/A
+continuous_family	f.test	5046	_xlfn.F.TEST({1,2,3,4},{2,3,5,9})	()	n	0.18476130908231336
+continuous_family	f.test	5047	_xlfn.F.TEST({1,"a",3,4},{2,3,5,9})	()	n	0.4039662185157451
+continuous_family	f.test	5048	_xlfn.F.TEST($AC$1:$AC$5,{2,3,5,9})	()	n	0.4039662185157451
+continuous_family	ftest	5049	FTEST({1,2,3,4},{2,3,5,9})	()	n	0.18476130908231336
+continuous_family	ftest	5050	FTEST({1,"a",3,4},{2,3,5,9})	()	n	0.4039662185157451
+continuous_family	ftest	5051	FTEST($AC$1:$AC$5,{2,3,5,9})	()	n	0.4039662185157451
+continuous_family	z.test	5052	_xlfn.Z.TEST({1,2,3,4},2)	()	n	0.21928901304049986
+continuous_family	z.test	5053	_xlfn.Z.TEST({1,2,3,4},2,1.5)	()	n	0.2524925375469229
+continuous_family	z.test	5054	_xlfn.Z.TEST({1,"a",3,4},2)	()	n	0.2248458989844455
+continuous_family	z.test	5055	_xlfn.Z.TEST($AC$1:$AC$5,2)	()	n	0.3527284930556367
+continuous_family	ztest	5056	ZTEST({1,2,3,4},2)	()	n	0.21928901304049986
+continuous_family	ztest	5057	ZTEST({1,2,3,4},2,1.5)	()	n	0.2524925375469229
+continuous_family	ztest	5058	ZTEST({1,"a",3,4},2)	()	n	0.2248458989844455
+continuous_family	ztest	5059	ZTEST($AC$1:$AC$5,2)	()	n	0.3527284930556367

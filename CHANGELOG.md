@@ -106,7 +106,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   result is 0. The discrete distributions are within 8 units in the last place of Excel and the others within 4, but
   for 170 listed rows, most of the binomial at 1,000 trials and more (`QUIRKS.md`). A sum of more than a million
   terms (`BINOM.DIST` over 1E15 trials) is not computed: the formula keeps the value it holds and is reported.
-- The beta, gamma, chi-squared, F and t distributions, captured from Excel (capture `continuous_family`, 5,003 rows):
+- The beta, gamma, chi-squared, F and t distributions, captured from Excel (capture `continuous_family`, 5,059 rows):
   `BETA.DIST`, `BETADIST`, `BETA.INV`, `BETAINV`, `GAMMA.DIST`, `GAMMADIST`, `GAMMA.INV`, `GAMMAINV`, `CHISQ.DIST`,
   `CHISQ.DIST.RT`, `CHIDIST`, `CHISQ.INV`, `CHISQ.INV.RT`, `CHIINV`, `F.DIST`, `F.DIST.RT`, `FDIST`, `F.INV`,
   `F.INV.RT`, `FINV`, `T.DIST`, `T.DIST.2T`, `T.DIST.RT`, `TDIST`, `T.INV`, `T.INV.2T`, `TINV`, and the tests
@@ -116,7 +116,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the gamma function cancel, Loader's saddle point, DiDonato and Morris's expansion and Temme's uniform expansion
   take over. As in Excel, `CHISQ.INV.RT` and `CHIINV` at one degree of freedom invert the left tail at 1 - p (a p
   of at most 2^-54, about 5.55E-17, is `#NUM!`), an empty sample in a test is `#VALUE!` (`#DIV/0!` in `Z.TEST`), and an empty bound of
-  the beta functions takes its default. Each function is within a relative tolerance of Excel from 1E-15 to 1E-12;
+  the beta functions takes its default. The tests take ranges or arrays alike; `CHISQ.TEST` and a paired `T.TEST` pair
+  their two arguments element by element in row-major order, whatever their shapes, when they hold as many elements
+  (`#N/A` otherwise), and a paired `T.TEST` drops a pair with anything but a number on either side. Each function is within a relative tolerance of Excel from 1E-15 to 1E-12;
   110 rows are listed, 97 of them where Excel's result is the further from the true value (`QUIRKS.md`). Every one
   does bounded work on any input: a series or continued fraction stops at 20,000 terms (`#NUM!` past them) and an
   inverse is a bisection over the doubles' bit patterns, at most 64 evaluations; at extreme shapes, where Excel itself

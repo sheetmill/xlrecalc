@@ -79,8 +79,8 @@ library differs in the last bits; the rows that match either way do not.
 | `CHISQ.DIST.RT` | statistical | implemented | 86 | 60 | 0 | 26 | 0 | 1e-13 relative |  |
 | `CHISQ.INV` | statistical | implemented | 129 | 69 | 0 | 56 | 4 | 1e-13 relative |  |
 | `CHISQ.INV.RT` | statistical | implemented | 176 | 97 | 0 | 65 | 14 | 1e-13 relative |  |
-| `CHISQ.TEST` | statistical | implemented | 6 | 4 | 0 | 2 | 0 | 1e-15 relative |  |
-| `CHITEST` | statistical | implemented | 6 | 4 | 0 | 2 | 0 | 1e-15 relative |  |
+| `CHISQ.TEST` | statistical | implemented | 18 | 10 | 0 | 8 | 0 | 1e-15 relative |  |
+| `CHITEST` | statistical | implemented | 18 | 10 | 0 | 8 | 0 | 1e-15 relative |  |
 | `CHOOSE` | lookup and reference | implemented | 11 | 11 | 0 | 0 | 0 |  |  |
 | `CHOOSECOLS` | lookup and reference | implemented | 42 | 42 | 0 | 0 | 0 |  |  |
 | `CHOOSEROWS` | lookup and reference | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
@@ -182,7 +182,7 @@ library differs in the last bits; the rows that match either way do not.
 | `F.DIST.RT` | statistical | implemented | 252 | 155 | 0 | 97 | 0 | 1e-12 relative |  |
 | `F.INV` | statistical | implemented | 202 | 138 | 0 | 60 | 4 | 1e-12 relative |  |
 | `F.INV.RT` | statistical | implemented | 172 | 113 | 0 | 56 | 3 | 1e-13 relative |  |
-| `F.TEST` | statistical | implemented | 19 | 12 | 0 | 7 | 0 | 1e-14 relative |  |
+| `F.TEST` | statistical | implemented | 22 | 12 | 0 | 10 | 0 | 1e-14 relative |  |
 | `FACT` | math | implemented | 36 | 34 | 2 | 0 | 0 | 8 ulps |  |
 | `FACTDOUBLE` | math | implemented | 36 | 36 | 0 | 0 | 0 | 8 ulps |  |
 | `FALSE` | logical | implemented | 0 | 0 | 0 | 0 | 0 |  |  |
@@ -206,7 +206,7 @@ library differs in the last bits; the rows that match either way do not.
 | `FORECAST.LINEAR` | statistical | implemented | 172 | 148 | 23 | 0 | 1 | 4 ulps |  |
 | `FORMULATEXT` | information | partial | 24 | 22 | 0 | 0 | 2 |  | the @ the formula bar adds to a legacy formula is not shown |
 | `FREQUENCY` | statistical | implemented | 23 | 23 | 0 | 0 | 0 |  |  |
-| `FTEST` | statistical | implemented | 19 | 12 | 0 | 7 | 0 | 1e-14 relative |  |
+| `FTEST` | statistical | implemented | 22 | 12 | 0 | 10 | 0 | 1e-14 relative |  |
 | `FV` | financial | implemented | 128 | 128 | 0 | 0 | 0 |  |  |
 | `FVSCHEDULE` | financial | implemented | 87 | 87 | 0 | 0 | 0 |  |  |
 | `GAMMA` | statistical | implemented | 62 | 38 | 22 | 0 | 2 | 4 ulps |  |
@@ -473,7 +473,7 @@ library differs in the last bits; the rows that match either way do not.
 | `T.DIST.RT` | statistical | implemented | 106 | 44 | 0 | 55 | 7 | 1e-13 relative |  |
 | `T.INV` | statistical | implemented | 129 | 67 | 0 | 45 | 17 | 1e-12 relative |  |
 | `T.INV.2T` | statistical | implemented | 158 | 69 | 0 | 68 | 21 | 1e-13 relative |  |
-| `T.TEST` | statistical | implemented | 325 | 276 | 0 | 49 | 0 | 1e-14 relative |  |
+| `T.TEST` | statistical | implemented | 334 | 277 | 0 | 57 | 0 | 1e-14 relative |  |
 | `TAKE` | lookup and reference | implemented | 36 | 36 | 0 | 0 | 0 |  |  |
 | `TAN` | math | implemented | 30 | 30 | 0 | 0 | 0 | 4 ulps |  |
 | `TANH` | math | implemented | 30 | 27 | 3 | 0 | 0 | 4 ulps |  |
@@ -500,7 +500,7 @@ library differs in the last bits; the rows that match either way do not.
 | `TRIMRANGE` | | absent | | | | | | | |
 | `TRUE` | logical | implemented | 1 | 1 | 0 | 0 | 0 |  |  |
 | `TRUNC` | math | implemented | 306 | 306 | 0 | 0 | 0 |  |  |
-| `TTEST` | statistical | implemented | 325 | 276 | 0 | 49 | 0 | 1e-14 relative |  |
+| `TTEST` | statistical | implemented | 334 | 277 | 0 | 57 | 0 | 1e-14 relative |  |
 | `TYPE` | information | implemented | 58 | 57 | 0 | 0 | 1 |  |  |
 | `UNICHAR` | text | implemented | 38 | 38 | 0 | 0 | 0 |  |  |
 | `UNICODE` | text | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
@@ -537,5 +537,5 @@ library differs in the last bits; the rows that match either way do not.
 | `YIELD` | financial | implemented | 120 | 36 | 0 | 83 | 1 | 1e-09 relative |  |
 | `YIELDDISC` | financial | implemented | 380 | 341 | 39 | 0 | 0 | 4 ulps |  |
 | `YIELDMAT` | | absent | | | | | | | |
-| `Z.TEST` | statistical | implemented | 68 | 53 | 0 | 15 | 0 | 1e-12 relative |  |
-| `ZTEST` | statistical | implemented | 68 | 53 | 0 | 15 | 0 | 1e-12 relative |  |
+| `Z.TEST` | statistical | implemented | 72 | 54 | 0 | 18 | 0 | 1e-12 relative |  |
+| `ZTEST` | statistical | implemented | 72 | 54 | 0 | 18 | 0 | 1e-12 relative |  |

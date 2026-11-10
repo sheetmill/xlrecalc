@@ -133,7 +133,7 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   48 of the others, for Excel's own `exp`, `pow`, `erf` and `gamma`; both groups rest on the platform's math library.
   `BINOM.INV(TRUE,0.5,0.5)` is 1 in Excel, where a cumulative probability of 0.5 reaches alpha at 0, as documented and
   as `BINOM.INV("3",0.5,0.5)` gives at its own tie (one row).
-- Declared tolerances, `continuous_family` (5,003 rows): the beta, gamma, chi-squared, F and t distributions, their
+- Declared tolerances, `continuous_family` (5,059 rows): the beta, gamma, chi-squared, F and t distributions, their
   inverses and tests declare a relative tolerance ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md)
   §8.1), each its largest difference from Excel on the capture (in parentheses, on the platform `docs/coverage.md`
   records) rounded up to a power of ten. 1E-12: `CHISQ.DIST` (3.1E-13), `F.DIST` (7.5E-13), `F.DIST.RT` (6.9E-13),
@@ -143,7 +143,7 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   `T.INV.2T` (3.7E-14), `TINV` (1.2E-14). 1E-14: `BETADIST` (1.5E-15), `BETAINV` (1.2E-15), `CHIDIST` (8.1E-15),
   `CHIINV` (1.0E-15), `CONFIDENCE.T` (5.4E-15), `F.TEST` (2.5E-15), `FDIST` (1.7E-15), `FINV` (4.0E-15), `FTEST`
   (2.5E-15), `GAMMADIST` (1.3E-15), `T.TEST` (2.7E-15), `TDIST` (6.0E-15), `TTEST` (2.7E-15). 1E-15: `CHISQ.TEST`
-  (1.2E-16), `CHITEST` (1.2E-16), `GAMMAINV` (9.2E-16).
+  (6.1E-16), `CHITEST` (6.1E-16), `GAMMAINV` (9.2E-16).
   110 rows are listed. In 97 of them Excel's result is the further from the true value (each group checked against
   40-digit arithmetic, a closed form or a limit): an inverse at a probability of 1E-300, where Excel's search stops
   short or gives `#NUM!` (19 rows); `T.INV`, `T.INV.2T`, `CHISQ.INV`, `CHISQ.INV.RT` and `CONFIDENCE.T` at 1E10 degrees

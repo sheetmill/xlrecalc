@@ -16,6 +16,7 @@ import struct
 import sys
 from typing import Any
 
+from xlrecalc._arrays import is_array, shape
 from xlrecalc._coerce import numbers
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._registry import function
@@ -836,9 +837,13 @@ def T_TEST(ctx: Any, array1: Any, array2: Any, tails: float, kind: float) -> Any
     assert isinstance(a, list)
     assert isinstance(b, list)
     if k_ == 1:
-        if len(a) != len(b):
-            return NA
-        d = [x - y for x, y in zip(a, b, strict=True)]
+        d = _paired(array1, array2)
+        if d is None:  # neither a range nor an array: the numbers as given
+            if len(a) != len(b):
+                return NA
+            d = [x - y for x, y in zip(a, b, strict=True)]
+        elif isinstance(d, ErrorValue):
+            return d
         if len(d) < 2:
             return DIV0
         mean, var = _mean_var(d)
@@ -883,20 +888,54 @@ def F_TEST(ctx: Any, array1: Any, array2: Any) -> Any:
     return 2 * min(left, 1 - left)
 
 
+def _paired(x: Any, y: Any) -> list[float] | ErrorValue | None:
+    """Differences of the pairs at the same position, in row-major order, as Excel pairs them.
+
+    The two must hold as many elements, whatever their shapes (#N/A otherwise); a pair with
+    anything but a number on either side is dropped (capture continuous_family). None where
+    either is neither a range nor an array.
+    """
+    tx, ty = _table(x), _table(y)
+    if tx is None or ty is None:
+        return None
+    if tx[0] * tx[1] != ty[0] * ty[1]:
+        return NA
+    cx, cy = tx[1], ty[1]
+    both = {i * cx + j for i, j in tx[2]} & {i * cy + j for i, j in ty[2]}
+    out = []
+    for k in sorted(both):
+        u, v = tx[3](*divmod(k, cx)), ty[3](*divmod(k, cy))
+        if type(u) is float and type(v) is float:
+            out.append(u - v)
+    return out
+
+
+def _table(arg: Any) -> tuple[int, int, set[tuple[int, int]], Any] | None:
+    """A range or an array as rows, columns, the positions holding something, and a reader."""
+    if isinstance(arg, Ref):
+        return arg.rows, arg.columns, {(i, j) for i, j, _ in arg.cells()}, arg.value
+    if is_array(arg):
+        rows, cols = shape(arg)
+        held = {(i, j) for i in range(rows) for j in range(cols)}
+        return rows, cols, held, lambda i, j: arg[i][j]
+    return None
+
+
 @function("CHITEST", "raw", "raw", category=S, rel=1e-15, rel_reason=_REL_TEST)
 @function("_xlfn.CHISQ.TEST", "raw", "raw", category=S, rel=1e-15, rel_reason=_REL_TEST)
 @_finite
 def CHISQ_TEST(ctx: Any, actual: Any, expected: Any) -> Any:
-    """The chi-squared test of observed counts against expected ones."""
-    if not (isinstance(actual, Ref) and isinstance(expected, Ref)):
-        return NA
-    if (actual.rows, actual.columns) != (expected.rows, expected.columns):
+    """The chi-squared test of observed counts against expected ones, ranges or arrays."""
+    a, e_ = _table(actual), _table(expected)
+    if a is None or e_ is None or a[0] * a[1] != e_[0] * e_[1]:
         return NA
     chi = 0.0
-    # Only where either range holds something, in row-major order: a whole sheet is no cost.
-    held = {(i, j) for i, j, _ in actual.cells()} | {(i, j) for i, j, _ in expected.cells()}
-    for i, j in sorted(held):
-        o, e = actual.value(i, j), expected.value(i, j)
+    # Element by element in row-major order, whatever the two shapes, as Excel pairs them; only
+    # where either holds something, so a whole sheet is no cost (capture continuous_family).
+    ca, ce = a[1], e_[1]
+    held = {i * ca + j for i, j in a[2]} | {i * ce + j for i, j in e_[2]}
+    for k in sorted(held):
+        o, e = a[3](*divmod(k, ca)), e_[3](*divmod(k, ce))
         if isinstance(o, ErrorValue):
             return o
         if isinstance(e, ErrorValue):
@@ -905,7 +944,7 @@ def CHISQ_TEST(ctx: Any, actual: Any, expected: Any) -> Any:
             if e == 0:
                 return DIV0
             chi += (o - e) ** 2 / e
-    r, c = actual.rows, actual.columns
+    r, c = a[0], a[1]  # the degrees of freedom are actual's
     df = (r - 1) * (c - 1) if r > 1 and c > 1 else max(r, c) - 1
     if df < 1:
         return NA
