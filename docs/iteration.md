@@ -13,8 +13,9 @@ and the same starting values, checked against Excel's results for each case it w
   `recalculate`, whether or not the loop holds cached values.
 - A trusting load (`load(path)`, or `recalculate(path)` of a file whose values are trusted) changes
   nothing, though Excel would run the loop once more on opening the file.
-- Each edit and each save runs the loop once, as in Excel, so `save()` changes the values in memory
-  as well as in the file.
+- Each edit runs the loop once, and so does each save once the loop has run (after an edit or an
+  evaluating load), as in Excel, so `save()` then changes the values in memory as well as in the
+  file.
 - A loop that never converges, such as a counter adding 1 to itself, moves on every run, as it does
   in Excel.
 - `ReadLimits.max_iteration_evaluations` (100,000,000 by default, about two minutes) bounds the cell

@@ -40,6 +40,11 @@ None
 set()
 ```
 
+`uncomputed` is not the only place a cell left as it was can be: the report also names cells
+that keep the file's value because they rely on a function or feature xlrecalc does not
+implement (`from_kept`), cells on a circular reference with iteration off (`circular`), and
+formulas Excel itself refuses in a file (`refused`); `unsupported` counts what was missing.
+
 Only the cached values change: every other part of the file is copied as it was, byte for
 byte. By default the file also asks Excel to recalculate when it opens it, so a value
 xlrecalc got wrong never persists in what Excel shows (`full_calc_on_load=False` leaves the
