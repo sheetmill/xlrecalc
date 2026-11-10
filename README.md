@@ -13,7 +13,8 @@ pip install xlrecalc
 ```
 
 Python 3.11 or later. The one dependency is [xlformat](https://github.com/sheetmill/xlformat),
-which applies Excel's number formats for `TEXT`.
+which applies Excel's number formats for `TEXT`. The examples below make their workbooks with
+openpyxl, installed separately (`pip install openpyxl`); xlrecalc itself does not need it.
 
 <!-- usage-start -->
 ## Recalculating a file
