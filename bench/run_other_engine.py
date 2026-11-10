@@ -1,4 +1,4 @@
-"""Usage: run_competitor.py <pycel|formulas|xlcalculator> <N>
+"""Usage: run_other_engine.py <pycel|formulas|xlcalculator> <N>
 Prints one JSON line: load time, full-eval time, incremental re-eval time, peak RSS (MB)."""
 import sys, time, json, resource, traceback
 sys.setrecursionlimit(1_000_000)

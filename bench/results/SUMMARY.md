@@ -20,7 +20,7 @@ uv run python bench/memory_breakdown.py 1000000 [--xlsx]
 cd bench                                         # the prototype and the other engines, on 3.11
 uv run --no-project --python 3.11 python proto_compact.py 10000
 uv run --no-project --python 3.11 --with pycel==1.0b30 --with formulas==1.3.4 \
-    --with xlcalculator==0.5.0 --with openpyxl==3.1.5 python run_competitor.py pycel 10000
+    --with xlcalculator==0.5.0 --with openpyxl==3.1.5 python run_other_engine.py pycel 10000
 ```
 
 Each runner prints one JSON line with timings and the process's memory (`rss.py`: on macOS
@@ -143,9 +143,9 @@ operands marshalled through JSON; its code is not included here. At 1k rows: ful
 re-eval 2.8 s; a 15-cell change costs 27 ms flagging + 20 ms eval (both scale with total formula
 count, not with the size of the change). The pure-dicts prototype at 1M rows: load 40.4 s, eval
 10.2 s, peak 4,990 MB. Raw output: `proto_10k_100k.jsonl`, `proto_1m.jsonl`,
-`competitors_10000.jsonl`, `proto_compact.jsonl`, `engine_10k_100k.jsonl`, `engine_1m.jsonl`,
-and `round2.txt` (the SQLite, phased design at 10k rows and pycel at 100k rows,
-the runs these tables first came from).
+`other_engines_10000.jsonl`, `proto_compact.jsonl`, `engine_10k_100k.jsonl`, `engine_1m.jsonl`,
+and `sqlite_phased_and_pycel_100k.txt` (the SQLite, phased design at 10k rows and pycel at 100k
+rows, the runs these tables first came from).
 
 ## Structural micro-benchmarks
 
