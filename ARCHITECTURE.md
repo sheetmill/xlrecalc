@@ -279,8 +279,7 @@ already the rule there). It refuses a file holding the spill operator (its file 
 **Strictness follows the input path, as in Excel.**
 - *Reading a file*: a formula Excel refuses in a file is treated the way Excel's repair treats
   it (§9.5): the formula is dropped and the cell keeps its cached value as a constant. Each one
-  is listed in the recalculation report. A lenient reading mode that evaluates such formulas
-  anyway is an option, not the default.
+  is listed in the recalculation report.
 - *Formulas set through the API* (`set_formula`): what Excel's formula bar takes, in its form
   (`=`, `@`, `A1#`, no `_xlfn.` prefixes). Capture `formula_bar` (`capture/formula_bar.py`)
   typed every corpus formula, in that form, into a cell through AppleScript and had Excel save
