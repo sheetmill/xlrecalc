@@ -3898,6 +3898,122 @@ def distributions_family() -> list[Case]:
     return cases
 
 
+# Samples for the tests of continuous_family: two of six, one of five with a text and a blank, one
+# with an error, observed and expected counts in two rows by three columns.
+_CONTINUOUS_TABLE: dict[str, Input] = {
+    "AA1": 3.1, "AA2": 4.7, "AA3": 2.2, "AA4": 5.9, "AA5": 4.4, "AA6": 3.8,
+    "AB1": 2.5, "AB2": 6.1, "AB3": 3.3, "AB4": 7.0, "AB5": 4.9, "AB6": 5.2,
+    "AC1": 1.0, "AC2": "x", "AC3": 4.0, "AC4": None, "AC5": 2.0,
+    "AD1": 1.0, "AD2": NA, "AD3": 3.0,
+    "AE1": 10.0, "AE2": 12.0, "AE3": 9.0, "AF1": 11.0, "AF2": 10.0, "AF3": 10.0,
+    "AG1": 10.5, "AG2": 11.5, "AG3": 9.5, "AH1": 10.5, "AH2": 10.5, "AH3": 9.0,
+}  # fmt: skip
+
+
+def continuous_family() -> list[Case]:
+    """The beta, gamma, chi-squared, F and t distributions, their inverses and tests.
+
+    Each over a grid of inputs from the tails to the middle, degrees of freedom fractional,
+    small and large, values past the domain, and every kind in each argument; the tests over
+    the samples of ``_CONTINUOUS_TABLE``.
+    """
+    t, f = True, False
+    ps = (
+        1e-300,
+        1e-10,
+        0.001,
+        0.05,
+        0.25,
+        0.5,
+        0.75,
+        0.95,
+        0.999,
+        1.0 - 1e-10,
+        0.0,
+        1.0,
+        1.5,
+        -0.1,
+    )
+    xs01 = (0.0, 1e-10, 0.1, 0.5, 0.9, 1.0, 1.0 - 1e-10, -0.1, 1.1)
+    shapes = (0.5, 1.0, 2.0, 3.7, 50.0, 1e-3, 0.0, -1.0)
+    cases = _grid("BETA.DIST", xs01, shapes, (0.5, 2.0, 7.3, 0.0), (t, f))
+    cases += _grid(
+        "BETA.DIST", (0.5, 2.0, 5.0), (2.0,), (3.0,), (t, f), (1.0, 0.0, 5.0), (3.0, 1.0, 5.0)
+    )
+    cases += _grid("BETADIST", (0.1, 0.5, 2.0), (2.0, 0.5), (3.0,), (0.0, 1.0), (1.0, 3.0))
+    cases += _grid("BETA.INV", ps, (0.5, 2.0, 50.0, 0.0), (0.5, 3.0))
+    cases += _grid("BETA.INV", (0.25, 0.5), (2.0,), (3.0,), (1.0, 0.0), (3.0, 1.0))
+    cases += _grid("BETAINV", (0.05, 0.5, 0.95, 0.0), (2.0, 0.5), (3.0,))
+    reals = (0.0, 1e-10, 0.5, 1.0, 2.5, 10.0, 100.0, 1000.0, -1.0)
+    cases += _grid("GAMMA.DIST", reals, (0.5, 1.0, 3.0, 100.0, 0.0, -1.0), (1.0, 2.5, 0.0), (t, f))
+    cases += _grid("GAMMADIST", (1.0, 10.0), (0.5, 3.0), (1.0, 2.5), (t, f))
+    cases += _grid("GAMMA.INV", ps, (0.5, 3.0, 100.0, 0.0), (1.0, 2.5, 0.0))
+    cases += _grid("GAMMAINV", (0.05, 0.5, 0.95), (0.5, 3.0), (1.0,))
+    dfs = (1.0, 1.9, 2.0, 5.0, 30.0, 1000.0, 1e10, 0.5, 0.0)
+    cases += _grid("CHISQ.DIST", reals, dfs, (t, f))
+    cases += _grid("CHISQ.DIST.RT", reals, dfs)
+    cases += _grid("CHIDIST", (0.5, 2.5, 100.0, -1.0), (1.0, 5.0, 0.5))
+    cases += _grid("CHISQ.INV", ps, dfs)
+    cases += _grid("CHISQ.INV.RT", ps, dfs)
+    cases += _grid("CHIINV", (0.05, 0.5, 0.95, 0.0), (1.0, 5.0, 0.5))
+    fs = (0.0, 1e-10, 0.5, 1.0, 2.5, 10.0, 1000.0, -1.0)
+    d1s, d2s = (1.0, 2.0, 5.0, 30.5, 1e6, 0.0), (1.0, 3.0, 10.0, 1e6, 0.5)
+    cases += _grid("F.DIST", fs, d1s, d2s, (t, f))
+    cases += _grid("F.DIST.RT", fs, d1s, d2s)
+    cases += _grid("FDIST", (0.5, 2.5, 10.0), (2.0, 5.0), (3.0, 10.0))
+    cases += _grid("F.INV", ps, (1.0, 5.0, 30.5, 0.0), (3.0, 10.0, 0.5))
+    cases += _grid("F.INV.RT", ps, (1.0, 5.0, 30.5, 0.0), (3.0, 10.0, 0.5))
+    cases += _grid("FINV", (0.05, 0.5, 0.95), (2.0, 5.0), (3.0, 10.0))
+    ts = (0.0, 1e-10, 0.5, 1.0, 2.0, 5.0, 40.0, 1e10, -0.5, -2.0, -40.0)
+    tdfs = (1.0, 1.9, 2.0, 5.0, 30.0, 1e6, 1e10, 0.5, 0.0)
+    cases += _grid("T.DIST", ts, tdfs, (t, f))
+    cases += _grid("T.DIST.2T", ts, tdfs)
+    cases += _grid("T.DIST.RT", ts, tdfs)
+    cases += _grid(
+        "TDIST", (0.0, 0.5, 2.0, 40.0, -1.0), (1.0, 5.0, 30.0, 0.5), (1.0, 2.0, 3.0, 1.5)
+    )
+    cases += _grid("T.INV", ps, tdfs)
+    cases += _grid("T.INV.2T", ps, tdfs)
+    cases += _grid("TINV", (0.05, 0.5, 0.95, 0.0, 1.0), (1.0, 5.0, 30.0, 0.5))
+    samples = ("$AA$1:$AA$6", "$AB$1:$AB$6", "$AC$1:$AC$5", "$AD$1:$AD$3")
+    for name in ("T.TEST", "TTEST"):
+        for a in samples:
+            for b in samples:
+                cases += [
+                    Case(name.lower(), f"{_file(name)}({a},{b},{{1}},{{2}})", (tails, kind))
+                    for tails in (1.0, 2.0, 1.5, 3.0)
+                    for kind in (1.0, 2.0, 3.0, 2.5, 4.0)
+                ]
+    for name in ("F.TEST", "FTEST"):
+        cases += [Case(name.lower(), f"{_file(name)}({a},{b})") for a in samples for b in samples]
+    pairs = (
+        ("$AE$1:$AF$3", "$AG$1:$AH$3"),
+        ("$AE$1:$AE$3", "$AG$1:$AG$3"),
+        ("$AE$1:$AF$3", "$AG$1:$AG$3"),
+    )
+    for name in ("CHISQ.TEST", "CHITEST"):
+        cases += [Case(name.lower(), f"{_file(name)}({a},{b})") for a, b in pairs]
+    for name in ("Z.TEST", "ZTEST"):
+        cases += [
+            Case(name.lower(), f"{_file(name)}({a},{{1}},{{2}})", (x, sigma))
+            for a in samples
+            for x in (4.0, 0.0, 10.0, -3.0)
+            for sigma in (1.0, 0.5, 0.0, None)
+        ]
+    cases += _grid(
+        "CONFIDENCE.T", (0.05, 0.5, 0.0, 1.0), (1.0, 2.5, 0.0), (1.0, 2.0, 10.0, 2.9, 1e6)
+    )
+    for name, valid in (
+        ("BETA.DIST", (0.5, 2.0, 3.0, t)), ("BETA.INV", (0.5, 2.0, 3.0)),
+        ("GAMMA.DIST", (2.0, 3.0, 1.0, t)), ("GAMMA.INV", (0.5, 3.0, 1.0)),
+        ("CHISQ.DIST", (2.0, 5.0, t)), ("CHISQ.INV.RT", (0.5, 5.0)), ("F.DIST", (2.0, 5.0, 3.0, t)),
+        ("F.INV", (0.5, 5.0, 3.0)), ("T.DIST", (1.0, 5.0, t)), ("T.INV.2T", (0.5, 5.0)),
+        ("TDIST", (1.0, 5.0, 2.0)), ("CONFIDENCE.T", (0.05, 1.0, 10.0)),
+    ):  # fmt: skip
+        cases += _kinds_at(name, valid)
+    return cases
+
+
 SUITES = {
     "number_text": Suite(number_text),
     "text_number": Suite(text_number),
@@ -3935,4 +4051,5 @@ SUITES = {
     "info_family": Suite(info_family, fixed=_INFO_TABLE),
     "matrix_family": Suite(matrix_family, fixed=_matrix_layout()[0]),
     "distributions_family": Suite(distributions_family),
+    "continuous_family": Suite(continuous_family, fixed=_CONTINUOUS_TABLE),
 }
