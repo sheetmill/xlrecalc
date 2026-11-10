@@ -4071,36 +4071,7 @@ def continuous_family() -> list[Case]:
     cases += _grid("T.DIST.RT", (1.3, 6.0), (2e5, 3e7))
     cases += _grid("CHISQ.DIST.RT", (1e8 - 3e4, 1e8 + 5e4), (1e8,))
     # A third set: extreme shapes and values, near the largest double and the smallest normal one.
-    # Seven more at a shape of 1.7E308 keep Excel calculating past 90 s and are left out
-    # (capture/slow_probe.py, tests/captures/slow_cases.tsv).
-    small, huge = 1e-307, 1.7e308
-    for name, args in (
-        ("BETA.DIST", (0.5, huge, 0.5, f)),
-        ("BETA.DIST", (0.5, 0.5, huge, f)),
-        ("BETA.DIST", (0.5, 1e300, 1e300, t)), ("BETA.DIST", (0.5, 1e300, 1e300, f)),
-        ("BETA.DIST", (1.0, 1e5, 1e5, f)), ("BETA.DIST", (0.5, 1e5, 1e5, f)),
-        ("BETA.DIST", (small, 0.5, 1e300, t)), ("BETA.DIST", (small, 0.5, 1e300, f)),
-        ("BETA.DIST", (0.5, small, 1e5, t)), ("BETA.DIST", (0.5, small, 1e5, f)),
-        ("BETA.DIST", (1e-300, small, 1e300, t)), ("BETA.DIST", (small, 1e-10, 0.5, f)),
-        ("BETA.DIST", (1.0, small, 1.0, f)), ("BETA.DIST", (1e-300, 1e-300, 1e300, t)),
-        ("BETA.INV", (0.5, 0.5, 1e300)), ("BETA.INV", (1 - 1e-16, 1e300, 0.5)),
-        ("BETA.INV", (0.5, small, 1e5)), ("BETA.INV", (0.5, 1e5, 1e-300)),
-        ("BETA.INV", (1e-300, 1e-300, 1e5)), ("BETA.INV", (0.5, 1e5, 1e300)),
-        ("BETA.INV", (0.5, 1e300, 1e10)),
-        ("GAMMA.DIST", (0.5, huge, 0.5, f)),
-        ("GAMMA.DIST", (1e300, 1e300, 1 - 1e-16, t)),
-        ("GAMMA.DIST", (1e300, 1e300, 1 - 1e-16, f)), ("GAMMA.DIST", (small, 0.5, small, f)),
-        ("GAMMA.DIST", (small, 1e-10, 0.5, f)), ("GAMMA.DIST", (0.5, 1e300, 1.0, t)),
-        ("GAMMA.DIST", (1e300, 0.5, 1.0, t)),
-        ("GAMMA.INV", (small, small, 0.5)), ("GAMMA.INV", (0.5, small, 1.0)),
-        ("GAMMA.INV", (1e-10, small, 1.0)), ("GAMMA.INV", (small, huge, small)),
-        ("GAMMA.INV", (0.5, huge, 1.0)), ("GAMMA.INV", (0.5, 1e300, 1.0)),
-        ("F.DIST", (small, 1.0, 1e5, f)), ("F.DIST", (small, 1e5, 1e10, f)),
-        ("F.DIST", (small, 1.0, 1e5, t)),
-        ("CONFIDENCE.T", (0.05, 1.0, 1e15)), ("CONFIDENCE.T", (0.05, 1.0, 1e10 + 2)),
-        ("CONFIDENCE.T", (0.05, 1.0, 1e10 + 1)),
-    ):  # fmt: skip
-        cases += _grid(name, *((v,) for v in args))
+    cases += continuous_third_set()
     # A fourth set: the tests given array constants, beside ranges, with text, a logical or a blank.
     arrays = {
         ("CHISQ.TEST", "CHITEST"): (
@@ -4127,6 +4098,53 @@ def continuous_family() -> list[Case]:
     for names, arguments in arrays.items():
         for name in names:
             cases += [Case(name.lower(), f"{_file(name)}({args})") for args in arguments]
+    return cases
+
+
+def continuous_third_set(slow: bool = False) -> list[Case]:
+    """``continuous_family``'s third set: extreme shapes and values, from 1E-307 to 1.7E308.
+
+    Seven more formulas, at a shape of 1.7E308, keep Excel calculating past 90 s: ``slow`` puts
+    them in their places, for ``capture/slow_probe.py`` (``tests/captures/slow_cases.tsv``); the
+    suite leaves them out.
+    """
+    t, f = True, False
+    small, huge = 1e-307, 1.7e308
+    cases: list[Case] = []
+    for name, args, past in (
+        ("BETA.DIST", (0.5, huge, 0.5, t), True), ("BETA.DIST", (0.5, huge, 0.5, f), False),
+        ("BETA.DIST", (0.5, 0.5, huge, t), True), ("BETA.DIST", (0.5, 0.5, huge, f), False),
+        ("BETA.DIST", (0.5, 1e300, 1e300, t), False), ("BETA.DIST", (0.5, 1e300, 1e300, f), False),
+        ("BETA.DIST", (1.0, 1e5, 1e5, f), False), ("BETA.DIST", (0.5, 1e5, 1e5, f), False),
+        ("BETA.DIST", (small, 0.5, 1e300, t), False), ("BETA.DIST", (small, 0.5, 1e300, f), False),
+        ("BETA.DIST", (0.5, small, 1e5, t), False), ("BETA.DIST", (0.5, small, 1e5, f), False),
+        ("BETA.DIST", (1e-300, small, 1e300, t), False),
+        ("BETA.DIST", (small, 1e-10, 0.5, f), False),
+        ("BETA.DIST", (1.0, small, 1.0, f), False),
+        ("BETA.DIST", (1e-300, 1e-300, 1e300, t), False),
+        ("BETA.INV", (0.5, 0.5, 1e300), False), ("BETA.INV", (1 - 1e-16, 1e300, 0.5), False),
+        ("BETA.INV", (0.5, small, 1e5), False), ("BETA.INV", (0.5, 1e5, 1e-300), False),
+        ("BETA.INV", (1e-300, 1e-300, 1e5), False), ("BETA.INV", (0.5, 1e5, 1e300), False),
+        ("BETA.INV", (0.5, huge, 2.0), True), ("BETA.INV", (0.5, huge, huge), True),
+        ("BETA.INV", (0.5, 1e300, 1e10), False),
+        ("GAMMA.DIST", (0.5, huge, 0.5, t), True), ("GAMMA.DIST", (0.5, huge, 0.5, f), False),
+        ("GAMMA.DIST", (1e5, huge, 1e5, t), True),
+        ("GAMMA.DIST", (1e300, 1e300, 1 - 1e-16, t), False),
+        ("GAMMA.DIST", (1e300, 1e300, 1 - 1e-16, f), False),
+        ("GAMMA.DIST", (small, 0.5, small, f), False),
+        ("GAMMA.DIST", (small, 1e-10, 0.5, f), False),
+        ("GAMMA.DIST", (1e300, huge, 1e300, t), True),
+        ("GAMMA.DIST", (0.5, 1e300, 1.0, t), False), ("GAMMA.DIST", (1e300, 0.5, 1.0, t), False),
+        ("GAMMA.INV", (small, small, 0.5), False), ("GAMMA.INV", (0.5, small, 1.0), False),
+        ("GAMMA.INV", (1e-10, small, 1.0), False), ("GAMMA.INV", (small, huge, small), False),
+        ("GAMMA.INV", (0.5, huge, 1.0), False), ("GAMMA.INV", (0.5, 1e300, 1.0), False),
+        ("F.DIST", (small, 1.0, 1e5, f), False), ("F.DIST", (small, 1e5, 1e10, f), False),
+        ("F.DIST", (small, 1.0, 1e5, t), False),
+        ("CONFIDENCE.T", (0.05, 1.0, 1e15), False), ("CONFIDENCE.T", (0.05, 1.0, 1e10 + 2), False),
+        ("CONFIDENCE.T", (0.05, 1.0, 1e10 + 1), False),
+    ):  # fmt: skip
+        if slow or not past:
+            cases += _grid(name, *((v,) for v in args))
     return cases
 
 

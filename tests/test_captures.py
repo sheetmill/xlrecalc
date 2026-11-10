@@ -1139,3 +1139,18 @@ def test_every_suite_generates_its_captured_formulas():
         captured = [row.formula for row in load(name).rows]
         generated = [case.formula for case in GENERATORS[name].cases()]
         assert generated == captured, name
+
+
+def test_slow_cases_are_what_the_slow_probe_generates():
+    """Each set in ``slow_cases.tsv`` holds its generator's cases in order: a rerun remakes it."""
+    pytest.importorskip("openpyxl")  # capture.slow_probe imports the pipeline, which needs it
+    from capture.slow_probe import SETS
+
+    path = Path(__file__).parent / "captures" / "slow_cases.tsv"
+    lines = path.read_text(encoding="utf-8").splitlines()
+    rows = [line.split("\t") for line in lines if line and not line.startswith("#")]
+    assert [r[0] for r in rows] == sorted((r[0] for r in rows), key=list(SETS).index)
+    for which, generate in SETS.items():
+        captured = [(r[1], r[2], r[3]) for r in rows if r[0] == which]
+        generated = [(c.tag, c.formula, repr(c.inputs)) for c in generate()]
+        assert generated == captured, which

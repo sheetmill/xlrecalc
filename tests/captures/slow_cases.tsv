@@ -1,22 +1,22 @@
 # suite: slow_cases (how long Excel takes over one formula alone in a workbook)
 # excel: 16.114.4 for Mac, locale en_US
-# captured: 2026-11-09
+# captured: 2026-11-10
 # edition: Office Home & Business 2021, update channel Current
 # limit: 90 s a case; past it Excel was ended (capture.excel_watch.may_end)
 # columns: set, tag, formula, inputs, kind, value, seconds
-shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(100000.0,)	n	0.0	3.0
+shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(100000.0,)	n	0.0	2.7
 shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(10000000000.0,)	n	0.0	0.7
-shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(1e+20,)	n	0.0	0.6
-shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(1e+50,)	n	0.0	0.6
-shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(1e+100,)	n	0.0	0.6
-shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(100000.0,)	n	0.5004205221103651	0.6
-shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(10000000000.0,)	n	0.5000013298076014	0.6
+shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(1e+20,)	n	0.0	0.7
+shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(1e+50,)	n	0.0	0.7
+shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(1e+100,)	n	0.0	0.7
+shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(100000.0,)	n	0.5004205221103651	0.7
+shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(10000000000.0,)	n	0.5000013298076014	0.7
 shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(1e+20,)	n	0.500000000013298	0.7
-shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(1e+50,)	n	0.5	0.6
-shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(1e+100,)	n	0.5	0.6
-shapes	beta.inv	_xlfn.BETA.INV(0.5,{1},0.5)	(100000.0,)	n	0.9999977253147848	0.6
-shapes	beta.inv	_xlfn.BETA.INV(0.5,{1},0.5)	(10000000000.0,)	n	0.9999999999772532	0.6
-shapes	beta.inv	_xlfn.BETA.INV(0.5,{1},0.5)	(1e+20,)	n	0.999999	0.6
+shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(1e+50,)	n	0.5	0.7
+shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(1e+100,)	n	0.5	0.7
+shapes	beta.inv	_xlfn.BETA.INV(0.5,{1},0.5)	(100000.0,)	n	0.9999977253147848	0.7
+shapes	beta.inv	_xlfn.BETA.INV(0.5,{1},0.5)	(10000000000.0,)	n	0.9999999999772532	0.7
+shapes	beta.inv	_xlfn.BETA.INV(0.5,{1},0.5)	(1e+20,)	n	0.999999	0.7
 shapes	beta.inv	_xlfn.BETA.INV(0.5,{1},0.5)	(1e+50,)	n	0.999999	0.6
 shapes	beta.inv	_xlfn.BETA.INV(0.5,{1},0.5)	(1e+100,)	n	0.999999	0.7
 third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 1.7e+308, 0.5, True)	past	90 s	
@@ -47,7 +47,7 @@ third	beta.inv	_xlfn.BETA.INV({1},{2},{3})	(0.5, 1e+300, 10000000000.0)	e	#NUM!	
 third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(0.5, 1.7e+308, 0.5, True)	past	90 s	
 third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(0.5, 1.7e+308, 0.5, False)	e	#NUM!	1.7
 third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(100000.0, 1.7e+308, 100000.0, True)	past	90 s	
-third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e+300, 1e+300, 0.9999999999999999, True)	n	1.0	1.7
+third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e+300, 1e+300, 0.9999999999999999, True)	n	1.0	1.6
 third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e+300, 1e+300, 0.9999999999999999, False)	n	0.0	0.6
 third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e-307, 0.5, 1e-307, False)	n	2.0755374871029737e+306	0.6
 third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e-307, 1e-10, 0.5, False)	n	9.999999294376767e+296	0.6
