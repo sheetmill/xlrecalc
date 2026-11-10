@@ -1,6 +1,7 @@
 -- Open one workbook (argument 1) with alerts off, do one thing to it (argument 3: none, calculate,
--- full, rebuild, or an edit: set_input, set_formula, break, new_cycle, new_dependent), report column A of its first sheet, rows 1 to argument 2, then save a copy under
--- argument 4 if one is named, and close without saving. Non-interactive: alerts are restored on every
+-- full, rebuild, or an edit: set_input, set_formula, break, new_cycle, new_dependent), report
+-- column A of its first sheet, rows 1 to argument 2, then save a copy under argument 4 if one is
+-- named, and close without saving. Non-interactive: alerts are restored on every
 -- exit path. Refuses a workbook of a name already open, and touches no other.
 --
 -- Output, fields separated by ASCII 31: "open" or "error", then value and displayed text per row.

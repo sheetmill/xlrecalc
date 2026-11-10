@@ -8,11 +8,10 @@ timed out``, -1712), the same hang seen from the other side; what can be learned
 display's last change, the request and its file, and whether Excel answers a question about its
 workbooks now and after 1 and 5 minutes. Excel is ended only when nothing of anyone else's can be
 in it (``may_end``): the run began with no workbook open, and every window of Excel's on screen is
-the request's own. Otherwise
-it is left as it is, since it may hold what the person using it needs. When it answers again,
-the workbooks the request named in Excel's container are closed without saving and alerts are
-turned back on, so a recovered hang leaves nothing behind. Imports only the standard library, so
-that the default test run can import it.
+the request's own. Otherwise it is left as it is, since it may hold what the person using it
+needs. When it answers again, the workbooks the request named in Excel's container are closed
+without saving and alerts are turned back on, so a recovered hang leaves nothing behind. Imports
+only the standard library, so that the default test run can import it.
 
 The display is kept awake while a process drives Excel (``caffeinate -d``, from the first request
 until the process ends): each unexplained hang recorded came with the display off. The record

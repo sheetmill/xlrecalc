@@ -4,9 +4,9 @@
 
 Non-interactive. Formulas of the shape ``INDEX(C:C,r):INDEX(C:C,s)``, lookups and aggregates, each
 in a column of its own over the numbers 1 to 5, where what they read holds the formula or does not.
-Excel with iteration off leaves a circular formula uncalculated, and saves it
-as the empty text or 0 (capture ``circular``), so each formula's cached value in the copy Excel
-saves shows what it did. Writes ``tests/captures/index_range.tsv``.
+Excel with iteration off leaves a circular formula uncalculated, and saves it as the empty text or
+0 (capture ``circular``), so each formula's cached value in the copy Excel saves shows what it
+did. Writes ``tests/captures/index_range.tsv``.
 """
 
 from __future__ import annotations

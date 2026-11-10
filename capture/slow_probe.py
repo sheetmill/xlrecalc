@@ -7,10 +7,10 @@ opened, calculated and saved by ``save_copy.applescript`` under a time limit. A 
 finishes gives its value and time; one past the limit is recorded as such, and Excel is ended when
 ``capture.excel_watch.may_end`` allows it (the run began with no workbook open, and only the
 probe's windows are on screen); otherwise the run stops, as any request past its limit does.
-Results go to ``tests/captures/slow_cases.tsv``, replacing the rows of each set run and keeping the
-others. ``shapes`` times functions of the beta and gamma
-families as their shape grows; ``third`` is the third set of ``continuous_family``, which Excel
-must finish before the pipeline captures it.
+Results go to ``tests/captures/slow_cases.tsv``, replacing the rows of each set run and keeping
+the others. ``shapes`` times functions of the beta and gamma families as their shape grows;
+``third`` is the third set of ``continuous_family``, which Excel must finish before the pipeline
+captures it.
 """
 
 from __future__ import annotations

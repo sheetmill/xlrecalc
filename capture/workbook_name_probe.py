@@ -4,9 +4,9 @@
 
 Non-interactive. One workbook: a workbook-level ``Rate`` and ``Range`` on sheet ``s``, a sheet-level
 ``Rate`` on sheet ``t``, and formulas reading them as ``[0]!Rate`` from both sheets, beside ``Rate``
-alone and a name that does not exist (``[1]!Rate`` with no external link makes Excel refuse
-the file). Excel opens it and saves
-a copy (``save_copy.applescript``); each formula's cached value and its text in the copy are read.
+alone and a name that does not exist (``[1]!Rate`` with no external link makes Excel refuse the
+file). Excel opens it and saves a copy (``save_copy.applescript``); each formula's cached value
+and its text in the copy are read.
 Writes ``tests/captures/workbook_name.tsv``.
 """
 
