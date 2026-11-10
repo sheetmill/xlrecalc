@@ -133,6 +133,35 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
   48 of the others, for Excel's own `exp`, `pow`, `erf` and `gamma`; both groups rest on the platform's math library.
   `BINOM.INV(TRUE,0.5,0.5)` is 1 in Excel, where a cumulative probability of 0.5 reaches alpha at 0, as documented and
   as `BINOM.INV("3",0.5,0.5)` gives at its own tie (one row).
+- Declared tolerances, `continuous_family` (5,003 rows): the beta, gamma, chi-squared, F and t distributions, their
+  inverses and tests declare a relative tolerance ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md)
+  §8.1), each its largest difference from Excel on the capture (in parentheses, on the platform `docs/coverage.md`
+  records) rounded up to a power of ten. 1E-12: `CHISQ.DIST` (3.1E-13), `F.DIST` (7.5E-13), `F.DIST.RT` (6.9E-13),
+  `F.INV` (9.4E-13), `T.DIST` (1.4E-13), `T.INV` (7.8E-13), `Z.TEST` (1.6E-13), `ZTEST` (1.6E-13). 1E-13: `BETA.DIST`
+  (4.7E-14), `BETA.INV` (2.8E-14), `CHISQ.DIST.RT` (6.2E-14), `CHISQ.INV` (3.3E-14), `CHISQ.INV.RT` (1.1E-14),
+  `F.INV.RT` (2.8E-14), `GAMMA.DIST` (9.6E-14), `GAMMA.INV` (1.4E-14), `T.DIST.2T` (1.2E-14), `T.DIST.RT` (1.2E-14),
+  `T.INV.2T` (3.7E-14), `TINV` (1.2E-14). 1E-14: `BETADIST` (1.5E-15), `BETAINV` (1.2E-15), `CHIDIST` (8.1E-15),
+  `CHIINV` (1.0E-15), `CONFIDENCE.T` (5.4E-15), `F.TEST` (2.5E-15), `FDIST` (1.7E-15), `FINV` (4.0E-15), `FTEST`
+  (2.5E-15), `GAMMADIST` (1.3E-15), `T.TEST` (2.7E-15), `TDIST` (6.0E-15), `TTEST` (2.7E-15). 1E-15: `CHISQ.TEST`
+  (1.2E-16), `CHITEST` (1.2E-16), `GAMMAINV` (9.2E-16).
+  110 rows are listed. In 97 of them Excel's result is the further from the true value (each group checked against
+  40-digit arithmetic, a closed form or a limit): an inverse at a probability of 1E-300, where Excel's search stops
+  short or gives `#NUM!` (19 rows); `T.INV`, `T.INV.2T`, `CHISQ.INV`, `CHISQ.INV.RT` and `CONFIDENCE.T` at 1E10 degrees
+  of freedom, about 2E-7 from the root or `#NUM!` (22 rows); `T.INV`, `T.INV.2T` and `CONFIDENCE.T` at 1E6 degrees of
+  freedom, 1E-12 to 3E-9 from it (19 rows); `T.INV.2T` near 1 at one degree of freedom, 6E-12 to 3E-5 from
+  tan(π(1 − p)/2) (4 rows); the t distribution at 1E-10, exactly 0.5 in Excel, 1 for two tails, where it is 0.5 and
+  the density times 1E-10 (21 rows); at an extreme shape or value, `#NUM!` where the result exists, 0, a quantile that
+  underflows to 0 or a tail of 2.5E-154 (8 rows), or a search that stops short, 0.999999 or 0.5 for 1 (4 rows).
+  `CHISQ.INV.RT` and `CHIINV` at one degree of freedom invert the left tail at 1 − p, as Excel does, so that a p of
+  at most 2^-54 (about 5.55E-17) is `#NUM!`; Excel's p is a unit of 1.1E-16 from 1 − (1 − p) on some rows, which
+  shows where p is small (12 rows). One row is ours: `BETA.DIST` with both shapes 1E300 is `#NUM!` here, where the
+  continued fraction does not converge within its terms, and 0.5 in Excel (1 row).
+  Seven formulas at a shape of 1.7E308 (`BETA.DIST` and `GAMMA.DIST` cumulative, `BETA.INV`) keep Excel calculating
+  past 90 seconds, alone in a workbook, where the other 55 timed, densities at 1.7E308 among them, take at most 3
+  seconds with the open (`tests/captures/slow_cases.tsv`);
+  they are not captured, and here they give their limits, 0 or 1, or `#NUM!`. Every function here does bounded work on
+  any input: each series and continued fraction stops at 20,000 terms, `#NUM!` past them, and each inverse is a
+  bisection over the doubles' bit patterns, at most 64 evaluations.
 - The platform's math library: three rows match Excel on the platform `docs/coverage.md` records (bit for bit, or within the
   function's declared tolerance) and differ on another, where a last-bit difference in `erfc`, `exp`, `log1p` or `expm1` survives a cancellation: `GAUSS(1E-5)`, which
   subtracts 0.5 from the normal distribution (as Excel's own result shows), and two rows of `IPMT` with payments due in

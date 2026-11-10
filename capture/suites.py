@@ -3437,6 +3437,15 @@ _EMPTY_VALID: dict[str, tuple[str, ...]] = {
     "_XLFN.TEXTJOIN": ('","', "TRUE", _R),
     "_XLFN.XLOOKUP": ("2", _R, _S, '"x"', "0", "1"),
     "_XLFN.XMATCH": ("2", _R, "0", "1"),
+    "_XLFN.BETA.DIST": ("0.4", "2", "3", "TRUE", "0", "1"), "BETADIST": ("0.4", "2", "3", "0", "1"),
+    "_XLFN.BETA.INV": ("0.4", "2", "3", "0", "1"), "BETAINV": ("0.4", "2", "3", "0", "1"),
+    "_XLFN.GAMMA.INV": ("0.4", "3", "2"), "GAMMAINV": ("0.4", "3", "2"),
+    "_XLFN.CHISQ.INV": ("0.4", "3"), "_XLFN.CHISQ.INV.RT": ("0.4", "3"), "CHIINV": ("0.4", "3"),
+    **dict.fromkeys(("_XLFN.F.INV", "_XLFN.F.INV.RT", "FINV"), ("0.4", "3", "5")),
+    "_XLFN.T.INV": ("0.4", "3"), "_XLFN.T.INV.2T": ("0.4", "3"), "TINV": ("0.4", "3"),
+    "_XLFN.CONFIDENCE.T": ("0.05", "2", "10"),
+    **dict.fromkeys(("_XLFN.T.TEST", "TTEST"), (_R, _S, "2", "2")),
+    **dict.fromkeys(("_XLFN.F.TEST", "FTEST", "_XLFN.CHISQ.TEST", "CHITEST"), (_R, _S)),
     "EDATE": ("40000", "2"), "EOMONTH": ("40000", "2"), "MROUND": ("5", "2"), "QUOTIENT": ("5",
     "2"),
 }  # fmt: skip
@@ -3500,6 +3509,44 @@ _EMPTY_ADDED += (  # the discrete and closed-form distributions, GAMMA, ERF
     "_XLFN.NEGBINOM.DIST",
     "_XLFN.POISSON.DIST",
     "_XLFN.WEIBULL.DIST",
+)
+_EMPTY_ADDED += (  # the beta, gamma, chi-squared, F and t distributions and tests
+    "BETADIST",
+    "BETAINV",
+    "CHIDIST",
+    "CHIINV",
+    "CHITEST",
+    "FDIST",
+    "FINV",
+    "FTEST",
+    "GAMMADIST",
+    "GAMMAINV",
+    "TDIST",
+    "TINV",
+    "TTEST",
+    "ZTEST",
+    "_XLFN.BETA.DIST",
+    "_XLFN.BETA.INV",
+    "_XLFN.CHISQ.DIST",
+    "_XLFN.CHISQ.DIST.RT",
+    "_XLFN.CHISQ.INV",
+    "_XLFN.CHISQ.INV.RT",
+    "_XLFN.CHISQ.TEST",
+    "_XLFN.CONFIDENCE.T",
+    "_XLFN.F.DIST",
+    "_XLFN.F.DIST.RT",
+    "_XLFN.F.INV",
+    "_XLFN.F.INV.RT",
+    "_XLFN.F.TEST",
+    "_XLFN.GAMMA.DIST",
+    "_XLFN.GAMMA.INV",
+    "_XLFN.T.DIST",
+    "_XLFN.T.DIST.2T",
+    "_XLFN.T.DIST.RT",
+    "_XLFN.T.INV",
+    "_XLFN.T.INV.2T",
+    "_XLFN.T.TEST",
+    "_XLFN.Z.TEST",
 )
 
 # Functions whose arguments the generator cannot fill (LET's are names): their formulas as given.
@@ -4011,6 +4058,48 @@ def continuous_family() -> list[Case]:
         ("TDIST", (1.0, 5.0, 2.0)), ("CONFIDENCE.T", (0.05, 1.0, 10.0)),
     ):  # fmt: skip
         cases += _kinds_at(name, valid)
+    # A second set for the rules the first fitted: the right tail's inverse at one degree of
+    # freedom reading p as 1 - (1 - p), at other small p and beside 2 degrees of freedom; the t
+    # distribution's center near p = 1; tails and densities at shapes the first did not reach.
+    small_ps = (1e-17, 1e-16, 3e-16, 1e-15, 1e-13, 3e-11, 1e-8, 1e-5, 0.3)
+    cases += _grid("CHISQ.INV.RT", small_ps, (1.0, 1.5, 2.0))
+    cases += _grid("CHIINV", small_ps, (1.0, 2.0))
+    cases += _grid("T.INV.2T", (1.0 - 1e-12, 1.0 - 1e-6, 0.9), (1.0, 3.0, 1e6))
+    cases += _grid("F.DIST", (0.3, 1.7), (2.0, 7.0), (2e5, 3e7), (t, f))
+    cases += _grid("F.DIST.RT", (0.3, 1.7), (2e5, 3e7), (1.0, 4.0))
+    cases += _grid("T.DIST.RT", (1.3, 6.0), (2e5, 3e7))
+    cases += _grid("CHISQ.DIST.RT", (1e8 - 3e4, 1e8 + 5e4), (1e8,))
+    # A third set: extreme shapes and values, near the largest double and the smallest normal one.
+    # Seven more at a shape of 1.7E308 keep Excel calculating past 90 s and are left out
+    # (capture/slow_probe.py, tests/captures/slow_cases.tsv).
+    small, huge = 1e-307, 1.7e308
+    for name, args in (
+        ("BETA.DIST", (0.5, huge, 0.5, f)),
+        ("BETA.DIST", (0.5, 0.5, huge, f)),
+        ("BETA.DIST", (0.5, 1e300, 1e300, t)), ("BETA.DIST", (0.5, 1e300, 1e300, f)),
+        ("BETA.DIST", (1.0, 1e5, 1e5, f)), ("BETA.DIST", (0.5, 1e5, 1e5, f)),
+        ("BETA.DIST", (small, 0.5, 1e300, t)), ("BETA.DIST", (small, 0.5, 1e300, f)),
+        ("BETA.DIST", (0.5, small, 1e5, t)), ("BETA.DIST", (0.5, small, 1e5, f)),
+        ("BETA.DIST", (1e-300, small, 1e300, t)), ("BETA.DIST", (small, 1e-10, 0.5, f)),
+        ("BETA.DIST", (1.0, small, 1.0, f)), ("BETA.DIST", (1e-300, 1e-300, 1e300, t)),
+        ("BETA.INV", (0.5, 0.5, 1e300)), ("BETA.INV", (1 - 1e-16, 1e300, 0.5)),
+        ("BETA.INV", (0.5, small, 1e5)), ("BETA.INV", (0.5, 1e5, 1e-300)),
+        ("BETA.INV", (1e-300, 1e-300, 1e5)), ("BETA.INV", (0.5, 1e5, 1e300)),
+        ("BETA.INV", (0.5, 1e300, 1e10)),
+        ("GAMMA.DIST", (0.5, huge, 0.5, f)),
+        ("GAMMA.DIST", (1e300, 1e300, 1 - 1e-16, t)),
+        ("GAMMA.DIST", (1e300, 1e300, 1 - 1e-16, f)), ("GAMMA.DIST", (small, 0.5, small, f)),
+        ("GAMMA.DIST", (small, 1e-10, 0.5, f)), ("GAMMA.DIST", (0.5, 1e300, 1.0, t)),
+        ("GAMMA.DIST", (1e300, 0.5, 1.0, t)),
+        ("GAMMA.INV", (small, small, 0.5)), ("GAMMA.INV", (0.5, small, 1.0)),
+        ("GAMMA.INV", (1e-10, small, 1.0)), ("GAMMA.INV", (small, huge, small)),
+        ("GAMMA.INV", (0.5, huge, 1.0)), ("GAMMA.INV", (0.5, 1e300, 1.0)),
+        ("F.DIST", (small, 1.0, 1e5, f)), ("F.DIST", (small, 1e5, 1e10, f)),
+        ("F.DIST", (small, 1.0, 1e5, t)),
+        ("CONFIDENCE.T", (0.05, 1.0, 1e15)), ("CONFIDENCE.T", (0.05, 1.0, 1e10 + 2)),
+        ("CONFIDENCE.T", (0.05, 1.0, 1e10 + 1)),
+    ):  # fmt: skip
+        cases += _grid(name, *((v,) for v in args))
     return cases
 
 

@@ -4890,3 +4890,127 @@ continuous_family	confidence.t_kinds	4876	_xlfn.CONFIDENCE.T({1},{2},{3})	(0.05,
 continuous_family	confidence.t_kinds	4877	_xlfn.CONFIDENCE.T({1},{2},{3})	(0.05, 1.0, None)	e	#NUM!
 continuous_family	confidence.t_kinds	4878	_xlfn.CONFIDENCE.T({1},{2},{3})	(0.05, 1.0, FormulaInput('=""'))	e	#VALUE!
 continuous_family	confidence.t_kinds	4879	_xlfn.CONFIDENCE.T({1},{2},{3})	(0.05, 1.0, ErrorValue('#N/A'))	e	#N/A
+continuous_family	chisq.inv.rt	4880	_xlfn.CHISQ.INV.RT({1},{2})	(1e-17, 1.0)	e	#NUM!
+continuous_family	chisq.inv.rt	4881	_xlfn.CHISQ.INV.RT({1},{2})	(1e-17, 1.5)	e	#NUM!
+continuous_family	chisq.inv.rt	4882	_xlfn.CHISQ.INV.RT({1},{2})	(1e-17, 2.0)	n	78.28789316179756
+continuous_family	chisq.inv.rt	4883	_xlfn.CHISQ.INV.RT({1},{2})	(1e-16, 1.0)	n	68.7632522116684
+continuous_family	chisq.inv.rt	4884	_xlfn.CHISQ.INV.RT({1},{2})	(1e-16, 1.5)	n	68.7632522116684
+continuous_family	chisq.inv.rt	4885	_xlfn.CHISQ.INV.RT({1},{2})	(1e-16, 2.0)	n	73.68272297580947
+continuous_family	chisq.inv.rt	4886	_xlfn.CHISQ.INV.RT({1},{2})	(3e-16, 1.0)	n	67.39648382445009
+continuous_family	chisq.inv.rt	4887	_xlfn.CHISQ.INV.RT({1},{2})	(3e-16, 1.5)	n	67.39648382445009
+continuous_family	chisq.inv.rt	4888	_xlfn.CHISQ.INV.RT({1},{2})	(3e-16, 2.0)	n	71.48549839847324
+continuous_family	chisq.inv.rt	4889	_xlfn.CHISQ.INV.RT({1},{2})	(1e-15, 1.0)	n	64.43203896936353
+continuous_family	chisq.inv.rt	4890	_xlfn.CHISQ.INV.RT({1},{2})	(1e-15, 1.5)	n	64.43203896936353
+continuous_family	chisq.inv.rt	4891	_xlfn.CHISQ.INV.RT({1},{2})	(1e-15, 2.0)	n	69.07755278982137
+continuous_family	chisq.inv.rt	4892	_xlfn.CHISQ.INV.RT({1},{2})	(1e-13, 1.0)	n	55.36859656626361
+continuous_family	chisq.inv.rt	4893	_xlfn.CHISQ.INV.RT({1},{2})	(1e-13, 1.5)	n	55.36859656626361
+continuous_family	chisq.inv.rt	4894	_xlfn.CHISQ.INV.RT({1},{2})	(1e-13, 2.0)	n	59.86721241784519
+continuous_family	chisq.inv.rt	4895	_xlfn.CHISQ.INV.RT({1},{2})	(3e-11, 1.0)	n	44.17690440029402
+continuous_family	chisq.inv.rt	4896	_xlfn.CHISQ.INV.RT({1},{2})	(3e-11, 1.5)	n	44.17690440029402
+continuous_family	chisq.inv.rt	4897	_xlfn.CHISQ.INV.RT({1},{2})	(3e-11, 2.0)	n	48.459647468532786
+continuous_family	chisq.inv.rt	4898	_xlfn.CHISQ.INV.RT({1},{2})	(1e-08, 1.0)	n	32.84125337305113
+continuous_family	chisq.inv.rt	4899	_xlfn.CHISQ.INV.RT({1},{2})	(1e-08, 1.5)	n	32.84125337305113
+continuous_family	chisq.inv.rt	4900	_xlfn.CHISQ.INV.RT({1},{2})	(1e-08, 2.0)	n	36.841361487904734
+continuous_family	chisq.inv.rt	4901	_xlfn.CHISQ.INV.RT({1},{2})	(1e-05, 1.0)	n	19.51142096464506
+continuous_family	chisq.inv.rt	4902	_xlfn.CHISQ.INV.RT({1},{2})	(1e-05, 1.5)	n	19.51142096464506
+continuous_family	chisq.inv.rt	4903	_xlfn.CHISQ.INV.RT({1},{2})	(1e-05, 2.0)	n	23.025850929940457
+continuous_family	chisq.inv.rt	4904	_xlfn.CHISQ.INV.RT({1},{2})	(0.3, 1.0)	n	1.0741941708575857
+continuous_family	chisq.inv.rt	4905	_xlfn.CHISQ.INV.RT({1},{2})	(0.3, 1.5)	n	1.0741941708575857
+continuous_family	chisq.inv.rt	4906	_xlfn.CHISQ.INV.RT({1},{2})	(0.3, 2.0)	n	2.4079456086518722
+continuous_family	chiinv	4907	CHIINV({1},{2})	(1e-17, 1.0)	e	#NUM!
+continuous_family	chiinv	4908	CHIINV({1},{2})	(1e-17, 2.0)	n	78.28789316179756
+continuous_family	chiinv	4909	CHIINV({1},{2})	(1e-16, 1.0)	n	68.7632522116684
+continuous_family	chiinv	4910	CHIINV({1},{2})	(1e-16, 2.0)	n	73.68272297580947
+continuous_family	chiinv	4911	CHIINV({1},{2})	(3e-16, 1.0)	n	67.39648382445009
+continuous_family	chiinv	4912	CHIINV({1},{2})	(3e-16, 2.0)	n	71.48549839847324
+continuous_family	chiinv	4913	CHIINV({1},{2})	(1e-15, 1.0)	n	64.43203896936353
+continuous_family	chiinv	4914	CHIINV({1},{2})	(1e-15, 2.0)	n	69.07755278982137
+continuous_family	chiinv	4915	CHIINV({1},{2})	(1e-13, 1.0)	n	55.36859656626361
+continuous_family	chiinv	4916	CHIINV({1},{2})	(1e-13, 2.0)	n	59.86721241784519
+continuous_family	chiinv	4917	CHIINV({1},{2})	(3e-11, 1.0)	n	44.17690440029402
+continuous_family	chiinv	4918	CHIINV({1},{2})	(3e-11, 2.0)	n	48.459647468532786
+continuous_family	chiinv	4919	CHIINV({1},{2})	(1e-08, 1.0)	n	32.84125337305113
+continuous_family	chiinv	4920	CHIINV({1},{2})	(1e-08, 2.0)	n	36.841361487904734
+continuous_family	chiinv	4921	CHIINV({1},{2})	(1e-05, 1.0)	n	19.51142096464506
+continuous_family	chiinv	4922	CHIINV({1},{2})	(1e-05, 2.0)	n	23.025850929940457
+continuous_family	chiinv	4923	CHIINV({1},{2})	(0.3, 1.0)	n	1.0741941708575857
+continuous_family	chiinv	4924	CHIINV({1},{2})	(0.3, 2.0)	n	2.4079456086518722
+continuous_family	t.inv.2t	4925	_xlfn.T.INV.2T({1},{2})	(0.999999999999, 1.0)	n	1.570804767579629e-12
+continuous_family	t.inv.2t	4926	_xlfn.T.INV.2T({1},{2})	(0.999999999999, 3.0)	n	1.3603194299042453e-12
+continuous_family	t.inv.2t	4927	_xlfn.T.INV.2T({1},{2})	(0.999999999999, 1000000.0)	n	1.2532867251725713e-12
+continuous_family	t.inv.2t	4928	_xlfn.T.INV.2T({1},{2})	(0.999999, 1.0)	n	1.570796326851106e-06
+continuous_family	t.inv.2t	4929	_xlfn.T.INV.2T({1},{2})	(0.999999, 3.0)	n	1.3603495232153402e-06
+continuous_family	t.inv.2t	4930	_xlfn.T.INV.2T({1},{2})	(0.999999, 1000000.0)	n	1.253314450680442e-06
+continuous_family	t.inv.2t	4931	_xlfn.T.INV.2T({1},{2})	(0.9, 1.0)	n	0.15838444032453633
+continuous_family	t.inv.2t	4932	_xlfn.T.INV.2T({1},{2})	(0.9, 3.0)	n	0.1365981993537
+continuous_family	t.inv.2t	4933	_xlfn.T.INV.2T({1},{2})	(0.9, 1000000.0)	n	0.1256613783757817
+continuous_family	f.dist	4934	_xlfn.F.DIST({1},{2},{3},{4})	(0.3, 2.0, 200000.0, True)	n	0.25918144595067455
+continuous_family	f.dist	4935	_xlfn.F.DIST({1},{2},{3},{4})	(0.3, 2.0, 200000.0, False)	n	0.7408163316003307
+continuous_family	f.dist	4936	_xlfn.F.DIST({1},{2},{3},{4})	(0.3, 2.0, 30000000.0, True)	n	0.2591817770958275
+continuous_family	f.dist	4937	_xlfn.F.DIST({1},{2},{3},{4})	(0.3, 2.0, 30000000.0, False)	n	0.7408182080878083
+continuous_family	f.dist	4938	_xlfn.F.DIST({1},{2},{3},{4})	(0.3, 7.0, 200000.0, True)	n	0.045902199241128434
+continuous_family	f.dist	4939	_xlfn.F.DIST({1},{2},{3},{4})	(0.3, 7.0, 200000.0, False)	n	0.4163526292956226
+continuous_family	f.dist	4940	_xlfn.F.DIST({1},{2},{3},{4})	(0.3, 7.0, 30000000.0, True)	n	0.04590129972859537
+continuous_family	f.dist	4941	_xlfn.F.DIST({1},{2},{3},{4})	(0.3, 7.0, 30000000.0, False)	n	0.416347454564138
+continuous_family	f.dist	4942	_xlfn.F.DIST({1},{2},{3},{4})	(1.7, 2.0, 200000.0, True)	n	0.8173138361811878
+continuous_family	f.dist	4943	_xlfn.F.DIST({1},{2},{3},{4})	(1.7, 2.0, 200000.0, False)	n	0.18268305820682268
+continuous_family	f.dist	4944	_xlfn.F.DIST({1},{2},{3},{4})	(1.7, 2.0, 30000000.0, True)	n	0.817316458348753
+continuous_family	f.dist	4945	_xlfn.F.DIST({1},{2},{3},{4})	(1.7, 2.0, 30000000.0, False)	n	0.18268352094711462
+continuous_family	f.dist	4946	_xlfn.F.DIST({1},{2},{3},{4})	(1.7, 7.0, 200000.0, True)	n	0.8960972973041033
+continuous_family	f.dist	4947	_xlfn.F.DIST({1},{2},{3},{4})	(1.7, 7.0, 200000.0, False)	n	0.23699409027146381
+continuous_family	f.dist	4948	_xlfn.F.DIST({1},{2},{3},{4})	(1.7, 7.0, 30000000.0, True)	n	0.8961042006621274
+continuous_family	f.dist	4949	_xlfn.F.DIST({1},{2},{3},{4})	(1.7, 7.0, 30000000.0, False)	n	0.23699114496989349
+continuous_family	f.dist.rt	4950	_xlfn.F.DIST.RT({1},{2},{3})	(0.3, 200000.0, 1.0)	n	0.9321093547901558
+continuous_family	f.dist.rt	4951	_xlfn.F.DIST.RT({1},{2},{3})	(0.3, 200000.0, 4.0)	n	0.9902415382239366
+continuous_family	f.dist.rt	4952	_xlfn.F.DIST.RT({1},{2},{3})	(0.3, 30000000.0, 1.0)	n	0.932110835202524
+continuous_family	f.dist.rt	4953	_xlfn.F.DIST.RT({1},{2},{3})	(0.3, 30000000.0, 4.0)	n	0.9902431301725529
+continuous_family	f.dist.rt	4954	_xlfn.F.DIST.RT({1},{2},{3})	(1.7, 200000.0, 1.0)	n	0.5568967626802753
+continuous_family	f.dist.rt	4955	_xlfn.F.DIST.RT({1},{2},{3})	(1.7, 200000.0, 4.0)	n	0.3288519050456509
+continuous_family	f.dist.rt	4956	_xlfn.F.DIST.RT({1},{2},{3})	(1.7, 30000000.0, 1.0)	n	0.5568976619735594
+continuous_family	f.dist.rt	4957	_xlfn.F.DIST.RT({1},{2},{3})	(1.7, 30000000.0, 4.0)	n	0.32885227912624637
+continuous_family	t.dist.rt	4958	_xlfn.T.DIST.RT({1},{2})	(1.3, 200000.0)	n	0.09680123367958422
+continuous_family	t.dist.rt	4959	_xlfn.T.DIST.RT({1},{2})	(1.3, 30000000.0)	n	0.09680048957957667
+continuous_family	t.dist.rt	4960	_xlfn.T.DIST.RT({1},{2})	(6.0, 200000.0)	n	9.88274943967403e-10
+continuous_family	t.dist.rt	4961	_xlfn.T.DIST.RT({1},{2})	(6.0, 30000000.0)	n	9.86598885476127e-10
+continuous_family	chisq.dist.rt	4962	_xlfn.CHISQ.DIST.RT({1},{2})	(99970000.0, 100000000.0)	n	0.9830595111350869
+continuous_family	chisq.dist.rt	4963	_xlfn.CHISQ.DIST.RT({1},{2})	(100050000.0, 100000000.0)	n	0.00020389378249022018
+continuous_family	beta.dist	4964	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 1.7e+308, 0.5, False)	n	0.0
+continuous_family	beta.dist	4965	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 0.5, 1.7e+308, False)	n	0.0
+continuous_family	beta.dist	4966	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 1e+300, 1e+300, True)	n	0.5
+continuous_family	beta.dist	4967	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 1e+300, 1e+300, False)	n	1.1283791670955984e+150
+continuous_family	beta.dist	4968	_xlfn.BETA.DIST({1},{2},{3},{4})	(1.0, 100000.0, 100000.0, False)	n	0.0
+continuous_family	beta.dist	4969	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 100000.0, 100000.0, False)	n	356.8243771998041
+continuous_family	beta.dist	4970	_xlfn.BETA.DIST({1},{2},{3},{4})	(1e-307, 0.5, 1e+300, True)	n	0.0003568248113363828
+continuous_family	beta.dist	4971	_xlfn.BETA.DIST({1},{2},{3},{4})	(1e-307, 0.5, 1e+300, False)	n	1.7841239377403544e+303
+continuous_family	beta.dist	4972	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 1e-307, 100000.0, True)	n	1.0
+continuous_family	beta.dist	4973	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 1e-307, 100000.0, False)	n	0.0
+continuous_family	beta.dist	4974	_xlfn.BETA.DIST({1},{2},{3},{4})	(1e-300, 1e-307, 1e+300, True)	n	1.0
+continuous_family	beta.dist	4975	_xlfn.BETA.DIST({1},{2},{3},{4})	(1e-307, 1e-10, 0.5, False)	n	9.99999929172056e+296
+continuous_family	beta.dist	4976	_xlfn.BETA.DIST({1},{2},{3},{4})	(1.0, 1e-307, 1.0, False)	e	#NUM!
+continuous_family	beta.dist	4977	_xlfn.BETA.DIST({1},{2},{3},{4})	(1e-300, 1e-300, 1e+300, True)	n	1.0
+continuous_family	beta.inv	4978	_xlfn.BETA.INV({1},{2},{3})	(0.5, 0.5, 1e+300)	n	1.963495408493682e-301
+continuous_family	beta.inv	4979	_xlfn.BETA.INV({1},{2},{3})	(0.9999999999999999, 1e+300, 0.5)	n	0.9999990000000001
+continuous_family	beta.inv	4980	_xlfn.BETA.INV({1},{2},{3})	(0.5, 1e-307, 100000.0)	e	#NUM!
+continuous_family	beta.inv	4981	_xlfn.BETA.INV({1},{2},{3})	(0.5, 100000.0, 1e-300)	n	0.5
+continuous_family	beta.inv	4982	_xlfn.BETA.INV({1},{2},{3})	(1e-300, 1e-300, 100000.0)	e	#NUM!
+continuous_family	beta.inv	4983	_xlfn.BETA.INV({1},{2},{3})	(0.5, 100000.0, 1e+300)	e	#NUM!
+continuous_family	beta.inv	4984	_xlfn.BETA.INV({1},{2},{3})	(0.5, 1e+300, 10000000000.0)	e	#NUM!
+continuous_family	gamma.dist	4985	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(0.5, 1.7e+308, 0.5, False)	e	#NUM!
+continuous_family	gamma.dist	4986	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e+300, 1e+300, 0.9999999999999999, True)	n	1.0
+continuous_family	gamma.dist	4987	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e+300, 1e+300, 0.9999999999999999, False)	n	0.0
+continuous_family	gamma.dist	4988	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e-307, 0.5, 1e-307, False)	n	2.0755374871029737e+306
+continuous_family	gamma.dist	4989	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e-307, 1e-10, 0.5, False)	n	9.999999294376767e+296
+continuous_family	gamma.dist	4990	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(0.5, 1e+300, 1.0, True)	e	#NUM!
+continuous_family	gamma.dist	4991	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e+300, 0.5, 1.0, True)	n	1.0
+continuous_family	gamma.inv	4992	_xlfn.GAMMA.INV({1},{2},{3})	(1e-307, 1e-307, 0.5)	e	#NUM!
+continuous_family	gamma.inv	4993	_xlfn.GAMMA.INV({1},{2},{3})	(0.5, 1e-307, 1.0)	n	0.0
+continuous_family	gamma.inv	4994	_xlfn.GAMMA.INV({1},{2},{3})	(1e-10, 1e-307, 1.0)	e	#NUM!
+continuous_family	gamma.inv	4995	_xlfn.GAMMA.INV({1},{2},{3})	(1e-307, 1.7e+308, 1e-307)	e	#NUM!
+continuous_family	gamma.inv	4996	_xlfn.GAMMA.INV({1},{2},{3})	(0.5, 1.7e+308, 1.0)	e	#NUM!
+continuous_family	gamma.inv	4997	_xlfn.GAMMA.INV({1},{2},{3})	(0.5, 1e+300, 1.0)	n	1.0002658235505755e+300
+continuous_family	f.dist	4998	_xlfn.F.DIST({1},{2},{3},{4})	(1e-307, 1.0, 100000.0, False)	n	1.261563107098391e+153
+continuous_family	f.dist	4999	_xlfn.F.DIST({1},{2},{3},{4})	(1e-307, 100000.0, 10000000000.0, False)	n	0.0
+continuous_family	f.dist	5000	_xlfn.F.DIST({1},{2},{3},{4})	(1e-307, 1.0, 100000.0, True)	e	#NUM!
+continuous_family	confidence.t	5001	_xlfn.CONFIDENCE.T({1},{2},{3})	(0.05, 1.0, 1000000000000000.0)	e	#NUM!
+continuous_family	confidence.t	5002	_xlfn.CONFIDENCE.T({1},{2},{3})	(0.05, 1.0, 10000000002.0)	e	#NUM!
+continuous_family	confidence.t	5003	_xlfn.CONFIDENCE.T({1},{2},{3})	(0.05, 1.0, 10000000001.0)	n	1.9599644085189063e-05

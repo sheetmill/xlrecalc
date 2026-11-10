@@ -106,6 +106,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   result is 0. The discrete distributions are within 8 units in the last place of Excel and the others within 4, but
   for 170 listed rows, most of the binomial at 1,000 trials and more (`QUIRKS.md`). A sum of more than a million
   terms (`BINOM.DIST` over 1E15 trials) is not computed: the formula keeps the value it holds and is reported.
+- The beta, gamma, chi-squared, F and t distributions, captured from Excel (capture `continuous_family`, 5,003 rows):
+  `BETA.DIST`, `BETADIST`, `BETA.INV`, `BETAINV`, `GAMMA.DIST`, `GAMMADIST`, `GAMMA.INV`, `GAMMAINV`, `CHISQ.DIST`,
+  `CHISQ.DIST.RT`, `CHIDIST`, `CHISQ.INV`, `CHISQ.INV.RT`, `CHIINV`, `F.DIST`, `F.DIST.RT`, `FDIST`, `F.INV`,
+  `F.INV.RT`, `FINV`, `T.DIST`, `T.DIST.2T`, `T.DIST.RT`, `TDIST`, `T.INV`, `T.INV.2T`, `TINV`, and the tests
+  `T.TEST`, `TTEST`, `F.TEST`, `FTEST`, `CHISQ.TEST`, `CHITEST`, `Z.TEST`, `ZTEST`, `CONFIDENCE.T`. Degrees of freedom
+  are truncated, from 1 to 1E10; each tail is computed directly where it is the smaller, and each inverse is the
+  root to the last bit, so far tails and probabilities near 1 keep their digits; at large shapes, where logarithms of
+  the gamma function cancel, Loader's saddle point, DiDonato and Morris's expansion and Temme's uniform expansion
+  take over. As in Excel, `CHISQ.INV.RT` and `CHIINV` at one degree of freedom invert the left tail at 1 - p (a p
+  of at most 2^-54, about 5.55E-17, is `#NUM!`), an empty sample in a test is `#VALUE!` (`#DIV/0!` in `Z.TEST`), and an empty bound of
+  the beta functions takes its default. Each function is within a relative tolerance of Excel from 1E-15 to 1E-12;
+  110 rows are listed, 97 of them where Excel's result is the further from the true value (`QUIRKS.md`). Every one
+  does bounded work on any input: a series or continued fraction stops at 20,000 terms (`#NUM!` past them) and an
+  inverse is a bisection over the doubles' bit patterns, at most 64 evaluations; at extreme shapes, where Excel itself
+  may calculate without end (seven formulas at a shape of 1.7E308), each gives its limit or `#NUM!`, never an error
+  of its own.
 - `MDETERM`, captured from Excel (capture `matrix_family`): elimination with partial pivoting, the first largest pivot,
   the pivots multiplied in order and signed by the swaps, bit for bit over integer, singular, Hilbert and random matrices
   up to 8 by 8; a zero pivot gives 0, an overflow `#NUM!`. Every element must be a number (`#VALUE!` for a text, a blank

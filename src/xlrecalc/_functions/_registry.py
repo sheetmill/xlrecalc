@@ -156,11 +156,17 @@ _EMPTY_IS_VALUE: dict[str, tuple[int, ...]] = {
     "INDEX": (0,), "IRR": (0,), "LINEST": (0,), "LOOKUP": (1, 2), "MIRR": (0,), "PROB": (0, 1),
     "_XLFN.XMATCH": (1,),
     "SUMX2MY2": (0, 1), "SUMX2PY2": (0, 1), "SUMXMY2": (0, 1),
+    **dict.fromkeys(("CHITEST", "_XLFN.CHISQ.TEST", "FTEST", "_XLFN.F.TEST"), (0, 1)),
+    **dict.fromkeys(("TTEST", "_XLFN.T.TEST"), (0, 1)),
 }  # fmt: skip
 # These take an empty optional argument as if it were left out. Others take it as 0 or FALSE.
 _EMPTY_OPTIONAL_IS_DEFAULT = frozenset(
     [
         "_XLFN.BINOM.DIST.RANGE",
+        "BETADIST",
+        "BETAINV",
+        "_XLFN.BETA.DIST",
+        "_XLFN.BETA.INV",
         "PROB",
         "ADDRESS",
         "BIN2HEX",

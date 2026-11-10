@@ -569,6 +569,60 @@ _TINY_PRINCIPAL = "CUMPRINC of the first periods of a very long loan: Excel give
 _MULTINOMIAL = (
     "Excel's result carries noise from its logarithm of the gamma function (279.99999999999966)"
 )
+_SEARCH_TINY_P = (
+    "an inverse at a probability of 1E-300: Excel's search stops short of the root or gives "
+    "#NUM!, where the result here is the root to the last bit, or 0 where it underflows "
+    "(capture continuous_family)"
+)
+_SEARCH_HUGE_DF = (
+    "T.INV, T.INV.2T, CHISQ.INV and CHISQ.INV.RT at 1E10 degrees of freedom: Excel's search "
+    "stops about 2E-7 from the root, or gives #NUM! (capture continuous_family)"
+)
+_SEARCH_1E6 = (
+    "T.INV, T.INV.2T and CONFIDENCE.T at 1E6 degrees of freedom: Excel's search stops 1E-12 to "
+    "3E-9 from the root, which the result here matches to 1E-15 (capture continuous_family)"
+)
+_T_HALF = (
+    "the t distribution at 1E-10 is exactly 0.5 in Excel, 1 for two tails, where it is 0.5 and "
+    "the density times 1E-10 here (capture continuous_family)"
+)
+_T_CENTER = (
+    "T.INV.2T near 1 at one degree of freedom is 6E-12 to 3E-5 from tan(pi (1 - p) / 2) in "
+    "Excel, and equal to it here (capture continuous_family)"
+)
+_CHISQ_ONE_DF = (
+    "CHISQ.INV.RT and CHIINV at one degree of freedom: Excel inverts the left tail at 1 - p, as "
+    "here, but its p is a unit of 1.1E-16 from 1 - (1 - p) on some rows, which shows where p is "
+    "small (capture continuous_family)"
+)
+_EXTREME_NUM = (
+    "Excel gives #NUM! at an extreme shape or value where the result exists: 0, a quantile that "
+    "underflows to 0, 1 to the last bit, or 2.5E-154 for F.DIST(1E-307,1,1E5,TRUE) (capture "
+    "continuous_family)"
+)
+_EXTREME_SEARCH = (
+    "an inverse at an extreme shape: Excel's search stops short of the root (0.999999 for 1, 0.5 "
+    "for 1, 2.7E-4 off), which the result here reaches (capture continuous_family)"
+)
+_BOTH_HUGE = (
+    "BETA.DIST with both shapes 1E300 is #NUM! here, where the continued fraction does not "
+    "converge within its terms; Excel gives 0.5 (capture continuous_family)"
+)
+_CONTINUOUS = {
+    _SEARCH_TINY_P: (655, 656, 658, 660, 1558, 1681, 1682, 1684, 2548, 2549, 2551, 2554, 2719,
+                     2722, 2723, 3377, 3378, 3503, 3504),
+    _SEARCH_HUGE_DF: (1621, 1630, 1639, 1693, 1702, 1711, 3387, 3396, 3405, 3414, 3432, 3441,
+                      3450, 3459, 3513, 3522, 3531, 3540, 3549, 3558, 3612, 5003),
+    _SEARCH_1E6: (3386, 3395, 3404, 3413, 3431, 3440, 3449, 3512, 3521, 3530, 3539, 3548, 3557,
+                  3611, 4454, 4459, 4469, 4474, 4933),
+    _T_HALF: (2914, 2916, 2918, 2920, 2922, 2924, 2926, 3103, 3104, 3105, 3106, 3107, 3108, 3109,
+              3202, 3203, 3204, 3205, 3206, 3207, 3208),
+    _T_CENTER: (3579, 3580, 4925, 4928),
+    _CHISQ_ONE_DF: (4886, 4887, 4892, 4893, 4898, 4899, 4901, 4902, 4911, 4915, 4919, 4921),
+    _EXTREME_NUM: (4980, 4982, 4984, 4985, 4990, 4992, 4994, 5000),
+    _EXTREME_SEARCH: (4978, 4979, 4981, 4997),
+    _BOTH_HUGE: (4966,),
+}  # fmt: skip
 KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{
         ("math_integers", case): _MULTINOMIAL
@@ -592,6 +646,11 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("distributions_family", case): _DISCRETE_TERMS for case in _DISCRETE_CASES},
     **{("distributions_family", case): _DISTRIBUTION_LIBRARY for case in _LIBRARY_CASES},
     ("distributions_family", 3364): _BINOM_INV_TIE,
+    **{
+        ("continuous_family", case): reason
+        for reason, cases in _CONTINUOUS.items()
+        for case in cases
+    },
     ("finance_family", 10952): _TBILLEQ_NOISE,
     **{
         ("finance", case): _VDB_FRACTIONAL
@@ -768,6 +827,7 @@ SUITES = [
     "info_family",
     "matrix_family",
     "distributions_family",
+    "continuous_family",
     "dates_family",
     "text_family",
     "database_family",

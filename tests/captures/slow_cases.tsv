@@ -1,0 +1,68 @@
+# suite: slow_cases (how long Excel takes over one formula alone in a workbook)
+# excel: 16.114.4 for Mac, locale en_US
+# captured: 2026-11-09
+# edition: Office Home & Business 2021, update channel Current
+# limit: 90 s a case; past it Excel was ended (capture.excel_watch.may_end)
+# columns: set, tag, formula, inputs, kind, value, seconds
+shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(100000.0,)	n	0.0	3.0
+shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(10000000000.0,)	n	0.0	0.7
+shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(1e+20,)	n	0.0	0.6
+shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(1e+50,)	n	0.0	0.6
+shapes	beta.dist	_xlfn.BETA.DIST(0.5,{1},0.5,TRUE)	(1e+100,)	n	0.0	0.6
+shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(100000.0,)	n	0.5004205221103651	0.6
+shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(10000000000.0,)	n	0.5000013298076014	0.6
+shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(1e+20,)	n	0.500000000013298	0.7
+shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(1e+50,)	n	0.5	0.6
+shapes	gamma.dist	_xlfn.GAMMA.DIST({1},{1},1,TRUE)	(1e+100,)	n	0.5	0.6
+shapes	beta.inv	_xlfn.BETA.INV(0.5,{1},0.5)	(100000.0,)	n	0.9999977253147848	0.6
+shapes	beta.inv	_xlfn.BETA.INV(0.5,{1},0.5)	(10000000000.0,)	n	0.9999999999772532	0.6
+shapes	beta.inv	_xlfn.BETA.INV(0.5,{1},0.5)	(1e+20,)	n	0.999999	0.6
+shapes	beta.inv	_xlfn.BETA.INV(0.5,{1},0.5)	(1e+50,)	n	0.999999	0.6
+shapes	beta.inv	_xlfn.BETA.INV(0.5,{1},0.5)	(1e+100,)	n	0.999999	0.7
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 1.7e+308, 0.5, True)	past	90 s	
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 1.7e+308, 0.5, False)	n	0.0	1.8
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 0.5, 1.7e+308, True)	past	90 s	
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 0.5, 1.7e+308, False)	n	0.0	1.7
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 1e+300, 1e+300, True)	n	0.5	0.6
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 1e+300, 1e+300, False)	n	1.1283791670955984e+150	0.6
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(1.0, 100000.0, 100000.0, False)	n	0.0	0.6
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 100000.0, 100000.0, False)	n	356.8243771998041	0.6
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(1e-307, 0.5, 1e+300, True)	n	0.0003568248113363828	0.6
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(1e-307, 0.5, 1e+300, False)	n	1.7841239377403544e+303	0.6
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 1e-307, 100000.0, True)	n	1.0	0.6
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(0.5, 1e-307, 100000.0, False)	n	0.0	0.6
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(1e-300, 1e-307, 1e+300, True)	n	1.0	0.6
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(1e-307, 1e-10, 0.5, False)	n	9.99999929172056e+296	0.6
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(1.0, 1e-307, 1.0, False)	e	#NUM!	0.6
+third	beta.dist	_xlfn.BETA.DIST({1},{2},{3},{4})	(1e-300, 1e-300, 1e+300, True)	n	1.0	0.6
+third	beta.inv	_xlfn.BETA.INV({1},{2},{3})	(0.5, 0.5, 1e+300)	n	1.963495408493682e-301	0.6
+third	beta.inv	_xlfn.BETA.INV({1},{2},{3})	(0.9999999999999999, 1e+300, 0.5)	n	0.9999990000000001	0.6
+third	beta.inv	_xlfn.BETA.INV({1},{2},{3})	(0.5, 1e-307, 100000.0)	e	#NUM!	0.6
+third	beta.inv	_xlfn.BETA.INV({1},{2},{3})	(0.5, 100000.0, 1e-300)	n	0.5	0.6
+third	beta.inv	_xlfn.BETA.INV({1},{2},{3})	(1e-300, 1e-300, 100000.0)	e	#NUM!	0.6
+third	beta.inv	_xlfn.BETA.INV({1},{2},{3})	(0.5, 100000.0, 1e+300)	e	#NUM!	0.6
+third	beta.inv	_xlfn.BETA.INV({1},{2},{3})	(0.5, 1.7e+308, 2.0)	past	90 s	
+third	beta.inv	_xlfn.BETA.INV({1},{2},{3})	(0.5, 1.7e+308, 1.7e+308)	past	90 s	
+third	beta.inv	_xlfn.BETA.INV({1},{2},{3})	(0.5, 1e+300, 10000000000.0)	e	#NUM!	1.7
+third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(0.5, 1.7e+308, 0.5, True)	past	90 s	
+third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(0.5, 1.7e+308, 0.5, False)	e	#NUM!	1.7
+third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(100000.0, 1.7e+308, 100000.0, True)	past	90 s	
+third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e+300, 1e+300, 0.9999999999999999, True)	n	1.0	1.7
+third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e+300, 1e+300, 0.9999999999999999, False)	n	0.0	0.6
+third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e-307, 0.5, 1e-307, False)	n	2.0755374871029737e+306	0.6
+third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e-307, 1e-10, 0.5, False)	n	9.999999294376767e+296	0.6
+third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e+300, 1.7e+308, 1e+300, True)	past	90 s	
+third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(0.5, 1e+300, 1.0, True)	e	#NUM!	1.7
+third	gamma.dist	_xlfn.GAMMA.DIST({1},{2},{3},{4})	(1e+300, 0.5, 1.0, True)	n	1.0	0.6
+third	gamma.inv	_xlfn.GAMMA.INV({1},{2},{3})	(1e-307, 1e-307, 0.5)	e	#NUM!	0.6
+third	gamma.inv	_xlfn.GAMMA.INV({1},{2},{3})	(0.5, 1e-307, 1.0)	n	0.0	0.6
+third	gamma.inv	_xlfn.GAMMA.INV({1},{2},{3})	(1e-10, 1e-307, 1.0)	e	#NUM!	0.6
+third	gamma.inv	_xlfn.GAMMA.INV({1},{2},{3})	(1e-307, 1.7e+308, 1e-307)	e	#NUM!	0.6
+third	gamma.inv	_xlfn.GAMMA.INV({1},{2},{3})	(0.5, 1.7e+308, 1.0)	e	#NUM!	0.6
+third	gamma.inv	_xlfn.GAMMA.INV({1},{2},{3})	(0.5, 1e+300, 1.0)	n	1.0002658235505755e+300	0.6
+third	f.dist	_xlfn.F.DIST({1},{2},{3},{4})	(1e-307, 1.0, 100000.0, False)	n	1.261563107098391e+153	0.6
+third	f.dist	_xlfn.F.DIST({1},{2},{3},{4})	(1e-307, 100000.0, 10000000000.0, False)	n	0.0	0.6
+third	f.dist	_xlfn.F.DIST({1},{2},{3},{4})	(1e-307, 1.0, 100000.0, True)	e	#NUM!	0.6
+third	confidence.t	_xlfn.CONFIDENCE.T({1},{2},{3})	(0.05, 1.0, 1000000000000000.0)	e	#NUM!	0.6
+third	confidence.t	_xlfn.CONFIDENCE.T({1},{2},{3})	(0.05, 1.0, 10000000002.0)	e	#NUM!	0.6
+third	confidence.t	_xlfn.CONFIDENCE.T({1},{2},{3})	(0.05, 1.0, 10000000001.0)	n	1.9599644085189063e-05	0.6

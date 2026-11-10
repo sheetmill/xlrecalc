@@ -2,8 +2,8 @@
 
 The evidence sentence (formulas, matches, known deviations) is checked against the capture run
 in ``tests/test_captures.py``; the rest is here: the function counts (``docs/coverage.md``), the
-largest group of known deviations and its size, and the iterative functions' share of listed
-rows (the deviation list and capture ``iterative``).
+largest group of known deviations and its size, the iterative functions' share of listed rows
+(the deviation list and capture ``iterative``), and the relative tolerances (the registry).
 """
 
 from __future__ import annotations
@@ -56,3 +56,20 @@ def test_iterative_share_is_the_iterative_capture():
     )
     assert stated, "README.md: the iterative functions' share is missing"
     assert (_figure(stated[1]), _figure(stated[2])) == (listed, len(rows))
+
+
+def test_relative_tolerances_are_the_registry():
+    """The relative tolerances stated: the iterative functions', the continuous family's range."""
+    from xlrecalc._functions import SPECS, _continuous
+
+    family = (_continuous._REL_TAILS, _continuous._REL_SEARCH, _continuous._REL_TEST)
+    rels = [s.rel for s in SPECS.values() if s.rel_reason in family]
+    others = {s.rel for s in SPECS.values() if s.rel and s.rel_reason not in family}
+    stated = re.search(
+        r"a relative one: ([\dE.-]+) for the iterative functions, ([\dE.-]+) to ([\dE.-]+) for "
+        r"the beta, gamma, chi-squared, F and t distributions",
+        _readme(),
+    )
+    assert stated, "README.md: the relative tolerances are missing"
+    assert {float(stated[1])} == others
+    assert (float(stated[2]), float(stated[3])) == (min(rels), max(rels))

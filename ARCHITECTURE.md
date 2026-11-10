@@ -802,7 +802,14 @@ multiplies in; the discrete distributions 8 and `GAMMA`, `GAMMALN`, `ERF`, `ERFC
 last bits. The iterative functions (`IRR`, `XIRR`, `RATE`,
 `YIELD`) declare a relative tolerance instead (`rel=1e-9`), since Excel itself guarantees
 their results only to its documented stopping tolerance; rows within it are counted apart
-from exact and ulp matches, under the same guard.
+from exact and ulp matches, under the same guard. So do the beta, gamma, chi-squared, F and t
+distributions, their inverses and tests, from 1E-15 to 1E-12, each its largest difference from
+Excel on the capture rounded up to a power of ten: they rest on the incomplete beta and gamma
+functions, continued fractions, series and asymptotic expansions whose results differ from
+Excel's by more than a few units in the last place where a tail is small or an inverse is a
+search, which neither side computes to the last bit. Where either side is exactly 0 no relative
+tolerance applies, and a row past a function's tolerance is a listed deviation, never a
+reason to raise it.
 
 ### 8.2 Status
 
