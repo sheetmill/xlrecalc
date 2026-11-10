@@ -224,8 +224,9 @@ So the next one explains itself: past a limit, `capture/excel_watch.py` saves a 
 `capture/build/excel_hangs/` (Excel's `sample`, uptime, CPU and memory, the display's last change, the request and its
 file) and asks about workbooks at once and after 1 and 5 minutes. When Excel answers, the workbooks the request named in
 Excel's container are closed without saving and alerts are turned back on, so that a recovered hang does not leave a probe's
-file open with alerts off. `uv run python -m capture.excel_watch` asks again and adds the answer to the record: run it before
-anyone quits Excel. `capture/array_size_probe.py` and `capture/value_probe.py` keep
+file open with alerts off. A request AppleScript gives up on first (`AppleEvent timed out`, -1712) is the same hang and
+is recorded the same way. `uv run python -m capture.excel_watch [RECORD]` asks again and adds the answer to that record,
+or to the latest if it is from the last half hour (else to a record of its own): run it before anyone quits Excel. `capture/array_size_probe.py` and `capture/value_probe.py` keep
 limits of their own: there, running past one is a result.
 
 The probes behind the design (`capture/writeback_probe.py`, `capture/semantics_probe.py`,

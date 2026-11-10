@@ -1,12 +1,14 @@
 """A time limit on each request to Excel, and evidence when one passes (``CAPTURING.md`` §2).
 
-    uv run python -m capture.excel_watch     # asks Excel again; the answer goes in the last record
+    uv run python -m capture.excel_watch [RECORD]   # asks Excel again; the answer goes in RECORD
 
-Past its limit a request is stopped, and what can be learned is saved under ``capture/build``: a
-``sample`` of Excel, how long it has been up, its CPU and memory, the display's last change, the
-request and its file, and whether Excel answers a question about its workbooks now and after 1 and
-5 minutes. Excel is ended only when nothing of anyone else's can be in it (``may_end``): the run
-began with no workbook open, and every window of Excel's on screen is the request's own. Otherwise
+Past its limit a request is stopped, and so is one that AppleScript gave up on first (``AppleEvent
+timed out``, -1712), the same hang seen from the other side; what can be learned is saved under
+``capture/build``: a ``sample`` of Excel, how long it has been up, its CPU and memory, the
+display's last change, the request and its file, and whether Excel answers a question about its
+workbooks now and after 1 and 5 minutes. Excel is ended only when nothing of anyone else's can be
+in it (``may_end``): the run began with no workbook open, and every window of Excel's on screen is
+the request's own. Otherwise
 it is left as it is, since it may hold what the person using it needs. When it answers again,
 the workbooks the request named in Excel's container are closed without saving and alerts are
 turned back on, so a recovered hang leaves nothing behind. Imports only the standard library, so
@@ -39,6 +41,8 @@ ANSWER_SECONDS = 15.0
 END_GRACE_SECONDS = 10.0  # between TERM and KILL
 """What Excel may take to say how many workbooks it has open."""
 ASK_AGAIN = (60.0, 240.0)
+RECENT_SECONDS = 1800.0  # asking again adds to the latest record only if it is this recent
+APPLE_EVENT_TIMEOUT = "(-1712)"  # AppleScript's own limit on a request, before ours
 """Seconds to wait before each further question: 1 minute after the first, then 5."""
 SAMPLE_SECONDS = 10
 _VERSION = 'tell application "Microsoft Excel" to version'
@@ -370,13 +374,18 @@ def osascript(
     preflight()
     keep_awake()
     try:
-        return subprocess.run(
+        result = subprocess.run(
             ["osascript", *arguments], capture_output=True, text=True, timeout=seconds
         )
     except subprocess.TimeoutExpired:
         what = f"{Path(arguments[0]).name} past {seconds:.0f} s"
         record, answered, ended = collect(what, arguments, seconds, end_allowed)
         raise ExcelTimeoutError(what, answered, record, ended) from None
+    if result.returncode and APPLE_EVENT_TIMEOUT in result.stderr:
+        what = f"{Path(arguments[0]).name}: AppleEvent timed out (-1712)"
+        record, answered, ended = collect(what, arguments, seconds, end_allowed)
+        raise ExcelTimeoutError(what, answered, record, ended)
+    return result
 
 
 def osascript_or_exit(*arguments: str, seconds: float) -> subprocess.CompletedProcess[str]:
@@ -387,15 +396,24 @@ def osascript_or_exit(*arguments: str, seconds: float) -> subprocess.CompletedPr
         sys.exit(str(timeout))
 
 
-def main() -> None:
-    """Ask Excel again, and add the answer to the last record."""
+def main(argv: list[str]) -> None:
+    """Ask Excel again, and add the answer to the record named, else to the latest if recent.
+
+    A record older than ``RECENT_SECONDS`` belongs to an earlier hang: the answer then starts a
+    record of its own rather than being added to it.
+    """
     answered = answers()
-    records = sorted(p for p in EVIDENCE.glob("*.txt") if not p.name.endswith(".sample.txt"))
     now = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
-    if records:
-        _log(records[-1], f"asked again at {now}: answers {answered}\n{_state()}")
-    print(f"answers about workbooks: {answered}; {records[-1] if records else 'no record'}")
+    if argv:
+        record = Path(argv[0])
+    else:
+        records = sorted(p for p in EVIDENCE.glob("*.txt") if not p.name.endswith(".sample.txt"))
+        recent = records and time.time() - records[-1].stat().st_mtime <= RECENT_SECONDS
+        record = records[-1] if recent else EVIDENCE / f"{now}-asked.txt"
+    EVIDENCE.mkdir(parents=True, exist_ok=True)
+    _log(record, f"asked again at {now}: answers {answered}\n{_state()}")
+    print(f"answers about workbooks: {answered}; {record}")
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

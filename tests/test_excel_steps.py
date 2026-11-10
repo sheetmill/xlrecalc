@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -247,3 +248,39 @@ def test_collect_ends_excel_only_when_allowed_and_may_end_holds(monkeypatch, tmp
     record, _, was_ended = excel_watch.collect("x", request, 1.0, end_allowed=True)
     assert (was_ended, ended) == (False, [])
     assert "may end Excel: False" in record.read_text()
+
+
+def test_an_apple_event_timeout_saves_a_record_and_stops(monkeypatch, tmp_path):
+    """AppleScript's own limit (-1712) can come before ours: the same hang, recorded alike."""
+    error = "save_copy.applescript:1288:1302: execution error: AppleEvent timed out. (-1712)"
+
+    def run(command, **kwargs):
+        if command[0] == "osascript" and command[1].endswith("save_copy.applescript"):
+            return subprocess.CompletedProcess(command, 1, "", error)
+        return subprocess.CompletedProcess(command, 0, "", "")
+
+    monkeypatch.setattr(subprocess, "run", run)
+    monkeypatch.setattr(excel_watch, "answers", lambda seconds=0: True)
+    monkeypatch.setattr(excel_watch, "_checked", True)
+    with pytest.raises(excel_watch.ExcelTimeoutError) as stopped:
+        excel_watch.osascript("capture/save_copy.applescript", "a.xlsx", seconds=600.0)
+    assert stopped.value.answered
+    (record,) = [p for p in tmp_path.glob("*.txt") if not p.name.endswith(".sample.txt")]
+    assert "save_copy.applescript: AppleEvent timed out (-1712)" in record.read_text()
+
+
+def test_asking_again_adds_to_a_recent_record_only(monkeypatch, tmp_path):
+    monkeypatch.setattr(excel_watch, "answers", lambda seconds=0: True)
+    monkeypatch.setattr(excel_watch, "_state", lambda: "state")
+    old = tmp_path / "20260101-000000.txt"
+    old.write_text("an earlier hang\n")
+    hour_ago = excel_watch.time.time() - 3600
+    os.utime(old, (hour_ago, hour_ago))
+    excel_watch.main([])
+    assert old.read_text() == "an earlier hang\n"
+    (asked,) = tmp_path.glob("*-asked.txt")
+    assert "answers True" in asked.read_text()
+    excel_watch.main([])
+    assert asked.read_text().count("asked again") == 2  # now the latest, and recent
+    excel_watch.main([str(old)])
+    assert "asked again" in old.read_text()  # a record named takes the answer
