@@ -240,29 +240,29 @@ library differs in the last bits; the rows that match either way do not.
 | `IMABS` | engineering | implemented | 18 | 18 | 0 | 0 | 0 |  |  |
 | `IMAGE` | | absent | | | | | | | |
 | `IMAGINARY` | engineering | implemented | 34 | 34 | 0 | 0 | 0 |  |  |
-| `IMARGUMENT` | engineering | implemented | 15 | 15 | 0 | 0 | 0 |  |  |
+| `IMARGUMENT` | engineering | implemented | 15 | 15 | 0 | 0 | 0 | 4 ulps |  |
 | `IMCONJUGATE` | engineering | implemented | 15 | 15 | 0 | 0 | 0 |  |  |
 | `IMCOS` | engineering | implemented | 15 | 15 | 0 | 0 | 0 |  |  |
-| `IMCOSH` | engineering | implemented | 15 | 15 | 0 | 0 | 0 |  |  |
-| `IMCOT` | engineering | implemented | 34 | 34 | 0 | 0 | 0 |  |  |
-| `IMCSC` | engineering | implemented | 15 | 15 | 0 | 0 | 0 |  |  |
-| `IMCSCH` | engineering | implemented | 15 | 15 | 0 | 0 | 0 |  |  |
+| `IMCOSH` | engineering | implemented | 15 | 14 | 0 | 0 | 1 |  |  |
+| `IMCOT` | engineering | implemented | 34 | 31 | 0 | 0 | 3 |  |  |
+| `IMCSC` | engineering | implemented | 15 | 13 | 0 | 0 | 2 |  |  |
+| `IMCSCH` | engineering | implemented | 15 | 12 | 0 | 0 | 3 |  |  |
 | `IMDIV` | engineering | implemented | 69 | 69 | 0 | 0 | 0 |  |  |
-| `IMEXP` | engineering | implemented | 15 | 15 | 0 | 0 | 0 |  |  |
+| `IMEXP` | engineering | implemented | 15 | 10 | 0 | 0 | 5 |  |  |
 | `IMLN` | engineering | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
-| `IMLOG10` | engineering | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
-| `IMLOG2` | engineering | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
-| `IMPOWER` | engineering | implemented | 185 | 185 | 0 | 0 | 0 |  |  |
+| `IMLOG10` | engineering | implemented | 28 | 25 | 0 | 0 | 3 |  |  |
+| `IMLOG2` | engineering | implemented | 28 | 22 | 0 | 0 | 6 |  |  |
+| `IMPOWER` | engineering | implemented | 185 | 159 | 0 | 0 | 26 |  |  |
 | `IMPRODUCT` | engineering | implemented | 71 | 71 | 0 | 0 | 0 |  |  |
 | `IMREAL` | engineering | implemented | 35 | 35 | 0 | 0 | 0 |  |  |
-| `IMSEC` | engineering | implemented | 15 | 15 | 0 | 0 | 0 |  |  |
-| `IMSECH` | engineering | implemented | 15 | 15 | 0 | 0 | 0 |  |  |
-| `IMSIN` | engineering | implemented | 15 | 15 | 0 | 0 | 0 |  |  |
-| `IMSINH` | engineering | implemented | 15 | 15 | 0 | 0 | 0 |  |  |
-| `IMSQRT` | engineering | implemented | 15 | 15 | 0 | 0 | 0 |  |  |
+| `IMSEC` | engineering | implemented | 15 | 12 | 0 | 0 | 3 |  |  |
+| `IMSECH` | engineering | implemented | 15 | 12 | 0 | 0 | 3 |  |  |
+| `IMSIN` | engineering | implemented | 15 | 13 | 0 | 0 | 2 |  |  |
+| `IMSINH` | engineering | implemented | 15 | 13 | 0 | 0 | 2 |  |  |
+| `IMSQRT` | engineering | implemented | 15 | 9 | 0 | 0 | 6 |  |  |
 | `IMSUB` | engineering | implemented | 69 | 69 | 0 | 0 | 0 |  |  |
 | `IMSUM` | engineering | implemented | 71 | 71 | 0 | 0 | 0 |  |  |
-| `IMTAN` | engineering | implemented | 34 | 34 | 0 | 0 | 0 |  |  |
+| `IMTAN` | engineering | implemented | 34 | 32 | 0 | 0 | 2 |  |  |
 | `INDEX` | lookup and reference | implemented | 453 | 441 | 2 | 0 | 10 |  |  |
 | `INDIRECT` | lookup and reference | implemented | 14 | 14 | 0 | 0 | 0 |  |  |
 | `INFO` | | absent | | | | | | | |

@@ -214,7 +214,11 @@ def _modulus(a: float, b: float) -> float:
     return 0.0 if big == 0 else big * math.sqrt(1 + (small / big) ** 2)
 
 
-@function("IMARGUMENT", "value", category=E)
+# A number, not text: the platform's atan2 may differ from Excel's in the last bit, as for ATAN2.
+_ATAN2 = "the platform's atan2 may differ from Excel's in the last bits, as for ATAN2"
+
+
+@function("IMARGUMENT", "value", category=E, ulps=4, ulps_reason=_ATAN2)
 def IMARGUMENT(ctx: Any, v: Any) -> Any:
     """The angle of a complex number, in radians; #DIV/0! at 0."""
     z = _arg(v, ctx)

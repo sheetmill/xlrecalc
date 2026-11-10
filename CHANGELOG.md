@@ -124,7 +124,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   inverse is a bisection over the doubles' bit patterns, at most 64 evaluations; at extreme shapes, where Excel itself
   may calculate without end (seven formulas at a shape of 1.7E308), each gives its limit or `#NUM!`, never an error
   of its own.
-- The complex-number functions, captured from Excel (capture `complex_family`, 1,229 rows, every one matching):
+- The complex-number functions, captured from Excel (capture `complex_family`, 1,229 rows, every one matching on
+  the reference platform; 67 listed for others, where the math library can round a part's 15th digit the other way):
   `COMPLEX`, `IMREAL`, `IMAGINARY`, `IMABS`, `IMARGUMENT`, `IMCONJUGATE`, `IMSUM`, `IMSUB`, `IMPRODUCT`, `IMDIV`,
   `IMPOWER`, `IMSQRT`, `IMEXP`, `IMLN`, `IMLOG10`, `IMLOG2`, `IMSIN`, `IMCOS`, `IMTAN`, `IMCOT`, `IMSEC`, `IMCSC`,
   `IMSINH`, `IMCOSH`, `IMSECH`, `IMCSCH`. A complex number is text such as `3+4i` or `-2.5-1.5j`, each part written

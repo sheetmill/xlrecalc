@@ -168,6 +168,13 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   function's declared tolerance) and differ on another, where a last-bit difference in `erfc`, `exp`, `log1p` or `expm1` survives a cancellation: `GAUSS(1E-5)`, which
   subtracts 0.5 from the normal distribution (as Excel's own result shows), and two rows of `IPMT` with payments due in
   advance (`empty_args`). They are listed on every platform, so the published counts do not depend on it.
+- The platform's math library, in text: 67 rows of `complex_family` match Excel here and may differ elsewhere. A complex
+  result is text, each part rounded to 15 significant digits, so a declared tolerance in units in the last place cannot
+  apply; where a part computed through `sin`, `cos`, `exp`, `log`, `sinh`, `cosh` or `atan2` lies within one unit in the
+  last place of a midpoint between two 15-digit decimals (63 rows), or an imaginary part is exactly 1, written `i`
+  where the double below it is written `1i` (9 rows, 5 of them among the 63), another platform's last bit can round
+  the text the other way: on Linux, `IMSEC("-2.5-1.5j")` gives `-0.364130793588459+...` where Excel gives
+  `-0.36413079358846+...`. `tests/test_complex_boundary.py` derives the rows. They are listed on every platform.
 - `VDB` from a fractional start, or late in a schedule, differs in its last bits on 75 of the 317 rows of `finance` that
   sweep fractional periods (5 to 1,131 units in the last place, Excel's rule otherwise reproduced): the book value carried
   period by period rounds differently from Excel's, and a straight-line amount computed once or a closed-form book value

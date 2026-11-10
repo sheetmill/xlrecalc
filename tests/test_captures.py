@@ -160,6 +160,12 @@ _LIBM_CANCELLATION = (
     "0, IPMT due in advance): it matches Excel on the platform docs/coverage.md records, and on "
     "another a last-bit difference before the cancellation shows in the result"
 )
+_COMPLEX_TEXT_BOUNDARY = (
+    "a complex part computed through sin, cos, exp, log, sinh, cosh or atan2 within one unit in "
+    "the last place of a midpoint between 15-digit decimals, or an imaginary part of exactly 1 "
+    "(written i): it matches Excel on the platform docs/coverage.md records, and another "
+    "platform's last bit can round the text the other way (tests/test_complex_boundary.py)"
+)
 _VDB_FRACTIONAL = (
     "VDB from a fractional start or late in a schedule: Excel's rule is reproduced, its last "
     "bits are not (5 to 1,131 units in the last place); the book value carried period by period "
@@ -737,6 +743,78 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     ("statistics_family", 1011): _LIBM_CANCELLATION,
     **{("empty_args", case): _LIBM_CANCELLATION for case in (346, 350)},
     **{
+        ("complex_family", case): _COMPLEX_TEXT_BOUNDARY
+        for case in (
+            411,
+            412,
+            413,
+            414,
+            416,
+            421,
+            424,
+            426,
+            427,
+            429,
+            434,
+            454,
+            455,
+            458,
+            467,
+            476,
+            480,
+            481,
+            516,
+            527,
+            538,
+            539,
+            541,
+            552,
+            553,
+            566,
+            567,
+            582,
+            592,
+            593,
+            596,
+            606,
+            607,
+            611,
+            890,
+            895,
+            897,
+            898,
+            900,
+            902,
+            904,
+            905,
+            907,
+            909,
+            911,
+            919,
+            925,
+            930,
+            960,
+            965,
+            1058,
+            1069,
+            1086,
+            1095,
+            1097,
+            1101,
+            1103,
+            1105,
+            1114,
+            1127,
+            1130,
+            1147,
+            1154,
+            1207,
+            1210,
+            1211,
+            1217,
+        )
+    },
+    **{
         ("database_family", case): _COMPUTED_CRITERIA
         for case in (
             17,
@@ -792,7 +870,7 @@ MATH_LIBRARY = frozenset(
     {_IPMT_TAIL, _ITER_NEAR_ZERO, _ITER_OUTCOME, _XIRR, _YIELD_ZERO_COUPON, _PRICE_EXTREME,
      _NORMAL_TAIL, _DISCRETE_TERMS, _DISTRIBUTION_LIBRARY}
 )  # fmt: skip
-OTHER_PLATFORMS = frozenset({_LIBM_CANCELLATION})
+OTHER_PLATFORMS = frozenset({_LIBM_CANCELLATION, _COMPLEX_TEXT_BOUNDARY})
 
 
 def _reference_platform() -> bool:
