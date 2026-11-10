@@ -732,12 +732,15 @@ memory, and computes `SUMPRODUCT` over whole columns without making the array (c
 `array_size`).
 
 `SUMIF`, `SUMIFS` and `COUNTIFS` make no array and need no limit: they walk non-blank cells, as
-`COUNTIF` does, and so do `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS` and `MINIFS`. A blank adds nothing to a sum. In a count, a criterion that rejects a blank
-limits the matches to that range's non-blank cells; otherwise a position fails only where a
-non-blank cell fails its criterion, and every other position counts. Their cost follows the cells
-a sheet holds, over a whole sheet too. `SUMIF`, `SUMIFS`, `COUNTIF` and `COUNTIFS` give Excel's value there (capture
-`array_functions`: 31 formulas over one column, ten and every column, 10 of them over a whole sheet); the other four
-are captured over smaller ranges only.
+`COUNTIF` does, and so do `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS` and `MINIFS`. A blank adds nothing
+to a sum. In a count, a criterion that rejects a blank limits the matches to that range's
+non-blank cells; otherwise a position fails only where a non-blank cell fails its criterion, and
+every other position counts. Their cost follows the cells a sheet holds, over a whole sheet too.
+Capture `array_functions` holds Excel's value for 30 formulas of `SUMIF`, `SUMIFS`, `COUNTIF` and
+`COUNTIFS` over one column, ten and every column, 9 of them over a whole sheet, and each matches.
+It holds none for `SUMIF(D!A:XFD,"<>5")`, which Excel did not finish within the probe's limit, or
+for `SUMIFS(D!A:XFD,D!A:XFD,"<>5")`, which was not run. The other four functions are captured over
+smaller ranges only.
 `MATCH`, `VLOOKUP`, `HLOOKUP` and `LOOKUP` read a range's non-blank cells likewise, since neither an
 exact match nor the bisection of cells of the key's type can land on a blank.
 `XLOOKUP` and `XMATCH` do too; a blank key, which finds a blank cell, looks for the first gap.

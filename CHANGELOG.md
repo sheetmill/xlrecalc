@@ -168,7 +168,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   an operation between arrays); one that would keeps the value the file holds and is reported.
   `ReadLimits` now bounds computing as well as reading.
 - `SUMIF`, `SUMIFS` and `COUNTIFS` visit only a range's non-blank cells, so they are computed over
-  any range, whole sheets included (capture `array_functions`).
+  any range without listing its positions; over whole sheets, capture `array_functions` holds Excel's value for 9
+  formulas, and each matches.
 
 ### Changed
 - A function written in a file without the prefix Excel gives it (`XLOOKUP` for `_xlfn.XLOOKUP`, as openpyxl writes what it

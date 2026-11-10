@@ -10,6 +10,7 @@ machine running out.
 from __future__ import annotations
 
 import io
+import re
 import tempfile
 from pathlib import Path
 from xml.sax.saxutils import escape as xml_escape
@@ -118,14 +119,31 @@ def test_the_limit_can_be_lowered():
 
 
 def excel_results() -> dict[str, float]:
-    """The ``SUMIF`` family in capture ``array_functions``: each formula's last value read."""
+    """The ``SUMIF`` family in capture ``array_functions``: each formula's value after Excel's
+    calculation, for the formulas Excel calculated (not one whose calculation timed out)."""
     results = {}
     lines = (CAPTURES / "array_functions.tsv").read_text(encoding="utf-8").splitlines()
     for line in lines:
         reads = [f for f in line.split("\t") if f.startswith("read: ") and " | " in f]
-        if reads and line.startswith(("SUMIF", "COUNTIF")):
+        calculated = "\tcalc: calculated " in line
+        if calculated and reads and line.startswith(("SUMIF", "COUNTIF")):
             results[line.split("\t")[0]] = float(reads[-1][6:].split(" | ")[0])
     return results
+
+
+def test_architecture_states_the_sumif_family_capture_counts():
+    """ARCHITECTURE.md's counts are the capture's: formulas with Excel's value, and those over a
+    whole sheet (every column, or all but one beside another range of all but one)."""
+    results = excel_results()
+    whole = [f for f in results if re.search(r"A:XF[CD]|B:XFD", f)]
+    text = (Path(__file__).parents[1] / "ARCHITECTURE.md").read_text(encoding="utf-8")
+    found = re.search(
+        r"holds Excel's value for (\d+) formulas of `SUMIF`.*?(\d+) of them over a whole sheet",
+        text,
+        re.S,
+    )
+    assert found, "ARCHITECTURE.md: the array_functions counts are missing"
+    assert (int(found[1]), int(found[2])) == (len(results), len(whole))
 
 
 @bounded
