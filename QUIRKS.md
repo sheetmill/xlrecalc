@@ -236,6 +236,6 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   root (sometimes after what looks like a bracketing search); and three `IRR` results at a
   rate of 0 differ by less than 1E-14, where a relative tolerance cannot apply. Tried, at most
   five hypotheses each: Newton on the rate, on 1 + rate and on 1 / (1 + rate), analytic and
-  numerical derivatives, stops on the step or on the NPV, 20 to 100 iterations, damping. An
-  investigation of Excel's iteration is planned. Each row is listed in
+  numerical derivatives, stops on the step or on the NPV, 20 to 100 iterations, damping. Excel's
+  iteration is on the Roadmap (ARCHITECTURE.md §13). Each row is listed in
   `tests/test_captures.py`.

@@ -1280,24 +1280,25 @@ One workbook is used from one thread at a time.
 
 ## 13. Roadmap
 
-1. 0.2: Excel's iteration for `IRR`, `XIRR`, `RATE` and `YIELD` (its starting step, update
+After 0.2.0, in this order: an order, not a promise or a date.
+
+1. Excel's iteration for `IRR`, `XIRR`, `RATE` and `YIELD` (its starting step, update
    rule and stopping test, inferred from capture sweeps), aiming to match the rows QUIRKS.md
    lists.
-2. 0.2: a live openpyxl adapter: `xlrecalc.from_openpyxl(workbook)` would build an engine from an
+2. A live openpyxl adapter: `xlrecalc.from_openpyxl(workbook)` would build an engine from an
    in-memory openpyxl `Workbook` through its public API only (`iter_rows`, `cell.value` and
    `cell.data_type`, `ArrayFormula`, `wb.defined_names`, `ws.tables`, `wb.epoch`), evaluate
    values on demand, and after the caller edits the workbook rebuild only the cells whose value
    or formula changed (`engine.refresh()`, or `engine.changed("Sheet1!A1", ...)` naming them).
    It would answer code, not persist values: saving with values stays `recalculate`. openpyxl
    would be an optional extra, imported when the adapter is used.
-3. 0.2: unions of ranges together with arrays of references, which QUIRKS.md lists as not
+3. Unions of ranges together with arrays of references, which QUIRKS.md lists as not
    computed.
-4. 0.2: the functions still absent, by family, each family's captures first. An order, not a promise
-   or a date: the families (distributions and their
-   inverses, complex numbers, Bessel functions and `CONVERT`, bonds with odd periods, the array and
-   matrix functions) follow as far as they get; those with large questions of their own (regular
-   expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable. `docs/coverage.md` lists what
-   exists.
+4. The functions still absent, by family, each family's captures first: Bessel functions and
+   `CONVERT`, bonds with odd periods, the regression arrays (`TREND`, `GROWTH`, `LOGEST`) and
+   `TRIMRANGE`, then `AGGREGATE` and the others one by one; those with large questions of their
+   own (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable.
+   `docs/coverage.md` lists what exists.
 5. `LAMBDA` and its helpers (`MAP`, `REDUCE`, `SCAN`, `BYROW`, `BYCOL`, `MAKEARRAY`, `ISOMITTED`): Excel's own
    semantics, captured before they are built, on an edition of Excel that has them (Office Home & Business 2021 for
    Mac does not; `CAPTURING.md` §2). They would compile as `LET` does (§5.4), a lambda's body a function of its
