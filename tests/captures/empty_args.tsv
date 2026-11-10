@@ -1,5 +1,6 @@
 # suite: empty_args
 # excel: 16.114.4 for Mac, locale en_US
+# edition: Office Home & Business 2021, update channel Current
 # date_system: 1900
 # captured: 2026-11-09
 # generator: capture/suites.py:empty_args
@@ -1207,9 +1208,16 @@ empty_args	textsplit	1194	_xlfn.TEXTSPLIT("a,b;c",",",,FALSE)	()	str	'a'
 empty_args	randarray	1195	_xlfn.RANDARRAY(1,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1196	_xlfn.RANDARRAY(,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1197	_xlfn.RANDARRAY(1,,5,5,FALSE)	()	n	5.0
-empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	1.7318348622566972
+empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	0.7494587414172447
 empty_args	randarray	1199	_xlfn.RANDARRAY(1,1,5,,FALSE)	()	e	#VALUE!
 empty_args	randarray	1200	_xlfn.RANDARRAY(1,1,5,5,)	()	n	5.0
-empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.8904271335534248
-empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.858543757343468
-empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.4932457095618017
+empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.20588048982813123
+empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.5778457067264151
+empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.23670139862190243
+empty_args	let	1204	_xlfn.LET(_xlpm.x,1,_xlpm.x+1)	()	n	2.0
+empty_args	let	1205	_xlfn.LET(_xlpm.x,,_xlpm.x+1)	()	n	1.0
+empty_args	let	1206	_xlfn.LET(_xlpm.x,1,)	()	n	0.0
+empty_args	let	1207	_xlfn.LET(_xlpm.x,,_xlpm.x)	()	n	0.0
+empty_args	let	1208	_xlfn.LET(_xlpm.x,1,_xlpm.y,,_xlpm.x+_xlpm.y)	()	n	1.0
+empty_args	let	1209	_xlfn.LET(_xlpm.x,,ISBLANK(_xlpm.x))	()	b	True
+empty_args	let	1210	_xlfn.LET(_xlpm.x,1,_xlpm.y,)	()	n	0.0

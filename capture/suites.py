@@ -3360,8 +3360,8 @@ _EMPTY_TABLE: dict[str, Input] = {
     "BD1": "N", "BD2": ">1", "BE1": "N", "BE2": ">2",
 }  # fmt: skip
 _EMPTY_SKIP = frozenset(
-    {"_XLFN.ANCHORARRAY", "_XLFN.SINGLE", "RAND", "RANDBETWEEN", "NOW", "TODAY", "_XLFN.LET"}
-)  # LET: its rows (_EMPTY_EXPLICIT) wait for their capture
+    {"_XLFN.ANCHORARRAY", "_XLFN.SINGLE", "RAND", "RANDBETWEEN", "NOW", "TODAY"}
+)
 _EMPTY_VALUE = {
     "number": "2", "text": '"a"', "logical": "TRUE", "value": "2", "branch": "2",
     "raw": "$AA$1:$AA$4", "array": "$AA$1:$AA$4", "matrix": "$AA$1:$AA$4", "key": "2",
@@ -3464,7 +3464,7 @@ _EMPTY_ADDED = (
     "_XLFN._XLWS.FILTER", "_XLFN.CHOOSECOLS", "_XLFN.CHOOSEROWS", "_XLFN.TAKE", "_XLFN.DROP",
     "_XLFN.EXPAND", "_XLFN.VSTACK", "_XLFN.HSTACK", "_XLFN.TOCOL", "_XLFN.TOROW", "_XLFN.WRAPROWS",
     "_XLFN.WRAPCOLS", "_XLFN.MUNIT", "MDETERM", "MINVERSE", "FREQUENCY", "_XLFN.MODE.MULT",
-    "_XLFN.TEXTSPLIT", "_XLFN.RANDARRAY",
+    "_XLFN.TEXTSPLIT", "_XLFN.RANDARRAY", "_XLFN.LET",
 )  # fmt: skip
 
 # Functions whose arguments the generator cannot fill (LET's are names): their formulas as given.

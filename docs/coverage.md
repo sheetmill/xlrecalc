@@ -270,7 +270,7 @@ library differs in the last bits; the rows that match either way do not.
 | `INTRATE` | financial | implemented | 380 | 341 | 39 | 0 | 0 | 4 ulps |  |
 | `IPMT` | financial | implemented | 91 | 66 | 17 | 0 | 8 | 4 ulps |  |
 | `IRR` | financial | implemented | 182 | 76 | 0 | 73 | 33 | 1e-09 relative |  |
-| `ISBLANK` | information | implemented | 31 | 31 | 0 | 0 | 0 |  |  |
+| `ISBLANK` | information | implemented | 32 | 32 | 0 | 0 | 0 |  |  |
 | `ISERR` | information | implemented | 17 | 17 | 0 | 0 | 0 |  |  |
 | `ISERROR` | information | implemented | 21 | 21 | 0 | 0 | 0 |  |  |
 | `ISEVEN` | information | implemented | 58 | 57 | 0 | 0 | 1 |  |  |
@@ -295,7 +295,7 @@ library differs in the last bits; the rows that match either way do not.
 | `LEFTB` | text | implemented | 91 | 91 | 0 | 0 | 0 |  |  |
 | `LEN` | text | implemented | 136 | 136 | 0 | 0 | 0 |  |  |
 | `LENB` | text | implemented | 28 | 28 | 0 | 0 | 0 |  |  |
-| `LET` | logical | implemented | 49 | 49 | 0 | 0 | 0 |  |  |
+| `LET` | logical | implemented | 56 | 56 | 0 | 0 | 0 |  |  |
 | `LINEST` | statistical | partial | 72 | 52 | 10 | 0 | 10 | 4 ulps | one regressor only |
 | `LN` | math | implemented | 17 | 17 | 0 | 0 | 0 |  |  |
 | `LOG` | math | implemented | 228 | 228 | 0 | 0 | 0 | 4 ulps |  |

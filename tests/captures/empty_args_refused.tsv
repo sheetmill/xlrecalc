@@ -1,4 +1,6 @@
 # formulas Excel refuses in a file (capture/empty_probe.py)
+# excel: 16.114.4 for Mac, locale en_US
+# edition: Office Home & Business 2021, update channel Current
 ABS()
 ACOS()
 ACOSH()
@@ -144,3 +146,4 @@ _xlfn.SORTBY($AA$1:$AA$4,$AA$1:$AA$4,,)
 _xlfn.MUNIT()
 MDETERM()
 MINVERSE()
+_xlfn.LET(,1,2)

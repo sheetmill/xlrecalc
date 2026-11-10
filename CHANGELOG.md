@@ -73,7 +73,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `_xlpm.` are `LET`'s, as Excel reads a file. A binding is evaluated when first read and once, so one nothing reads
   is never evaluated (a binding reading the formula's own cell is no circular reference); a name read before it is
   bound is `#NAME?`. A bound range stays a reference, spills, and is intersected in a plain formula. With no
-  calculation after the bindings the last name is the calculation, as Excel writes it back. A file with a name bound
+  calculation after the bindings the last name is the calculation, as Excel writes it back. An empty value binds a
+  blank (`LET(x,,ISBLANK(x))` is TRUE, `LET(x,,x+1)` 1) and an empty calculation is 0. A file with a name bound
   twice, a name without `_xlpm.`, or a number where a name goes does not open in Excel: such a formula keeps the value
   it holds and is in `Report.refused`. `set_formula` writes `LET` with the dynamic-array marker only where its
   calculation needs it (`LET(x,SEQUENCE(3),SUM(x))` is a plain formula, as Excel writes it typed).
