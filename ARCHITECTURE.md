@@ -1063,10 +1063,12 @@ engine:
   wrong never persists in what Excel shows; `full_calc_on_load=False` leaves the file's setting
   as it was, for files Excel should show as written. A file with the setting makes a later
   load treat every formula as stale (§7.4): a full recalculation, a cost and never an error;
-- cells on or after a circular reference are written as Excel saves them, the empty text
-  (§7.2); uncomputed cells (§7.6) keep the cached value they had; refused formulas (§9.5) are
-  left as written and reported: Excel's repair turns each into its cached value, the value the
-  engine already used for the cells depending on it;
+- cells on or after a circular reference are written as Excel saves them (§7.2): with iteration
+  off, each keeps the value the file holds, and one with no value is the empty text (0 for a
+  formula set through the API); with iteration on, each has the value the save's run gives.
+  Uncomputed cells (§7.6) keep the cached value they had; refused formulas (§9.5) are left as
+  written and reported: Excel's repair turns each into its cached value, the value the engine
+  already used for the cells depending on it;
 - cells changed through the API are written in Excel's forms: a number as `<v>`, a text as an
   inline string (`t="inlineStr"`, `<is><t>`, with `xml:space="preserve"` where it needs it),
   which Excel reads and turns into a shared string when it saves, so the shared-strings part is
