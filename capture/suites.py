@@ -4203,6 +4203,48 @@ def complex_family() -> list[Case]:
         Case("improduct", 'IMPRODUCT({"1+i","1-i"},"2")'),
         Case("improduct", 'IMPRODUCT("1+i","1+j")'),
     ]
+    # A second set: parts on either side of the switches to the exponent form, near 1E21 and
+    # below 1E-5; IMCOT and IMTAN at large real parts, around 2^26 and 2^27, alone and with an
+    # imaginary part; IMPOWER at more powers (integers, negative and fractional) and moduli; the
+    # logarithms over more moduli; and the suffix and trimming rules on other values.
+    switch = (
+        1e20, 2e20, 123456789012345678901.0, 9.99999999999999e20, 1e21, 1.5e21, 1e22, -1e21,
+        1e-5, 1.5e-5, 1.23456789012345e-5, 1e-6, 1.23456789012345e-6, 1e-8, 1e-9, 1e-10, 1e-15,
+        1e-19, 1e-20, -1e-6,
+    )  # fmt: skip
+    cases += _grid("COMPLEX", switch, (0.0, 1.0)) + _grid("COMPLEX", (0.0, 1.0), switch)
+    angles = (
+        67108863.0, 67108864.0, 67108864.5, 134217727.0, 134217728.0, 1e10, 9007199254740992.0,
+        1e20, 1e300, -1e300,
+    )  # fmt: skip
+    for name in ("IMCOT", "IMTAN"):
+        cases += _grid(name, angles)
+        cases += _grid(name, tuple(f"{a!r}+i" for a in angles if a > 0))
+    cases += _grid(
+        "IMPOWER",
+        ("1.1+0.3i", "3+4i", "0.9-0.1j", "-2.5-1.5j", "1e-10+1e10i", "2"),
+        (-3.0, -2.0, -1000.0, 1.5, -1.5, 7.3, 0.1, 1 / 3, 4.0, 5.0, 17.0, 1e6, 2147483649.0, 1e15),
+    )
+    moduli = (
+        "2", "1024", "7", "3+4i", "1e10", "1e20", "1e20+3i", "1e30", "1e100", "1e5+1e5i",
+        "123.456-7i", "0.001", "1e-20",
+    )  # fmt: skip
+    for name in ("IMLN", "IMLOG10", "IMLOG2"):
+        cases += _grid(name, moduli)
+    cases += [
+        Case("imsub", 'IMSUB("2j","1+i")'),
+        Case("imsub", 'IMSUB("3","2j")'),
+        Case("imdiv", 'IMDIV("2j","i")'),
+        Case("imdiv", 'IMDIV("4","2j")'),
+        Case("imsum", 'IMSUM("j","i")'),
+        Case("imsum", 'IMSUM("2","3j","1")'),
+        Case("improduct", 'IMPRODUCT("j","2","i")'),
+        Case("improduct", 'IMPRODUCT("2j","3j")'),
+        Case("imabs", 'IMABS(" 3+4i ")'),
+        Case("imabs", 'IMABS("")'),
+        Case("imabs", 'IMABS("  ")'),
+        Case("imreal", 'IMREAL(CHAR(9)&"3+4i")'),
+    ]
     return cases
 
 

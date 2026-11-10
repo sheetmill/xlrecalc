@@ -1,23 +1,23 @@
 """Complex numbers as Excel writes them, text such as ``3+4i`` (capture ``complex_family``).
 
 A complex number is text: a real part, an imaginary part with its suffix ``i`` or ``j``, or both;
-``i`` alone for 1. Each part is a number as Excel writes it as text (15 significant digits, the
-exponent form past them), and a part of 0 is left out. The functions compute in polar form where
+``i`` alone for 1. Each part is written with 15 significant digits, in digits below 1E21 and
+while they take at most 19 places after the point, else in the exponent form with two exponent
+digits at least (``E-08``); a part of 0 is left out. The functions compute in polar form where
 Excel does (``IMSQRT``, ``IMPOWER``), so their last bits are Excel's: ``IMSQRT(-1)`` is
 ``6.12323399573677E-17+i``. Text that is no complex number is ``#NUM!``; two suffixes in one
 calculation are ``#NUM!`` in ``IMSUB`` and ``IMDIV`` and ``#VALUE!`` in ``IMSUM`` and
-``IMPRODUCT``. A part is written in digits below 1E21 and with 15 significant digits in the
-exponent form, which takes two digits at least (``E-08``).
+``IMPRODUCT``.
 
 The trigonometric functions are #NUM! from a real part of 2^27 and the hyperbolic ones and
-``IMEXP`` from an imaginary part of 2^27, as ``SIN`` is; an overflowing ``cosh`` or ``sinh`` is
-infinite, so ``IMSECH(1E300)`` is 0 and ``IMTAN`` of a huge imaginary part is ``i``; ``IMEXP``
-takes e^a as the largest double at most, and a result whose 15 digits pass it is #NUM!.
-``IMTAN`` and ``IMCOT`` use the double-angle form and ``IMABS`` scales by the larger part, each
-fitted to Excel's last digits.
+``IMEXP`` from an imaginary part of 2^27, as ``SIN`` is, but ``IMCOT`` of a real number from
+2^27 is 0; an overflowing ``cosh`` or ``sinh`` is infinite, so ``IMSECH(1E300)`` is 0 and
+``IMTAN`` of a huge imaginary part is ``i``; ``IMEXP`` takes e^a as the largest double at most,
+and a result whose 15 digits pass it is #NUM!. ``IMTAN`` and ``IMCOT`` use the double-angle
+form, ``IMABS`` scales by the larger part, ``IMPOWER`` takes a whole power by squaring and
+``IMLOG2`` divides by the double just below ln 2, each fitted to Excel's last digits.
 
-Not imported by the package yet: 972 of the capture's 976 rows match; the other four are
-``IMCOT(1E300)``, 0 in Excel, and last digits of ``IMLOG2`` and ``IMPOWER``.
+Not imported by the package yet; every row of the capture matches.
 """
 
 from __future__ import annotations
@@ -115,10 +115,12 @@ def _text(real: float, imaginary: float, suffix: str) -> str | ErrorValue:
 
 
 def _number(x: float) -> str:
-    """A part as Excel writes it here: as ``&`` does, but in digits below 1E21, not 1E+20.
+    """A part as Excel writes it here, with 15 significant digits.
 
-    1E20 is written in full and 1E300 with its exponent (capture complex_family); the switch at
-    1E21 is a hypothesis between them.
+    In digits below 1E21 and while they take at most 19 places after the point, else in the
+    exponent form (``&`` switches sooner both ways): 999999999999999000000 and 1E+21,
+    0.0000123456789012345 and 1.23456789012345E-06, 0.0000000000000000001 and 1E-20 (capture
+    complex_family).
     """
     text = number_to_text(x)
     if "E" in text:  # 15 significant digits in the exponent form, where ``&`` keeps fewer
@@ -131,6 +133,12 @@ def _number(x: float) -> str:
         digits = mantissa.lstrip("-").replace(".", "")
         whole = len(mantissa.lstrip("-").split(".")[0])
         return sign + digits + "0" * (int(exponent) + whole - len(digits))
+    if "E-" in text:
+        mantissa, exponent = text.split("E-")
+        sign = "-" if mantissa.startswith("-") else ""
+        digits = mantissa.lstrip("-").replace(".", "")
+        if int(exponent) - 1 + len(digits) <= 19:
+            return f"{sign}0.{'0' * (int(exponent) - 1)}{digits}"
     return text
 
 
@@ -218,11 +226,34 @@ def IMARGUMENT(ctx: Any, v: Any) -> Any:
 
 
 def _polar_power(a: float, b: float, n: float, scaled: bool = True) -> tuple[float, float]:
-    """R^n (cos n theta + i sin n theta); ``scaled`` takes r by hypot, else as sqrt(a² + b²)."""
+    """R^n (cos n theta + i sin n theta); ``scaled`` takes r by hypot, else as sqrt(a² + b²).
+
+    R^n is Excel's: by squaring for a whole power, a square root for 0.5, e^(n ln r) for any
+    other, and a negative power the reciprocal of the positive one, so ``IMPOWER(2,-0.5)`` is
+    1/sqrt(2) and ``(0.5+0.5i)^1000`` has Excel's last digits (capture complex_family, all 145
+    IMPOWER rows that give a number).
+    """
     r = math.hypot(a, b) if scaled else math.sqrt(a * a + b * b)  # not IMABS's form (capture)
     theta = math.atan2(b, a)
-    rn = r**n
+    m = abs(n)
+    if m.is_integer() and m < 2.0**53:
+        rm = _whole_power(r, int(m))
+    else:
+        rm = math.sqrt(r) if m == 0.5 else math.exp(m * math.log(r)) if r else 0.0
+    rn = 1.0 / rm if n < 0 else rm  # ZeroDivisionError at an underflow, OverflowError past
     return rn * math.cos(n * theta), rn * math.sin(n * theta)
+
+
+def _whole_power(r: float, k: int) -> float:
+    """R^k by squaring: at most 53 squarings and as many products."""
+    out = 1.0
+    while k:
+        if k & 1:
+            out *= r
+        k >>= 1
+        if k:
+            r *= r
+    return out
 
 
 _LARGEST_ANGLE = 2.0**27  # SIN's and COS's limit in Excel, #NUM! from it (captures math_trig)
@@ -313,12 +344,24 @@ def _one(a: float, b: float) -> tuple[float, float]:
     return 1.0, 0.0
 
 
-def _log_base(base: float) -> Any:
+def _log_base(ln_base: float) -> Any:
     def core(a: float, b: float) -> tuple[float, float] | ErrorValue:
         z = _ln(a, b)
-        return z if isinstance(z, ErrorValue) else (z[0] / math.log(base), z[1] / math.log(base))
+        return z if isinstance(z, ErrorValue) else (z[0] / ln_base, z[1] / ln_base)
 
     return core
+
+
+# IMLOG2 divides by the double just below ln 2: IMLOG2(1E20) is 66.4385618977473, one unit above
+# the true value's last digit, and all 25 IMLOG2 rows that give a number agree (capture).
+_LN2_EXCEL = math.nextafter(math.log(2.0), 0.0)
+
+
+def _cot_limited(a: float, b: float) -> tuple[float, float] | ErrorValue:
+    """IMCOT from a real part of 2^27: 0 for a real number, else #NUM! (capture)."""
+    if _big(a):
+        return (0.0, 0.0) if b == 0 else NUM
+    return _cot(a, b)
 
 
 _UNARY: dict[str, Any] = {
@@ -326,12 +369,12 @@ _UNARY: dict[str, Any] = {
     "IMSQRT": lambda a, b: _polar_power(a, b, 0.5, scaled=False),  # IMSQRT(1E300) is #NUM!
     "IMEXP": _exp,
     "IMLN": _ln,
-    "IMLOG10": _log_base(10.0),
-    "IMLOG2": _log_base(2.0),
+    "IMLOG10": _log_base(math.log(10.0)),
+    "IMLOG2": _log_base(_LN2_EXCEL),
     "IMSIN": _limited(_sin, True),
     "IMCOS": _limited(_cos, True),
     "_xlfn.IMTAN": _limited(_tan, True),
-    "_xlfn.IMCOT": _limited(_cot, True),
+    "_xlfn.IMCOT": _cot_limited,
     "_xlfn.IMSEC": _limited(_ratio(_one, _cos), True),
     "_xlfn.IMCSC": _limited(_ratio(_one, _sin), True),
     "_xlfn.IMSINH": _limited(_sinh, False),
@@ -414,7 +457,7 @@ def IMPOWER(ctx: Any, v: Any, n: float) -> Any:
         return "0" if n > 0 else NUM
     try:
         real, imaginary = _polar_power(z[0], z[1], n)
-    except (OverflowError, ValueError):  # past the double's range
+    except (OverflowError, ValueError, ZeroDivisionError):  # past the double's range
         return NUM
     return _text(real, imaginary, z[2] or "i")
 
