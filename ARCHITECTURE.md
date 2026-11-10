@@ -64,8 +64,8 @@ three `SUM` cells over whole columns. Full tables in `bench/results/SUMMARY.md`.
 | A plain Python evaluation loop is fast enough | about 400k trivial formulas per second | CPython is not the bottleneck; structure is |
 | Per-cell Python objects are the memory problem | a dict of floats costs 148 B per cell; a per-cell dependency graph about 1.5 KB per formula | no per-cell objects, no per-cell edge lists |
 | Formulas are massively repetitive | 16 distinct templates for 3M formulas | compile once per template, store a template id per cell |
-| Template deduplication | load 7x faster and memory 9x lower than compiling per cell; 1M rows load in 5.4 s, evaluate in 8.4 s, 1.5 GB peak | the core idea |
-| Unindexed reverse lookup | changing A1 on 1M rows re-evaluates in 9.9 s, slower than the full recalculation (8.4 s); computing the dirty set alone takes 7.4 s | the reverse probe must be indexed (§6.4) |
+| Template deduplication | load 7x faster and memory 9x lower than compiling per cell; 1M rows load in 5.65 s, evaluate in 8.23 s, 1.3 GB peak (`bench/results/SUMMARY.md`) | the core idea |
+| Unindexed reverse lookup | changing A1 on 1M rows re-evaluates in 11.3 s, slower than the full recalculation (8.23 s); computing the dirty set alone takes 7.58 s (the same run) | the reverse probe must be indexed (§6.4) |
 | Evaluation driven from SQL in phases | 107 s for 30k formulas, quadratic in chain depth | evaluation is Python-driven, in dependency order |
 | SQLite as a value store | about 40% throughput cost; 20 B per cell against 148 | a possible optional backend, not the default |
 | SQLite R-tree for range reverse lookup | 8.4 µs per lookup against 5.4 µs for a bucketed interval index in Python; 17x slower to build | a Python interval index suffices |
@@ -329,10 +329,10 @@ formula moved and share the parsed template; a reference the tokenizer reads as 
 column past `XFD`, a row past 1,048,576) stays text, so it cannot collide with a reference.
 `tests/test_fastkey.py` moves every corpus formula to other cells and checks that equal raw keys
 always mean equal parsed keys. Whether Excel refuses a formula in a file (§9.5) depends only on
-its text outside the references, so it is decided once per raw key too. Loading
-openpyxl's 1M-row benchmark file (3M formulas, 4M cells) takes 23.6 s with the raw key and
-58.8 s parsing every formula; from the prototypes' pickled table, which skips the xlsx reader,
-8.5 s.
+its text outside the references, so it is decided once per raw key too. When the raw key
+was measured, loading openpyxl's 1M-row benchmark file (3M formulas, 4M cells) took 23.6 s with
+it and 58.8 s parsing every formula, and 8.5 s from the prototypes' pickled table, which skips the
+xlsx reader; the current load times are in `bench/results/SUMMARY.md` (17.2 s from the file).
 
 A template records its canonical text, the compiled callable, its constants table, its reference
 list (offsets, anchors, sheets, cell or range), whether it is volatile (`NOW`, `TODAY`, `RAND`,
@@ -453,7 +453,7 @@ references stay within its static range.
 
 ### 6.4 Dirty sets as runs, and the acceptance test
 
-A change to a cell high up a long chain dirties a million cells, and the prototype spent 7.4 s
+A change to a cell high up a long chain dirties a million cells, and the prototype spent 7.58 s
 just finding them, cell by cell. A dirty set travels as row runs per `(sheet, column)`, and a
 template that refers to its own column above (`C2 = C1 + B2`, a running total) makes every later
 cell of its run depend on any earlier one, so a dirty cell of it dirties the rest of its run in
@@ -465,7 +465,7 @@ recalculation, and computing what it dirties must take under 1 s.
 
 | | full recalculation | change A1, re-evaluated | its dirty set | change last A |
 |---|---|---|---|---|
-| prototype, unindexed | 8.2 s | 11.3 s | 8.8 s | 0.92 s |
+| prototype, unindexed | 8.23 s | 11.3 s | 7.58 s | 0.92 s |
 | the engine | 13.6 s | 5.0 s | 0.14 ms | 0.95 s |
 
 Both conditions hold (both rows on Python 3.11). The engine's full recalculation runs at about
