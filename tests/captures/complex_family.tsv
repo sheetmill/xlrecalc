@@ -1,0 +1,988 @@
+# suite: complex_family
+# excel: 16.114.4 for Mac, locale en_US
+# edition: Office Home & Business 2021, update channel Current
+# date_system: 1900
+# captured: 2026-11-09
+# generator: capture/suites.py:complex_family
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# columns: suite tag case formula inputs expected_type expected_repr
+complex_family	complex	1	COMPLEX({1},{2})	(0.0, 0.0)	str	'0'
+complex_family	complex	2	COMPLEX({1},{2})	(0.0, 1.0)	str	'i'
+complex_family	complex	3	COMPLEX({1},{2})	(0.0, -1.0)	str	'-i'
+complex_family	complex	4	COMPLEX({1},{2})	(0.0, 0.5)	str	'0.5i'
+complex_family	complex	5	COMPLEX({1},{2})	(0.0, -2.5)	str	'-2.5i'
+complex_family	complex	6	COMPLEX({1},{2})	(0.0, 123456789012345.0)	str	'123456789012345i'
+complex_family	complex	7	COMPLEX({1},{2})	(0.0, 1234567890123456.0)	str	'1234567890123460i'
+complex_family	complex	8	COMPLEX({1},{2})	(0.0, 1000000000000000.0)	str	'1000000000000000i'
+complex_family	complex	9	COMPLEX({1},{2})	(0.0, 1e+16)	str	'10000000000000000i'
+complex_family	complex	10	COMPLEX({1},{2})	(0.0, 1e+20)	str	'100000000000000000000i'
+complex_family	complex	11	COMPLEX({1},{2})	(0.0, 1e-05)	str	'0.00001i'
+complex_family	complex	12	COMPLEX({1},{2})	(0.0, 1e-10)	str	'0.0000000001i'
+complex_family	complex	13	COMPLEX({1},{2})	(0.0, 0.30000000000000004)	str	'0.3i'
+complex_family	complex	14	COMPLEX({1},{2})	(0.0, 0.3333333333333333)	str	'0.333333333333333i'
+complex_family	complex	15	COMPLEX({1},{2})	(0.0, 1e+300)	str	'1E+300i'
+complex_family	complex	16	COMPLEX({1},{2})	(0.0, 1e-300)	str	'1E-300i'
+complex_family	complex	17	COMPLEX({1},{2})	(1.0, 0.0)	str	'1'
+complex_family	complex	18	COMPLEX({1},{2})	(1.0, 1.0)	str	'1+i'
+complex_family	complex	19	COMPLEX({1},{2})	(1.0, -1.0)	str	'1-i'
+complex_family	complex	20	COMPLEX({1},{2})	(1.0, 0.5)	str	'1+0.5i'
+complex_family	complex	21	COMPLEX({1},{2})	(1.0, -2.5)	str	'1-2.5i'
+complex_family	complex	22	COMPLEX({1},{2})	(1.0, 123456789012345.0)	str	'1+123456789012345i'
+complex_family	complex	23	COMPLEX({1},{2})	(1.0, 1234567890123456.0)	str	'1+1234567890123460i'
+complex_family	complex	24	COMPLEX({1},{2})	(1.0, 1000000000000000.0)	str	'1+1000000000000000i'
+complex_family	complex	25	COMPLEX({1},{2})	(1.0, 1e+16)	str	'1+10000000000000000i'
+complex_family	complex	26	COMPLEX({1},{2})	(1.0, 1e+20)	str	'1+100000000000000000000i'
+complex_family	complex	27	COMPLEX({1},{2})	(1.0, 1e-05)	str	'1+0.00001i'
+complex_family	complex	28	COMPLEX({1},{2})	(1.0, 1e-10)	str	'1+0.0000000001i'
+complex_family	complex	29	COMPLEX({1},{2})	(1.0, 0.30000000000000004)	str	'1+0.3i'
+complex_family	complex	30	COMPLEX({1},{2})	(1.0, 0.3333333333333333)	str	'1+0.333333333333333i'
+complex_family	complex	31	COMPLEX({1},{2})	(1.0, 1e+300)	str	'1+1E+300i'
+complex_family	complex	32	COMPLEX({1},{2})	(1.0, 1e-300)	str	'1+1E-300i'
+complex_family	complex	33	COMPLEX({1},{2})	(-1.0, 0.0)	str	'-1'
+complex_family	complex	34	COMPLEX({1},{2})	(-1.0, 1.0)	str	'-1+i'
+complex_family	complex	35	COMPLEX({1},{2})	(-1.0, -1.0)	str	'-1-i'
+complex_family	complex	36	COMPLEX({1},{2})	(-1.0, 0.5)	str	'-1+0.5i'
+complex_family	complex	37	COMPLEX({1},{2})	(-1.0, -2.5)	str	'-1-2.5i'
+complex_family	complex	38	COMPLEX({1},{2})	(-1.0, 123456789012345.0)	str	'-1+123456789012345i'
+complex_family	complex	39	COMPLEX({1},{2})	(-1.0, 1234567890123456.0)	str	'-1+1234567890123460i'
+complex_family	complex	40	COMPLEX({1},{2})	(-1.0, 1000000000000000.0)	str	'-1+1000000000000000i'
+complex_family	complex	41	COMPLEX({1},{2})	(-1.0, 1e+16)	str	'-1+10000000000000000i'
+complex_family	complex	42	COMPLEX({1},{2})	(-1.0, 1e+20)	str	'-1+100000000000000000000i'
+complex_family	complex	43	COMPLEX({1},{2})	(-1.0, 1e-05)	str	'-1+0.00001i'
+complex_family	complex	44	COMPLEX({1},{2})	(-1.0, 1e-10)	str	'-1+0.0000000001i'
+complex_family	complex	45	COMPLEX({1},{2})	(-1.0, 0.30000000000000004)	str	'-1+0.3i'
+complex_family	complex	46	COMPLEX({1},{2})	(-1.0, 0.3333333333333333)	str	'-1+0.333333333333333i'
+complex_family	complex	47	COMPLEX({1},{2})	(-1.0, 1e+300)	str	'-1+1E+300i'
+complex_family	complex	48	COMPLEX({1},{2})	(-1.0, 1e-300)	str	'-1+1E-300i'
+complex_family	complex	49	COMPLEX({1},{2})	(0.5, 0.0)	str	'0.5'
+complex_family	complex	50	COMPLEX({1},{2})	(0.5, 1.0)	str	'0.5+i'
+complex_family	complex	51	COMPLEX({1},{2})	(0.5, -1.0)	str	'0.5-i'
+complex_family	complex	52	COMPLEX({1},{2})	(0.5, 0.5)	str	'0.5+0.5i'
+complex_family	complex	53	COMPLEX({1},{2})	(0.5, -2.5)	str	'0.5-2.5i'
+complex_family	complex	54	COMPLEX({1},{2})	(0.5, 123456789012345.0)	str	'0.5+123456789012345i'
+complex_family	complex	55	COMPLEX({1},{2})	(0.5, 1234567890123456.0)	str	'0.5+1234567890123460i'
+complex_family	complex	56	COMPLEX({1},{2})	(0.5, 1000000000000000.0)	str	'0.5+1000000000000000i'
+complex_family	complex	57	COMPLEX({1},{2})	(0.5, 1e+16)	str	'0.5+10000000000000000i'
+complex_family	complex	58	COMPLEX({1},{2})	(0.5, 1e+20)	str	'0.5+100000000000000000000i'
+complex_family	complex	59	COMPLEX({1},{2})	(0.5, 1e-05)	str	'0.5+0.00001i'
+complex_family	complex	60	COMPLEX({1},{2})	(0.5, 1e-10)	str	'0.5+0.0000000001i'
+complex_family	complex	61	COMPLEX({1},{2})	(0.5, 0.30000000000000004)	str	'0.5+0.3i'
+complex_family	complex	62	COMPLEX({1},{2})	(0.5, 0.3333333333333333)	str	'0.5+0.333333333333333i'
+complex_family	complex	63	COMPLEX({1},{2})	(0.5, 1e+300)	str	'0.5+1E+300i'
+complex_family	complex	64	COMPLEX({1},{2})	(0.5, 1e-300)	str	'0.5+1E-300i'
+complex_family	complex	65	COMPLEX({1},{2})	(-2.5, 0.0)	str	'-2.5'
+complex_family	complex	66	COMPLEX({1},{2})	(-2.5, 1.0)	str	'-2.5+i'
+complex_family	complex	67	COMPLEX({1},{2})	(-2.5, -1.0)	str	'-2.5-i'
+complex_family	complex	68	COMPLEX({1},{2})	(-2.5, 0.5)	str	'-2.5+0.5i'
+complex_family	complex	69	COMPLEX({1},{2})	(-2.5, -2.5)	str	'-2.5-2.5i'
+complex_family	complex	70	COMPLEX({1},{2})	(-2.5, 123456789012345.0)	str	'-2.5+123456789012345i'
+complex_family	complex	71	COMPLEX({1},{2})	(-2.5, 1234567890123456.0)	str	'-2.5+1234567890123460i'
+complex_family	complex	72	COMPLEX({1},{2})	(-2.5, 1000000000000000.0)	str	'-2.5+1000000000000000i'
+complex_family	complex	73	COMPLEX({1},{2})	(-2.5, 1e+16)	str	'-2.5+10000000000000000i'
+complex_family	complex	74	COMPLEX({1},{2})	(-2.5, 1e+20)	str	'-2.5+100000000000000000000i'
+complex_family	complex	75	COMPLEX({1},{2})	(-2.5, 1e-05)	str	'-2.5+0.00001i'
+complex_family	complex	76	COMPLEX({1},{2})	(-2.5, 1e-10)	str	'-2.5+0.0000000001i'
+complex_family	complex	77	COMPLEX({1},{2})	(-2.5, 0.30000000000000004)	str	'-2.5+0.3i'
+complex_family	complex	78	COMPLEX({1},{2})	(-2.5, 0.3333333333333333)	str	'-2.5+0.333333333333333i'
+complex_family	complex	79	COMPLEX({1},{2})	(-2.5, 1e+300)	str	'-2.5+1E+300i'
+complex_family	complex	80	COMPLEX({1},{2})	(-2.5, 1e-300)	str	'-2.5+1E-300i'
+complex_family	complex	81	COMPLEX({1},{2})	(123456789012345.0, 0.0)	str	'123456789012345'
+complex_family	complex	82	COMPLEX({1},{2})	(123456789012345.0, 1.0)	str	'123456789012345+i'
+complex_family	complex	83	COMPLEX({1},{2})	(123456789012345.0, -1.0)	str	'123456789012345-i'
+complex_family	complex	84	COMPLEX({1},{2})	(123456789012345.0, 0.5)	str	'123456789012345+0.5i'
+complex_family	complex	85	COMPLEX({1},{2})	(123456789012345.0, -2.5)	str	'123456789012345-2.5i'
+complex_family	complex	86	COMPLEX({1},{2})	(123456789012345.0, 123456789012345.0)	str	'123456789012345+123456789012345i'
+complex_family	complex	87	COMPLEX({1},{2})	(123456789012345.0, 1234567890123456.0)	str	'123456789012345+1234567890123460i'
+complex_family	complex	88	COMPLEX({1},{2})	(123456789012345.0, 1000000000000000.0)	str	'123456789012345+1000000000000000i'
+complex_family	complex	89	COMPLEX({1},{2})	(123456789012345.0, 1e+16)	str	'123456789012345+10000000000000000i'
+complex_family	complex	90	COMPLEX({1},{2})	(123456789012345.0, 1e+20)	str	'123456789012345+100000000000000000000i'
+complex_family	complex	91	COMPLEX({1},{2})	(123456789012345.0, 1e-05)	str	'123456789012345+0.00001i'
+complex_family	complex	92	COMPLEX({1},{2})	(123456789012345.0, 1e-10)	str	'123456789012345+0.0000000001i'
+complex_family	complex	93	COMPLEX({1},{2})	(123456789012345.0, 0.30000000000000004)	str	'123456789012345+0.3i'
+complex_family	complex	94	COMPLEX({1},{2})	(123456789012345.0, 0.3333333333333333)	str	'123456789012345+0.333333333333333i'
+complex_family	complex	95	COMPLEX({1},{2})	(123456789012345.0, 1e+300)	str	'123456789012345+1E+300i'
+complex_family	complex	96	COMPLEX({1},{2})	(123456789012345.0, 1e-300)	str	'123456789012345+1E-300i'
+complex_family	complex	97	COMPLEX({1},{2})	(1234567890123456.0, 0.0)	str	'1234567890123460'
+complex_family	complex	98	COMPLEX({1},{2})	(1234567890123456.0, 1.0)	str	'1234567890123460+i'
+complex_family	complex	99	COMPLEX({1},{2})	(1234567890123456.0, -1.0)	str	'1234567890123460-i'
+complex_family	complex	100	COMPLEX({1},{2})	(1234567890123456.0, 0.5)	str	'1234567890123460+0.5i'
+complex_family	complex	101	COMPLEX({1},{2})	(1234567890123456.0, -2.5)	str	'1234567890123460-2.5i'
+complex_family	complex	102	COMPLEX({1},{2})	(1234567890123456.0, 123456789012345.0)	str	'1234567890123460+123456789012345i'
+complex_family	complex	103	COMPLEX({1},{2})	(1234567890123456.0, 1234567890123456.0)	str	'1234567890123460+1234567890123460i'
+complex_family	complex	104	COMPLEX({1},{2})	(1234567890123456.0, 1000000000000000.0)	str	'1234567890123460+1000000000000000i'
+complex_family	complex	105	COMPLEX({1},{2})	(1234567890123456.0, 1e+16)	str	'1234567890123460+10000000000000000i'
+complex_family	complex	106	COMPLEX({1},{2})	(1234567890123456.0, 1e+20)	str	'1234567890123460+100000000000000000000i'
+complex_family	complex	107	COMPLEX({1},{2})	(1234567890123456.0, 1e-05)	str	'1234567890123460+0.00001i'
+complex_family	complex	108	COMPLEX({1},{2})	(1234567890123456.0, 1e-10)	str	'1234567890123460+0.0000000001i'
+complex_family	complex	109	COMPLEX({1},{2})	(1234567890123456.0, 0.30000000000000004)	str	'1234567890123460+0.3i'
+complex_family	complex	110	COMPLEX({1},{2})	(1234567890123456.0, 0.3333333333333333)	str	'1234567890123460+0.333333333333333i'
+complex_family	complex	111	COMPLEX({1},{2})	(1234567890123456.0, 1e+300)	str	'1234567890123460+1E+300i'
+complex_family	complex	112	COMPLEX({1},{2})	(1234567890123456.0, 1e-300)	str	'1234567890123460+1E-300i'
+complex_family	complex	113	COMPLEX({1},{2})	(1000000000000000.0, 0.0)	str	'1000000000000000'
+complex_family	complex	114	COMPLEX({1},{2})	(1000000000000000.0, 1.0)	str	'1000000000000000+i'
+complex_family	complex	115	COMPLEX({1},{2})	(1000000000000000.0, -1.0)	str	'1000000000000000-i'
+complex_family	complex	116	COMPLEX({1},{2})	(1000000000000000.0, 0.5)	str	'1000000000000000+0.5i'
+complex_family	complex	117	COMPLEX({1},{2})	(1000000000000000.0, -2.5)	str	'1000000000000000-2.5i'
+complex_family	complex	118	COMPLEX({1},{2})	(1000000000000000.0, 123456789012345.0)	str	'1000000000000000+123456789012345i'
+complex_family	complex	119	COMPLEX({1},{2})	(1000000000000000.0, 1234567890123456.0)	str	'1000000000000000+1234567890123460i'
+complex_family	complex	120	COMPLEX({1},{2})	(1000000000000000.0, 1000000000000000.0)	str	'1000000000000000+1000000000000000i'
+complex_family	complex	121	COMPLEX({1},{2})	(1000000000000000.0, 1e+16)	str	'1000000000000000+10000000000000000i'
+complex_family	complex	122	COMPLEX({1},{2})	(1000000000000000.0, 1e+20)	str	'1000000000000000+100000000000000000000i'
+complex_family	complex	123	COMPLEX({1},{2})	(1000000000000000.0, 1e-05)	str	'1000000000000000+0.00001i'
+complex_family	complex	124	COMPLEX({1},{2})	(1000000000000000.0, 1e-10)	str	'1000000000000000+0.0000000001i'
+complex_family	complex	125	COMPLEX({1},{2})	(1000000000000000.0, 0.30000000000000004)	str	'1000000000000000+0.3i'
+complex_family	complex	126	COMPLEX({1},{2})	(1000000000000000.0, 0.3333333333333333)	str	'1000000000000000+0.333333333333333i'
+complex_family	complex	127	COMPLEX({1},{2})	(1000000000000000.0, 1e+300)	str	'1000000000000000+1E+300i'
+complex_family	complex	128	COMPLEX({1},{2})	(1000000000000000.0, 1e-300)	str	'1000000000000000+1E-300i'
+complex_family	complex	129	COMPLEX({1},{2})	(1e+16, 0.0)	str	'10000000000000000'
+complex_family	complex	130	COMPLEX({1},{2})	(1e+16, 1.0)	str	'10000000000000000+i'
+complex_family	complex	131	COMPLEX({1},{2})	(1e+16, -1.0)	str	'10000000000000000-i'
+complex_family	complex	132	COMPLEX({1},{2})	(1e+16, 0.5)	str	'10000000000000000+0.5i'
+complex_family	complex	133	COMPLEX({1},{2})	(1e+16, -2.5)	str	'10000000000000000-2.5i'
+complex_family	complex	134	COMPLEX({1},{2})	(1e+16, 123456789012345.0)	str	'10000000000000000+123456789012345i'
+complex_family	complex	135	COMPLEX({1},{2})	(1e+16, 1234567890123456.0)	str	'10000000000000000+1234567890123460i'
+complex_family	complex	136	COMPLEX({1},{2})	(1e+16, 1000000000000000.0)	str	'10000000000000000+1000000000000000i'
+complex_family	complex	137	COMPLEX({1},{2})	(1e+16, 1e+16)	str	'10000000000000000+10000000000000000i'
+complex_family	complex	138	COMPLEX({1},{2})	(1e+16, 1e+20)	str	'10000000000000000+100000000000000000000i'
+complex_family	complex	139	COMPLEX({1},{2})	(1e+16, 1e-05)	str	'10000000000000000+0.00001i'
+complex_family	complex	140	COMPLEX({1},{2})	(1e+16, 1e-10)	str	'10000000000000000+0.0000000001i'
+complex_family	complex	141	COMPLEX({1},{2})	(1e+16, 0.30000000000000004)	str	'10000000000000000+0.3i'
+complex_family	complex	142	COMPLEX({1},{2})	(1e+16, 0.3333333333333333)	str	'10000000000000000+0.333333333333333i'
+complex_family	complex	143	COMPLEX({1},{2})	(1e+16, 1e+300)	str	'10000000000000000+1E+300i'
+complex_family	complex	144	COMPLEX({1},{2})	(1e+16, 1e-300)	str	'10000000000000000+1E-300i'
+complex_family	complex	145	COMPLEX({1},{2})	(1e+20, 0.0)	str	'100000000000000000000'
+complex_family	complex	146	COMPLEX({1},{2})	(1e+20, 1.0)	str	'100000000000000000000+i'
+complex_family	complex	147	COMPLEX({1},{2})	(1e+20, -1.0)	str	'100000000000000000000-i'
+complex_family	complex	148	COMPLEX({1},{2})	(1e+20, 0.5)	str	'100000000000000000000+0.5i'
+complex_family	complex	149	COMPLEX({1},{2})	(1e+20, -2.5)	str	'100000000000000000000-2.5i'
+complex_family	complex	150	COMPLEX({1},{2})	(1e+20, 123456789012345.0)	str	'100000000000000000000+123456789012345i'
+complex_family	complex	151	COMPLEX({1},{2})	(1e+20, 1234567890123456.0)	str	'100000000000000000000+1234567890123460i'
+complex_family	complex	152	COMPLEX({1},{2})	(1e+20, 1000000000000000.0)	str	'100000000000000000000+1000000000000000i'
+complex_family	complex	153	COMPLEX({1},{2})	(1e+20, 1e+16)	str	'100000000000000000000+10000000000000000i'
+complex_family	complex	154	COMPLEX({1},{2})	(1e+20, 1e+20)	str	'100000000000000000000+100000000000000000000i'
+complex_family	complex	155	COMPLEX({1},{2})	(1e+20, 1e-05)	str	'100000000000000000000+0.00001i'
+complex_family	complex	156	COMPLEX({1},{2})	(1e+20, 1e-10)	str	'100000000000000000000+0.0000000001i'
+complex_family	complex	157	COMPLEX({1},{2})	(1e+20, 0.30000000000000004)	str	'100000000000000000000+0.3i'
+complex_family	complex	158	COMPLEX({1},{2})	(1e+20, 0.3333333333333333)	str	'100000000000000000000+0.333333333333333i'
+complex_family	complex	159	COMPLEX({1},{2})	(1e+20, 1e+300)	str	'100000000000000000000+1E+300i'
+complex_family	complex	160	COMPLEX({1},{2})	(1e+20, 1e-300)	str	'100000000000000000000+1E-300i'
+complex_family	complex	161	COMPLEX({1},{2})	(1e-05, 0.0)	str	'0.00001'
+complex_family	complex	162	COMPLEX({1},{2})	(1e-05, 1.0)	str	'0.00001+i'
+complex_family	complex	163	COMPLEX({1},{2})	(1e-05, -1.0)	str	'0.00001-i'
+complex_family	complex	164	COMPLEX({1},{2})	(1e-05, 0.5)	str	'0.00001+0.5i'
+complex_family	complex	165	COMPLEX({1},{2})	(1e-05, -2.5)	str	'0.00001-2.5i'
+complex_family	complex	166	COMPLEX({1},{2})	(1e-05, 123456789012345.0)	str	'0.00001+123456789012345i'
+complex_family	complex	167	COMPLEX({1},{2})	(1e-05, 1234567890123456.0)	str	'0.00001+1234567890123460i'
+complex_family	complex	168	COMPLEX({1},{2})	(1e-05, 1000000000000000.0)	str	'0.00001+1000000000000000i'
+complex_family	complex	169	COMPLEX({1},{2})	(1e-05, 1e+16)	str	'0.00001+10000000000000000i'
+complex_family	complex	170	COMPLEX({1},{2})	(1e-05, 1e+20)	str	'0.00001+100000000000000000000i'
+complex_family	complex	171	COMPLEX({1},{2})	(1e-05, 1e-05)	str	'0.00001+0.00001i'
+complex_family	complex	172	COMPLEX({1},{2})	(1e-05, 1e-10)	str	'0.00001+0.0000000001i'
+complex_family	complex	173	COMPLEX({1},{2})	(1e-05, 0.30000000000000004)	str	'0.00001+0.3i'
+complex_family	complex	174	COMPLEX({1},{2})	(1e-05, 0.3333333333333333)	str	'0.00001+0.333333333333333i'
+complex_family	complex	175	COMPLEX({1},{2})	(1e-05, 1e+300)	str	'0.00001+1E+300i'
+complex_family	complex	176	COMPLEX({1},{2})	(1e-05, 1e-300)	str	'0.00001+1E-300i'
+complex_family	complex	177	COMPLEX({1},{2})	(1e-10, 0.0)	str	'0.0000000001'
+complex_family	complex	178	COMPLEX({1},{2})	(1e-10, 1.0)	str	'0.0000000001+i'
+complex_family	complex	179	COMPLEX({1},{2})	(1e-10, -1.0)	str	'0.0000000001-i'
+complex_family	complex	180	COMPLEX({1},{2})	(1e-10, 0.5)	str	'0.0000000001+0.5i'
+complex_family	complex	181	COMPLEX({1},{2})	(1e-10, -2.5)	str	'0.0000000001-2.5i'
+complex_family	complex	182	COMPLEX({1},{2})	(1e-10, 123456789012345.0)	str	'0.0000000001+123456789012345i'
+complex_family	complex	183	COMPLEX({1},{2})	(1e-10, 1234567890123456.0)	str	'0.0000000001+1234567890123460i'
+complex_family	complex	184	COMPLEX({1},{2})	(1e-10, 1000000000000000.0)	str	'0.0000000001+1000000000000000i'
+complex_family	complex	185	COMPLEX({1},{2})	(1e-10, 1e+16)	str	'0.0000000001+10000000000000000i'
+complex_family	complex	186	COMPLEX({1},{2})	(1e-10, 1e+20)	str	'0.0000000001+100000000000000000000i'
+complex_family	complex	187	COMPLEX({1},{2})	(1e-10, 1e-05)	str	'0.0000000001+0.00001i'
+complex_family	complex	188	COMPLEX({1},{2})	(1e-10, 1e-10)	str	'0.0000000001+0.0000000001i'
+complex_family	complex	189	COMPLEX({1},{2})	(1e-10, 0.30000000000000004)	str	'0.0000000001+0.3i'
+complex_family	complex	190	COMPLEX({1},{2})	(1e-10, 0.3333333333333333)	str	'0.0000000001+0.333333333333333i'
+complex_family	complex	191	COMPLEX({1},{2})	(1e-10, 1e+300)	str	'0.0000000001+1E+300i'
+complex_family	complex	192	COMPLEX({1},{2})	(1e-10, 1e-300)	str	'0.0000000001+1E-300i'
+complex_family	complex	193	COMPLEX({1},{2})	(0.30000000000000004, 0.0)	str	'0.3'
+complex_family	complex	194	COMPLEX({1},{2})	(0.30000000000000004, 1.0)	str	'0.3+i'
+complex_family	complex	195	COMPLEX({1},{2})	(0.30000000000000004, -1.0)	str	'0.3-i'
+complex_family	complex	196	COMPLEX({1},{2})	(0.30000000000000004, 0.5)	str	'0.3+0.5i'
+complex_family	complex	197	COMPLEX({1},{2})	(0.30000000000000004, -2.5)	str	'0.3-2.5i'
+complex_family	complex	198	COMPLEX({1},{2})	(0.30000000000000004, 123456789012345.0)	str	'0.3+123456789012345i'
+complex_family	complex	199	COMPLEX({1},{2})	(0.30000000000000004, 1234567890123456.0)	str	'0.3+1234567890123460i'
+complex_family	complex	200	COMPLEX({1},{2})	(0.30000000000000004, 1000000000000000.0)	str	'0.3+1000000000000000i'
+complex_family	complex	201	COMPLEX({1},{2})	(0.30000000000000004, 1e+16)	str	'0.3+10000000000000000i'
+complex_family	complex	202	COMPLEX({1},{2})	(0.30000000000000004, 1e+20)	str	'0.3+100000000000000000000i'
+complex_family	complex	203	COMPLEX({1},{2})	(0.30000000000000004, 1e-05)	str	'0.3+0.00001i'
+complex_family	complex	204	COMPLEX({1},{2})	(0.30000000000000004, 1e-10)	str	'0.3+0.0000000001i'
+complex_family	complex	205	COMPLEX({1},{2})	(0.30000000000000004, 0.30000000000000004)	str	'0.3+0.3i'
+complex_family	complex	206	COMPLEX({1},{2})	(0.30000000000000004, 0.3333333333333333)	str	'0.3+0.333333333333333i'
+complex_family	complex	207	COMPLEX({1},{2})	(0.30000000000000004, 1e+300)	str	'0.3+1E+300i'
+complex_family	complex	208	COMPLEX({1},{2})	(0.30000000000000004, 1e-300)	str	'0.3+1E-300i'
+complex_family	complex	209	COMPLEX({1},{2})	(0.3333333333333333, 0.0)	str	'0.333333333333333'
+complex_family	complex	210	COMPLEX({1},{2})	(0.3333333333333333, 1.0)	str	'0.333333333333333+i'
+complex_family	complex	211	COMPLEX({1},{2})	(0.3333333333333333, -1.0)	str	'0.333333333333333-i'
+complex_family	complex	212	COMPLEX({1},{2})	(0.3333333333333333, 0.5)	str	'0.333333333333333+0.5i'
+complex_family	complex	213	COMPLEX({1},{2})	(0.3333333333333333, -2.5)	str	'0.333333333333333-2.5i'
+complex_family	complex	214	COMPLEX({1},{2})	(0.3333333333333333, 123456789012345.0)	str	'0.333333333333333+123456789012345i'
+complex_family	complex	215	COMPLEX({1},{2})	(0.3333333333333333, 1234567890123456.0)	str	'0.333333333333333+1234567890123460i'
+complex_family	complex	216	COMPLEX({1},{2})	(0.3333333333333333, 1000000000000000.0)	str	'0.333333333333333+1000000000000000i'
+complex_family	complex	217	COMPLEX({1},{2})	(0.3333333333333333, 1e+16)	str	'0.333333333333333+10000000000000000i'
+complex_family	complex	218	COMPLEX({1},{2})	(0.3333333333333333, 1e+20)	str	'0.333333333333333+100000000000000000000i'
+complex_family	complex	219	COMPLEX({1},{2})	(0.3333333333333333, 1e-05)	str	'0.333333333333333+0.00001i'
+complex_family	complex	220	COMPLEX({1},{2})	(0.3333333333333333, 1e-10)	str	'0.333333333333333+0.0000000001i'
+complex_family	complex	221	COMPLEX({1},{2})	(0.3333333333333333, 0.30000000000000004)	str	'0.333333333333333+0.3i'
+complex_family	complex	222	COMPLEX({1},{2})	(0.3333333333333333, 0.3333333333333333)	str	'0.333333333333333+0.333333333333333i'
+complex_family	complex	223	COMPLEX({1},{2})	(0.3333333333333333, 1e+300)	str	'0.333333333333333+1E+300i'
+complex_family	complex	224	COMPLEX({1},{2})	(0.3333333333333333, 1e-300)	str	'0.333333333333333+1E-300i'
+complex_family	complex	225	COMPLEX({1},{2})	(1e+300, 0.0)	str	'1E+300'
+complex_family	complex	226	COMPLEX({1},{2})	(1e+300, 1.0)	str	'1E+300+i'
+complex_family	complex	227	COMPLEX({1},{2})	(1e+300, -1.0)	str	'1E+300-i'
+complex_family	complex	228	COMPLEX({1},{2})	(1e+300, 0.5)	str	'1E+300+0.5i'
+complex_family	complex	229	COMPLEX({1},{2})	(1e+300, -2.5)	str	'1E+300-2.5i'
+complex_family	complex	230	COMPLEX({1},{2})	(1e+300, 123456789012345.0)	str	'1E+300+123456789012345i'
+complex_family	complex	231	COMPLEX({1},{2})	(1e+300, 1234567890123456.0)	str	'1E+300+1234567890123460i'
+complex_family	complex	232	COMPLEX({1},{2})	(1e+300, 1000000000000000.0)	str	'1E+300+1000000000000000i'
+complex_family	complex	233	COMPLEX({1},{2})	(1e+300, 1e+16)	str	'1E+300+10000000000000000i'
+complex_family	complex	234	COMPLEX({1},{2})	(1e+300, 1e+20)	str	'1E+300+100000000000000000000i'
+complex_family	complex	235	COMPLEX({1},{2})	(1e+300, 1e-05)	str	'1E+300+0.00001i'
+complex_family	complex	236	COMPLEX({1},{2})	(1e+300, 1e-10)	str	'1E+300+0.0000000001i'
+complex_family	complex	237	COMPLEX({1},{2})	(1e+300, 0.30000000000000004)	str	'1E+300+0.3i'
+complex_family	complex	238	COMPLEX({1},{2})	(1e+300, 0.3333333333333333)	str	'1E+300+0.333333333333333i'
+complex_family	complex	239	COMPLEX({1},{2})	(1e+300, 1e+300)	str	'1E+300+1E+300i'
+complex_family	complex	240	COMPLEX({1},{2})	(1e+300, 1e-300)	str	'1E+300+1E-300i'
+complex_family	complex	241	COMPLEX({1},{2})	(1e-300, 0.0)	str	'1E-300'
+complex_family	complex	242	COMPLEX({1},{2})	(1e-300, 1.0)	str	'1E-300+i'
+complex_family	complex	243	COMPLEX({1},{2})	(1e-300, -1.0)	str	'1E-300-i'
+complex_family	complex	244	COMPLEX({1},{2})	(1e-300, 0.5)	str	'1E-300+0.5i'
+complex_family	complex	245	COMPLEX({1},{2})	(1e-300, -2.5)	str	'1E-300-2.5i'
+complex_family	complex	246	COMPLEX({1},{2})	(1e-300, 123456789012345.0)	str	'1E-300+123456789012345i'
+complex_family	complex	247	COMPLEX({1},{2})	(1e-300, 1234567890123456.0)	str	'1E-300+1234567890123460i'
+complex_family	complex	248	COMPLEX({1},{2})	(1e-300, 1000000000000000.0)	str	'1E-300+1000000000000000i'
+complex_family	complex	249	COMPLEX({1},{2})	(1e-300, 1e+16)	str	'1E-300+10000000000000000i'
+complex_family	complex	250	COMPLEX({1},{2})	(1e-300, 1e+20)	str	'1E-300+100000000000000000000i'
+complex_family	complex	251	COMPLEX({1},{2})	(1e-300, 1e-05)	str	'1E-300+0.00001i'
+complex_family	complex	252	COMPLEX({1},{2})	(1e-300, 1e-10)	str	'1E-300+0.0000000001i'
+complex_family	complex	253	COMPLEX({1},{2})	(1e-300, 0.30000000000000004)	str	'1E-300+0.3i'
+complex_family	complex	254	COMPLEX({1},{2})	(1e-300, 0.3333333333333333)	str	'1E-300+0.333333333333333i'
+complex_family	complex	255	COMPLEX({1},{2})	(1e-300, 1e+300)	str	'1E-300+1E+300i'
+complex_family	complex	256	COMPLEX({1},{2})	(1e-300, 1e-300)	str	'1E-300+1E-300i'
+complex_family	complex	257	COMPLEX({1},{2},{3})	(3.0, 4.0, 'i')	str	'3+4i'
+complex_family	complex	258	COMPLEX({1},{2},{3})	(3.0, 4.0, 'j')	str	'3+4j'
+complex_family	complex	259	COMPLEX({1},{2},{3})	(3.0, 4.0, 'I')	e	#VALUE!
+complex_family	complex	260	COMPLEX({1},{2},{3})	(3.0, 4.0, 'J')	e	#VALUE!
+complex_family	complex	261	COMPLEX({1},{2},{3})	(3.0, 4.0, '')	str	'3+4i'
+complex_family	complex	262	COMPLEX({1},{2},{3})	(3.0, 4.0, 'k')	e	#VALUE!
+complex_family	complex	263	COMPLEX({1},{2},{3})	(3.0, 0.0, 'i')	str	'3'
+complex_family	complex	264	COMPLEX({1},{2},{3})	(3.0, 0.0, 'j')	str	'3'
+complex_family	complex	265	COMPLEX({1},{2},{3})	(3.0, 0.0, 'I')	e	#VALUE!
+complex_family	complex	266	COMPLEX({1},{2},{3})	(3.0, 0.0, 'J')	e	#VALUE!
+complex_family	complex	267	COMPLEX({1},{2},{3})	(3.0, 0.0, '')	str	'3'
+complex_family	complex	268	COMPLEX({1},{2},{3})	(3.0, 0.0, 'k')	e	#VALUE!
+complex_family	complex	269	COMPLEX({1},{2},{3})	(0.0, 4.0, 'i')	str	'4i'
+complex_family	complex	270	COMPLEX({1},{2},{3})	(0.0, 4.0, 'j')	str	'4j'
+complex_family	complex	271	COMPLEX({1},{2},{3})	(0.0, 4.0, 'I')	e	#VALUE!
+complex_family	complex	272	COMPLEX({1},{2},{3})	(0.0, 4.0, 'J')	e	#VALUE!
+complex_family	complex	273	COMPLEX({1},{2},{3})	(0.0, 4.0, '')	str	'4i'
+complex_family	complex	274	COMPLEX({1},{2},{3})	(0.0, 4.0, 'k')	e	#VALUE!
+complex_family	complex	275	COMPLEX({1},{2},{3})	(0.0, 0.0, 'i')	str	'0'
+complex_family	complex	276	COMPLEX({1},{2},{3})	(0.0, 0.0, 'j')	str	'0'
+complex_family	complex	277	COMPLEX({1},{2},{3})	(0.0, 0.0, 'I')	e	#VALUE!
+complex_family	complex	278	COMPLEX({1},{2},{3})	(0.0, 0.0, 'J')	e	#VALUE!
+complex_family	complex	279	COMPLEX({1},{2},{3})	(0.0, 0.0, '')	str	'0'
+complex_family	complex	280	COMPLEX({1},{2},{3})	(0.0, 0.0, 'k')	e	#VALUE!
+complex_family	complex_kinds	281	COMPLEX({1},{2})	(2.5, 4.0)	str	'2.5+4i'
+complex_family	complex_kinds	282	COMPLEX({1},{2})	(-2.5, 4.0)	str	'-2.5+4i'
+complex_family	complex_kinds	283	COMPLEX({1},{2})	(0.0, 4.0)	str	'4i'
+complex_family	complex_kinds	284	COMPLEX({1},{2})	('3', 4.0)	str	'3+4i'
+complex_family	complex_kinds	285	COMPLEX({1},{2})	('abc', 4.0)	e	#VALUE!
+complex_family	complex_kinds	286	COMPLEX({1},{2})	(True, 4.0)	e	#VALUE!
+complex_family	complex_kinds	287	COMPLEX({1},{2})	(False, 4.0)	e	#VALUE!
+complex_family	complex_kinds	288	COMPLEX({1},{2})	(None, 4.0)	str	'4i'
+complex_family	complex_kinds	289	COMPLEX({1},{2})	(FormulaInput('=""'), 4.0)	e	#VALUE!
+complex_family	complex_kinds	290	COMPLEX({1},{2})	(ErrorValue('#N/A'), 4.0)	e	#N/A
+complex_family	complex_kinds	291	COMPLEX({1},{2})	(3.0, 2.5)	str	'3+2.5i'
+complex_family	complex_kinds	292	COMPLEX({1},{2})	(3.0, -2.5)	str	'3-2.5i'
+complex_family	complex_kinds	293	COMPLEX({1},{2})	(3.0, 0.0)	str	'3'
+complex_family	complex_kinds	294	COMPLEX({1},{2})	(3.0, '3')	str	'3+3i'
+complex_family	complex_kinds	295	COMPLEX({1},{2})	(3.0, 'abc')	e	#VALUE!
+complex_family	complex_kinds	296	COMPLEX({1},{2})	(3.0, True)	e	#VALUE!
+complex_family	complex_kinds	297	COMPLEX({1},{2})	(3.0, False)	e	#VALUE!
+complex_family	complex_kinds	298	COMPLEX({1},{2})	(3.0, None)	str	'3'
+complex_family	complex_kinds	299	COMPLEX({1},{2})	(3.0, FormulaInput('=""'))	e	#VALUE!
+complex_family	complex_kinds	300	COMPLEX({1},{2})	(3.0, ErrorValue('#N/A'))	e	#N/A
+complex_family	imreal	301	IMREAL({1})	('1+2i',)	n	1.0
+complex_family	imreal	302	IMREAL({1})	('i',)	n	0.0
+complex_family	imreal	303	IMREAL({1})	('-i',)	n	0.0
+complex_family	imreal	304	IMREAL({1})	('+i',)	n	0.0
+complex_family	imreal	305	IMREAL({1})	('3',)	n	3.0
+complex_family	imreal	306	IMREAL({1})	('1.5e3-2e-2j',)	n	1500.0
+complex_family	imreal	307	IMREAL({1})	('1e+20i',)	n	0.0
+complex_family	imreal	308	IMREAL({1})	('2i',)	n	0.0
+complex_family	imreal	309	IMREAL({1})	('1+i',)	n	1.0
+complex_family	imreal	310	IMREAL({1})	('1-i',)	n	1.0
+complex_family	imreal	311	IMREAL({1})	(' 1+2i',)	n	1.0
+complex_family	imreal	312	IMREAL({1})	('1+2i ',)	n	1.0
+complex_family	imreal	313	IMREAL({1})	('1+2I',)	e	#NUM!
+complex_family	imreal	314	IMREAL({1})	('1+2ij',)	e	#NUM!
+complex_family	imreal	315	IMREAL({1})	('',)	e	#NUM!
+complex_family	imreal	316	IMREAL({1})	('abc',)	e	#NUM!
+complex_family	imreal	317	IMREAL({1})	('1+2i+3',)	e	#NUM!
+complex_family	imreal	318	IMREAL({1})	('1E5',)	n	100000.0
+complex_family	imreal	319	IMREAL({1})	('3 4i',)	e	#NUM!
+complex_family	imreal	320	IMREAL({1})	('+3+4i',)	n	3.0
+complex_family	imreal	321	IMREAL({1})	('0i',)	n	0.0
+complex_family	imreal	322	IMREAL({1})	('.5i',)	n	0.0
+complex_family	imreal	323	IMREAL({1})	('5.i',)	n	0.0
+complex_family	imreal	324	IMREAL({1})	('1e5i',)	n	0.0
+complex_family	imreal	325	IMREAL({1})	('i5',)	e	#NUM!
+complex_family	imreal	326	IMREAL({1})	('--1',)	e	#NUM!
+complex_family	imreal	327	IMREAL({1})	('1+-2i',)	n	1.0
+complex_family	imreal	328	IMREAL({1})	('1e400',)	e	#NUM!
+complex_family	imreal	329	IMREAL({1})	('0x10',)	e	#NUM!
+complex_family	imreal	330	IMREAL({1})	(True,)	e	#VALUE!
+complex_family	imreal	331	IMREAL({1})	(None,)	n	0.0
+complex_family	imreal	332	IMREAL({1})	(5.0,)	n	5.0
+complex_family	imreal	333	IMREAL({1})	(ErrorValue('#N/A'),)	e	#N/A
+complex_family	imaginary	334	IMAGINARY({1})	('1+2i',)	n	2.0
+complex_family	imaginary	335	IMAGINARY({1})	('i',)	n	1.0
+complex_family	imaginary	336	IMAGINARY({1})	('-i',)	n	-1.0
+complex_family	imaginary	337	IMAGINARY({1})	('+i',)	n	1.0
+complex_family	imaginary	338	IMAGINARY({1})	('3',)	n	0.0
+complex_family	imaginary	339	IMAGINARY({1})	('1.5e3-2e-2j',)	n	-0.02
+complex_family	imaginary	340	IMAGINARY({1})	('1e+20i',)	n	1e+20
+complex_family	imaginary	341	IMAGINARY({1})	('2i',)	n	2.0
+complex_family	imaginary	342	IMAGINARY({1})	('1+i',)	n	1.0
+complex_family	imaginary	343	IMAGINARY({1})	('1-i',)	n	-1.0
+complex_family	imaginary	344	IMAGINARY({1})	(' 1+2i',)	n	2.0
+complex_family	imaginary	345	IMAGINARY({1})	('1+2i ',)	n	2.0
+complex_family	imaginary	346	IMAGINARY({1})	('1+2I',)	e	#NUM!
+complex_family	imaginary	347	IMAGINARY({1})	('1+2ij',)	e	#NUM!
+complex_family	imaginary	348	IMAGINARY({1})	('',)	e	#NUM!
+complex_family	imaginary	349	IMAGINARY({1})	('abc',)	e	#NUM!
+complex_family	imaginary	350	IMAGINARY({1})	('1+2i+3',)	e	#NUM!
+complex_family	imaginary	351	IMAGINARY({1})	('1E5',)	n	0.0
+complex_family	imaginary	352	IMAGINARY({1})	('3 4i',)	e	#NUM!
+complex_family	imaginary	353	IMAGINARY({1})	('+3+4i',)	n	4.0
+complex_family	imaginary	354	IMAGINARY({1})	('0i',)	n	0.0
+complex_family	imaginary	355	IMAGINARY({1})	('.5i',)	n	0.5
+complex_family	imaginary	356	IMAGINARY({1})	('5.i',)	n	5.0
+complex_family	imaginary	357	IMAGINARY({1})	('1e5i',)	n	100000.0
+complex_family	imaginary	358	IMAGINARY({1})	('i5',)	e	#NUM!
+complex_family	imaginary	359	IMAGINARY({1})	('--1',)	e	#NUM!
+complex_family	imaginary	360	IMAGINARY({1})	('1+-2i',)	n	-2.0
+complex_family	imaginary	361	IMAGINARY({1})	('1e400',)	e	#NUM!
+complex_family	imaginary	362	IMAGINARY({1})	('0x10',)	e	#NUM!
+complex_family	imaginary	363	IMAGINARY({1})	(True,)	e	#VALUE!
+complex_family	imaginary	364	IMAGINARY({1})	(None,)	n	0.0
+complex_family	imaginary	365	IMAGINARY({1})	(5.0,)	n	0.0
+complex_family	imaginary	366	IMAGINARY({1})	(ErrorValue('#N/A'),)	e	#N/A
+complex_family	imabs	367	IMABS({1})	('0',)	n	0.0
+complex_family	imabs	368	IMABS({1})	('1',)	n	1.0
+complex_family	imabs	369	IMABS({1})	('-1',)	n	1.0
+complex_family	imabs	370	IMABS({1})	('i',)	n	1.0
+complex_family	imabs	371	IMABS({1})	('-i',)	n	1.0
+complex_family	imabs	372	IMABS({1})	('3+4i',)	n	5.0
+complex_family	imabs	373	IMABS({1})	('-2.5-1.5j',)	n	2.91547594742265
+complex_family	imabs	374	IMABS({1})	('1e-10+1e10i',)	n	10000000000.0
+complex_family	imabs	375	IMABS({1})	('1e300',)	n	1e+300
+complex_family	imabs	376	IMABS({1})	('0.5+0.5i',)	n	0.7071067811865476
+complex_family	imabs	377	IMABS({1})	('1e15+1i',)	n	1000000000000000.0
+complex_family	imabs	378	IMABS({1})	('1E+20-3i',)	n	1e+20
+complex_family	imabs	379	IMABS({1})	(2.0,)	n	2.0
+complex_family	imabs	380	IMABS({1})	('abc',)	e	#NUM!
+complex_family	imargument	381	IMARGUMENT({1})	('0',)	e	#DIV/0!
+complex_family	imargument	382	IMARGUMENT({1})	('1',)	n	0.0
+complex_family	imargument	383	IMARGUMENT({1})	('-1',)	n	3.141592653589793
+complex_family	imargument	384	IMARGUMENT({1})	('i',)	n	1.5707963267948966
+complex_family	imargument	385	IMARGUMENT({1})	('-i',)	n	-1.5707963267948966
+complex_family	imargument	386	IMARGUMENT({1})	('3+4i',)	n	0.9272952180016122
+complex_family	imargument	387	IMARGUMENT({1})	('-2.5-1.5j',)	n	-2.601173153319209
+complex_family	imargument	388	IMARGUMENT({1})	('1e-10+1e10i',)	n	1.5707963267948966
+complex_family	imargument	389	IMARGUMENT({1})	('1e300',)	n	0.0
+complex_family	imargument	390	IMARGUMENT({1})	('0.5+0.5i',)	n	0.7853981633974483
+complex_family	imargument	391	IMARGUMENT({1})	('1e15+1i',)	n	1e-15
+complex_family	imargument	392	IMARGUMENT({1})	('1E+20-3i',)	n	-3e-20
+complex_family	imargument	393	IMARGUMENT({1})	(2.0,)	n	0.0
+complex_family	imargument	394	IMARGUMENT({1})	('abc',)	e	#NUM!
+complex_family	imconjugate	395	IMCONJUGATE({1})	('0',)	str	'0'
+complex_family	imconjugate	396	IMCONJUGATE({1})	('1',)	str	'1'
+complex_family	imconjugate	397	IMCONJUGATE({1})	('-1',)	str	'-1'
+complex_family	imconjugate	398	IMCONJUGATE({1})	('i',)	str	'-i'
+complex_family	imconjugate	399	IMCONJUGATE({1})	('-i',)	str	'i'
+complex_family	imconjugate	400	IMCONJUGATE({1})	('3+4i',)	str	'3-4i'
+complex_family	imconjugate	401	IMCONJUGATE({1})	('-2.5-1.5j',)	str	'-2.5+1.5j'
+complex_family	imconjugate	402	IMCONJUGATE({1})	('1e-10+1e10i',)	str	'0.0000000001-10000000000i'
+complex_family	imconjugate	403	IMCONJUGATE({1})	('1e300',)	str	'1E+300'
+complex_family	imconjugate	404	IMCONJUGATE({1})	('0.5+0.5i',)	str	'0.5-0.5i'
+complex_family	imconjugate	405	IMCONJUGATE({1})	('1e15+1i',)	str	'1000000000000000-i'
+complex_family	imconjugate	406	IMCONJUGATE({1})	('1E+20-3i',)	str	'100000000000000000000+3i'
+complex_family	imconjugate	407	IMCONJUGATE({1})	(2.0,)	str	'2'
+complex_family	imconjugate	408	IMCONJUGATE({1})	('abc',)	e	#NUM!
+complex_family	imsqrt	409	IMSQRT({1})	('0',)	str	'0'
+complex_family	imsqrt	410	IMSQRT({1})	('1',)	str	'1'
+complex_family	imsqrt	411	IMSQRT({1})	('-1',)	str	'6.12323399573677E-17+i'
+complex_family	imsqrt	412	IMSQRT({1})	('i',)	str	'0.707106781186548+0.707106781186547i'
+complex_family	imsqrt	413	IMSQRT({1})	('-i',)	str	'0.707106781186548-0.707106781186547i'
+complex_family	imsqrt	414	IMSQRT({1})	('3+4i',)	str	'2+i'
+complex_family	imsqrt	415	IMSQRT({1})	('-2.5-1.5j',)	str	'0.455782814190405-1.64552057833116j'
+complex_family	imsqrt	416	IMSQRT({1})	('1e-10+1e10i',)	str	'70710.6781186548+70710.6781186547i'
+complex_family	imsqrt	417	IMSQRT({1})	('1e300',)	e	#NUM!
+complex_family	imsqrt	418	IMSQRT({1})	('0.5+0.5i',)	str	'0.776886987015019+0.321797126452791i'
+complex_family	imsqrt	419	IMSQRT({1})	('1e15+1i',)	str	'31622776.6016838+1.58113883008419E-08i'
+complex_family	imsqrt	420	IMSQRT({1})	('1E+20-3i',)	str	'10000000000-0.00000000015i'
+complex_family	imsqrt	421	IMSQRT({1})	(2.0,)	str	'1.4142135623731'
+complex_family	imsqrt	422	IMSQRT({1})	('abc',)	e	#NUM!
+complex_family	imexp	423	IMEXP({1})	('0',)	str	'1'
+complex_family	imexp	424	IMEXP({1})	('1',)	str	'2.71828182845905'
+complex_family	imexp	425	IMEXP({1})	('-1',)	str	'0.367879441171442'
+complex_family	imexp	426	IMEXP({1})	('i',)	str	'0.54030230586814+0.841470984807897i'
+complex_family	imexp	427	IMEXP({1})	('-i',)	str	'0.54030230586814-0.841470984807897i'
+complex_family	imexp	428	IMEXP({1})	('3+4i',)	str	'-13.1287830814622-15.200784463068i'
+complex_family	imexp	429	IMEXP({1})	('-2.5-1.5j',)	str	'0.00580646310155184-0.0818793746027398j'
+complex_family	imexp	430	IMEXP({1})	('1e-10+1e10i',)	e	#NUM!
+complex_family	imexp	431	IMEXP({1})	('1e300',)	e	#NUM!
+complex_family	imexp	432	IMEXP({1})	('0.5+0.5i',)	str	'1.44688903658417+0.790439083213615i'
+complex_family	imexp	433	IMEXP({1})	('1e15+1i',)	str	'9.71297746009434E+307+1.51270661257499E+308i'
+complex_family	imexp	434	IMEXP({1})	('1E+20-3i',)	str	'-1.77970271470383E+308-2.53690469680938E+307i'
+complex_family	imexp	435	IMEXP({1})	(2.0,)	str	'7.38905609893065'
+complex_family	imexp	436	IMEXP({1})	('abc',)	e	#NUM!
+complex_family	imln	437	IMLN({1})	('0',)	e	#NUM!
+complex_family	imln	438	IMLN({1})	('1',)	str	'0'
+complex_family	imln	439	IMLN({1})	('-1',)	str	'3.14159265358979i'
+complex_family	imln	440	IMLN({1})	('i',)	str	'1.5707963267949i'
+complex_family	imln	441	IMLN({1})	('-i',)	str	'-1.5707963267949i'
+complex_family	imln	442	IMLN({1})	('3+4i',)	str	'1.6094379124341+0.927295218001612i'
+complex_family	imln	443	IMLN({1})	('-2.5-1.5j',)	str	'1.07003308174814-2.60117315331921j'
+complex_family	imln	444	IMLN({1})	('1e-10+1e10i',)	str	'23.0258509299405+1.5707963267949i'
+complex_family	imln	445	IMLN({1})	('1e300',)	str	'690.775527898214'
+complex_family	imln	446	IMLN({1})	('0.5+0.5i',)	str	'-0.346573590279973+0.785398163397448i'
+complex_family	imln	447	IMLN({1})	('1e15+1i',)	str	'34.5387763949107+0.000000000000001i'
+complex_family	imln	448	IMLN({1})	('1E+20-3i',)	str	'46.0517018598809-3E-20i'
+complex_family	imln	449	IMLN({1})	(2.0,)	str	'0.693147180559945'
+complex_family	imln	450	IMLN({1})	('abc',)	e	#NUM!
+complex_family	imlog10	451	IMLOG10({1})	('0',)	e	#NUM!
+complex_family	imlog10	452	IMLOG10({1})	('1',)	str	'0'
+complex_family	imlog10	453	IMLOG10({1})	('-1',)	str	'1.36437635384184i'
+complex_family	imlog10	454	IMLOG10({1})	('i',)	str	'0.682188176920921i'
+complex_family	imlog10	455	IMLOG10({1})	('-i',)	str	'-0.682188176920921i'
+complex_family	imlog10	456	IMLOG10({1})	('3+4i',)	str	'0.698970004336019+0.402719196273373i'
+complex_family	imlog10	457	IMLOG10({1})	('-2.5-1.5j',)	str	'0.464709462857146-1.12967514696141j'
+complex_family	imlog10	458	IMLOG10({1})	('1e-10+1e10i',)	str	'10+0.682188176920921i'
+complex_family	imlog10	459	IMLOG10({1})	('1e300',)	str	'300'
+complex_family	imlog10	460	IMLOG10({1})	('0.5+0.5i',)	str	'-0.150514997831991+0.34109408846046i'
+complex_family	imlog10	461	IMLOG10({1})	('1e15+1i',)	str	'15+4.34294481903252E-16i'
+complex_family	imlog10	462	IMLOG10({1})	('1E+20-3i',)	str	'20-1.30288344570976E-20i'
+complex_family	imlog10	463	IMLOG10({1})	(2.0,)	str	'0.301029995663981'
+complex_family	imlog10	464	IMLOG10({1})	('abc',)	e	#NUM!
+complex_family	imlog2	465	IMLOG2({1})	('0',)	e	#NUM!
+complex_family	imlog2	466	IMLOG2({1})	('1',)	str	'0'
+complex_family	imlog2	467	IMLOG2({1})	('-1',)	str	'4.53236014182719i'
+complex_family	imlog2	468	IMLOG2({1})	('i',)	str	'2.2661800709136i'
+complex_family	imlog2	469	IMLOG2({1})	('-i',)	str	'-2.2661800709136i'
+complex_family	imlog2	470	IMLOG2({1})	('3+4i',)	str	'2.32192809488736+1.33780421245098i'
+complex_family	imlog2	471	IMLOG2({1})	('-2.5-1.5j',)	str	'1.54373142062517-3.75269960878713j'
+complex_family	imlog2	472	IMLOG2({1})	('1e-10+1e10i',)	str	'33.2192809488736+2.2661800709136i'
+complex_family	imlog2	473	IMLOG2({1})	('1e300',)	str	'996.578428466209'
+complex_family	imlog2	474	IMLOG2({1})	('0.5+0.5i',)	str	'-0.5+1.1330900354568i'
+complex_family	imlog2	475	IMLOG2({1})	('1e15+1i',)	str	'49.8289214233104+1.44269504088896E-15i'
+complex_family	imlog2	476	IMLOG2({1})	('1E+20-3i',)	str	'66.4385618977473-4.32808512266689E-20i'
+complex_family	imlog2	477	IMLOG2({1})	(2.0,)	str	'1'
+complex_family	imlog2	478	IMLOG2({1})	('abc',)	e	#NUM!
+complex_family	imsin	479	IMSIN({1})	('0',)	str	'0'
+complex_family	imsin	480	IMSIN({1})	('1',)	str	'0.841470984807897'
+complex_family	imsin	481	IMSIN({1})	('-1',)	str	'-0.841470984807897'
+complex_family	imsin	482	IMSIN({1})	('i',)	str	'1.1752011936438i'
+complex_family	imsin	483	IMSIN({1})	('-i',)	str	'-1.1752011936438i'
+complex_family	imsin	484	IMSIN({1})	('3+4i',)	str	'3.85373803791938-27.0168132580039i'
+complex_family	imsin	485	IMSIN({1})	('-2.5-1.5j',)	str	'-1.40785162624539+1.70585864116447j'
+complex_family	imsin	486	IMSIN({1})	('1e-10+1e10i',)	e	#NUM!
+complex_family	imsin	487	IMSIN({1})	('1e300',)	e	#NUM!
+complex_family	imsin	488	IMSIN({1})	('0.5+0.5i',)	str	'0.540612685713153+0.457304153184249i'
+complex_family	imsin	489	IMSIN({1})	('1e15+1i',)	e	#NUM!
+complex_family	imsin	490	IMSIN({1})	('1E+20-3i',)	e	#NUM!
+complex_family	imsin	491	IMSIN({1})	(2.0,)	str	'0.909297426825682'
+complex_family	imsin	492	IMSIN({1})	('abc',)	e	#NUM!
+complex_family	imcos	493	IMCOS({1})	('0',)	str	'1'
+complex_family	imcos	494	IMCOS({1})	('1',)	str	'0.54030230586814'
+complex_family	imcos	495	IMCOS({1})	('-1',)	str	'0.54030230586814'
+complex_family	imcos	496	IMCOS({1})	('i',)	str	'1.54308063481524'
+complex_family	imcos	497	IMCOS({1})	('-i',)	str	'1.54308063481524'
+complex_family	imcos	498	IMCOS({1})	('3+4i',)	str	'-27.0349456030742-3.85115333481178i'
+complex_family	imcos	499	IMCOS({1})	('-2.5-1.5j',)	str	'-1.88461794440335-1.2743144408871j'
+complex_family	imcos	500	IMCOS({1})	('1e-10+1e10i',)	e	#NUM!
+complex_family	imcos	501	IMCOS({1})	('1e300',)	e	#NUM!
+complex_family	imcos	502	IMCOS({1})	('0.5+0.5i',)	str	'0.98958488339992-0.249826397500462i'
+complex_family	imcos	503	IMCOS({1})	('1e15+1i',)	e	#NUM!
+complex_family	imcos	504	IMCOS({1})	('1E+20-3i',)	e	#NUM!
+complex_family	imcos	505	IMCOS({1})	(2.0,)	str	'-0.416146836547142'
+complex_family	imcos	506	IMCOS({1})	('abc',)	e	#NUM!
+complex_family	imtan	507	_xlfn.IMTAN({1})	('0',)	str	'0'
+complex_family	imtan	508	_xlfn.IMTAN({1})	('1',)	str	'1.5574077246549'
+complex_family	imtan	509	_xlfn.IMTAN({1})	('-1',)	str	'-1.5574077246549'
+complex_family	imtan	510	_xlfn.IMTAN({1})	('i',)	str	'0.761594155955765i'
+complex_family	imtan	511	_xlfn.IMTAN({1})	('-i',)	str	'-0.761594155955765i'
+complex_family	imtan	512	_xlfn.IMTAN({1})	('3+4i',)	str	'-0.000187346204629478+0.999355987381473i'
+complex_family	imtan	513	_xlfn.IMTAN({1})	('-2.5-1.5j',)	str	'0.0926378362684199-0.967786802152774j'
+complex_family	imtan	514	_xlfn.IMTAN({1})	('1e-10+1e10i',)	str	'i'
+complex_family	imtan	515	_xlfn.IMTAN({1})	('1e300',)	e	#NUM!
+complex_family	imtan	516	_xlfn.IMTAN({1})	('0.5+0.5i',)	str	'0.403896455316026+0.564083141267498i'
+complex_family	imtan	517	_xlfn.IMTAN({1})	('1e15+1i',)	e	#NUM!
+complex_family	imtan	518	_xlfn.IMTAN({1})	('1E+20-3i',)	e	#NUM!
+complex_family	imtan	519	_xlfn.IMTAN({1})	(2.0,)	str	'-2.18503986326152'
+complex_family	imtan	520	_xlfn.IMTAN({1})	('abc',)	e	#NUM!
+complex_family	imcot	521	_xlfn.IMCOT({1})	('0',)	e	#NUM!
+complex_family	imcot	522	_xlfn.IMCOT({1})	('1',)	str	'0.642092615934331'
+complex_family	imcot	523	_xlfn.IMCOT({1})	('-1',)	str	'-0.642092615934331'
+complex_family	imcot	524	_xlfn.IMCOT({1})	('i',)	str	'-1.31303528549933i'
+complex_family	imcot	525	_xlfn.IMCOT({1})	('-i',)	str	'1.31303528549933i'
+complex_family	imcot	526	_xlfn.IMCOT({1})	('3+4i',)	str	'-0.000187587737983659-1.00064439247156i'
+complex_family	imcot	527	_xlfn.IMCOT({1})	('-2.5-1.5j',)	str	'0.0980094330799369+1.02390383499893j'
+complex_family	imcot	528	_xlfn.IMCOT({1})	('1e-10+1e10i',)	str	'-i'
+complex_family	imcot	529	_xlfn.IMCOT({1})	('1e300',)	str	'0'
+complex_family	imcot	530	_xlfn.IMCOT({1})	('0.5+0.5i',)	str	'0.839139579024831-1.17194514452435i'
+complex_family	imcot	531	_xlfn.IMCOT({1})	('1e15+1i',)	e	#NUM!
+complex_family	imcot	532	_xlfn.IMCOT({1})	('1E+20-3i',)	e	#NUM!
+complex_family	imcot	533	_xlfn.IMCOT({1})	(2.0,)	str	'-0.457657554360286'
+complex_family	imcot	534	_xlfn.IMCOT({1})	('abc',)	e	#NUM!
+complex_family	imsec	535	_xlfn.IMSEC({1})	('0',)	str	'1'
+complex_family	imsec	536	_xlfn.IMSEC({1})	('1',)	str	'1.85081571768093'
+complex_family	imsec	537	_xlfn.IMSEC({1})	('-1',)	str	'1.85081571768093'
+complex_family	imsec	538	_xlfn.IMSEC({1})	('i',)	str	'0.648054273663885'
+complex_family	imsec	539	_xlfn.IMSEC({1})	('-i',)	str	'0.648054273663885'
+complex_family	imsec	540	_xlfn.IMSEC({1})	('3+4i',)	str	'-0.0362534969158689+0.00516434460775318i'
+complex_family	imsec	541	_xlfn.IMSEC({1})	('-2.5-1.5j',)	str	'-0.36413079358846+0.246212835879772j'
+complex_family	imsec	542	_xlfn.IMSEC({1})	('1e-10+1e10i',)	str	'0'
+complex_family	imsec	543	_xlfn.IMSEC({1})	('1e300',)	e	#NUM!
+complex_family	imsec	544	_xlfn.IMSEC({1})	('0.5+0.5i',)	str	'0.949978867615495+0.239827630938088i'
+complex_family	imsec	545	_xlfn.IMSEC({1})	('1e15+1i',)	e	#NUM!
+complex_family	imsec	546	_xlfn.IMSEC({1})	('1E+20-3i',)	e	#NUM!
+complex_family	imsec	547	_xlfn.IMSEC({1})	(2.0,)	str	'-2.40299796172238'
+complex_family	imsec	548	_xlfn.IMSEC({1})	('abc',)	e	#NUM!
+complex_family	imcsc	549	_xlfn.IMCSC({1})	('0',)	e	#NUM!
+complex_family	imcsc	550	_xlfn.IMCSC({1})	('1',)	str	'1.18839510577812'
+complex_family	imcsc	551	_xlfn.IMCSC({1})	('-1',)	str	'-1.18839510577812'
+complex_family	imcsc	552	_xlfn.IMCSC({1})	('i',)	str	'-0.850918128239322i'
+complex_family	imcsc	553	_xlfn.IMCSC({1})	('-i',)	str	'0.850918128239322i'
+complex_family	imcsc	554	_xlfn.IMCSC({1})	('3+4i',)	str	'0.0051744731840194+0.036275889628626i'
+complex_family	imcsc	555	_xlfn.IMCSC({1})	('-2.5-1.5j',)	str	'-0.287786519529814-0.348703735534849j'
+complex_family	imcsc	556	_xlfn.IMCSC({1})	('1e-10+1e10i',)	str	'0'
+complex_family	imcsc	557	_xlfn.IMCSC({1})	('1e300',)	e	#NUM!
+complex_family	imcsc	558	_xlfn.IMCSC({1})	('0.5+0.5i',)	str	'1.07822969465402-0.912074264038811i'
+complex_family	imcsc	559	_xlfn.IMCSC({1})	('1e15+1i',)	e	#NUM!
+complex_family	imcsc	560	_xlfn.IMCSC({1})	('1E+20-3i',)	e	#NUM!
+complex_family	imcsc	561	_xlfn.IMCSC({1})	(2.0,)	str	'1.09975017029462'
+complex_family	imcsc	562	_xlfn.IMCSC({1})	('abc',)	e	#NUM!
+complex_family	imsinh	563	_xlfn.IMSINH({1})	('0',)	str	'0'
+complex_family	imsinh	564	_xlfn.IMSINH({1})	('1',)	str	'1.1752011936438'
+complex_family	imsinh	565	_xlfn.IMSINH({1})	('-1',)	str	'-1.1752011936438'
+complex_family	imsinh	566	_xlfn.IMSINH({1})	('i',)	str	'0.841470984807897i'
+complex_family	imsinh	567	_xlfn.IMSINH({1})	('-i',)	str	'-0.841470984807897i'
+complex_family	imsinh	568	_xlfn.IMSINH({1})	('3+4i',)	str	'-6.548120040911-7.61923172032141i'
+complex_family	imsinh	569	_xlfn.IMSINH({1})	('-2.5-1.5j',)	str	'-0.427974534506151-6.11692801236931j'
+complex_family	imsinh	570	_xlfn.IMSINH({1})	('1e-10+1e10i',)	e	#NUM!
+complex_family	imsinh	571	_xlfn.IMSINH({1})	('1e300',)	e	#NUM!
+complex_family	imsinh	572	_xlfn.IMSINH({1})	('0.5+0.5i',)	str	'0.457304153184249+0.540612685713153i'
+complex_family	imsinh	573	_xlfn.IMSINH({1})	('1e15+1i',)	e	#NUM!
+complex_family	imsinh	574	_xlfn.IMSINH({1})	('1E+20-3i',)	e	#NUM!
+complex_family	imsinh	575	_xlfn.IMSINH({1})	(2.0,)	str	'3.62686040784702'
+complex_family	imsinh	576	_xlfn.IMSINH({1})	('abc',)	e	#NUM!
+complex_family	imcosh	577	_xlfn.IMCOSH({1})	('0',)	str	'1'
+complex_family	imcosh	578	_xlfn.IMCOSH({1})	('1',)	str	'1.54308063481524'
+complex_family	imcosh	579	_xlfn.IMCOSH({1})	('-1',)	str	'1.54308063481524'
+complex_family	imcosh	580	_xlfn.IMCOSH({1})	('i',)	str	'0.54030230586814'
+complex_family	imcosh	581	_xlfn.IMCOSH({1})	('-i',)	str	'0.54030230586814'
+complex_family	imcosh	582	_xlfn.IMCOSH({1})	('3+4i',)	str	'-6.58066304055116-7.58155274274655i'
+complex_family	imcosh	583	_xlfn.IMCOSH({1})	('-2.5-1.5j',)	str	'0.433780997607703+6.03504863776657j'
+complex_family	imcosh	584	_xlfn.IMCOSH({1})	('1e-10+1e10i',)	e	#NUM!
+complex_family	imcosh	585	_xlfn.IMCOSH({1})	('1e300',)	e	#NUM!
+complex_family	imcosh	586	_xlfn.IMCOSH({1})	('0.5+0.5i',)	str	'0.98958488339992+0.249826397500462i'
+complex_family	imcosh	587	_xlfn.IMCOSH({1})	('1e15+1i',)	e	#NUM!
+complex_family	imcosh	588	_xlfn.IMCOSH({1})	('1E+20-3i',)	e	#NUM!
+complex_family	imcosh	589	_xlfn.IMCOSH({1})	(2.0,)	str	'3.76219569108363'
+complex_family	imcosh	590	_xlfn.IMCOSH({1})	('abc',)	e	#NUM!
+complex_family	imsech	591	_xlfn.IMSECH({1})	('0',)	str	'1'
+complex_family	imsech	592	_xlfn.IMSECH({1})	('1',)	str	'0.648054273663885'
+complex_family	imsech	593	_xlfn.IMSECH({1})	('-1',)	str	'0.648054273663885'
+complex_family	imsech	594	_xlfn.IMSECH({1})	('i',)	str	'1.85081571768093'
+complex_family	imsech	595	_xlfn.IMSECH({1})	('-i',)	str	'1.85081571768093'
+complex_family	imsech	596	_xlfn.IMSECH({1})	('3+4i',)	str	'-0.065294027857947+0.0752249603027732i'
+complex_family	imsech	597	_xlfn.IMSECH({1})	('-2.5-1.5j',)	str	'0.0118487095906125-0.164847098117439j'
+complex_family	imsech	598	_xlfn.IMSECH({1})	('1e-10+1e10i',)	e	#NUM!
+complex_family	imsech	599	_xlfn.IMSECH({1})	('1e300',)	str	'0'
+complex_family	imsech	600	_xlfn.IMSECH({1})	('0.5+0.5i',)	str	'0.949978867615495-0.239827630938088i'
+complex_family	imsech	601	_xlfn.IMSECH({1})	('1e15+1i',)	str	'0'
+complex_family	imsech	602	_xlfn.IMSECH({1})	('1E+20-3i',)	str	'0'
+complex_family	imsech	603	_xlfn.IMSECH({1})	(2.0,)	str	'0.26580222883408'
+complex_family	imsech	604	_xlfn.IMSECH({1})	('abc',)	e	#NUM!
+complex_family	imcsch	605	_xlfn.IMCSCH({1})	('0',)	e	#NUM!
+complex_family	imcsch	606	_xlfn.IMCSCH({1})	('1',)	str	'0.850918128239322'
+complex_family	imcsch	607	_xlfn.IMCSCH({1})	('-1',)	str	'-0.850918128239322'
+complex_family	imcsch	608	_xlfn.IMCSCH({1})	('i',)	str	'-1.18839510577812i'
+complex_family	imcsch	609	_xlfn.IMCSCH({1})	('-i',)	str	'1.18839510577812i'
+complex_family	imcsch	610	_xlfn.IMCSCH({1})	('3+4i',)	str	'-0.0648774713706355+0.0754898329158637i'
+complex_family	imcsch	611	_xlfn.IMCSCH({1})	('-2.5-1.5j',)	str	'-0.0113823103766644+0.162684383239863j'
+complex_family	imcsch	612	_xlfn.IMCSCH({1})	('1e-10+1e10i',)	e	#NUM!
+complex_family	imcsch	613	_xlfn.IMCSCH({1})	('1e300',)	str	'0'
+complex_family	imcsch	614	_xlfn.IMCSCH({1})	('0.5+0.5i',)	str	'0.912074264038811-1.07822969465402i'
+complex_family	imcsch	615	_xlfn.IMCSCH({1})	('1e15+1i',)	str	'0'
+complex_family	imcsch	616	_xlfn.IMCSCH({1})	('1E+20-3i',)	str	'0'
+complex_family	imcsch	617	_xlfn.IMCSCH({1})	(2.0,)	str	'0.275720564771783'
+complex_family	imcsch	618	_xlfn.IMCSCH({1})	('abc',)	e	#NUM!
+complex_family	imsub	619	IMSUB({1},{2})	('0', '0')	str	'0'
+complex_family	imsub	620	IMSUB({1},{2})	('0', '1')	str	'-1'
+complex_family	imsub	621	IMSUB({1},{2})	('0', 'i')	str	'-i'
+complex_family	imsub	622	IMSUB({1},{2})	('0', '3+4i')	str	'-3-4i'
+complex_family	imsub	623	IMSUB({1},{2})	('0', '-2.5-1.5j')	str	'2.5+1.5j'
+complex_family	imsub	624	IMSUB({1},{2})	('0', '1+2j')	str	'-1-2j'
+complex_family	imsub	625	IMSUB({1},{2})	('0', '1e300')	str	'-1E+300'
+complex_family	imsub	626	IMSUB({1},{2})	('0', 2.0)	str	'-2'
+complex_family	imsub	627	IMSUB({1},{2})	('1', '0')	str	'1'
+complex_family	imsub	628	IMSUB({1},{2})	('1', '1')	str	'0'
+complex_family	imsub	629	IMSUB({1},{2})	('1', 'i')	str	'1-i'
+complex_family	imsub	630	IMSUB({1},{2})	('1', '3+4i')	str	'-2-4i'
+complex_family	imsub	631	IMSUB({1},{2})	('1', '-2.5-1.5j')	str	'3.5+1.5j'
+complex_family	imsub	632	IMSUB({1},{2})	('1', '1+2j')	str	'-2j'
+complex_family	imsub	633	IMSUB({1},{2})	('1', '1e300')	str	'-1E+300'
+complex_family	imsub	634	IMSUB({1},{2})	('1', 2.0)	str	'-1'
+complex_family	imsub	635	IMSUB({1},{2})	('i', '0')	str	'i'
+complex_family	imsub	636	IMSUB({1},{2})	('i', '1')	str	'-1+i'
+complex_family	imsub	637	IMSUB({1},{2})	('i', 'i')	str	'0'
+complex_family	imsub	638	IMSUB({1},{2})	('i', '3+4i')	str	'-3-3i'
+complex_family	imsub	639	IMSUB({1},{2})	('i', '-2.5-1.5j')	e	#NUM!
+complex_family	imsub	640	IMSUB({1},{2})	('i', '1+2j')	e	#NUM!
+complex_family	imsub	641	IMSUB({1},{2})	('i', '1e300')	str	'-1E+300+i'
+complex_family	imsub	642	IMSUB({1},{2})	('i', 2.0)	str	'-2+i'
+complex_family	imsub	643	IMSUB({1},{2})	('3+4i', '0')	str	'3+4i'
+complex_family	imsub	644	IMSUB({1},{2})	('3+4i', '1')	str	'2+4i'
+complex_family	imsub	645	IMSUB({1},{2})	('3+4i', 'i')	str	'3+3i'
+complex_family	imsub	646	IMSUB({1},{2})	('3+4i', '3+4i')	str	'0'
+complex_family	imsub	647	IMSUB({1},{2})	('3+4i', '-2.5-1.5j')	e	#NUM!
+complex_family	imsub	648	IMSUB({1},{2})	('3+4i', '1+2j')	e	#NUM!
+complex_family	imsub	649	IMSUB({1},{2})	('3+4i', '1e300')	str	'-1E+300+4i'
+complex_family	imsub	650	IMSUB({1},{2})	('3+4i', 2.0)	str	'1+4i'
+complex_family	imsub	651	IMSUB({1},{2})	('-2.5-1.5j', '0')	str	'-2.5-1.5j'
+complex_family	imsub	652	IMSUB({1},{2})	('-2.5-1.5j', '1')	str	'-3.5-1.5j'
+complex_family	imsub	653	IMSUB({1},{2})	('-2.5-1.5j', 'i')	e	#NUM!
+complex_family	imsub	654	IMSUB({1},{2})	('-2.5-1.5j', '3+4i')	e	#NUM!
+complex_family	imsub	655	IMSUB({1},{2})	('-2.5-1.5j', '-2.5-1.5j')	str	'0'
+complex_family	imsub	656	IMSUB({1},{2})	('-2.5-1.5j', '1+2j')	str	'-3.5-3.5j'
+complex_family	imsub	657	IMSUB({1},{2})	('-2.5-1.5j', '1e300')	str	'-1E+300-1.5j'
+complex_family	imsub	658	IMSUB({1},{2})	('-2.5-1.5j', 2.0)	str	'-4.5-1.5j'
+complex_family	imsub	659	IMSUB({1},{2})	('1+2j', '0')	str	'1+2j'
+complex_family	imsub	660	IMSUB({1},{2})	('1+2j', '1')	str	'2j'
+complex_family	imsub	661	IMSUB({1},{2})	('1+2j', 'i')	e	#NUM!
+complex_family	imsub	662	IMSUB({1},{2})	('1+2j', '3+4i')	e	#NUM!
+complex_family	imsub	663	IMSUB({1},{2})	('1+2j', '-2.5-1.5j')	str	'3.5+3.5j'
+complex_family	imsub	664	IMSUB({1},{2})	('1+2j', '1+2j')	str	'0'
+complex_family	imsub	665	IMSUB({1},{2})	('1+2j', '1e300')	str	'-1E+300+2j'
+complex_family	imsub	666	IMSUB({1},{2})	('1+2j', 2.0)	str	'-1+2j'
+complex_family	imsub	667	IMSUB({1},{2})	('1e300', '0')	str	'1E+300'
+complex_family	imsub	668	IMSUB({1},{2})	('1e300', '1')	str	'1E+300'
+complex_family	imsub	669	IMSUB({1},{2})	('1e300', 'i')	str	'1E+300-i'
+complex_family	imsub	670	IMSUB({1},{2})	('1e300', '3+4i')	str	'1E+300-4i'
+complex_family	imsub	671	IMSUB({1},{2})	('1e300', '-2.5-1.5j')	str	'1E+300+1.5j'
+complex_family	imsub	672	IMSUB({1},{2})	('1e300', '1+2j')	str	'1E+300-2j'
+complex_family	imsub	673	IMSUB({1},{2})	('1e300', '1e300')	str	'0'
+complex_family	imsub	674	IMSUB({1},{2})	('1e300', 2.0)	str	'1E+300'
+complex_family	imsub	675	IMSUB({1},{2})	(2.0, '0')	str	'2'
+complex_family	imsub	676	IMSUB({1},{2})	(2.0, '1')	str	'1'
+complex_family	imsub	677	IMSUB({1},{2})	(2.0, 'i')	str	'2-i'
+complex_family	imsub	678	IMSUB({1},{2})	(2.0, '3+4i')	str	'-1-4i'
+complex_family	imsub	679	IMSUB({1},{2})	(2.0, '-2.5-1.5j')	str	'4.5+1.5j'
+complex_family	imsub	680	IMSUB({1},{2})	(2.0, '1+2j')	str	'1-2j'
+complex_family	imsub	681	IMSUB({1},{2})	(2.0, '1e300')	str	'-1E+300'
+complex_family	imsub	682	IMSUB({1},{2})	(2.0, 2.0)	str	'0'
+complex_family	imdiv	683	IMDIV({1},{2})	('0', '0')	e	#NUM!
+complex_family	imdiv	684	IMDIV({1},{2})	('0', '1')	str	'0'
+complex_family	imdiv	685	IMDIV({1},{2})	('0', 'i')	str	'0'
+complex_family	imdiv	686	IMDIV({1},{2})	('0', '3+4i')	str	'0'
+complex_family	imdiv	687	IMDIV({1},{2})	('0', '-2.5-1.5j')	str	'0'
+complex_family	imdiv	688	IMDIV({1},{2})	('0', '1+2j')	str	'0'
+complex_family	imdiv	689	IMDIV({1},{2})	('0', '1e300')	str	'0'
+complex_family	imdiv	690	IMDIV({1},{2})	('0', 2.0)	str	'0'
+complex_family	imdiv	691	IMDIV({1},{2})	('1', '0')	e	#NUM!
+complex_family	imdiv	692	IMDIV({1},{2})	('1', '1')	str	'1'
+complex_family	imdiv	693	IMDIV({1},{2})	('1', 'i')	str	'-i'
+complex_family	imdiv	694	IMDIV({1},{2})	('1', '3+4i')	str	'0.12-0.16i'
+complex_family	imdiv	695	IMDIV({1},{2})	('1', '-2.5-1.5j')	str	'-0.294117647058824+0.176470588235294j'
+complex_family	imdiv	696	IMDIV({1},{2})	('1', '1+2j')	str	'0.2-0.4j'
+complex_family	imdiv	697	IMDIV({1},{2})	('1', '1e300')	str	'1E-300'
+complex_family	imdiv	698	IMDIV({1},{2})	('1', 2.0)	str	'0.5'
+complex_family	imdiv	699	IMDIV({1},{2})	('i', '0')	e	#NUM!
+complex_family	imdiv	700	IMDIV({1},{2})	('i', '1')	str	'i'
+complex_family	imdiv	701	IMDIV({1},{2})	('i', 'i')	str	'1'
+complex_family	imdiv	702	IMDIV({1},{2})	('i', '3+4i')	str	'0.16+0.12i'
+complex_family	imdiv	703	IMDIV({1},{2})	('i', '-2.5-1.5j')	e	#NUM!
+complex_family	imdiv	704	IMDIV({1},{2})	('i', '1+2j')	e	#NUM!
+complex_family	imdiv	705	IMDIV({1},{2})	('i', '1e300')	str	'1E-300i'
+complex_family	imdiv	706	IMDIV({1},{2})	('i', 2.0)	str	'0.5i'
+complex_family	imdiv	707	IMDIV({1},{2})	('3+4i', '0')	e	#NUM!
+complex_family	imdiv	708	IMDIV({1},{2})	('3+4i', '1')	str	'3+4i'
+complex_family	imdiv	709	IMDIV({1},{2})	('3+4i', 'i')	str	'4-3i'
+complex_family	imdiv	710	IMDIV({1},{2})	('3+4i', '3+4i')	str	'1'
+complex_family	imdiv	711	IMDIV({1},{2})	('3+4i', '-2.5-1.5j')	e	#NUM!
+complex_family	imdiv	712	IMDIV({1},{2})	('3+4i', '1+2j')	e	#NUM!
+complex_family	imdiv	713	IMDIV({1},{2})	('3+4i', '1e300')	str	'3E-300+4E-300i'
+complex_family	imdiv	714	IMDIV({1},{2})	('3+4i', 2.0)	str	'1.5+2i'
+complex_family	imdiv	715	IMDIV({1},{2})	('-2.5-1.5j', '0')	e	#NUM!
+complex_family	imdiv	716	IMDIV({1},{2})	('-2.5-1.5j', '1')	str	'-2.5-1.5j'
+complex_family	imdiv	717	IMDIV({1},{2})	('-2.5-1.5j', 'i')	e	#NUM!
+complex_family	imdiv	718	IMDIV({1},{2})	('-2.5-1.5j', '3+4i')	e	#NUM!
+complex_family	imdiv	719	IMDIV({1},{2})	('-2.5-1.5j', '-2.5-1.5j')	str	'1'
+complex_family	imdiv	720	IMDIV({1},{2})	('-2.5-1.5j', '1+2j')	str	'-1.1+0.7j'
+complex_family	imdiv	721	IMDIV({1},{2})	('-2.5-1.5j', '1e300')	str	'-2.5E-300-1.5E-300j'
+complex_family	imdiv	722	IMDIV({1},{2})	('-2.5-1.5j', 2.0)	str	'-1.25-0.75j'
+complex_family	imdiv	723	IMDIV({1},{2})	('1+2j', '0')	e	#NUM!
+complex_family	imdiv	724	IMDIV({1},{2})	('1+2j', '1')	str	'1+2j'
+complex_family	imdiv	725	IMDIV({1},{2})	('1+2j', 'i')	e	#NUM!
+complex_family	imdiv	726	IMDIV({1},{2})	('1+2j', '3+4i')	e	#NUM!
+complex_family	imdiv	727	IMDIV({1},{2})	('1+2j', '-2.5-1.5j')	str	'-0.647058823529412-0.411764705882353j'
+complex_family	imdiv	728	IMDIV({1},{2})	('1+2j', '1+2j')	str	'1'
+complex_family	imdiv	729	IMDIV({1},{2})	('1+2j', '1e300')	str	'1E-300+2E-300j'
+complex_family	imdiv	730	IMDIV({1},{2})	('1+2j', 2.0)	str	'0.5+j'
+complex_family	imdiv	731	IMDIV({1},{2})	('1e300', '0')	e	#NUM!
+complex_family	imdiv	732	IMDIV({1},{2})	('1e300', '1')	str	'1E+300'
+complex_family	imdiv	733	IMDIV({1},{2})	('1e300', 'i')	str	'-1E+300i'
+complex_family	imdiv	734	IMDIV({1},{2})	('1e300', '3+4i')	str	'1.2E+299-1.6E+299i'
+complex_family	imdiv	735	IMDIV({1},{2})	('1e300', '-2.5-1.5j')	str	'-2.94117647058824E+299+1.76470588235294E+299j'
+complex_family	imdiv	736	IMDIV({1},{2})	('1e300', '1+2j')	str	'2E+299-4E+299j'
+complex_family	imdiv	737	IMDIV({1},{2})	('1e300', '1e300')	str	'1'
+complex_family	imdiv	738	IMDIV({1},{2})	('1e300', 2.0)	str	'5E+299'
+complex_family	imdiv	739	IMDIV({1},{2})	(2.0, '0')	e	#NUM!
+complex_family	imdiv	740	IMDIV({1},{2})	(2.0, '1')	str	'2'
+complex_family	imdiv	741	IMDIV({1},{2})	(2.0, 'i')	str	'-2i'
+complex_family	imdiv	742	IMDIV({1},{2})	(2.0, '3+4i')	str	'0.24-0.32i'
+complex_family	imdiv	743	IMDIV({1},{2})	(2.0, '-2.5-1.5j')	str	'-0.588235294117647+0.352941176470588j'
+complex_family	imdiv	744	IMDIV({1},{2})	(2.0, '1+2j')	str	'0.4-0.8j'
+complex_family	imdiv	745	IMDIV({1},{2})	(2.0, '1e300')	str	'2E-300'
+complex_family	imdiv	746	IMDIV({1},{2})	(2.0, 2.0)	str	'1'
+complex_family	imsum	747	IMSUM({1},{2})	('0', '0')	str	'0'
+complex_family	imsum	748	IMSUM({1},{2})	('0', '1')	str	'1'
+complex_family	imsum	749	IMSUM({1},{2})	('0', 'i')	str	'i'
+complex_family	imsum	750	IMSUM({1},{2})	('0', '3+4i')	str	'3+4i'
+complex_family	imsum	751	IMSUM({1},{2})	('0', '-2.5-1.5j')	str	'-2.5-1.5j'
+complex_family	imsum	752	IMSUM({1},{2})	('0', '1+2j')	str	'1+2j'
+complex_family	imsum	753	IMSUM({1},{2})	('0', '1e300')	str	'1E+300'
+complex_family	imsum	754	IMSUM({1},{2})	('0', 2.0)	str	'2'
+complex_family	imsum	755	IMSUM({1},{2})	('1', '0')	str	'1'
+complex_family	imsum	756	IMSUM({1},{2})	('1', '1')	str	'2'
+complex_family	imsum	757	IMSUM({1},{2})	('1', 'i')	str	'1+i'
+complex_family	imsum	758	IMSUM({1},{2})	('1', '3+4i')	str	'4+4i'
+complex_family	imsum	759	IMSUM({1},{2})	('1', '-2.5-1.5j')	str	'-1.5-1.5j'
+complex_family	imsum	760	IMSUM({1},{2})	('1', '1+2j')	str	'2+2j'
+complex_family	imsum	761	IMSUM({1},{2})	('1', '1e300')	str	'1E+300'
+complex_family	imsum	762	IMSUM({1},{2})	('1', 2.0)	str	'3'
+complex_family	imsum	763	IMSUM({1},{2})	('i', '0')	str	'i'
+complex_family	imsum	764	IMSUM({1},{2})	('i', '1')	str	'1+i'
+complex_family	imsum	765	IMSUM({1},{2})	('i', 'i')	str	'2i'
+complex_family	imsum	766	IMSUM({1},{2})	('i', '3+4i')	str	'3+5i'
+complex_family	imsum	767	IMSUM({1},{2})	('i', '-2.5-1.5j')	e	#VALUE!
+complex_family	imsum	768	IMSUM({1},{2})	('i', '1+2j')	e	#VALUE!
+complex_family	imsum	769	IMSUM({1},{2})	('i', '1e300')	str	'1E+300+i'
+complex_family	imsum	770	IMSUM({1},{2})	('i', 2.0)	str	'2+i'
+complex_family	imsum	771	IMSUM({1},{2})	('3+4i', '0')	str	'3+4i'
+complex_family	imsum	772	IMSUM({1},{2})	('3+4i', '1')	str	'4+4i'
+complex_family	imsum	773	IMSUM({1},{2})	('3+4i', 'i')	str	'3+5i'
+complex_family	imsum	774	IMSUM({1},{2})	('3+4i', '3+4i')	str	'6+8i'
+complex_family	imsum	775	IMSUM({1},{2})	('3+4i', '-2.5-1.5j')	e	#VALUE!
+complex_family	imsum	776	IMSUM({1},{2})	('3+4i', '1+2j')	e	#VALUE!
+complex_family	imsum	777	IMSUM({1},{2})	('3+4i', '1e300')	str	'1E+300+4i'
+complex_family	imsum	778	IMSUM({1},{2})	('3+4i', 2.0)	str	'5+4i'
+complex_family	imsum	779	IMSUM({1},{2})	('-2.5-1.5j', '0')	str	'-2.5-1.5j'
+complex_family	imsum	780	IMSUM({1},{2})	('-2.5-1.5j', '1')	str	'-1.5-1.5j'
+complex_family	imsum	781	IMSUM({1},{2})	('-2.5-1.5j', 'i')	e	#VALUE!
+complex_family	imsum	782	IMSUM({1},{2})	('-2.5-1.5j', '3+4i')	e	#VALUE!
+complex_family	imsum	783	IMSUM({1},{2})	('-2.5-1.5j', '-2.5-1.5j')	str	'-5-3j'
+complex_family	imsum	784	IMSUM({1},{2})	('-2.5-1.5j', '1+2j')	str	'-1.5+0.5j'
+complex_family	imsum	785	IMSUM({1},{2})	('-2.5-1.5j', '1e300')	str	'1E+300-1.5j'
+complex_family	imsum	786	IMSUM({1},{2})	('-2.5-1.5j', 2.0)	str	'-0.5-1.5j'
+complex_family	imsum	787	IMSUM({1},{2})	('1+2j', '0')	str	'1+2j'
+complex_family	imsum	788	IMSUM({1},{2})	('1+2j', '1')	str	'2+2j'
+complex_family	imsum	789	IMSUM({1},{2})	('1+2j', 'i')	e	#VALUE!
+complex_family	imsum	790	IMSUM({1},{2})	('1+2j', '3+4i')	e	#VALUE!
+complex_family	imsum	791	IMSUM({1},{2})	('1+2j', '-2.5-1.5j')	str	'-1.5+0.5j'
+complex_family	imsum	792	IMSUM({1},{2})	('1+2j', '1+2j')	str	'2+4j'
+complex_family	imsum	793	IMSUM({1},{2})	('1+2j', '1e300')	str	'1E+300+2j'
+complex_family	imsum	794	IMSUM({1},{2})	('1+2j', 2.0)	str	'3+2j'
+complex_family	imsum	795	IMSUM({1},{2})	('1e300', '0')	str	'1E+300'
+complex_family	imsum	796	IMSUM({1},{2})	('1e300', '1')	str	'1E+300'
+complex_family	imsum	797	IMSUM({1},{2})	('1e300', 'i')	str	'1E+300+i'
+complex_family	imsum	798	IMSUM({1},{2})	('1e300', '3+4i')	str	'1E+300+4i'
+complex_family	imsum	799	IMSUM({1},{2})	('1e300', '-2.5-1.5j')	str	'1E+300-1.5j'
+complex_family	imsum	800	IMSUM({1},{2})	('1e300', '1+2j')	str	'1E+300+2j'
+complex_family	imsum	801	IMSUM({1},{2})	('1e300', '1e300')	str	'2E+300'
+complex_family	imsum	802	IMSUM({1},{2})	('1e300', 2.0)	str	'1E+300'
+complex_family	imsum	803	IMSUM({1},{2})	(2.0, '0')	str	'2'
+complex_family	imsum	804	IMSUM({1},{2})	(2.0, '1')	str	'3'
+complex_family	imsum	805	IMSUM({1},{2})	(2.0, 'i')	str	'2+i'
+complex_family	imsum	806	IMSUM({1},{2})	(2.0, '3+4i')	str	'5+4i'
+complex_family	imsum	807	IMSUM({1},{2})	(2.0, '-2.5-1.5j')	str	'-0.5-1.5j'
+complex_family	imsum	808	IMSUM({1},{2})	(2.0, '1+2j')	str	'3+2j'
+complex_family	imsum	809	IMSUM({1},{2})	(2.0, '1e300')	str	'1E+300'
+complex_family	imsum	810	IMSUM({1},{2})	(2.0, 2.0)	str	'4'
+complex_family	improduct	811	IMPRODUCT({1},{2})	('0', '0')	str	'0'
+complex_family	improduct	812	IMPRODUCT({1},{2})	('0', '1')	str	'0'
+complex_family	improduct	813	IMPRODUCT({1},{2})	('0', 'i')	str	'0'
+complex_family	improduct	814	IMPRODUCT({1},{2})	('0', '3+4i')	str	'0'
+complex_family	improduct	815	IMPRODUCT({1},{2})	('0', '-2.5-1.5j')	str	'0'
+complex_family	improduct	816	IMPRODUCT({1},{2})	('0', '1+2j')	str	'0'
+complex_family	improduct	817	IMPRODUCT({1},{2})	('0', '1e300')	str	'0'
+complex_family	improduct	818	IMPRODUCT({1},{2})	('0', 2.0)	str	'0'
+complex_family	improduct	819	IMPRODUCT({1},{2})	('1', '0')	str	'0'
+complex_family	improduct	820	IMPRODUCT({1},{2})	('1', '1')	str	'1'
+complex_family	improduct	821	IMPRODUCT({1},{2})	('1', 'i')	str	'i'
+complex_family	improduct	822	IMPRODUCT({1},{2})	('1', '3+4i')	str	'3+4i'
+complex_family	improduct	823	IMPRODUCT({1},{2})	('1', '-2.5-1.5j')	str	'-2.5-1.5j'
+complex_family	improduct	824	IMPRODUCT({1},{2})	('1', '1+2j')	str	'1+2j'
+complex_family	improduct	825	IMPRODUCT({1},{2})	('1', '1e300')	str	'1E+300'
+complex_family	improduct	826	IMPRODUCT({1},{2})	('1', 2.0)	str	'2'
+complex_family	improduct	827	IMPRODUCT({1},{2})	('i', '0')	str	'0'
+complex_family	improduct	828	IMPRODUCT({1},{2})	('i', '1')	str	'i'
+complex_family	improduct	829	IMPRODUCT({1},{2})	('i', 'i')	str	'-1'
+complex_family	improduct	830	IMPRODUCT({1},{2})	('i', '3+4i')	str	'-4+3i'
+complex_family	improduct	831	IMPRODUCT({1},{2})	('i', '-2.5-1.5j')	e	#VALUE!
+complex_family	improduct	832	IMPRODUCT({1},{2})	('i', '1+2j')	e	#VALUE!
+complex_family	improduct	833	IMPRODUCT({1},{2})	('i', '1e300')	str	'1E+300i'
+complex_family	improduct	834	IMPRODUCT({1},{2})	('i', 2.0)	str	'2i'
+complex_family	improduct	835	IMPRODUCT({1},{2})	('3+4i', '0')	str	'0'
+complex_family	improduct	836	IMPRODUCT({1},{2})	('3+4i', '1')	str	'3+4i'
+complex_family	improduct	837	IMPRODUCT({1},{2})	('3+4i', 'i')	str	'-4+3i'
+complex_family	improduct	838	IMPRODUCT({1},{2})	('3+4i', '3+4i')	str	'-7+24i'
+complex_family	improduct	839	IMPRODUCT({1},{2})	('3+4i', '-2.5-1.5j')	e	#VALUE!
+complex_family	improduct	840	IMPRODUCT({1},{2})	('3+4i', '1+2j')	e	#VALUE!
+complex_family	improduct	841	IMPRODUCT({1},{2})	('3+4i', '1e300')	str	'3E+300+4E+300i'
+complex_family	improduct	842	IMPRODUCT({1},{2})	('3+4i', 2.0)	str	'6+8i'
+complex_family	improduct	843	IMPRODUCT({1},{2})	('-2.5-1.5j', '0')	str	'0'
+complex_family	improduct	844	IMPRODUCT({1},{2})	('-2.5-1.5j', '1')	str	'-2.5-1.5j'
+complex_family	improduct	845	IMPRODUCT({1},{2})	('-2.5-1.5j', 'i')	e	#VALUE!
+complex_family	improduct	846	IMPRODUCT({1},{2})	('-2.5-1.5j', '3+4i')	e	#VALUE!
+complex_family	improduct	847	IMPRODUCT({1},{2})	('-2.5-1.5j', '-2.5-1.5j')	str	'4+7.5j'
+complex_family	improduct	848	IMPRODUCT({1},{2})	('-2.5-1.5j', '1+2j')	str	'0.5-6.5j'
+complex_family	improduct	849	IMPRODUCT({1},{2})	('-2.5-1.5j', '1e300')	str	'-2.5E+300-1.5E+300j'
+complex_family	improduct	850	IMPRODUCT({1},{2})	('-2.5-1.5j', 2.0)	str	'-5-3j'
+complex_family	improduct	851	IMPRODUCT({1},{2})	('1+2j', '0')	str	'0'
+complex_family	improduct	852	IMPRODUCT({1},{2})	('1+2j', '1')	str	'1+2j'
+complex_family	improduct	853	IMPRODUCT({1},{2})	('1+2j', 'i')	e	#VALUE!
+complex_family	improduct	854	IMPRODUCT({1},{2})	('1+2j', '3+4i')	e	#VALUE!
+complex_family	improduct	855	IMPRODUCT({1},{2})	('1+2j', '-2.5-1.5j')	str	'0.5-6.5j'
+complex_family	improduct	856	IMPRODUCT({1},{2})	('1+2j', '1+2j')	str	'-3+4j'
+complex_family	improduct	857	IMPRODUCT({1},{2})	('1+2j', '1e300')	str	'1E+300+2E+300j'
+complex_family	improduct	858	IMPRODUCT({1},{2})	('1+2j', 2.0)	str	'2+4j'
+complex_family	improduct	859	IMPRODUCT({1},{2})	('1e300', '0')	str	'0'
+complex_family	improduct	860	IMPRODUCT({1},{2})	('1e300', '1')	str	'1E+300'
+complex_family	improduct	861	IMPRODUCT({1},{2})	('1e300', 'i')	str	'1E+300i'
+complex_family	improduct	862	IMPRODUCT({1},{2})	('1e300', '3+4i')	str	'3E+300+4E+300i'
+complex_family	improduct	863	IMPRODUCT({1},{2})	('1e300', '-2.5-1.5j')	str	'-2.5E+300-1.5E+300j'
+complex_family	improduct	864	IMPRODUCT({1},{2})	('1e300', '1+2j')	str	'1E+300+2E+300j'
+complex_family	improduct	865	IMPRODUCT({1},{2})	('1e300', '1e300')	e	#VALUE!
+complex_family	improduct	866	IMPRODUCT({1},{2})	('1e300', 2.0)	str	'2E+300'
+complex_family	improduct	867	IMPRODUCT({1},{2})	(2.0, '0')	str	'0'
+complex_family	improduct	868	IMPRODUCT({1},{2})	(2.0, '1')	str	'2'
+complex_family	improduct	869	IMPRODUCT({1},{2})	(2.0, 'i')	str	'2i'
+complex_family	improduct	870	IMPRODUCT({1},{2})	(2.0, '3+4i')	str	'6+8i'
+complex_family	improduct	871	IMPRODUCT({1},{2})	(2.0, '-2.5-1.5j')	str	'-5-3j'
+complex_family	improduct	872	IMPRODUCT({1},{2})	(2.0, '1+2j')	str	'2+4j'
+complex_family	improduct	873	IMPRODUCT({1},{2})	(2.0, '1e300')	str	'2E+300'
+complex_family	improduct	874	IMPRODUCT({1},{2})	(2.0, 2.0)	str	'4'
+complex_family	impower	875	IMPOWER({1},{2})	('0', 2.0)	str	'0'
+complex_family	impower	876	IMPOWER({1},{2})	('0', 0.5)	str	'0'
+complex_family	impower	877	IMPOWER({1},{2})	('0', -1.0)	e	#NUM!
+complex_family	impower	878	IMPOWER({1},{2})	('0', 0.0)	e	#NUM!
+complex_family	impower	879	IMPOWER({1},{2})	('0', 3.0)	str	'0'
+complex_family	impower	880	IMPOWER({1},{2})	('0', 1000.0)	str	'0'
+complex_family	impower	881	IMPOWER({1},{2})	('0', -0.5)	e	#NUM!
+complex_family	impower	882	IMPOWER({1},{2})	('1', 2.0)	str	'1'
+complex_family	impower	883	IMPOWER({1},{2})	('1', 0.5)	str	'1'
+complex_family	impower	884	IMPOWER({1},{2})	('1', -1.0)	str	'1'
+complex_family	impower	885	IMPOWER({1},{2})	('1', 0.0)	str	'1'
+complex_family	impower	886	IMPOWER({1},{2})	('1', 3.0)	str	'1'
+complex_family	impower	887	IMPOWER({1},{2})	('1', 1000.0)	str	'1'
+complex_family	impower	888	IMPOWER({1},{2})	('1', -0.5)	str	'1'
+complex_family	impower	889	IMPOWER({1},{2})	('-1', 2.0)	str	'1-2.44929359829471E-16i'
+complex_family	impower	890	IMPOWER({1},{2})	('-1', 0.5)	str	'6.12323399573677E-17+i'
+complex_family	impower	891	IMPOWER({1},{2})	('-1', -1.0)	str	'-1-1.22464679914735E-16i'
+complex_family	impower	892	IMPOWER({1},{2})	('-1', 0.0)	str	'1'
+complex_family	impower	893	IMPOWER({1},{2})	('-1', 3.0)	str	'-1+3.67394039744206E-16i'
+complex_family	impower	894	IMPOWER({1},{2})	('-1', 1000.0)	str	'1-3.21416645927563E-13i'
+complex_family	impower	895	IMPOWER({1},{2})	('-1', -0.5)	str	'6.12323399573677E-17-i'
+complex_family	impower	896	IMPOWER({1},{2})	('i', 2.0)	str	'-1+1.22464679914735E-16i'
+complex_family	impower	897	IMPOWER({1},{2})	('i', 0.5)	str	'0.707106781186548+0.707106781186547i'
+complex_family	impower	898	IMPOWER({1},{2})	('i', -1.0)	str	'6.12323399573677E-17-i'
+complex_family	impower	899	IMPOWER({1},{2})	('i', 0.0)	str	'1'
+complex_family	impower	900	IMPOWER({1},{2})	('i', 3.0)	str	'-1.83697019872103E-16-i'
+complex_family	impower	901	IMPOWER({1},{2})	('i', 1000.0)	str	'1-1.60708322963782E-13i'
+complex_family	impower	902	IMPOWER({1},{2})	('i', -0.5)	str	'0.707106781186548-0.707106781186547i'
+complex_family	impower	903	IMPOWER({1},{2})	('-i', 2.0)	str	'-1-1.22464679914735E-16i'
+complex_family	impower	904	IMPOWER({1},{2})	('-i', 0.5)	str	'0.707106781186548-0.707106781186547i'
+complex_family	impower	905	IMPOWER({1},{2})	('-i', -1.0)	str	'6.12323399573677E-17+i'
+complex_family	impower	906	IMPOWER({1},{2})	('-i', 0.0)	str	'1'
+complex_family	impower	907	IMPOWER({1},{2})	('-i', 3.0)	str	'-1.83697019872103E-16+i'
+complex_family	impower	908	IMPOWER({1},{2})	('-i', 1000.0)	str	'1+1.60708322963782E-13i'
+complex_family	impower	909	IMPOWER({1},{2})	('-i', -0.5)	str	'0.707106781186548+0.707106781186547i'
+complex_family	impower	910	IMPOWER({1},{2})	('3+4i', 2.0)	str	'-7+24i'
+complex_family	impower	911	IMPOWER({1},{2})	('3+4i', 0.5)	str	'2+i'
+complex_family	impower	912	IMPOWER({1},{2})	('3+4i', -1.0)	str	'0.12-0.16i'
+complex_family	impower	913	IMPOWER({1},{2})	('3+4i', 0.0)	str	'1'
+complex_family	impower	914	IMPOWER({1},{2})	('3+4i', 3.0)	str	'-117+44i'
+complex_family	impower	915	IMPOWER({1},{2})	('3+4i', 1000.0)	e	#NUM!
+complex_family	impower	916	IMPOWER({1},{2})	('3+4i', -0.5)	str	'0.4-0.2i'
+complex_family	impower	917	IMPOWER({1},{2})	('-2.5-1.5j', 2.0)	str	'4+7.5j'
+complex_family	impower	918	IMPOWER({1},{2})	('-2.5-1.5j', 0.5)	str	'0.455782814190405-1.64552057833116j'
+complex_family	impower	919	IMPOWER({1},{2})	('-2.5-1.5j', -1.0)	str	'-0.294117647058823+0.176470588235294j'
+complex_family	impower	920	IMPOWER({1},{2})	('-2.5-1.5j', 0.0)	str	'1'
+complex_family	impower	921	IMPOWER({1},{2})	('-2.5-1.5j', 3.0)	str	'1.25-24.75j'
+complex_family	impower	922	IMPOWER({1},{2})	('-2.5-1.5j', 1000.0)	e	#NUM!
+complex_family	impower	923	IMPOWER({1},{2})	('-2.5-1.5j', -0.5)	str	'0.156332215531851+0.564408902013355j'
+complex_family	impower	924	IMPOWER({1},{2})	('1e-10+1e10i', 2.0)	str	'-100000000000000000000+12246.4679914735i'
+complex_family	impower	925	IMPOWER({1},{2})	('1e-10+1e10i', 0.5)	str	'70710.6781186548+70710.6781186547i'
+complex_family	impower	926	IMPOWER({1},{2})	('1e-10+1e10i', -1.0)	str	'6.12323399573677E-27-0.0000000001i'
+complex_family	impower	927	IMPOWER({1},{2})	('1e-10+1e10i', 0.0)	str	'1'
+complex_family	impower	928	IMPOWER({1},{2})	('1e-10+1e10i', 3.0)	str	'-183697019872103-1E+30i'
+complex_family	impower	929	IMPOWER({1},{2})	('1e-10+1e10i', 1000.0)	e	#NUM!
+complex_family	impower	930	IMPOWER({1},{2})	('1e-10+1e10i', -0.5)	str	'7.07106781186548E-06-7.07106781186548E-06i'
+complex_family	impower	931	IMPOWER({1},{2})	('1e300', 2.0)	e	#NUM!
+complex_family	impower	932	IMPOWER({1},{2})	('1e300', 0.5)	str	'1E+150'
+complex_family	impower	933	IMPOWER({1},{2})	('1e300', -1.0)	str	'1E-300'
+complex_family	impower	934	IMPOWER({1},{2})	('1e300', 0.0)	str	'1'
+complex_family	impower	935	IMPOWER({1},{2})	('1e300', 3.0)	e	#NUM!
+complex_family	impower	936	IMPOWER({1},{2})	('1e300', 1000.0)	e	#NUM!
+complex_family	impower	937	IMPOWER({1},{2})	('1e300', -0.5)	str	'1E-150'
+complex_family	impower	938	IMPOWER({1},{2})	('0.5+0.5i', 2.0)	str	'3.06161699786838E-17+0.5i'
+complex_family	impower	939	IMPOWER({1},{2})	('0.5+0.5i', 0.5)	str	'0.776886987015019+0.321797126452791i'
+complex_family	impower	940	IMPOWER({1},{2})	('0.5+0.5i', -1.0)	str	'1-1i'
+complex_family	impower	941	IMPOWER({1},{2})	('0.5+0.5i', 0.0)	str	'1'
+complex_family	impower	942	IMPOWER({1},{2})	('0.5+0.5i', 3.0)	str	'-0.25+0.25i'
+complex_family	impower	943	IMPOWER({1},{2})	('0.5+0.5i', 1000.0)	str	'3.05493636349994E-151-2.45476849869575E-164i'
+complex_family	impower	944	IMPOWER({1},{2})	('0.5+0.5i', -0.5)	str	'1.09868411346781-0.455089860562227i'
+complex_family	impower	945	IMPOWER({1},{2})	('1e15+1i', 2.0)	str	'1E+30+2000000000000000i'
+complex_family	impower	946	IMPOWER({1},{2})	('1e15+1i', 0.5)	str	'31622776.6016838+1.58113883008419E-08i'
+complex_family	impower	947	IMPOWER({1},{2})	('1e15+1i', -1.0)	str	'0.000000000000001-1E-30i'
+complex_family	impower	948	IMPOWER({1},{2})	('1e15+1i', 0.0)	str	'1'
+complex_family	impower	949	IMPOWER({1},{2})	('1e15+1i', 3.0)	str	'1E+45+3E+30i'
+complex_family	impower	950	IMPOWER({1},{2})	('1e15+1i', 1000.0)	e	#NUM!
+complex_family	impower	951	IMPOWER({1},{2})	('1e15+1i', -0.5)	str	'3.16227766016838E-08-1.58113883008419E-23i'
+complex_family	impower	952	IMPOWER({1},{2})	('1E+20-3i', 2.0)	str	'1E+40-600000000000000000000i'
+complex_family	impower	953	IMPOWER({1},{2})	('1E+20-3i', 0.5)	str	'10000000000-0.00000000015i'
+complex_family	impower	954	IMPOWER({1},{2})	('1E+20-3i', -1.0)	str	'1E-20+3E-40i'
+complex_family	impower	955	IMPOWER({1},{2})	('1E+20-3i', 0.0)	str	'1'
+complex_family	impower	956	IMPOWER({1},{2})	('1E+20-3i', 3.0)	str	'1E+60-9E+40i'
+complex_family	impower	957	IMPOWER({1},{2})	('1E+20-3i', 1000.0)	e	#NUM!
+complex_family	impower	958	IMPOWER({1},{2})	('1E+20-3i', -0.5)	str	'0.0000000001+1.5E-30i'
+complex_family	impower	959	IMPOWER({1},{2})	(2.0, 2.0)	str	'4'
+complex_family	impower	960	IMPOWER({1},{2})	(2.0, 0.5)	str	'1.4142135623731'
+complex_family	impower	961	IMPOWER({1},{2})	(2.0, -1.0)	str	'0.5'
+complex_family	impower	962	IMPOWER({1},{2})	(2.0, 0.0)	str	'1'
+complex_family	impower	963	IMPOWER({1},{2})	(2.0, 3.0)	str	'8'
+complex_family	impower	964	IMPOWER({1},{2})	(2.0, 1000.0)	str	'1.07150860718627E+301'
+complex_family	impower	965	IMPOWER({1},{2})	(2.0, -0.5)	str	'0.707106781186547'
+complex_family	impower	966	IMPOWER({1},{2})	('abc', 2.0)	e	#NUM!
+complex_family	impower	967	IMPOWER({1},{2})	('abc', 0.5)	e	#NUM!
+complex_family	impower	968	IMPOWER({1},{2})	('abc', -1.0)	e	#NUM!
+complex_family	impower	969	IMPOWER({1},{2})	('abc', 0.0)	e	#NUM!
+complex_family	impower	970	IMPOWER({1},{2})	('abc', 3.0)	e	#NUM!
+complex_family	impower	971	IMPOWER({1},{2})	('abc', 1000.0)	e	#NUM!
+complex_family	impower	972	IMPOWER({1},{2})	('abc', -0.5)	e	#NUM!
+complex_family	imsum	973	IMSUM("1+i","2+3i","i")	()	str	'3+5i'
+complex_family	imsum	974	IMSUM({"1+i","2-i"})	()	str	'3'
+complex_family	improduct	975	IMPRODUCT({"1+i","1-i"},"2")	()	str	'4'
+complex_family	improduct	976	IMPRODUCT("1+i","1+j")	()	e	#VALUE!

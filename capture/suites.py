@@ -4130,6 +4130,64 @@ def continuous_family() -> list[Case]:
     return cases
 
 
+def complex_family() -> list[Case]:
+    """Complex numbers as text: the number-to-text rules of COMPLEX, parsing, and each function.
+
+    COMPLEX over parts of 15 and 16 significant digits, exponents, 0.1+0.2, 1/3 and 1E+-300,
+    each suffix; IMREAL and IMAGINARY over the forms a text can take; the other functions over
+    complex numbers with both suffixes, zero parts, signs and extreme magnitudes.
+    """
+    parts = (
+        0.0, 1.0, -1.0, 0.5, -2.5, 123456789012345.0, 1234567890123456.0, 1e15, 1e16, 1e20, 1e-5,
+        1e-10, 0.1 + 0.2, 1 / 3, 1e300, 1e-300,
+    )  # fmt: skip
+    cases = _grid("COMPLEX", parts, parts)
+    cases += _grid("COMPLEX", (3.0, 0.0), (4.0, 0.0), ("i", "j", "I", "J", "", "k"))
+    cases += _kinds_at("COMPLEX", (3.0, 4.0))
+    texts = (
+        "1+2i", "i", "-i", "+i", "3", "1.5e3-2e-2j", "1e+20i", "2i", "1+i", "1-i", " 1+2i",
+        "1+2i ", "1+2I", "1+2ij", "", "abc", "1+2i+3", "1E5", "3 4i", "+3+4i", "0i", ".5i", "5.i",
+        "1e5i", "i5", "--1", "1+-2i", "1e400", "0x10", True, None, 5.0, NA,
+    )  # fmt: skip
+    cases += _grid("IMREAL", texts) + _grid("IMAGINARY", texts)
+    zs = (
+        "0", "1", "-1", "i", "-i", "3+4i", "-2.5-1.5j", "1e-10+1e10i", "1e300", "0.5+0.5i",
+        "1e15+1i", "1E+20-3i", 2.0, "abc",
+    )  # fmt: skip
+    for name in [
+        "IMABS",
+        "IMARGUMENT",
+        "IMCONJUGATE",
+        "IMSQRT",
+        "IMEXP",
+        "IMLN",
+        "IMLOG10",
+        "IMLOG2",
+        "IMSIN",
+        "IMCOS",
+        "IMTAN",
+        "IMCOT",
+        "IMSEC",
+        "IMCSC",
+        "IMSINH",
+        "IMCOSH",
+        "IMSECH",
+        "IMCSCH",
+    ]:
+        cases += _grid(name, zs)
+    pairs = ("0", "1", "i", "3+4i", "-2.5-1.5j", "1+2j", "1e300", 2.0)
+    for name in ("IMSUB", "IMDIV", "IMSUM", "IMPRODUCT"):
+        cases += _grid(name, pairs, pairs)
+    cases += _grid("IMPOWER", zs, (2.0, 0.5, -1.0, 0.0, 3.0, 1000.0, -0.5))
+    cases += [
+        Case("imsum", 'IMSUM("1+i","2+3i","i")'),
+        Case("imsum", 'IMSUM({"1+i","2-i"})'),
+        Case("improduct", 'IMPRODUCT({"1+i","1-i"},"2")'),
+        Case("improduct", 'IMPRODUCT("1+i","1+j")'),
+    ]
+    return cases
+
+
 SUITES = {
     "number_text": Suite(number_text),
     "text_number": Suite(text_number),
@@ -4168,4 +4226,5 @@ SUITES = {
     "matrix_family": Suite(matrix_family, fixed=_matrix_layout()[0]),
     "distributions_family": Suite(distributions_family),
     "continuous_family": Suite(continuous_family, fixed=_CONTINUOUS_TABLE),
+    "complex_family": Suite(complex_family),
 }
