@@ -797,7 +797,9 @@ value. `QUIRKS.md` lists each one as a known deviation. Today `PRICE` declares 8
 `CORREL`, `LINEST` and the normal-distribution functions 4, for Excel's `exp`, `log1p`,
 `expm1` and `erfc` and its summations; trigonometry, hyperbolics, logarithms and `SERIESSUM` declare 4 for
 Excel's math library, `FACT` and `FACTDOUBLE` 8 and `COMBIN`, `COMBINA` and `PERMUT` 4 for the order it
-multiplies in. The iterative functions (`IRR`, `XIRR`, `RATE`,
+multiplies in; the discrete distributions 8 and `GAMMA`, `GAMMALN`, `ERF`, `ERFC`,
+`WEIBULL.DIST` and `LOGNORM.DIST` 4, for terms and a math library that are not Excel's in the
+last bits. The iterative functions (`IRR`, `XIRR`, `RATE`,
 `YIELD`) declare a relative tolerance instead (`rel=1e-9`), since Excel itself guarantees
 their results only to its documented stopping tolerance; rows within it are counted apart
 from exact and ulp matches, under the same guard.

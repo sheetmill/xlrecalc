@@ -49,6 +49,12 @@ _REFERENCE_ONLY = frozenset({
 # An empty argument at these positions makes Excel refuse a file, and F() is position 0 (capture
 # empty_args, refused rows in tests/captures/empty_args_refused.tsv).
 _EMPTY_REFUSED: dict[str, tuple[int, ...]] = {
+    "ERF.PRECISE": (0,),
+    "ERFC": (0,),
+    "ERFC.PRECISE": (0,),
+    "GAMMA": (0,),
+    "GAMMALN": (0,),
+    "GAMMALN.PRECISE": (0,),
     "ABS": (0,),
     "ACOS": (0,),
     "ACOSH": (0,),

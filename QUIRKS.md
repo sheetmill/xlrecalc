@@ -123,8 +123,15 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
 - Declared tolerances, `finance_family`: `CUMIPMT`, `CUMPRINC`, `DB`, `DDB`, `MIRR` within 8 units in the last place,
   `EFFECT`, `NOMINAL`, `ISPMT`, `PDURATION`, `RRI`, the discounted securities and Treasury bills within 4. 84 rows of `CUMIPMT`
   and `CUMPRINC` are further, at tiny rates and in tiny principals, where Excel's result carries noise that neither a sum
-  of periods nor a difference of balances reproduces (with one more in `empty_args`, 85 rows in all, the largest group of
-  known deviations); one row of `TBILLEQ` too.
+  of periods nor a difference of balances reproduces (with one more in `empty_args`, 85 rows in all); one row of `TBILLEQ` too.
+- Declared tolerances, `distributions_family`: the discrete distributions (`BINOM.DIST`, `BINOMDIST`, `BINOM.DIST.RANGE`,
+  `NEGBINOM.DIST`, `NEGBINOMDIST`, `POISSON.DIST`, `POISSON`, `HYPGEOM.DIST`, `HYPGEOMDIST`) within 8 units in the last
+  place; `GAMMA`, `GAMMALN`, `ERF`, `ERFC` and their `.PRECISE` forms, `WEIBULL.DIST`, `LOGNORM.DIST` and `LOGNORM.INV`
+  within 4. 121 rows of the discrete ones are further, most at 1,000 trials and more, where Excel's terms are none of the
+  exact count of ways times the powers, `lgamma` or Loader's saddle point (the largest group of known deviations), and
+  48 of the others, for Excel's own `exp`, `pow`, `erf` and `gamma`; both groups rest on the platform's math library.
+  `BINOM.INV(TRUE,0.5,0.5)` is 1 in Excel, where a cumulative probability of 0.5 reaches alpha at 0, as documented and
+  as `BINOM.INV("3",0.5,0.5)` gives at its own tie (one row).
 - The platform's math library: three rows match Excel on the platform `docs/coverage.md` records (bit for bit, or within the
   function's declared tolerance) and differ on another, where a last-bit difference in `erfc`, `exp`, `log1p` or `expm1` survives a cancellation: `GAUSS(1E-5)`, which
   subtracts 0.5 from the normal distribution (as Excel's own result shows), and two rows of `IPMT` with payments due in

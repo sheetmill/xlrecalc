@@ -96,6 +96,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `CEILING`, `FLOOR` and their `.MATH` and `.PRECISE` forms, `ISO.CEILING`, `MROUND`, `EVEN`, `ODD`, `QUOTIENT`,
   `FACT`, `FACTDOUBLE`, `GCD`, `LCM`, `COMBIN`, `COMBINA`, `PERMUT`, `PERMUTATIONA`, `MULTINOMIAL`, `SERIESSUM`,
   `SUMX2MY2`, `SUMX2PY2`, `SUMXMY2`, `ROMAN`, `ARABIC`, `BASE`, `DECIMAL`.
+- Distributions, captured from Excel (capture `distributions_family`, 3,848 rows): `BINOM.DIST`, `BINOMDIST`,
+  `BINOM.DIST.RANGE`, `BINOM.INV`, `CRITBINOM`, `NEGBINOM.DIST`, `NEGBINOMDIST`, `POISSON.DIST`, `POISSON`,
+  `HYPGEOM.DIST`, `HYPGEOMDIST`, `EXPON.DIST`, `EXPONDIST`, `WEIBULL.DIST`, `WEIBULL`, `LOGNORM.DIST`, `LOGNORMDIST`,
+  `LOGNORM.INV`, `LOGINV`, `GAMMA`, `GAMMALN`, `GAMMALN.PRECISE`, `ERF`, `ERF.PRECISE`, `ERFC`, `ERFC.PRECISE`. Counts are
+  truncated and every domain error is Excel's, its exceptions included: a hypergeometric count outside what can occur
+  is 0, not `#NUM!`; `POISSON.DIST` of 0 is `EXP(-mean)` for a negative mean too; `WEIBULL.DIST`'s density at 0 is 0;
+  `BINOM.INV` needs a probability and an alpha strictly between 0 and 1; `ERF` and `ERFC` take no logical. A subnormal
+  result is 0. The discrete distributions are within 8 units in the last place of Excel and the others within 4, but
+  for 170 listed rows, most of the binomial at 1,000 trials and more (`QUIRKS.md`). A sum of more than a million
+  terms (`BINOM.DIST` over 1E15 trials) is not computed: the formula keeps the value it holds and is reported.
 - `MDETERM`, captured from Excel (capture `matrix_family`): elimination with partial pivoting, the first largest pivot,
   the pivots multiplied in order and signed by the swaps, bit for bit over integer, singular, Hilbert and random matrices
   up to 8 by 8; a zero pivot gives 0, an overflow `#NUM!`. Every element must be a number (`#VALUE!` for a text, a blank

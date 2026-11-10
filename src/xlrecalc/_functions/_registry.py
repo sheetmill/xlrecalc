@@ -150,6 +150,8 @@ _EMPTY_REQUIRED_IS_NA = frozenset(
     ]
 )
 # These give #VALUE! for an empty argument where a range belongs, at these positions.
+# These give #N/A for any empty argument, an optional one too (capture empty_args: ERF(2,)).
+_EMPTY_ANY_IS_NA = frozenset(["ERF"])
 _EMPTY_IS_VALUE: dict[str, tuple[int, ...]] = {
     "INDEX": (0,), "IRR": (0,), "LINEST": (0,), "LOOKUP": (1, 2), "MIRR": (0,), "PROB": (0, 1),
     "_XLFN.XMATCH": (1,),
@@ -158,6 +160,7 @@ _EMPTY_IS_VALUE: dict[str, tuple[int, ...]] = {
 # These take an empty optional argument as if it were left out. Others take it as 0 or FALSE.
 _EMPTY_OPTIONAL_IS_DEFAULT = frozenset(
     [
+        "_XLFN.BINOM.DIST.RANGE",
         "PROB",
         "ADDRESS",
         "BIN2HEX",
@@ -225,6 +228,7 @@ def function(
         plain = not any(lifted_kinds) and all(_CONVERT.get(k) is None for k in kinds)
 
         required_na = name.upper() in _EMPTY_REQUIRED_IS_NA
+        any_na = name.upper() in _EMPTY_ANY_IS_NA
         value_at = _EMPTY_IS_VALUE.get(name.upper(), ())
         defaults = (
             [p.default for p in list(inspect.signature(core).parameters.values())[1:]]
@@ -236,7 +240,7 @@ def function(
             n = len(args)
             if n < lo or (hi is not None and n > hi):
                 return VALUE
-            if required_na and any(a is MISSING for a in args[:lo]):
+            if (required_na or any_na) and any(a is MISSING for a in args[: n if any_na else lo]):
                 return ErrorValue.NA
             if value_at and any(i < n and args[i] is MISSING for i in value_at):
                 return VALUE

@@ -6,6 +6,7 @@ numbers stay stable.
 
 from __future__ import annotations
 
+import itertools
 import math
 import random
 from collections.abc import Callable
@@ -3368,6 +3369,12 @@ _EMPTY_VALUE = {
 }  # fmt: skip
 _R, _S = "$AA$1:$AA$4", "$AB$1:$AB$4"
 _EMPTY_VALID: dict[str, tuple[str, ...]] = {
+    "BINOMDIST": ("3", "10", "0.5", "TRUE"), "_XLFN.BINOM.DIST": ("3", "10", "0.5", "TRUE"),
+    "_XLFN.BINOM.DIST.RANGE": ("10", "0.5", "3", "7"), "_XLFN.BINOM.INV": ("10", "0.5", "0.5"),
+    "CRITBINOM": ("10", "0.5", "0.5"), "NEGBINOMDIST": ("2", "3", "0.5"),
+    "_XLFN.NEGBINOM.DIST": ("2", "3", "0.5", "TRUE"), "HYPGEOMDIST": ("1", "4", "8", "20"),
+    "_XLFN.HYPGEOM.DIST": ("1", "4", "8", "20", "TRUE"), "LOGINV": ("0.5", "0", "1"),
+    "_XLFN.LOGNORM.INV": ("0.5", "0", "1"),
     "MMULT": ("{1,2}", "{3;4}"), "_XLFN.SEQUENCE": ("2", "2", "1", "1"),
     "_XLFN.UNIQUE": (_R, "FALSE", "FALSE"), "_XLFN._XLWS.SORT": (_R, "1", "1", "FALSE"),
     "_XLFN.CHOOSECOLS": (_R, "1", "1"), "_XLFN.CHOOSEROWS": (_R, "2", "1"),
@@ -3466,6 +3473,34 @@ _EMPTY_ADDED = (
     "_XLFN.WRAPCOLS", "_XLFN.MUNIT", "MDETERM", "MINVERSE", "FREQUENCY", "_XLFN.MODE.MULT",
     "_XLFN.TEXTSPLIT", "_XLFN.RANDARRAY", "_XLFN.LET",
 )  # fmt: skip
+_EMPTY_ADDED += (  # the discrete and closed-form distributions, GAMMA, ERF
+    "BINOMDIST",
+    "CRITBINOM",
+    "ERF",
+    "ERFC",
+    "EXPONDIST",
+    "GAMMALN",
+    "HYPGEOMDIST",
+    "LOGINV",
+    "LOGNORMDIST",
+    "NEGBINOMDIST",
+    "POISSON",
+    "WEIBULL",
+    "_XLFN.BINOM.DIST",
+    "_XLFN.BINOM.DIST.RANGE",
+    "_XLFN.BINOM.INV",
+    "_XLFN.ERF.PRECISE",
+    "_XLFN.ERFC.PRECISE",
+    "_XLFN.EXPON.DIST",
+    "_XLFN.GAMMA",
+    "_XLFN.GAMMALN.PRECISE",
+    "_XLFN.HYPGEOM.DIST",
+    "_XLFN.LOGNORM.DIST",
+    "_XLFN.LOGNORM.INV",
+    "_XLFN.NEGBINOM.DIST",
+    "_XLFN.POISSON.DIST",
+    "_XLFN.WEIBULL.DIST",
+)
 
 # Functions whose arguments the generator cannot fill (LET's are names): their formulas as given.
 _EMPTY_EXPLICIT = {
@@ -3757,6 +3792,112 @@ _INTEGERS_TABLE: dict[str, Input] = {
 }  # fmt: skip
 
 
+def _grid(name: str, *axes: tuple[Input, ...]) -> list[Case]:
+    """Every combination of the axes' values, one argument per axis."""
+    args = ",".join(f"{{{i + 1}}}" for i in range(len(axes)))
+    return [
+        Case(name.lower(), f"{_file(name)}({args})", combo) for combo in itertools.product(*axes)
+    ]
+
+
+def _kinds_at(name: str, valid: tuple[Input, ...]) -> list[Case]:
+    """Each argument in turn given every kind of ``KINDS_ARG``, the others valid."""
+    args = ",".join(f"{{{i + 1}}}" for i in range(len(valid)))
+    return [
+        Case(f"{name.lower()}_kinds", f"{_file(name)}({args})", (*valid[:i], v, *valid[i + 1 :]))
+        for i in range(len(valid))
+        for v in KINDS_ARG
+    ]
+
+
+def distributions_family() -> list[Case]:
+    """The discrete and closed-form distributions, ``GAMMA`` and its logarithms, ``ERF``, ``ERFC``.
+
+    Each over a grid of valid inputs with fractional, zero, negative and out-of-domain values,
+    tails where cancellation and underflow show the method, and every kind in each argument.
+    """
+    t, f = True, False
+    ks = (0.0, 1.0, 3.0, 3.9, 10.0, -1.0, 11.0)
+    ns = (10.0, 10.9, 1.0, 0.0, 1000.0)
+    ps = (0.5, 0.3, 0.0, 1.0, 1e-10, 1.1, -0.1)
+    cases = _grid("BINOM.DIST", ks, ns, ps, (t, f))
+    cases += _grid("BINOMDIST", (0.0, 3.0, 3.9, 10.0), (10.0, 0.0), (0.5, 0.3, 1.0), (t, f))
+    cases += _grid(
+        "BINOM.DIST", (0.0, 400.0, 500.0, 600.0, 999.0), (1000.0, 1030.0, 1e5), (0.5, 0.001), (t, f)
+    )
+    cases += _grid(
+        "BINOM.DIST.RANGE", (10.0, 10.9, 0.0, 1000.0), (0.5, 0.3, 0.0, 1.0), (0.0, 3.0, 3.5, 11.0)
+    )
+    cases += _grid(
+        "BINOM.DIST.RANGE",
+        (10.0, 1000.0),
+        (0.5, 0.3),
+        (0.0, 3.0, 7.0),
+        (3.0, 2.0, 10.0, 10.5, 1001.0),
+    )
+    alphas = (0.0, 1e-10, 0.05, 0.5, 0.95, 0.999999, 1.0, 1.1)
+    cases += _grid("BINOM.INV", (10.0, 10.9, 0.0, 1000.0), (0.5, 0.3, 0.0, 1.0), alphas)
+    cases += _grid("CRITBINOM", (10.0, 1000.0), (0.5, 0.3, 1.0), alphas)
+    cases += _grid(
+        "NEGBINOM.DIST", (0.0, 2.0, 2.7, 10.0, -1.0), (1.0, 3.0, 3.5, 0.0, 0.5), ps, (t, f)
+    )
+    cases += _grid("NEGBINOMDIST", (0.0, 2.0, 10.0), (1.0, 3.0, 0.5), (0.5, 0.3, 1.0))
+    xs = (0.0, 1.0, 2.0, 2.9, 10.0, 100.0, -1.0, 1000.0)
+    means = (0.0, 1.0, 2.5, 100.0, -1.0, 1000.0)
+    cases += _grid("POISSON.DIST", xs, means, (t, f))
+    cases += _grid("POISSON", (0.0, 2.9, 100.0), (1.0, 2.5, 0.0), (t, f))
+    samples = (0.0, 1.0, 2.5, 4.0, 5.0, -1.0)
+    draws, successes = (4.0, 4.5, 0.0, 20.0), (8.0, 8.9, 0.0, 21.0)
+    cases += _grid("HYPGEOM.DIST", samples, draws, successes, (20.0, 20.9, 4.0), (t, f))
+    cases += _grid("HYPGEOMDIST", (0.0, 1.0, 4.0), (4.0, 20.0), (8.0, 0.0), (20.0, 4.0))
+    reals = (0.0, 0.5, 1.0, 2.0, 10.0, 700.0, 800.0, -1.0, 1e-300)
+    cases += _grid("EXPON.DIST", reals, (1.0, 0.5, 2.0, 0.0, -1.0, 1e-300), (t, f))
+    cases += _grid("EXPONDIST", (0.0, 1.0, 10.0), (1.0, 0.5), (t, f))
+    shapes = (0.5, 1.0, 2.0, 3.7, 0.0, -1.0, 100.0)
+    cases += _grid(
+        "WEIBULL.DIST", (0.0, 0.5, 1.0, 2.0, 10.0, -1.0), shapes, (1.0, 2.5, 0.0, -1.0), (t, f)
+    )
+    cases += _grid("WEIBULL", (0.0, 1.0, 2.0), (0.5, 2.0), (1.0, 2.5), (t, f))
+    positives = (1e-300, 0.1, 0.5, 1.0, 2.0, 10.0, 1e10, 0.0, -1.0)
+    cases += _grid("LOGNORM.DIST", positives, (0.0, 1.0, -2.0), (1.0, 0.5, 0.0, -1.0), (t, f))
+    cases += _grid("LOGNORMDIST", (0.5, 1.0, 10.0, 0.0), (0.0, 1.0), (1.0, 0.0))
+    probabilities = (1e-300, 1e-10, 0.01, 0.25, 0.5, 0.75, 0.99, 1.0 - 1e-10, 0.0, 1.0, -0.1)
+    cases += _grid("LOGNORM.INV", probabilities, (0.0, 1.0, -2.0), (1.0, 0.5, 0.0, -1.0))
+    cases += _grid("LOGINV", (0.01, 0.5, 0.99, 0.0), (0.0, 1.0), (1.0, 0.0))
+    gammas = (
+        0.5, 1.0, 1.5, 2.0, 3.0, 4.5, 10.0, 10.1, 20.0, 50.5, 100.0, 170.0, 171.0, 171.6, 171.7,
+        172.0, 1e-10, 1e-300, 0.0, -0.5, -1.0, -1.5, -2.5, -100.5, -170.5, -171.5, -177.5,
+        -184.5, 1e5, 1e10, 1e300, 2.5e305,
+    )  # fmt: skip
+    cases += _one(["GAMMA", "GAMMALN", "GAMMALN.PRECISE"], gammas + _EDGES)
+    erfs = (
+        0.0, 1e-300, 1e-10, 0.1, 0.5, 0.84375, 1.0, 1.25, 2.0, 2.857142857142857, 3.0, 4.0, 5.0,
+        5.9, 6.0, 10.0, 26.5, 27.3, 30.0, -0.5, -1.0, -3.0, -6.0, -27.0, -30.0,
+    )  # fmt: skip
+    cases += _one(["ERF", "ERF.PRECISE", "ERFC", "ERFC.PRECISE"], erfs + _EDGES)
+    cases += _grid("ERF", (0.0, 0.5, 1.0, -1.0, 3.0), (0.0, 0.5, 1.0, 2.0, -3.0, 10.0))
+    for name, valid in (
+        ("BINOM.DIST", (3.0, 10.0, 0.5, t)),
+        ("BINOM.DIST.RANGE", (10.0, 0.5, 3.0, 7.0)),
+        ("BINOM.INV", (10.0, 0.5, 0.5)),
+        ("NEGBINOM.DIST", (2.0, 3.0, 0.5, t)),
+        ("POISSON.DIST", (2.0, 2.5, t)),
+        ("HYPGEOM.DIST", (1.0, 4.0, 8.0, 20.0, t)),
+        ("EXPON.DIST", (1.0, 0.5, t)),
+        ("WEIBULL.DIST", (1.0, 2.0, 2.5, t)),
+        ("LOGNORM.DIST", (2.0, 0.0, 1.0, t)),
+        ("LOGNORM.INV", (0.5, 0.0, 1.0)),
+        ("ERF", (0.5, 1.0)),
+        ("BINOMDIST", (3.0, 10.0, 0.5, t)),
+        ("POISSON", (2.0, 2.5, t)),
+        ("HYPGEOMDIST", (1.0, 4.0, 8.0, 20.0)),
+        ("WEIBULL", (1.0, 2.0, 2.5, t)),
+        ("LOGNORMDIST", (2.0, 0.0, 1.0)),
+    ):
+        cases += _kinds_at(name, valid)
+    return cases
+
+
 SUITES = {
     "number_text": Suite(number_text),
     "text_number": Suite(text_number),
@@ -3793,4 +3934,5 @@ SUITES = {
     "dates_family": Suite(dates_family),
     "info_family": Suite(info_family, fixed=_INFO_TABLE),
     "matrix_family": Suite(matrix_family, fixed=_matrix_layout()[0]),
+    "distributions_family": Suite(distributions_family),
 }

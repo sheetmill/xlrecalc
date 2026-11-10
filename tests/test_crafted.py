@@ -434,3 +434,34 @@ def test_an_active_tab_that_leads_nowhere_is_harmless(tab):
         load(package('<row r="1"><c r="A1"><v>2</v></c></row>', workbook_extra=views)).value("A1")
         == 2.0
     )
+
+
+EXTREME_COUNTS = [
+    "_xlfn.BINOM.DIST(5E+14,1E+15,0.5,TRUE)",
+    "_xlfn.BINOM.DIST(3,1E+15,0.5,FALSE)",
+    "_xlfn.BINOM.DIST(5E+14,1E+15,0.5,FALSE)",
+    "_xlfn.BINOM.DIST.RANGE(1E+15,0.5,0,1E+15)",
+    "_xlfn.BINOM.INV(1E+15,0.5,0.5)",
+    "_xlfn.NEGBINOM.DIST(1E+15,3,0.5,TRUE)",
+    "_xlfn.NEGBINOM.DIST(1E+15,1E+15,0.5,FALSE)",
+    "_xlfn.POISSON.DIST(1E+15,1E+15,TRUE)",
+    "_xlfn.POISSON.DIST(1E+15,1E+15,FALSE)",
+    "_xlfn.HYPGEOM.DIST(1E+14,5E+14,5E+14,1E+15,TRUE)",
+    "_xlfn.HYPGEOM.DIST(1E+14,5E+14,5E+14,1E+15,FALSE)",
+    "_xlfn.GAMMA(1E+300)",
+    "GAMMALN(1E+307)",
+]
+
+
+@bounded(seconds=60)
+def test_distributions_bound_their_counts():
+    """Counts of 1E15 neither hang nor allocate: a value, an error, or kept and reported."""
+    rows = "".join(
+        f'<row r="{r}"><c r="A{r}"><f>{f}</f><v>7</v></c></row>'
+        for r, f in enumerate(EXTREME_COUNTS, 1)
+    )
+    wb = load(package(rows))
+    wb.recalculate(full=True)
+    for r, formula in enumerate(EXTREME_COUNTS, 1):
+        value = wb.value(f"A{r}")
+        assert isinstance(value, float | xlrecalc.ErrorValue), (formula, value)

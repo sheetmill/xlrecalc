@@ -92,21 +92,23 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
 
 ## What it computes, and what not yet
 
-- **Functions**: 373 of Excel's functions (17 of them partly): math, statistics,
+- **Functions**: 399 of Excel's functions (17 of them partly): math, statistics,
   logic, text, dates, lookup (`VLOOKUP`, `INDEX`, `MATCH`, `OFFSET`, `INDIRECT`...), the
   financial and bond functions, the database functions. The
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 65,077 formulas computed by Excel and compared with xlrecalc's results: 64,650
+- **Evidence**: 69,020 formulas computed by Excel and compared with xlrecalc's results: 68,423
   match, bit for bit or within a small tolerance declared per function (a few units in the last
-  place, or a relative 1E-9 for the iterative functions), 427 known deviations, each listed
+  place, or a relative 1E-9 for the iterative functions), 597 known deviations, each listed
   with its reason in
   [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md). Each listed
   deviation is still computed and compared with Excel on every test run, and one that starts to
   match fails the run, except a few that can match by chance (a random result, a result Excel
-  varies between runs, a row that depends on the platform's math library). The largest group of deviations is `CUMIPMT` and `CUMPRINC` at tiny rates
-  and in tiny principals, where Excel's result carries noise past their tolerance (85 rows).
-  Among the others, from some starting guesses
+  varies between runs, a row that depends on the platform's math library). The largest group of deviations is `BINOM.DIST`,
+  `BINOM.DIST.RANGE`, `NEGBINOM.DIST`, `POISSON.DIST` and `POISSON` past their tolerance, most at
+  1,000 trials and more, where Excel's terms match none of the methods tried (121 rows). Among the
+  others, `CUMIPMT` and `CUMPRINC` at tiny rates and in tiny principals carry Excel's noise, and
+  from some starting guesses
   Excel's `IRR` and `RATE` reach another root
   than xlrecalc, or a rate where xlrecalc gives `#NUM!`, and `XIRR` stops about 1E-8 from the
   root; 79 of the 352 captured rows of `IRR`, `XIRR` and `RATE` differ that way.

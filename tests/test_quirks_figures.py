@@ -56,9 +56,18 @@ def test_cumulative_noise_and_tbilleq():
     assert _n(found[2]) == _listed(tc._CUMULATIVE_NOISE)
     assert _n(found[2]) - _n(found[1]) == _listed(tc._CUMULATIVE_NOISE, "empty_args") == 1
     assert _n(found[3]) == _listed(tc._TBILLEQ_NOISE)
+
+
+def test_distribution_rows():
+    found = _one(
+        r"([\d,]+) rows of the discrete ones are further.*?\(the largest group of known "
+        r"deviations\), and ([\d,]+) of the others"
+    )
+    assert _n(found[1]) == _listed(tc._DISCRETE_TERMS)
+    assert _n(found[2]) == _listed(tc._DISTRIBUTION_LIBRARY)
     largest, size = Counter(tc.KNOWN_DEVIATIONS.values()).most_common(1)[0]
-    assert largest == tc._CUMULATIVE_NOISE  # the README's largest group, by the same count
-    assert size == _n(found[2])
+    assert largest == tc._DISCRETE_TERMS  # the README's largest group, by the same count
+    assert size == _n(found[1])
 
 
 def test_vdb_listed_share():
