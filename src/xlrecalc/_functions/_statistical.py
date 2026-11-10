@@ -301,6 +301,8 @@ def LINEST(ctx: Context, ys: Any, xs: Any = MISSING, const: Any = True, stats: A
     """Least-squares line through the points: slope and intercept, with statistics."""
     yv = _cells(ys)
     xv = [float(i) for i in range(1, len(yv) + 1)] if xs is MISSING else _cells(xs)
+    if yv and len(xv) > len(yv) and len(xv) % len(yv) == 0:  # several regressors: reported
+        return ctx.unsupported("LINEST with several regressors")  # type: ignore[attr-defined]
     if len(xv) != len(yv):
         return ErrorValue.REF
     for v in (*yv, *xv):

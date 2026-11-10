@@ -362,6 +362,45 @@ def test_a_workbook_qualified_name_against_excel():
     assert not engine.report.uncomputed
 
 
+def test_linest_with_several_regressors_is_reported_not_a_wrong_value():
+    """Several x columns used to give #REF! with nothing reported; a wrong size still is #REF!."""
+    e = Engine()
+    s = e.add_sheet("s")
+    for r, (a, b, c) in enumerate([(1, 2, 3), (2, 1, 5), (3, 4, 8), (4, 3, 9), (5, 6, 13)]):
+        for col, v in enumerate((a, b, c)):
+            e.sheets[s].set(r, col, float(v))
+    e.set_formula(s, 0, 5, "INDEX(LINEST(C1:C5,A1:B5),1,1)")
+    e.set_formula(s, 1, 5, "INDEX(LINEST(C1:C5,A1:A5),1,1)")
+    e.set_formula(s, 2, 5, "LINEST(C1:C5,A1:A4)")
+    e.recalculate(full=True)
+    assert e.get(s, 1, 5) == 2.4
+    assert e.get(s, 2, 5) == ErrorValue.REF
+    assert e.report.unsupported == {"LINEST with several regressors": 1}
+    assert {str(c) for c in e.report.uncomputed} == {"s!F1"}
+
+
+def test_a_computed_database_criterion_is_reported_not_a_wrong_value():
+    """A formula under a name the database lacks used to match nothing, unreported."""
+    e = Engine()
+    s = e.add_sheet("s")
+    sheet = e.sheets[s]
+    sheet.set(0, 0, "N")
+    sheet.set(0, 1, "V")
+    for i in range(5):
+        sheet.set(1 + i, 0, float(i + 1))
+        sheet.set(1 + i, 1, float(10 * (i + 1)))
+    sheet.set(0, 3, "Big")
+    e.set_formula(s, 1, 3, "A2>3")
+    sheet.set(0, 4, "N")
+    sheet.set(1, 4, ">3")
+    e.set_formula(s, 0, 6, 'DSUM(A1:B6,"V",D1:D2)')
+    e.set_formula(s, 1, 6, 'DSUM(A1:B6,"V",E1:E2)')
+    e.recalculate(full=True)
+    assert e.get(s, 1, 6) == 90.0
+    assert e.report.unsupported == {"a computed criterion": 1}
+    assert {str(c) for c in e.report.uncomputed} == {"s!G1"}
+
+
 def test_a_name_in_another_workbook_is_reported_like_any_external_reference():
     """``[1]!Rate`` names another workbook's name; ``[1]Other!B2`` was already reported."""
     engine = Engine.from_cells({"S": {"A1": "=[1]!Rate/100", "A2": "=[1]Other!B2"}})

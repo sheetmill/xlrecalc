@@ -6,7 +6,7 @@ holds; a blank criteria row matches every record, and a condition under a name t
 lacks matches none. A text condition without an operator matches text that starts with it
 (``Bolt`` matches ``Boltcutter``), as in Excel; ``=Bolt`` matches only ``Bolt``.
 Conditions computed by a formula (a name the database lacks over a formula) are not supported:
-they match no record.
+the formula is reported (``Report.unsupported``) and the file's value kept.
 """
 
 from __future__ import annotations
@@ -88,10 +88,13 @@ def _matching(db: Any, field: Any, crit: Any, ctx: Context) -> tuple[list[Any], 
     rows: list[list[tuple[int, Callable[[Any], bool]] | None]] = []
     if len(conditions) < crit.rows - 1:
         rows.append([])  # a blank criteria row matches every record
-    for crow in conditions.values():
+    templates = ctx.sheets[crit.sheet].templates  # type: ignore[attr-defined]
+    for r, crow in conditions.items():
         tests: list[tuple[int, Callable[[Any], bool]] | None] = []
         for c, value in crow.items():
             key = _key(wanted.get(c, BLANK))
+            if key not in names and templates.at(crit.r1 + r, crit.c1 + c) is not None:
+                return ctx.unsupported("a computed criterion")  # type: ignore[attr-defined,no-any-return]
             tests.append((names[key], _condition(value, ctx)) if key in names else None)
         rows.append(tests)
 

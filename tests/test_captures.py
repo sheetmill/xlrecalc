@@ -187,7 +187,7 @@ _RANDOM = (
 )
 _COMPUTED_CRITERIA = (
     "a computed criterion (a formula under a name the database lacks, evaluated for each "
-    "record) is not supported; it matches no record"
+    "record) is not supported, and the cell is reported"
 )
 _UNION = "a union of ranges is not implemented, and the cell is reported"
 _REGEX = "the regular-expression match mode (3) is not implemented, and the cell is reported"
@@ -826,6 +826,11 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
             169,
             207,
             245,
+            94,
+            132,
+            170,
+            208,
+            246,
         )
     },
     **{

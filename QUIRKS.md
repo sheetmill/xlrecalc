@@ -192,7 +192,8 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
 - `VDB` (`finance`) within 4 units in the last place but five rows: the last period of a
   long schedule (7 to 48 units), and two edge cases Excel answers oddly (`#DIV/0!` for start
   = end = life at a rate of 1 per period; cost - salvage when salvage exceeds cost).
-- Database functions (`misc`, `database_family`): a computed criterion is not supported. `DVAR`, `DVARP`, `DSTDEV` and
+- Database functions (`misc`, `database_family`): a computed criterion is not supported; the cell is reported and keeps
+  the file's value. `DVAR`, `DVARP`, `DSTDEV` and
   `DSTDEVP` declare 4 units in the last place for Excel's sum of squares; two rows are 6 and 10 units away. Blank records
   are counted up to the sheet's last row holding a value, where Excel's used range also counts formatted rows.
 - Random numbers: two rows of `misc` draw them (`RANDBETWEEN(1.5,2.5)`, and two draws compared), and four of

@@ -190,6 +190,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a format Excel refuses, a value the format cannot show).
 
 ### Fixed
+- `LINEST` with several regressors gave `#REF!`, and a computed criterion in a database function (a formula under a
+  name the database lacks) matched no record, each with nothing reported. Neither is implemented: both are now
+  reported (`Report.unsupported`, `uncomputed`) and keep the value the file holds.
 - `INDEX` with a row index of 0 and a column index over a single column or row was `#VALUE!`; it is that column
   (`INDEX(Z1:Z4,0,1)` is Z1:Z4). A column index of 0 given over a single row or column is a row index and a column
   index as over any range (`INDEX(Z1:AB1,1,0)` is the row, `INDEX(Z1:AB1,2,0)` `#REF!`), where a column index left out

@@ -866,7 +866,7 @@ intersected first, even inside `INDEX` or `SUMPRODUCT`, as in Excel), `ADDRESS`,
 Excel for Windows uses Windows-1252; there is no setting for it yet),
 `RAND` and `RANDBETWEEN` (volatile; both bounds rounded up), and `DSUM`, `DAVERAGE`,
 `DCOUNT`, `DMAX`, `DMIN` (a text condition matches by prefix; computed criteria are not
-supported) (capture `misc`);
+supported, and are reported) (capture `misc`);
 `INDEX` with a 0 index gives a whole row or column, and into a range returns a reference; its area
 number is 1, since a union is not computed (below 1 `#VALUE!`, above `#REF!`).
 `SUBTOTAL` reads the rows the file marks hidden: codes 101 to 111 leave out every hidden row, and 1 to
