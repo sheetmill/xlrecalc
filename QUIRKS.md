@@ -81,7 +81,9 @@ alternative: no subnormal numbers (a result or a constant below 2.22507385850720
 magnitude is 0); `=0^0` and `POWER(0,0)` are `#NUM!`; text compares without case; a blank is 0,
 `""` or FALSE by context; `DATE` adds 1900 to a year from 0 to 1899; `ROUND` and `ROUNDDOWN` work on the 15-digit
 decimal value, and `ROUNDUP` is `ROUNDDOWN` plus one unit at the last kept place, added in
-doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`).
+doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` of a real number is 0 from
+2^27, where `IMTAN` and `SIN` are `#NUM!`, and `IMLOG2` divides by the double just below ln 2, so `IMLOG2(1E20)` is
+66.4385618977473, a unit above the true value's 15th digit (capture `complex_family`).
 
 ## Known deviations
 

@@ -147,6 +147,12 @@ _EMPTY_REQUIRED_IS_NA = frozenset(
         "YIELD",
         "YIELDDISC",
         "_XLFN.WORKDAY.INTL",
+        "COMPLEX",
+        "IMDIV",
+        "IMPOWER",
+        "IMPRODUCT",
+        "IMSUB",
+        "IMSUM",
     ]
 )
 # These give #VALUE! for an empty argument where a range belongs, at these positions.

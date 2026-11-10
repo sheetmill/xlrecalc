@@ -17,7 +17,9 @@ and a result whose 15 digits pass it is #NUM!. ``IMTAN`` and ``IMCOT`` use the d
 form, ``IMABS`` scales by the larger part, ``IMPOWER`` takes a whole power by squaring and
 ``IMLOG2`` divides by the double just below ln 2, each fitted to Excel's last digits.
 
-Not imported by the package yet; every row of the capture matches.
+Every row of the capture matches. An empty required argument is #N/A (the registry), a later empty
+argument of ``IMSUM`` and ``IMPRODUCT`` is skipped, and a one-argument function called with its
+argument empty is refused in a file (``_load.py``), each as Excel does (capture ``empty_args``).
 """
 
 from __future__ import annotations
@@ -28,6 +30,7 @@ import sys
 from typing import Any
 
 from xlrecalc._coerce import Context, to_number
+from xlrecalc._formula import MISSING
 from xlrecalc._functions._registry import function
 from xlrecalc._numtext import number_to_text
 from xlrecalc._values import BLANK, ErrorValue, Ref
@@ -390,9 +393,15 @@ for _name, _core in _UNARY.items():
 
 
 def _many(args: tuple[Any, ...], ctx: Context) -> list[Complex] | ErrorValue:
-    """Every complex number the arguments hold: a range's non-blank cells, an array's elements."""
+    """Every complex number the arguments hold: a range's non-blank cells, an array's elements.
+
+    An empty argument after the first is skipped: ``IMPRODUCT("3+4j",)`` is ``3+4j`` (capture
+    empty_args; an empty first one is #N/A, by the registry).
+    """
     out: list[Complex] = []
     for arg in args:
+        if arg is MISSING:
+            continue
         if isinstance(arg, Ref):
             values: list[Any] = arg.values()
         elif isinstance(arg, tuple):

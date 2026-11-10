@@ -3369,6 +3369,9 @@ _EMPTY_VALUE = {
 }  # fmt: skip
 _R, _S = "$AA$1:$AA$4", "$AB$1:$AB$4"
 _EMPTY_VALID: dict[str, tuple[str, ...]] = {
+    "COMPLEX": ("3", "4", '"j"'),
+    "IMSUB": ('"3+4j"', '"1-2j"'), "IMDIV": ('"3+4j"', '"1-2j"'), "IMPOWER": ('"3+4j"', "2"),
+    "IMSUM": ('"3+4j"', '"1-2j"'), "IMPRODUCT": ('"3+4j"', '"1-2j"'),
     "BINOMDIST": ("3", "10", "0.5", "TRUE"), "_XLFN.BINOM.DIST": ("3", "10", "0.5", "TRUE"),
     "_XLFN.BINOM.DIST.RANGE": ("10", "0.5", "3", "7"), "_XLFN.BINOM.INV": ("10", "0.5", "0.5"),
     "CRITBINOM": ("10", "0.5", "0.5"), "NEGBINOMDIST": ("2", "3", "0.5"),
@@ -3547,6 +3550,34 @@ _EMPTY_ADDED += (  # the beta, gamma, chi-squared, F and t distributions and tes
     "_XLFN.T.INV.2T",
     "_XLFN.T.TEST",
     "_XLFN.Z.TEST",
+)
+_EMPTY_ADDED += (  # the complex-number functions
+    "COMPLEX",
+    "IMABS",
+    "IMAGINARY",
+    "IMARGUMENT",
+    "IMCONJUGATE",
+    "IMCOS",
+    "IMDIV",
+    "IMEXP",
+    "IMLN",
+    "IMLOG10",
+    "IMLOG2",
+    "IMPOWER",
+    "IMPRODUCT",
+    "IMREAL",
+    "IMSIN",
+    "IMSQRT",
+    "IMSUB",
+    "IMSUM",
+    "_XLFN.IMCOSH",
+    "_XLFN.IMCOT",
+    "_XLFN.IMCSC",
+    "_XLFN.IMCSCH",
+    "_XLFN.IMSEC",
+    "_XLFN.IMSECH",
+    "_XLFN.IMSINH",
+    "_XLFN.IMTAN",
 )
 
 # Functions whose arguments the generator cannot fill (LET's are names): their formulas as given.

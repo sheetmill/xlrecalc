@@ -124,6 +124,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   inverse is a bisection over the doubles' bit patterns, at most 64 evaluations; at extreme shapes, where Excel itself
   may calculate without end (seven formulas at a shape of 1.7E308), each gives its limit or `#NUM!`, never an error
   of its own.
+- The complex-number functions, captured from Excel (capture `complex_family`, 1,229 rows, every one matching):
+  `COMPLEX`, `IMREAL`, `IMAGINARY`, `IMABS`, `IMARGUMENT`, `IMCONJUGATE`, `IMSUM`, `IMSUB`, `IMPRODUCT`, `IMDIV`,
+  `IMPOWER`, `IMSQRT`, `IMEXP`, `IMLN`, `IMLOG10`, `IMLOG2`, `IMSIN`, `IMCOS`, `IMTAN`, `IMCOT`, `IMSEC`, `IMCSC`,
+  `IMSINH`, `IMCOSH`, `IMSECH`, `IMCSCH`. A complex number is text such as `3+4i` or `-2.5-1.5j`, each part written
+  with 15 significant digits, in digits below 1E21 and while they take at most 19 places after the point, else in
+  the exponent form (`1E+21`, `1.23456789012345E-06`); `i` alone for 1, a part of 0 left out, spaces at either end
+  dropped. Text that is no complex number is `#NUM!`; `i` and `j` in one calculation are `#NUM!` in `IMSUB` and
+  `IMDIV` and `#VALUE!` in `IMSUM` and `IMPRODUCT`. The last digits are Excel's: `IMSQRT` and `IMPOWER` in polar form,
+  a whole power by squaring and a negative one as a reciprocal (`IMPOWER(2,-0.5)` is 0.707106781186547), `IMLOG2`
+  dividing by the double just below ln 2 (`IMLOG2(1E20)` is 66.4385618977473), `IMTAN` and `IMCOT` in the
+  double-angle form. As in Excel, the trigonometric functions are `#NUM!` from a real part of 2^27 and the hyperbolic
+  ones and `IMEXP` from an imaginary part of 2^27, but `IMCOT` of a real number from 2^27 is 0. An empty required
+  argument is `#N/A`, an empty suffix is `i`, a later empty argument of `IMSUM` and `IMPRODUCT` is skipped, and
+  Excel refuses a file holding a one-argument function called with its argument empty (`IMABS()`), as `set_formula`
+  does (capture `empty_args`, 39 rows more).
 - `MDETERM`, captured from Excel (capture `matrix_family`): elimination with partial pivoting, the first largest pivot,
   the pivots multiplied in order and signed by the swaps, bit for bit over integer, singular, Hilbert and random matrices
   up to 8 by 8; a zero pivot gives 0, an overflow `#NUM!`. Every element must be a number (`#VALUE!` for a text, a blank

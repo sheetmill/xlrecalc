@@ -2,6 +2,7 @@
 
 from xlrecalc._functions import (
     _bonds,
+    _complex,
     _continuous,
     _database,
     _datetime,
@@ -24,6 +25,7 @@ __all__ = ["REGISTRY", "SPECS", "Spec", "function"]
 
 del (
     _bonds,
+    _complex,
     _continuous,
     _database,
     _datetime,

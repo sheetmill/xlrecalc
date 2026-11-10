@@ -17,7 +17,7 @@ import xlrecalc._functions as functions
 
 # Modules committed before their functions are registered; each is imported by the package once
 # they are, and taken off this list in the same change.
-NOT_REGISTERED: frozenset[str] = frozenset({"_complex"})
+NOT_REGISTERED: frozenset[str] = frozenset()
 
 _PREFIX = "xlrecalc._functions."
 

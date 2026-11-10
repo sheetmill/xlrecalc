@@ -2,7 +2,7 @@
 # excel: 16.114.4 for Mac, locale en_US
 # edition: Office Home & Business 2021, update channel Current
 # date_system: 1900
-# captured: 2026-11-09
+# captured: 2026-11-10
 # generator: capture/suites.py:empty_args
 # method: openpyxl writes the formula in column A and the inputs in B onward (floats as
 #   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
@@ -1208,12 +1208,12 @@ empty_args	textsplit	1194	_xlfn.TEXTSPLIT("a,b;c",",",,FALSE)	()	str	'a'
 empty_args	randarray	1195	_xlfn.RANDARRAY(1,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1196	_xlfn.RANDARRAY(,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1197	_xlfn.RANDARRAY(1,,5,5,FALSE)	()	n	5.0
-empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	3.4269144581450783
+empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	4.400594324123659
 empty_args	randarray	1199	_xlfn.RANDARRAY(1,1,5,,FALSE)	()	e	#VALUE!
 empty_args	randarray	1200	_xlfn.RANDARRAY(1,1,5,5,)	()	n	5.0
-empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.5809867070148411
-empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.7519823139883146
-empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.95640546637455
+empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.2561783084700917
+empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.8676837220029774
+empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.34633765932199734
 empty_args	let	1204	_xlfn.LET(_xlpm.x,1,_xlpm.x+1)	()	n	2.0
 empty_args	let	1205	_xlfn.LET(_xlpm.x,,_xlpm.x+1)	()	n	1.0
 empty_args	let	1206	_xlfn.LET(_xlpm.x,1,)	()	n	0.0
@@ -1468,3 +1468,42 @@ empty_args	z.test	1454	_xlfn.Z.TEST($AA$1:$AA$4,2,2)	()	n	0.0400591568638171
 empty_args	z.test	1455	_xlfn.Z.TEST(,2,2)	()	e	#DIV/0!
 empty_args	z.test	1456	_xlfn.Z.TEST($AA$1:$AA$4,,2)	()	n	8.841728520080376e-05
 empty_args	z.test	1457	_xlfn.Z.TEST($AA$1:$AA$4,2,)	()	e	#NUM!
+empty_args	complex	1458	COMPLEX(3,4,"j")	()	str	'3+4j'
+empty_args	complex	1459	COMPLEX(,4,"j")	()	e	#N/A
+empty_args	complex	1460	COMPLEX(3,,"j")	()	e	#N/A
+empty_args	complex	1461	COMPLEX(3,4,)	()	str	'3+4i'
+empty_args	imabs	1462	IMABS(2)	()	n	2.0
+empty_args	imaginary	1463	IMAGINARY(2)	()	n	0.0
+empty_args	imargument	1464	IMARGUMENT(2)	()	n	0.0
+empty_args	imconjugate	1465	IMCONJUGATE(2)	()	str	'2'
+empty_args	imcos	1466	IMCOS(2)	()	str	'-0.416146836547142'
+empty_args	imdiv	1467	IMDIV("3+4j","1-2j")	()	str	'-1+2j'
+empty_args	imdiv	1468	IMDIV(,"1-2j")	()	e	#N/A
+empty_args	imdiv	1469	IMDIV("3+4j",)	()	e	#N/A
+empty_args	imexp	1470	IMEXP(2)	()	str	'7.38905609893065'
+empty_args	imln	1471	IMLN(2)	()	str	'0.693147180559945'
+empty_args	imlog10	1472	IMLOG10(2)	()	str	'0.301029995663981'
+empty_args	imlog2	1473	IMLOG2(2)	()	str	'1'
+empty_args	impower	1474	IMPOWER("3+4j",2)	()	str	'-7+24j'
+empty_args	impower	1475	IMPOWER(,2)	()	e	#N/A
+empty_args	impower	1476	IMPOWER("3+4j",)	()	e	#N/A
+empty_args	improduct	1477	IMPRODUCT("3+4j","1-2j")	()	str	'11-2j'
+empty_args	improduct	1478	IMPRODUCT(,"1-2j")	()	e	#N/A
+empty_args	improduct	1479	IMPRODUCT("3+4j",)	()	str	'3+4j'
+empty_args	imreal	1480	IMREAL(2)	()	n	2.0
+empty_args	imsin	1481	IMSIN(2)	()	str	'0.909297426825682'
+empty_args	imsqrt	1482	IMSQRT(2)	()	str	'1.4142135623731'
+empty_args	imsub	1483	IMSUB("3+4j","1-2j")	()	str	'2+6j'
+empty_args	imsub	1484	IMSUB(,"1-2j")	()	e	#N/A
+empty_args	imsub	1485	IMSUB("3+4j",)	()	e	#N/A
+empty_args	imsum	1486	IMSUM("3+4j","1-2j")	()	str	'4+2j'
+empty_args	imsum	1487	IMSUM(,"1-2j")	()	e	#N/A
+empty_args	imsum	1488	IMSUM("3+4j",)	()	str	'3+4j'
+empty_args	imcosh	1489	_xlfn.IMCOSH(2)	()	str	'3.76219569108363'
+empty_args	imcot	1490	_xlfn.IMCOT(2)	()	str	'-0.457657554360286'
+empty_args	imcsc	1491	_xlfn.IMCSC(2)	()	str	'1.09975017029462'
+empty_args	imcsch	1492	_xlfn.IMCSCH(2)	()	str	'0.275720564771783'
+empty_args	imsec	1493	_xlfn.IMSEC(2)	()	str	'-2.40299796172238'
+empty_args	imsech	1494	_xlfn.IMSECH(2)	()	str	'0.26580222883408'
+empty_args	imsinh	1495	_xlfn.IMSINH(2)	()	str	'3.62686040784702'
+empty_args	imtan	1496	_xlfn.IMTAN(2)	()	str	'-2.18503986326152'

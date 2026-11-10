@@ -828,6 +828,7 @@ SUITES = [
     "matrix_family",
     "distributions_family",
     "continuous_family",
+    "complex_family",
     "dates_family",
     "text_family",
     "database_family",
