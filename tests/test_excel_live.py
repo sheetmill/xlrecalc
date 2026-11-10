@@ -28,6 +28,7 @@ from pathlib import Path
 import pytest
 
 import xlrecalc
+from tests.captures import load as load_capture
 from tests.excel_steps import answers, step, stop_the_run
 from tests.test_captures import (
     KNOWN_DEVIATIONS,
@@ -112,9 +113,15 @@ def test_capture_suites_recalculated_here_match_excel(container, name):
     recalculate(src)
     save_copy(src, copy)
     ours, excel = values(src), values(copy)
+    # Known deviations by their captured formula: a function a test registers in this process
+    # adds cases to a generated suite (empty_args), which moves every later row.
+    captured = load_capture(name).rows
+    known = {
+        captured[case - 1].formula for (suite_name, case) in KNOWN_DEVIATIONS if suite_name == name
+    }
     differ = []
     for row, case in enumerate(cases, 1):
-        if any(v in case.formula.upper() for v in VOLATILE) or (name, row) in KNOWN_DEVIATIONS:
+        if any(v in case.formula.upper() for v in VOLATILE) or case.formula in known:
             continue
         a, b = ours.get((row, 1)), excel.get((row, 1))
         if a is None:  # uncomputed here: the cached value is left as it was
