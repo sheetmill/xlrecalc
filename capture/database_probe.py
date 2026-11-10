@@ -1,66 +1,54 @@
 """Which error and constant arguments of the database functions Excel refuses in a file.
 
-    uv run python -m capture.database_probe
+    uv run python -m capture.database_probe [--full]
 
-Excel refuses a whole file for one such formula (-50, ``CAPTURING.md`` §2). Each form is opened
-alone for ``DSUM``; for every other database function, the forms ``DSUM`` accepted are opened
-together, and each form ``DSUM`` refused is opened alone, so every refusal listed was seen by
-itself. The refused formulas go to ``tests/captures/database_refused.tsv``, which the suite
-``database_family`` leaves out, so it can be captured at once.
+Excel refuses a whole file for one such formula (-50, ``CAPTURING.md`` §2), so the forms are
+opened in batches, each refused batch halved until every refusal is opened alone
+(``capture/refusals.py``): a known refusal of the same build is kept without an open, and the
+rest confirmed in full batches, unless ``--full``. The refused formulas go to
+``tests/captures/database_refused.tsv``, which the suite ``database_family`` leaves out, so it can
+be captured at once.
 """
 
 from __future__ import annotations
 
-from pathlib import Path
+import sys
 
 from capture.edition import edition_line
 from capture.pipeline import CAPTURES, Case, excel_version, run_excel
+from capture.refusals import Probe, known_accepted, known_refused
 from capture.suites import _DB_EXTRA, MISC_TABLE, database_errors_all
 
 FIXED = {**MISC_TABLE, **_DB_EXTRA}
+REFUSED = CAPTURES / "database_refused.tsv"
 
 
-def opens(cases: list[Case]) -> bool:
+def _opens(cases: list[Case]) -> bool:
     try:
         run_excel(cases, "database_probe", False, FIXED)
-    except RuntimeError:
+    except RuntimeError as exc:
+        if "-50" not in str(exc):  # not a refusal: Excel failed otherwise
+            sys.exit(f"Excel failed otherwise: {exc}")
         return False
     return True
 
 
 def main() -> None:
     cases = database_errors_all()
-    by_fn: dict[str, list[Case]] = {}
-    for case in cases:
-        by_fn.setdefault(case.formula.split("(", 1)[0], []).append(case)
-    count = 0
-    refused_forms: set[str] = set()
-    refused: list[str] = []
-    for case in by_fn.pop("DSUM"):
-        count += 1
-        if not opens([case]):
-            refused_forms.add(case.formula.removeprefix("DSUM"))
-            refused.append(case.formula)
-    for fn, group in by_fn.items():
-        accepted = [c for c in group if c.formula.removeprefix(fn) not in refused_forms]
-        count += 1
-        if not opens(accepted):
-            raise SystemExit(f"{fn}: a form DSUM accepts was refused; bisect before going on")
-        for case in group:
-            if case.formula.removeprefix(fn) in refused_forms:
-                count += 1
-                if opens([case]):
-                    raise SystemExit(f"{case.formula}: accepted where DSUM's form was refused")
-                refused.append(case.formula)
-    path: Path = CAPTURES / "database_refused.tsv"
+    build = excel_version()
+    refused, refused_build = known_refused(REFUSED)
+    accepted = known_accepted(CAPTURES / "database_family.tsv")
+    new = sum(1 for c in cases if c.formula not in refused and c.formula not in accepted)
+    probe = Probe(_opens)
+    probe.run(cases, refused, refused_build == build, "--full" in sys.argv)
     lines = [
         "# formulas Excel refuses in a file (capture/database_probe.py)",
-        f"# excel: {excel_version()} for Mac, locale en_US",
+        f"# excel: {build} for Mac, locale en_US",
         edition_line(),
-        *refused,
+        *probe.refused,
     ]
-    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print(f"{len(cases)} formulas, {count} opens, {len(refused)} refused -> {path.name}")
+    REFUSED.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print(f"{probe.summary(len(cases))} ({new} not seen before) -> {REFUSED.name}")
 
 
 if __name__ == "__main__":

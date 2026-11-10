@@ -137,6 +137,20 @@ captures: they open a file with alerts on and wait for a person to accept the re
 dismiss the circular-reference warning. `capture/marker_probe.py --typed` reads a workbook a
 person typed formulas into and saved (AppleScript can only enter legacy formulas).
 
+**Opens.** Excel refuses a whole file for one formula it does not take, so a probe that must name refused formulas
+opens them in batches of 60 and halves a refused batch until each refusal is opened alone (`capture/refusals.py`).
+Settled answers are not asked again: a refusal of the same build (its list's `# excel:` line) is kept without an open,
+and the forms a captured suite holds are confirmed in full batches, where a refusal is news and is bisected; a new form,
+or a refusal of another build, is probed. `--full` asks everything again. Measured on Excel 16.114.4: a batch of 60
+opens in about 4.5 s, a workbook of one formula in about 1 s; `capture/empty_probe.py` went from 955 opens (about 15
+minutes) to 22 (101 s) with nothing new, `capture/database_probe.py` from 514 (21 minutes) to 2 (8 s). The suites
+(`capture/pipeline.py`, `capture/dynamic_probe.py`) open one workbook a suite. One workbook a case remains where the
+case is the workbook: the iteration probes and `calc_chain` (a workbook's calculation settings, its cached values,
+its sheets' order; Excel takes iteration settings from the first workbook open), `circular_cached`, `cell_probe` (the
+active sheet), `array_size_probe` (Excel's memory per file), and `value_probe`, `literal_probe` and
+`workbook_name_probe`, whose cases mostly make Excel refuse the file and each record whether its file opens;
+`capture/refusal_probe.py` opens each formula given alone by purpose, to name the one a suite's workbook fails on.
+
 **The edition is part of the evidence.** The build number does not say which functions Excel has:
 Office Home & Business 2021 for Mac at 16.114.4 lacks `LAMBDA` and its helpers, which Microsoft 365
 and Excel 2024 at the same build have. Every capture header records the edition and the update

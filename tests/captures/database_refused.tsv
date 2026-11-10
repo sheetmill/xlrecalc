@@ -1,4 +1,6 @@
 # formulas Excel refuses in a file (capture/database_probe.py)
+# excel: 16.114.4 for Mac, locale en_US
+# edition: Office Home & Business 2021, update channel Current
 DSUM(#N/A,"Score",DU1:DU2)
 DSUM(#N/A,"Num",FD1:FD2)
 DSUM(#DIV/0!,"Score",DU1:DU2)
