@@ -3,7 +3,7 @@
 Machine: Apple M4 Pro, 24 GB. Every row in the tables below ran on CPython 3.11.18, the
 package's own Python, each in a fresh process: the package's runners in its environment, the
 compact prototype with the standard library alone, and the other engines (pycel 1.0b30, formulas
-1.3.4, xlcalculator 0.5.0, openpyxl 3.1.5) in a temporary environment holding only them. Raw
+1.3.4, xlcalculator 0.5.0) in a temporary environment holding only them and openpyxl 3.1.5. Raw
 output: `current_py311.jsonl` (the package's rows) and `baseline_py311.jsonl` (the prototype, the
 other engines, and the package before the store changes of "Memory and speed of the store"
 below).

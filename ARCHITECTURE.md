@@ -4,7 +4,7 @@ xlrecalc evaluates the formulas of an Excel workbook from Python with the result
 computes, and writes those results back into the file as the cached values Excel stores. This
 document describes the design: what the engine is for, the evidence behind its shape, the value
 model, how formulas become compiled templates, how dependencies and scheduling work, the
-function library, the xlsx reader and surgical writer, the ways to use it with openpyxl, and how
+function library, the xlsx reader and surgical writer, how it works with openpyxl, and how
 Excel's results are captured for the tests. Measured numbers are in `bench/results/SUMMARY.md`.
 
 ## 1. Goals and non-goals
@@ -60,7 +60,7 @@ three `SUM` cells over whole columns. Full tables in `bench/results/SUMMARY.md`.
 
 | finding | number | consequence |
 |---|---|---|
-| Existing pure-Python engines on the same workbooks | an order of magnitude or more longer to evaluate and more memory; the measurements and scripts are in `bench/` | 10x to 50x is available |
+| Existing pure-Python engines are slow on the same workbooks | an order of magnitude or more longer to evaluate and more memory; the measurements and scripts are in `bench/` | 10x to 50x is available |
 | A plain Python evaluation loop is fast enough | about 400k trivial formulas per second | CPython is not the bottleneck; structure is |
 | Per-cell Python objects are the memory problem | a dict of floats costs 148 B per cell; a per-cell dependency graph about 1.5 KB per formula | no per-cell objects, no per-cell edge lists |
 | Formulas are massively repetitive | 16 distinct templates for 3M formulas | compile once per template, store a template id per cell |
