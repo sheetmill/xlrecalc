@@ -43,7 +43,9 @@ def recalculate(
             persists in what Excel shows. With ``False`` the file's setting stays as it was and
             Excel shows the written values. A file with the setting also makes a later
             ``recalculate`` of it evaluate every formula again.
-        limits: Limits on what reading the file may decompress.
+        limits: Limits on what reading and computing the workbook may cost (``ReadLimits``):
+            the package's parts and sizes, the cells an array may hold, and the evaluations of
+            one run of iterative calculation.
         quirks: Which Excel quirks to reproduce; all by default.
 
     Returns:
