@@ -38,12 +38,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE = ROOT / "capture" / "build" / "excel_hangs"
 ANSWER_SECONDS = 15.0
-END_GRACE_SECONDS = 10.0  # between TERM and KILL
-"""What Excel may take to say how many workbooks it has open."""
+"""The limit on a short question to Excel: its workbook count, its version, closing workbooks."""
+END_GRACE_SECONDS = 10.0
+"""Between TERM and KILL, when Excel is ended."""
 ASK_AGAIN = (60.0, 240.0)
-RECENT_SECONDS = 1800.0  # asking again adds to the latest record only if it is this recent
-APPLE_EVENT_TIMEOUT = "(-1712)"  # AppleScript's own limit on a request, before ours
-"""Seconds to wait before each further question: 1 minute after the first, then 5."""
+"""The waits before each further question about workbooks, after the first at once: Excel is
+asked again after 1 minute, and after 5 minutes in all."""
+RECENT_SECONDS = 1800.0
+"""Asking again adds the answer to the latest record only if that record is this recent."""
+APPLE_EVENT_TIMEOUT = "(-1712)"
+"""AppleScript's error when it gives up on a request, which can come before our limit."""
 SAMPLE_SECONDS = 10
 _VERSION = 'tell application "Microsoft Excel" to version'
 CONTAINER_MARK = "/Library/Containers/com.microsoft.Excel/"
