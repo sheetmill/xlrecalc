@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-10
+
 ### Added
 - Iterative calculation, for a workbook with iteration on (`<calcPr iterate="1">`), as Excel does it (captures
   `iterate_calc`, `calc_chain`, `iterate_open`): a run of up to `iterateCount` iterations from the values the cells hold, each
@@ -398,5 +400,6 @@ First release.
   calculation settings; archive limits (`ReadLimits`, `LimitError`) and a refusal of DTDs
   protect against hostile files; `PackageError` for a file that is not a readable package.
 
-[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/sheetmill/xlrecalc/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/sheetmill/xlrecalc/releases/tag/v0.1.0
