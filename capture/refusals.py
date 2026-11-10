@@ -7,7 +7,7 @@ captured without its refusals. So a run keeps each known refusal of the same bui
 open, and opens everything else in full batches: the forms known to be accepted, which confirm
 in one open a batch when nothing changed (a refusal there is news, and is bisected), the forms
 not seen before, and the refusals of another build. A rerun with nothing new costs one open per
-batch.
+batch. Imports only the standard library, so that the tests run without openpyxl.
 """
 
 from __future__ import annotations
@@ -16,8 +16,10 @@ import time
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-from capture.pipeline import Case
+if TYPE_CHECKING:  # capture.pipeline imports openpyxl, which the default test run may lack
+    from capture.pipeline import Case
 
 BATCH = 60
 MAX_OPENS = 2500

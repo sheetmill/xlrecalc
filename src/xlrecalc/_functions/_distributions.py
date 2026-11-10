@@ -254,8 +254,10 @@ def HYPGEOM_DIST(
 # Continuous -----------------------------------------------------------------------------------
 
 
-@function("EXPONDIST", "number", "number", "logical", category=S)
-@function("_xlfn.EXPON.DIST", "number", "number", "logical", category=S)
+@function("EXPONDIST", "number", "number", "logical", category=S, ulps=4, ulps_reason=_LIBRARY)
+@function(
+    "_xlfn.EXPON.DIST", "number", "number", "logical", category=S, ulps=4, ulps_reason=_LIBRARY
+)
 def EXPON_DIST(ctx: Any, x: float, rate: float, cumulative: bool) -> Any:
     """The exponential distribution."""
     if x < 0 or rate <= 0:

@@ -2,8 +2,15 @@
 
 from __future__ import annotations
 
-from capture.pipeline import Case
+from typing import NamedTuple
+
 from capture.refusals import BATCH, Probe
+
+
+class Case(NamedTuple):  # as capture.pipeline's, which needs openpyxl
+    tag: str
+    formula: str
+
 
 CASES = [Case("t", f"F({i})") for i in range(150)]
 REFUSES = {"F(3)", "F(70)", "F(71)", "F(149)"}

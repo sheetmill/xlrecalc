@@ -139,12 +139,13 @@ def _declared(spec: object) -> str:
 def platform_label() -> str:
     """The platform the split between exact and ulps rows is measured on, as the page records it.
 
-    The math library's last bits come with the operating system: on macOS, its major version
-    and the machine's architecture (``macOS 26, arm64``).
+    The math library's last bits come with the operating system: on macOS, its major and minor
+    version and the machine's architecture (``macOS 26.5, arm64``). The minor version counts:
+    ``lgamma`` differs in its last bits between macOS 26.5 and 26.7.
     """
     machine = platform.machine()
     if sys.platform == "darwin":
-        return f"macOS {platform.mac_ver()[0].split('.')[0]}, {machine}"
+        return f"macOS {'.'.join(platform.mac_ver()[0].split('.')[:2])}, {machine}"
     return f"{platform.system()}, {machine}"
 
 
