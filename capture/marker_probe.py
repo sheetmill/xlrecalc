@@ -12,11 +12,12 @@ Writes ``tests/captures/marker_<way>.tsv``. Both ways enter legacy formulas (no 
 intersection), so AppleScript cannot enter a formula as Excel 365's formula bar does.
 
 ``--typed PATH ...`` reads instead the workbooks in which a person typed ``TYPED[k]`` into cell
-``A<4k+1>`` in Excel's formula bar and saved them (``xlrecalc_marker_typed.xlsx`` for the first
-``FIRST_BATCH`` formulas, ``xlrecalc_marker_typed2.xlsx`` up to ``THIRD_BATCH``,
-``xlrecalc_marker_typed3.xlsx`` up to ``FOURTH_BATCH``, ``xlrecalc_marker_typed4.xlsx`` for the
-rest, each built by ``typed_workbook`` from its first formula on), and writes
-``tests/captures/marker_typed.tsv``.
+``A<4k+1>`` in Excel's formula bar and saved them, and writes ``tests/captures/marker_typed.tsv``.
+Each workbook holds one batch, built by ``typed_workbook`` from the batch's first formula on:
+``xlrecalc_marker_typed.xlsx`` the formulas before ``SECOND_START``,
+``xlrecalc_marker_typed2.xlsx`` those from ``SECOND_START`` to ``THIRD_START``,
+``xlrecalc_marker_typed3.xlsx`` from ``THIRD_START`` to ``FOURTH_START``, and
+``xlrecalc_marker_typed4.xlsx`` from ``FOURTH_START`` on.
 """
 
 from __future__ import annotations
@@ -74,8 +75,8 @@ TYPED = [
     "=SUM(SEQUENCE(3))",
     "=ROWS(UNIQUE(Z1:Z3))",
 ]
-FIRST_BATCH = len(TYPED)
-"""Formulas before this index went into the first of the typed workbooks (``KEPT``)."""
+SECOND_START = len(TYPED)
+"""Where the second batch starts: the formulas before it went into the first typed workbook."""
 TYPED += [
     # a function that makes an array under a branch, an explicit @ and an operator
     "=IF(TRUE,SEQUENCE(1))",
@@ -107,8 +108,8 @@ TYPED += [
     "=WRAPROWS(1,1)",
     "=WRAPCOLS(1,1)",
 ]
-THIRD_BATCH = len(TYPED)
-"""Formulas from here up to ``FOURTH_BATCH`` went into the third workbook."""
+THIRD_START = len(TYPED)
+"""Where the third batch starts."""
 TYPED += [
     # an array carried through a lifted function, an operator, a branch; consumed by SUM
     "=ABS(SEQUENCE(1))",
@@ -124,8 +125,8 @@ TYPED += [
     '=INDIRECT("Z1:Z1")',
 ]
 
-FOURTH_BATCH = len(TYPED)
-"""Formulas from here on went into the fourth workbook."""
+FOURTH_START = len(TYPED)
+"""Where the fourth batch starts; it runs to the end of ``TYPED``."""
 TYPED += [
     # array constants, written and lifted into OFFSET; a defined name holding SEQUENCE(1)
     "={1}",
