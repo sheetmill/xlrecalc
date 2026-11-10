@@ -112,7 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `F.INV.RT`, `FINV`, `T.DIST`, `T.DIST.2T`, `T.DIST.RT`, `TDIST`, `T.INV`, `T.INV.2T`, `TINV`, and the tests
   `T.TEST`, `TTEST`, `F.TEST`, `FTEST`, `CHISQ.TEST`, `CHITEST`, `Z.TEST`, `ZTEST`, `CONFIDENCE.T`. Degrees of freedom
   are truncated, from 1 to 1E10; each tail is computed directly where it is the smaller, and each inverse is the
-  root to the last bit, so far tails and probabilities near 1 keep their digits; at large shapes, where logarithms of
+  root to the last bit, so that far tails and probabilities near 1 keep their digits; at large shapes, where logarithms of
   the gamma function cancel, Loader's saddle point, DiDonato and Morris's expansion and Temme's uniform expansion
   take over. As in Excel, `CHISQ.INV.RT` and `CHIINV` at one degree of freedom invert the left tail at 1 - p (a p
   of at most 2^-54, about 5.55E-17, is `#NUM!`), an empty sample in a test is `#VALUE!` (`#DIV/0!` in `Z.TEST`), and an empty bound of
