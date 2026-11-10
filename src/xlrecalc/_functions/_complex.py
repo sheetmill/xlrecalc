@@ -9,15 +9,22 @@ calculation are ``#NUM!`` in ``IMSUB`` and ``IMDIV`` and ``#VALUE!`` in ``IMSUM`
 ``IMPRODUCT``. A part is written in digits below 1E21 and with 15 significant digits in the
 exponent form, which takes two digits at least (``E-08``).
 
-Not imported by the package yet: 935 of the capture's 976 rows match, and the rest (Excel's
-argument limits in the trigonometric and hyperbolic functions, ``IMEXP`` at an overflow, a few
-last digits) come first.
+The trigonometric functions are #NUM! from a real part of 2^27 and the hyperbolic ones and
+``IMEXP`` from an imaginary part of 2^27, as ``SIN`` is; an overflowing ``cosh`` or ``sinh`` is
+infinite, so ``IMSECH(1E300)`` is 0 and ``IMTAN`` of a huge imaginary part is ``i``; ``IMEXP``
+takes e^a as the largest double at most, and a result whose 15 digits pass it is #NUM!.
+``IMTAN`` and ``IMCOT`` use the double-angle form and ``IMABS`` scales by the larger part, each
+fitted to Excel's last digits.
+
+Not imported by the package yet: 972 of the capture's 976 rows match; the other four are
+``IMCOT(1E300)``, 0 in Excel, and last digits of ``IMLOG2`` and ``IMPOWER``.
 """
 
 from __future__ import annotations
 
 import math
 import re
+import sys
 from typing import Any
 
 from xlrecalc._coerce import Context, to_number
@@ -97,6 +104,8 @@ def _text(real: float, imaginary: float, suffix: str) -> str | ErrorValue:
     if not (math.isfinite(real) and math.isfinite(imaginary)):
         return NUM
     re_text, im_text = _number(real), _number(imaginary)
+    if math.isinf(float(re_text)) or math.isinf(float(im_text)):  # 15 digits past the largest
+        return NUM
     if im_text == "0":
         return re_text
     im_part = {1.0: "", -1.0: "-"}.get(imaginary, im_text) + suffix  # 1 itself, not its text
@@ -185,7 +194,13 @@ def _part(name: str, pick: Any) -> None:
 
 _part("IMREAL", lambda z: z[0])
 _part("IMAGINARY", lambda z: z[1])
-_part("IMABS", lambda z: math.hypot(z[0], z[1]))
+_part("IMABS", lambda z: _modulus(z[0], z[1]))
+
+
+def _modulus(a: float, b: float) -> float:
+    """|a + bi| as Excel computes it, scaled by the larger part (IMABS(-2.5-1.5j) to the bit)."""
+    big, small = (abs(a), abs(b)) if abs(a) >= abs(b) else (abs(b), abs(a))
+    return 0.0 if big == 0 else big * math.sqrt(1 + (small / big) ** 2)
 
 
 @function("IMARGUMENT", "value", category=E)
@@ -204,14 +219,32 @@ def IMARGUMENT(ctx: Any, v: Any) -> Any:
 
 def _polar_power(a: float, b: float, n: float, scaled: bool = True) -> tuple[float, float]:
     """R^n (cos n theta + i sin n theta); ``scaled`` takes r by hypot, else as sqrt(a² + b²)."""
-    r = math.hypot(a, b) if scaled else math.sqrt(a * a + b * b)
+    r = math.hypot(a, b) if scaled else math.sqrt(a * a + b * b)  # not IMABS's form (capture)
     theta = math.atan2(b, a)
     rn = r**n
     return rn * math.cos(n * theta), rn * math.sin(n * theta)
 
 
-def _exp(a: float, b: float) -> tuple[float, float]:
-    e = math.exp(a)
+_LARGEST_ANGLE = 2.0**27  # SIN's and COS's limit in Excel, #NUM! from it (captures math_trig)
+
+
+def _big(x: float) -> bool:
+    return abs(x) >= _LARGEST_ANGLE
+
+
+def _sinh_(x: float) -> float:
+    return math.copysign(math.inf, x) if abs(x) > 710 else math.sinh(x)
+
+
+def _cosh_(x: float) -> float:
+    return math.inf if abs(x) > 710 else math.cosh(x)
+
+
+def _exp(a: float, b: float) -> tuple[float, float] | ErrorValue:
+    """E^a (cos b + i sin b), e^a at most the largest double, as Excel clamps it."""
+    if _big(b):
+        return NUM
+    e = sys.float_info.max if a > 709.78 else math.exp(a)
     return e * math.cos(b), e * math.sin(b)
 
 
@@ -222,24 +255,55 @@ def _ln(a: float, b: float) -> tuple[float, float] | ErrorValue:
 
 
 def _sin(a: float, b: float) -> tuple[float, float]:
-    return math.sin(a) * math.cosh(b), math.cos(a) * math.sinh(b)
+    return math.sin(a) * _cosh_(b), math.cos(a) * _sinh_(b)
 
 
 def _cos(a: float, b: float) -> tuple[float, float]:
-    return math.cos(a) * math.cosh(b), -math.sin(a) * math.sinh(b)
+    return math.cos(a) * _cosh_(b), -math.sin(a) * _sinh_(b)
 
 
 def _sinh(a: float, b: float) -> tuple[float, float]:
-    return math.sinh(a) * math.cos(b), math.cosh(a) * math.sin(b)
+    return _sinh_(a) * math.cos(b), _cosh_(a) * math.sin(b)
 
 
 def _cosh(a: float, b: float) -> tuple[float, float]:
-    return math.cosh(a) * math.cos(b), math.sinh(a) * math.sin(b)
+    return _cosh_(a) * math.cos(b), _sinh_(a) * math.sin(b)
+
+
+def _tan(a: float, b: float) -> tuple[float, float] | ErrorValue:
+    """(sin 2a + i sinh 2b) / (cos 2a + cosh 2b), as Excel computes it: i where b is huge."""
+    den = math.cos(2 * a) + _cosh_(2 * b)
+    if not math.isfinite(den):
+        return 0.0, math.copysign(1.0, b)
+    return math.sin(2 * a) / den, _sinh_(2 * b) / den
+
+
+def _cot(a: float, b: float) -> tuple[float, float] | ErrorValue:
+    """(sin 2a - i sinh 2b) / (cosh 2b - cos 2a), as Excel computes it: -i where b is huge."""
+    den = _cosh_(2 * b) - math.cos(2 * a)
+    if not math.isfinite(den):
+        return 0.0, -math.copysign(1.0, b)
+    if den == 0:
+        return NUM
+    return math.sin(2 * a) / den, -_sinh_(2 * b) / den
+
+
+def _limited(core: Any, on_real: bool) -> Any:
+    """#NUM! where the part a sine or cosine takes is 2^27 or more, as SIN gives (capture)."""
+
+    def limited(a: float, b: float) -> Any:
+        return NUM if _big(a if on_real else b) else core(a, b)
+
+    return limited
 
 
 def _ratio(top: Any, bottom: Any) -> Any:
+    """Top / bottom; 0 where the bottom overflows (IMSEC of a huge imaginary part, as Excel)."""
+
     def core(a: float, b: float) -> tuple[float, float] | ErrorValue:
         (p, q), (r, s) = top(a, b), bottom(a, b)
+        if not (math.isfinite(r) and math.isfinite(s)):
+            return 0.0, 0.0
         return _div(p, q, r, s)
 
     return core
@@ -264,16 +328,16 @@ _UNARY: dict[str, Any] = {
     "IMLN": _ln,
     "IMLOG10": _log_base(10.0),
     "IMLOG2": _log_base(2.0),
-    "IMSIN": _sin,
-    "IMCOS": _cos,
-    "_xlfn.IMTAN": _ratio(_sin, _cos),
-    "_xlfn.IMCOT": _ratio(_cos, _sin),
-    "_xlfn.IMSEC": _ratio(_one, _cos),
-    "_xlfn.IMCSC": _ratio(_one, _sin),
-    "_xlfn.IMSINH": _sinh,
-    "_xlfn.IMCOSH": _cosh,
-    "_xlfn.IMSECH": _ratio(_one, _cosh),
-    "_xlfn.IMCSCH": _ratio(_one, _sinh),
+    "IMSIN": _limited(_sin, True),
+    "IMCOS": _limited(_cos, True),
+    "_xlfn.IMTAN": _limited(_tan, True),
+    "_xlfn.IMCOT": _limited(_cot, True),
+    "_xlfn.IMSEC": _limited(_ratio(_one, _cos), True),
+    "_xlfn.IMCSC": _limited(_ratio(_one, _sin), True),
+    "_xlfn.IMSINH": _limited(_sinh, False),
+    "_xlfn.IMCOSH": _limited(_cosh, False),
+    "_xlfn.IMSECH": _limited(_ratio(_one, _cosh), False),
+    "_xlfn.IMCSCH": _limited(_ratio(_one, _sinh), False),
 }
 for _name, _core in _UNARY.items():
     function(_name, "value", category=E)(_unary(_core))
