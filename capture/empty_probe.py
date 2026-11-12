@@ -15,6 +15,7 @@ from __future__ import annotations
 import sys
 
 from capture.edition import edition_line
+from capture.entry_probe import still_refused
 from capture.pipeline import CAPTURES, Case, excel_version, run_excel
 from capture.refusals import Probe, known_accepted, known_refused
 from capture.suites import _EMPTY_TABLE, empty_args_all
@@ -46,8 +47,8 @@ def main() -> None:
     refused, refused_build = known_refused(REFUSED)
     accepted = known_accepted(CAPTURES / "empty_args.tsv")
     new = sum(1 for c in cases if c.formula not in refused and c.formula not in accepted)
-    probe = Probe(_opens)
-    probe.run(cases, refused, refused_build == build, "--full" in sys.argv)
+    probe = Probe(_opens, still_refused)
+    probe.run(cases, refused, refused_build == build, "--full" in sys.argv, accepted)
     lines = [
         "# formulas Excel refuses in a file (capture/empty_probe.py)",
         f"# excel: {build} for Mac, locale en_US",

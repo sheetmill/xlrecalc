@@ -152,8 +152,16 @@ typed formulas into and saved (AppleScript can only enter legacy formulas).
 **Opens.** Excel refuses a whole file for one formula it does not take, so a probe that must name refused formulas
 opens them in batches of 60 and halves a refused batch until each refusal is opened alone (`capture/refusals.py`).
 Settled answers are not asked again: a refusal of the same build (its list's `# excel:` line) is kept without an open,
-and the forms a captured suite holds are confirmed in full batches, where a refusal is news and is bisected; a new form,
-or a refusal of another build, is probed. `--full` asks everything again. Measured on Excel 16.114.4: a batch of 60
+and the forms a captured suite holds are confirmed in batches of 1,500, where a refusal is news and is bisected (1,496
+forms of `empty_args` open in one workbook in 0.7 s on 16.115); a new form is probed in batches of 60. A refusal of
+another build is first set in one open workbook (`capture/entry_probe.py`, `set_formulas.applescript`): a formula Excel
+refuses, set through AppleScript's `formula`, leaves the cell unchanged without an error, so the cell read back gives
+the verdict. Those Excel still refuses there are kept, and only those it takes now are opened in a file. On 16.115 the
+two verdicts agreed for 3,448 of the 3,449 forms `empty_probe` and `database_probe` had settled, set in 234 s; the
+one that differs is file-only: `_xlfn.LET(_xlpm.x,1,_xlpm.y,)` opens in a file, and `=LET(x,1,y,)` is refused set in
+a cell. So the entry check settles refusals, never acceptances, and a form longer than 255 characters (AppleScript's
+limit) is opened in a file. After a build change, `empty_probe` then takes 12 s (one open) and `database_probe` 13 s,
+where the file opens took 1,322 s and 231 s. `--full` asks everything again through files. Measured on Excel 16.114.4: a batch of 60
 opens in about 4.5 s, a workbook of one formula in about 1 s. With nothing new, `capture/empty_probe.py` makes 22
 opens (about 100 s) and `capture/database_probe.py` 2 (8 s); with `--full`, 955 (about 15 minutes) and 514 (21
 minutes). The suites
