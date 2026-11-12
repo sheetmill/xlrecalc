@@ -267,7 +267,21 @@ _DEPTH_NAMES = {
     "CDTWO": "_xlfn.LAMBDA(_xlpm.n,_xlpm.a,IF(_xlpm.n<=0,0,1+CDTWO(_xlpm.n-1,_xlpm.a)))",
     "CDBIG": "_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,0,1+0*SUM(_xlpm.n,1,2,3)+CDBIG(_xlpm.n-1)))",
 }
-_DEPTH_ARGS = {"CD": "", "CDTHREE": ",1,2", "CDTWO": ",1", "CDBIG": ""}
+_BODIES = {  # recursive bodies of one parameter, differing in what they evaluate around the call
+    "BSUMTWO": "IF(_xlpm.n<=0,0,1+0*SUM(_xlpm.n,1)+BSUMTWO(_xlpm.n-1))",
+    "BSUMEIGHT": "IF(_xlpm.n<=0,0,1+0*SUM(_xlpm.n,1,2,3,4,5,6,7)+BSUMEIGHT(_xlpm.n-1))",
+    "BNEST": "IF(_xlpm.n<=0,0,1+ABS(ABS(ABS(BNEST(_xlpm.n-1)))))",
+    "BLETX": "LET(_xlpm.m,_xlpm.n-1,IF(_xlpm.n<=0,0,1+BLETX(_xlpm.m)))",
+    "BPLAIN": "IF(_xlpm.n<=0,0,BPLAIN(_xlpm.n-1))",
+}
+_DEPTH_NAMES.update({k: f"_xlfn.LAMBDA(_xlpm.n,{v})" for k, v in _BODIES.items()})
+_DEPTH_ARGS = {
+    "CD": "",
+    "CDTHREE": ",1,2",
+    "CDTWO": ",1",
+    "CDBIG": "",
+    **dict.fromkeys(_BODIES, ""),
+}
 
 
 def depth_suite(
