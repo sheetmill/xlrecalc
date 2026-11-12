@@ -1,12 +1,13 @@
 # suite: circular_alerts
 # excel: 16.115 for Mac, locale en_US
 # edition: Microsoft 365 Subscription, update channel Current
-# captured: 2026-11-11
+# captured: 2026-11-12
 # generator: capture/circular_probe.py --interactive
 # method: openpyxl writes the formulas into column A (constants in B, no cached values,
-#   fullCalcOnLoad); Excel opens it with alerts on, a person dismisses the
-#   circular-reference warning; formula, value and text are read from the open
-#   workbook, saved is the cell as Excel's saved copy holds it
+#   fullCalcOnLoad); Excel opens it by Launch Services, as a double-click does, and a
+#   person answers the circular-reference warning, then says so (reported: Continue);
+#   formula, value and text are then read from the open workbook through AppleScript,
+#   saved is the cell as Excel's saved copy holds it
 # saved_calcPr: <calcPr calcId="191029"/>
 # columns: row tag formula constant value text saved
 1	pair	A2+1	None			'<c r="A1" t="str"><f ca="1">A2+1</f><v /></c>'

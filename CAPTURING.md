@@ -77,7 +77,7 @@ people's workbooks are used.
 | `static_cycle` | 37 | loops of references through a branch not taken, and real loops as controls: which Excel calls circular |
 | `array_refs` | 8,602 cells | `ROW`, `COLUMN`, `CELL`, ranges and arrays as a criterion or a lookup key, and arrays of references, each as a legacy formula, a legacy array formula and a dynamic array |
 | `array_functions` | 41 | the `SUMIF` family, `DSUM`, `CORREL` and `ROW` times `COLUMN` over one column, ten and every column of another sheet, with Excel's memory: Excel's value, or the file's value kept |
-| `circular`, `circular_alerts` | 16 each | circular references with iteration off: what Excel saves and shows, alerts off and on (the second interactive; [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §7.2) |
+| `circular`, `circular_alerts` | 16 each | circular references with iteration off: what Excel saves and shows, alerts off, and opened as a double-click opens it, with the warning a person dismisses (the second interactive; [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §7.2) |
 
 All live in `tests/captures/` as TSV files with a header: suite, Excel build and locale, edition
 and update channel (§2), date system, capture date, generator and method. `tests/test_captures.py` and
@@ -136,9 +136,18 @@ create, refuse to run when a workbook of the same name is open, and never use th
 With alerts off, a file Excel would offer to repair fails to open with error -50 ("Parameter
 error"), which is how probes detect a repair prompt without a person at the keyboard.
 `capture/repair_probe.py` and `capture/circular_probe.py --interactive` are the interactive
-captures: they open a file with alerts on and wait for a person to accept the repair or
-dismiss the circular-reference warning. `capture/marker_probe.py --typed` reads a workbook a
-person typed formulas into and saved (AppleScript can only enter legacy formulas).
+captures, and whether a dialog appears depends on how the file is opened, dialog by dialog.
+Excel shows its repair dialogs for a file AppleScript opens with alerts on, so `repair_probe`
+opens it that way and waits for a person to accept them. It does not show its
+circular-reference warning for a file AppleScript opens, with alerts on or off; it does for one
+opened by Launch Services, as a double-click in the Finder opens it (Excel 16.115: a small loop
+with `fullCalcOnLoad` showed the warning when double-clicked and none under AppleScript). So
+`circular_probe --interactive` opens the file with `open -a "Microsoft Excel"` and, since the
+warning does not block requests about the workbook, asks the person in a dialog of its own to
+say when it is answered (the header records the reply); then it reads and saves the workbook
+through AppleScript (`read_save.applescript`). Earlier captures of `circular_alerts` opened the file through
+AppleScript and saw no warning. `capture/marker_probe.py --typed` reads a workbook a person
+typed formulas into and saved (AppleScript can only enter legacy formulas).
 
 **Opens.** Excel refuses a whole file for one formula it does not take, so a probe that must name refused formulas
 opens them in batches of 60 and halves a refused batch until each refusal is opened alone (`capture/refusals.py`).

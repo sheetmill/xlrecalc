@@ -10,9 +10,10 @@ cells of that copy are given sentinel cached values (``900 + row``) and the copy
 alerts off (``open_read.applescript``) to see whether Excel shows the file's values for cells on
 a cycle or recalculates them. Writes ``tests/captures/circular.tsv``.
 
-With ``--interactive`` the openpyxl file is opened with alerts on instead
-(``repair_probe.applescript``), so Excel shows its circular-reference warning and a person
-dismisses it; column A is read and a copy saved. Writes ``tests/captures/circular_alerts.tsv``.
+With ``--interactive`` the openpyxl file is opened by Launch Services instead (``open -a``), as a
+double-click in the Finder opens it, so Excel shows its circular-reference warning, which it does
+not show for a file AppleScript opens; a person dismisses it, and column A is read and a copy
+saved through ``read_save.applescript``. Writes ``tests/captures/circular_alerts.tsv``.
 """
 
 from __future__ import annotations
@@ -21,6 +22,7 @@ import datetime as dt
 import re
 import subprocess
 import sys
+import time
 import zipfile
 from pathlib import Path
 
@@ -125,10 +127,29 @@ def interactive() -> None:
         p.unlink(missing_ok=True)
     build(src)
     version = excel_version()
-    print(f"opening {src.name} with alerts on: dismiss Excel's circular-reference warning")
-    out = osascript(
-        str(HERE / "repair_probe.applescript"), str(src), str(len(CASES)), str(copy)
-    ).split("\n")
+    # Launch Services, as a double-click in the Finder opens it: Excel shows its circular
+    # reference warning then, not when AppleScript opens the file (CAPTURING.md §2).
+    print(f"opening {src.name} as the Finder does: answer Excel's circular-reference warning")
+    subprocess.run(["open", "-a", "Microsoft Excel", str(src)], check=True)
+    read_save = str(HERE / "read_save.applescript")
+    start = time.monotonic()
+    while osascript(read_save, src.name, "ready") != "yes":  # open, and Excel answers about it
+        if time.monotonic() - start > 900:
+            sys.exit(f"{src.name}: not open in Excel after 15 minutes")
+        time.sleep(1)
+    # The warning does not block requests about the workbook, so the person says when it is
+    # answered, in a dialog of osascript's own; nothing is read before.
+    answered = osascript(
+        "-e",
+        "display dialog \"Answer Excel's circular-reference warning first (or note that none "
+        'appeared), then click Continue." buttons {"No warning appeared", "Continue"} '
+        'default button "Continue" with title "xlrecalc capture"',
+        "-e",
+        "button returned of result",
+    )
+    print(f"the person answered: {answered}")
+    out = osascript(read_save, src.name, str(len(CASES)), str(copy)).split("\n")
+    out.insert(0, "")
     seen = {int(f[0]): f[1:] for f in (line.split(US) for line in out[1:])}
     xml = saved_cells(copy)
     header = [
@@ -138,9 +159,10 @@ def interactive() -> None:
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/circular_probe.py --interactive",
         "# method: openpyxl writes the formulas into column A (constants in B, no cached values,",
-        "#   fullCalcOnLoad); Excel opens it with alerts on, a person dismisses the",
-        "#   circular-reference warning; formula, value and text are read from the open",
-        "#   workbook, saved is the cell as Excel's saved copy holds it",
+        "#   fullCalcOnLoad); Excel opens it by Launch Services, as a double-click does, and a",
+        f"#   person answers the circular-reference warning, then says so (reported: {answered});",
+        "#   formula, value and text are then read from the open workbook through AppleScript,",
+        "#   saved is the cell as Excel's saved copy holds it",
         f"# saved_calcPr: {calc_pr(copy)}",
         "# columns: row tag formula constant value text saved",
     ]
