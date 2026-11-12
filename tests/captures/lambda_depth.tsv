@@ -1,0 +1,61 @@
+# suite: lambda_depth
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-12
+# generator: capture/lambda_probe.py --paste lambda_depth (each formula pasted as text, which
+#   enters it as typing does; data 1, 2, 3 in Z1:Z3 and 10, 20, 30 in AA1:AA3; formula k
+#   in A<5k+1>, its block A to D of rows 5k+1 to 5k+4)
+# name rows: name, name, text, sheet scope (Python repr)
+# cell rows: cell, k, typed, address, type, value, file form, f_t, f_ref, cm, rich error
+'name'	'CD'	'_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,0,1+CD(_xlpm.n-1)))'	None
+'name'	'CDBIG'	'_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,0,1+0*SUM(_xlpm.n,1,2,3)+CDBIG(_xlpm.n-1)))'	None
+'name'	'CDTHREE'	'_xlfn.LAMBDA(_xlpm.n,_xlpm.a,_xlpm.b,IF(_xlpm.n<=0,0,1+CDTHREE(_xlpm.n-1,_xlpm.a,_xlpm.b)))'	None
+'name'	'CDTWO'	'_xlfn.LAMBDA(_xlpm.n,_xlpm.a,IF(_xlpm.n<=0,0,1+CDTWO(_xlpm.n-1,_xlpm.a)))'	None
+'cell'	0	'=CD(3274)'	'A1'	'n'	3274.0	'CD(3274)'	'array'	'A1'	'1'	None
+'cell'	1	'=CD(3275)'	'A6'	'n'	3275.0	'CD(3275)'	'array'	'A6'	'1'	None
+'cell'	2	'=CD(3276)'	'A11'	'n'	3276.0	'CD(3276)'	'array'	'A11'	'1'	None
+'cell'	3	'=CD(3277)'	'A16'	'n'	3277.0	'CD(3277)'	'array'	'A16'	'1'	None
+'cell'	4	'=CD(4094)'	'A21'	'n'	4094.0	'CD(4094)'	'array'	'A21'	'1'	None
+'cell'	5	'=CD(4095)'	'A26'	'n'	4095.0	'CD(4095)'	'array'	'A26'	'1'	None
+'cell'	6	'=CD(4096)'	'A31'	'n'	4096.0	'CD(4096)'	'array'	'A31'	'1'	None
+'cell'	7	'=CD(4097)'	'A36'	'n'	4097.0	'CD(4097)'	'array'	'A36'	'1'	None
+'cell'	8	'=CD(5459)'	'A41'	'n'	5459.0	'CD(5459)'	'array'	'A41'	'1'	None
+'cell'	9	'=CD(5460)'	'A46'	'n'	5460.0	'CD(5460)'	'array'	'A46'	'1'	None
+'cell'	10	'=CD(5461)'	'A51'	'e'	'#NUM!'	'CD(5461)'	'array'	'A51'	'1'	None
+'cell'	11	'=CD(5462)'	'A56'	'e'	'#NUM!'	'CD(5462)'	'array'	'A56'	'1'	None
+'cell'	12	'=CDTWO(3274,1)'	'A61'	'n'	3274.0	'CDTWO(3274,1)'	'array'	'A61'	'1'	None
+'cell'	13	'=CDTWO(3275,1)'	'A66'	'n'	3275.0	'CDTWO(3275,1)'	'array'	'A66'	'1'	None
+'cell'	14	'=CDTWO(3276,1)'	'A71'	'n'	3276.0	'CDTWO(3276,1)'	'array'	'A71'	'1'	None
+'cell'	15	'=CDTWO(3277,1)'	'A76'	'n'	3277.0	'CDTWO(3277,1)'	'array'	'A76'	'1'	None
+'cell'	16	'=CDTWO(4094,1)'	'A81'	'n'	4094.0	'CDTWO(4094,1)'	'array'	'A81'	'1'	None
+'cell'	17	'=CDTWO(4095,1)'	'A86'	'e'	'#NUM!'	'CDTWO(4095,1)'	'array'	'A86'	'1'	None
+'cell'	18	'=CDTWO(4096,1)'	'A91'	'e'	'#NUM!'	'CDTWO(4096,1)'	'array'	'A91'	'1'	None
+'cell'	19	'=CDTWO(4097,1)'	'A96'	'e'	'#NUM!'	'CDTWO(4097,1)'	'array'	'A96'	'1'	None
+'cell'	20	'=CDTWO(5459,1)'	'A101'	'e'	'#NUM!'	'CDTWO(5459,1)'	'array'	'A101'	'1'	None
+'cell'	21	'=CDTWO(5460,1)'	'A106'	'e'	'#NUM!'	'CDTWO(5460,1)'	'array'	'A106'	'1'	None
+'cell'	22	'=CDTWO(5461,1)'	'A111'	'e'	'#NUM!'	'CDTWO(5461,1)'	'array'	'A111'	'1'	None
+'cell'	23	'=CDTWO(5462,1)'	'A116'	'e'	'#NUM!'	'CDTWO(5462,1)'	'array'	'A116'	'1'	None
+'cell'	24	'=CDTHREE(3274,1,2)'	'A121'	'n'	3274.0	'CDTHREE(3274,1,2)'	'array'	'A121'	'1'	None
+'cell'	25	'=CDTHREE(3275,1,2)'	'A126'	'n'	3275.0	'CDTHREE(3275,1,2)'	'array'	'A126'	'1'	None
+'cell'	26	'=CDTHREE(3276,1,2)'	'A131'	'e'	'#NUM!'	'CDTHREE(3276,1,2)'	'array'	'A131'	'1'	None
+'cell'	27	'=CDTHREE(3277,1,2)'	'A136'	'e'	'#NUM!'	'CDTHREE(3277,1,2)'	'array'	'A136'	'1'	None
+'cell'	28	'=CDTHREE(4094,1,2)'	'A141'	'e'	'#NUM!'	'CDTHREE(4094,1,2)'	'array'	'A141'	'1'	None
+'cell'	29	'=CDTHREE(4095,1,2)'	'A146'	'e'	'#NUM!'	'CDTHREE(4095,1,2)'	'array'	'A146'	'1'	None
+'cell'	30	'=CDTHREE(4096,1,2)'	'A151'	'e'	'#NUM!'	'CDTHREE(4096,1,2)'	'array'	'A151'	'1'	None
+'cell'	31	'=CDTHREE(4097,1,2)'	'A156'	'e'	'#NUM!'	'CDTHREE(4097,1,2)'	'array'	'A156'	'1'	None
+'cell'	32	'=CDTHREE(5459,1,2)'	'A161'	'e'	'#NUM!'	'CDTHREE(5459,1,2)'	'array'	'A161'	'1'	None
+'cell'	33	'=CDTHREE(5460,1,2)'	'A166'	'e'	'#NUM!'	'CDTHREE(5460,1,2)'	'array'	'A166'	'1'	None
+'cell'	34	'=CDTHREE(5461,1,2)'	'A171'	'e'	'#NUM!'	'CDTHREE(5461,1,2)'	'array'	'A171'	'1'	None
+'cell'	35	'=CDTHREE(5462,1,2)'	'A176'	'e'	'#NUM!'	'CDTHREE(5462,1,2)'	'array'	'A176'	'1'	None
+'cell'	36	'=CDBIG(3274)'	'A181'	'n'	3274.0	'CDBIG(3274)'	'array'	'A181'	'1'	None
+'cell'	37	'=CDBIG(3275)'	'A186'	'n'	3275.0	'CDBIG(3275)'	'array'	'A186'	'1'	None
+'cell'	38	'=CDBIG(3276)'	'A191'	'n'	3276.0	'CDBIG(3276)'	'array'	'A191'	'1'	None
+'cell'	39	'=CDBIG(3277)'	'A196'	'n'	3277.0	'CDBIG(3277)'	'array'	'A196'	'1'	None
+'cell'	40	'=CDBIG(4094)'	'A201'	'n'	4094.0	'CDBIG(4094)'	'array'	'A201'	'1'	None
+'cell'	41	'=CDBIG(4095)'	'A206'	'n'	4095.0	'CDBIG(4095)'	'array'	'A206'	'1'	None
+'cell'	42	'=CDBIG(4096)'	'A211'	'n'	4096.0	'CDBIG(4096)'	'array'	'A211'	'1'	None
+'cell'	43	'=CDBIG(4097)'	'A216'	'n'	4097.0	'CDBIG(4097)'	'array'	'A216'	'1'	None
+'cell'	44	'=CDBIG(5459)'	'A221'	'n'	5459.0	'CDBIG(5459)'	'array'	'A221'	'1'	None
+'cell'	45	'=CDBIG(5460)'	'A226'	'e'	'#NUM!'	'CDBIG(5460)'	'array'	'A226'	'1'	None
+'cell'	46	'=CDBIG(5461)'	'A231'	'e'	'#NUM!'	'CDBIG(5461)'	'array'	'A231'	'1'	None
+'cell'	47	'=CDBIG(5462)'	'A236'	'e'	'#NUM!'	'CDBIG(5462)'	'array'	'A236'	'1'	None

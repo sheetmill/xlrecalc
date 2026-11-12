@@ -1,0 +1,32 @@
+# suite: lambda_names
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-12
+# generator: capture/lambda_probe.py --paste lambda_names (each formula pasted as text, which
+#   enters it as typing does; data 1, 2, 3 in Z1:Z3 and 10, 20, 30 in AA1:AA3; formula k
+#   in A<5k+1>, its block A to D of rows 5k+1 to 5k+4)
+# name rows: name, name, text, sheet scope (Python repr)
+# cell rows: cell, k, typed, address, type, value, file form, f_t, f_ref, cm, rich error
+'name'	'ADDONE'	'_xlfn.LAMBDA(_xlpm.x,_xlpm.x+1)'	None
+'name'	'CD'	'_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,0,1+CD(_xlpm.n-1)))'	None
+'name'	'FACTR'	'_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=1,1,_xlpm.n*FACTR(_xlpm.n-1)))'	None
+'name'	'ISEV'	'_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n=0,TRUE,ISOD(_xlpm.n-1)))'	None
+'name'	'ISOD'	'_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n=0,FALSE,ISEV(_xlpm.n-1)))'	None
+'name'	'TWICE'	'_xlfn.LAMBDA(_xlpm.f,_xlpm.x,_xlpm.f(_xlpm.f(_xlpm.x)))'	None
+'cell'	0	'=ADDONE(1)'	'A1'	'n'	2.0	'ADDONE(1)'	'array'	'A1'	'1'	None
+'cell'	1	'=FACTR(170)'	'A6'	'n'	7.257415615307994e+306	'FACTR(170)'	'array'	'A6'	'1'	None
+'cell'	2	'=FACTR(171)'	'A11'	'e'	'#NUM!'	'FACTR(171)'	'array'	'A11'	'1'	None
+'cell'	3	'=ISEV(10)'	'A16'	'b'	True	'ISEV(10)'	'array'	'A16'	'1'	None
+'cell'	4	'=ISOD(7)'	'A21'	'b'	True	'ISOD(7)'	'array'	'A21'	'1'	None
+'cell'	5	'=TWICE(ADDONE,1)'	'A26'	'n'	3.0	'TWICE(ADDONE,1)'	'array'	'A26'	'1'	None
+'cell'	6	'=TWICE(LAMBDA(x,x*3),2)'	'A31'	'n'	18.0	'TWICE(_xlfn.LAMBDA(_xlpm.x,_xlpm.x*3),2)'	'array'	'A31'	'1'	None
+'cell'	7	'=MAP(Z1:Z3,ADDONE)'	'A36'	'n'	2.0	'_xlfn.MAP(Z1:Z3,ADDONE)'	'array'	'A36:A38'	'1'	None
+'cell'	7	'=MAP(Z1:Z3,ADDONE)'	'A37'	'n'	3.0	None	None	None	None	None
+'cell'	7	'=MAP(Z1:Z3,ADDONE)'	'A38'	'n'	4.0	None	None	None	None	None
+'cell'	8	'=ISREF(ADDONE)'	'A41'	'b'	False	'ISREF(ADDONE)'	'normal'	None	None	None
+'cell'	9	'=CD(10)'	'A46'	'n'	10.0	'CD(10)'	'array'	'A46'	'1'	None
+'cell'	10	'=CD(100)'	'A51'	'n'	100.0	'CD(100)'	'array'	'A51'	'1'	None
+'cell'	11	'=CD(1000)'	'A56'	'n'	1000.0	'CD(1000)'	'array'	'A56'	'1'	None
+'cell'	12	'=CD(2000)'	'A61'	'n'	2000.0	'CD(2000)'	'array'	'A61'	'1'	None
+'cell'	13	'=CD(5000)'	'A66'	'n'	5000.0	'CD(5000)'	'array'	'A66'	'1'	None
+'cell'	14	'=CD(10000)'	'A71'	'e'	'#NUM!'	'CD(10000)'	'array'	'A71'	'1'	None

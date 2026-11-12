@@ -1,0 +1,45 @@
+# suite: lambda_calls
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-12
+# generator: capture/lambda_probe.py --paste lambda_calls (each formula pasted as text, which
+#   enters it as typing does; data 1, 2, 3 in Z1:Z3 and 10, 20, 30 in AA1:AA3; formula k
+#   in A<5k+1>, its block A to D of rows 5k+1 to 5k+4)
+# cell rows: cell, k, typed, address, type, value, file form, f_t, f_ref, cm, rich error
+'cell'	0	'=LAMBDA(x,x+1)(1,2)'	'A1'	'e'	'#VALUE!'	'_xlfn.LAMBDA(_xlpm.x,_xlpm.x+1)(1,2)'	'array'	'A1'	'1'	None
+'cell'	1	'=LAMBDA(x,y,x+y)(1)'	'A6'	'e'	'#VALUE!'	'_xlfn.LAMBDA(_xlpm.x,_xlpm.y,_xlpm.x+_xlpm.y)(1)'	'array'	'A6'	'1'	None
+'cell'	2	'=LAMBDA(x,y,x+y)()'	'A11'	'e'	'#VALUE!'	'_xlfn.LAMBDA(_xlpm.x,_xlpm.y,_xlpm.x+_xlpm.y)()'	'array'	'A11'	'1'	None
+'cell'	3	'=LAMBDA(x)(1)'	'A16'	'e'	'#VALUE!'	'_xlfn.LAMBDA(x)(1)'	'array'	'A16'	'1'	None
+'cell'	4	'=LAMBDA(1)()'	'A21'	'n'	1.0	'_xlfn.LAMBDA(1)()'	'array'	'A21'	'1'	None
+'cell'	5	'=LAMBDA(x,ISOMITTED(x))()'	'A26'	'e'	'#VALUE!'	'_xlfn.LAMBDA(_xlpm.x,_xlfn.ISOMITTED(_xlpm.x))()'	'array'	'A26'	'1'	None
+'cell'	6	'=LAMBDA(x,ISOMITTED(x))(Z9)'	'A31'	'b'	False	'_xlfn.LAMBDA(_xlpm.x,_xlfn.ISOMITTED(_xlpm.x))(Z9)'	'array'	'A31'	'1'	None
+'cell'	7	'=LAMBDA(x,y,ISBLANK(y))(1,)'	'A36'	'b'	True	'_xlfn.LAMBDA(_xlpm.x,_xlpm.y,ISBLANK(_xlpm.y))(1,)'	'array'	'A36'	'1'	None
+'cell'	8	'=LAMBDA(x,[y],y)(1)'	'A41'	'n'	0.0	'_xlfn.LAMBDA(_xlpm.x,_xlop.y,_xlpm.y)(1)'	'array'	'A41'	'1'	None
+'cell'	9	'=LAMBDA(x,[y],ISOMITTED(y))(1,Z9)'	'A46'	'b'	False	'_xlfn.LAMBDA(_xlpm.x,_xlop.y,_xlfn.ISOMITTED(_xlpm.y))(1,Z9)'	'array'	'A46'	'1'	None
+'cell'	10	'=LAMBDA(x,x)(1/0)'	'A51'	'e'	'#DIV/0!'	'_xlfn.LAMBDA(_xlpm.x,_xlpm.x)(1/0)'	'array'	'A51'	'1'	None
+'cell'	11	'=LAMBDA(x,ISERROR(x))(1/0)'	'A56'	'b'	True	'_xlfn.LAMBDA(_xlpm.x,ISERROR(_xlpm.x))(1/0)'	'array'	'A56'	'1'	None
+'cell'	12	'=SUM(LAMBDA(x,x))'	'A61'	'e'	'#VALUE!'	'SUM(_xlfn.LAMBDA(_xlpm.x,_xlpm.x))'	'normal'	None	None	None
+'cell'	13	'="a"&LAMBDA(x,x)'	'A66'	'e'	'#VALUE!'	'"a"&_xlfn.LAMBDA(_xlpm.x,_xlpm.x)'	'normal'	None	None	None
+'cell'	14	'=LAMBDA(x,x)+1'	'A71'	'e'	'#VALUE!'	'_xlfn.LAMBDA(_xlpm.x,_xlpm.x)+1'	'normal'	None	None	None
+'cell'	15	'=IF(TRUE,LAMBDA(x,x))'	'A76'	'e'	'#VALUE!'	'IF(TRUE,_xlfn.LAMBDA(_xlpm.x,_xlpm.x))'	'normal'	None	None	'#CALC!'
+'cell'	16	'=IF(TRUE,LAMBDA(x,x),0)(5)'	'A81'	'n'	5.0	'IF(TRUE,_xlfn.LAMBDA(_xlpm.x,_xlpm.x),0)(5)'	'array'	'A81'	'1'	None
+'cell'	17	'=ISREF(LAMBDA(x,x)(Z1))'	'A86'	'b'	True	'ISREF(_xlfn.LAMBDA(_xlpm.x,_xlpm.x)(Z1))'	'normal'	None	None	None
+'cell'	18	'=ROW(LAMBDA(x,x)(Z2))'	'A91'	'n'	2.0	'ROW(_xlfn.LAMBDA(_xlpm.x,_xlpm.x)(Z2))'	'array'	'A91'	'1'	None
+'cell'	19	'=LAMBDA(x,x)(Z1:Z3)'	'A96'	'n'	1.0	'_xlfn.LAMBDA(_xlpm.x,_xlpm.x)(Z1:Z3)'	'array'	'A96:A98'	'1'	None
+'cell'	19	'=LAMBDA(x,x)(Z1:Z3)'	'A97'	'n'	2.0	None	None	None	None	None
+'cell'	19	'=LAMBDA(x,x)(Z1:Z3)'	'A98'	'n'	3.0	None	None	None	None	None
+'cell'	20	'=CHOOSE(2,LAMBDA(x,x+1),LAMBDA(x,x*10))(3)'	'A101'	'n'	30.0	'CHOOSE(2,_xlfn.LAMBDA(_xlpm.x,_xlpm.x+1),_xlfn.LAMBDA(_xlpm.x,_xlpm.x*10))(3)'	'array'	'A101'	'1'	None
+'cell'	21	'=LAMBDA(x,y,x&y)("a",1)'	'A106'	'str'	'a1'	'_xlfn.LAMBDA(_xlpm.x,_xlpm.y,_xlpm.x&_xlpm.y)("a",1)'	'array'	'A106'	'1'	None
+'cell'	22	'=ISERROR(LAMBDA(x,x))'	'A111'	'b'	False	'ISERROR(_xlfn.LAMBDA(_xlpm.x,_xlpm.x))'	'normal'	None	None	None
+'cell'	23	'=TYPE(LAMBDA(x,x))'	'A116'	'n'	128.0	'TYPE(_xlfn.LAMBDA(_xlpm.x,_xlpm.x))'	'normal'	None	None	None
+'cell'	24	'=LET(f,LAMBDA(x,x*2),f)'	'A121'	'e'	'#VALUE!'	'_xlfn.LET(_xlpm.f,_xlfn.LAMBDA(_xlpm.x,_xlpm.x*2),_xlpm.f)'	'array'	'A121'	'1'	'#CALC!'
+'cell'	25	'=LET(f,LAMBDA(x,x*2),MAP(Z1:Z3,f))'	'A126'	'n'	2.0	'_xlfn.LET(_xlpm.f,_xlfn.LAMBDA(_xlpm.x,_xlpm.x*2),_xlfn.MAP(Z1:Z3,_xlpm.f))'	'array'	'A126:A128'	'1'	None
+'cell'	25	'=LET(f,LAMBDA(x,x*2),MAP(Z1:Z3,f))'	'A127'	'n'	4.0	None	None	None	None	None
+'cell'	25	'=LET(f,LAMBDA(x,x*2),MAP(Z1:Z3,f))'	'A128'	'n'	6.0	None	None	None	None	None
+'cell'	26	'=LAMBDA(x,LAMBDA(y,x*y))(3)'	'A131'	'e'	'#VALUE!'	'_xlfn.LAMBDA(_xlpm.x,_xlfn.LAMBDA(_xlpm.y,_xlpm.x*_xlpm.y))(3)'	'array'	'A131'	'1'	'#CALC!'
+'cell'	27	'=LAMBDA(X,x+1)(2)'	'A136'	'n'	3.0	'_xlfn.LAMBDA(_xlpm.X,_xlpm.X+1)(2)'	'array'	'A136'	'1'	None
+'cell'	28	'=LAMBDA(x,x*2)({1,2;3,4})'	'A141'	'n'	2.0	'_xlfn.LAMBDA(_xlpm.x,_xlpm.x*2)({1,2;3,4})'	'array'	'A141:B142'	'1'	None
+'cell'	28	'=LAMBDA(x,x*2)({1,2;3,4})'	'B141'	'n'	4.0	None	None	None	None	None
+'cell'	28	'=LAMBDA(x,x*2)({1,2;3,4})'	'A142'	'n'	6.0	None	None	None	None	None
+'cell'	28	'=LAMBDA(x,x*2)({1,2;3,4})'	'B142'	'n'	8.0	None	None	None	None	None
+'cell'	29	'=ISOMITTED(Z1)'	'A146'	'b'	False	'_xlfn.ISOMITTED(Z1)'	'normal'	None	None	None

@@ -1,0 +1,61 @@
+# suite: lambda_helpers
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-12
+# generator: capture/lambda_probe.py --paste lambda_helpers (each formula pasted as text, which
+#   enters it as typing does; data 1, 2, 3 in Z1:Z3 and 10, 20, 30 in AA1:AA3; formula k
+#   in A<5k+1>, its block A to D of rows 5k+1 to 5k+4)
+# cell rows: cell, k, typed, address, type, value, file form, f_t, f_ref, cm, rich error
+'cell'	0	'=MAP(Z1:Z3,AA1:AA3,LAMBDA(a,b,a+b))'	'A1'	'n'	11.0	'_xlfn.MAP(Z1:Z3,AA1:AA3,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))'	'array'	'A1:A3'	'1'	None
+'cell'	0	'=MAP(Z1:Z3,AA1:AA3,LAMBDA(a,b,a+b))'	'A2'	'n'	22.0	None	None	None	None	None
+'cell'	0	'=MAP(Z1:Z3,AA1:AA3,LAMBDA(a,b,a+b))'	'A3'	'n'	33.0	None	None	None	None	None
+'cell'	1	'=MAP(Z1:Z3,AA1:AA2,LAMBDA(a,b,a+b))'	'A6'	'n'	11.0	'_xlfn.MAP(Z1:Z3,AA1:AA2,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))'	'array'	'A6:A8'	'1'	None
+'cell'	1	'=MAP(Z1:Z3,AA1:AA2,LAMBDA(a,b,a+b))'	'A7'	'n'	22.0	None	None	None	None	None
+'cell'	1	'=MAP(Z1:Z3,AA1:AA2,LAMBDA(a,b,a+b))'	'A8'	'e'	'#N/A'	None	None	None	None	None
+'cell'	2	'=MAP({1,2},LAMBDA(a,ISREF(a)))'	'A11'	'b'	False	'_xlfn.MAP({1,2},_xlfn.LAMBDA(_xlpm.a,ISREF(_xlpm.a)))'	'array'	'A11:B11'	'1'	None
+'cell'	2	'=MAP({1,2},LAMBDA(a,ISREF(a)))'	'B11'	'b'	False	None	None	None	None	None
+'cell'	3	'=MAP(5,LAMBDA(a,a*2))'	'A16'	'n'	10.0	'_xlfn.MAP(5,_xlfn.LAMBDA(_xlpm.a,_xlpm.a*2))'	'array'	'A16'	'1'	None
+'cell'	4	'=REDUCE(,Z1:Z3,LAMBDA(a,b,a+b))'	'A21'	'n'	6.0	'_xlfn.REDUCE(,Z1:Z3,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))'	'array'	'A21'	'1'	None
+'cell'	5	'=SCAN(,Z1:Z3,LAMBDA(a,b,a+b))'	'A26'	'n'	1.0	'_xlfn.SCAN(,Z1:Z3,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))'	'array'	'A26:A28'	'1'	None
+'cell'	5	'=SCAN(,Z1:Z3,LAMBDA(a,b,a+b))'	'A27'	'n'	3.0	None	None	None	None	None
+'cell'	5	'=SCAN(,Z1:Z3,LAMBDA(a,b,a+b))'	'A28'	'n'	6.0	None	None	None	None	None
+'cell'	6	'=REDUCE("",Z1:AA2,LAMBDA(a,b,a&b&","))'	'A31'	'str'	'1,10,2,20,'	'_xlfn.REDUCE("",Z1:AA2,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a&_xlpm.b&","))'	'array'	'A31'	'1'	None
+'cell'	7	'=SCAN("",Z1:AA2,LAMBDA(a,b,a&b))'	'A36'	'str'	'1'	'_xlfn.SCAN("",Z1:AA2,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a&_xlpm.b))'	'array'	'A36:B37'	'1'	None
+'cell'	7	'=SCAN("",Z1:AA2,LAMBDA(a,b,a&b))'	'B36'	'str'	'110'	None	None	None	None	None
+'cell'	7	'=SCAN("",Z1:AA2,LAMBDA(a,b,a&b))'	'A37'	'str'	'1102'	None	None	None	None	None
+'cell'	7	'=SCAN("",Z1:AA2,LAMBDA(a,b,a&b))'	'B37'	'str'	'110220'	None	None	None	None	None
+'cell'	8	'=BYROW(Z1:AA3,LAMBDA(r,r))'	'A41'	'e'	'#VALUE!'	'_xlfn.BYROW(Z1:AA3,_xlfn.LAMBDA(_xlpm.r,_xlpm.r))'	'array'	'A41'	'1'	'#CALC!'
+'cell'	9	'=BYCOL(Z1:AA3,LAMBDA(c,ROWS(c)))'	'A46'	'n'	3.0	'_xlfn.BYCOL(Z1:AA3,_xlfn.LAMBDA(_xlpm.c,ROWS(_xlpm.c)))'	'array'	'A46:B46'	'1'	None
+'cell'	9	'=BYCOL(Z1:AA3,LAMBDA(c,ROWS(c)))'	'B46'	'n'	3.0	None	None	None	None	None
+'cell'	10	'=BYROW(Z1:AA3,LAMBDA(r,ISREF(r)))'	'A51'	'b'	True	'_xlfn.BYROW(Z1:AA3,_xlfn.LAMBDA(_xlpm.r,ISREF(_xlpm.r)))'	'array'	'A51:A53'	'1'	None
+'cell'	10	'=BYROW(Z1:AA3,LAMBDA(r,ISREF(r)))'	'A52'	'b'	True	None	None	None	None	None
+'cell'	10	'=BYROW(Z1:AA3,LAMBDA(r,ISREF(r)))'	'A53'	'b'	True	None	None	None	None	None
+'cell'	11	'=MAKEARRAY(0,2,LAMBDA(r,c,1))'	'A56'	'e'	'#VALUE!'	'_xlfn.MAKEARRAY(0,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,1))'	'array'	'A56'	'1'	None
+'cell'	12	'=MAKEARRAY(-1,2,LAMBDA(r,c,1))'	'A61'	'e'	'#VALUE!'	'_xlfn.MAKEARRAY(-1,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,1))'	'array'	'A61'	'1'	None
+'cell'	13	'=MAKEARRAY(2.7,1.2,LAMBDA(r,c,r))'	'A66'	'e'	'#VALUE!'	'_xlfn.MAKEARRAY(2.7,1.2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r))'	'array'	'A66'	'1'	None
+'cell'	14	'=MAP(Z1:Z3,5)'	'A71'	'e'	'#VALUE!'	'_xlfn.MAP(Z1:Z3,5)'	'array'	'A71'	'1'	None
+'cell'	15	'=MAP(Z1:Z3,LAMBDA(a,1/0))'	'A76'	'e'	'#DIV/0!'	'_xlfn.MAP(Z1:Z3,_xlfn.LAMBDA(_xlpm.a,1/0))'	'array'	'A76:A78'	'1'	None
+'cell'	15	'=MAP(Z1:Z3,LAMBDA(a,1/0))'	'A77'	'e'	'#DIV/0!'	None	None	None	None	None
+'cell'	15	'=MAP(Z1:Z3,LAMBDA(a,1/0))'	'A78'	'e'	'#DIV/0!'	None	None	None	None	None
+'cell'	16	'=REDUCE(0,{1,2;3,4},LAMBDA(a,b,a*10+b))'	'A81'	'n'	1234.0	'_xlfn.REDUCE(0,{1,2;3,4},_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a*10+_xlpm.b))'	'array'	'A81'	'1'	None
+'cell'	17	'=SCAN(0,{1,2;3,4},LAMBDA(a,b,a*10+b))'	'A86'	'n'	1.0	'_xlfn.SCAN(0,{1,2;3,4},_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a*10+_xlpm.b))'	'array'	'A86:B87'	'1'	None
+'cell'	17	'=SCAN(0,{1,2;3,4},LAMBDA(a,b,a*10+b))'	'B86'	'n'	12.0	None	None	None	None	None
+'cell'	17	'=SCAN(0,{1,2;3,4},LAMBDA(a,b,a*10+b))'	'A87'	'n'	123.0	None	None	None	None	None
+'cell'	17	'=SCAN(0,{1,2;3,4},LAMBDA(a,b,a*10+b))'	'B87'	'n'	1234.0	None	None	None	None	None
+'cell'	18	'=MAKEARRAY(2,3,LAMBDA(r,c,r*10+c))'	'A91'	'n'	11.0	'_xlfn.MAKEARRAY(2,3,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r*10+_xlpm.c))'	'array'	'A91:C92'	'1'	None
+'cell'	18	'=MAKEARRAY(2,3,LAMBDA(r,c,r*10+c))'	'B91'	'n'	12.0	None	None	None	None	None
+'cell'	18	'=MAKEARRAY(2,3,LAMBDA(r,c,r*10+c))'	'C91'	'n'	13.0	None	None	None	None	None
+'cell'	18	'=MAKEARRAY(2,3,LAMBDA(r,c,r*10+c))'	'A92'	'n'	21.0	None	None	None	None	None
+'cell'	18	'=MAKEARRAY(2,3,LAMBDA(r,c,r*10+c))'	'B92'	'n'	22.0	None	None	None	None	None
+'cell'	18	'=MAKEARRAY(2,3,LAMBDA(r,c,r*10+c))'	'C92'	'n'	23.0	None	None	None	None	None
+'cell'	19	'=MAP(Z1:Z3,LAMBDA(a,ROW(a)))'	'A96'	'n'	1.0	'_xlfn.MAP(Z1:Z3,_xlfn.LAMBDA(_xlpm.a,ROW(_xlpm.a)))'	'array'	'A96:A98'	'1'	None
+'cell'	19	'=MAP(Z1:Z3,LAMBDA(a,ROW(a)))'	'A97'	'n'	2.0	None	None	None	None	None
+'cell'	19	'=MAP(Z1:Z3,LAMBDA(a,ROW(a)))'	'A98'	'n'	3.0	None	None	None	None	None
+'cell'	20	'=BYCOL(Z1:AA3,LAMBDA(c,SUM(c)*2))'	'A101'	'n'	12.0	'_xlfn.BYCOL(Z1:AA3,_xlfn.LAMBDA(_xlpm.c,SUM(_xlpm.c)*2))'	'array'	'A101:B101'	'1'	None
+'cell'	20	'=BYCOL(Z1:AA3,LAMBDA(c,SUM(c)*2))'	'B101'	'n'	120.0	None	None	None	None	None
+'cell'	21	'=REDUCE(0,Z1:Z3,LAMBDA(a,b,Z1:Z2))'	'A106'	'n'	1.0	'_xlfn.REDUCE(0,Z1:Z3,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,Z1:Z2))'	'array'	'A106:A107'	'1'	None
+'cell'	21	'=REDUCE(0,Z1:Z3,LAMBDA(a,b,Z1:Z2))'	'A107'	'n'	2.0	None	None	None	None	None
+'cell'	22	'=MAP(Z1:Z3,LAMBDA(a,{1,2}))'	'A111'	'e'	'#VALUE!'	'_xlfn.MAP(Z1:Z3,_xlfn.LAMBDA(_xlpm.a,{1,2}))'	'array'	'A111'	'1'	'#CALC!'
+'cell'	23	'=SCAN(0,5,LAMBDA(a,b,a+b))'	'A116'	'n'	5.0	'_xlfn.SCAN(0,5,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))'	'array'	'A116'	'1'	None
+'cell'	24	'=MAP(Z9:Z10,LAMBDA(a,ISBLANK(a)))'	'A121'	'b'	True	'_xlfn.MAP(Z9:Z10,_xlfn.LAMBDA(_xlpm.a,ISBLANK(_xlpm.a)))'	'array'	'A121:A122'	'1'	None
+'cell'	24	'=MAP(Z9:Z10,LAMBDA(a,ISBLANK(a)))'	'A122'	'b'	True	None	None	None	None	None
