@@ -132,7 +132,9 @@ Excel wrote them (the file form of a function, for example).
 Driving Excel: scripts are files under `capture/`, non-interactive, with `display alerts` off
 and restored on every exit path (the setting otherwise persists until Excel quits, and Excel
 then silently fails to open or repair files opened by hand); they open only workbooks they
-create, refuse to run when a workbook of the same name is open, and never use the clipboard.
+create, and refuse to run when a workbook of the same name is open. One script uses the clipboard:
+`paste_formulas.applescript` (below), which saves the clipboard's text first and restores it after
+(anything on the clipboard that is not text is lost).
 With alerts off, a file Excel would offer to repair fails to open with error -50 ("Parameter
 error"), which is how probes detect a repair prompt without a person at the keyboard.
 `capture/repair_probe.py` and `capture/circular_probe.py --interactive` are the interactive
@@ -148,6 +150,15 @@ say when it is answered (the header records the reply); then it reads and saves 
 through AppleScript (`read_save.applescript`). Earlier captures of `circular_alerts` opened the file through
 AppleScript and saw no warning. `capture/marker_probe.py --typed` reads a workbook a person
 typed formulas into and saved (AppleScript can only enter legacy formulas).
+
+**Formulas as typed, without a person.** Pasting a column of formulas as text enters them as typing
+them does: `capture/paste_probe.py` (`paste_formulas.applescript`: the text on the clipboard, Excel's
+`paste worksheet` into A1) rebuilt the typed workbooks of `marker_typed` (75 formulas) and of
+`lambda_probe --typed` (6 `LET`, 23 `LAMBDA` formulas and two named lambdas, the names written as Excel
+stored them), and every anchor cell matched the typed one on Excel 16.115: the formula's text with its
+prefixes (`_xlfn.`, `_xlpm.`, `_xlop.`), its `t` and `ref`, the dynamic-array marker (`cm`) and the
+cached value, but for `RANDARRAY()`'s random value. Captures of typed formulas use this method; a
+macro setting `Range.Formula2` and keystrokes were not needed (and not tried).
 
 **Opens.** Excel refuses a whole file for one formula it does not take, so a probe that must name refused formulas
 opens them in batches of 60 and halves a refused batch until each refusal is opened alone (`capture/refusals.py`).
