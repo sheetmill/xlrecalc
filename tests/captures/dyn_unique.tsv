@@ -1,6 +1,7 @@
 # suite: dyn_unique
-# excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-08
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/dynamic_probe.py
 # method: dynamic-array formulas (cm=1 with the XLDAPR metadata), one per block of 12 rows in column B, over data in columns AA on; Excel calculates and saves a copy;
 #   every cell of the copy is recorded
@@ -152,6 +153,81 @@ input	data	BR7	'-3.0'
 input	data	BR8	'False'
 input	data	BR9	"'X'"
 input	data	BR10	'5.0'
+input	data	BT1	'1.0'
+input	data	BT2	'2.0'
+input	data	BT3	'3.0'
+input	data	BT4	'4.0'
+input	data	BU1	"'a'"
+input	data	BU3	"'c'"
+input	legacy	BU4	'""'
+input	data	BV1	'True'
+input	data	BV2	"ErrorValue('#N/A')"
+input	data	BV3	'False'
+input	data	BV4	'0.5'
+input	data	BX1	'-1.5'
+input	data	BX2	'0.0'
+input	data	BX3	'10000000000.0'
+input	data	BY1	"'x'"
+input	data	BY2	"ErrorValue('#DIV/0!')"
+input	data	BY3	'False'
+input	data	BZ1	'7.0'
+input	data	BZ2	"'z'"
+input	data	CA1	"'Y'"
+input	data	CA2	'8.0'
+input	data	CA3	"'w'"
+input	data	CC1	'79.0'
+input	data	CC2	'85.0'
+input	data	CC3	'78.0'
+input	data	CC4	'85.0'
+input	data	CC5	'50.0'
+input	data	CC6	'81.0'
+input	data	CC7	'95.0'
+input	data	CC8	'88.0'
+input	data	CC9	'97.0'
+input	data	CC10	"'x'"
+input	data	CC12	'True'
+input	data	CC13	'70.0'
+input	data	CD1	'80.0'
+input	data	CD2	'70.0'
+input	data	CD3	'90.0'
+input	data	CE1	'1.5'
+input	data	CE2	'2.5'
+input	data	CE3	'2.5'
+input	data	CE4	'-1.0'
+input	data	CE5	'0.0'
+input	data	CE6	'3.0'
+input	data	CE7	'3.0'
+input	data	CE8	'3.0'
+input	data	CE9	'10.0'
+input	data	CF1	'0.0'
+input	data	CF2	'2.5'
+input	data	CF3	'3.0'
+input	data	CG1	'1.0'
+input	data	CG2	'2.0'
+input	data	CG3	'2.0'
+input	data	CG4	'3.0'
+input	data	CG5	'3.0'
+input	data	CG6	'4.0'
+input	data	CH1	"'a,b,c'"
+input	data	CH2	"'x;y,z'"
+input	data	CH3	"''"
+input	data	CH4	"'one'"
+input	data	CH5	"'a,,b'"
+input	data	CH6	"'A-b-C'"
+input	data	CH7	"'1,2;3,4'"
+input	data	CI1	"','"
+input	data	CI2	"';'"
+input	data	CJ1	"'p--q-r'"
+input	data	CJ2	"'m-pqr'"
+input	data	CJ3	"'u;;v'"
+input	data	CJ4	"'u,;v'"
+input	data	CJ5	"'u;,v'"
+input	data	CK1	"'-'"
+input	data	CK2	"'--'"
+input	data	CL1	"'--'"
+input	data	CL2	"'-'"
+input	data	CM1	"'-p'"
+input	data	CM2	"'pqr'"
 input	dynamic	B1	'_xlfn.UNIQUE(AA1:AA8)'
 input	reader	N1	'SUM(_xlfn.ANCHORARRAY(B1))'
 input	reader	N2	'ROWS(_xlfn.ANCHORARRAY(B1))'
@@ -229,6 +305,24 @@ cell	BN1	n	'0.3'	None
 cell	BO1	n	'0.2'	None				
 cell	BP1	n	'0.1'	None				
 cell	BR1	b	True	None				
+cell	BT1	n	'1'	None				
+cell	BU1	s	'a'	None				
+cell	BV1	b	True	None				
+cell	BX1	n	'-1.5'	None				
+cell	BY1	s	'x'	None				
+cell	BZ1	n	'7'	None				
+cell	CA1	s	'Y'	None				
+cell	CC1	n	'79'	None				
+cell	CD1	n	'80'	None				
+cell	CE1	n	'1.5'	None				
+cell	CF1	n	'0'	None				
+cell	CG1	n	'1'	None				
+cell	CH1	s	'a,b,c'	None				
+cell	CI1	s	','	None				
+cell	CJ1	s	'p--q-r'	None				
+cell	CK1	s	'-'	None				
+cell	CL1	s	'--'	None				
+cell	CM1	s	'-p'	None				
 cell	B2	n	'1'	None				
 cell	N2	n	'7'	'ROWS(_xlfn.ANCHORARRAY(B1))'	normal			
 cell	AA2	n	'1'	None				
@@ -268,6 +362,23 @@ cell	BK2	n	'2'	None
 cell	BL2	n	'-1'	None				
 cell	BM2	n	'0.2'	None				
 cell	BR2	s	'x'	None				
+cell	BT2	n	'2'	None				
+cell	BV2	e	'#N/A'	None				
+cell	BX2	n	'0'	None				
+cell	BY2	e	'#DIV/0!'	None				
+cell	BZ2	s	'z'	None				
+cell	CA2	n	'8'	None				
+cell	CC2	n	'85'	None				
+cell	CD2	n	'70'	None				
+cell	CE2	n	'2.5'	None				
+cell	CF2	n	'2.5'	None				
+cell	CG2	n	'2'	None				
+cell	CH2	s	'x;y,z'	None				
+cell	CI2	s	';'	None				
+cell	CJ2	s	'm-pqr'	None				
+cell	CK2	s	'--'	None				
+cell	CL2	s	'-'	None				
+cell	CM2	s	'pqr'	None				
 cell	B3	n	'4'	None				
 cell	N3	n	'1'	'COLUMNS(_xlfn.ANCHORARRAY(B1))'	normal			
 cell	AA3	n	'4'	None				
@@ -286,6 +397,18 @@ cell	BK3	n	'-1'	None
 cell	BL3	n	'2'	None				
 cell	BM3	n	'0.3'	None				
 cell	BR3	n	'5'	None				
+cell	BT3	n	'3'	None				
+cell	BU3	s	'c'	None				
+cell	BV3	b	False	None				
+cell	BX3	n	'10000000000'	None				
+cell	BY3	b	False	None				
+cell	CA3	s	'w'	None				
+cell	CC3	n	'78'	None				
+cell	CD3	n	'90'	None				
+cell	CE3	n	'2.5'	None				
+cell	CF3	n	'3'	None				
+cell	CG3	n	'2'	None				
+cell	CJ3	s	'u;;v'	None				
 cell	B4	n	'5'	None				
 cell	AA4	n	'1'	None				
 cell	AB4	s	'Pear'	None				
@@ -297,6 +420,14 @@ cell	BE4	n	'7'	None
 cell	BF4	s	'zeta'	None				
 cell	BG4	n	'3'	None				
 cell	BH4	s	's'	None				
+cell	BT4	n	'4'	None				
+cell	BU4	str	''	'""'	normal			
+cell	BV4	n	'0.5'	None				
+cell	CC4	n	'85'	None				
+cell	CE4	n	'-1'	None				
+cell	CG4	n	'3'	None				
+cell	CH4	s	'one'	None				
+cell	CJ4	s	'u,;v'	None				
 cell	B5	n	'9'	None				
 cell	AA5	n	'5'	None				
 cell	AB5	s	'fig'	None				
@@ -308,6 +439,11 @@ cell	BF5	s	'ALPHA'	None
 cell	BG5	n	'1'	None				
 cell	BH5	s	't'	None				
 cell	BR5	e	'#N/A'	None				
+cell	CC5	n	'50'	None				
+cell	CE5	n	'0'	None				
+cell	CG5	n	'3'	None				
+cell	CH5	s	'a,,b'	None				
+cell	CJ5	s	'u;,v'	None				
 cell	B6	n	'2'	None				
 cell	AA6	n	'9'	None				
 cell	AB6	s	'APPLE'	None				
@@ -320,6 +456,10 @@ cell	BF6	s	'beta'	None
 cell	BG6	n	'2'	None				
 cell	BH6	s	'u'	None				
 cell	BR6	str	''	'""'	normal			
+cell	CC6	n	'81'	None				
+cell	CE6	n	'3'	None				
+cell	CG6	n	'4'	None				
+cell	CH6	s	'A-b-C'	None				
 cell	B7	n	'6'	None				
 cell	AA7	n	'2'	None				
 cell	AB7	s	'kiwi'	None				
@@ -328,23 +468,33 @@ cell	AF7	n	'1'	None
 cell	BE7	n	'10000000000'	None				
 cell	BF7	s	'gamma'	None				
 cell	BR7	n	'-3'	None				
+cell	CC7	n	'95'	None				
+cell	CE7	n	'3'	None				
+cell	CH7	s	'1,2;3,4'	None				
 cell	AA8	n	'6'	None				
 cell	AB8	s	'fig'	None				
 cell	AC8	b	False	None				
 cell	BE8	n	'3.25'	None				
 cell	BF8	s	'Gamma'	None				
 cell	BR8	b	False	None				
+cell	CC8	n	'88'	None				
+cell	CE8	n	'3'	None				
 cell	AC9	s	'a'	None				
 cell	BE9	n	'0.5'	None				
 cell	BF9	s	'delta'	None				
 cell	BR9	s	'X'	None				
+cell	CC9	n	'97'	None				
+cell	CE9	n	'10'	None				
 cell	AC10	n	'10'	None				
 cell	BE10	n	'-0.1'	None				
 cell	BF10	s	'Delta'	None				
 cell	BR10	n	'5'	None				
+cell	CC10	s	'x'	None				
 cell	AC11	e	'#DIV/0!'	None				
 cell	AC12	str	''	'""'	normal			
+cell	CC12	b	True	None				
 cell	B13	str	'pear'	'_xlfn.UNIQUE(AB1:AB8)'	array	B13:B16	1	
+cell	CC13	n	'70'	None				
 cell	B14	str	'Apple'	None				
 cell	B15	str	'fig'	None				
 cell	B16	str	'kiwi'	None				

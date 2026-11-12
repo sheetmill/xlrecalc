@@ -1,7 +1,8 @@
 # suite: misc
-# excel: 16.114.3 for Mac, locale en_US
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
 # date_system: 1900
-# captured: 2026-11-07
+# captured: 2026-11-11
 # generator: capture/suites.py:misc
 # method: openpyxl writes the formula in column A and the inputs in B onward (floats as
 #   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
@@ -197,7 +198,7 @@ misc	randbetween	184	RANDBETWEEN(2.5,2.7)	()	n	3.0
 misc	randbetween	185	AND(RANDBETWEEN(1,6)>=1,RANDBETWEEN(1,6)<=6)	()	b	True
 misc	randbetween	186	RANDBETWEEN(-2.5,-2.2)	()	n	-2.0
 misc	randbetween	187	RANDBETWEEN("a",2)	()	e	#VALUE!
-misc	randbetween	188	INT(RANDBETWEEN(1,10))=RANDBETWEEN(4,4)+0*RAND()-4+RANDBETWEEN(1,1)	()	b	False
+misc	randbetween	188	INT(RANDBETWEEN(1,10))=RANDBETWEEN(4,4)+0*RAND()-4+RANDBETWEEN(1,1)	()	b	True
 misc	dsum	189	DSUM(DP1:DS7,"Score",DU1:DU2)	()	n	27.0
 misc	dsum	190	DSUM(DP1:DS7,"Score",DV1:DV2)	()	n	46.0
 misc	dsum	191	DSUM(DP1:DS7,"Score",DW1:DX2)	()	n	27.0

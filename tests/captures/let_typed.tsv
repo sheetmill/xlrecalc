@@ -1,7 +1,7 @@
 # suite: let_typed
-# excel: 16.114.4 for Mac, locale en_US
-# edition: Office Home & Business 2021, update channel Current
-# captured: 2026-11-09
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/lambda_probe.py --typed (a person typed each formula into the
 #   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3 and 10, 20, 30 in AA1:AA3;
 #   formula k in A<5k+1>)

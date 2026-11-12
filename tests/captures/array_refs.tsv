@@ -1,6 +1,7 @@
 # suite: array_refs
-# excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-06
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/array_ref_probe.py
 # method: plain, legacy array and dynamic-array formulas over a data block; Excel
 #   calculates and saves a copy; every cell of the copy is recorded

@@ -1,5 +1,6 @@
-# suite: value_forms (capture.value_probe); Excel 16.114.3 for Mac, en_US
-# captured: 2026-11-05; method: openpyxl's workbook with A1 rewritten in the sheet XML, opened with alerts off and saved as a copy
+# suite: value_forms (capture.value_probe); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11; method: openpyxl's workbook with A1 rewritten in the sheet XML, opened with alerts off and saved as a copy
 # A1 = 111 rewritten as the case says, B1 = A1*2; values as type:value from Excel's copy; refused = error -50
 case	outcome	error	A1	B1
 control	opened		n:111	n:222

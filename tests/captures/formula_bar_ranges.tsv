@@ -1,6 +1,7 @@
 # suite: formula_bar_ranges
-# excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-01
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/formula_bar.py (corpus in display form, and one call per function)
 # method: each formula is set as a cell's formula through AppleScript, as typed in the
 #   formula bar; Excel saves a copy; file is the <f> text of the copy, REJECTED when

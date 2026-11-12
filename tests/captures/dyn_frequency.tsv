@@ -1,6 +1,7 @@
 # suite: dyn_frequency
-# excel: 16.114.4 for Mac, locale en_US
-# captured: 2026-11-09
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/dynamic_probe.py
 # method: dynamic-array formulas (cm=1 with the XLDAPR metadata), one per block of 12 rows in column B, over data in columns AA on; Excel calculates and saves a copy;
 #   every cell of the copy is recorded
@@ -216,6 +217,17 @@ input	data	CH6	"'A-b-C'"
 input	data	CH7	"'1,2;3,4'"
 input	data	CI1	"','"
 input	data	CI2	"';'"
+input	data	CJ1	"'p--q-r'"
+input	data	CJ2	"'m-pqr'"
+input	data	CJ3	"'u;;v'"
+input	data	CJ4	"'u,;v'"
+input	data	CJ5	"'u;,v'"
+input	data	CK1	"'-'"
+input	data	CK2	"'--'"
+input	data	CL1	"'--'"
+input	data	CL2	"'-'"
+input	data	CM1	"'-p'"
+input	data	CM2	"'pqr'"
 input	dynamic	B1	'FREQUENCY(CC1:CC13,CD1:CD3)'
 input	reader	N1	'SUM(_xlfn.ANCHORARRAY(B1))'
 input	reader	N2	'ROWS(_xlfn.ANCHORARRAY(B1))'
@@ -317,6 +329,10 @@ cell	CF1	n	'0'	None
 cell	CG1	n	'1'	None				
 cell	CH1	s	'a,b,c'	None				
 cell	CI1	s	','	None				
+cell	CJ1	s	'p--q-r'	None				
+cell	CK1	s	'-'	None				
+cell	CL1	s	'--'	None				
+cell	CM1	s	'-p'	None				
 cell	B2	n	'2'	None				
 cell	N2	n	'4'	'ROWS(_xlfn.ANCHORARRAY(B1))'	normal			
 cell	AA2	n	'1'	None				
@@ -369,6 +385,10 @@ cell	CF2	n	'2.5'	None
 cell	CG2	n	'2'	None				
 cell	CH2	s	'x;y,z'	None				
 cell	CI2	s	';'	None				
+cell	CJ2	s	'm-pqr'	None				
+cell	CK2	s	'--'	None				
+cell	CL2	s	'-'	None				
+cell	CM2	s	'pqr'	None				
 cell	B3	n	'4'	None				
 cell	N3	n	'1'	'COLUMNS(_xlfn.ANCHORARRAY(B1))'	normal			
 cell	AA3	n	'4'	None				
@@ -398,6 +418,7 @@ cell	CD3	n	'90'	None
 cell	CE3	n	'2.5'	None				
 cell	CF3	n	'3'	None				
 cell	CG3	n	'2'	None				
+cell	CJ3	s	'u;;v'	None				
 cell	B4	n	'2'	None				
 cell	AA4	n	'1'	None				
 cell	AB4	s	'Pear'	None				
@@ -416,6 +437,7 @@ cell	CC4	n	'85'	None
 cell	CE4	n	'-1'	None				
 cell	CG4	n	'3'	None				
 cell	CH4	s	'one'	None				
+cell	CJ4	s	'u,;v'	None				
 cell	AA5	n	'5'	None				
 cell	AB5	s	'fig'	None				
 cell	AD5	s	'b'	None				
@@ -430,6 +452,7 @@ cell	CC5	n	'50'	None
 cell	CE5	n	'0'	None				
 cell	CG5	n	'3'	None				
 cell	CH5	s	'a,,b'	None				
+cell	CJ5	s	'u;,v'	None				
 cell	AA6	n	'9'	None				
 cell	AB6	s	'APPLE'	None				
 cell	AC6	s	'A'	None				

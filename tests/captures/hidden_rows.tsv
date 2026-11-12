@@ -1,6 +1,7 @@
 # suite: hidden_rows
-# excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-06
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/hidden_probe.py
 # method: rows hidden by a filter (filterMode, a filter column) or by hand; Excel
 #   calculates and saves a copy; value and type from the copy

@@ -2,7 +2,7 @@
 
 Excel behaviors that xlrecalc reproduces on purpose and that a caller may switch off through
 `Quirks` (see [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §4.4). Every entry names the switch, states what Excel does,
-what `strict` does instead, and the evidence: rows captured from Excel 16.114.3 for Mac under
+what `strict` does instead, and the evidence: rows captured from Excel 16.115 for Mac (Microsoft 365) under
 `tests/captures/`, with the method in `CAPTURING.md`. `leap_year_1900` and
 `fifteen_digit_precision` are shared with xlformat and mean the same there.
 
@@ -114,6 +114,11 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
 - `FINDB`, `SEARCHB`, `LEFTB`, `RIGHTB`, `MIDB`, `LENB` and `REPLACEB` behave as this English Excel for Mac computes
   them, counting no text double (capture `text_family`). With a double-byte language as the default, Excel documents
   them counting such text as two; that belongs to localization, which the package does not do (ARCHITECTURE.md §1.2).
+- A character outside the first plane (an emoji, written as two UTF-16 units) counts as one in `LEN`, `MID`, `REPLACE`,
+  `FIND`, `SEARCH`, `LEFT` and `RIGHT`, and as two in `LENB`, `MIDB` and `REPLACEB`, which can cut it in two; a
+  wildcard's `?` matches one unit, so it takes `??` in `SEARCH` and in criteria (`COUNTIF`, `MATCH`), and a match
+  starts only where a character starts; the limit of a text, 32,767, counts units (capture `text_family`, Excel 16.115;
+  16.114 counted units in `LEN`, `MID`, `REPLACE`, `FIND` and `SEARCH` too).
 - `ENCODEURL`, `FILTERXML` and `EUROCONVERT` give `#NAME?` in Excel 16 for Mac in every file form (capture `mac_gaps`),
   so there is no reference for them here: they are not implemented, and a cell using one keeps its cached value and is
   reported.
@@ -159,7 +164,7 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   shows where p is small (12 rows). One row is ours: `BETA.DIST` with both shapes 1E300 is `#NUM!` here, where the
   continued fraction does not converge within its terms, and 0.5 in Excel (1 row).
   Seven formulas at a shape of 1.7E308 (`BETA.DIST` and `GAMMA.DIST` cumulative, `BETA.INV`) keep Excel calculating
-  past 90 seconds, alone in a workbook, where the other 55 timed, densities at 1.7E308 among them, take at most 3
+  past 90 seconds, alone in a workbook, where the other 55 timed, densities at 1.7E308 among them, take at most 5
   seconds with the open (`tests/captures/slow_cases.tsv`);
   they are not captured, and here they give their limits, 0 or 1, or `#NUM!`. Every function here does bounded work on
   any input: each series and continued fraction stops at 20,000 terms, `#NUM!` past them, and each inverse is a

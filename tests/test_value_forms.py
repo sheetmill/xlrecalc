@@ -20,11 +20,11 @@ openpyxl = pytest.importorskip("openpyxl")
 from capture.value_probe import cases  # noqa: E402
 
 CAPTURE = Path(__file__).with_name("captures") / "value_forms.tsv"
-ROWS = [
+ROWS = [  # past the '#' header lines and the column names
     line.split("\t")
-    for line in CAPTURE.read_text(encoding="utf-8").splitlines()[4:]
-    if line.strip()
-]
+    for line in CAPTURE.read_text(encoding="utf-8").splitlines()
+    if line.strip() and not line.startswith("#")
+][1:]
 BUILT = cases()
 
 

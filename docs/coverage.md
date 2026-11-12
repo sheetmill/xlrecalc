@@ -84,7 +84,7 @@ so the page counts them together and is the same on every platform.
 | `CLEAN` | text | implemented | 28 | 28 | 0 |  |  |
 | `CODE` | text | implemented | 19 | 19 | 0 |  |  |
 | `COLUMN` | lookup and reference | implemented | 4 | 4 | 0 |  |  |
-| `COLUMNS` | lookup and reference | implemented | 4 | 4 | 0 |  |  |
+| `COLUMNS` | lookup and reference | implemented | 9 | 9 | 0 |  |  |
 | `COMBIN` | math | implemented | 289 | 289 | 0 | 4 ulps |  |
 | `COMBINA` | math | implemented | 207 | 207 | 0 | 4 ulps |  |
 | `COMPLEX` | engineering | implemented | 384 | 384 | 0 |  |  |
@@ -102,7 +102,7 @@ so the page counts them together and is the same on every platform.
 | `COUNT` | statistical | implemented | 16 | 16 | 0 |  |  |
 | `COUNTA` | statistical | implemented | 16 | 16 | 0 |  |  |
 | `COUNTBLANK` | statistical | implemented | 6 | 6 | 0 |  |  |
-| `COUNTIF` | math | implemented | 76 | 76 | 0 |  |  |
+| `COUNTIF` | math | implemented | 106 | 106 | 0 |  |  |
 | `COUNTIFS` | math | implemented | 50 | 50 | 0 |  |  |
 | `COUPDAYBS` | financial | implemented | 95 | 95 | 0 |  |  |
 | `COUPDAYS` | financial | implemented | 106 | 105 | 1 |  |  |
@@ -260,7 +260,7 @@ so the page counts them together and is the same on every platform.
 | `IMSUB` | engineering | implemented | 69 | 69 | 0 |  |  |
 | `IMSUM` | engineering | implemented | 71 | 71 | 0 |  |  |
 | `IMTAN` | engineering | implemented | 34 | 32 | 2 |  |  |
-| `INDEX` | lookup and reference | implemented | 453 | 443 | 10 |  |  |
+| `INDEX` | lookup and reference | implemented | 463 | 453 | 10 |  |  |
 | `INDIRECT` | lookup and reference | implemented | 14 | 14 | 0 |  |  |
 | `INFO` | | absent | | | | | |
 | `INT` | math | implemented | 18 | 17 | 1 |  |  |
@@ -276,7 +276,7 @@ so the page counts them together and is the same on every platform.
 | `ISLOGICAL` | information | implemented | 18 | 18 | 0 |  |  |
 | `ISNA` | information | implemented | 20 | 20 | 0 |  |  |
 | `ISNONTEXT` | information | implemented | 58 | 57 | 1 |  |  |
-| `ISNUMBER` | information | implemented | 19 | 19 | 0 |  |  |
+| `ISNUMBER` | information | implemented | 49 | 49 | 0 |  |  |
 | `ISO.CEILING` | math | implemented | 304 | 304 | 0 |  |  |
 | `ISODD` | information | implemented | 58 | 57 | 1 |  |  |
 | `ISOMITTED` | | absent | | | | | |
@@ -291,7 +291,7 @@ so the page counts them together and is the same on every platform.
 | `LCM` | math | implemented | 213 | 213 | 0 |  |  |
 | `LEFT` | text | implemented | 36 | 36 | 0 |  |  |
 | `LEFTB` | text | implemented | 91 | 91 | 0 |  |  |
-| `LEN` | text | implemented | 136 | 136 | 0 |  |  |
+| `LEN` | text | implemented | 162 | 162 | 0 |  |  |
 | `LENB` | text | implemented | 28 | 28 | 0 |  |  |
 | `LET` | logical | implemented | 56 | 56 | 0 |  |  |
 | `LINEST` | statistical | partial | 72 | 62 | 10 | 4 ulps | one regressor only |
@@ -307,7 +307,7 @@ so the page counts them together and is the same on every platform.
 | `LOWER` | text | implemented | 22 | 22 | 0 |  |  |
 | `MAKEARRAY` | | absent | | | | | |
 | `MAP` | | absent | | | | | |
-| `MATCH` | lookup and reference | implemented | 64 | 64 | 0 |  |  |
+| `MATCH` | lookup and reference | implemented | 94 | 94 | 0 |  |  |
 | `MAX` | statistical | implemented | 16 | 16 | 0 |  |  |
 | `MAXA` | statistical | implemented | 37 | 37 | 0 |  |  |
 | `MAXIFS` | math | implemented | 86 | 86 | 0 |  |  |
@@ -406,9 +406,9 @@ so the page counts them together and is the same on every platform.
 | `REGEXREPLACE` | | absent | | | | | |
 | `REGEXTEST` | | absent | | | | | |
 | `REGISTER.ID` | | absent | | | | | |
-| `REPLACE` | text | implemented | 123 | 123 | 0 |  |  |
+| `REPLACE` | text | implemented | 127 | 127 | 0 |  |  |
 | `REPLACEB` | text | implemented | 1349 | 1349 | 0 |  |  |
-| `REPT` | text | implemented | 77 | 77 | 0 |  |  |
+| `REPT` | text | implemented | 93 | 93 | 0 |  |  |
 | `RIGHT` | text | implemented | 63 | 63 | 0 |  |  |
 | `RIGHTB` | text | implemented | 91 | 91 | 0 |  |  |
 | `ROMAN` | math | implemented | 167 | 167 | 0 |  |  |
@@ -452,7 +452,7 @@ so the page counts them together and is the same on every platform.
 | `STDEVPA` | statistical | implemented | 37 | 37 | 0 | 4 ulps |  |
 | `STEYX` | statistical | implemented | 24 | 24 | 0 | 4 ulps |  |
 | `STOCKHISTORY` | | absent | | | | | |
-| `SUBSTITUTE` | text | implemented | 496 | 496 | 0 |  |  |
+| `SUBSTITUTE` | text | implemented | 520 | 520 | 0 |  |  |
 | `SUBTOTAL` | math | implemented | 16 | 16 | 0 |  |  |
 | `SUM` | math | implemented | 105 | 105 | 0 |  |  |
 | `SUMIF` | math | implemented | 86 | 86 | 0 |  |  |
@@ -479,10 +479,10 @@ so the page counts them together and is the same on every platform.
 | `TBILLYIELD` | financial | implemented | 270 | 270 | 0 | 4 ulps |  |
 | `TDIST` | statistical | implemented | 114 | 114 | 0 | 1e-14 relative |  |
 | `TEXT` | text | implemented | 1172 | 1172 | 0 |  |  |
-| `TEXTAFTER` | text | implemented | 2426 | 2426 | 0 |  |  |
-| `TEXTBEFORE` | text | implemented | 2426 | 2426 | 0 |  |  |
+| `TEXTAFTER` | text | implemented | 2446 | 2446 | 0 |  |  |
+| `TEXTBEFORE` | text | implemented | 2446 | 2446 | 0 |  |  |
 | `TEXTJOIN` | text | implemented | 80 | 80 | 0 |  |  |
-| `TEXTSPLIT` | text | implemented | 61 | 61 | 0 |  |  |
+| `TEXTSPLIT` | text | implemented | 76 | 76 | 0 |  |  |
 | `TIME` | date and time | implemented | 550 | 550 | 0 |  |  |
 | `TIMEVALUE` | date and time | implemented | 127 | 127 | 0 |  |  |
 | `TINV` | statistical | implemented | 23 | 23 | 0 | 1e-13 relative |  |

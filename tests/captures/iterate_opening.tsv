@@ -1,6 +1,7 @@
 # suite: iterate_opening
-# excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-07
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/iterate_opening_probe.py
 # method: each variant as three files: no cached values with fullCalcOnLoad and
 #   openpyxl's calcId (flag), no cached values without it (no_flag), every formula

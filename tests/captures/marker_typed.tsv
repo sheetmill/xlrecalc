@@ -1,6 +1,7 @@
 # suite: marker_typed
-# excel: 16.114.4 for Mac, locale en_US
-# captured: 2026-11-09
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/marker_probe.py --typed (a person typed each formula into the
 #   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3; formula k in A<4k+1>;
 #   the workbooks are kept as marker_typed.xlsx and marker_typed2.xlsx to 4.xlsx)
@@ -76,7 +77,7 @@
 '=FREQUENCY(Z1:Z3,Z2)'	'FREQUENCY(Z1:Z3,Z2)'	'1'	'array'	'A273:A274'	2.0
 '=MODE.MULT(Z1,Z1)'	'_xlfn.MODE.MULT(Z1,Z1)'	'1'	'array'	'A277'	1.0
 '=TEXTSPLIT("a",",")'	'_xlfn.TEXTSPLIT("a",",")'	'1'	'array'	'A281'	'a'
-'=RANDARRAY()'	'_xlfn.RANDARRAY()'	'1'	'array'	'A285'	0.05452499250492959
+'=RANDARRAY()'	'_xlfn.RANDARRAY()'	'1'	'array'	'A285'	0.8713688939029576
 '=MUNIT(1)'	'_xlfn.MUNIT(1)'	'1'	'array'	'A289'	1.0
 '=MINVERSE(Z1)'	'MINVERSE(Z1)'	'1'	'array'	'A293'	1.0
 '=MDETERM(Z1)'	'MDETERM(Z1)'	None	'normal'	None	1.0

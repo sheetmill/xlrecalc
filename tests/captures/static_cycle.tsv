@@ -1,6 +1,7 @@
 # suite: static_cycle
-# excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-06
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/static_cycle_probe.py
 # columns: group, cell, formula (repr), cached value (repr) in the copy Excel saved
 pair, not taken	A1	'=IF(TRUE,1,A2)'	1.0

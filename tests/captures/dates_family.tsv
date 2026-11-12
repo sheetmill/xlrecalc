@@ -1,7 +1,8 @@
 # suite: dates_family
-# excel: 16.114.3 for Mac, locale en_US
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
 # date_system: 1900
-# captured: 2026-11-06
+# captured: 2026-11-11
 # generator: capture/suites.py:dates_family
 # method: openpyxl writes the formula in column A and the inputs in B onward (floats as
 #   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
@@ -484,7 +485,7 @@ dates_family	weeknum	472	WEEKNUM({1},{2})	(0.0, 18.0)	e	#NUM!
 dates_family	weeknum	473	WEEKNUM({1},{2})	(0.0, 21.0)	n	52.0
 dates_family	weeknum	474	WEEKNUM({1},{2})	(0.0, 22.0)	e	#NUM!
 dates_family	weeknum	475	WEEKNUM({1},{2})	(0.0, 0.0)	e	#NUM!
-dates_family	weeknum	476	WEEKNUM({1},{2})	(0.0, -1.0)	n	1.0
+dates_family	weeknum	476	WEEKNUM({1},{2})	(0.0, -1.0)	n	0.0
 dates_family	weeknum	477	WEEKNUM({1},{2})	(0.0, 1.5)	n	0.0
 dates_family	weeknum	478	WEEKNUM({1},{2})	(0.0, 11.9)	n	1.0
 dates_family	weeknum	479	WEEKNUM({1},{2})	(0.0, '2')	n	1.0
@@ -505,9 +506,9 @@ dates_family	weeknum	493	WEEKNUM({1},{2})	(1.0, 16.0)	n	1.0
 dates_family	weeknum	494	WEEKNUM({1},{2})	(1.0, 17.0)	n	1.0
 dates_family	weeknum	495	WEEKNUM({1},{2})	(1.0, 18.0)	e	#NUM!
 dates_family	weeknum	496	WEEKNUM({1},{2})	(1.0, 21.0)	n	52.0
-dates_family	weeknum	497	WEEKNUM({1},{2})	(1.0, 22.0)	n	1.0
+dates_family	weeknum	497	WEEKNUM({1},{2})	(1.0, 22.0)	e	#NUM!
 dates_family	weeknum	498	WEEKNUM({1},{2})	(1.0, 0.0)	e	#NUM!
-dates_family	weeknum	499	WEEKNUM({1},{2})	(1.0, -1.0)	e	#NUM!
+dates_family	weeknum	499	WEEKNUM({1},{2})	(1.0, -1.0)	n	1.0
 dates_family	weeknum	500	WEEKNUM({1},{2})	(1.0, 1.5)	n	1.0
 dates_family	weeknum	501	WEEKNUM({1},{2})	(1.0, 11.9)	n	1.0
 dates_family	weeknum	502	WEEKNUM({1},{2})	(1.0, '2')	n	1.0
@@ -528,9 +529,9 @@ dates_family	weeknum	516	WEEKNUM({1},{2})	(59.0, 16.0)	n	9.0
 dates_family	weeknum	517	WEEKNUM({1},{2})	(59.0, 17.0)	n	9.0
 dates_family	weeknum	518	WEEKNUM({1},{2})	(59.0, 18.0)	e	#NUM!
 dates_family	weeknum	519	WEEKNUM({1},{2})	(59.0, 21.0)	n	9.0
-dates_family	weeknum	520	WEEKNUM({1},{2})	(59.0, 22.0)	n	9.0
+dates_family	weeknum	520	WEEKNUM({1},{2})	(59.0, 22.0)	e	#NUM!
 dates_family	weeknum	521	WEEKNUM({1},{2})	(59.0, 0.0)	e	#NUM!
-dates_family	weeknum	522	WEEKNUM({1},{2})	(59.0, -1.0)	e	#NUM!
+dates_family	weeknum	522	WEEKNUM({1},{2})	(59.0, -1.0)	n	9.0
 dates_family	weeknum	523	WEEKNUM({1},{2})	(59.0, 1.5)	n	9.0
 dates_family	weeknum	524	WEEKNUM({1},{2})	(59.0, 11.9)	n	10.0
 dates_family	weeknum	525	WEEKNUM({1},{2})	(59.0, '2')	n	10.0
@@ -551,9 +552,9 @@ dates_family	weeknum	539	WEEKNUM({1},{2})	(60.0, 16.0)	n	9.0
 dates_family	weeknum	540	WEEKNUM({1},{2})	(60.0, 17.0)	n	9.0
 dates_family	weeknum	541	WEEKNUM({1},{2})	(60.0, 18.0)	e	#NUM!
 dates_family	weeknum	542	WEEKNUM({1},{2})	(60.0, 21.0)	n	9.0
-dates_family	weeknum	543	WEEKNUM({1},{2})	(60.0, 22.0)	n	10.0
+dates_family	weeknum	543	WEEKNUM({1},{2})	(60.0, 22.0)	e	#NUM!
 dates_family	weeknum	544	WEEKNUM({1},{2})	(60.0, 0.0)	e	#NUM!
-dates_family	weeknum	545	WEEKNUM({1},{2})	(60.0, -1.0)	e	#NUM!
+dates_family	weeknum	545	WEEKNUM({1},{2})	(60.0, -1.0)	n	9.0
 dates_family	weeknum	546	WEEKNUM({1},{2})	(60.0, 1.5)	n	9.0
 dates_family	weeknum	547	WEEKNUM({1},{2})	(60.0, 11.9)	n	10.0
 dates_family	weeknum	548	WEEKNUM({1},{2})	(60.0, '2')	n	10.0
@@ -576,7 +577,7 @@ dates_family	weeknum	564	WEEKNUM({1},{2})	(61.0, 18.0)	e	#NUM!
 dates_family	weeknum	565	WEEKNUM({1},{2})	(61.0, 21.0)	n	9.0
 dates_family	weeknum	566	WEEKNUM({1},{2})	(61.0, 22.0)	e	#NUM!
 dates_family	weeknum	567	WEEKNUM({1},{2})	(61.0, 0.0)	e	#NUM!
-dates_family	weeknum	568	WEEKNUM({1},{2})	(61.0, -1.0)	e	#NUM!
+dates_family	weeknum	568	WEEKNUM({1},{2})	(61.0, -1.0)	n	9.0
 dates_family	weeknum	569	WEEKNUM({1},{2})	(61.0, 1.5)	n	9.0
 dates_family	weeknum	570	WEEKNUM({1},{2})	(61.0, 11.9)	n	10.0
 dates_family	weeknum	571	WEEKNUM({1},{2})	(61.0, '2')	n	10.0
@@ -620,7 +621,7 @@ dates_family	weeknum	608	WEEKNUM({1},{2})	(367.0, 16.0)	n	1.0
 dates_family	weeknum	609	WEEKNUM({1},{2})	(367.0, 17.0)	n	1.0
 dates_family	weeknum	610	WEEKNUM({1},{2})	(367.0, 18.0)	e	#NUM!
 dates_family	weeknum	611	WEEKNUM({1},{2})	(367.0, 21.0)	n	1.0
-dates_family	weeknum	612	WEEKNUM({1},{2})	(367.0, 22.0)	n	1.0
+dates_family	weeknum	612	WEEKNUM({1},{2})	(367.0, 22.0)	e	#NUM!
 dates_family	weeknum	613	WEEKNUM({1},{2})	(367.0, 0.0)	e	#NUM!
 dates_family	weeknum	614	WEEKNUM({1},{2})	(367.0, -1.0)	n	1.0
 dates_family	weeknum	615	WEEKNUM({1},{2})	(367.0, 1.5)	n	1.0
@@ -643,9 +644,9 @@ dates_family	weeknum	631	WEEKNUM({1},{2})	(1.5, 16.0)	n	1.0
 dates_family	weeknum	632	WEEKNUM({1},{2})	(1.5, 17.0)	n	1.0
 dates_family	weeknum	633	WEEKNUM({1},{2})	(1.5, 18.0)	e	#NUM!
 dates_family	weeknum	634	WEEKNUM({1},{2})	(1.5, 21.0)	n	52.0
-dates_family	weeknum	635	WEEKNUM({1},{2})	(1.5, 22.0)	n	1.0
+dates_family	weeknum	635	WEEKNUM({1},{2})	(1.5, 22.0)	e	#NUM!
 dates_family	weeknum	636	WEEKNUM({1},{2})	(1.5, 0.0)	e	#NUM!
-dates_family	weeknum	637	WEEKNUM({1},{2})	(1.5, -1.0)	e	#NUM!
+dates_family	weeknum	637	WEEKNUM({1},{2})	(1.5, -1.0)	n	1.0
 dates_family	weeknum	638	WEEKNUM({1},{2})	(1.5, 1.5)	n	1.0
 dates_family	weeknum	639	WEEKNUM({1},{2})	(1.5, 11.9)	n	1.0
 dates_family	weeknum	640	WEEKNUM({1},{2})	(1.5, '2')	n	1.0
@@ -689,9 +690,9 @@ dates_family	weeknum	677	WEEKNUM({1},{2})	(36526.0, 16.0)	n	1.0
 dates_family	weeknum	678	WEEKNUM({1},{2})	(36526.0, 17.0)	n	1.0
 dates_family	weeknum	679	WEEKNUM({1},{2})	(36526.0, 18.0)	e	#NUM!
 dates_family	weeknum	680	WEEKNUM({1},{2})	(36526.0, 21.0)	n	52.0
-dates_family	weeknum	681	WEEKNUM({1},{2})	(36526.0, 22.0)	n	1.0
+dates_family	weeknum	681	WEEKNUM({1},{2})	(36526.0, 22.0)	e	#NUM!
 dates_family	weeknum	682	WEEKNUM({1},{2})	(36526.0, 0.0)	e	#NUM!
-dates_family	weeknum	683	WEEKNUM({1},{2})	(36526.0, -1.0)	e	#NUM!
+dates_family	weeknum	683	WEEKNUM({1},{2})	(36526.0, -1.0)	n	1.0
 dates_family	weeknum	684	WEEKNUM({1},{2})	(36526.0, 1.5)	n	1.0
 dates_family	weeknum	685	WEEKNUM({1},{2})	(36526.0, 11.9)	n	1.0
 dates_family	weeknum	686	WEEKNUM({1},{2})	(36526.0, '2')	n	1.0
@@ -712,9 +713,9 @@ dates_family	weeknum	700	WEEKNUM({1},{2})	(36527.25, 16.0)	n	1.0
 dates_family	weeknum	701	WEEKNUM({1},{2})	(36527.25, 17.0)	n	2.0
 dates_family	weeknum	702	WEEKNUM({1},{2})	(36527.25, 18.0)	e	#NUM!
 dates_family	weeknum	703	WEEKNUM({1},{2})	(36527.25, 21.0)	n	52.0
-dates_family	weeknum	704	WEEKNUM({1},{2})	(36527.25, 22.0)	n	1.0
+dates_family	weeknum	704	WEEKNUM({1},{2})	(36527.25, 22.0)	e	#NUM!
 dates_family	weeknum	705	WEEKNUM({1},{2})	(36527.25, 0.0)	e	#NUM!
-dates_family	weeknum	706	WEEKNUM({1},{2})	(36527.25, -1.0)	e	#NUM!
+dates_family	weeknum	706	WEEKNUM({1},{2})	(36527.25, -1.0)	n	2.0
 dates_family	weeknum	707	WEEKNUM({1},{2})	(36527.25, 1.5)	n	2.0
 dates_family	weeknum	708	WEEKNUM({1},{2})	(36527.25, 11.9)	n	1.0
 dates_family	weeknum	709	WEEKNUM({1},{2})	(36527.25, '2')	n	1.0
@@ -735,9 +736,9 @@ dates_family	weeknum	723	WEEKNUM({1},{2})	(38353.0, 16.0)	n	1.0
 dates_family	weeknum	724	WEEKNUM({1},{2})	(38353.0, 17.0)	n	1.0
 dates_family	weeknum	725	WEEKNUM({1},{2})	(38353.0, 18.0)	e	#NUM!
 dates_family	weeknum	726	WEEKNUM({1},{2})	(38353.0, 21.0)	n	53.0
-dates_family	weeknum	727	WEEKNUM({1},{2})	(38353.0, 22.0)	n	1.0
+dates_family	weeknum	727	WEEKNUM({1},{2})	(38353.0, 22.0)	e	#NUM!
 dates_family	weeknum	728	WEEKNUM({1},{2})	(38353.0, 0.0)	e	#NUM!
-dates_family	weeknum	729	WEEKNUM({1},{2})	(38353.0, -1.0)	e	#NUM!
+dates_family	weeknum	729	WEEKNUM({1},{2})	(38353.0, -1.0)	n	1.0
 dates_family	weeknum	730	WEEKNUM({1},{2})	(38353.0, 1.5)	n	1.0
 dates_family	weeknum	731	WEEKNUM({1},{2})	(38353.0, 11.9)	n	1.0
 dates_family	weeknum	732	WEEKNUM({1},{2})	(38353.0, '2')	n	1.0
@@ -758,9 +759,9 @@ dates_family	weeknum	746	WEEKNUM({1},{2})	(39448.0, 16.0)	n	1.0
 dates_family	weeknum	747	WEEKNUM({1},{2})	(39448.0, 17.0)	n	1.0
 dates_family	weeknum	748	WEEKNUM({1},{2})	(39448.0, 18.0)	e	#NUM!
 dates_family	weeknum	749	WEEKNUM({1},{2})	(39448.0, 21.0)	n	1.0
-dates_family	weeknum	750	WEEKNUM({1},{2})	(39448.0, 22.0)	n	1.0
+dates_family	weeknum	750	WEEKNUM({1},{2})	(39448.0, 22.0)	e	#NUM!
 dates_family	weeknum	751	WEEKNUM({1},{2})	(39448.0, 0.0)	e	#NUM!
-dates_family	weeknum	752	WEEKNUM({1},{2})	(39448.0, -1.0)	e	#NUM!
+dates_family	weeknum	752	WEEKNUM({1},{2})	(39448.0, -1.0)	n	1.0
 dates_family	weeknum	753	WEEKNUM({1},{2})	(39448.0, 1.5)	n	1.0
 dates_family	weeknum	754	WEEKNUM({1},{2})	(39448.0, 11.9)	n	1.0
 dates_family	weeknum	755	WEEKNUM({1},{2})	(39448.0, '2')	n	1.0
@@ -781,7 +782,7 @@ dates_family	weeknum	769	WEEKNUM({1},{2})	(42370.0, 16.0)	n	1.0
 dates_family	weeknum	770	WEEKNUM({1},{2})	(42370.0, 17.0)	n	1.0
 dates_family	weeknum	771	WEEKNUM({1},{2})	(42370.0, 18.0)	e	#NUM!
 dates_family	weeknum	772	WEEKNUM({1},{2})	(42370.0, 21.0)	n	53.0
-dates_family	weeknum	773	WEEKNUM({1},{2})	(42370.0, 22.0)	n	1.0
+dates_family	weeknum	773	WEEKNUM({1},{2})	(42370.0, 22.0)	e	#NUM!
 dates_family	weeknum	774	WEEKNUM({1},{2})	(42370.0, 0.0)	e	#NUM!
 dates_family	weeknum	775	WEEKNUM({1},{2})	(42370.0, -1.0)	n	1.0
 dates_family	weeknum	776	WEEKNUM({1},{2})	(42370.0, 1.5)	n	1.0
@@ -806,7 +807,7 @@ dates_family	weeknum	794	WEEKNUM({1},{2})	(42736.0, 18.0)	e	#NUM!
 dates_family	weeknum	795	WEEKNUM({1},{2})	(42736.0, 21.0)	n	52.0
 dates_family	weeknum	796	WEEKNUM({1},{2})	(42736.0, 22.0)	e	#NUM!
 dates_family	weeknum	797	WEEKNUM({1},{2})	(42736.0, 0.0)	e	#NUM!
-dates_family	weeknum	798	WEEKNUM({1},{2})	(42736.0, -1.0)	e	#NUM!
+dates_family	weeknum	798	WEEKNUM({1},{2})	(42736.0, -1.0)	n	1.0
 dates_family	weeknum	799	WEEKNUM({1},{2})	(42736.0, 1.5)	n	1.0
 dates_family	weeknum	800	WEEKNUM({1},{2})	(42736.0, 11.9)	n	1.0
 dates_family	weeknum	801	WEEKNUM({1},{2})	(42736.0, '2')	n	1.0
@@ -852,7 +853,7 @@ dates_family	weeknum	840	WEEKNUM({1},{2})	(43466.0, 18.0)	e	#NUM!
 dates_family	weeknum	841	WEEKNUM({1},{2})	(43466.0, 21.0)	n	1.0
 dates_family	weeknum	842	WEEKNUM({1},{2})	(43466.0, 22.0)	e	#NUM!
 dates_family	weeknum	843	WEEKNUM({1},{2})	(43466.0, 0.0)	e	#NUM!
-dates_family	weeknum	844	WEEKNUM({1},{2})	(43466.0, -1.0)	e	#NUM!
+dates_family	weeknum	844	WEEKNUM({1},{2})	(43466.0, -1.0)	n	1.0
 dates_family	weeknum	845	WEEKNUM({1},{2})	(43466.0, 1.5)	n	1.0
 dates_family	weeknum	846	WEEKNUM({1},{2})	(43466.0, 11.9)	n	1.0
 dates_family	weeknum	847	WEEKNUM({1},{2})	(43466.0, '2')	n	1.0
@@ -873,9 +874,9 @@ dates_family	weeknum	861	WEEKNUM({1},{2})	(43831.0, 16.0)	n	1.0
 dates_family	weeknum	862	WEEKNUM({1},{2})	(43831.0, 17.0)	n	1.0
 dates_family	weeknum	863	WEEKNUM({1},{2})	(43831.0, 18.0)	e	#NUM!
 dates_family	weeknum	864	WEEKNUM({1},{2})	(43831.0, 21.0)	n	1.0
-dates_family	weeknum	865	WEEKNUM({1},{2})	(43831.0, 22.0)	n	1.0
+dates_family	weeknum	865	WEEKNUM({1},{2})	(43831.0, 22.0)	e	#NUM!
 dates_family	weeknum	866	WEEKNUM({1},{2})	(43831.0, 0.0)	e	#NUM!
-dates_family	weeknum	867	WEEKNUM({1},{2})	(43831.0, -1.0)	n	1.0
+dates_family	weeknum	867	WEEKNUM({1},{2})	(43831.0, -1.0)	e	#NUM!
 dates_family	weeknum	868	WEEKNUM({1},{2})	(43831.0, 1.5)	n	1.0
 dates_family	weeknum	869	WEEKNUM({1},{2})	(43831.0, 11.9)	n	1.0
 dates_family	weeknum	870	WEEKNUM({1},{2})	(43831.0, '2')	n	1.0
@@ -921,7 +922,7 @@ dates_family	weeknum	909	WEEKNUM({1},{2})	(45292.0, 18.0)	e	#NUM!
 dates_family	weeknum	910	WEEKNUM({1},{2})	(45292.0, 21.0)	n	1.0
 dates_family	weeknum	911	WEEKNUM({1},{2})	(45292.0, 22.0)	e	#NUM!
 dates_family	weeknum	912	WEEKNUM({1},{2})	(45292.0, 0.0)	e	#NUM!
-dates_family	weeknum	913	WEEKNUM({1},{2})	(45292.0, -1.0)	n	1.0
+dates_family	weeknum	913	WEEKNUM({1},{2})	(45292.0, -1.0)	e	#NUM!
 dates_family	weeknum	914	WEEKNUM({1},{2})	(45292.0, 1.5)	n	1.0
 dates_family	weeknum	915	WEEKNUM({1},{2})	(45292.0, 11.9)	n	1.0
 dates_family	weeknum	916	WEEKNUM({1},{2})	(45292.0, '2')	n	1.0
@@ -942,9 +943,9 @@ dates_family	weeknum	930	WEEKNUM({1},{2})	(45657.0, 16.0)	n	53.0
 dates_family	weeknum	931	WEEKNUM({1},{2})	(45657.0, 17.0)	n	53.0
 dates_family	weeknum	932	WEEKNUM({1},{2})	(45657.0, 18.0)	e	#NUM!
 dates_family	weeknum	933	WEEKNUM({1},{2})	(45657.0, 21.0)	n	1.0
-dates_family	weeknum	934	WEEKNUM({1},{2})	(45657.0, 22.0)	n	53.0
+dates_family	weeknum	934	WEEKNUM({1},{2})	(45657.0, 22.0)	e	#NUM!
 dates_family	weeknum	935	WEEKNUM({1},{2})	(45657.0, 0.0)	e	#NUM!
-dates_family	weeknum	936	WEEKNUM({1},{2})	(45657.0, -1.0)	n	53.0
+dates_family	weeknum	936	WEEKNUM({1},{2})	(45657.0, -1.0)	e	#NUM!
 dates_family	weeknum	937	WEEKNUM({1},{2})	(45657.0, 1.5)	n	53.0
 dates_family	weeknum	938	WEEKNUM({1},{2})	(45657.0, 11.9)	n	53.0
 dates_family	weeknum	939	WEEKNUM({1},{2})	(45657.0, '2')	n	53.0
@@ -1011,9 +1012,9 @@ dates_family	weeknum	999	WEEKNUM({1},{2})	('2024-01-31', 16.0)	n	5.0
 dates_family	weeknum	1000	WEEKNUM({1},{2})	('2024-01-31', 17.0)	n	5.0
 dates_family	weeknum	1001	WEEKNUM({1},{2})	('2024-01-31', 18.0)	e	#NUM!
 dates_family	weeknum	1002	WEEKNUM({1},{2})	('2024-01-31', 21.0)	n	5.0
-dates_family	weeknum	1003	WEEKNUM({1},{2})	('2024-01-31', 22.0)	n	5.0
+dates_family	weeknum	1003	WEEKNUM({1},{2})	('2024-01-31', 22.0)	e	#NUM!
 dates_family	weeknum	1004	WEEKNUM({1},{2})	('2024-01-31', 0.0)	e	#NUM!
-dates_family	weeknum	1005	WEEKNUM({1},{2})	('2024-01-31', -1.0)	e	#NUM!
+dates_family	weeknum	1005	WEEKNUM({1},{2})	('2024-01-31', -1.0)	n	5.0
 dates_family	weeknum	1006	WEEKNUM({1},{2})	('2024-01-31', 1.5)	n	5.0
 dates_family	weeknum	1007	WEEKNUM({1},{2})	('2024-01-31', 11.9)	n	5.0
 dates_family	weeknum	1008	WEEKNUM({1},{2})	('2024-01-31', '2')	n	5.0
@@ -1034,9 +1035,9 @@ dates_family	weeknum	1022	WEEKNUM({1},{2})	('1/1/2021', 16.0)	n	1.0
 dates_family	weeknum	1023	WEEKNUM({1},{2})	('1/1/2021', 17.0)	n	1.0
 dates_family	weeknum	1024	WEEKNUM({1},{2})	('1/1/2021', 18.0)	e	#NUM!
 dates_family	weeknum	1025	WEEKNUM({1},{2})	('1/1/2021', 21.0)	n	53.0
-dates_family	weeknum	1026	WEEKNUM({1},{2})	('1/1/2021', 22.0)	n	1.0
+dates_family	weeknum	1026	WEEKNUM({1},{2})	('1/1/2021', 22.0)	e	#NUM!
 dates_family	weeknum	1027	WEEKNUM({1},{2})	('1/1/2021', 0.0)	e	#NUM!
-dates_family	weeknum	1028	WEEKNUM({1},{2})	('1/1/2021', -1.0)	e	#NUM!
+dates_family	weeknum	1028	WEEKNUM({1},{2})	('1/1/2021', -1.0)	n	1.0
 dates_family	weeknum	1029	WEEKNUM({1},{2})	('1/1/2021', 1.5)	n	1.0
 dates_family	weeknum	1030	WEEKNUM({1},{2})	('1/1/2021', 11.9)	n	1.0
 dates_family	weeknum	1031	WEEKNUM({1},{2})	('1/1/2021', '2')	n	1.0
@@ -1126,9 +1127,9 @@ dates_family	weeknum	1114	WEEKNUM({1},{2})	(None, 16.0)	n	1.0
 dates_family	weeknum	1115	WEEKNUM({1},{2})	(None, 17.0)	n	0.0
 dates_family	weeknum	1116	WEEKNUM({1},{2})	(None, 18.0)	e	#NUM!
 dates_family	weeknum	1117	WEEKNUM({1},{2})	(None, 21.0)	n	52.0
-dates_family	weeknum	1118	WEEKNUM({1},{2})	(None, 22.0)	n	0.0
+dates_family	weeknum	1118	WEEKNUM({1},{2})	(None, 22.0)	e	#NUM!
 dates_family	weeknum	1119	WEEKNUM({1},{2})	(None, 0.0)	e	#NUM!
-dates_family	weeknum	1120	WEEKNUM({1},{2})	(None, -1.0)	e	#NUM!
+dates_family	weeknum	1120	WEEKNUM({1},{2})	(None, -1.0)	n	0.0
 dates_family	weeknum	1121	WEEKNUM({1},{2})	(None, 1.5)	n	0.0
 dates_family	weeknum	1122	WEEKNUM({1},{2})	(None, 11.9)	n	1.0
 dates_family	weeknum	1123	WEEKNUM({1},{2})	(None, '2')	n	1.0
@@ -1264,9 +1265,9 @@ dates_family	weeknum	1252	WEEKNUM({1},{2})	(42372.0, 16.0)	n	2.0
 dates_family	weeknum	1253	WEEKNUM({1},{2})	(42372.0, 17.0)	n	2.0
 dates_family	weeknum	1254	WEEKNUM({1},{2})	(42372.0, 18.0)	e	#NUM!
 dates_family	weeknum	1255	WEEKNUM({1},{2})	(42372.0, 21.0)	n	53.0
-dates_family	weeknum	1256	WEEKNUM({1},{2})	(42372.0, 22.0)	n	1.0
+dates_family	weeknum	1256	WEEKNUM({1},{2})	(42372.0, 22.0)	e	#NUM!
 dates_family	weeknum	1257	WEEKNUM({1},{2})	(42372.0, 0.0)	e	#NUM!
-dates_family	weeknum	1258	WEEKNUM({1},{2})	(42372.0, -1.0)	n	1.0
+dates_family	weeknum	1258	WEEKNUM({1},{2})	(42372.0, -1.0)	e	#NUM!
 dates_family	weeknum	1259	WEEKNUM({1},{2})	(42372.0, 1.5)	n	2.0
 dates_family	weeknum	1260	WEEKNUM({1},{2})	(42372.0, 11.9)	n	1.0
 dates_family	weeknum	1261	WEEKNUM({1},{2})	(42372.0, '2')	n	1.0
@@ -1310,7 +1311,7 @@ dates_family	weeknum	1298	WEEKNUM({1},{2})	(42374.0, 16.0)	n	2.0
 dates_family	weeknum	1299	WEEKNUM({1},{2})	(42374.0, 17.0)	n	2.0
 dates_family	weeknum	1300	WEEKNUM({1},{2})	(42374.0, 18.0)	e	#NUM!
 dates_family	weeknum	1301	WEEKNUM({1},{2})	(42374.0, 21.0)	n	1.0
-dates_family	weeknum	1302	WEEKNUM({1},{2})	(42374.0, 22.0)	n	2.0
+dates_family	weeknum	1302	WEEKNUM({1},{2})	(42374.0, 22.0)	e	#NUM!
 dates_family	weeknum	1303	WEEKNUM({1},{2})	(42374.0, 0.0)	e	#NUM!
 dates_family	weeknum	1304	WEEKNUM({1},{2})	(42374.0, -1.0)	n	2.0
 dates_family	weeknum	1305	WEEKNUM({1},{2})	(42374.0, 1.5)	n	2.0
@@ -1356,9 +1357,9 @@ dates_family	weeknum	1344	WEEKNUM({1},{2})	(42376.0, 16.0)	n	2.0
 dates_family	weeknum	1345	WEEKNUM({1},{2})	(42376.0, 17.0)	n	2.0
 dates_family	weeknum	1346	WEEKNUM({1},{2})	(42376.0, 18.0)	e	#NUM!
 dates_family	weeknum	1347	WEEKNUM({1},{2})	(42376.0, 21.0)	n	1.0
-dates_family	weeknum	1348	WEEKNUM({1},{2})	(42376.0, 22.0)	n	2.0
+dates_family	weeknum	1348	WEEKNUM({1},{2})	(42376.0, 22.0)	e	#NUM!
 dates_family	weeknum	1349	WEEKNUM({1},{2})	(42376.0, 0.0)	e	#NUM!
-dates_family	weeknum	1350	WEEKNUM({1},{2})	(42376.0, -1.0)	e	#NUM!
+dates_family	weeknum	1350	WEEKNUM({1},{2})	(42376.0, -1.0)	n	2.0
 dates_family	weeknum	1351	WEEKNUM({1},{2})	(42376.0, 1.5)	n	2.0
 dates_family	weeknum	1352	WEEKNUM({1},{2})	(42376.0, 11.9)	n	2.0
 dates_family	weeknum	1353	WEEKNUM({1},{2})	(42376.0, '2')	n	2.0
@@ -1381,7 +1382,7 @@ dates_family	weeknum	1369	WEEKNUM({1},{2})	(42377.0, 18.0)	e	#NUM!
 dates_family	weeknum	1370	WEEKNUM({1},{2})	(42377.0, 21.0)	n	1.0
 dates_family	weeknum	1371	WEEKNUM({1},{2})	(42377.0, 22.0)	e	#NUM!
 dates_family	weeknum	1372	WEEKNUM({1},{2})	(42377.0, 0.0)	e	#NUM!
-dates_family	weeknum	1373	WEEKNUM({1},{2})	(42377.0, -1.0)	e	#NUM!
+dates_family	weeknum	1373	WEEKNUM({1},{2})	(42377.0, -1.0)	n	2.0
 dates_family	weeknum	1374	WEEKNUM({1},{2})	(42377.0, 1.5)	n	2.0
 dates_family	weeknum	1375	WEEKNUM({1},{2})	(42377.0, 11.9)	n	2.0
 dates_family	weeknum	1376	WEEKNUM({1},{2})	(42377.0, '2')	n	2.0

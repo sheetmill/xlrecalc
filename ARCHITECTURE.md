@@ -140,7 +140,8 @@ the error stay distinct through each of these. Callers who need the distinction 
 ### 4.3 Coercion and comparison
 
 Conversions and comparisons live in a few small modules, each tested against captures
-(`tests/captures/*.tsv`, §10); everything stated here is captured from Excel 16.114.3 for Mac.
+(`tests/captures/*.tsv`, §10); everything stated here is captured from Excel 16.115 for Mac under
+Microsoft 365, where every capture made on 16.114 (Office Home & Business 2021) was rerun.
 
 **Number to text** (`_numtext.py`; `&`, the text functions, text comparisons) is Excel's text
 form of a number, not a cell format: up to 15 significant digits, rounded with ties down (as
@@ -735,11 +736,11 @@ memory, and computes `SUMPRODUCT` over whole columns without making the array (c
 to a sum. In a count, a criterion that rejects a blank limits the matches to that range's
 non-blank cells; otherwise a position fails only where a non-blank cell fails its criterion, and
 every other position counts. Their cost follows the cells a sheet holds, over a whole sheet too.
-Capture `array_functions` holds Excel's value for 30 formulas of `SUMIF`, `SUMIFS`, `COUNTIF` and
-`COUNTIFS` over one column, ten and every column, 9 of them over a whole sheet, and each matches.
-It holds none for `SUMIF(D!A:XFD,"<>5")`, which Excel did not finish within the probe's limit, or
-for `SUMIFS(D!A:XFD,D!A:XFD,"<>5")`, which was not run. The other four functions are captured over
-smaller ranges only.
+Capture `array_functions` holds Excel's value for 31 formulas of `SUMIF`, `SUMIFS`, `COUNTIF` and
+`COUNTIFS` over one column, ten and every column, 10 of them over a whole sheet, and each matches.
+Excel takes about two minutes to open `SUMIF(D!A:XFD,"<>5")` and two more to calculate it; the
+capture holds no value for `SUMIFS(D!A:XFD,D!A:XFD,"<>5")`, which is as slow and was not run. The
+other four functions are captured over smaller ranges only.
 `MATCH`, `VLOOKUP`, `HLOOKUP` and `LOOKUP` read a range's non-blank cells likewise, since neither an
 exact match nor the bisection of cells of the key's type can land on a blank.
 `XLOOKUP` and `XMATCH` do too; a blank key, which finds a blank cell, looks for the first gap.
@@ -1140,7 +1141,7 @@ needs the calculation chain removed; patching values alone needs nothing else.
 ### 9.5 What Excel's repair does to a refused formula
 
 Capture `repair` (`capture/repair_probe.py`, `tests/captures/repair.tsv`; Excel 16.114.3 for
-Mac). One workbook held each formula Excel refuses in a file (§5.2: the error literals `#SPILL!`
+Mac, the same on 16.115). One workbook held each formula Excel refuses in a file (§5.2: the error literals `#SPILL!`
 and `#CALC!`, the spill operator `A1#` and `Sheet2!A1#`, `Table1[@[Unit Price]]` and
 `[@[Unit Price]]*2` outside the table, a tab, `SUM( )`) between valid control formulas, every
 formula cell with a deliberately wrong cached value and the calculation settings of a file
@@ -1290,8 +1291,8 @@ After 0.2.0, in this order: an order, not a promise or a date.
    own (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable.
    `docs/coverage.md` lists what exists.
 5. `LAMBDA` and its helpers (`MAP`, `REDUCE`, `SCAN`, `BYROW`, `BYCOL`, `MAKEARRAY`, `ISOMITTED`): Excel's own
-   semantics, captured before they are built, on an edition of Excel that has them (Office Home & Business 2021 for
-   Mac does not; `CAPTURING.md` §2). They would compile as `LET` does (§5.4), a lambda's body a function of its
+   semantics, captured before they are built, on an edition of Excel that has them (Microsoft 365 does; Office Home
+   & Business 2021 for Mac does not; `CAPTURING.md` §2). They would compile as `LET` does (§5.4), a lambda's body a function of its
    environment and arguments. `xlrecalc.evaluate(text)` for one formula outside a workbook, and
    callbacks (§12).
 6. Then: a setting or capture for Excel for Windows' text order, the array-backed store and

@@ -1,6 +1,7 @@
 # suite: calc_chain
-# excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-07
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/calc_chain_probe.py
 # method: a loop saved by Excel, then its chain kept, reversed or removed, cached values
 #   set to 0, iterateCount 1; shown after opening, calculated after one calculate, saved

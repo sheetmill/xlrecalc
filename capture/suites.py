@@ -2575,6 +2575,28 @@ def text_family() -> list[Case]:
             "€5",
         )
     ]
+    # Characters outside the first plane where position or length matters beyond LEN, MID,
+    # REPLACE, FIND, SEARCH and REPT: instances, splits, the text limit and wildcards.
+    for t in astral:
+        for k in (1.0, 2.0, 3.0):
+            cases.append(Case("astral_substitute", 'SUBSTITUTE({1},"😀","Z",{2})', (t, k)))
+        cases.append(Case("astral_substitute", 'LEN(SUBSTITUTE({1},"😀","yy"))', (t,)))
+        for k in (1.0, 2.0, -1.0):
+            cases.append(Case("astral_textbefore", '_xlfn.TEXTBEFORE({1},"😀",{2})', (t, k)))
+            cases.append(Case("astral_textafter", '_xlfn.TEXTAFTER({1},"😀",{2})', (t, k)))
+        cases.append(Case("astral_textbefore", '_xlfn.TEXTBEFORE({1},"b")', (t,)))
+        cases.append(Case("astral_textafter", '_xlfn.TEXTAFTER({1},"x")', (t,)))
+        cases.append(Case("astral_textsplit", 'COLUMNS(_xlfn.TEXTSPLIT({1},"😀"))', (t,)))
+        cases.append(Case("astral_textsplit", 'INDEX(_xlfn.TEXTSPLIT({1},"😀"),1,1)', (t,)))
+        cases.append(Case("astral_textsplit", 'LEN(INDEX(_xlfn.TEXTSPLIT({1},"b"),1,1))', (t,)))
+        for pattern in ("?", "??", "?x", "x?", "*😀*", "~?"):
+            cases.append(Case("astral_wildcard", f'COUNTIF({{1}},"{pattern}")', (t,)))
+            cases.append(Case("astral_wildcard", f'ISNUMBER(MATCH("{pattern}",{{1}},0))', (t,)))
+    for n in (16383, 16384, 32767, 32768):
+        cases.append(Case("astral_limit", f'LEN(REPT("😀",{n}))'))
+        cases.append(Case("astral_limit", f'LEN(SUBSTITUTE(REPT("a",{n}),"a","😀"))'))
+        cases.append(Case("astral_limit", f'LEN(REPT("😀",{n})&"x")'))
+        cases.append(Case("astral_limit", f'LEN(REPLACE(REPT("😀",{n}),1,1,"ab"))'))
     return cases
 
 

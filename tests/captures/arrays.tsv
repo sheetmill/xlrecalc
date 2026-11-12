@@ -1,6 +1,7 @@
 # suite: arrays
-# excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-01
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/array_probe.py
 # method: legacy formulas, legacy array formulas (t=array) and dynamic-array formulas
 #   (cm=1 with the XLDAPR metadata) over Z1:AB5; Excel calculates and saves a copy;

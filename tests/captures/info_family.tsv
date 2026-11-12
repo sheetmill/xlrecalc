@@ -1,7 +1,8 @@
 # suite: info_family
-# excel: 16.114.3 for Mac, locale en_US
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
 # date_system: 1900
-# captured: 2026-11-06
+# captured: 2026-11-11
 # generator: capture/suites.py:info_family
 # method: openpyxl writes the formula in column A and the inputs in B onward (floats as
 #   repr text); Excel opens the workbook, calculates and saves a copy; the cached value

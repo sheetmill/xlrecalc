@@ -1,6 +1,7 @@
 # suite: dynrefs
-# excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-01
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/dynref_probe.py
 # method: legacy formulas written by openpyxl (column A, and placed cells in column C);
 #   Excel calculates and saves a copy; value and type from the copy; the file's

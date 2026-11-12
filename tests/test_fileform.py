@@ -26,9 +26,6 @@ def rows(name: str) -> list[list[str]]:
 
 # Typed text -> why the printer's form differs from what the formula-bar capture recorded.
 BAR_DIFFERENCES = {
-    "=LAMBDA(x,x+1)(2)": "AppleScript's legacy formula does not know LAMBDA and stores the text "
-    "as typed; a file holding _xlfn.LAMBDA(_xlpm.x,...) opens and is kept (formula_forms)",
-    "=LAMBDA(x,y,x*y)(2,3)": "as above",
     "=eval(1)": "a function the package does not know keeps the case it was typed in",
     "=Table1[[Col'[1']]]": "Excel simplifies a single-column structured reference; both open",
 }

@@ -1,6 +1,7 @@
 # suite: repair
-# excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-01
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/repair_probe.py
 # method: openpyxl writes each formula into column A with the cached value 100+row and
 #   calcPr calcId="191029" (Excel trusts cached values); Excel opens it with alerts

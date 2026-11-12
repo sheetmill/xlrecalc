@@ -13,7 +13,7 @@ from typing import Any
 
 from xlrecalc._arrays import check_area
 from xlrecalc._coerce import Context, scalar, to_number
-from xlrecalc._compare import compare, lookup_equal, wildcard
+from xlrecalc._compare import compare, lookup_equal, utf16_units, wildcard
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._registry import function
 from xlrecalc._store import MAX_COL, MAX_ROW
@@ -27,9 +27,9 @@ _WILD = re.compile(r"[*?~]")
 def _exact(lookup: Any, cells: list[tuple[int, Any]]) -> int | None:
     """The first position holding the value. A blank never matches, so only cells are visited."""
     if isinstance(lookup, str) and _WILD.search(lookup):
-        pattern = wildcard(lookup)
+        pattern = wildcard(utf16_units(lookup))
         for i, v in cells:
-            if isinstance(v, str) and pattern.fullmatch(v):
+            if isinstance(v, str) and pattern.fullmatch(utf16_units(v)):
                 return i
         return None
     for i, v in cells:
@@ -501,8 +501,11 @@ def _x_search(
         return _x_binary(key, cells, match, search, ctx)
     order = cells if search == 1 else reversed(cells)
     if match == 2 and isinstance(key, str):
-        pattern = wildcard(key)
-        return next((i for i, v in order if isinstance(v, str) and pattern.fullmatch(v)), None)
+        pattern = wildcard(utf16_units(key))
+        return next(
+            (i for i, v in order if isinstance(v, str) and pattern.fullmatch(utf16_units(v))),
+            None,
+        )
     best = None
     best_value: Any = None
     for i, v in order:

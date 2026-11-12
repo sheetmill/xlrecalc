@@ -9,6 +9,9 @@
 -- Non-interactive; opens only the workbook it is given, refuses one of the same name already open.
 on run argv
 	set xlStep to item 1 of argv
+	-- Longer than any step's limit in array_size_probe.py, which ends a step itself: the default
+	-- of 120 s gave up on an open of a whole-sheet SUMIF while Excel was still working (-1712).
+	with timeout of 900 seconds
 	tell application "Microsoft Excel"
 		if xlStep is "count" then
 			return (count of workbooks) as text
@@ -41,5 +44,6 @@ on run argv
 			return "restored"
 		end if
 	end tell
+	end timeout
 	error "unknown step: " & xlStep
 end run

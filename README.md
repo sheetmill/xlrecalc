@@ -4,7 +4,7 @@ xlrecalc recalculates Excel workbooks in pure Python. It evaluates a workbook's 
 the results Excel computes and writes them back into the file as the cached values Excel
 stores, so that openpyxl's data-only mode, pandas and other readers see values where a
 workbook written by a program has only formulas. Results are tested against values captured
-from Excel 16 for Mac.
+from Excel 16 for Mac under Microsoft 365.
 
 Documentation: <https://xlrecalc.readthedocs.io>.
 
@@ -103,7 +103,7 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
   financial and bond functions, the database functions, complex numbers. The
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 75,499 formulas computed by Excel and compared with xlrecalc's results: 74,720
+- **Evidence**: 75,650 formulas computed by Excel and compared with xlrecalc's results: 74,871
   match, bit for bit or within a small tolerance declared per function (a few units in the last
   place, or a relative one: 1E-9 for the iterative functions, 1E-15 to 1E-12 for the beta,
   gamma, chi-squared, F and t distributions), 779 known deviations, each listed

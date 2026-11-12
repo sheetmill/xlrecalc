@@ -8,11 +8,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- Excel 16.115 for Mac under Microsoft 365 is the reference: every capture made on 16.114 (Office Home & Business 2021)
+  was rerun on it. Its differences: `LEN`, `MID`, `REPLACE`, `FIND` and `SEARCH` count a character outside the first
+  plane (an emoji) as one, as `LEFT` and `RIGHT` did already (`LEN` of an emoji is 1, was 2), and so does the package;
+  `LENB`, `MIDB` and `REPLACEB` still count its two UTF-16 units, the limit of a text, 32,767, counts units too, and a
+  wildcard's `?` matches one unit (capture `text_family`, 151 rows added). The `LAMBDA` helpers compute there, and
+  `LAMBDA` typed in its formula bar is written with `_xlfn.` and `_xlpm.` (captures `prefixes`, `formula_bar`). Every
+  other capture is unchanged but for random results.
 - The coverage page (`docs/coverage.md`) counts a captured row that matches Excel exactly or within the function's
   declared tolerance as one figure, so it is the same on every platform; the split between them depends on the platform's
   math library. The rows that depend on that library are held strictly only on a named reference platform (macOS 26.5,
   arm64, Python 3.11): Python 3.14 on the same system brings four `BINOM.DIST` rows of `distributions_family` within 8
   units in the last place that 3.11 leaves past them.
+
+### Fixed
+- A wildcard's `?` in criteria (`COUNTIF` and the other `IF` functions, the database functions), `MATCH`, `XMATCH`
+  and `XLOOKUP` matches one UTF-16 unit, as in Excel, so a character outside the first plane takes `??`; it took `?`
+  (capture `text_family`).
+- The limit of a text in `&`, `CONCATENATE`, `CONCAT`, `TEXTJOIN` and `REPT` counts UTF-16 units, as Excel does; it
+  counted characters (capture `text_family`).
 
 ## [0.2.0] - 2026-11-10
 

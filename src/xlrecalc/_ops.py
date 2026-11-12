@@ -13,7 +13,7 @@ from typing import Any
 from xlrecalc._arith import flush, snap
 from xlrecalc._arrays import NotImplementedFormError, broadcast
 from xlrecalc._coerce import Context, Raw, scalar, to_bool, to_number, to_text
-from xlrecalc._compare import compare, switch_equal
+from xlrecalc._compare import compare, switch_equal, utf16_length
 from xlrecalc._formula import MISSING
 from xlrecalc._numtext import DBL_MIN
 from xlrecalc._values import BLANK, ErrorValue, Ref, Value
@@ -153,7 +153,9 @@ class Ops:
         y = to_text(b, self.context)
         if isinstance(y, ErrorValue):
             return y
-        return x + y if len(x) + len(y) <= 32767 else VALUE
+        if len(x) + len(y) > 16383 and utf16_length(x) + utf16_length(y) > 32767:
+            return VALUE  # Excel's limit counts UTF-16 units (capture text_family)
+        return x + y
 
     def _cmp(self, a: Raw, b: Raw, op: str) -> Value:
         if type(a) is tuple or type(b) is tuple:

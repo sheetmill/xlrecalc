@@ -11,7 +11,7 @@ import xlformat
 
 from xlrecalc._arrays import to_array
 from xlrecalc._coerce import Context, scalar, to_bool, to_number, to_text
-from xlrecalc._compare import wildcard
+from xlrecalc._compare import utf16_length, utf16_units, wildcard
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._math import _decimal
 from xlrecalc._functions._registry import function
@@ -26,8 +26,7 @@ _SPACES = re.compile(" +")
 @function("CONCATENATE", "text", min_args=1, variadic=True, category=T)
 def CONCATENATE(ctx: Context, *parts: str) -> str | ErrorValue:
     """The texts joined."""
-    text = "".join(parts)
-    return text if len(text) <= 32767 else VALUE
+    return _limited("".join(parts))
 
 
 def _count(n: float, default: int) -> int | ErrorValue:
@@ -63,23 +62,22 @@ def MID(ctx: Context, text: str, start: float, n: float) -> str | ErrorValue:
     s, k = math.trunc(start), math.trunc(n)
     if s < 1 or k < 0:
         return VALUE
-    return _characters(_units(text)[s - 1 : s - 1 + k])
+    return text[s - 1 : s - 1 + k]
 
 
 @function("LEN", "text", category=T)
 def LEN(ctx: Context, text: str) -> float:
     """Number of characters."""
-    return float(len(_units(text)))
+    return float(len(text))
 
 
 @function("FIND", "text", "text", "number", min_args=2, category=T)
 def FIND(ctx: Context, needle: str, haystack: str, start: float = 1.0) -> float | ErrorValue:
     """Position of ``needle`` in ``haystack`` from ``start``, with case; ``#VALUE!`` if absent."""
     s = math.trunc(start)
-    units = _units(haystack)
-    if s < 1 or s > len(units) + 1:
+    if s < 1 or s > len(haystack) + 1:
         return VALUE
-    i = units.find(_units(needle), s - 1)
+    i = haystack.find(needle, s - 1)
     return VALUE if i < 0 else float(i + 1)
 
 
@@ -141,9 +139,9 @@ _MAX_TEXT = 32767  # Excel's longest text in a cell
 
 @function("REPT", "text", "number", category=T)
 def REPT(ctx: Context, text: str, times: float) -> str | ErrorValue:
-    """A text repeated; ``#VALUE!`` past 32,767 characters."""
+    """A text repeated; ``#VALUE!`` past 32,767 UTF-16 units."""
     n = math.trunc(times)
-    if n < 0 or len(text) * n > _MAX_TEXT:
+    if n < 0 or utf16_length(text) * n > _MAX_TEXT:
         return VALUE
     return text * n
 
@@ -154,9 +152,7 @@ def REPLACE(ctx: Context, old: str, start: float, count: float, new: str) -> str
     s, n = math.trunc(start), math.trunc(count)
     if s < 1 or n < 0 or s > _MAX_TEXT:
         return VALUE
-    units = _units(old)
-    result = units[: s - 1] + _units(new) + units[s - 1 + n :]
-    return VALUE if len(result) > _MAX_TEXT else _characters(result)
+    return _limited(old[: s - 1] + new + old[s - 1 + n :])
 
 
 # Excel for Mac numbers characters in the Mac OS Roman set (capture misc); Excel for Windows
@@ -259,7 +255,7 @@ def CONCAT(ctx: Context, *args: Any) -> str | ErrorValue:
             if isinstance(text, ErrorValue):
                 return text
             parts.append(text)
-            size += len(text)
+            size += utf16_length(text)
     return VALUE if size > _MAX_TEXT else "".join(parts)
 
 
@@ -307,21 +303,14 @@ def TEXTJOIN(ctx: Context, delimiter: Any, ignore: Any, *args: Any) -> str | Err
         if delimiters:
             out.append(delimiters[i % len(delimiters)])
         out.append(part)
-    joined = "".join(out)
-    return VALUE if len(joined) > _MAX_TEXT else joined
+    return _limited("".join(out))
 
 
 # Units ---------------------------------------------------------------------------------------
-# Excel's text is UTF-16: LEN, MID, FIND and their kin count a character outside the first plane as
-# two, and can cut it in two (capture text_family).
-
-
-def _units(text: str) -> str:
-    """The text with each character outside the first plane as its two surrogates."""
-    if text.isascii() or max(text) <= "￿":
-        return text
-    raw = text.encode("utf-16-le")
-    return "".join(chr(raw[i] | raw[i + 1] << 8) for i in range(0, len(raw), 2))
+# Excel's text is UTF-16. LEN, MID, REPLACE, FIND and SEARCH count a character outside the first
+# plane as one, but a text's limit counts its UTF-16 units, a wildcard's ? matches one unit (such a
+# character takes ??), and LENB, MIDB and REPLACEB count units and can cut a character in two
+# (capture text_family, Excel 16.115).
 
 
 def _characters(units: str) -> str:
@@ -331,7 +320,7 @@ def _characters(units: str) -> str:
 
 def _limited(text: str) -> str | ErrorValue:
     """A result past the limit of a text is ``#VALUE!``."""
-    return VALUE if len(_units(text)) > _MAX_TEXT else text
+    return VALUE if utf16_length(text) > _MAX_TEXT else text
 
 
 @function("PROPER", "text", category=T)
@@ -382,13 +371,20 @@ def UNICODE(ctx: Context, text: str) -> float | ErrorValue:
 
 
 def _search(needle: str, within: str, start: float) -> float | ErrorValue:
-    units, s = _units(within), math.trunc(start)
-    if s < 1 or s > len(units):
+    """The pattern matched over UTF-16 units from a character's start; a position in characters."""
+    s = math.trunc(start)
+    if s < 1 or s > len(within):
         return VALUE
     tildes = len(needle) - len(needle.rstrip("~"))
     pattern = needle[:-1] if tildes % 2 else needle  # a last ~ with nothing to escape is dropped
-    found = wildcard(_units(pattern)).search(units, s - 1)
-    return VALUE if found is None else float(found.start() + 1)
+    units, regex = utf16_units(within), wildcard(utf16_units(pattern))
+    at = len(utf16_units(within[: s - 1]))
+    while (found := regex.search(units, at)) is not None:
+        i = found.start()
+        if not "\udc00" <= units[i : i + 1] <= "\udfff":  # not the second half of a character
+            return float(i - sum("\udc00" <= u <= "\udfff" for u in units[:i]) + 1)
+        at = i + 1
+    return VALUE
 
 
 @function("SEARCH", "text", "text", "number", min_args=2, category=T)
@@ -411,8 +407,8 @@ def FINDB(ctx: Context, needle: str, within: str, start: float = 1.0) -> float |
 
 @function("LENB", "text", category=T)
 def LENB(ctx: Context, text: str) -> float:
-    """``LEN``, in this language setting: no text counts double."""
-    return LEN(ctx, text)  # type: ignore[no-any-return]
+    """``LEN`` in UTF-16 units: a character outside the first plane counts two."""
+    return float(len(utf16_units(text)))
 
 
 @function("LEFTB", "text", "number", min_args=1, category=T)
@@ -429,14 +425,22 @@ def RIGHTB(ctx: Context, text: str, n: float = 1.0) -> str | ErrorValue:
 
 @function("MIDB", "text", "number", "number", category=T)
 def MIDB(ctx: Context, text: str, start: float, n: float) -> str | ErrorValue:
-    """``MID``, in this language setting: no text counts double."""
-    return MID(ctx, text, start, n)  # type: ignore[no-any-return]
+    """``MID`` in UTF-16 units: a character outside the first plane counts two."""
+    s, k = math.trunc(start), math.trunc(n)
+    if s < 1 or k < 0:
+        return VALUE
+    return _characters(utf16_units(text)[s - 1 : s - 1 + k])
 
 
 @function("REPLACEB", "text", "number", "number", "text", category=T)
 def REPLACEB(ctx: Context, text: str, start: float, n: float, new: str) -> str | ErrorValue:
-    """``REPLACE``, in this language setting: no text counts double."""
-    return REPLACE(ctx, text, start, n, new)  # type: ignore[no-any-return]
+    """``REPLACE`` in UTF-16 units: a character outside the first plane counts two."""
+    s, k = math.trunc(start), math.trunc(n)
+    if s < 1 or k < 0 or s > _MAX_TEXT:
+        return VALUE
+    units = utf16_units(text)
+    result = units[: s - 1] + utf16_units(new) + units[s - 1 + k :]
+    return VALUE if len(result) > _MAX_TEXT else _characters(result)
 
 
 @function("SUBSTITUTE", "text", "text", "text", "value", min_args=3, category=T)
@@ -453,7 +457,7 @@ def SUBSTITUTE(ctx: Context, text: str, old: str, new: str, instance: Any = None
     if not old:
         return text
     if instance is None:  # the size first: a small formula can ask for a billion characters
-        size = len(_units(text)) + text.count(old) * (len(_units(new)) - len(_units(old)))
+        size = utf16_length(text) + text.count(old) * (utf16_length(new) - utf16_length(old))
         return VALUE if size > _MAX_TEXT else text.replace(old, new)
     at = -1
     for _ in range(k):

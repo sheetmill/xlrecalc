@@ -315,11 +315,11 @@ def test_refused_in_file_agrees_with_excel_on_database_arguments():
 
 
 def test_a_lone_surrogate_is_written_as_excel_stores_it(tmp_path):
-    """``MID`` can cut a character in two; the file holds ``_xDE00_``, as Excel saves it."""
+    """``MIDB`` can cut a character in two; the file holds ``_xDE00_``, as Excel saves it."""
     openpyxl = pytest.importorskip("openpyxl")
     book = openpyxl.Workbook()
     book.active["B1"] = "\U0001f600ab"
-    book.active["A1"] = "=MID(B1,2,2)"
+    book.active["A1"] = "=MIDB(B1,2,2)"
     source, out = tmp_path / "in.xlsx", tmp_path / "out.xlsx"
     book.save(source)
     recalculate(source, out, full=True)

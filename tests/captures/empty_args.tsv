@@ -1,8 +1,8 @@
 # suite: empty_args
-# excel: 16.114.4 for Mac, locale en_US
-# edition: Office Home & Business 2021, update channel Current
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
 # date_system: 1900
-# captured: 2026-11-10
+# captured: 2026-11-11
 # generator: capture/suites.py:empty_args
 # method: openpyxl writes the formula in column A and the inputs in B onward (floats as
 #   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
@@ -1208,12 +1208,12 @@ empty_args	textsplit	1194	_xlfn.TEXTSPLIT("a,b;c",",",,FALSE)	()	str	'a'
 empty_args	randarray	1195	_xlfn.RANDARRAY(1,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1196	_xlfn.RANDARRAY(,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1197	_xlfn.RANDARRAY(1,,5,5,FALSE)	()	n	5.0
-empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	4.400594324123659
+empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	2.5195756810615197
 empty_args	randarray	1199	_xlfn.RANDARRAY(1,1,5,,FALSE)	()	e	#VALUE!
 empty_args	randarray	1200	_xlfn.RANDARRAY(1,1,5,5,)	()	n	5.0
-empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.2561783084700917
-empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.8676837220029774
-empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.34633765932199734
+empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.37669879360976566
+empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.7467465022953739
+empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.01341173314816424
 empty_args	let	1204	_xlfn.LET(_xlpm.x,1,_xlpm.x+1)	()	n	2.0
 empty_args	let	1205	_xlfn.LET(_xlpm.x,,_xlpm.x+1)	()	n	1.0
 empty_args	let	1206	_xlfn.LET(_xlpm.x,1,)	()	n	0.0

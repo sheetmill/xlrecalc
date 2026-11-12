@@ -238,8 +238,10 @@ def _equal_to(target: Value, quirks: Quirks) -> Callable[[Value], bool]:
     if isinstance(target, bool):
         return lambda cell: isinstance(cell, bool) and cell == target
     if isinstance(target, str):
-        pattern = wildcard(target)
-        return lambda cell: isinstance(cell, str) and pattern.fullmatch(cell) is not None
+        pattern = wildcard(utf16_units(target))
+        return lambda cell: (
+            isinstance(cell, str) and pattern.fullmatch(utf16_units(cell)) is not None
+        )
     number = float(target)  # type: ignore[arg-type]
     return lambda cell: (
         isinstance(cell, float)
@@ -258,8 +260,33 @@ def _ordered(target: Value, op: str, quirks: Quirks) -> Callable[[Value], bool]:
     return test
 
 
+def utf16_units(text: str) -> str:
+    """The text with each character outside the first plane as its two surrogates.
+
+    Excel's text is UTF-16, and a wildcard's ``?`` matches one unit of it, so such a character
+    takes ``??`` (capture text_family): patterns and texts are matched in this form.
+    """
+    if text.isascii() or max(text) <= "\uffff":
+        return text
+    raw = text.encode("utf-16-le")
+    return "".join(chr(raw[i] | raw[i + 1] << 8) for i in range(0, len(raw), 2))
+
+
+def utf16_length(text: str) -> int:
+    """The text's length in UTF-16 units: a character outside the first plane counts two.
+
+    Excel's limit of a text, 32,767, counts these units (capture text_family).
+    """
+    if text.isascii():
+        return len(text)
+    return len(text) + sum(1 for ch in text if ch > "\uffff")
+
+
 def wildcard(text: str) -> re.Pattern[str]:
-    """``*`` any run, ``?`` one character, ``~`` escapes; without case."""
+    """``*`` any run, ``?`` one UTF-16 unit, ``~`` escapes; without case.
+
+    Give it the pattern as ``utf16_units`` gives it, and match texts in that form too.
+    """
     out, i = [], 0
     while i < len(text):
         ch = text[i]

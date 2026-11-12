@@ -43,7 +43,7 @@ FUNCTIONS_OUTPUT = ROOT / "tests" / "captures" / "array_functions.tsv"
 GB = 10**9
 MEMORY_LIMIT = 8 * GB
 TEN_COLUMN_LIMIT = GB // 2
-STEP_SECONDS = {"open": 180, "read": 60, "calc": 300, "close": 60}
+STEP_SECONDS = {"open": 600, "read": 60, "calc": 600, "close": 60}
 
 MAIN = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 REL = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"

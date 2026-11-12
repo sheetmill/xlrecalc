@@ -1,6 +1,7 @@
 # suite: circular_cached
-# excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-06
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/circular_cached_probe.py
 # method: iteration off; a real loop whose file holds sentinel cached values, in a file
 #   openpyxl built or Excel saved, with or without fullCalcOnLoad; opened alone with

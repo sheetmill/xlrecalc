@@ -1,6 +1,7 @@
 # suite: prefixes
-# excel: 16.114.3 for Mac, locale en_US
-# captured: 2026-11-06
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/prefix_probe.py
 # method: each call written by openpyxl with and without _xlfn.; Excel calculates and
 #   saves a copy; the value is its cached value (#NAME? for a form it does not know)
@@ -9,29 +10,29 @@ MAXIFS	'_xlfn.'	'_xlfn.MAXIFS(Z1:Z3,Z1:Z3,">1")'	n	3.0
 MAXIFS	''	'MAXIFS(Z1:Z3,Z1:Z3,">1")'	e	#NAME?
 MINIFS	'_xlfn.'	'_xlfn.MINIFS(Z1:Z3,Z1:Z3,">1")'	n	2.0
 MINIFS	''	'MINIFS(Z1:Z3,Z1:Z3,">1")'	e	#NAME?
-MAP	'_xlfn.'	'SUM(_xlfn.MAP(Z1:Z3,_xlfn.LAMBDA(_xlpm.x,_xlpm.x*2)))'	e	#NAME?
+MAP	'_xlfn.'	'SUM(_xlfn.MAP(Z1:Z3,_xlfn.LAMBDA(_xlpm.x,_xlpm.x*2)))'	n	12.0
 MAP	''	'SUM(MAP(Z1:Z3,_xlfn.LAMBDA(_xlpm.x,_xlpm.x*2)))'	e	#NAME?
-REDUCE	'_xlfn.'	'_xlfn.REDUCE(0,Z1:Z3,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))'	e	#NAME?
+REDUCE	'_xlfn.'	'_xlfn.REDUCE(0,Z1:Z3,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))'	n	6.0
 REDUCE	''	'REDUCE(0,Z1:Z3,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))'	e	#NAME?
-SCAN	'_xlfn.'	'SUM(_xlfn.SCAN(0,Z1:Z3,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b)))'	e	#NAME?
+SCAN	'_xlfn.'	'SUM(_xlfn.SCAN(0,Z1:Z3,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b)))'	n	10.0
 SCAN	''	'SUM(SCAN(0,Z1:Z3,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b)))'	e	#NAME?
-BYROW	'_xlfn.'	'SUM(_xlfn.BYROW(Z1:Z3,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r))))'	e	#NAME?
+BYROW	'_xlfn.'	'SUM(_xlfn.BYROW(Z1:Z3,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r))))'	n	6.0
 BYROW	''	'SUM(BYROW(Z1:Z3,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r))))'	e	#NAME?
-BYCOL	'_xlfn.'	'SUM(_xlfn.BYCOL(Z1:Z3,_xlfn.LAMBDA(_xlpm.c,SUM(_xlpm.c))))'	e	#NAME?
+BYCOL	'_xlfn.'	'SUM(_xlfn.BYCOL(Z1:Z3,_xlfn.LAMBDA(_xlpm.c,SUM(_xlpm.c))))'	n	6.0
 BYCOL	''	'SUM(BYCOL(Z1:Z3,_xlfn.LAMBDA(_xlpm.c,SUM(_xlpm.c))))'	e	#NAME?
-MAKEARRAY	'_xlfn.'	'SUM(_xlfn.MAKEARRAY(2,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c)))'	e	#NAME?
+MAKEARRAY	'_xlfn.'	'SUM(_xlfn.MAKEARRAY(2,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c)))'	n	12.0
 MAKEARRAY	''	'SUM(MAKEARRAY(2,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c)))'	e	#NAME?
-ISOMITTED	'_xlfn.'	'_xlfn.LAMBDA(_xlpm.x,_xlpm.y,_xlfn.ISOMITTED(_xlpm.y))(1)'	e	#NAME?
-ISOMITTED	''	'_xlfn.LAMBDA(_xlpm.x,_xlpm.y,ISOMITTED(_xlpm.y))(1)'	e	#NAME?
-LAMBDA	'_xlfn.'	'_xlfn.LAMBDA(_xlpm.x,_xlpm.x+1)(2)'	e	#NAME?
+ISOMITTED	'_xlfn.'	'_xlfn.LAMBDA(_xlpm.x,_xlpm.y,_xlfn.ISOMITTED(_xlpm.y))(1)'	e	#VALUE!
+ISOMITTED	''	'_xlfn.LAMBDA(_xlpm.x,_xlpm.y,ISOMITTED(_xlpm.y))(1)'	e	#VALUE!
+LAMBDA	'_xlfn.'	'_xlfn.LAMBDA(_xlpm.x,_xlpm.x+1)(2)'	n	3.0
 LAMBDA	''	'LAMBDA(_xlpm.x,_xlpm.x+1)(2)'	e	#NAME?
 LET	'_xlfn.'	'_xlfn.LET(_xlpm.x,1,_xlpm.x+1)'	n	2.0
 LET	''	'LET(_xlpm.x,1,_xlpm.x+1)'	e	#NAME?
-REGEXTEST	'_xlfn.'	'_xlfn.REGEXTEST("abc","b")'	e	#NAME?
+REGEXTEST	'_xlfn.'	'_xlfn.REGEXTEST("abc","b")'	b	True
 REGEXTEST	''	'REGEXTEST("abc","b")'	e	#NAME?
-REGEXEXTRACT	'_xlfn.'	'_xlfn.REGEXEXTRACT("abc","b")'	e	#NAME?
+REGEXEXTRACT	'_xlfn.'	'_xlfn.REGEXEXTRACT("abc","b")'	str	'b'
 REGEXEXTRACT	''	'REGEXEXTRACT("abc","b")'	e	#NAME?
-REGEXREPLACE	'_xlfn.'	'_xlfn.REGEXREPLACE("abc","b","x")'	e	#NAME?
+REGEXREPLACE	'_xlfn.'	'_xlfn.REGEXREPLACE("abc","b","x")'	str	'axc'
 REGEXREPLACE	''	'REGEXREPLACE("abc","b","x")'	e	#NAME?
 SUMIFS	'_xlfn.'	'_xlfn.SUMIFS(Z1:Z3,Z1:Z3,">1")'	n	5.0
 SUMIFS	''	'SUMIFS(Z1:Z3,Z1:Z3,">1")'	n	5.0

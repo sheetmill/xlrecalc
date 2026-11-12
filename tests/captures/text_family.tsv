@@ -1,7 +1,8 @@
 # suite: text_family
-# excel: 16.114.3 for Mac, locale en_US
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
 # date_system: 1900
-# captured: 2026-11-06
+# captured: 2026-11-12
 # generator: capture/suites.py:text_family
 # method: openpyxl writes the formula in column A and the inputs in B onward (floats as
 #   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
@@ -9543,11 +9544,11 @@ text_family	unichar	9530	_xlfn.UNICHAR({1})	(131070.0,)	e	#N/A
 text_family	unichar	9531	_xlfn.UNICHAR({1})	(131071.0,)	e	#N/A
 text_family	unichar	9532	_xlfn.UNICHAR({1})	(1048574.0,)	e	#N/A
 text_family	unichar	9533	_xlfn.UNICHAR({1})	(1048576.0,)	str	'\U00100000'
-text_family	len	9534	LEN({1})	('😀',)	n	2.0
-text_family	len	9535	LEN({1})	('😀x',)	n	3.0
-text_family	len	9536	LEN({1})	('x😀',)	n	3.0
-text_family	len	9537	LEN({1})	('a😀b😀c',)	n	7.0
-text_family	len	9538	LEN({1})	('😀😀',)	n	4.0
+text_family	len	9534	LEN({1})	('😀',)	n	1.0
+text_family	len	9535	LEN({1})	('😀x',)	n	2.0
+text_family	len	9536	LEN({1})	('x😀',)	n	2.0
+text_family	len	9537	LEN({1})	('a😀b😀c',)	n	5.0
+text_family	len	9538	LEN({1})	('😀😀',)	n	2.0
 text_family	upper	9539	UPPER({1})	('😀',)	str	'😀'
 text_family	upper	9540	UPPER({1})	('😀x',)	str	'😀X'
 text_family	upper	9541	UPPER({1})	('x😀',)	str	'X😀'
@@ -9573,17 +9574,17 @@ text_family	astral_right	9560	RIGHT({1},{2})	('😀', 0.0)	str	''
 text_family	astral_mid	9561	MID({1},{2},{3})	('😀', 1.0, 0.0)	str	''
 text_family	astral_replace	9562	REPLACE({1},{2},{3},"Z")	('😀', 1.0, 0.0)	str	'Z😀'
 text_family	astral_mid	9563	MID({1},{2},{3})	('😀', 2.0, 0.0)	str	''
-text_family	astral_replace	9564	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 0.0)	str	'_xD83D_Z_xDE00_'
+text_family	astral_replace	9564	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 0.0)	str	'😀Z'
 text_family	astral_mid	9565	MID({1},{2},{3})	('😀', 3.0, 0.0)	str	''
 text_family	astral_replace	9566	REPLACE({1},{2},{3},"Z")	('😀', 3.0, 0.0)	str	'😀Z'
 text_family	astral_mid	9567	MID({1},{2},{3})	('😀', 4.0, 0.0)	str	''
 text_family	astral_replace	9568	REPLACE({1},{2},{3},"Z")	('😀', 4.0, 0.0)	str	'😀Z'
 text_family	astral_left	9569	LEFT({1},{2})	('😀', 1.0)	str	'😀'
 text_family	astral_right	9570	RIGHT({1},{2})	('😀', 1.0)	str	'😀'
-text_family	astral_mid	9571	MID({1},{2},{3})	('😀', 1.0, 1.0)	str	'_xD83D_'
-text_family	astral_replace	9572	REPLACE({1},{2},{3},"Z")	('😀', 1.0, 1.0)	str	'Z_xDE00_'
-text_family	astral_mid	9573	MID({1},{2},{3})	('😀', 2.0, 1.0)	str	'_xDE00_'
-text_family	astral_replace	9574	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 1.0)	str	'_xD83D_Z'
+text_family	astral_mid	9571	MID({1},{2},{3})	('😀', 1.0, 1.0)	str	'😀'
+text_family	astral_replace	9572	REPLACE({1},{2},{3},"Z")	('😀', 1.0, 1.0)	str	'Z'
+text_family	astral_mid	9573	MID({1},{2},{3})	('😀', 2.0, 1.0)	str	''
+text_family	astral_replace	9574	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 1.0)	str	'😀Z'
 text_family	astral_mid	9575	MID({1},{2},{3})	('😀', 3.0, 1.0)	str	''
 text_family	astral_replace	9576	REPLACE({1},{2},{3},"Z")	('😀', 3.0, 1.0)	str	'😀Z'
 text_family	astral_mid	9577	MID({1},{2},{3})	('😀', 4.0, 1.0)	str	''
@@ -9592,8 +9593,8 @@ text_family	astral_left	9579	LEFT({1},{2})	('😀', 2.0)	str	'😀'
 text_family	astral_right	9580	RIGHT({1},{2})	('😀', 2.0)	str	'😀'
 text_family	astral_mid	9581	MID({1},{2},{3})	('😀', 1.0, 2.0)	str	'😀'
 text_family	astral_replace	9582	REPLACE({1},{2},{3},"Z")	('😀', 1.0, 2.0)	str	'Z'
-text_family	astral_mid	9583	MID({1},{2},{3})	('😀', 2.0, 2.0)	str	'_xDE00_'
-text_family	astral_replace	9584	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 2.0)	str	'_xD83D_Z'
+text_family	astral_mid	9583	MID({1},{2},{3})	('😀', 2.0, 2.0)	str	''
+text_family	astral_replace	9584	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 2.0)	str	'😀Z'
 text_family	astral_mid	9585	MID({1},{2},{3})	('😀', 3.0, 2.0)	str	''
 text_family	astral_replace	9586	REPLACE({1},{2},{3},"Z")	('😀', 3.0, 2.0)	str	'😀Z'
 text_family	astral_mid	9587	MID({1},{2},{3})	('😀', 4.0, 2.0)	str	''
@@ -9602,8 +9603,8 @@ text_family	astral_left	9589	LEFT({1},{2})	('😀', 3.0)	str	'😀'
 text_family	astral_right	9590	RIGHT({1},{2})	('😀', 3.0)	str	'😀'
 text_family	astral_mid	9591	MID({1},{2},{3})	('😀', 1.0, 3.0)	str	'😀'
 text_family	astral_replace	9592	REPLACE({1},{2},{3},"Z")	('😀', 1.0, 3.0)	str	'Z'
-text_family	astral_mid	9593	MID({1},{2},{3})	('😀', 2.0, 3.0)	str	'_xDE00_'
-text_family	astral_replace	9594	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 3.0)	str	'_xD83D_Z'
+text_family	astral_mid	9593	MID({1},{2},{3})	('😀', 2.0, 3.0)	str	''
+text_family	astral_replace	9594	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 3.0)	str	'😀Z'
 text_family	astral_mid	9595	MID({1},{2},{3})	('😀', 3.0, 3.0)	str	''
 text_family	astral_replace	9596	REPLACE({1},{2},{3},"Z")	('😀', 3.0, 3.0)	str	'😀Z'
 text_family	astral_mid	9597	MID({1},{2},{3})	('😀', 4.0, 3.0)	str	''
@@ -9612,8 +9613,8 @@ text_family	astral_left	9599	LEFT({1},{2})	('😀', 4.0)	str	'😀'
 text_family	astral_right	9600	RIGHT({1},{2})	('😀', 4.0)	str	'😀'
 text_family	astral_mid	9601	MID({1},{2},{3})	('😀', 1.0, 4.0)	str	'😀'
 text_family	astral_replace	9602	REPLACE({1},{2},{3},"Z")	('😀', 1.0, 4.0)	str	'Z'
-text_family	astral_mid	9603	MID({1},{2},{3})	('😀', 2.0, 4.0)	str	'_xDE00_'
-text_family	astral_replace	9604	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 4.0)	str	'_xD83D_Z'
+text_family	astral_mid	9603	MID({1},{2},{3})	('😀', 2.0, 4.0)	str	''
+text_family	astral_replace	9604	REPLACE({1},{2},{3},"Z")	('😀', 2.0, 4.0)	str	'😀Z'
 text_family	astral_mid	9605	MID({1},{2},{3})	('😀', 3.0, 4.0)	str	''
 text_family	astral_replace	9606	REPLACE({1},{2},{3},"Z")	('😀', 3.0, 4.0)	str	'😀Z'
 text_family	astral_mid	9607	MID({1},{2},{3})	('😀', 4.0, 4.0)	str	''
@@ -9639,59 +9640,59 @@ text_family	astral_right	9626	RIGHT({1},{2})	('😀x', 0.0)	str	''
 text_family	astral_mid	9627	MID({1},{2},{3})	('😀x', 1.0, 0.0)	str	''
 text_family	astral_replace	9628	REPLACE({1},{2},{3},"Z")	('😀x', 1.0, 0.0)	str	'Z😀x'
 text_family	astral_mid	9629	MID({1},{2},{3})	('😀x', 2.0, 0.0)	str	''
-text_family	astral_replace	9630	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 0.0)	str	'_xD83D_Z_xDE00_x'
+text_family	astral_replace	9630	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 0.0)	str	'😀Zx'
 text_family	astral_mid	9631	MID({1},{2},{3})	('😀x', 3.0, 0.0)	str	''
-text_family	astral_replace	9632	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 0.0)	str	'😀Zx'
+text_family	astral_replace	9632	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 0.0)	str	'😀xZ'
 text_family	astral_mid	9633	MID({1},{2},{3})	('😀x', 4.0, 0.0)	str	''
 text_family	astral_replace	9634	REPLACE({1},{2},{3},"Z")	('😀x', 4.0, 0.0)	str	'😀xZ'
 text_family	astral_left	9635	LEFT({1},{2})	('😀x', 1.0)	str	'😀'
 text_family	astral_right	9636	RIGHT({1},{2})	('😀x', 1.0)	str	'x'
-text_family	astral_mid	9637	MID({1},{2},{3})	('😀x', 1.0, 1.0)	str	'_xD83D_'
-text_family	astral_replace	9638	REPLACE({1},{2},{3},"Z")	('😀x', 1.0, 1.0)	str	'Z_xDE00_x'
-text_family	astral_mid	9639	MID({1},{2},{3})	('😀x', 2.0, 1.0)	str	'_xDE00_'
-text_family	astral_replace	9640	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 1.0)	str	'_xD83D_Zx'
-text_family	astral_mid	9641	MID({1},{2},{3})	('😀x', 3.0, 1.0)	str	'x'
-text_family	astral_replace	9642	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 1.0)	str	'😀Z'
+text_family	astral_mid	9637	MID({1},{2},{3})	('😀x', 1.0, 1.0)	str	'😀'
+text_family	astral_replace	9638	REPLACE({1},{2},{3},"Z")	('😀x', 1.0, 1.0)	str	'Zx'
+text_family	astral_mid	9639	MID({1},{2},{3})	('😀x', 2.0, 1.0)	str	'x'
+text_family	astral_replace	9640	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 1.0)	str	'😀Z'
+text_family	astral_mid	9641	MID({1},{2},{3})	('😀x', 3.0, 1.0)	str	''
+text_family	astral_replace	9642	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 1.0)	str	'😀xZ'
 text_family	astral_mid	9643	MID({1},{2},{3})	('😀x', 4.0, 1.0)	str	''
 text_family	astral_replace	9644	REPLACE({1},{2},{3},"Z")	('😀x', 4.0, 1.0)	str	'😀xZ'
 text_family	astral_left	9645	LEFT({1},{2})	('😀x', 2.0)	str	'😀x'
 text_family	astral_right	9646	RIGHT({1},{2})	('😀x', 2.0)	str	'😀x'
-text_family	astral_mid	9647	MID({1},{2},{3})	('😀x', 1.0, 2.0)	str	'😀'
-text_family	astral_replace	9648	REPLACE({1},{2},{3},"Z")	('😀x', 1.0, 2.0)	str	'Zx'
-text_family	astral_mid	9649	MID({1},{2},{3})	('😀x', 2.0, 2.0)	str	'_xDE00_x'
-text_family	astral_replace	9650	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 2.0)	str	'_xD83D_Z'
-text_family	astral_mid	9651	MID({1},{2},{3})	('😀x', 3.0, 2.0)	str	'x'
-text_family	astral_replace	9652	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 2.0)	str	'😀Z'
+text_family	astral_mid	9647	MID({1},{2},{3})	('😀x', 1.0, 2.0)	str	'😀x'
+text_family	astral_replace	9648	REPLACE({1},{2},{3},"Z")	('😀x', 1.0, 2.0)	str	'Z'
+text_family	astral_mid	9649	MID({1},{2},{3})	('😀x', 2.0, 2.0)	str	'x'
+text_family	astral_replace	9650	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 2.0)	str	'😀Z'
+text_family	astral_mid	9651	MID({1},{2},{3})	('😀x', 3.0, 2.0)	str	''
+text_family	astral_replace	9652	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 2.0)	str	'😀xZ'
 text_family	astral_mid	9653	MID({1},{2},{3})	('😀x', 4.0, 2.0)	str	''
 text_family	astral_replace	9654	REPLACE({1},{2},{3},"Z")	('😀x', 4.0, 2.0)	str	'😀xZ'
 text_family	astral_left	9655	LEFT({1},{2})	('😀x', 3.0)	str	'😀x'
 text_family	astral_right	9656	RIGHT({1},{2})	('😀x', 3.0)	str	'😀x'
 text_family	astral_mid	9657	MID({1},{2},{3})	('😀x', 1.0, 3.0)	str	'😀x'
 text_family	astral_replace	9658	REPLACE({1},{2},{3},"Z")	('😀x', 1.0, 3.0)	str	'Z'
-text_family	astral_mid	9659	MID({1},{2},{3})	('😀x', 2.0, 3.0)	str	'_xDE00_x'
-text_family	astral_replace	9660	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 3.0)	str	'_xD83D_Z'
-text_family	astral_mid	9661	MID({1},{2},{3})	('😀x', 3.0, 3.0)	str	'x'
-text_family	astral_replace	9662	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 3.0)	str	'😀Z'
+text_family	astral_mid	9659	MID({1},{2},{3})	('😀x', 2.0, 3.0)	str	'x'
+text_family	astral_replace	9660	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 3.0)	str	'😀Z'
+text_family	astral_mid	9661	MID({1},{2},{3})	('😀x', 3.0, 3.0)	str	''
+text_family	astral_replace	9662	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 3.0)	str	'😀xZ'
 text_family	astral_mid	9663	MID({1},{2},{3})	('😀x', 4.0, 3.0)	str	''
 text_family	astral_replace	9664	REPLACE({1},{2},{3},"Z")	('😀x', 4.0, 3.0)	str	'😀xZ'
 text_family	astral_left	9665	LEFT({1},{2})	('😀x', 4.0)	str	'😀x'
 text_family	astral_right	9666	RIGHT({1},{2})	('😀x', 4.0)	str	'😀x'
 text_family	astral_mid	9667	MID({1},{2},{3})	('😀x', 1.0, 4.0)	str	'😀x'
 text_family	astral_replace	9668	REPLACE({1},{2},{3},"Z")	('😀x', 1.0, 4.0)	str	'Z'
-text_family	astral_mid	9669	MID({1},{2},{3})	('😀x', 2.0, 4.0)	str	'_xDE00_x'
-text_family	astral_replace	9670	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 4.0)	str	'_xD83D_Z'
-text_family	astral_mid	9671	MID({1},{2},{3})	('😀x', 3.0, 4.0)	str	'x'
-text_family	astral_replace	9672	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 4.0)	str	'😀Z'
+text_family	astral_mid	9669	MID({1},{2},{3})	('😀x', 2.0, 4.0)	str	'x'
+text_family	astral_replace	9670	REPLACE({1},{2},{3},"Z")	('😀x', 2.0, 4.0)	str	'😀Z'
+text_family	astral_mid	9671	MID({1},{2},{3})	('😀x', 3.0, 4.0)	str	''
+text_family	astral_replace	9672	REPLACE({1},{2},{3},"Z")	('😀x', 3.0, 4.0)	str	'😀xZ'
 text_family	astral_mid	9673	MID({1},{2},{3})	('😀x', 4.0, 4.0)	str	''
 text_family	astral_replace	9674	REPLACE({1},{2},{3},"Z")	('😀x', 4.0, 4.0)	str	'😀xZ'
 text_family	astral_find	9675	FIND({1},{2})	('😀', '😀x')	n	1.0
 text_family	astral_search	9676	SEARCH({1},{2})	('😀', '😀x')	n	1.0
 text_family	astral_find	9677	FIND({1},{2},2)	('😀', '😀x')	e	#VALUE!
 text_family	astral_search	9678	SEARCH({1},{2},2)	('😀', '😀x')	e	#VALUE!
-text_family	astral_find	9679	FIND({1},{2})	('x', '😀x')	n	3.0
-text_family	astral_search	9680	SEARCH({1},{2})	('x', '😀x')	n	3.0
-text_family	astral_find	9681	FIND({1},{2},2)	('x', '😀x')	n	3.0
-text_family	astral_search	9682	SEARCH({1},{2},2)	('x', '😀x')	n	3.0
+text_family	astral_find	9679	FIND({1},{2})	('x', '😀x')	n	2.0
+text_family	astral_search	9680	SEARCH({1},{2})	('x', '😀x')	n	2.0
+text_family	astral_find	9681	FIND({1},{2},2)	('x', '😀x')	n	2.0
+text_family	astral_search	9682	SEARCH({1},{2},2)	('x', '😀x')	n	2.0
 text_family	astral_find	9683	FIND({1},{2})	('b', '😀x')	e	#VALUE!
 text_family	astral_search	9684	SEARCH({1},{2})	('b', '😀x')	e	#VALUE!
 text_family	astral_find	9685	FIND({1},{2},2)	('b', '😀x')	e	#VALUE!
@@ -9707,27 +9708,27 @@ text_family	astral_replace	9694	REPLACE({1},{2},{3},"Z")	('x😀', 1.0, 0.0)	str
 text_family	astral_mid	9695	MID({1},{2},{3})	('x😀', 2.0, 0.0)	str	''
 text_family	astral_replace	9696	REPLACE({1},{2},{3},"Z")	('x😀', 2.0, 0.0)	str	'xZ😀'
 text_family	astral_mid	9697	MID({1},{2},{3})	('x😀', 3.0, 0.0)	str	''
-text_family	astral_replace	9698	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 0.0)	str	'x_xD83D_Z_xDE00_'
+text_family	astral_replace	9698	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 0.0)	str	'x😀Z'
 text_family	astral_mid	9699	MID({1},{2},{3})	('x😀', 4.0, 0.0)	str	''
 text_family	astral_replace	9700	REPLACE({1},{2},{3},"Z")	('x😀', 4.0, 0.0)	str	'x😀Z'
 text_family	astral_left	9701	LEFT({1},{2})	('x😀', 1.0)	str	'x'
 text_family	astral_right	9702	RIGHT({1},{2})	('x😀', 1.0)	str	'😀'
 text_family	astral_mid	9703	MID({1},{2},{3})	('x😀', 1.0, 1.0)	str	'x'
 text_family	astral_replace	9704	REPLACE({1},{2},{3},"Z")	('x😀', 1.0, 1.0)	str	'Z😀'
-text_family	astral_mid	9705	MID({1},{2},{3})	('x😀', 2.0, 1.0)	str	'_xD83D_'
-text_family	astral_replace	9706	REPLACE({1},{2},{3},"Z")	('x😀', 2.0, 1.0)	str	'xZ_xDE00_'
-text_family	astral_mid	9707	MID({1},{2},{3})	('x😀', 3.0, 1.0)	str	'_xDE00_'
-text_family	astral_replace	9708	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 1.0)	str	'x_xD83D_Z'
+text_family	astral_mid	9705	MID({1},{2},{3})	('x😀', 2.0, 1.0)	str	'😀'
+text_family	astral_replace	9706	REPLACE({1},{2},{3},"Z")	('x😀', 2.0, 1.0)	str	'xZ'
+text_family	astral_mid	9707	MID({1},{2},{3})	('x😀', 3.0, 1.0)	str	''
+text_family	astral_replace	9708	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 1.0)	str	'x😀Z'
 text_family	astral_mid	9709	MID({1},{2},{3})	('x😀', 4.0, 1.0)	str	''
 text_family	astral_replace	9710	REPLACE({1},{2},{3},"Z")	('x😀', 4.0, 1.0)	str	'x😀Z'
 text_family	astral_left	9711	LEFT({1},{2})	('x😀', 2.0)	str	'x😀'
 text_family	astral_right	9712	RIGHT({1},{2})	('x😀', 2.0)	str	'x😀'
-text_family	astral_mid	9713	MID({1},{2},{3})	('x😀', 1.0, 2.0)	str	'x_xD83D_'
-text_family	astral_replace	9714	REPLACE({1},{2},{3},"Z")	('x😀', 1.0, 2.0)	str	'Z_xDE00_'
+text_family	astral_mid	9713	MID({1},{2},{3})	('x😀', 1.0, 2.0)	str	'x😀'
+text_family	astral_replace	9714	REPLACE({1},{2},{3},"Z")	('x😀', 1.0, 2.0)	str	'Z'
 text_family	astral_mid	9715	MID({1},{2},{3})	('x😀', 2.0, 2.0)	str	'😀'
 text_family	astral_replace	9716	REPLACE({1},{2},{3},"Z")	('x😀', 2.0, 2.0)	str	'xZ'
-text_family	astral_mid	9717	MID({1},{2},{3})	('x😀', 3.0, 2.0)	str	'_xDE00_'
-text_family	astral_replace	9718	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 2.0)	str	'x_xD83D_Z'
+text_family	astral_mid	9717	MID({1},{2},{3})	('x😀', 3.0, 2.0)	str	''
+text_family	astral_replace	9718	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 2.0)	str	'x😀Z'
 text_family	astral_mid	9719	MID({1},{2},{3})	('x😀', 4.0, 2.0)	str	''
 text_family	astral_replace	9720	REPLACE({1},{2},{3},"Z")	('x😀', 4.0, 2.0)	str	'x😀Z'
 text_family	astral_left	9721	LEFT({1},{2})	('x😀', 3.0)	str	'x😀'
@@ -9736,8 +9737,8 @@ text_family	astral_mid	9723	MID({1},{2},{3})	('x😀', 1.0, 3.0)	str	'x😀'
 text_family	astral_replace	9724	REPLACE({1},{2},{3},"Z")	('x😀', 1.0, 3.0)	str	'Z'
 text_family	astral_mid	9725	MID({1},{2},{3})	('x😀', 2.0, 3.0)	str	'😀'
 text_family	astral_replace	9726	REPLACE({1},{2},{3},"Z")	('x😀', 2.0, 3.0)	str	'xZ'
-text_family	astral_mid	9727	MID({1},{2},{3})	('x😀', 3.0, 3.0)	str	'_xDE00_'
-text_family	astral_replace	9728	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 3.0)	str	'x_xD83D_Z'
+text_family	astral_mid	9727	MID({1},{2},{3})	('x😀', 3.0, 3.0)	str	''
+text_family	astral_replace	9728	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 3.0)	str	'x😀Z'
 text_family	astral_mid	9729	MID({1},{2},{3})	('x😀', 4.0, 3.0)	str	''
 text_family	astral_replace	9730	REPLACE({1},{2},{3},"Z")	('x😀', 4.0, 3.0)	str	'x😀Z'
 text_family	astral_left	9731	LEFT({1},{2})	('x😀', 4.0)	str	'x😀'
@@ -9746,8 +9747,8 @@ text_family	astral_mid	9733	MID({1},{2},{3})	('x😀', 1.0, 4.0)	str	'x😀'
 text_family	astral_replace	9734	REPLACE({1},{2},{3},"Z")	('x😀', 1.0, 4.0)	str	'Z'
 text_family	astral_mid	9735	MID({1},{2},{3})	('x😀', 2.0, 4.0)	str	'😀'
 text_family	astral_replace	9736	REPLACE({1},{2},{3},"Z")	('x😀', 2.0, 4.0)	str	'xZ'
-text_family	astral_mid	9737	MID({1},{2},{3})	('x😀', 3.0, 4.0)	str	'_xDE00_'
-text_family	astral_replace	9738	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 4.0)	str	'x_xD83D_Z'
+text_family	astral_mid	9737	MID({1},{2},{3})	('x😀', 3.0, 4.0)	str	''
+text_family	astral_replace	9738	REPLACE({1},{2},{3},"Z")	('x😀', 3.0, 4.0)	str	'x😀Z'
 text_family	astral_mid	9739	MID({1},{2},{3})	('x😀', 4.0, 4.0)	str	''
 text_family	astral_replace	9740	REPLACE({1},{2},{3},"Z")	('x😀', 4.0, 4.0)	str	'x😀Z'
 text_family	astral_find	9741	FIND({1},{2})	('😀', 'x😀')	n	2.0
@@ -9773,49 +9774,49 @@ text_family	astral_replace	9760	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 1.0, 0.
 text_family	astral_mid	9761	MID({1},{2},{3})	('a😀b😀c', 2.0, 0.0)	str	''
 text_family	astral_replace	9762	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 0.0)	str	'aZ😀b😀c'
 text_family	astral_mid	9763	MID({1},{2},{3})	('a😀b😀c', 3.0, 0.0)	str	''
-text_family	astral_replace	9764	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 0.0)	str	'a_xD83D_Z_xDE00_b😀c'
+text_family	astral_replace	9764	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 0.0)	str	'a😀Zb😀c'
 text_family	astral_mid	9765	MID({1},{2},{3})	('a😀b😀c', 4.0, 0.0)	str	''
-text_family	astral_replace	9766	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 0.0)	str	'a😀Zb😀c'
+text_family	astral_replace	9766	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 0.0)	str	'a😀bZ😀c'
 text_family	astral_left	9767	LEFT({1},{2})	('a😀b😀c', 1.0)	str	'a'
 text_family	astral_right	9768	RIGHT({1},{2})	('a😀b😀c', 1.0)	str	'c'
 text_family	astral_mid	9769	MID({1},{2},{3})	('a😀b😀c', 1.0, 1.0)	str	'a'
 text_family	astral_replace	9770	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 1.0, 1.0)	str	'Z😀b😀c'
-text_family	astral_mid	9771	MID({1},{2},{3})	('a😀b😀c', 2.0, 1.0)	str	'_xD83D_'
-text_family	astral_replace	9772	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 1.0)	str	'aZ_xDE00_b😀c'
-text_family	astral_mid	9773	MID({1},{2},{3})	('a😀b😀c', 3.0, 1.0)	str	'_xDE00_'
-text_family	astral_replace	9774	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 1.0)	str	'a_xD83D_Zb😀c'
-text_family	astral_mid	9775	MID({1},{2},{3})	('a😀b😀c', 4.0, 1.0)	str	'b'
-text_family	astral_replace	9776	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 1.0)	str	'a😀Z😀c'
+text_family	astral_mid	9771	MID({1},{2},{3})	('a😀b😀c', 2.0, 1.0)	str	'😀'
+text_family	astral_replace	9772	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 1.0)	str	'aZb😀c'
+text_family	astral_mid	9773	MID({1},{2},{3})	('a😀b😀c', 3.0, 1.0)	str	'b'
+text_family	astral_replace	9774	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 1.0)	str	'a😀Z😀c'
+text_family	astral_mid	9775	MID({1},{2},{3})	('a😀b😀c', 4.0, 1.0)	str	'😀'
+text_family	astral_replace	9776	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 1.0)	str	'a😀bZc'
 text_family	astral_left	9777	LEFT({1},{2})	('a😀b😀c', 2.0)	str	'a😀'
 text_family	astral_right	9778	RIGHT({1},{2})	('a😀b😀c', 2.0)	str	'😀c'
-text_family	astral_mid	9779	MID({1},{2},{3})	('a😀b😀c', 1.0, 2.0)	str	'a_xD83D_'
-text_family	astral_replace	9780	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 1.0, 2.0)	str	'Z_xDE00_b😀c'
-text_family	astral_mid	9781	MID({1},{2},{3})	('a😀b😀c', 2.0, 2.0)	str	'😀'
-text_family	astral_replace	9782	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 2.0)	str	'aZb😀c'
-text_family	astral_mid	9783	MID({1},{2},{3})	('a😀b😀c', 3.0, 2.0)	str	'_xDE00_b'
-text_family	astral_replace	9784	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 2.0)	str	'a_xD83D_Z😀c'
-text_family	astral_mid	9785	MID({1},{2},{3})	('a😀b😀c', 4.0, 2.0)	str	'b_xD83D_'
-text_family	astral_replace	9786	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 2.0)	str	'a😀Z_xDE00_c'
+text_family	astral_mid	9779	MID({1},{2},{3})	('a😀b😀c', 1.0, 2.0)	str	'a😀'
+text_family	astral_replace	9780	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 1.0, 2.0)	str	'Zb😀c'
+text_family	astral_mid	9781	MID({1},{2},{3})	('a😀b😀c', 2.0, 2.0)	str	'😀b'
+text_family	astral_replace	9782	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 2.0)	str	'aZ😀c'
+text_family	astral_mid	9783	MID({1},{2},{3})	('a😀b😀c', 3.0, 2.0)	str	'b😀'
+text_family	astral_replace	9784	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 2.0)	str	'a😀Zc'
+text_family	astral_mid	9785	MID({1},{2},{3})	('a😀b😀c', 4.0, 2.0)	str	'😀c'
+text_family	astral_replace	9786	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 2.0)	str	'a😀bZ'
 text_family	astral_left	9787	LEFT({1},{2})	('a😀b😀c', 3.0)	str	'a😀b'
 text_family	astral_right	9788	RIGHT({1},{2})	('a😀b😀c', 3.0)	str	'b😀c'
-text_family	astral_mid	9789	MID({1},{2},{3})	('a😀b😀c', 1.0, 3.0)	str	'a😀'
-text_family	astral_replace	9790	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 1.0, 3.0)	str	'Zb😀c'
-text_family	astral_mid	9791	MID({1},{2},{3})	('a😀b😀c', 2.0, 3.0)	str	'😀b'
-text_family	astral_replace	9792	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 3.0)	str	'aZ😀c'
-text_family	astral_mid	9793	MID({1},{2},{3})	('a😀b😀c', 3.0, 3.0)	str	'_xDE00_b_xD83D_'
-text_family	astral_replace	9794	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 3.0)	str	'a_xD83D_Z_xDE00_c'
-text_family	astral_mid	9795	MID({1},{2},{3})	('a😀b😀c', 4.0, 3.0)	str	'b😀'
-text_family	astral_replace	9796	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 3.0)	str	'a😀Zc'
+text_family	astral_mid	9789	MID({1},{2},{3})	('a😀b😀c', 1.0, 3.0)	str	'a😀b'
+text_family	astral_replace	9790	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 1.0, 3.0)	str	'Z😀c'
+text_family	astral_mid	9791	MID({1},{2},{3})	('a😀b😀c', 2.0, 3.0)	str	'😀b😀'
+text_family	astral_replace	9792	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 3.0)	str	'aZc'
+text_family	astral_mid	9793	MID({1},{2},{3})	('a😀b😀c', 3.0, 3.0)	str	'b😀c'
+text_family	astral_replace	9794	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 3.0)	str	'a😀Z'
+text_family	astral_mid	9795	MID({1},{2},{3})	('a😀b😀c', 4.0, 3.0)	str	'😀c'
+text_family	astral_replace	9796	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 3.0)	str	'a😀bZ'
 text_family	astral_left	9797	LEFT({1},{2})	('a😀b😀c', 4.0)	str	'a😀b😀'
 text_family	astral_right	9798	RIGHT({1},{2})	('a😀b😀c', 4.0)	str	'😀b😀c'
-text_family	astral_mid	9799	MID({1},{2},{3})	('a😀b😀c', 1.0, 4.0)	str	'a😀b'
-text_family	astral_replace	9800	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 1.0, 4.0)	str	'Z😀c'
-text_family	astral_mid	9801	MID({1},{2},{3})	('a😀b😀c', 2.0, 4.0)	str	'😀b_xD83D_'
-text_family	astral_replace	9802	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 4.0)	str	'aZ_xDE00_c'
-text_family	astral_mid	9803	MID({1},{2},{3})	('a😀b😀c', 3.0, 4.0)	str	'_xDE00_b😀'
-text_family	astral_replace	9804	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 4.0)	str	'a_xD83D_Zc'
-text_family	astral_mid	9805	MID({1},{2},{3})	('a😀b😀c', 4.0, 4.0)	str	'b😀c'
-text_family	astral_replace	9806	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 4.0)	str	'a😀Z'
+text_family	astral_mid	9799	MID({1},{2},{3})	('a😀b😀c', 1.0, 4.0)	str	'a😀b😀'
+text_family	astral_replace	9800	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 1.0, 4.0)	str	'Zc'
+text_family	astral_mid	9801	MID({1},{2},{3})	('a😀b😀c', 2.0, 4.0)	str	'😀b😀c'
+text_family	astral_replace	9802	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 2.0, 4.0)	str	'aZ'
+text_family	astral_mid	9803	MID({1},{2},{3})	('a😀b😀c', 3.0, 4.0)	str	'b😀c'
+text_family	astral_replace	9804	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 3.0, 4.0)	str	'a😀Z'
+text_family	astral_mid	9805	MID({1},{2},{3})	('a😀b😀c', 4.0, 4.0)	str	'😀c'
+text_family	astral_replace	9806	REPLACE({1},{2},{3},"Z")	('a😀b😀c', 4.0, 4.0)	str	'a😀bZ'
 text_family	astral_find	9807	FIND({1},{2})	('😀', 'a😀b😀c')	n	2.0
 text_family	astral_search	9808	SEARCH({1},{2})	('😀', 'a😀b😀c')	n	2.0
 text_family	astral_find	9809	FIND({1},{2},2)	('😀', 'a😀b😀c')	n	2.0
@@ -9824,68 +9825,68 @@ text_family	astral_find	9811	FIND({1},{2})	('x', 'a😀b😀c')	e	#VALUE!
 text_family	astral_search	9812	SEARCH({1},{2})	('x', 'a😀b😀c')	e	#VALUE!
 text_family	astral_find	9813	FIND({1},{2},2)	('x', 'a😀b😀c')	e	#VALUE!
 text_family	astral_search	9814	SEARCH({1},{2},2)	('x', 'a😀b😀c')	e	#VALUE!
-text_family	astral_find	9815	FIND({1},{2})	('b', 'a😀b😀c')	n	4.0
-text_family	astral_search	9816	SEARCH({1},{2})	('b', 'a😀b😀c')	n	4.0
-text_family	astral_find	9817	FIND({1},{2},2)	('b', 'a😀b😀c')	n	4.0
-text_family	astral_search	9818	SEARCH({1},{2},2)	('b', 'a😀b😀c')	n	4.0
-text_family	astral_find	9819	FIND({1},{2})	('c', 'a😀b😀c')	n	7.0
-text_family	astral_search	9820	SEARCH({1},{2})	('c', 'a😀b😀c')	n	7.0
-text_family	astral_find	9821	FIND({1},{2},2)	('c', 'a😀b😀c')	n	7.0
-text_family	astral_search	9822	SEARCH({1},{2},2)	('c', 'a😀b😀c')	n	7.0
+text_family	astral_find	9815	FIND({1},{2})	('b', 'a😀b😀c')	n	3.0
+text_family	astral_search	9816	SEARCH({1},{2})	('b', 'a😀b😀c')	n	3.0
+text_family	astral_find	9817	FIND({1},{2},2)	('b', 'a😀b😀c')	n	3.0
+text_family	astral_search	9818	SEARCH({1},{2},2)	('b', 'a😀b😀c')	n	3.0
+text_family	astral_find	9819	FIND({1},{2})	('c', 'a😀b😀c')	n	5.0
+text_family	astral_search	9820	SEARCH({1},{2})	('c', 'a😀b😀c')	n	5.0
+text_family	astral_find	9821	FIND({1},{2},2)	('c', 'a😀b😀c')	n	5.0
+text_family	astral_search	9822	SEARCH({1},{2},2)	('c', 'a😀b😀c')	n	5.0
 text_family	astral_left	9823	LEFT({1},{2})	('😀😀', 0.0)	str	''
 text_family	astral_right	9824	RIGHT({1},{2})	('😀😀', 0.0)	str	''
 text_family	astral_mid	9825	MID({1},{2},{3})	('😀😀', 1.0, 0.0)	str	''
 text_family	astral_replace	9826	REPLACE({1},{2},{3},"Z")	('😀😀', 1.0, 0.0)	str	'Z😀😀'
 text_family	astral_mid	9827	MID({1},{2},{3})	('😀😀', 2.0, 0.0)	str	''
-text_family	astral_replace	9828	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 0.0)	str	'_xD83D_Z_xDE00_😀'
+text_family	astral_replace	9828	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 0.0)	str	'😀Z😀'
 text_family	astral_mid	9829	MID({1},{2},{3})	('😀😀', 3.0, 0.0)	str	''
-text_family	astral_replace	9830	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 0.0)	str	'😀Z😀'
+text_family	astral_replace	9830	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 0.0)	str	'😀😀Z'
 text_family	astral_mid	9831	MID({1},{2},{3})	('😀😀', 4.0, 0.0)	str	''
-text_family	astral_replace	9832	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 0.0)	str	'😀_xD83D_Z_xDE00_'
+text_family	astral_replace	9832	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 0.0)	str	'😀😀Z'
 text_family	astral_left	9833	LEFT({1},{2})	('😀😀', 1.0)	str	'😀'
 text_family	astral_right	9834	RIGHT({1},{2})	('😀😀', 1.0)	str	'😀'
-text_family	astral_mid	9835	MID({1},{2},{3})	('😀😀', 1.0, 1.0)	str	'_xD83D_'
-text_family	astral_replace	9836	REPLACE({1},{2},{3},"Z")	('😀😀', 1.0, 1.0)	str	'Z_xDE00_😀'
-text_family	astral_mid	9837	MID({1},{2},{3})	('😀😀', 2.0, 1.0)	str	'_xDE00_'
-text_family	astral_replace	9838	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 1.0)	str	'_xD83D_Z😀'
-text_family	astral_mid	9839	MID({1},{2},{3})	('😀😀', 3.0, 1.0)	str	'_xD83D_'
-text_family	astral_replace	9840	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 1.0)	str	'😀Z_xDE00_'
-text_family	astral_mid	9841	MID({1},{2},{3})	('😀😀', 4.0, 1.0)	str	'_xDE00_'
-text_family	astral_replace	9842	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 1.0)	str	'😀_xD83D_Z'
+text_family	astral_mid	9835	MID({1},{2},{3})	('😀😀', 1.0, 1.0)	str	'😀'
+text_family	astral_replace	9836	REPLACE({1},{2},{3},"Z")	('😀😀', 1.0, 1.0)	str	'Z😀'
+text_family	astral_mid	9837	MID({1},{2},{3})	('😀😀', 2.0, 1.0)	str	'😀'
+text_family	astral_replace	9838	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 1.0)	str	'😀Z'
+text_family	astral_mid	9839	MID({1},{2},{3})	('😀😀', 3.0, 1.0)	str	''
+text_family	astral_replace	9840	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 1.0)	str	'😀😀Z'
+text_family	astral_mid	9841	MID({1},{2},{3})	('😀😀', 4.0, 1.0)	str	''
+text_family	astral_replace	9842	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 1.0)	str	'😀😀Z'
 text_family	astral_left	9843	LEFT({1},{2})	('😀😀', 2.0)	str	'😀😀'
 text_family	astral_right	9844	RIGHT({1},{2})	('😀😀', 2.0)	str	'😀😀'
-text_family	astral_mid	9845	MID({1},{2},{3})	('😀😀', 1.0, 2.0)	str	'😀'
-text_family	astral_replace	9846	REPLACE({1},{2},{3},"Z")	('😀😀', 1.0, 2.0)	str	'Z😀'
-text_family	astral_mid	9847	MID({1},{2},{3})	('😀😀', 2.0, 2.0)	str	'_xDE00__xD83D_'
-text_family	astral_replace	9848	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 2.0)	str	'_xD83D_Z_xDE00_'
-text_family	astral_mid	9849	MID({1},{2},{3})	('😀😀', 3.0, 2.0)	str	'😀'
-text_family	astral_replace	9850	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 2.0)	str	'😀Z'
-text_family	astral_mid	9851	MID({1},{2},{3})	('😀😀', 4.0, 2.0)	str	'_xDE00_'
-text_family	astral_replace	9852	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 2.0)	str	'😀_xD83D_Z'
+text_family	astral_mid	9845	MID({1},{2},{3})	('😀😀', 1.0, 2.0)	str	'😀😀'
+text_family	astral_replace	9846	REPLACE({1},{2},{3},"Z")	('😀😀', 1.0, 2.0)	str	'Z'
+text_family	astral_mid	9847	MID({1},{2},{3})	('😀😀', 2.0, 2.0)	str	'😀'
+text_family	astral_replace	9848	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 2.0)	str	'😀Z'
+text_family	astral_mid	9849	MID({1},{2},{3})	('😀😀', 3.0, 2.0)	str	''
+text_family	astral_replace	9850	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 2.0)	str	'😀😀Z'
+text_family	astral_mid	9851	MID({1},{2},{3})	('😀😀', 4.0, 2.0)	str	''
+text_family	astral_replace	9852	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 2.0)	str	'😀😀Z'
 text_family	astral_left	9853	LEFT({1},{2})	('😀😀', 3.0)	str	'😀😀'
 text_family	astral_right	9854	RIGHT({1},{2})	('😀😀', 3.0)	str	'😀😀'
-text_family	astral_mid	9855	MID({1},{2},{3})	('😀😀', 1.0, 3.0)	str	'😀_xD83D_'
-text_family	astral_replace	9856	REPLACE({1},{2},{3},"Z")	('😀😀', 1.0, 3.0)	str	'Z_xDE00_'
-text_family	astral_mid	9857	MID({1},{2},{3})	('😀😀', 2.0, 3.0)	str	'_xDE00_😀'
-text_family	astral_replace	9858	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 3.0)	str	'_xD83D_Z'
-text_family	astral_mid	9859	MID({1},{2},{3})	('😀😀', 3.0, 3.0)	str	'😀'
-text_family	astral_replace	9860	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 3.0)	str	'😀Z'
-text_family	astral_mid	9861	MID({1},{2},{3})	('😀😀', 4.0, 3.0)	str	'_xDE00_'
-text_family	astral_replace	9862	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 3.0)	str	'😀_xD83D_Z'
+text_family	astral_mid	9855	MID({1},{2},{3})	('😀😀', 1.0, 3.0)	str	'😀😀'
+text_family	astral_replace	9856	REPLACE({1},{2},{3},"Z")	('😀😀', 1.0, 3.0)	str	'Z'
+text_family	astral_mid	9857	MID({1},{2},{3})	('😀😀', 2.0, 3.0)	str	'😀'
+text_family	astral_replace	9858	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 3.0)	str	'😀Z'
+text_family	astral_mid	9859	MID({1},{2},{3})	('😀😀', 3.0, 3.0)	str	''
+text_family	astral_replace	9860	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 3.0)	str	'😀😀Z'
+text_family	astral_mid	9861	MID({1},{2},{3})	('😀😀', 4.0, 3.0)	str	''
+text_family	astral_replace	9862	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 3.0)	str	'😀😀Z'
 text_family	astral_left	9863	LEFT({1},{2})	('😀😀', 4.0)	str	'😀😀'
 text_family	astral_right	9864	RIGHT({1},{2})	('😀😀', 4.0)	str	'😀😀'
 text_family	astral_mid	9865	MID({1},{2},{3})	('😀😀', 1.0, 4.0)	str	'😀😀'
 text_family	astral_replace	9866	REPLACE({1},{2},{3},"Z")	('😀😀', 1.0, 4.0)	str	'Z'
-text_family	astral_mid	9867	MID({1},{2},{3})	('😀😀', 2.0, 4.0)	str	'_xDE00_😀'
-text_family	astral_replace	9868	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 4.0)	str	'_xD83D_Z'
-text_family	astral_mid	9869	MID({1},{2},{3})	('😀😀', 3.0, 4.0)	str	'😀'
-text_family	astral_replace	9870	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 4.0)	str	'😀Z'
-text_family	astral_mid	9871	MID({1},{2},{3})	('😀😀', 4.0, 4.0)	str	'_xDE00_'
-text_family	astral_replace	9872	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 4.0)	str	'😀_xD83D_Z'
+text_family	astral_mid	9867	MID({1},{2},{3})	('😀😀', 2.0, 4.0)	str	'😀'
+text_family	astral_replace	9868	REPLACE({1},{2},{3},"Z")	('😀😀', 2.0, 4.0)	str	'😀Z'
+text_family	astral_mid	9869	MID({1},{2},{3})	('😀😀', 3.0, 4.0)	str	''
+text_family	astral_replace	9870	REPLACE({1},{2},{3},"Z")	('😀😀', 3.0, 4.0)	str	'😀😀Z'
+text_family	astral_mid	9871	MID({1},{2},{3})	('😀😀', 4.0, 4.0)	str	''
+text_family	astral_replace	9872	REPLACE({1},{2},{3},"Z")	('😀😀', 4.0, 4.0)	str	'😀😀Z'
 text_family	astral_find	9873	FIND({1},{2})	('😀', '😀😀')	n	1.0
 text_family	astral_search	9874	SEARCH({1},{2})	('😀', '😀😀')	n	1.0
-text_family	astral_find	9875	FIND({1},{2},2)	('😀', '😀😀')	n	3.0
-text_family	astral_search	9876	SEARCH({1},{2},2)	('😀', '😀😀')	n	3.0
+text_family	astral_find	9875	FIND({1},{2},2)	('😀', '😀😀')	n	2.0
+text_family	astral_search	9876	SEARCH({1},{2},2)	('😀', '😀😀')	n	2.0
 text_family	astral_find	9877	FIND({1},{2})	('x', '😀😀')	e	#VALUE!
 text_family	astral_search	9878	SEARCH({1},{2})	('x', '😀😀')	e	#VALUE!
 text_family	astral_find	9879	FIND({1},{2},2)	('x', '😀😀')	e	#VALUE!
@@ -9899,7 +9900,7 @@ text_family	astral_search	9886	SEARCH({1},{2})	('c', '😀😀')	e	#VALUE!
 text_family	astral_find	9887	FIND({1},{2},2)	('c', '😀😀')	e	#VALUE!
 text_family	astral_search	9888	SEARCH({1},{2},2)	('c', '😀😀')	e	#VALUE!
 text_family	astral_search	9889	SEARCH("?x",{1})	('😀',)	e	#VALUE!
-text_family	astral_search	9890	SEARCH("?x",{1})	('😀x',)	n	2.0
+text_family	astral_search	9890	SEARCH("?x",{1})	('😀x',)	e	#VALUE!
 text_family	astral_search	9891	SEARCH("?x",{1})	('x😀',)	e	#VALUE!
 text_family	astral_search	9892	SEARCH("?x",{1})	('a😀b😀c',)	e	#VALUE!
 text_family	astral_search	9893	SEARCH("?x",{1})	('😀😀',)	e	#VALUE!
@@ -9908,11 +9909,11 @@ text_family	astral_search	9895	SEARCH("x?",{1})	('😀x',)	e	#VALUE!
 text_family	astral_search	9896	SEARCH("x?",{1})	('x😀',)	n	1.0
 text_family	astral_search	9897	SEARCH("x?",{1})	('a😀b😀c',)	e	#VALUE!
 text_family	astral_search	9898	SEARCH("x?",{1})	('😀😀',)	e	#VALUE!
-text_family	astral_rept	9899	LEN(REPT({1},3))	('😀',)	n	6.0
-text_family	astral_rept	9900	LEN(REPT({1},3))	('😀x',)	n	9.0
-text_family	astral_rept	9901	LEN(REPT({1},3))	('x😀',)	n	9.0
-text_family	astral_rept	9902	LEN(REPT({1},3))	('a😀b😀c',)	n	21.0
-text_family	astral_rept	9903	LEN(REPT({1},3))	('😀😀',)	n	12.0
+text_family	astral_rept	9899	LEN(REPT({1},3))	('😀',)	n	3.0
+text_family	astral_rept	9900	LEN(REPT({1},3))	('😀x',)	n	6.0
+text_family	astral_rept	9901	LEN(REPT({1},3))	('x😀',)	n	6.0
+text_family	astral_rept	9902	LEN(REPT({1},3))	('a😀b😀c',)	n	15.0
+text_family	astral_rept	9903	LEN(REPT({1},3))	('😀😀',)	n	6.0
 text_family	huge_usdollar	9904	LEN(USDOLLAR({1}))	(1000000000000000.0,)	n	25.0
 text_family	huge_usdollar	9905	LEN(USDOLLAR({1}))	(1e+20,)	n	31.0
 text_family	huge_usdollar	9906	LEN(USDOLLAR({1}))	(1e+50,)	n	71.0
@@ -10042,3 +10043,154 @@ text_family	numbervalue_more	10029	_xlfn.NUMBERVALUE({1})	('$1,000',)	n	1000.0
 text_family	numbervalue_more	10030	_xlfn.NUMBERVALUE({1})	('($1,000.50)',)	n	-1000.5
 text_family	numbervalue_more	10031	_xlfn.NUMBERVALUE({1})	('-$5',)	n	-5.0
 text_family	numbervalue_more	10032	_xlfn.NUMBERVALUE({1})	('€5',)	n	5.0
+text_family	astral_substitute	10033	SUBSTITUTE({1},"😀","Z",{2})	('😀', 1.0)	str	'Z'
+text_family	astral_substitute	10034	SUBSTITUTE({1},"😀","Z",{2})	('😀', 2.0)	str	'😀'
+text_family	astral_substitute	10035	SUBSTITUTE({1},"😀","Z",{2})	('😀', 3.0)	str	'😀'
+text_family	astral_substitute	10036	LEN(SUBSTITUTE({1},"😀","yy"))	('😀',)	n	2.0
+text_family	astral_textbefore	10037	_xlfn.TEXTBEFORE({1},"😀",{2})	('😀', 1.0)	str	''
+text_family	astral_textafter	10038	_xlfn.TEXTAFTER({1},"😀",{2})	('😀', 1.0)	str	''
+text_family	astral_textbefore	10039	_xlfn.TEXTBEFORE({1},"😀",{2})	('😀', 2.0)	e	#VALUE!
+text_family	astral_textafter	10040	_xlfn.TEXTAFTER({1},"😀",{2})	('😀', 2.0)	e	#VALUE!
+text_family	astral_textbefore	10041	_xlfn.TEXTBEFORE({1},"😀",{2})	('😀', -1.0)	str	''
+text_family	astral_textafter	10042	_xlfn.TEXTAFTER({1},"😀",{2})	('😀', -1.0)	str	''
+text_family	astral_textbefore	10043	_xlfn.TEXTBEFORE({1},"b")	('😀',)	e	#N/A
+text_family	astral_textafter	10044	_xlfn.TEXTAFTER({1},"x")	('😀',)	e	#N/A
+text_family	astral_textsplit	10045	COLUMNS(_xlfn.TEXTSPLIT({1},"😀"))	('😀',)	n	2.0
+text_family	astral_textsplit	10046	INDEX(_xlfn.TEXTSPLIT({1},"😀"),1,1)	('😀',)	str	''
+text_family	astral_textsplit	10047	LEN(INDEX(_xlfn.TEXTSPLIT({1},"b"),1,1))	('😀',)	n	1.0
+text_family	astral_wildcard	10048	COUNTIF({1},"?")	('😀',)	n	0.0
+text_family	astral_wildcard	10049	ISNUMBER(MATCH("?",{1},0))	('😀',)	b	False
+text_family	astral_wildcard	10050	COUNTIF({1},"??")	('😀',)	n	1.0
+text_family	astral_wildcard	10051	ISNUMBER(MATCH("??",{1},0))	('😀',)	b	True
+text_family	astral_wildcard	10052	COUNTIF({1},"?x")	('😀',)	n	0.0
+text_family	astral_wildcard	10053	ISNUMBER(MATCH("?x",{1},0))	('😀',)	b	False
+text_family	astral_wildcard	10054	COUNTIF({1},"x?")	('😀',)	n	0.0
+text_family	astral_wildcard	10055	ISNUMBER(MATCH("x?",{1},0))	('😀',)	b	False
+text_family	astral_wildcard	10056	COUNTIF({1},"*😀*")	('😀',)	n	1.0
+text_family	astral_wildcard	10057	ISNUMBER(MATCH("*😀*",{1},0))	('😀',)	b	True
+text_family	astral_wildcard	10058	COUNTIF({1},"~?")	('😀',)	n	0.0
+text_family	astral_wildcard	10059	ISNUMBER(MATCH("~?",{1},0))	('😀',)	b	False
+text_family	astral_substitute	10060	SUBSTITUTE({1},"😀","Z",{2})	('😀x', 1.0)	str	'Zx'
+text_family	astral_substitute	10061	SUBSTITUTE({1},"😀","Z",{2})	('😀x', 2.0)	str	'😀x'
+text_family	astral_substitute	10062	SUBSTITUTE({1},"😀","Z",{2})	('😀x', 3.0)	str	'😀x'
+text_family	astral_substitute	10063	LEN(SUBSTITUTE({1},"😀","yy"))	('😀x',)	n	3.0
+text_family	astral_textbefore	10064	_xlfn.TEXTBEFORE({1},"😀",{2})	('😀x', 1.0)	str	''
+text_family	astral_textafter	10065	_xlfn.TEXTAFTER({1},"😀",{2})	('😀x', 1.0)	str	'x'
+text_family	astral_textbefore	10066	_xlfn.TEXTBEFORE({1},"😀",{2})	('😀x', 2.0)	e	#N/A
+text_family	astral_textafter	10067	_xlfn.TEXTAFTER({1},"😀",{2})	('😀x', 2.0)	e	#N/A
+text_family	astral_textbefore	10068	_xlfn.TEXTBEFORE({1},"😀",{2})	('😀x', -1.0)	str	''
+text_family	astral_textafter	10069	_xlfn.TEXTAFTER({1},"😀",{2})	('😀x', -1.0)	str	'x'
+text_family	astral_textbefore	10070	_xlfn.TEXTBEFORE({1},"b")	('😀x',)	e	#N/A
+text_family	astral_textafter	10071	_xlfn.TEXTAFTER({1},"x")	('😀x',)	str	''
+text_family	astral_textsplit	10072	COLUMNS(_xlfn.TEXTSPLIT({1},"😀"))	('😀x',)	n	2.0
+text_family	astral_textsplit	10073	INDEX(_xlfn.TEXTSPLIT({1},"😀"),1,1)	('😀x',)	str	''
+text_family	astral_textsplit	10074	LEN(INDEX(_xlfn.TEXTSPLIT({1},"b"),1,1))	('😀x',)	n	2.0
+text_family	astral_wildcard	10075	COUNTIF({1},"?")	('😀x',)	n	0.0
+text_family	astral_wildcard	10076	ISNUMBER(MATCH("?",{1},0))	('😀x',)	b	False
+text_family	astral_wildcard	10077	COUNTIF({1},"??")	('😀x',)	n	0.0
+text_family	astral_wildcard	10078	ISNUMBER(MATCH("??",{1},0))	('😀x',)	b	False
+text_family	astral_wildcard	10079	COUNTIF({1},"?x")	('😀x',)	n	0.0
+text_family	astral_wildcard	10080	ISNUMBER(MATCH("?x",{1},0))	('😀x',)	b	False
+text_family	astral_wildcard	10081	COUNTIF({1},"x?")	('😀x',)	n	0.0
+text_family	astral_wildcard	10082	ISNUMBER(MATCH("x?",{1},0))	('😀x',)	b	False
+text_family	astral_wildcard	10083	COUNTIF({1},"*😀*")	('😀x',)	n	1.0
+text_family	astral_wildcard	10084	ISNUMBER(MATCH("*😀*",{1},0))	('😀x',)	b	True
+text_family	astral_wildcard	10085	COUNTIF({1},"~?")	('😀x',)	n	0.0
+text_family	astral_wildcard	10086	ISNUMBER(MATCH("~?",{1},0))	('😀x',)	b	False
+text_family	astral_substitute	10087	SUBSTITUTE({1},"😀","Z",{2})	('x😀', 1.0)	str	'xZ'
+text_family	astral_substitute	10088	SUBSTITUTE({1},"😀","Z",{2})	('x😀', 2.0)	str	'x😀'
+text_family	astral_substitute	10089	SUBSTITUTE({1},"😀","Z",{2})	('x😀', 3.0)	str	'x😀'
+text_family	astral_substitute	10090	LEN(SUBSTITUTE({1},"😀","yy"))	('x😀',)	n	3.0
+text_family	astral_textbefore	10091	_xlfn.TEXTBEFORE({1},"😀",{2})	('x😀', 1.0)	str	'x'
+text_family	astral_textafter	10092	_xlfn.TEXTAFTER({1},"😀",{2})	('x😀', 1.0)	str	''
+text_family	astral_textbefore	10093	_xlfn.TEXTBEFORE({1},"😀",{2})	('x😀', 2.0)	e	#N/A
+text_family	astral_textafter	10094	_xlfn.TEXTAFTER({1},"😀",{2})	('x😀', 2.0)	e	#N/A
+text_family	astral_textbefore	10095	_xlfn.TEXTBEFORE({1},"😀",{2})	('x😀', -1.0)	str	'x'
+text_family	astral_textafter	10096	_xlfn.TEXTAFTER({1},"😀",{2})	('x😀', -1.0)	str	''
+text_family	astral_textbefore	10097	_xlfn.TEXTBEFORE({1},"b")	('x😀',)	e	#N/A
+text_family	astral_textafter	10098	_xlfn.TEXTAFTER({1},"x")	('x😀',)	str	'😀'
+text_family	astral_textsplit	10099	COLUMNS(_xlfn.TEXTSPLIT({1},"😀"))	('x😀',)	n	2.0
+text_family	astral_textsplit	10100	INDEX(_xlfn.TEXTSPLIT({1},"😀"),1,1)	('x😀',)	str	'x'
+text_family	astral_textsplit	10101	LEN(INDEX(_xlfn.TEXTSPLIT({1},"b"),1,1))	('x😀',)	n	2.0
+text_family	astral_wildcard	10102	COUNTIF({1},"?")	('x😀',)	n	0.0
+text_family	astral_wildcard	10103	ISNUMBER(MATCH("?",{1},0))	('x😀',)	b	False
+text_family	astral_wildcard	10104	COUNTIF({1},"??")	('x😀',)	n	0.0
+text_family	astral_wildcard	10105	ISNUMBER(MATCH("??",{1},0))	('x😀',)	b	False
+text_family	astral_wildcard	10106	COUNTIF({1},"?x")	('x😀',)	n	0.0
+text_family	astral_wildcard	10107	ISNUMBER(MATCH("?x",{1},0))	('x😀',)	b	False
+text_family	astral_wildcard	10108	COUNTIF({1},"x?")	('x😀',)	n	0.0
+text_family	astral_wildcard	10109	ISNUMBER(MATCH("x?",{1},0))	('x😀',)	b	False
+text_family	astral_wildcard	10110	COUNTIF({1},"*😀*")	('x😀',)	n	1.0
+text_family	astral_wildcard	10111	ISNUMBER(MATCH("*😀*",{1},0))	('x😀',)	b	True
+text_family	astral_wildcard	10112	COUNTIF({1},"~?")	('x😀',)	n	0.0
+text_family	astral_wildcard	10113	ISNUMBER(MATCH("~?",{1},0))	('x😀',)	b	False
+text_family	astral_substitute	10114	SUBSTITUTE({1},"😀","Z",{2})	('a😀b😀c', 1.0)	str	'aZb😀c'
+text_family	astral_substitute	10115	SUBSTITUTE({1},"😀","Z",{2})	('a😀b😀c', 2.0)	str	'a😀bZc'
+text_family	astral_substitute	10116	SUBSTITUTE({1},"😀","Z",{2})	('a😀b😀c', 3.0)	str	'a😀b😀c'
+text_family	astral_substitute	10117	LEN(SUBSTITUTE({1},"😀","yy"))	('a😀b😀c',)	n	7.0
+text_family	astral_textbefore	10118	_xlfn.TEXTBEFORE({1},"😀",{2})	('a😀b😀c', 1.0)	str	'a'
+text_family	astral_textafter	10119	_xlfn.TEXTAFTER({1},"😀",{2})	('a😀b😀c', 1.0)	str	'b😀c'
+text_family	astral_textbefore	10120	_xlfn.TEXTBEFORE({1},"😀",{2})	('a😀b😀c', 2.0)	str	'a😀b'
+text_family	astral_textafter	10121	_xlfn.TEXTAFTER({1},"😀",{2})	('a😀b😀c', 2.0)	str	'c'
+text_family	astral_textbefore	10122	_xlfn.TEXTBEFORE({1},"😀",{2})	('a😀b😀c', -1.0)	str	'a😀b'
+text_family	astral_textafter	10123	_xlfn.TEXTAFTER({1},"😀",{2})	('a😀b😀c', -1.0)	str	'c'
+text_family	astral_textbefore	10124	_xlfn.TEXTBEFORE({1},"b")	('a😀b😀c',)	str	'a😀'
+text_family	astral_textafter	10125	_xlfn.TEXTAFTER({1},"x")	('a😀b😀c',)	e	#N/A
+text_family	astral_textsplit	10126	COLUMNS(_xlfn.TEXTSPLIT({1},"😀"))	('a😀b😀c',)	n	3.0
+text_family	astral_textsplit	10127	INDEX(_xlfn.TEXTSPLIT({1},"😀"),1,1)	('a😀b😀c',)	str	'a'
+text_family	astral_textsplit	10128	LEN(INDEX(_xlfn.TEXTSPLIT({1},"b"),1,1))	('a😀b😀c',)	n	2.0
+text_family	astral_wildcard	10129	COUNTIF({1},"?")	('a😀b😀c',)	n	0.0
+text_family	astral_wildcard	10130	ISNUMBER(MATCH("?",{1},0))	('a😀b😀c',)	b	False
+text_family	astral_wildcard	10131	COUNTIF({1},"??")	('a😀b😀c',)	n	0.0
+text_family	astral_wildcard	10132	ISNUMBER(MATCH("??",{1},0))	('a😀b😀c',)	b	False
+text_family	astral_wildcard	10133	COUNTIF({1},"?x")	('a😀b😀c',)	n	0.0
+text_family	astral_wildcard	10134	ISNUMBER(MATCH("?x",{1},0))	('a😀b😀c',)	b	False
+text_family	astral_wildcard	10135	COUNTIF({1},"x?")	('a😀b😀c',)	n	0.0
+text_family	astral_wildcard	10136	ISNUMBER(MATCH("x?",{1},0))	('a😀b😀c',)	b	False
+text_family	astral_wildcard	10137	COUNTIF({1},"*😀*")	('a😀b😀c',)	n	1.0
+text_family	astral_wildcard	10138	ISNUMBER(MATCH("*😀*",{1},0))	('a😀b😀c',)	b	True
+text_family	astral_wildcard	10139	COUNTIF({1},"~?")	('a😀b😀c',)	n	0.0
+text_family	astral_wildcard	10140	ISNUMBER(MATCH("~?",{1},0))	('a😀b😀c',)	b	False
+text_family	astral_substitute	10141	SUBSTITUTE({1},"😀","Z",{2})	('😀😀', 1.0)	str	'Z😀'
+text_family	astral_substitute	10142	SUBSTITUTE({1},"😀","Z",{2})	('😀😀', 2.0)	str	'😀Z'
+text_family	astral_substitute	10143	SUBSTITUTE({1},"😀","Z",{2})	('😀😀', 3.0)	str	'😀😀'
+text_family	astral_substitute	10144	LEN(SUBSTITUTE({1},"😀","yy"))	('😀😀',)	n	4.0
+text_family	astral_textbefore	10145	_xlfn.TEXTBEFORE({1},"😀",{2})	('😀😀', 1.0)	str	''
+text_family	astral_textafter	10146	_xlfn.TEXTAFTER({1},"😀",{2})	('😀😀', 1.0)	str	'😀'
+text_family	astral_textbefore	10147	_xlfn.TEXTBEFORE({1},"😀",{2})	('😀😀', 2.0)	str	'😀'
+text_family	astral_textafter	10148	_xlfn.TEXTAFTER({1},"😀",{2})	('😀😀', 2.0)	str	''
+text_family	astral_textbefore	10149	_xlfn.TEXTBEFORE({1},"😀",{2})	('😀😀', -1.0)	str	'😀'
+text_family	astral_textafter	10150	_xlfn.TEXTAFTER({1},"😀",{2})	('😀😀', -1.0)	str	''
+text_family	astral_textbefore	10151	_xlfn.TEXTBEFORE({1},"b")	('😀😀',)	e	#N/A
+text_family	astral_textafter	10152	_xlfn.TEXTAFTER({1},"x")	('😀😀',)	e	#N/A
+text_family	astral_textsplit	10153	COLUMNS(_xlfn.TEXTSPLIT({1},"😀"))	('😀😀',)	n	3.0
+text_family	astral_textsplit	10154	INDEX(_xlfn.TEXTSPLIT({1},"😀"),1,1)	('😀😀',)	str	''
+text_family	astral_textsplit	10155	LEN(INDEX(_xlfn.TEXTSPLIT({1},"b"),1,1))	('😀😀',)	n	2.0
+text_family	astral_wildcard	10156	COUNTIF({1},"?")	('😀😀',)	n	0.0
+text_family	astral_wildcard	10157	ISNUMBER(MATCH("?",{1},0))	('😀😀',)	b	False
+text_family	astral_wildcard	10158	COUNTIF({1},"??")	('😀😀',)	n	0.0
+text_family	astral_wildcard	10159	ISNUMBER(MATCH("??",{1},0))	('😀😀',)	b	False
+text_family	astral_wildcard	10160	COUNTIF({1},"?x")	('😀😀',)	n	0.0
+text_family	astral_wildcard	10161	ISNUMBER(MATCH("?x",{1},0))	('😀😀',)	b	False
+text_family	astral_wildcard	10162	COUNTIF({1},"x?")	('😀😀',)	n	0.0
+text_family	astral_wildcard	10163	ISNUMBER(MATCH("x?",{1},0))	('😀😀',)	b	False
+text_family	astral_wildcard	10164	COUNTIF({1},"*😀*")	('😀😀',)	n	1.0
+text_family	astral_wildcard	10165	ISNUMBER(MATCH("*😀*",{1},0))	('😀😀',)	b	True
+text_family	astral_wildcard	10166	COUNTIF({1},"~?")	('😀😀',)	n	0.0
+text_family	astral_wildcard	10167	ISNUMBER(MATCH("~?",{1},0))	('😀😀',)	b	False
+text_family	astral_limit	10168	LEN(REPT("😀",16383))	()	n	16383.0
+text_family	astral_limit	10169	LEN(SUBSTITUTE(REPT("a",16383),"a","😀"))	()	n	16383.0
+text_family	astral_limit	10170	LEN(REPT("😀",16383)&"x")	()	n	16384.0
+text_family	astral_limit	10171	LEN(REPLACE(REPT("😀",16383),1,1,"ab"))	()	n	16384.0
+text_family	astral_limit	10172	LEN(REPT("😀",16384))	()	e	#VALUE!
+text_family	astral_limit	10173	LEN(SUBSTITUTE(REPT("a",16384),"a","😀"))	()	e	#VALUE!
+text_family	astral_limit	10174	LEN(REPT("😀",16384)&"x")	()	e	#VALUE!
+text_family	astral_limit	10175	LEN(REPLACE(REPT("😀",16384),1,1,"ab"))	()	e	#VALUE!
+text_family	astral_limit	10176	LEN(REPT("😀",32767))	()	e	#VALUE!
+text_family	astral_limit	10177	LEN(SUBSTITUTE(REPT("a",32767),"a","😀"))	()	e	#VALUE!
+text_family	astral_limit	10178	LEN(REPT("😀",32767)&"x")	()	e	#VALUE!
+text_family	astral_limit	10179	LEN(REPLACE(REPT("😀",32767),1,1,"ab"))	()	e	#VALUE!
+text_family	astral_limit	10180	LEN(REPT("😀",32768))	()	e	#VALUE!
+text_family	astral_limit	10181	LEN(SUBSTITUTE(REPT("a",32768),"a","😀"))	()	e	#VALUE!
+text_family	astral_limit	10182	LEN(REPT("😀",32768)&"x")	()	e	#VALUE!
+text_family	astral_limit	10183	LEN(REPLACE(REPT("😀",32768),1,1,"ab"))	()	e	#VALUE!

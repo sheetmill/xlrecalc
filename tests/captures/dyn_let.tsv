@@ -1,7 +1,7 @@
 # suite: dyn_let
-# excel: 16.114.4 for Mac, locale en_US
-# edition: Office Home & Business 2021, update channel Current
-# captured: 2026-11-09
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-11
 # generator: capture/dynamic_probe.py
 # method: dynamic-array formulas (cm=1 with the XLDAPR metadata), one per block of 12 rows in column B, over data in columns AA on; Excel calculates and saves a copy;
 #   every cell of the copy is recorded

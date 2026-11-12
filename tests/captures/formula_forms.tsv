@@ -1,5 +1,6 @@
 # suite: formula_forms
-# excel: 16.114.3 for Mac, locale en_US
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
 # generator: capture/formula_forms.py (formulas from tests/formula_corpus.py)
 # method: openpyxl writes each formula into <f>; Excel opens the workbook and saves a
 #   copy; the column excel is the <f> text of the copy, or REFUSED when Excel refuses
