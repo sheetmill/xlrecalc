@@ -137,8 +137,8 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   as `BINOM.INV("3",0.5,0.5)` gives at its own tie (one row).
 - Declared tolerances, `continuous_family` (5,059 rows): the beta, gamma, chi-squared, F and t distributions, their
   inverses and tests declare a relative tolerance ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md)
-  §8.1), each its largest difference from Excel on the capture (in parentheses, on the platform `docs/coverage.md`
-  records) rounded up to a power of ten. 1E-12: `CHISQ.DIST` (3.1E-13), `F.DIST` (7.5E-13), `F.DIST.RT` (6.9E-13),
+  §8.1), each its largest difference from Excel on the capture (in parentheses, on the reference platform,
+  `REFERENCE_PLATFORM` in `tests/test_captures.py`) rounded up to a power of ten. 1E-12: `CHISQ.DIST` (3.1E-13), `F.DIST` (7.5E-13), `F.DIST.RT` (6.9E-13),
   `F.INV` (9.4E-13), `T.DIST` (1.4E-13), `T.INV` (7.8E-13), `Z.TEST` (1.6E-13), `ZTEST` (1.6E-13). 1E-13: `BETA.DIST`
   (4.7E-14), `BETA.INV` (2.8E-14), `CHISQ.DIST.RT` (6.2E-14), `CHISQ.INV` (3.3E-14), `CHISQ.INV.RT` (1.1E-14),
   `F.INV.RT` (2.8E-14), `GAMMA.DIST` (9.6E-14), `GAMMA.INV` (1.4E-14), `T.DIST.2T` (1.2E-14), `T.DIST.RT` (1.2E-14),
@@ -164,7 +164,7 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   they are not captured, and here they give their limits, 0 or 1, or `#NUM!`. Every function here does bounded work on
   any input: each series and continued fraction stops at 20,000 terms, `#NUM!` past them, and each inverse is a
   bisection over the doubles' bit patterns, at most 64 evaluations.
-- The platform's math library: three rows match Excel on the platform `docs/coverage.md` records (bit for bit, or within the
+- The platform's math library: three rows match Excel on the reference platform (`REFERENCE_PLATFORM` in `tests/test_captures.py`) (bit for bit, or within the
   function's declared tolerance) and differ on another, where a last-bit difference in `erfc`, `exp`, `log1p` or `expm1` survives a cancellation: `GAUSS(1E-5)`, which
   subtracts 0.5 from the normal distribution (as Excel's own result shows), and two rows of `IPMT` with payments due in
   advance (`empty_args`). They are listed on every platform, so the published counts do not depend on it.

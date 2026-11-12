@@ -3,23 +3,13 @@
 from __future__ import annotations
 
 import pytest
-from tools.coverage import OUTPUT, matrix, platform_label, recorded_platform
+from tools.coverage import OUTPUT, matrix
 
 
 @pytest.mark.excel
 def test_coverage_matrix_is_current():
-    """The page as generated now, where the platform is the one it was generated on.
-
-    The split between exact and within-tolerance rows depends on the math library's last bits,
-    which come with the operating system: elsewhere the comparison would fail for a reason
-    unrelated to the page.
-    """
-    page = OUTPUT.read_text(encoding="utf-8")
-    recorded, here = recorded_platform(page), platform_label()
-    assert recorded is not None, "docs/coverage.md does not record its platform"
-    if recorded != here:
-        pytest.skip(f"docs/coverage.md was generated on {recorded}; this is {here}")
-    assert page == matrix(), (
+    """The page as generated now, on any platform: it counts no split that the math library sets."""
+    assert OUTPUT.read_text(encoding="utf-8") == matrix(), (
         "docs/coverage.md is out of date: run `uv run python tools/coverage.py --write`"
     )
 
@@ -31,11 +21,3 @@ def test_every_registered_function_appears():
     for name in SPECS:
         bare = name.removeprefix("_XLFN.").removeprefix("_XLWS.")  # _xlfn._xlws.SORT too
         assert f"| `{bare}` |" in text, name
-
-
-def test_another_platform_skips_the_comparison(monkeypatch):
-    import tests.test_coverage as module
-
-    monkeypatch.setattr(module, "platform_label", lambda: "macOS 15, arm64")
-    with pytest.raises(pytest.skip.Exception, match="this is macOS 15, arm64"):
-        test_coverage_matrix_is_current()

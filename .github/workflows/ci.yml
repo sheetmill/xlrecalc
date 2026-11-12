@@ -37,9 +37,9 @@ jobs:
       - run: uv sync --locked --group dev
       - run: uv run pytest --tier slow
 
-  # macOS, Excel's reference platform here: the coverage page's staleness test compares only on
-  # the platform the page records (macOS major version and architecture) and skips, saying
-  # why, on any other.
+  # macOS, as Excel runs here. The strict rules for math-library rows hold only on the reference
+  # platform (REFERENCE_PLATFORM in tests/test_captures.py); the coverage page is the same
+  # everywhere.
   test-macos:
     runs-on: macos-latest
     steps:

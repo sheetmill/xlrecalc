@@ -121,7 +121,7 @@ to `SUITES` in `tests/test_captures.py`. A row that cannot be matched needs its 
 `KNOWN_DEVIATIONS` there and in `QUIRKS.md`. The list is strict: a listed row that matches Excel
 fails the test, so an entry cannot outlive its cause; a random result is exempt
 (`EXEMPT`), and a row listed because the platform's math library differs from Excel's in the
-last bits (`MATH_LIBRARY`) must differ only on the platform `docs/coverage.md` records; one that matches there and differs
+last bits (`MATH_LIBRARY`) must differ only on the reference platform (`REFERENCE_PLATFORM` in `tests/test_captures.py`); one that matches there and differs
 on another, where a cancellation exposes the library's last bits (`OTHER_PLATFORMS`), must match there. A function whose results stay a few units in the
 last place from Excel's after a fixed time spent fitting its last bits declares a tolerance in the
 registry instead ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1), listed in `QUIRKS.md` too. Iterative functions (`IRR`, `XIRR`, `RATE`,

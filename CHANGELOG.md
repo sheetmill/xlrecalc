@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- The coverage page (`docs/coverage.md`) counts a captured row that matches Excel exactly or within the function's
+  declared tolerance as one figure, so it is the same on every platform; the split between them depends on the platform's
+  math library. The rows that depend on that library are held strictly only on a named reference platform (macOS 26.5,
+  arm64, Python 3.11): Python 3.14 on the same system brings four `BINOM.DIST` rows of `distributions_family` within 8
+  units in the last place that 3.11 leaves past them.
+
 ## [0.2.0] - 2026-11-10
 
 ### Added

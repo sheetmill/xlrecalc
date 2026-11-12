@@ -11,8 +11,10 @@ from __future__ import annotations
 
 import functools
 import math
+import platform
 import re
 import struct
+import sys
 from pathlib import Path
 
 import pytest
@@ -157,13 +159,13 @@ _NORMAL_TAIL = (
 )
 _LIBM_CANCELLATION = (
     "a difference that cancels a value from the platform's erfc, exp, log1p or expm1 (GAUSS near "
-    "0, IPMT due in advance): it matches Excel on the platform docs/coverage.md records, and on "
-    "another a last-bit difference before the cancellation shows in the result"
+    "0, IPMT due in advance): it matches Excel on the reference platform (REFERENCE_PLATFORM), "
+    "and on another a last-bit difference before the cancellation shows in the result"
 )
 _COMPLEX_TEXT_BOUNDARY = (
     "a complex part computed through sin, cos, exp, log, sinh, cosh or atan2 within one unit in "
     "the last place of a midpoint between 15-digit decimals, or an imaginary part of exactly 1 "
-    "(written i): it matches Excel on the platform docs/coverage.md records, and another "
+    "(written i): it matches Excel on the reference platform (REFERENCE_PLATFORM), and another "
     "platform's last bit can round the text the other way (tests/test_complex_boundary.py)"
 )
 _VDB_FRACTIONAL = (
@@ -864,12 +866,12 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
 }
 # A listed deviation that matches Excel fails the test, so a stale entry cannot survive, with three
 # exceptions. A random result can match by chance. A row listed because the platform's math
-# library (exp, log1p, expm1, pow, erfc) differs from Excel's in the last bits may match on another
-# platform's library: it must still differ on the platform the captures' split is measured on
-# (docs/coverage.md records it), and elsewhere it counts as listed whether or not it matches, so
-# the published counts are the same on every platform. And the reverse: a row that matches on that
-# platform, but differs on another whose library differs in the bits a cancellation exposes, must
-# match there and counts as listed everywhere.
+# library (exp, log1p, expm1, pow, erfc, lgamma) differs from Excel's in the last bits may match on
+# another platform's library: it must still differ on the reference platform, and elsewhere it
+# counts as listed whether or not it matches, so the published counts are the same on every
+# platform. And the reverse: a row that matches on the reference platform, but differs on another
+# whose library differs in the bits a cancellation exposes, must match there and counts as listed
+# everywhere.
 EXEMPT = frozenset({_RANDOM, _WEEKNUM_ODD_TYPE})
 MATH_LIBRARY = frozenset(
     {_IPMT_TAIL, _ITER_NEAR_ZERO, _ITER_OUTCOME, _XIRR, _YIELD_ZERO_COUPON, _PRICE_EXTREME,
@@ -878,10 +880,26 @@ MATH_LIBRARY = frozenset(
 OTHER_PLATFORMS = frozenset({_LIBM_CANCELLATION, _COMPLEX_TEXT_BOUNDARY})
 
 
-def _reference_platform() -> bool:
-    from tools.coverage import OUTPUT, platform_label, recorded_platform
+# Where the strict rules above for math-library rows hold. The last bits come with the operating
+# system's math library (its major and minor version: lgamma differs between macOS 26.5 and 26.7),
+# the machine's architecture, and Python's own math module (Python 3.14 on macOS 26.5 gives four
+# BINOM.DIST rows of distributions_family within 8 ulps that 3.11 gives past them). Moving it
+# means rerunning the suite there and settling every row that changes.
+REFERENCE_PLATFORM = "macOS 26.5, arm64, Python 3.11"
 
-    return recorded_platform(OUTPUT.read_text(encoding="utf-8")) == platform_label()
+
+def platform_label() -> str:
+    """This platform as ``REFERENCE_PLATFORM`` names one (``macOS 26.5, arm64, Python 3.11``)."""
+    system = (
+        f"macOS {'.'.join(platform.mac_ver()[0].split('.')[:2])}"
+        if sys.platform == "darwin"
+        else platform.system()
+    )
+    return f"{system}, {platform.machine()}, Python {sys.version_info[0]}.{sys.version_info[1]}"
+
+
+def _reference_platform() -> bool:
+    return platform_label() == REFERENCE_PLATFORM
 
 
 SUITES = [
