@@ -90,8 +90,10 @@ def test_sheet_names_reach_the_context_exactly(text, sheet):
 
 def test_names_and_unknown_functions_go_through_constants():
     assert compiled("__import__", 0, 0).fn(Recorder(), 0, 0) == ("name", None, "__import__")
-    result = compiled("eval(1)", 0, 0).fn(Recorder(), 0, 0)
-    assert result == ("unsupported", "eval", 1.0)
+    result = compiled("eval(1)", 0, 0).fn(Recorder(), 0, 0)  # a call of a name's LAMBDA
+    assert result == ("invoke", ("name", None, "eval"), 1.0)
+    result = compiled("_xludf.eval(1)", 0, 0).fn(Recorder(), 0, 0)
+    assert result == ("unsupported", "_xludf.eval", 1.0)
 
 
 def test_functions_are_called_by_index():

@@ -44,14 +44,14 @@ from xlrecalc._ops import Ops
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef, Report
 from xlrecalc._store import COLS, MAX_COL, MAX_ROW, Sheet
-from xlrecalc._values import BLANK, ErrorValue, Ref, Value
+from xlrecalc._values import BLANK, ErrorValue, Lambda, Ref, Value
 
 __all__ = ["Engine", "Report", "Template"]
 
 SHEET_SHIFT = 34
 KEY_MASK = (1 << SHEET_SHIFT) - 1
 NAME, REF, VALUE = ErrorValue.NAME, ErrorValue.REF, ErrorValue.VALUE
-SPILL = ErrorValue("#SPILL!")
+SPILL, CALC = ErrorValue("#SPILL!"), ErrorValue("#CALC!")
 ITERATION_LIMIT = "iterative calculation past ReadLimits.max_iteration_evaluations"
 ITERATION_UNREAD = "iterative calculation reading a cell its pass did not evaluate"
 _VOLATILE = frozenset(n for n, s in SPECS.items() if s.volatile)
@@ -356,7 +356,9 @@ class Engine:
         compiled = compile_formula(
             formula, row, col, REGISTRY, self.ops, self.quirks, array_mode, as_reference
         )
-        unsupported = {bare_label(c) for c in compiled.calls if c not in REGISTRY}
+        unsupported = {
+            bare_label(c) for c in compiled.calls if c not in REGISTRY and not self._defined(c)
+        }
         unsupported |= compiled.features
         template = Template(
             key,
@@ -374,6 +376,11 @@ class Engine:
         self.templates.append(template)
         self._template_ids[key] = tid
         return tid
+
+    def _defined(self, call: str) -> bool:
+        """A call of a defined name (a ``LAMBDA`` it holds, when evaluated), in any scope."""
+        folded = call.casefold()
+        return "." not in call and any(name == folded for _, name in self.names)
 
     def formula_text(self, sheet: int, row: int, col: int) -> str | None:
         """The cell's formula in file form, or ``None`` for a cell without one."""
@@ -1067,6 +1074,8 @@ class Engine:
             return 0.0
         if isinstance(value, float):
             return flush(value) if math.isfinite(value) else ErrorValue.NUM
+        if type(value) is Lambda:  # a function value is no cell's value (capture lambda_calls)
+            return CALC
         return value  # type: ignore[no-any-return]
 
     def edited(self, n: int) -> None:

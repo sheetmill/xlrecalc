@@ -8,6 +8,7 @@ first; results without subnormals; overflow is ``#NUM!``.
 from __future__ import annotations
 
 import math
+from types import GeneratorType
 from typing import Any
 
 from xlrecalc._arith import flush, snap
@@ -16,12 +17,19 @@ from xlrecalc._coerce import Context, Raw, scalar, to_bool, to_number, to_text
 from xlrecalc._compare import compare, switch_equal, utf16_length
 from xlrecalc._formula import MISSING
 from xlrecalc._numtext import DBL_MIN
-from xlrecalc._values import BLANK, ErrorValue, Ref, Value
+from xlrecalc._values import BLANK, ErrorValue, Lambda, Ref, Value
 
 __all__ = ["Ops"]
 
 NUM, DIV0, VALUE, NULL = ErrorValue.NUM, ErrorValue.DIV0, ErrorValue.VALUE, ErrorValue.NULL
 NA = ErrorValue.NA
+
+STACK_LIMIT = 65536
+"""Excel's budget for calls of function values in progress: each costs 8, plus 4 a parameter
+(capture ``lambda_depth``: 5,461 calls of one parameter, 4,095 of two, 3,276 of three)."""
+NESTED_RUNS = 64
+"""Call stacks one inside another (a function such as ``MAP`` calling a function value that
+calls ``MAP``), beyond which a formula is reported, not computed: each nesting is Python's own."""
 
 
 def _finite(x: float) -> float | ErrorValue:
@@ -40,6 +48,8 @@ class Ops:
 
     def __init__(self, context: Context) -> None:
         self.context = context
+        self.stack_cost = 0  # of the calls of function values in progress
+        self.runs = 0  # call stacks in progress, one inside another
 
     def _limit(self) -> int | None:
         return getattr(self.context, "max_array_cells", None)
@@ -160,6 +170,8 @@ class Ops:
     def _cmp(self, a: Raw, b: Raw, op: str) -> Value:
         if type(a) is tuple or type(b) is tuple:
             return self._each(lambda x, y: self._cmp(x, y, op), a, b)
+        if type(a) is Lambda or type(b) is Lambda:
+            return VALUE
         return compare(scalar(a, self.context), scalar(b, self.context), op, self.context.quirks)  # type: ignore[arg-type]
 
     def eq(self, a: Raw, b: Raw) -> Value:
@@ -302,8 +314,193 @@ class Ops:
     def union(self, *items: Raw) -> Value:
         raise NotImplementedFormError("a union of ranges")
 
-    def invoke(self, ctx: object, fn: Raw, *args: Raw) -> Value:
-        raise NotImplementedFormError("a call of a formula's result")
+    # LAMBDA (captures lambda_calls, lambda_names, lambda_depth) ---------------------------------
+
+    @staticmethod
+    def closure(body: Any, env: Env | None, r: int, c: int, required: int, total: int) -> Lambda:
+        """``LAMBDA``: a function value over the environment it is evaluated in."""
+        return Lambda(body, env, r, c, required, total)
+
+    def invoke(self, fn: Any, *args: Any) -> Any:
+        """A call of a function value in a formula, outside any ``LAMBDA`` body."""
+        return self.call(fn, args)
+
+    @staticmethod
+    def request(fn: Any, *args: Any) -> tuple[Any, tuple[Any, ...]]:
+        """A call inside a ``LAMBDA`` body, as its generator yields it to ``call``."""
+        return fn, args
+
+    def call(self, fn: Any, args: tuple[Any, ...]) -> Any:
+        """A call of a function value, run to its result on an explicit stack.
+
+        A body that calls a function value is a generator that yields each call as
+        ``(function, arguments)``; the loop runs the call and sends its result back, so
+        recursion as deep as Excel's budget never uses Python's stack. A call past the budget
+        (``STACK_LIMIT``) is ``#NUM!``, as in Excel.
+        """
+        if self.runs >= NESTED_RUNS:
+            raise NotImplementedFormError("calls of LAMBDA nested through functions too deeply")
+        stack: list[tuple[Any, int]] = []
+        start = self.stack_cost
+        self.runs += 1
+        try:
+            value = self._enter(fn, args, stack)
+            while stack:
+                try:
+                    fn, args = stack[-1][0].send(value)
+                except StopIteration as done:
+                    self.stack_cost -= stack.pop()[1]
+                    value = done.value
+                    continue
+                value = self._enter(fn, args, stack)
+            return value
+        finally:
+            self.runs -= 1
+            self.stack_cost = start
+
+    def _enter(self, fn: Any, args: tuple[Any, ...], stack: list[tuple[Any, int]]) -> Any:
+        """Start a call: its result, or ``None`` with its body pushed on ``stack`` to run."""
+        if type(fn) is not Lambda:  # an error is the result; another value is not captured
+            fn = scalar(fn, self.context)
+            if isinstance(fn, ErrorValue):
+                return fn
+            raise NotImplementedFormError("a call of a value that is no LAMBDA")
+        n = len(args)
+        if n < fn.required or n > fn.total:  # capture lambda_calls
+            return VALUE
+        cost = 8 + 4 * fn.total
+        if self.stack_cost + cost >= STACK_LIMIT:
+            return NUM
+        env = Env(self.context, fn.r, fn.c, fn.env, ())
+        env.values = [BLANK if a is MISSING else a for a in args]
+        if n < fn.total or MISSING in args:  # an omitted argument reads as a blank
+            env.values.extend([BLANK] * (fn.total - n))
+            env.omitted = frozenset(i for i in range(fn.total) if i >= n or args[i] is MISSING)
+        self.stack_cost += cost
+        try:
+            result = fn.body(self.context, fn.r, fn.c, env)
+        except BaseException:
+            self.stack_cost -= cost
+            raise
+        if type(result) is GeneratorType:
+            stack.append((result, cost))
+            return None
+        self.stack_cost -= cost
+        return result
+
+    @staticmethod
+    def omitted(env: Env, depth: int, index: int) -> bool:
+        """``ISOMITTED`` of a parameter: no argument, or an empty one, was given for it."""
+        for _ in range(depth):
+            env = env.parent  # type: ignore[assignment]
+        return index in env.omitted
+
+    @staticmethod
+    def gforce(env: Env, depth: int, index: int) -> Any:
+        """``force`` for a binding that calls a function value: a generator, as its caller."""
+        for _ in range(depth):
+            env = env.parent  # type: ignore[assignment]
+        value = env.values[index]
+        if value is _UNSET:
+            value = env.thunks[index](env.ctx, env.r, env.c, env)
+            if type(value) is GeneratorType:
+                value = yield from value
+            env.values[index] = value
+        return value
+
+    # The lazy helpers again, as generators, for branches that call a function value: a
+    # branch's result may be a generator, run from here so its calls reach the call stack.
+
+    def glazy_if(self, fn: Any, test: Raw, r: int, c: int, *branches: Any) -> Any:
+        ctx = self.context
+        if type(test) is tuple:
+            done = yield from _taken(branches, ctx, r, c)
+            return fn(ctx, test, *done)
+        t = to_bool(test, ctx)
+        if isinstance(t, ErrorValue):
+            return t
+        k = 0 if t else 1
+        if k >= len(branches):
+            return fn(ctx, t)
+        (chosen,) = yield from _taken(branches[k : k + 1], ctx, r, c)
+        return fn(ctx, t, chosen, chosen)
+
+    def _glazy_error(self, fn: Any, value: Raw, r: int, c: int, alt: Any, na_only: bool) -> Any:
+        ctx = self.context
+        if type(value) is tuple:
+            (other,) = yield from _taken((alt,), ctx, r, c)
+            return fn(ctx, value, other)
+        v = scalar(value, ctx)
+        if isinstance(v, ErrorValue) and (not na_only or v is NA):
+            (other,) = yield from _taken((alt,), ctx, r, c)
+            return fn(ctx, value, other)
+        return fn(ctx, value, BLANK)
+
+    def glazy_iferror(self, fn: Any, value: Raw, r: int, c: int, alt: Any) -> Any:
+        return (yield from self._glazy_error(fn, value, r, c, alt, False))
+
+    def glazy_ifna(self, fn: Any, value: Raw, r: int, c: int, alt: Any) -> Any:
+        return (yield from self._glazy_error(fn, value, r, c, alt, True))
+
+    def glazy_ifs(self, fn: Any, first: Raw, r: int, c: int, *rest: Any) -> Any:
+        ctx = self.context
+        condition = first
+        k = 0
+        while True:
+            if type(condition) is tuple:
+                done = yield from _taken(rest, ctx, r, c)
+                return fn(ctx, first, *done)
+            t = to_bool(condition, ctx)
+            if isinstance(t, ErrorValue):
+                return t
+            if t:
+                if k >= len(rest):
+                    return VALUE
+                (chosen,) = yield from _taken(rest[k : k + 1], ctx, r, c)
+                return chosen
+            if k + 1 >= len(rest):
+                return NA if k < len(rest) else VALUE
+            (condition,) = yield from _taken(rest[k + 1 : k + 2], ctx, r, c)
+            k += 2
+
+    def glazy_switch(self, fn: Any, first: Raw, r: int, c: int, *rest: Any) -> Any:
+        ctx = self.context
+        if type(first) is tuple:
+            done = yield from _taken(rest, ctx, r, c)
+            return fn(ctx, first, *done)
+        v = scalar(first, ctx)
+        if isinstance(v, ErrorValue):
+            return v
+        for k in range(0, len(rest) - len(rest) % 2, 2):
+            (candidate,) = yield from _taken(rest[k : k + 1], ctx, r, c)
+            if type(candidate) is tuple:
+                done = yield from _taken(rest, ctx, r, c)
+                return fn(ctx, first, *done)
+            value = scalar(candidate, ctx)
+            if isinstance(value, ErrorValue):
+                return value
+            if switch_equal(v, value):
+                (chosen,) = yield from _taken(rest[k + 1 : k + 2], ctx, r, c)
+                return chosen
+        if len(rest) % 2:
+            (chosen,) = yield from _taken(rest[-1:], ctx, r, c)
+            return chosen
+        return NA
+
+    def glazy_choose(self, fn: Any, index: Raw, r: int, c: int, *choices: Any) -> Any:
+        ctx = self.context
+        if type(index) is tuple:
+            done = yield from _taken(choices, ctx, r, c)
+            return fn(ctx, index, *done)
+        n = to_number(index, ctx)
+        if isinstance(n, ErrorValue):
+            return n
+        k = math.trunc(n)
+        chosen: Any = MISSING
+        if 1 <= k <= len(choices):
+            (chosen,) = yield from _taken(choices[k - 1 : k], ctx, r, c)
+        args = [chosen if i == k - 1 else MISSING for i in range(len(choices))]
+        return fn(ctx, n, *args)
 
     # LET (capture dyn_let) ----------------------------------------------------------------------
 
@@ -332,13 +529,28 @@ class Ops:
 _UNSET = object()  # a binding not evaluated yet
 
 
-class Env:
-    """The bindings of one ``LET`` call while it is evaluated, and the scope around it."""
+def _taken(branches: tuple[Any, ...], ctx: Any, r: int, c: int) -> Any:
+    """The values of lazy branches, each run on the call stack if it is a generator."""
+    out = []
+    for b in branches:
+        v = b(ctx, r, c)
+        if type(v) is GeneratorType:
+            v = yield from v
+        out.append(v)
+    return out
 
-    __slots__ = ("c", "ctx", "parent", "r", "thunks", "values")
+
+class Env:
+    """The bindings of one ``LET`` call, or the arguments of one call of a function value.
+
+    It lives while it is evaluated, and links to the scope around it.
+    """
+
+    __slots__ = ("c", "ctx", "omitted", "parent", "r", "thunks", "values")
 
     def __init__(
         self, ctx: object, r: int, c: int, parent: Env | None, thunks: tuple[Any, ...]
     ) -> None:
         self.ctx, self.r, self.c, self.parent, self.thunks = ctx, r, c, parent, thunks
         self.values: list[Any] = [_UNSET] * len(thunks)
+        self.omitted: frozenset[int] = frozenset()  # arguments not given (ISOMITTED)

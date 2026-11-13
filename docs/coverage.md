@@ -9,7 +9,7 @@ deviations with their reasons (`QUIRKS.md`, `tests/test_captures.py`). Whether a
 matching row is exact or within its tolerance depends on the platform's math library,
 so the page counts them together and is the same on every platform.
 
-444 implemented, 17 partial, 62 absent.
+446 implemented, 17 partial, 60 absent.
 
 | function | category | status | rows | match | listed | tolerance | note |
 |---|---|---|---:|---:|---:|---|---|
@@ -279,14 +279,14 @@ so the page counts them together and is the same on every platform.
 | `ISNUMBER` | information | implemented | 49 | 49 | 0 |  |  |
 | `ISO.CEILING` | math | implemented | 304 | 304 | 0 |  |  |
 | `ISODD` | information | implemented | 58 | 57 | 1 |  |  |
-| `ISOMITTED` | | absent | | | | | |
+| `ISOMITTED` | information | implemented | 0 | 0 | 0 |  |  |
 | `ISOWEEKNUM` | date and time | implemented | 41 | 41 | 0 |  |  |
 | `ISPMT` | financial | implemented | 1325 | 1325 | 0 | 4 ulps |  |
 | `ISREF` | information | implemented | 34 | 34 | 0 |  |  |
 | `ISTEXT` | information | implemented | 20 | 20 | 0 |  |  |
 | `JIS` | | absent | | | | | |
 | `KURT` | statistical | implemented | 32 | 30 | 2 | 4 ulps |  |
-| `LAMBDA` | | absent | | | | | |
+| `LAMBDA` | logical | implemented | 0 | 0 | 0 |  |  |
 | `LARGE` | statistical | implemented | 31 | 30 | 1 |  |  |
 | `LCM` | math | implemented | 213 | 213 | 0 |  |  |
 | `LEFT` | text | implemented | 36 | 36 | 0 |  |  |

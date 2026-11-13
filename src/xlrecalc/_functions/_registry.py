@@ -20,6 +20,12 @@ core function receives the evaluation context first, then the coerced arguments:
 - ``key``: one value in a legacy formula, inside ``SUMPRODUCT`` too (an array's first element, a
   reference intersected), and taken element by element in an array formula (``VLOOKUP``'s key:
   capture ``array_refs``).
+- ``function``: a function value (a ``Lambda``: ``MAP``'s last argument), untouched.
+
+A function value given at any other kind's position never reaches the core: the call is
+``#VALUE!``, except that ``ISERROR`` and ``ISREF`` give FALSE and ``TYPE`` 128 (capture
+``lambda_calls``). ``branch`` arguments pass one through, so ``IF`` and ``CHOOSE`` can choose
+one to call.
 
 When an argument of a one-value kind (or a ``branch``) is an array, the function is applied to
 each element and returns an array (§7.7).
@@ -51,7 +57,7 @@ from xlrecalc._arrays import broadcast, to_array
 from xlrecalc._coerce import Context, scalar, to_bool, to_number, to_text
 from xlrecalc._formula import MISSING
 from xlrecalc._formula._codegen import kind_at
-from xlrecalc._values import ErrorValue, Ref
+from xlrecalc._values import ErrorValue, Lambda, Ref
 
 __all__ = ["REGISTRY", "SPECS", "Spec", "function"]
 
@@ -201,6 +207,19 @@ _EMPTY_OPTIONAL_IS_DEFAULT = frozenset(
     ]
 )
 
+# What these give for a function value, where any other function gives #VALUE! (capture
+# lambda_calls).
+_GIVEN_LAMBDA: dict[str, Any] = {"ISERROR": False, "ISREF": False, "TYPE": 128.0}
+_TAKES_LAMBDA = frozenset({"branch", "function"})
+
+
+def _given_lambda(name: str, kinds: tuple[str, ...], cycle: int, args: tuple[Any, ...]) -> Any:
+    """The result of a call given a function value where it takes none, else ``None``."""
+    for i, a in enumerate(args):
+        if type(a) is Lambda and (not kinds or kind_at(kinds, i, cycle) not in _TAKES_LAMBDA):
+            return _GIVEN_LAMBDA.get(name, VALUE)
+    return None
+
 
 def function(
     name: str,
@@ -234,6 +253,7 @@ def function(
         raise ValueError(f"{name}: status 'implemented', or 'partial' with a note")
     lo = len(kinds) if min_args is None else min_args
     hi = None if variadic else len(kinds)
+    upper = name.upper()
 
     def wrap(core: Callable[..., Any]) -> Callable[..., Any]:
         lifted_kinds = [k in _LIFTED for k in kinds]
@@ -249,6 +269,10 @@ def function(
         )
 
         def call(ctx: Context, *args: Any) -> Any:
+            if Lambda in map(type, args):
+                given = _given_lambda(upper, kinds, cycle, args)
+                if given is not None:
+                    return given
             n = len(args)
             if n < lo or (hi is not None and n > hi):
                 return VALUE
@@ -300,7 +324,6 @@ def function(
         call = wrap(core)
         if in_array is not None:
             call.in_array = wrap(in_array)  # type: ignore[attr-defined]
-        upper = name.upper()
         REGISTRY[upper] = call
         SPECS[upper] = Spec(
             upper, kinds, lo, hi, errors, volatile, category, ulps, ulps_reason, status, note,

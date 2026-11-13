@@ -54,6 +54,9 @@ _LAZY = {
 }
 _SCALAR = frozenset({"number", "text", "logical", "value"})
 _PARAM = "_xlpm."  # a LET or LAMBDA name, as a file writes it
+_OPTIONAL = "_xlop."  # an optional LAMBDA parameter in its list (``[y]`` typed)
+# The generator versions of the lazy helpers, for a branch that calls a function value.
+_GLAZY = {helper: "g" + helper for helper in _LAZY.values()}
 
 MAX_ROW = 1048575  # 0-based limits of a sheet
 MAX_COL = 16383
@@ -109,7 +112,14 @@ ALLOWED_NAMES = frozenset(
         "scope",
         "force",
         "bind",
+        "closure",
+        "request",
+        "omitted",
+        "gforce",
+        "yield",
+        "from",
         *_LAZY.values(),
+        *_GLAZY.values(),
         *_BINARY.values(),
         *_PREFIX.values(),
         *_CONTEXT,
@@ -251,9 +261,16 @@ class _Generator:
         self.array_formula = False  # the formula itself is an array formula
         self.branches: list[str] = []  # functions for the branches of IF and friends
         self.intersects = False
+        self.branch_yields = False  # the last branch compiled calls a function value
         self.scopes: list[dict[str, int]] = []  # LET names in scope, innermost last
         self.values: dict[str, Node] = {}  # what each LET name in scope is bound to
         self.env = "None"  # the variable holding the innermost LET's environment
+        # Per scope: names whose binding is a generator (it calls a function value), and
+        # whether the scope is a LAMBDA's parameters.
+        self.generators: list[set[str]] = []
+        self.parameters: list[bool] = []
+        self.bodies = 0  # LAMBDA bodies around the node being compiled
+        self.yields = False  # the function being generated calls a function value
 
     def ranged(self, node: Node) -> bool:
         """A range a legacy formula intersects; a ``LET`` name is what it is bound to."""
@@ -349,8 +366,7 @@ class _Generator:
             case Call(name, _, args, _, _, prefix):
                 return self.call(name, prefix, args)
             case Invoke(callee, _, args):
-                argv = "".join(f", {self.expr(a)}" for a in args)
-                return self.emit(f"ops.invoke(ctx, {self.expr(callee)}{argv})")
+                return self.invoke(self.expr(callee), args)
             case ArrayConstant(_, rows):
                 return self.constant(
                     tuple(tuple(_element(e, self.quirks) for e in row) for row in rows)
@@ -433,12 +449,23 @@ class _Generator:
         Resolved here, innermost scope first, into a depth and an index in the environment; a
         name not bound at this point (bound later, or nowhere) is ``#NAME?``, as in Excel.
         """
+        found = self.lookup(text)
+        if found is None:
+            return self.constant(ErrorValue.NAME)
+        depth, index, generator = found
+        if generator:  # its binding calls a function value: evaluated on the call stack
+            self.yields = True
+            return self.emit(f"yield from ops.gforce({self.env}, {depth:d}, {index:d})")
+        return self.emit(f"ops.force({self.env}, {depth:d}, {index:d})")
+
+    def lookup(self, text: str) -> tuple[int, int, bool] | None:
+        """A name in scope: its depth, its index and whether its binding is a generator."""
         folded = text.casefold()
         for depth, names in enumerate(reversed(self.scopes)):
             index = names.get(folded)
             if index is not None:
-                return self.emit(f"ops.force({self.env}, {depth:d}, {index:d})")
-        return self.constant(ErrorValue.NAME)
+                return depth, index, folded in self.generators[-1 - depth]
+        return None
 
     def let(self, args: list[Node]) -> str:
         """``LET``: each binding a function of the environment, evaluated only when read.
@@ -450,14 +477,20 @@ class _Generator:
         pairs = args if len(args) % 2 == 0 else args[:-1]
         body = pairs[-2] if len(args) % 2 == 0 else args[-1]
         names: dict[str, int] = {}
+        generators: set[str] = set()
         self.scopes.append(names)
+        self.generators.append(generators)
+        self.parameters.append(False)
         thunks = []
         outer: list[tuple[str, Node | None]] = []  # what the names shadowed, restored after
         for k in range(0, len(pairs), 2):
             name = pairs[k]
             assert isinstance(name, Reference)  # refused in a file otherwise (_load)
-            thunks.append(self.function_of_env(pairs[k + 1]))
+            thunk, generator = self.function_of_env(pairs[k + 1])
+            thunks.append(thunk)
             names[name.token.text.casefold()] = k // 2
+            if generator:
+                generators.add(name.token.text.casefold())
             outer.append((name.token.text.casefold(), self.values.get(name.token.text.casefold())))
             self.values[name.token.text.casefold()] = pairs[k + 1]
         listed = "".join(f"{t}, " for t in thunks)
@@ -466,6 +499,8 @@ class _Generator:
         result = self.argument(body)
         self.env = saved
         self.scopes.pop()
+        self.generators.pop()
+        self.parameters.pop()
         for folded, value in reversed(outer):
             if value is None:
                 self.values.pop(folded, None)
@@ -473,32 +508,38 @@ class _Generator:
                 self.values[folded] = value
         return result
 
-    def function_of_env(self, node: Node) -> str:
-        """A top-level function ``bK(ctx, r, c, E)`` of a value, ``E`` the environment."""
-        saved_lines, saved_env = self.lines, self.env
-        self.lines, self.env = [], "E"
+    def function_of_env(self, node: Node) -> tuple[str, bool]:
+        """A top-level function ``bK(ctx, r, c, E)`` of a value, ``E`` the environment.
+
+        Also whether it is a generator: inside a ``LAMBDA`` body, a function that calls a
+        function value yields the call to the call stack (``Ops.invoke``) instead of making it.
+        """
+        saved_lines, saved_env, saved_yields = self.lines, self.env, self.yields
+        self.lines, self.env, self.yields = [], "E", False
         code = self.argument(node)
         body = "".join(f"    {line}\n" for line in self.lines)
-        self.lines, self.env = saved_lines, saved_env
+        generator = self.yields
+        self.lines, self.env, self.yields = saved_lines, saved_env, saved_yields
         name = f"b{len(self.branches):d}"
         self.branches.append(f"def {name}(ctx, r, c, E):\n{body}    return {code}\n")
-        return name
+        return name, generator
 
     def branch(self, node: Node, kind: str) -> str:
         """A lazy argument, compiled as a function of its own (``b0(ctx, r, c)``).
 
         The call evaluates it only if it is taken: ``IF(FALSE,A1,5)`` never reads A1.
         """
-        saved, saved_env = self.lines, self.env
+        saved, saved_env, saved_yields = self.lines, self.env, self.yields
         scoped = bool(self.scopes)
-        self.lines = []
+        self.lines, self.yields = [], False
         if scoped:  # a branch inside LET reads its names through the environment
             self.env = "E"
         code = self.argument(node)
         if self.arrays and kind in _LIFTED and not isinstance(node, Leaf):
             code = self.emit(f"ctx.arr({code})")
         body = "".join(f"    {line}\n" for line in self.lines)
-        self.lines, self.env = saved, saved_env
+        self.branch_yields = self.yields
+        self.lines, self.env, self.yields = saved, saved_env, saved_yields
         name = f"b{len(self.branches):d}"
         params = "ctx, r, c, E" if scoped else "ctx, r, c"
         self.branches.append(f"def {name}({params}):\n{body}    return {code}\n")
@@ -513,14 +554,31 @@ class _Generator:
         first = self.argument(args[0]) if args else "MISSING"
         if args and self.arrays and not isinstance(args[0], Leaf):
             first = self.emit(f"ctx.arr({first})")
-        rest = [self.branch(a, kinds[min(k + 1, len(kinds) - 1)]) for k, a in enumerate(args[1:])]
+        rest = []
+        generator = False
+        for k, a in enumerate(args[1:]):
+            rest.append(self.branch(a, kinds[min(k + 1, len(kinds) - 1)]))
+            generator = generator or self.branch_yields
         helper = _LAZY[upper]
         names = "".join(f", {b}" for b in rest)
-        return self.emit(f"ops.{helper}({self.function(fn)}, {first}, r, c{names})")
+        call = f"ops.{helper}({self.function(fn)}, {first}, r, c{names})"
+        if generator:  # a branch calls a function value: run on the call stack (ops.glazy_*)
+            self.yields = True
+            return self.emit(f"yield from ops.g{call[4:]}")
+        return self.emit(call)
 
     def call(self, name: Token, prefix: Token | None, args: list[Node]) -> str:
         if prefix is None and name.text.upper() == "_XLFN.LET" and len(args) >= 2:
             return self.let(args)
+        if prefix is None and name.text.upper() == "_XLFN.LAMBDA":
+            return self.closure(args)
+        if prefix is None and name.text[:6].casefold() == _PARAM:  # a name bound to a function
+            return self.invoke(self.bound(name.text), args)
+        if prefix is None and name.text.upper() == "_XLFN.ISOMITTED" and len(args) == 1:
+            omitted = self.omitted(args[0])
+            if omitted is not None:
+                self.calls.add("_XLFN.ISOMITTED")
+                return omitted
         fn = self.registry.get(name.text.upper()) if prefix is None else None
         if fn is not None and name.text.upper() in _LAZY and args:
             self.calls.add(name.text.upper())
@@ -574,8 +632,81 @@ class _Generator:
         self.calls.add(name.text.upper() if prefix is None else prefix.text + name.text)
         if fn is None:
             label = name.text if prefix is None else prefix.text + name.text
+            if prefix is None and "." not in label:  # a defined name holding a LAMBDA, if any
+                self.refs.append(RefSpec("name", None, name=label))
+                callee = self.emit(f"ctx.name(None, {self.constant(label)})")
+                return self.invoke(callee, args, parts)
             return self.emit(f"ctx.unsupported({self.constant(label)}{argv})")
         return self.emit(f"{self.function(fn)}(ctx{argv})")
+
+    def closure(self, args: list[Node]) -> str:
+        """``LAMBDA``: a function value over the environment it is evaluated in (a closure).
+
+        Its body is a function of its parameters' environment (``bK(ctx, r, c, E)``).
+        Parameters are ``_xlpm.`` names, optional ones ``_xlop.`` (``[y]`` typed), which the
+        body reads as ``_xlpm.``; a body that calls a function value is a generator, run on
+        the call stack in ``Ops`` (§5.4).
+        """
+        self.calls.add("_XLFN.LAMBDA")
+        names: dict[str, int] = {}
+        required = 0
+        for k, param in enumerate(args[:-1]):
+            plain = isinstance(param, Reference) and param.prefix is None
+            text = param.token.text.casefold() if isinstance(param, Reference) else ""
+            kind, key = text[:6], _PARAM + text[6:]
+            if (
+                not plain
+                or kind not in (_PARAM, _OPTIONAL)
+                or len(text) == len(kind)
+                or key in names
+                or (kind == _PARAM and required < k)  # a required one after an optional one
+            ):
+                names = {}
+                break
+            names[key] = k
+            required += kind == _PARAM
+        if not args or len(names) != len(args) - 1:
+            self.features.add("a LAMBDA whose parameters Excel would not take")
+            return self.constant(ErrorValue.VALUE)
+        self.scopes.append(names)
+        self.generators.append(set())
+        self.parameters.append(True)
+        outer = [(folded, self.values.pop(folded, None)) for folded in names]
+        self.bodies += 1
+        body, _ = self.function_of_env(args[-1])
+        self.bodies -= 1
+        for folded, value in outer:
+            if value is not None:
+                self.values[folded] = value
+        self.scopes.pop()
+        self.generators.pop()
+        self.parameters.pop()
+        total = len(names)
+        return self.emit(f"ops.closure({body}, {self.env}, r, c, {required:d}, {total:d})")
+
+    def invoke(self, callee: str, args: list[Node], parts: list[str] | None = None) -> str:
+        """A call of a function value: inside a ``LAMBDA`` body, yielded to the call stack.
+
+        Arguments are passed as they are, a cell as a reference (capture ``lambda_calls``).
+        """
+        if parts is None:
+            parts = [self.argument(a) for a in args]
+        argv = "".join(f", {code}" for code in parts)
+        if self.bodies:
+            self.yields = True
+            return self.emit(f"yield {self.emit(f'ops.request({callee}{argv})')}")
+        return self.emit(f"ops.invoke({callee}{argv})")
+
+    def omitted(self, node: Node) -> str | None:
+        """``ISOMITTED`` of a ``LAMBDA`` parameter, or ``None`` for anything else."""
+        while isinstance(node, Group):
+            node = node.inner
+        if not (isinstance(node, Reference) and node.prefix is None):
+            return None
+        found = self.lookup(node.token.text) if node.token.text[:6].casefold() == _PARAM else None
+        if found is None or not self.parameters[-1 - found[0]]:
+            return None
+        return self.emit(f"ops.omitted({self.env}, {found[0]:d}, {found[1]:d})")
 
     def argument(self, node: Node) -> str:
         """A function argument: a single cell is passed as a reference, not its value."""

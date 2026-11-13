@@ -157,12 +157,17 @@ def test_a_form_not_implemented_keeps_its_value_and_is_reported(formula):
 
 
 def _has_form_not_implemented(node: object) -> bool:
-    """Whether a parsed formula has a union (not as ``ROW``'s reference) or a call of a result."""
+    """Whether a parsed formula has a union (not as ``ROW``'s reference) or a call of a result
+    other than a ``LAMBDA``'s."""
     stack = [node]
     while stack:
         item = stack.pop()
         if isinstance(item, Invoke):
-            return True
+            callee = item.callee
+            while isinstance(callee, Invoke):
+                callee = callee.callee
+            if not (isinstance(callee, Call) and callee.name.text.upper() == "_XLFN.LAMBDA"):
+                return True
         if isinstance(item, Call) and item.name.text.upper() in ("ROW", "COLUMN"):
             continue
         if isinstance(item, Union):

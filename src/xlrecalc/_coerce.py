@@ -13,7 +13,7 @@ from typing import Protocol
 from xlrecalc._formula import MISSING
 from xlrecalc._numtext import number_to_text, text_to_number
 from xlrecalc._quirks import Quirks
-from xlrecalc._values import BLANK, ErrorValue, Ref, Value
+from xlrecalc._values import BLANK, ErrorValue, Lambda, Ref, Value
 
 __all__ = [
     "Context",
@@ -73,6 +73,8 @@ def to_number(v: Raw, ctx: Context) -> float | ErrorValue:
         return v
     if v is BLANK:
         return 0.0
+    if type(v) is Lambda:  # type: ignore[comparison-overlap]  # a function value (lambda_calls)
+        return VALUE  # type: ignore[unreachable]
     assert isinstance(v, str)
     n = text_to_number(v, ctx.quirks, date1904=ctx.date1904, today=ctx.today)
     return VALUE if n is None else n
@@ -89,7 +91,7 @@ def to_text(v: Raw, ctx: Context) -> str | ErrorValue:
         return number_to_text(v, ctx.quirks)
     if isinstance(v, ErrorValue):
         return v
-    return ""
+    return VALUE if type(v) is Lambda else ""  # type: ignore[comparison-overlap]
 
 
 def to_bool(v: Raw, ctx: Context) -> bool | ErrorValue:
@@ -103,6 +105,8 @@ def to_bool(v: Raw, ctx: Context) -> bool | ErrorValue:
         return v
     if v is BLANK:
         return False
+    if type(v) is Lambda:  # type: ignore[comparison-overlap]
+        return VALUE  # type: ignore[unreachable]
     upper = str(v).upper()
     if upper in ("TRUE", "FALSE"):
         return upper == "TRUE"

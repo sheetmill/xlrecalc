@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import re
 from collections.abc import Iterator
-from typing import ClassVar, Final
+from typing import Any, ClassVar, Final
 
 import xlformat
 
-__all__ = ["BLANK", "ErrorValue", "Ref", "Value"]
+__all__ = ["BLANK", "ErrorValue", "Lambda", "Ref", "Value"]
 
 _CODE: Final = re.compile(r"#[A-Z0-9_/]+[!?]?")
 _CODES: Final = (
@@ -129,6 +129,26 @@ ErrorValue.REF = ErrorValue("#REF!")
 ErrorValue.NAME = ErrorValue("#NAME?")
 ErrorValue.NUM = ErrorValue("#NUM!")
 ErrorValue.NA = ErrorValue("#N/A")
+
+
+class Lambda:
+    """A function value made by ``LAMBDA`` (ARCHITECTURE.md §5.4): never a cell's value.
+
+    ``body`` is the compiled body, a function of ``(ctx, r, c, E)`` returning a value or, when
+    the body calls a function value itself, a generator the call stack in ``Ops`` runs;
+    ``env`` the environment the ``LAMBDA`` was evaluated in, so a body reads the names around
+    it (a closure); ``r`` and ``c`` the cell it was made in. Its ``required`` parameters come
+    first, then the optional ones (``[y]``), ``total`` in all.
+    """
+
+    __slots__ = ("body", "c", "env", "r", "required", "total")
+
+    def __init__(self, body: Any, env: Any, r: int, c: int, required: int, total: int) -> None:
+        self.body, self.env, self.r, self.c = body, env, r, c
+        self.required, self.total = required, total
+
+    def __repr__(self) -> str:
+        return f"Lambda({self.required}/{self.total})"
 
 
 class Ref:

@@ -3384,6 +3384,8 @@ _EMPTY_TABLE: dict[str, Input] = {
 }  # fmt: skip
 _EMPTY_SKIP = frozenset(
     {"_XLFN.ANCHORARRAY", "_XLFN.SINGLE", "RAND", "RANDBETWEEN", "NOW", "TODAY"}
+    # LAMBDA and the functions that take one: not yet captured with empty arguments.
+    | {"_XLFN.LAMBDA", "_XLFN.ISOMITTED"}
 )
 _EMPTY_VALUE = {
     "number": "2", "text": '"a"', "logical": "TRUE", "value": "2", "branch": "2",

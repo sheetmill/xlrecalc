@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `LAMBDA` and `ISOMITTED`, captured from Excel (captures `lambda_calls`, `lambda_names`, `lambda_depth`): a function
+  value called where it is made (`LAMBDA(x,x+1)(2)`), through a `LET` name or a parameter, or through a defined name
+  that holds one (`ADDONE(1)`), recursion and mutual recursion included. It closes over the names around it; optional
+  parameters (`[y]`) and arguments given empty read as a blank, and `ISOMITTED` tells them apart; a wrong argument
+  count is `#VALUE!`; a call returns references as they are. A function value as a cell's value is `#CALC!`, given to
+  an operator or a function `#VALUE!` (`ISERROR` and `ISREF` FALSE, `TYPE` 128). Recursion runs on an explicit stack
+  and stops with `#NUM!` at Excel's budget: 65,536, each call in progress costing 8 plus 4 a parameter (5,461 calls of
+  one parameter).
+
 ### Changed
 - Excel 16.115 for Mac under Microsoft 365 is the reference: every capture made on 16.114 (Office Home & Business 2021)
   was rerun on it. Its differences: `LEN`, `MID`, `REPLACE`, `FIND` and `SEARCH` count a character outside the first

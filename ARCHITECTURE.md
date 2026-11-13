@@ -365,6 +365,30 @@ calculation after the bindings, the last name is the calculation, as Excel write
 name bound twice or written without `_xlpm.`, or a number where a name goes, makes Excel refuse
 the file. Formulas without `LET` compile as before.
 
+**`LAMBDA`** (captures `lambda_calls`, `lambda_names`, `lambda_depth`) is compiled as `LET` is:
+its parameters are a scope resolved at compile time (`_xlpm.` names, optional ones `_xlop.` in the
+list, typed `[y]`), and its body a function of their environment (`b0(ctx, r, c, E)`).
+Evaluating `LAMBDA` makes a function value (`ops.closure`) over the environment it is evaluated
+in, so a body reads the names around it, `LET`'s and an outer `LAMBDA`'s. Calls of one, as
+`LAMBDA(x,x+1)(2)`, through a `LET` name or a parameter, or through a defined name holding one
+(`ADDONE(1)`), check the argument count (`#VALUE!` otherwise) and pass arguments as they are,
+references and errors included; an argument not given, or given empty, reads as a blank and
+makes `ISOMITTED` TRUE. A function value is no cell's value: a cell or spilled element holding
+one is `#CALC!`, an operator or function given one `#VALUE!` (but `ISERROR` and `ISREF` FALSE,
+`TYPE` 128, and `IF`'s and `CHOOSE`'s results pass it on to be called), checked where the
+registry receives every function's arguments. A call of any other value is reported, not
+computed.
+
+Recursion runs on an explicit stack, never Python's: a body that calls a function value is a
+generator that yields each call (`ops.request`), and `ops.call`'s loop runs it and sends its
+result back; lazy branches and `LET` bindings that call one are generators too, run through the
+generator forms of the lazy helpers (`ops.glazy_if`...). Excel stops recursion at a budget,
+which the stack charges: each call in progress costs 8 plus 4 a parameter (declared ones,
+optional ones included), and a call that would bring the total to 65,536 is `#NUM!` (5,461 calls
+of one parameter, 4,095 of two, 3,276 of three). A function that calls a function value itself
+(`MAP`) starts a stack of its own, so Python's stack grows only with such functions nested
+through function values, which past 64 deep is reported.
+
 **Workbook text never enters generated source.** Strings, numbers, error literals, sheet names,
 defined names and array constants from the formula go into the template's constants table `K`;
 functions are looked up in the registry table `F` by index, never by the name in the file. The
@@ -1290,11 +1314,9 @@ After 0.2.0, in this order: an order, not a promise or a date.
    `TRIMRANGE`, then `AGGREGATE` and the others one by one; those with large questions of their
    own (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable.
    `docs/coverage.md` lists what exists.
-5. `LAMBDA` and its helpers (`MAP`, `REDUCE`, `SCAN`, `BYROW`, `BYCOL`, `MAKEARRAY`, `ISOMITTED`): Excel's own
-   semantics, captured before they are built, on an edition of Excel that has them (Microsoft 365 does; Office Home
-   & Business 2021 for Mac does not; `CAPTURING.md` §2). They would compile as `LET` does (§5.4), a lambda's body a function of its
-   environment and arguments. `xlrecalc.evaluate(text)` for one formula outside a workbook, and
-   callbacks (§12).
+5. The `LAMBDA` helpers (`MAP`, `REDUCE`, `SCAN`, `BYROW`, `BYCOL`, `MAKEARRAY`), from capture
+   `lambda_helpers`. `xlrecalc.evaluate(text)` for one formula outside a workbook, and callbacks
+   (§12).
 6. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
    vectorized templates (numpy as an optional extra), a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,
