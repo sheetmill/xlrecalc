@@ -18,18 +18,42 @@ import pytest
 from tests.test_arrays import DOC, _cell, _metadata
 from tests.test_captures import same
 from tests.test_xlsx import package
+from tests.watchdog import bounded
 from xlrecalc._engine import node
 from xlrecalc._load import load
 from xlrecalc._values import BLANK, ErrorValue
 from xlrecalc._xlsx._write import text_escape
 
 CAPTURES = Path(__file__).with_name("captures")
-SUITES = ("lambda_calls", "lambda_helpers")
+SUITES = ("lambda_calls", "lambda_helpers", "lambda_names")
+DEPTH = "lambda_depth"
+"""Recursion to Excel's limit and past it: replayed in a child process under the watchdog."""
 DATA = {"Z1": 1.0, "Z2": 2.0, "Z3": 3.0, "AA1": 10.0, "AA2": 20.0, "AA3": 30.0}
 
-KNOWN: dict[tuple[str, str], str] = {}
+_BODY = (
+    "Excel's recursion budget counts what a body evaluates at its deepest call too: a body"
+    " calling SUM with four or eight arguments stops one or two calls earlier; the engine charges"
+    " calls only"
+)
+_TAIL = (
+    "Excel runs a call in tail position (nothing after it in the body) past the budget, to between"
+    " 8,000 and 10,000 calls; the engine charges it as any other call"
+)
+KNOWN: dict[tuple[str, str], str] = {
+    (DEPTH, "A196"): _BODY,  # CDBIG(5460): SUM of four arguments
+    (DEPTH, "A301"): _BODY,  # BSUMEIGHT(5459): SUM of eight
+    (DEPTH, "A306"): _BODY,  # BSUMEIGHT(5460)
+    (DEPTH, "A476"): _TAIL,  # BPLAIN(5461)
+    (DEPTH, "A481"): _TAIL,  # BPLAIN(8000)
+}
 """Cells where the engine differs from Excel, with the reason (``QUIRKS.md``). Strict: a listed
 cell that matches fails."""
+REPORTED = {(DEPTH, "_XLUDF.LET")}
+"""Reported calls a capture holds on purpose: ``BLETX``'s name was stored with ``LET`` as an
+unknown function (``_xludf.LET``), which Excel shows as ``#NAME?`` at every depth, as does the
+engine, reporting it."""
+BOUNDARY = ("A11", "A16", "A31", "A36", "A66", "A71", "A111", "A116")
+"""The rows at the edge of the budget for one, two and three parameters, in the default run."""
 
 
 def _rows(suite: str) -> list[list[object]]:
@@ -37,8 +61,9 @@ def _rows(suite: str) -> list[list[object]]:
     return [[ast.literal_eval(f) for f in line.split("\t")] for line in lines if line[:1] != "#"]
 
 
-def workbook(suite: str) -> bytes:
-    """The probe's workbook for a suite: its data, its names and its formulas in file form."""
+def workbook(suite: str, only: tuple[str, ...] = ()) -> bytes:
+    """The probe's workbook for a suite: its data, its names and its formulas in file form
+    (``only`` those at these addresses, if given)."""
     cells = {where: f'<c r="{where}"><v>{value!r}</v></c>' for where, value in DATA.items()}
     names = ""
     for row in _rows(suite):
@@ -46,7 +71,7 @@ def workbook(suite: str) -> bytes:
             names += f'<definedName name="{row[1]}">{text_escape(str(row[2]))}</definedName>'
             continue
         _, _, _, where, _, _, text, f_t, _, _, _ = row
-        if text is None:  # a cell the formula above spilled into
+        if text is None or (only and where not in only):  # spilled into, or left out
             continue
         f = text_escape(str(text))
         if f_t == "array":
@@ -154,6 +179,94 @@ def test_every_formula_is_computed(suite: str) -> None:
     assert not report.unsupported, dict(report.unsupported)
 
 
+def _depth_failures(only: tuple[str, ...]) -> list[str]:
+    """Capture lambda_depth's cells (``only`` these, if given) that differ from Excel unlisted, or
+    match it though listed; and calls reported unexpectedly."""
+    e = load(io.BytesIO(workbook(DEPTH, only)))
+    report = e.recalculate(full=True)
+    problems = [f"reported: {k}" for k in report.unsupported if (DEPTH, k) not in REPORTED]
+    for row in _rows(DEPTH):
+        if row[0] != "cell" or (only and row[3] not in only):
+            continue
+        r, c = _cell(str(row[3]))
+        got, want = e.get(0, r - 1, c - 1), expected(row)
+        listed = (DEPTH, row[3]) in KNOWN
+        if same(got, want) == listed:
+            problems.append(f"{row[3]} {row[2]}: {got!r}, Excel {want!r}, listed {listed}")
+    return problems
+
+
+@bounded
+def test_recursion_at_the_budget_matches_excel() -> None:
+    """One, two and three parameters, each at the last call Excel takes and the first it stops."""
+    assert _depth_failures(BOUNDARY) == []
+
+
+@pytest.mark.slow
+@bounded(seconds=600.0)
+def test_recursion_matches_excel_at_every_captured_depth() -> None:
+    assert _depth_failures(()) == []
+
+
+def _book(names: dict[str, str], formulas: dict[str, str]) -> bytes:
+    """A workbook of plain formulas (file form) and defined names."""
+    defined = "".join(
+        f'<definedName name="{n}">{text_escape(t)}</definedName>' for n, t in names.items()
+    )
+    rows = "".join(
+        f'<row r="{_cell(w)[0]}"><c r="{w}"><f>{text_escape(f)}</f></c></row>'
+        for w, f in sorted(formulas.items(), key=lambda item: _cell(item[0]))
+    )
+    return package(rows, workbook_extra=f"<definedNames>{defined}</definedNames>")
+
+
+def _computed(names: dict[str, str], formulas: dict[str, str]) -> tuple[dict[str, object], list]:
+    e = load(io.BytesIO(_book(names, formulas)))
+    report = e.recalculate(full=True)
+    values = {w: e.get(0, _cell(w)[0] - 1, _cell(w)[1] - 1) for w in formulas}
+    return values, sorted(report.unsupported)
+
+
+_RUNAWAY = {
+    "TAIL": "_xlfn.LAMBDA(_xlpm.n,TAIL(_xlpm.n+1))",
+    "GROW": "_xlfn.LAMBDA(_xlpm.n,1+GROW(_xlpm.n+1))",
+    "LETS": "_xlfn.LAMBDA(_xlpm.n,_xlfn.LET(_xlpm.m,_xlpm.n-1,IF(_xlpm.n<=0,0,1+LETS(_xlpm.m))))",
+    "ISEV": "_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n=0,TRUE,ISOD(_xlpm.n-1)))",
+    "ISOD": "_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n=0,FALSE,ISEV(_xlpm.n-1)))",
+    "VIAMAP": "_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,0,"
+    "SUM(_xlfn.MAP({1},_xlfn.LAMBDA(_xlpm.x,1+VIAMAP(_xlpm.n-1))))))",
+}
+
+
+@bounded
+def test_runaway_recursion_stops_at_the_budget() -> None:
+    """Recursion that never ends stops with ``#NUM!``, on the explicit stack, in bounded memory;
+    so does recursion through a ``LET`` binding and mutual recursion past the budget."""
+    values, reported = _computed(
+        _RUNAWAY,
+        {
+            "A1": "TAIL(1)",
+            "A2": "GROW(1)",
+            "A3": "LETS(5000)",
+            "A4": "LETS(5461)",
+            "A5": "ISEV(5000)",
+            "A6": "ISEV(6000)",
+        },
+    )
+    num = ErrorValue.NUM
+    assert values == {"A1": num, "A2": num, "A3": 5000.0, "A4": num, "A5": True, "A6": num}
+    assert reported == []
+
+
+@bounded
+def test_recursion_through_a_function_that_calls_a_lambda_is_bounded() -> None:
+    """Each ``MAP`` inside the recursion is a call stack inside the one before, so Python's own:
+    shallow, it computes; past ``NESTED_RUNS`` the formula is reported, not computed."""
+    values, reported = _computed(_RUNAWAY, {"A1": "VIAMAP(20)", "A2": "VIAMAP(1000)"})
+    assert values["A1"] == 20.0
+    assert reported == ["calls of LAMBDA nested through functions too deeply"]
+
+
 _FAMILY = ("LAMBDA", "ISOMITTED", "MAP", "REDUCE", "SCAN", "BYROW", "BYCOL", "MAKEARRAY")
 
 
@@ -197,3 +310,25 @@ def test_plain_formulas_match_excel_or_are_reported(row: tuple[str, str, str, st
 _BARE_INSIDE = frozenset({"_xlfn.LAMBDA(_xlpm.x,_xlpm.y,ISOMITTED(_xlpm.y))(1)"})
 """A bare name inside a body Excel never runs (one argument for two parameters: ``#VALUE!``);
 the engine reports the formula for the name, as it does any formula holding a bare one."""
+
+
+@pytest.mark.parametrize(
+    ("names", "formula"),
+    [
+        ({"OUTER": "INNER*2", "INNER": "Data!$B$1"}, "OUTER"),
+        ({"TWICEB": "_xlfn.LAMBDA(_xlpm.x,_xlpm.x*Data!$B$1)", "SELF": "TWICEB"}, "SELF(2)"),
+    ],
+)
+def test_an_edit_reaches_a_formula_through_names(names: dict[str, str], formula: str) -> None:
+    """A name's dependencies are those of the names it refers to or calls, so an edit of a
+    cell they read recalculates the formula."""
+    defined = "".join(
+        f'<definedName name="{n}">{text_escape(t)}</definedName>' for n, t in names.items()
+    )
+    row = f'<row r="1"><c r="A1"><f>{text_escape(formula)}</f></c><c r="B1"><v>1</v></c></row>'
+    e = load(io.BytesIO(package(row, workbook_extra=f"<definedNames>{defined}</definedNames>")))
+    e.recalculate(full=True)
+    before = e.get(0, 0, 0)
+    e.set_value(0, 0, 1, 5.0)
+    e.recalculate()
+    assert (before, e.get(0, 0, 0)) == (2.0, 10.0)

@@ -140,14 +140,10 @@ class DependencyIndex:
         engine = self.engine
         if spec.kind == "name":
             for s in self.sheets_of[tid]:
-                template = engine._name_template(spec.name or "", s)
-                if template is None:
-                    continue
-                for inner in template.refs:
-                    if inner.kind == "box":
-                        target = s if inner.sheet is None else engine.sheet_index(inner.sheet)
-                        if target is not None:
-                            yield _make(tid, target, inner, absolute=True)
+                for inner in engine.name_boxes(spec.name or "", s):
+                    target = s if inner.sheet is None else engine.sheet_index(inner.sheet)
+                    if target is not None:
+                        yield _make(tid, target, inner, absolute=True)
             return
         target = None if spec.sheet is None else engine.sheet_index(spec.sheet)
         if spec.sheet is not None and target is None:

@@ -441,8 +441,9 @@ the template's formula cells inside the rectangle; each template's cells are kep
 column, so a rectangle yields runs, found by bisection, not cells. Single-cell references with
 both axes relative, the common case, are grouped by offset, so a change is probed once per
 distinct offset in the workbook, not once per template. References to another sheet apply on
-the sheets that use the template; a defined name contributes its own references. The index is
-built from the templates and the cells' runs (0.4 s for the 3M formulas of the 1M-row
+the sheets that use the template; a defined name contributes its own references and those of
+the names it refers to or calls, each name once, so a recursive `LAMBDA` name ends. The index
+is built from the templates and the cells' runs (0.4 s for the 3M formulas of the 1M-row
 benchmark) and rebuilt when formulas change, not when values do.
 
 ### 6.2 Ranges

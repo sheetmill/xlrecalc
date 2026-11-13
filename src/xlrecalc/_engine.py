@@ -1209,14 +1209,8 @@ class Engine:
         self, spec: RefSpec, sheet: int, row: int, col: int
     ) -> Iterator[tuple[int, int, int, int, int]]:
         if spec.kind == "name":
-            text = self._name_text(spec.name or "", sheet)
-            if text is None:
-                return
-            template = self._name_template(spec.name or "", sheet)
-            if template is not None:
-                for inner in template.refs:
-                    if inner.kind == "box":
-                        yield from self._spec_boxes(inner, sheet, 0, 0)
+            for inner in self.name_boxes(spec.name or "", sheet):
+                yield from self._spec_boxes(inner, sheet, 0, 0)
             return
         target = sheet if spec.sheet is None else self.sheet_index(spec.sheet)
         if target is None:
@@ -1422,6 +1416,25 @@ class Engine:
                     template = None
             self._name_templates[key] = template
         return self._name_templates[key]
+
+    def name_boxes(self, name: str, sheet: int) -> Iterator[RefSpec]:
+        """The boxes a defined name refers to, and those of the names it refers to or calls.
+
+        Followed iteratively, each name once, so a name that calls itself (a recursive
+        ``LAMBDA``) or a chain of names ends.
+        """
+        todo, seen = [name], set()
+        while todo:
+            name = todo.pop()
+            if name.casefold() in seen:
+                continue
+            seen.add(name.casefold())
+            template = self._name_template(name, sheet)
+            for inner in template.refs if template is not None else ():
+                if inner.kind == "box":
+                    yield inner
+                elif inner.sheet is None:
+                    todo.append(inner.name or "")
 
     def name_text(self, name: str) -> str | None:
         """A defined name's definition as the current sheet sees it, or ``None``."""

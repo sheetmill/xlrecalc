@@ -22,7 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   positive whole sizes. A call whose result is not one value makes the result `#CALC!` (`REDUCE`'s last excepted).
   Written without `_xlfn.`, each is a name Excel does not know (`#NAME?`), and is reported with that cause (capture
   `prefixes`).
-
 ### Changed
 - Excel 16.115 for Mac under Microsoft 365 is the reference: every capture made on 16.114 (Office Home & Business 2021)
   was rerun on it. Its differences: `LEN`, `MID`, `REPLACE`, `FIND` and `SEARCH` count a character outside the first
@@ -38,6 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   units in the last place that 3.11 leaves past them.
 
 ### Fixed
+- A formula reading a defined name that refers to another name, or calls one holding a `LAMBDA`, is recalculated when
+  a cell the other name reads changes; only the first name's own references were followed.
 - A wildcard's `?` in criteria (`COUNTIF` and the other `IF` functions, the database functions), `MATCH`, `XMATCH`
   and `XLOOKUP` matches one UTF-16 unit, as in Excel, so a character outside the first plane takes `??`; it took `?`
   (capture `text_family`).
