@@ -18,10 +18,11 @@ import pytest
 from tests.test_arrays import DOC, _cell, _metadata
 from tests.test_captures import same
 from tests.test_xlsx import package
-from tests.watchdog import bounded
+from tests.watchdog import bounded, in_child
 from xlrecalc._engine import node
 from xlrecalc._load import load
 from xlrecalc._values import BLANK, ErrorValue
+from xlrecalc._workbook import _may_be_array
 from xlrecalc._xlsx._write import text_escape
 
 CAPTURES = Path(__file__).with_name("captures")
@@ -208,6 +209,46 @@ def test_recursion_matches_excel_at_every_captured_depth() -> None:
     assert _depth_failures(()) == []
 
 
+def _outcomes_here() -> list[tuple[str, str, str]]:
+    """Each typed formula of the four captures (suite, file form) and how it fares: ``match``
+    when every cell of its result matches Excel, ``listed`` when one is a known deviation,
+    ``not evaluated`` when the engine reports it, else ``differs``."""
+    out = []
+    for suite in (*SUITES, DEPTH):
+        e = load(io.BytesIO(workbook(suite)))
+        report = e.recalculate(full=True)
+        reported = {(ref.row, ref.col) for ref in report.uncomputed}
+        cases: dict[int, list[list[object]]] = {}
+        for row in _rows(suite):
+            if row[0] == "cell":
+                cases.setdefault(int(row[1]), []).append(row)  # type: ignore[call-overload]
+        for rows in cases.values():
+            cells = [_cell(str(r[3])) for r in rows]
+            if cells[0] in reported:
+                outcome = "not evaluated"
+            elif any((suite, r[3]) in KNOWN for r in rows):
+                outcome = "listed"
+            elif all(
+                same(e.get(0, r - 1, c - 1), expected(row))
+                for (r, c), row in zip(cells, rows, strict=True)
+            ):
+                outcome = "match"
+            else:
+                outcome = "differs"
+            out.append((suite, str(rows[0][6]), outcome))
+    return out
+
+
+_OUTCOMES: list[tuple[str, str, str]] = []
+
+
+def formula_outcomes() -> list[tuple[str, str, str]]:
+    """``_outcomes_here``, run once in a child process under the watchdog (deep recursion)."""
+    if not _OUTCOMES:
+        _OUTCOMES.extend(in_child(_outcomes_here, seconds=600.0))
+    return _OUTCOMES
+
+
 def _book(names: dict[str, str], formulas: dict[str, str]) -> bytes:
     """A workbook of plain formulas (file form) and defined names."""
     defined = "".join(
@@ -332,3 +373,20 @@ def test_an_edit_reaches_a_formula_through_names(names: dict[str, str], formula:
     e.set_value(0, 0, 1, 5.0)
     e.recalculate()
     assert (before, e.get(0, 0, 0)) == (2.0, 10.0)
+
+
+def _typed() -> list[tuple[str, str, bool]]:
+    """Every typed formula of the LAMBDA captures: suite, file form, and whether Excel marked it."""
+    return [
+        (suite, str(row[6]), row[7] == "array")
+        for suite in (*SUITES, DEPTH)
+        for row in _rows(suite)
+        if row[0] == "cell" and row[6] is not None
+    ]
+
+
+@pytest.mark.parametrize(("suite", "text", "marked"), _typed(), ids=lambda x: str(x))
+def test_marker_as_excel_writes_it_typed(suite: str, text: str, marked: bool) -> None:
+    """``set_formula`` marks a formula as a dynamic array exactly where Excel marked it typed."""
+    names = {str(r[1]).casefold(): str(r[2]) for r in _rows(suite) if r[0] == "name"}
+    assert _may_be_array(text, lambda n: names.get(n.casefold())) is marked

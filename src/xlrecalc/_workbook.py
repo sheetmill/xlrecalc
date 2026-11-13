@@ -21,6 +21,7 @@ from xlrecalc._formula._nodes import (
     Binary,
     Call,
     Group,
+    Invoke,
     Leaf,
     Missing,
     Node,
@@ -355,6 +356,9 @@ class Workbook:
 # Arguments that carry an array to the result although the registry does not lift them: N's
 # value, and INDEX's array, whose shape the text does not give (capture marker_typed).
 _CARRIED = {"N": (0,), "INDEX": (0,)}
+# ROW and COLUMN give an array for a range: a call's result there may be one (capture
+# lambda_calls: ROW(LAMBDA(x,x)(Z2)) is marked, ISREF(LAMBDA(x,x)(Z1)) is not).
+_CARRIED |= {"ROW": (0,), "COLUMN": (0,)}
 
 
 def _may_be_array(text: str, name_text: Callable[[str], str | None] | None = None) -> bool:
@@ -368,25 +372,40 @@ def _may_be_array(text: str, name_text: Callable[[str], str | None] | None = Non
     index that is not a number other than 0, and ``OFFSET`` with a height or width that is not a
     number, since their size is then not in the text. ``LET`` carries its calculation, a name in
     it standing for what it is bound to (capture ``let_typed``: ``LET(x,SEQUENCE(3),SUM(x))`` is
-    not marked).
+    not marked). A call of a function value (``LAMBDA(x,x)(Z1:Z3)``, ``ADDONE(1)`` through a
+    defined name) may give an array; an uncalled ``LAMBDA`` marks the formula only as its result,
+    through ``LET`` and names, not inside an operation (captures ``lambda_calls``,
+    ``lambda_names``: ``=LAMBDA(x,x)+1`` and ``IF(TRUE,LAMBDA(x,x))`` are not marked).
     """
     try:
         root = parse(text).root
     except (FormulaSyntaxError, TokenizeError):
         return False
     stack: list[Node] = [root]
+    result: set[int] = {id(root)}  # nodes that are the formula's result, not an operand
     seen: set[str] = set()  # names already followed: a name may refer to itself
     bound: dict[str, Node] = {}  # LET names, by their folded text, to their values
     while stack:
         node = stack.pop()
-        if isinstance(node, ArrayConstant):
+        at_result = id(node) in result
+        if isinstance(node, ArrayConstant | Invoke):
             return True
+        if (
+            isinstance(node, Call)
+            and node.prefix is None
+            and node.name.text.upper() == "_XLFN.LAMBDA"
+        ):
+            if at_result:
+                return True
+            continue
         if isinstance(node, Reference) and node.token.kind is Kind.NAME and node.prefix is None:
             folded = node.token.text.casefold()
             if folded in bound:
                 if folded not in seen:
                     seen.add(folded)
                     stack.append(bound[folded])
+                    if at_result:
+                        result.add(id(bound[folded]))
                 continue
         if isinstance(node, Call) and node.prefix is None and node.name.text.upper() == "_XLFN.LET":
             args = node.args
@@ -396,6 +415,8 @@ def _may_be_array(text: str, name_text: Callable[[str], str | None] | None = Non
                     bound[declared.token.text.casefold()] = value
             if args:
                 stack.append(pairs[-2] if len(args) % 2 == 0 and len(pairs) >= 2 else args[-1])
+                if at_result:
+                    result.add(id(stack[-1]))
             continue
         if isinstance(node, Reference) and node.token.kind is Kind.NAME and name_text is not None:
             folded = node.token.text.casefold()
@@ -404,8 +425,12 @@ def _may_be_array(text: str, name_text: Callable[[str], str | None] | None = Non
             if definition is not None:
                 with contextlib.suppress(FormulaSyntaxError, TokenizeError):
                     stack.append(parse(definition.removeprefix("=")).root)
+                    if at_result:
+                        result.add(id(stack[-1]))
         elif isinstance(node, Group):
             stack.append(node.inner)
+            if at_result:
+                result.add(id(node.inner))
         elif isinstance(node, Prefix | Postfix):
             stack.append(node.operand)
         elif isinstance(node, Binary):
@@ -413,6 +438,8 @@ def _may_be_array(text: str, name_text: Callable[[str], str | None] | None = Non
         elif isinstance(node, Call):
             name = ((node.prefix.text if node.prefix is not None else "") + node.name.text).upper()
             spec = SPECS.get(name)
+            if spec is None and name_text is not None and name_text(node.name.text) is not None:
+                return True  # a call of a defined name, which holds a LAMBDA if it runs
             if spec is None or name == "_XLFN.SINGLE":
                 continue
             cycle: int = getattr(REGISTRY[name], "cycle", 1)

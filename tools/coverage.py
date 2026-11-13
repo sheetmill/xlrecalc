@@ -90,7 +90,21 @@ def evidence() -> dict[str, Evidence]:
                 if outcome:
                     setattr(e, outcome, getattr(e, outcome) + 1)
     _dynamic_evidence(found)
+    _lambda_evidence(found)
     return found
+
+
+def _lambda_evidence(found: dict[str, Evidence]) -> None:
+    """``LAMBDA`` and its helpers (captures ``lambda_*``): a typed formula is a row, exact when
+    every cell of its result matches Excel."""
+    from tests.test_lambda import formula_outcomes
+
+    for _suite, text, outcome in formula_outcomes():
+        for fn in {display(n) for n in _CALL.findall(text) if n.upper() in SPECS}:
+            ev = found[fn]
+            ev.rows += 1
+            if outcome in ("match", "listed"):
+                setattr(ev, outcome, getattr(ev, outcome) + 1)
 
 
 def _dynamic_evidence(found: dict[str, Evidence]) -> None:

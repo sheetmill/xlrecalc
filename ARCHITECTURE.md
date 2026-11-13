@@ -798,7 +798,12 @@ and arguments taken element by element (`=-SEQUENCE(1)`, `=IF(TRUE,SEQUENCE(1))`
 (`=INDEX(SEQUENCE(3),1)`) and defined names, not through a function that takes an array
 (`=SUM(SEQUENCE(3))`, `=ROWS(SEQUENCE(1))`); and when `INDEX` has an index that is not a number other
 than 0, or `OFFSET` a height or width that is not a number, so that the size is not in the text
-(`=INDEX(Z1:Z1,0)`, `=OFFSET(Z1,0,0,Z1,1)`; not `=OFFSET(Z1,0,0,1,1)`). The registry flags the
+(`=INDEX(Z1:Z1,0)`, `=OFFSET(Z1,0,0,Z1,1)`; not `=OFFSET(Z1,0,0,1,1)`). A call of a function
+value may give anything, so it is marked (`=LAMBDA(x,x)(Z1)`, `=ADDONE(1)` through a defined
+name, `=ROW(LAMBDA(x,x)(Z2))`, `ROW` and `COLUMN` carrying their reference), and so is an uncalled
+`LAMBDA` as the formula's result (`=LAMBDA(x,x+1)`), but not one an operation or a function takes
+(`=LAMBDA(x,x)+1`, `=IF(TRUE,LAMBDA(x,x))`, `=ISREF(ADDONE)`): every typed formula of the four
+`lambda_*` captures is marked as Excel marked it. The registry flags the
 functions that make arrays (`makes_array`), and a test holds the flags to the captures: set
 exactly for the functions a dynamic array spilled from or a typed call on literals and references
 marked although it neither spills nor intersects. The writer does the

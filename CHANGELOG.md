@@ -22,6 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   positive whole sizes. A call whose result is not one value makes the result `#CALC!` (`REDUCE`'s last excepted).
   Written without `_xlfn.`, each is a name Excel does not know (`#NAME?`), and is reported with that cause (capture
   `prefixes`).
+- A formula set through the API that calls a function value, or gives an uncalled `LAMBDA` as its result, is a
+  dynamic array, as Excel marks it typed (every typed formula of the `lambda_*` captures).
+- README's evidence counts the 169 formulas of the `lambda_*` captures: 153 match, 5 are known deviations of the
+  recursion budget, and 11 call a name holding `LET` as a function Excel does not know (`_xludf.LET`), which Excel
+  shows as `#NAME?` and the package reports. The coverage page counts them per function.
+
 ### Changed
 - Excel 16.115 for Mac under Microsoft 365 is the reference: every capture made on 16.114 (Office Home & Business 2021)
   was rerun on it. Its differences: `LEN`, `MID`, `REPLACE`, `FIND` and `SEARCH` count a character outside the first

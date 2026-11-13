@@ -1144,6 +1144,11 @@ def test_stated_evidence_is_the_capture_run(page):
         assert not failures
         for key, n in counts.items():
             total[key] += n
+    from tests.test_lambda import formula_outcomes  # the LAMBDA captures: a typed formula a row
+
+    for _suite, _text, outcome in formula_outcomes():
+        assert outcome != "differs"
+        total[outcome] += 1
     text = " ".join((Path(__file__).parents[1] / page).read_text(encoding="utf-8").split())
     found = re.search(
         r"([\d,]+) formulas computed by Excel.*?([\d,]+) match.*?"
