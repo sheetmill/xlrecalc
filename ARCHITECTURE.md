@@ -389,6 +389,15 @@ of one parameter, 4,095 of two, 3,276 of three). A function that calls a functio
 (`MAP`) starts a stack of its own, so Python's stack grows only with such functions nested
 through function values, which past 64 deep is reported.
 
+The helpers (capture `lambda_helpers`) take a function value as an argument of kind `function`.
+`MAP` passes a range's elements as references to their cells and an array's as values, padding a
+shorter argument with `#N/A`; `REDUCE` and `SCAN` go row by row from their initial value (an
+empty one a blank); `BYROW` and `BYCOL` pass each row or column, of a range as a reference;
+`MAKEARRAY` takes positive whole sizes only (2.7 is `#VALUE!`) and checks its size against the
+array limit before any call. A call whose result is not one value (a range, an array of several)
+makes the whole result `#CALC!`, except for `REDUCE`, whose last result may be a range that
+spills.
+
 **Workbook text never enters generated source.** Strings, numbers, error literals, sheet names,
 defined names and array constants from the formula go into the template's constants table `K`;
 functions are looked up in the registry table `F` by index, never by the name in the file. The
@@ -1314,9 +1323,7 @@ After 0.2.0, in this order: an order, not a promise or a date.
    `TRIMRANGE`, then `AGGREGATE` and the others one by one; those with large questions of their
    own (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable.
    `docs/coverage.md` lists what exists.
-5. The `LAMBDA` helpers (`MAP`, `REDUCE`, `SCAN`, `BYROW`, `BYCOL`, `MAKEARRAY`), from capture
-   `lambda_helpers`. `xlrecalc.evaluate(text)` for one formula outside a workbook, and callbacks
-   (§12).
+5. `xlrecalc.evaluate(text)` for one formula outside a workbook, and callbacks (§12).
 6. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
    vectorized templates (numpy as an optional extra), a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,

@@ -228,7 +228,8 @@ def test_array_makers_are_flagged_as_the_captures_show() -> None:
 
     Evidence for a flag: a dynamic array whose outermost call spilled over more than one cell
     (``dyn_*``), or a typed call of the function on literals and references alone that Excel
-    marked although it neither spills nor intersects (``marker_typed``). Evidence against: such
+    marked although it neither spills nor intersects (``marker_typed``); the ``lambda_*``
+    captures' spills count as the ``dyn_*`` ones do. Evidence against: such
     a call Excel did not mark. ``INDEX`` and ``OFFSET``, marked or not by their arguments, and
     ``LET``, by its calculation, are left to ``test_api``'s end-to-end tests of typed formulas.
     """
@@ -242,6 +243,13 @@ def test_array_makers_are_flagged_as_the_captures_show() -> None:
             name = _outermost(ast.literal_eval(text))
             if name is not None and name not in _SIZED:
                 makes.add(name)
+    for suite in ("lambda_calls", "lambda_helpers", "lambda_names"):  # typed, then pasted
+        for line in (CAPTURES / f"{suite}.tsv").read_text(encoding="utf-8").splitlines():
+            row = [ast.literal_eval(f) for f in line.split("\t")] if line[:1] != "#" else []
+            if row and row[0] == "cell" and row[6] and ":" in str(row[8]):
+                name = _outermost(row[6])
+                if name is not None and name not in _SIZED:
+                    makes.add(name)
     engine = Engine(Quirks.EXCEL)
     engine.add_sheet("typed")
     for line in (CAPTURES / "marker_typed.tsv").read_text(encoding="utf-8").splitlines():

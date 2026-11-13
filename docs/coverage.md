@@ -9,7 +9,7 @@ deviations with their reasons (`QUIRKS.md`, `tests/test_captures.py`). Whether a
 matching row is exact or within its tolerance depends on the platform's math library,
 so the page counts them together and is the same on every platform.
 
-446 implemented, 17 partial, 60 absent.
+452 implemented, 17 partial, 54 absent.
 
 | function | category | status | rows | match | listed | tolerance | note |
 |---|---|---|---:|---:|---:|---|---|
@@ -62,8 +62,8 @@ so the page counts them together and is the same on every platform.
 | `BITOR` | engineering | implemented | 199 | 199 | 0 |  |  |
 | `BITRSHIFT` | engineering | implemented | 227 | 227 | 0 |  |  |
 | `BITXOR` | engineering | implemented | 199 | 199 | 0 |  |  |
-| `BYCOL` | | absent | | | | | |
-| `BYROW` | | absent | | | | | |
+| `BYCOL` | logical | implemented | 0 | 0 | 0 |  |  |
+| `BYROW` | logical | implemented | 0 | 0 | 0 |  |  |
 | `CALL` | | absent | | | | | |
 | `CEILING` | math | implemented | 275 | 275 | 0 |  |  |
 | `CEILING.MATH` | math | implemented | 245 | 245 | 0 |  |  |
@@ -305,8 +305,8 @@ so the page counts them together and is the same on every platform.
 | `LOGNORMDIST` | statistical | implemented | 50 | 49 | 1 | 4 ulps |  |
 | `LOOKUP` | lookup and reference | implemented | 45 | 45 | 0 |  |  |
 | `LOWER` | text | implemented | 22 | 22 | 0 |  |  |
-| `MAKEARRAY` | | absent | | | | | |
-| `MAP` | | absent | | | | | |
+| `MAKEARRAY` | logical | implemented | 0 | 0 | 0 |  |  |
+| `MAP` | logical | implemented | 0 | 0 | 0 |  |  |
 | `MATCH` | lookup and reference | implemented | 94 | 94 | 0 |  |  |
 | `MAX` | statistical | implemented | 16 | 16 | 0 |  |  |
 | `MAXA` | statistical | implemented | 37 | 37 | 0 |  |  |
@@ -401,7 +401,7 @@ so the page counts them together and is the same on every platform.
 | `RANK.EQ` | statistical | implemented | 20 | 20 | 0 |  |  |
 | `RATE` | financial | implemented | 97 | 84 | 13 | 1e-09 relative |  |
 | `RECEIVED` | financial | implemented | 380 | 380 | 0 | 4 ulps |  |
-| `REDUCE` | | absent | | | | | |
+| `REDUCE` | logical | implemented | 0 | 0 | 0 |  |  |
 | `REGEXEXTRACT` | | absent | | | | | |
 | `REGEXREPLACE` | | absent | | | | | |
 | `REGEXTEST` | | absent | | | | | |
@@ -420,7 +420,7 @@ so the page counts them together and is the same on every platform.
 | `RRI` | financial | implemented | 644 | 644 | 0 | 4 ulps |  |
 | `RSQ` | statistical | implemented | 24 | 24 | 0 | 4 ulps |  |
 | `RTD` | | absent | | | | | |
-| `SCAN` | | absent | | | | | |
+| `SCAN` | logical | implemented | 0 | 0 | 0 |  |  |
 | `SEARCH` | text | implemented | 402 | 402 | 0 |  |  |
 | `SEARCHB` | text | implemented | 352 | 352 | 0 |  |  |
 | `SEC` | math | implemented | 30 | 30 | 0 | 4 ulps |  |

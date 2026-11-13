@@ -24,7 +24,7 @@ from xlrecalc._values import BLANK, ErrorValue
 from xlrecalc._xlsx._write import text_escape
 
 CAPTURES = Path(__file__).with_name("captures")
-SUITES = ("lambda_calls",)
+SUITES = ("lambda_calls", "lambda_helpers")
 DATA = {"Z1": 1.0, "Z2": 2.0, "Z3": 3.0, "AA1": 10.0, "AA2": 20.0, "AA3": 30.0}
 
 KNOWN: dict[tuple[str, str], str] = {}
@@ -145,3 +145,55 @@ def test_spill_ranges_match_excel(suite: str) -> None:
         if box != (r - 1, c - 1, r2 - 1, c2 - 1) and (suite, row[3]) not in KNOWN:
             wrong.append((row[3], box, row[8]))
     assert not wrong
+
+
+@pytest.mark.parametrize("suite", SUITES)
+def test_every_formula_is_computed(suite: str) -> None:
+    """No formula of a LAMBDA capture is kept as not implemented."""
+    report = engine_for(suite).recalculate(full=True)
+    assert not report.unsupported, dict(report.unsupported)
+
+
+_FAMILY = ("LAMBDA", "ISOMITTED", "MAP", "REDUCE", "SCAN", "BYROW", "BYCOL", "MAKEARRAY")
+
+
+def _prefix_rows() -> list[tuple[str, str, str, str, str]]:
+    """Capture ``prefixes``' rows for the LAMBDA family (function, prefix, formula, type,
+    value): plain formulas, with and without ``_xlfn.``, over 1, 2, 3 in Z1:Z3."""
+    lines = (CAPTURES / "prefixes.tsv").read_text(encoding="utf-8").splitlines()
+    rows = [line.split("\t") for line in lines if line[:1] != "#"]
+    return [
+        (f, ast.literal_eval(p), ast.literal_eval(t), k, v)
+        for f, p, t, k, v in rows
+        if f in _FAMILY
+    ]
+
+
+@pytest.mark.parametrize("row", _prefix_rows(), ids=lambda r: r[2])
+def test_plain_formulas_match_excel_or_are_reported(row: tuple[str, str, str, str, str]) -> None:
+    """With ``_xlfn.`` each computes Excel's value; without it, a name Excel does not know, the
+    cell is reported with that cause and, the file holding no value for it, is ``#NAME?``."""
+    _, prefix, text, kind, value = row
+    first = f'<row r="1"><c r="A1"><f>{text_escape(text)}</f></c><c r="Z1"><v>1.0</v></c></row>'
+    rest = "".join(f'<row r="{i}"><c r="Z{i}"><v>{i}.0</v></c></row>' for i in (2, 3))
+    data = package(first + rest)
+    e = load(io.BytesIO(data))
+    report = e.recalculate(full=True)
+    got = e.get(0, 0, 0)
+    if prefix:
+        assert not report.unsupported, dict(report.unsupported)
+        want = ErrorValue(value) if kind == "e" else float(value)
+        assert same(got, want), (text, got, want)
+        return
+    labels = " ".join(report.unsupported)
+    assert "written without Excel's file prefix (_xlfn.): Excel shows #NAME?" in labels, labels
+    assert got == ErrorValue.NAME
+    if text in _BARE_INSIDE:  # reported, as every bare name is, though Excel's value differs
+        assert value != "#NAME?", text
+    else:
+        assert value == "#NAME?", text
+
+
+_BARE_INSIDE = frozenset({"_xlfn.LAMBDA(_xlpm.x,_xlpm.y,ISOMITTED(_xlpm.y))(1)"})
+"""A bare name inside a body Excel never runs (one argument for two parameters: ``#VALUE!``);
+the engine reports the formula for the name, as it does any formula holding a bare one."""

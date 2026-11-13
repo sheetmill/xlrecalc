@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   an operator or a function `#VALUE!` (`ISERROR` and `ISREF` FALSE, `TYPE` 128). Recursion runs on an explicit stack
   and stops with `#NUM!` at Excel's budget: 65,536, each call in progress costing 8 plus 4 a parameter (5,461 calls of
   one parameter).
+- `MAP`, `REDUCE`, `SCAN`, `BYROW`, `BYCOL` and `MAKEARRAY`, captured from Excel (capture `lambda_helpers`): `MAP`
+  passes a range's elements as references and an array's as values, padding a shorter argument with `#N/A`; `REDUCE`
+  and `SCAN` go row by row from their initial value; `BYROW` and `BYCOL` pass each row or column; `MAKEARRAY` takes
+  positive whole sizes. A call whose result is not one value makes the result `#CALC!` (`REDUCE`'s last excepted).
+  Written without `_xlfn.`, each is a name Excel does not know (`#NAME?`), and is reported with that cause (capture
+  `prefixes`).
 
 ### Changed
 - Excel 16.115 for Mac under Microsoft 365 is the reference: every capture made on 16.114 (Office Home & Business 2021)
