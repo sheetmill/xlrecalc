@@ -164,6 +164,12 @@ prefixes (`_xlfn.`, `_xlpm.`, `_xlop.`), its `t` and `ref`, the dynamic-array ma
 cached value, but for `RANDARRAY()`'s random value. Captures of typed formulas use this method; a
 macro setting `Range.Formula2` and keystrokes were not needed (and not tried).
 
+**A fresh Excel after LAMBDA captures.** After pasting `lambda_probe`'s recursion cases (deep recursion, recursion
+through `MAP` past its limit), the same Excel session computed `#NUM!` for ten unrelated rows of `empty_args`
+(`ADDRESS` with a sheet's text, `INDIRECT`, `FLOOR.PRECISE`, `FORMULATEXT`), reproducibly, and a fresh session gave the
+captured values. So a capture that follows a LAMBDA capture starts with Excel quit (`quit_excel.applescript`, which
+quits only when no workbook is open).
+
 **Opens.** Excel refuses a whole file for one formula it does not take, so a probe that must name refused formulas
 opens them in batches of 60 and halves a refused batch until each refusal is opened alone (`capture/refusals.py`).
 Settled answers are not asked again: a refusal of the same build (its list's `# excel:` line) is kept without an open,
