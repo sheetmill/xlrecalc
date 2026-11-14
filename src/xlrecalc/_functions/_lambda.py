@@ -14,7 +14,7 @@ import math
 from collections.abc import Iterator
 from typing import Any
 
-from xlrecalc._arrays import check_area, element
+from xlrecalc._arrays import check_area
 from xlrecalc._coerce import scalar, to_number
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._registry import function
@@ -38,15 +38,17 @@ def _size(a: Any) -> tuple[int, int]:
 
 
 def _at(a: Any, rows: int, cols: int, i: int, j: int) -> Any:
-    """Element (i, j): a range's as a reference to its cell, an array's as its value."""
+    """Element (i, j): a range's as a reference to its cell, an array's as its value.
+
+    ``#N/A`` past its size, of one element too (capture ``lambda_more``: no repeating).
+    """
+    if i >= rows or j >= cols:
+        return ErrorValue.NA
     if isinstance(a, Ref):
-        if (rows > 1 and i >= rows) or (cols > 1 and j >= cols):
-            return ErrorValue.NA
-        r, c = a.r1 + (0 if rows == 1 else i), a.c1 + (0 if cols == 1 else j)
-        return Ref(a.source, a.sheet, r, c, r, c)
+        return Ref(a.source, a.sheet, a.r1 + i, a.c1 + j, a.r1 + i, a.c1 + j)
     if type(a) is tuple:
-        return element(a, rows, cols, i, j)
-    return BLANK if a is MISSING else a
+        return a[i][j]
+    return a
 
 
 def _one(v: Any) -> Any:
@@ -73,14 +75,17 @@ def _elements(a: Any) -> Iterator[Any]:
 
 @function("_XLFN.MAP", "raw", "function", min_args=2, variadic=True, category=L, makes_array=True)
 def MAP(ctx: Any, *args: Any) -> Any:
-    """``fn`` of the elements at each position of the arrays, a shorter one padded with ``#N/A``."""
+    """``fn`` of the elements at each position of the arrays, a smaller one padded with ``#N/A``.
+
+    An empty array argument is ``#VALUE!`` (capture ``empty_args``), as in the others here.
+    """
     *arrays, fn = args
-    if type(fn) is not Lambda:
+    if type(fn) is not Lambda or any(a is MISSING for a in arrays):  # capture empty_args
         return VALUE
     sizes = [_size(a) for a in arrays]
     rows, cols = max(s[0] for s in sizes), max(s[1] for s in sizes)
     _limit(ctx, rows, cols)
-    call = ctx.ops.call
+    call = ctx.ops.helper_call
     out = []
     for i in range(rows):
         row = []
@@ -97,10 +102,10 @@ def MAP(ctx: Any, *args: Any) -> Any:
 @function("_XLFN.REDUCE", "raw", "raw", "function", category=L, makes_array=True)
 def REDUCE(ctx: Any, initial: Any, array: Any, fn: Any) -> Any:
     """``fn(total, element)`` over the elements in turn from ``initial``; its last result."""
-    if type(fn) is not Lambda:
+    if type(fn) is not Lambda or array is MISSING:
         return VALUE
     total = BLANK if initial is MISSING else initial
-    call = ctx.ops.call
+    call = ctx.ops.helper_call
     for v in _elements(array):
         total = call(fn, (total, v))
     return total
@@ -109,12 +114,12 @@ def REDUCE(ctx: Any, initial: Any, array: Any, fn: Any) -> Any:
 @function("_XLFN.SCAN", "raw", "raw", "function", category=L, makes_array=True)
 def SCAN(ctx: Any, initial: Any, array: Any, fn: Any) -> Any:
     """``REDUCE``'s running results, in the shape of the array."""
-    if type(fn) is not Lambda:
+    if type(fn) is not Lambda or array is MISSING:
         return VALUE
     rows, cols = _size(array)
     _limit(ctx, rows, cols)
     total = BLANK if initial is MISSING else initial
-    call = ctx.ops.call
+    call = ctx.ops.helper_call
     values = []
     for v in _elements(array):
         total = _one(call(fn, (total, v)))
@@ -125,12 +130,12 @@ def SCAN(ctx: Any, initial: Any, array: Any, fn: Any) -> Any:
 
 
 def _lines(ctx: Any, array: Any, fn: Any, by_row: bool) -> Any:
-    if type(fn) is not Lambda:
+    if type(fn) is not Lambda or array is MISSING:
         return VALUE
     rows, cols = _size(array)
     n = rows if by_row else cols
     _limit(ctx, n, 1)
-    call = ctx.ops.call
+    call = ctx.ops.helper_call
     out = []
     for k in range(n):
         if isinstance(array, Ref):
@@ -161,7 +166,12 @@ def BYCOL(ctx: Any, array: Any, fn: Any) -> Any:
 
 
 def _dimension(v: Any, ctx: Any) -> int | ErrorValue:
-    """A size: a positive whole number, else ``#VALUE!`` (2.7 included: capture lambda_helpers)."""
+    """A size: a positive whole number, else ``#VALUE!`` (2.7 included: capture lambda_helpers).
+
+    An empty size is 1. Unverified: capture ``empty_args`` shows only that one computes.
+    """
+    if v is MISSING:
+        return 1
     n = to_number(scalar(v, ctx), ctx)
     if isinstance(n, ErrorValue):
         return n
@@ -181,7 +191,7 @@ def MAKEARRAY(ctx: Any, rows: Any, cols: Any, fn: Any) -> Any:
     if type(fn) is not Lambda:
         return VALUE
     _limit(ctx, r, c)
-    call = ctx.ops.call
+    call = ctx.ops.helper_call
     out = []
     for i in range(r):
         row = []

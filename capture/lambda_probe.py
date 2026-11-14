@@ -258,6 +258,45 @@ PASTED: dict[str, tuple[list[str], dict[str, str]]] = {
     ),
 }
 
+# Choices the engine made without a capture, and the budget's optional parameters. Not here:
+# SUM(1)(2) and REDUCE of two arguments, which Excel refuses in a file (refusal_probe).
+_MORE_NAMES = {
+    "COPT": "_xlfn.LAMBDA(_xlpm.n,_xlop.a,IF(_xlpm.n<=0,0,1+COPT(_xlpm.n-1)))",
+    "COPTG": "_xlfn.LAMBDA(_xlpm.n,_xlop.a,IF(_xlpm.n<=0,0,1+COPTG(_xlpm.n-1,1)))",
+    "FIVE": "5",
+    "BLETTWO": "_xlfn.LAMBDA(_xlpm.n,_xlfn.LET(_xlpm.m,_xlpm.n-1,_xlpm.k,1,"
+    "IF(_xlpm.n<=0,0,_xlpm.k+BLETTWO(_xlpm.m))))",
+    "VIAMAP": "_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,0,"
+    "SUM(_xlfn.MAP({1},_xlfn.LAMBDA(_xlpm.x,1+VIAMAP(_xlpm.n-1))))))",
+}
+PASTED["lambda_more"] = (
+    [
+        *(f"=COPT({n})" for n in (4094, 4095, 5460, 5461)),
+        *(f"=COPTG({n},1)" for n in (4094, 4095, 5460, 5461)),
+        *(
+            f"={fn}(LAMBDA(x,x))"
+            for fn in ("ISERR", "ISNA", "ISBLANK", "ISNUMBER", "ISTEXT", "ISLOGICAL", "ISNONTEXT")
+        ),
+        "=N(LAMBDA(x,x))",
+        "=T(LAMBDA(x,x))",
+        "=FIVE(1)",
+        "=MAP({1;2;3},{10},LAMBDA(a,b,a+b))",
+        "=MAP(Z1:Z3,AA1,LAMBDA(a,b,a+b))",
+        "=REDUCE(0,Z1:Z3,LAMBDA(a,b,a+ISREF(b)))",
+        "=SCAN(0,Z1:Z3,LAMBDA(a,b,ISREF(b)))",
+        "=VIAMAP(20)",
+        "=VIAMAP(1000)",
+        "=LAMBDA(x,x)=1",
+        "=(LAMBDA(x,x))(2)",
+        # Where recursion through MAP stops (20 computes, 1,000 is #VALUE!).
+        *(f"=VIAMAP({n})" for n in (30, 40, 50, 60, 63, 64, 65, 80, 100, 150, 200, 300, 500)),
+        *(f"=VIAMAP({n})" for n in range(21, 30)),
+        # A LET binding in a recursive body: two of them (one stops where two parameters do).
+        *(f"=BLETTWO({n})" for n in (3275, 3276, 4094, 4095)),
+    ],
+    _MORE_NAMES,
+)
+
 _DEPTH_NAMES = {
     "CD": LAMBDA_NAMES["CD"],
     # Not CD3: a name that is a cell's address (column CD, row 3) is not one, and Excel did not
@@ -271,7 +310,7 @@ _BODIES = {  # recursive bodies of one parameter, differing in what they evaluat
     "BSUMTWO": "IF(_xlpm.n<=0,0,1+0*SUM(_xlpm.n,1)+BSUMTWO(_xlpm.n-1))",
     "BSUMEIGHT": "IF(_xlpm.n<=0,0,1+0*SUM(_xlpm.n,1,2,3,4,5,6,7)+BSUMEIGHT(_xlpm.n-1))",
     "BNEST": "IF(_xlpm.n<=0,0,1+ABS(ABS(ABS(BNEST(_xlpm.n-1)))))",
-    "BLETX": "LET(_xlpm.m,_xlpm.n-1,IF(_xlpm.n<=0,0,1+BLETX(_xlpm.m)))",
+    "BLETX": "_xlfn.LET(_xlpm.m,_xlpm.n-1,IF(_xlpm.n<=0,0,1+BLETX(_xlpm.m)))",
     "BPLAIN": "IF(_xlpm.n<=0,0,BPLAIN(_xlpm.n-1))",
 }
 _DEPTH_NAMES.update({k: f"_xlfn.LAMBDA(_xlpm.n,{v})" for k, v in _BODIES.items()})

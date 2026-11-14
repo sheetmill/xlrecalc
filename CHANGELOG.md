@@ -8,25 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- `LAMBDA` and `ISOMITTED`, captured from Excel (captures `lambda_calls`, `lambda_names`, `lambda_depth`): a function
-  value called where it is made (`LAMBDA(x,x+1)(2)`), through a `LET` name or a parameter, or through a defined name
-  that holds one (`ADDONE(1)`), recursion and mutual recursion included. It closes over the names around it; optional
-  parameters (`[y]`) and arguments given empty read as a blank, and `ISOMITTED` tells them apart; a wrong argument
-  count is `#VALUE!`; a call returns references as they are. A function value as a cell's value is `#CALC!`, given to
-  an operator or a function `#VALUE!` (`ISERROR` and `ISREF` FALSE, `TYPE` 128). Recursion runs on an explicit stack
-  and stops with `#NUM!` at Excel's budget: 65,536, each call in progress costing 8 plus 4 a parameter (5,461 calls of
-  one parameter).
-- `MAP`, `REDUCE`, `SCAN`, `BYROW`, `BYCOL` and `MAKEARRAY`, captured from Excel (capture `lambda_helpers`): `MAP`
-  passes a range's elements as references and an array's as values, padding a shorter argument with `#N/A`; `REDUCE`
-  and `SCAN` go row by row from their initial value; `BYROW` and `BYCOL` pass each row or column; `MAKEARRAY` takes
-  positive whole sizes. A call whose result is not one value makes the result `#CALC!` (`REDUCE`'s last excepted).
-  Written without `_xlfn.`, each is a name Excel does not know (`#NAME?`), and is reported with that cause (capture
-  `prefixes`).
+- `LAMBDA` and `ISOMITTED`, captured from Excel (captures `lambda_calls`, `lambda_names`, `lambda_depth`,
+  `lambda_more`): a function value called where it is made (`LAMBDA(x,x+1)(2)`, `(LAMBDA(x,x))(2)`), through a `LET`
+  name or a parameter, or through a defined name that holds one (`ADDONE(1)`), recursion and mutual recursion
+  included. It closes over the names around it; optional parameters (`[y]`) and arguments given empty read as a
+  blank, and `ISOMITTED` tells them apart; a wrong argument count is `#VALUE!`; a call returns references as they are,
+  and a call of anything but a function value is `#VALUE!`. A function value as a cell's value is `#CALC!`, given to an
+  operator or a function `#VALUE!` (the `IS` functions FALSE, `ISNONTEXT` TRUE, `TYPE` 128). Recursion runs on an
+  explicit stack and stops with `#NUM!` at Excel's budget: 65,536, each call in progress costing 8 plus 4 a parameter
+  (optional ones included) and 4 a `LET` name its body binds (5,461 calls of one parameter). Excel refuses a file
+  with an empty `LAMBDA` parameter or body, `ISOMITTED()` or `REDUCE` of two arguments, and so does the package.
+- `MAP`, `REDUCE`, `SCAN`, `BYROW`, `BYCOL` and `MAKEARRAY`, captured from Excel (captures `lambda_helpers`,
+  `lambda_more`, `empty_args`): `MAP` passes a range's elements as references and an array's as values, padding a
+  smaller argument with `#N/A`; `REDUCE` and `SCAN` go row by row from their initial value; `BYROW` and `BYCOL` pass
+  each row or column; `MAKEARRAY` takes positive whole sizes; an empty array argument is `#VALUE!`. A call whose
+  result is not one value makes the result `#CALC!` (`REDUCE`'s last excepted). Twenty such functions may call one
+  inside another through a recursion; the next call is `#VALUE!`, as in Excel. Written without `_xlfn.`, each is a
+  name Excel does not know (`#NAME?`), and is reported with that cause (capture `prefixes`).
 - A formula set through the API that calls a function value, or gives an uncalled `LAMBDA` as its result, is a
   dynamic array, as Excel marks it typed (every typed formula of the `lambda_*` captures).
-- README's evidence counts the 169 formulas of the `lambda_*` captures: 153 match, 5 are known deviations of the
-  recursion budget, and 11 call a name holding `LET` as a function Excel does not know (`_xludf.LET`), which Excel
-  shows as `#NAME?` and the package reports. The coverage page counts them per function.
+- README's evidence counts the 221 formulas of the `lambda_*` captures, 5 of them known deviations of the recursion
+  budget, and the 24 `empty_args` rows of the eight functions. The coverage page counts them per function.
 
 ### Changed
 - Excel 16.115 for Mac under Microsoft 365 is the reference: every capture made on 16.114 (Office Home & Business 2021)

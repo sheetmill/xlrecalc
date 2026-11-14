@@ -94,14 +94,14 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   computes `CORREL` over ten columns (captures `array_size`, `array_functions`). `LINEST`,
   `XIRR` and `XNPV` were not captured at that size. The database functions walk their non-blank
   cells, and are computed at any size.
-- Recursion through `LAMBDA` (capture `lambda_depth`, 99 rows): Excel stops it with `#NUM!` at a
-  budget of 65,536, each call in progress costing 8 plus 4 a parameter, which the package follows
-  exactly for plain bodies. Excel counts what a body evaluates at its deepest call too: a body that
-  calls `SUM` with four or eight arguments stops one or two calls earlier (3 rows). It also runs a
-  call in tail position, with nothing after it in the body, past the budget, to between 8,000 and
-  10,000 calls (2 rows). The package charges both as any other call. Whether an optional
-  parameter counts is not captured; here every declared one does, given or not. Calls nested
-  through `MAP` and its siblings more than 64 deep are reported, not computed.
+- Recursion through `LAMBDA` (captures `lambda_depth`, 99 rows, and `lambda_more`): Excel stops it
+  with `#NUM!` at a budget of 65,536, each call in progress costing 8 plus 4 a parameter (optional
+  ones too, given or not) and 4 a `LET` name its body binds, which the package follows exactly
+  for plain bodies. Excel counts what a body evaluates at its deepest call too: a body that calls
+  `SUM` with four or eight arguments stops one or two calls earlier (3 rows). It also runs a call
+  in tail position, with nothing after it in the body, past the budget, to between 8,000 and
+  10,000 calls (2 rows). The package charges both as any other call. A `LET` name is charged
+  whether or not the branch holding it runs (not captured).
 - A function given an array of references (`N(OFFSET(Z1,{0;1;2;3},0))`, `SUBTOTAL(9,OFFSET(...))`,
   `COUNTIF(INDIRECT({"Z1";"Z2"}),">0")`) is not computed: the formula keeps the value the file
   holds and is reported (16 formulas of capture `array_refs`, listed in

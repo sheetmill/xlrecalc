@@ -1,0 +1,72 @@
+# suite: lambda_more
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-13
+# generator: capture/lambda_probe.py --paste lambda_more (each formula pasted as text, which
+#   enters it as typing does; data 1, 2, 3 in Z1:Z3 and 10, 20, 30 in AA1:AA3; formula k
+#   in A<5k+1>, its block A to D of rows 5k+1 to 5k+4)
+# name rows: name, name, text, sheet scope (Python repr)
+# cell rows: cell, k, typed, address, type, value, file form, f_t, f_ref, cm, rich error
+'name'	'BLETTWO'	'_xlfn.LAMBDA(_xlpm.n,_xlfn.LET(_xlpm.m,_xlpm.n-1,_xlpm.k,1,IF(_xlpm.n<=0,0,_xlpm.k+BLETTWO(_xlpm.m))))'	None
+'name'	'COPT'	'_xlfn.LAMBDA(_xlpm.n,_xlop.a,IF(_xlpm.n<=0,0,1+COPT(_xlpm.n-1)))'	None
+'name'	'COPTG'	'_xlfn.LAMBDA(_xlpm.n,_xlop.a,IF(_xlpm.n<=0,0,1+COPTG(_xlpm.n-1,1)))'	None
+'name'	'FIVE'	'5'	None
+'name'	'VIAMAP'	'_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,0,SUM(_xlfn.MAP({1},_xlfn.LAMBDA(_xlpm.x,1+VIAMAP(_xlpm.n-1))))))'	None
+'cell'	0	'=COPT(4094)'	'A1'	'n'	4094.0	'COPT(4094)'	'array'	'A1'	'1'	None
+'cell'	1	'=COPT(4095)'	'A6'	'e'	'#NUM!'	'COPT(4095)'	'array'	'A6'	'1'	None
+'cell'	2	'=COPT(5460)'	'A11'	'e'	'#NUM!'	'COPT(5460)'	'array'	'A11'	'1'	None
+'cell'	3	'=COPT(5461)'	'A16'	'e'	'#NUM!'	'COPT(5461)'	'array'	'A16'	'1'	None
+'cell'	4	'=COPTG(4094,1)'	'A21'	'n'	4094.0	'COPTG(4094,1)'	'array'	'A21'	'1'	None
+'cell'	5	'=COPTG(4095,1)'	'A26'	'e'	'#NUM!'	'COPTG(4095,1)'	'array'	'A26'	'1'	None
+'cell'	6	'=COPTG(5460,1)'	'A31'	'e'	'#NUM!'	'COPTG(5460,1)'	'array'	'A31'	'1'	None
+'cell'	7	'=COPTG(5461,1)'	'A36'	'e'	'#NUM!'	'COPTG(5461,1)'	'array'	'A36'	'1'	None
+'cell'	8	'=ISERR(LAMBDA(x,x))'	'A41'	'b'	False	'ISERR(_xlfn.LAMBDA(_xlpm.x,_xlpm.x))'	'normal'	None	None	None
+'cell'	9	'=ISNA(LAMBDA(x,x))'	'A46'	'b'	False	'ISNA(_xlfn.LAMBDA(_xlpm.x,_xlpm.x))'	'normal'	None	None	None
+'cell'	10	'=ISBLANK(LAMBDA(x,x))'	'A51'	'b'	False	'ISBLANK(_xlfn.LAMBDA(_xlpm.x,_xlpm.x))'	'normal'	None	None	None
+'cell'	11	'=ISNUMBER(LAMBDA(x,x))'	'A56'	'b'	False	'ISNUMBER(_xlfn.LAMBDA(_xlpm.x,_xlpm.x))'	'normal'	None	None	None
+'cell'	12	'=ISTEXT(LAMBDA(x,x))'	'A61'	'b'	False	'ISTEXT(_xlfn.LAMBDA(_xlpm.x,_xlpm.x))'	'normal'	None	None	None
+'cell'	13	'=ISLOGICAL(LAMBDA(x,x))'	'A66'	'b'	False	'ISLOGICAL(_xlfn.LAMBDA(_xlpm.x,_xlpm.x))'	'normal'	None	None	None
+'cell'	14	'=ISNONTEXT(LAMBDA(x,x))'	'A71'	'b'	True	'ISNONTEXT(_xlfn.LAMBDA(_xlpm.x,_xlpm.x))'	'normal'	None	None	None
+'cell'	15	'=N(LAMBDA(x,x))'	'A76'	'e'	'#VALUE!'	'N(_xlfn.LAMBDA(_xlpm.x,_xlpm.x))'	'normal'	None	None	None
+'cell'	16	'=T(LAMBDA(x,x))'	'A81'	'e'	'#VALUE!'	'T(_xlfn.LAMBDA(_xlpm.x,_xlpm.x))'	'normal'	None	None	None
+'cell'	17	'=FIVE(1)'	'A86'	'e'	'#VALUE!'	'FIVE(1)'	'array'	'A86'	'1'	None
+'cell'	18	'=MAP({1;2;3},{10},LAMBDA(a,b,a+b))'	'A91'	'n'	11.0	'_xlfn.MAP({1;2;3},{10},_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))'	'array'	'A91:A93'	'1'	None
+'cell'	18	'=MAP({1;2;3},{10},LAMBDA(a,b,a+b))'	'A92'	'e'	'#N/A'	None	None	None	None	None
+'cell'	18	'=MAP({1;2;3},{10},LAMBDA(a,b,a+b))'	'A93'	'e'	'#N/A'	None	None	None	None	None
+'cell'	19	'=MAP(Z1:Z3,AA1,LAMBDA(a,b,a+b))'	'A96'	'n'	11.0	'_xlfn.MAP(Z1:Z3,AA1,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))'	'array'	'A96:A98'	'1'	None
+'cell'	19	'=MAP(Z1:Z3,AA1,LAMBDA(a,b,a+b))'	'A97'	'e'	'#N/A'	None	None	None	None	None
+'cell'	19	'=MAP(Z1:Z3,AA1,LAMBDA(a,b,a+b))'	'A98'	'e'	'#N/A'	None	None	None	None	None
+'cell'	20	'=REDUCE(0,Z1:Z3,LAMBDA(a,b,a+ISREF(b)))'	'A101'	'n'	3.0	'_xlfn.REDUCE(0,Z1:Z3,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+ISREF(_xlpm.b)))'	'array'	'A101'	'1'	None
+'cell'	21	'=SCAN(0,Z1:Z3,LAMBDA(a,b,ISREF(b)))'	'A106'	'b'	True	'_xlfn.SCAN(0,Z1:Z3,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,ISREF(_xlpm.b)))'	'array'	'A106:A108'	'1'	None
+'cell'	21	'=SCAN(0,Z1:Z3,LAMBDA(a,b,ISREF(b)))'	'A107'	'b'	True	None	None	None	None	None
+'cell'	21	'=SCAN(0,Z1:Z3,LAMBDA(a,b,ISREF(b)))'	'A108'	'b'	True	None	None	None	None	None
+'cell'	22	'=VIAMAP(20)'	'A111'	'n'	20.0	'VIAMAP(20)'	'array'	'A111'	'1'	None
+'cell'	23	'=VIAMAP(1000)'	'A116'	'e'	'#VALUE!'	'VIAMAP(1000)'	'array'	'A116'	'1'	None
+'cell'	24	'=LAMBDA(x,x)=1'	'A121'	'e'	'#VALUE!'	'_xlfn.LAMBDA(_xlpm.x,_xlpm.x)=1'	'normal'	None	None	None
+'cell'	25	'=(LAMBDA(x,x))(2)'	'A126'	'n'	2.0	'(_xlfn.LAMBDA(_xlpm.x,_xlpm.x))(2)'	'array'	'A126'	'1'	None
+'cell'	26	'=VIAMAP(30)'	'A131'	'e'	'#VALUE!'	'VIAMAP(30)'	'array'	'A131'	'1'	None
+'cell'	27	'=VIAMAP(40)'	'A136'	'e'	'#VALUE!'	'VIAMAP(40)'	'array'	'A136'	'1'	None
+'cell'	28	'=VIAMAP(50)'	'A141'	'e'	'#VALUE!'	'VIAMAP(50)'	'array'	'A141'	'1'	None
+'cell'	29	'=VIAMAP(60)'	'A146'	'e'	'#VALUE!'	'VIAMAP(60)'	'array'	'A146'	'1'	None
+'cell'	30	'=VIAMAP(63)'	'A151'	'e'	'#VALUE!'	'VIAMAP(63)'	'array'	'A151'	'1'	None
+'cell'	31	'=VIAMAP(64)'	'A156'	'e'	'#VALUE!'	'VIAMAP(64)'	'array'	'A156'	'1'	None
+'cell'	32	'=VIAMAP(65)'	'A161'	'e'	'#VALUE!'	'VIAMAP(65)'	'array'	'A161'	'1'	None
+'cell'	33	'=VIAMAP(80)'	'A166'	'e'	'#VALUE!'	'VIAMAP(80)'	'array'	'A166'	'1'	None
+'cell'	34	'=VIAMAP(100)'	'A171'	'e'	'#VALUE!'	'VIAMAP(100)'	'array'	'A171'	'1'	None
+'cell'	35	'=VIAMAP(150)'	'A176'	'e'	'#VALUE!'	'VIAMAP(150)'	'array'	'A176'	'1'	None
+'cell'	36	'=VIAMAP(200)'	'A181'	'e'	'#VALUE!'	'VIAMAP(200)'	'array'	'A181'	'1'	None
+'cell'	37	'=VIAMAP(300)'	'A186'	'e'	'#VALUE!'	'VIAMAP(300)'	'array'	'A186'	'1'	None
+'cell'	38	'=VIAMAP(500)'	'A191'	'e'	'#VALUE!'	'VIAMAP(500)'	'array'	'A191'	'1'	None
+'cell'	39	'=VIAMAP(21)'	'A196'	'e'	'#VALUE!'	'VIAMAP(21)'	'array'	'A196'	'1'	None
+'cell'	40	'=VIAMAP(22)'	'A201'	'e'	'#VALUE!'	'VIAMAP(22)'	'array'	'A201'	'1'	None
+'cell'	41	'=VIAMAP(23)'	'A206'	'e'	'#VALUE!'	'VIAMAP(23)'	'array'	'A206'	'1'	None
+'cell'	42	'=VIAMAP(24)'	'A211'	'e'	'#VALUE!'	'VIAMAP(24)'	'array'	'A211'	'1'	None
+'cell'	43	'=VIAMAP(25)'	'A216'	'e'	'#VALUE!'	'VIAMAP(25)'	'array'	'A216'	'1'	None
+'cell'	44	'=VIAMAP(26)'	'A221'	'e'	'#VALUE!'	'VIAMAP(26)'	'array'	'A221'	'1'	None
+'cell'	45	'=VIAMAP(27)'	'A226'	'e'	'#VALUE!'	'VIAMAP(27)'	'array'	'A226'	'1'	None
+'cell'	46	'=VIAMAP(28)'	'A231'	'e'	'#VALUE!'	'VIAMAP(28)'	'array'	'A231'	'1'	None
+'cell'	47	'=VIAMAP(29)'	'A236'	'e'	'#VALUE!'	'VIAMAP(29)'	'array'	'A236'	'1'	None
+'cell'	48	'=BLETTWO(3275)'	'A241'	'n'	3275.0	'BLETTWO(3275)'	'array'	'A241'	'1'	None
+'cell'	49	'=BLETTWO(3276)'	'A246'	'e'	'#NUM!'	'BLETTWO(3276)'	'array'	'A246'	'1'	None
+'cell'	50	'=BLETTWO(4094)'	'A251'	'e'	'#NUM!'	'BLETTWO(4094)'	'array'	'A251'	'1'	None
+'cell'	51	'=BLETTWO(4095)'	'A256'	'e'	'#NUM!'	'BLETTWO(4095)'	'array'	'A256'	'1'	None

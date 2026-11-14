@@ -139,7 +139,7 @@ class _Parser:
     def operators(self, left: Node, min_bp: int) -> Node:
         while True:
             tok = self.peek()
-            if tok.kind is Kind.OPEN and not tok.space and isinstance(left, (Call, Invoke)):
+            if tok.kind is Kind.OPEN and not tok.space and isinstance(left, (Call, Invoke, Group)):
                 left = self.invoke(left, self.take())
                 continue
             if tok.kind is Kind.OPERATOR:

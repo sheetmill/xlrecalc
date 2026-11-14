@@ -2,7 +2,7 @@
 # excel: 16.115 for Mac, locale en_US
 # edition: Microsoft 365 Subscription, update channel Current
 # date_system: 1900
-# captured: 2026-11-11
+# captured: 2026-11-13
 # generator: capture/suites.py:empty_args
 # method: openpyxl writes the formula in column A and the inputs in B onward (floats as
 #   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
@@ -1208,12 +1208,12 @@ empty_args	textsplit	1194	_xlfn.TEXTSPLIT("a,b;c",",",,FALSE)	()	str	'a'
 empty_args	randarray	1195	_xlfn.RANDARRAY(1,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1196	_xlfn.RANDARRAY(,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1197	_xlfn.RANDARRAY(1,,5,5,FALSE)	()	n	5.0
-empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	2.5195756810615197
+empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	3.185977808155534
 empty_args	randarray	1199	_xlfn.RANDARRAY(1,1,5,,FALSE)	()	e	#VALUE!
 empty_args	randarray	1200	_xlfn.RANDARRAY(1,1,5,5,)	()	n	5.0
-empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.37669879360976566
-empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.7467465022953739
-empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.01341173314816424
+empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.32306370122155315
+empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.4976333000322355
+empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.4348237036002631
 empty_args	let	1204	_xlfn.LET(_xlpm.x,1,_xlpm.x+1)	()	n	2.0
 empty_args	let	1205	_xlfn.LET(_xlpm.x,,_xlpm.x+1)	()	n	1.0
 empty_args	let	1206	_xlfn.LET(_xlpm.x,1,)	()	n	0.0
@@ -1507,3 +1507,27 @@ empty_args	imsec	1493	_xlfn.IMSEC(2)	()	str	'-2.40299796172238'
 empty_args	imsech	1494	_xlfn.IMSECH(2)	()	str	'0.26580222883408'
 empty_args	imsinh	1495	_xlfn.IMSINH(2)	()	str	'3.62686040784702'
 empty_args	imtan	1496	_xlfn.IMTAN(2)	()	str	'-2.18503986326152'
+empty_args	lambda	1497	_xlfn.LAMBDA(_xlpm.x,_xlpm.x+1)(2)	()	n	3.0
+empty_args	lambda	1498	_xlfn.LAMBDA(_xlpm.x,_xlpm.y,_xlpm.x+_xlpm.y)(,2)	()	n	2.0
+empty_args	lambda	1499	_xlfn.LAMBDA(_xlpm.x,_xlpm.y,_xlpm.x+_xlpm.y)(2,)	()	n	2.0
+empty_args	isomitted	1500	_xlfn.ISOMITTED($AA$1:$AA$4)	()	b	False
+empty_args	map	1501	_xlfn.MAP($AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.a,_xlpm.a*2))	()	n	2.0
+empty_args	map	1502	_xlfn.MAP(,_xlfn.LAMBDA(_xlpm.a,_xlpm.a*2))	()	e	#VALUE!
+empty_args	map	1503	_xlfn.MAP($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	reduce	1504	_xlfn.REDUCE(1,$AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))	()	n	16.0
+empty_args	reduce	1505	_xlfn.REDUCE(1,,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))	()	e	#VALUE!
+empty_args	reduce	1506	_xlfn.REDUCE(1,$AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	scan	1507	_xlfn.SCAN(1,$AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))	()	n	2.0
+empty_args	scan	1508	_xlfn.SCAN(,$AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))	()	n	1.0
+empty_args	scan	1509	_xlfn.SCAN(1,,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))	()	e	#VALUE!
+empty_args	scan	1510	_xlfn.SCAN(1,$AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	byrow	1511	_xlfn.BYROW($AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r)))	()	n	1.0
+empty_args	byrow	1512	_xlfn.BYROW(,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r)))	()	e	#VALUE!
+empty_args	byrow	1513	_xlfn.BYROW($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	bycol	1514	_xlfn.BYCOL($AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r)))	()	n	15.0
+empty_args	bycol	1515	_xlfn.BYCOL(,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r)))	()	e	#VALUE!
+empty_args	bycol	1516	_xlfn.BYCOL($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	makearray	1517	_xlfn.MAKEARRAY(2,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c))	()	n	2.0
+empty_args	makearray	1518	_xlfn.MAKEARRAY(,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c))	()	n	2.0
+empty_args	makearray	1519	_xlfn.MAKEARRAY(2,,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c))	()	n	2.0
+empty_args	makearray	1520	_xlfn.MAKEARRAY(2,2,)	()	e	#VALUE!

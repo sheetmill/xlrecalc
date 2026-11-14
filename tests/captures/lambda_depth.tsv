@@ -1,13 +1,13 @@
 # suite: lambda_depth
 # excel: 16.115 for Mac, locale en_US
 # edition: Microsoft 365 Subscription, update channel Current
-# captured: 2026-11-12
+# captured: 2026-11-13
 # generator: capture/lambda_probe.py --paste lambda_depth (each formula pasted as text, which
 #   enters it as typing does; data 1, 2, 3 in Z1:Z3 and 10, 20, 30 in AA1:AA3; formula k
 #   in A<5k+1>, its block A to D of rows 5k+1 to 5k+4)
 # name rows: name, name, text, sheet scope (Python repr)
 # cell rows: cell, k, typed, address, type, value, file form, f_t, f_ref, cm, rich error
-'name'	'BLETX'	'_xlfn.LAMBDA(_xlpm.n,_xludf.LET(_xlpm.m,_xlpm.n-1,IF(_xlpm.n<=0,0,1+BLETX(_xlpm.m))))'	None
+'name'	'BLETX'	'_xlfn.LAMBDA(_xlpm.n,_xlfn.LET(_xlpm.m,_xlpm.n-1,IF(_xlpm.n<=0,0,1+BLETX(_xlpm.m))))'	None
 'name'	'BNEST'	'_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,0,1+ABS(ABS(ABS(BNEST(_xlpm.n-1))))))'	None
 'name'	'BPLAIN'	'_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,0,BPLAIN(_xlpm.n-1)))'	None
 'name'	'BSUMEIGHT'	'_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,0,1+0*SUM(_xlpm.n,1,2,3,4,5,6,7)+BSUMEIGHT(_xlpm.n-1)))'	None
@@ -93,17 +93,17 @@
 'cell'	74	'=BNEST(8000)'	'A371'	'e'	'#NUM!'	'BNEST(8000)'	'array'	'A371'	'1'	None
 'cell'	75	'=BNEST(10000)'	'A376'	'e'	'#NUM!'	'BNEST(10000)'	'array'	'A376'	'1'	None
 'cell'	76	'=BNEST(50000)'	'A381'	'e'	'#NUM!'	'BNEST(50000)'	'array'	'A381'	'1'	None
-'cell'	77	'=BLETX(3275)'	'A386'	'e'	'#NAME?'	'BLETX(3275)'	'array'	'A386'	'1'	None
-'cell'	78	'=BLETX(3276)'	'A391'	'e'	'#NAME?'	'BLETX(3276)'	'array'	'A391'	'1'	None
-'cell'	79	'=BLETX(4094)'	'A396'	'e'	'#NAME?'	'BLETX(4094)'	'array'	'A396'	'1'	None
-'cell'	80	'=BLETX(4095)'	'A401'	'e'	'#NAME?'	'BLETX(4095)'	'array'	'A401'	'1'	None
-'cell'	81	'=BLETX(5458)'	'A406'	'e'	'#NAME?'	'BLETX(5458)'	'array'	'A406'	'1'	None
-'cell'	82	'=BLETX(5459)'	'A411'	'e'	'#NAME?'	'BLETX(5459)'	'array'	'A411'	'1'	None
-'cell'	83	'=BLETX(5460)'	'A416'	'e'	'#NAME?'	'BLETX(5460)'	'array'	'A416'	'1'	None
-'cell'	84	'=BLETX(5461)'	'A421'	'e'	'#NAME?'	'BLETX(5461)'	'array'	'A421'	'1'	None
-'cell'	85	'=BLETX(8000)'	'A426'	'e'	'#NAME?'	'BLETX(8000)'	'array'	'A426'	'1'	None
-'cell'	86	'=BLETX(10000)'	'A431'	'e'	'#NAME?'	'BLETX(10000)'	'array'	'A431'	'1'	None
-'cell'	87	'=BLETX(50000)'	'A436'	'e'	'#NAME?'	'BLETX(50000)'	'array'	'A436'	'1'	None
+'cell'	77	'=BLETX(3275)'	'A386'	'n'	3275.0	'BLETX(3275)'	'array'	'A386'	'1'	None
+'cell'	78	'=BLETX(3276)'	'A391'	'n'	3276.0	'BLETX(3276)'	'array'	'A391'	'1'	None
+'cell'	79	'=BLETX(4094)'	'A396'	'n'	4094.0	'BLETX(4094)'	'array'	'A396'	'1'	None
+'cell'	80	'=BLETX(4095)'	'A401'	'e'	'#NUM!'	'BLETX(4095)'	'array'	'A401'	'1'	None
+'cell'	81	'=BLETX(5458)'	'A406'	'e'	'#NUM!'	'BLETX(5458)'	'array'	'A406'	'1'	None
+'cell'	82	'=BLETX(5459)'	'A411'	'e'	'#NUM!'	'BLETX(5459)'	'array'	'A411'	'1'	None
+'cell'	83	'=BLETX(5460)'	'A416'	'e'	'#NUM!'	'BLETX(5460)'	'array'	'A416'	'1'	None
+'cell'	84	'=BLETX(5461)'	'A421'	'e'	'#NUM!'	'BLETX(5461)'	'array'	'A421'	'1'	None
+'cell'	85	'=BLETX(8000)'	'A426'	'e'	'#NUM!'	'BLETX(8000)'	'array'	'A426'	'1'	None
+'cell'	86	'=BLETX(10000)'	'A431'	'e'	'#NUM!'	'BLETX(10000)'	'array'	'A431'	'1'	None
+'cell'	87	'=BLETX(50000)'	'A436'	'e'	'#NUM!'	'BLETX(50000)'	'array'	'A436'	'1'	None
 'cell'	88	'=BPLAIN(3275)'	'A441'	'n'	0.0	'BPLAIN(3275)'	'array'	'A441'	'1'	None
 'cell'	89	'=BPLAIN(3276)'	'A446'	'n'	0.0	'BPLAIN(3276)'	'array'	'A446'	'1'	None
 'cell'	90	'=BPLAIN(4094)'	'A451'	'n'	0.0	'BPLAIN(4094)'	'array'	'A451'	'1'	None

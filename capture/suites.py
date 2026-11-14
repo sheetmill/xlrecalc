@@ -3384,9 +3384,6 @@ _EMPTY_TABLE: dict[str, Input] = {
 }  # fmt: skip
 _EMPTY_SKIP = frozenset(
     {"_XLFN.ANCHORARRAY", "_XLFN.SINGLE", "RAND", "RANDBETWEEN", "NOW", "TODAY"}
-    # LAMBDA and the functions that take one: not yet captured with empty arguments.
-    | {"_XLFN.LAMBDA", "_XLFN.ISOMITTED", "_XLFN.MAP", "_XLFN.REDUCE", "_XLFN.SCAN"}
-    | {"_XLFN.BYROW", "_XLFN.BYCOL", "_XLFN.MAKEARRAY"}
 )
 _EMPTY_VALUE = {
     "number": "2", "text": '"a"', "logical": "TRUE", "value": "2", "branch": "2",
@@ -3604,8 +3601,13 @@ _EMPTY_ADDED += (  # the complex-number functions
     "_XLFN.IMSINH",
     "_XLFN.IMTAN",
 )
+_EMPTY_ADDED += (  # LAMBDA and the functions that call one
+    "_XLFN.LAMBDA", "_XLFN.ISOMITTED", "_XLFN.MAP", "_XLFN.REDUCE", "_XLFN.SCAN", "_XLFN.BYROW",
+    "_XLFN.BYCOL", "_XLFN.MAKEARRAY",
+)  # fmt: skip
 
-# Functions whose arguments the generator cannot fill (LET's are names): their formulas as given.
+# Functions whose arguments the generator cannot fill (LET's are names, the others take a
+# LAMBDA): their formulas as given.
 _EMPTY_EXPLICIT = {
     "_XLFN.LET": (
         "_xlfn.LET(_xlpm.x,1,_xlpm.x+1)",
@@ -3616,6 +3618,49 @@ _EMPTY_EXPLICIT = {
         "_xlfn.LET(_xlpm.x,1,_xlpm.y,,_xlpm.x+_xlpm.y)",
         "_xlfn.LET(_xlpm.x,,ISBLANK(_xlpm.x))",
         "_xlfn.LET(_xlpm.x,1,_xlpm.y,)",
+    ),
+    "_XLFN.LAMBDA": (
+        "_xlfn.LAMBDA(_xlpm.x,_xlpm.x+1)(2)",
+        "_xlfn.LAMBDA(_xlpm.x,)(2)",
+        "_xlfn.LAMBDA(,_xlpm.x)(2)",
+        "_xlfn.LAMBDA(_xlpm.x,_xlpm.y,_xlpm.x+_xlpm.y)(,2)",
+        "_xlfn.LAMBDA(_xlpm.x,_xlpm.y,_xlpm.x+_xlpm.y)(2,)",
+    ),
+    "_XLFN.ISOMITTED": (
+        "_xlfn.ISOMITTED($AA$1:$AA$4)",
+        "_xlfn.ISOMITTED()",
+    ),
+    "_XLFN.MAP": (
+        "_xlfn.MAP($AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.a,_xlpm.a*2))",
+        "_xlfn.MAP(,_xlfn.LAMBDA(_xlpm.a,_xlpm.a*2))",
+        "_xlfn.MAP($AA$1:$AA$4,)",
+    ),
+    "_XLFN.REDUCE": (
+        "_xlfn.REDUCE(1,$AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))",
+        "_xlfn.REDUCE(1,,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))",
+        "_xlfn.REDUCE(1,$AA$1:$AA$4,)",
+    ),
+    "_XLFN.SCAN": (
+        "_xlfn.SCAN(1,$AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))",
+        "_xlfn.SCAN(,$AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))",
+        "_xlfn.SCAN(1,,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))",
+        "_xlfn.SCAN(1,$AA$1:$AA$4,)",
+    ),
+    "_XLFN.BYROW": (
+        "_xlfn.BYROW($AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r)))",
+        "_xlfn.BYROW(,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r)))",
+        "_xlfn.BYROW($AA$1:$AA$4,)",
+    ),
+    "_XLFN.BYCOL": (
+        "_xlfn.BYCOL($AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r)))",
+        "_xlfn.BYCOL(,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r)))",
+        "_xlfn.BYCOL($AA$1:$AA$4,)",
+    ),
+    "_XLFN.MAKEARRAY": (
+        "_xlfn.MAKEARRAY(2,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c))",
+        "_xlfn.MAKEARRAY(,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c))",
+        "_xlfn.MAKEARRAY(2,,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c))",
+        "_xlfn.MAKEARRAY(2,2,)",
     ),
 }
 

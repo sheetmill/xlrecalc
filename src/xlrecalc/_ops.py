@@ -26,10 +26,13 @@ NA = ErrorValue.NA
 
 STACK_LIMIT = 65536
 """Excel's budget for calls of function values in progress: each costs 8, plus 4 a parameter
-(capture ``lambda_depth``: 5,461 calls of one parameter, 4,095 of two, 3,276 of three)."""
-NESTED_RUNS = 64
-"""Call stacks one inside another (a function such as ``MAP`` calling a function value that
-calls ``MAP``), beyond which a formula is reported, not computed: each nesting is Python's own."""
+(optional ones included, given or not) and 4 a ``LET`` name its body binds (captures
+``lambda_depth``, ``lambda_more``: 5,461 calls of one parameter, 4,095 of two or of one and a
+``LET`` name, 3,276 of three or of one and two names)."""
+NESTED_HELPERS = 20
+"""Calls of a function value made by ``MAP`` and its siblings, one inside another, that Excel
+takes; the next is ``#VALUE!`` (capture ``lambda_more``: recursion through ``MAP`` 20 deep
+computes, 21 does not). Each such call is a call stack of its own, so this bounds Python's."""
 
 
 def _finite(x: float) -> float | ErrorValue:
@@ -49,7 +52,7 @@ class Ops:
     def __init__(self, context: Context) -> None:
         self.context = context
         self.stack_cost = 0  # of the calls of function values in progress
-        self.runs = 0  # call stacks in progress, one inside another
+        self.helpers = 0  # calls by MAP and its siblings in progress, one inside another
 
     def _limit(self) -> int | None:
         return getattr(self.context, "max_array_cells", None)
@@ -317,9 +320,14 @@ class Ops:
     # LAMBDA (captures lambda_calls, lambda_names, lambda_depth) ---------------------------------
 
     @staticmethod
-    def closure(body: Any, env: Env | None, r: int, c: int, required: int, total: int) -> Lambda:
-        """``LAMBDA``: a function value over the environment it is evaluated in."""
-        return Lambda(body, env, r, c, required, total)
+    def closure(
+        body: Any, env: Env | None, r: int, c: int, required: int, total: int, names: int
+    ) -> Lambda:
+        """``LAMBDA``: a function value over the environment it is evaluated in.
+
+        ``names``: the ``LET`` names its body binds, each costing a call 4, as a parameter does.
+        """
+        return Lambda(body, env, r, c, required, total, 8 + 4 * (total + names))
 
     def invoke(self, fn: Any, *args: Any) -> Any:
         """A call of a function value in a formula, outside any ``LAMBDA`` body."""
@@ -338,11 +346,8 @@ class Ops:
         recursion as deep as Excel's budget never uses Python's stack. A call past the budget
         (``STACK_LIMIT``) is ``#NUM!``, as in Excel.
         """
-        if self.runs >= NESTED_RUNS:
-            raise NotImplementedFormError("calls of LAMBDA nested through functions too deeply")
         stack: list[tuple[Any, int]] = []
         start = self.stack_cost
-        self.runs += 1
         try:
             value = self._enter(fn, args, stack)
             while stack:
@@ -355,20 +360,27 @@ class Ops:
                 value = self._enter(fn, args, stack)
             return value
         finally:
-            self.runs -= 1
             self.stack_cost = start
+
+    def helper_call(self, fn: Any, args: tuple[Any, ...]) -> Any:
+        """A call by ``MAP`` or a sibling: ``#VALUE!`` past ``NESTED_HELPERS`` such calls."""
+        if self.helpers >= NESTED_HELPERS:
+            return VALUE
+        self.helpers += 1
+        try:
+            return self.call(fn, args)
+        finally:
+            self.helpers -= 1
 
     def _enter(self, fn: Any, args: tuple[Any, ...], stack: list[tuple[Any, int]]) -> Any:
         """Start a call: its result, or ``None`` with its body pushed on ``stack`` to run."""
-        if type(fn) is not Lambda:  # an error is the result; another value is not captured
+        if type(fn) is not Lambda:  # an error is the result, another value #VALUE! (lambda_more)
             fn = scalar(fn, self.context)
-            if isinstance(fn, ErrorValue):
-                return fn
-            raise NotImplementedFormError("a call of a value that is no LAMBDA")
+            return fn if isinstance(fn, ErrorValue) else VALUE
         n = len(args)
         if n < fn.required or n > fn.total:  # capture lambda_calls
             return VALUE
-        cost = 8 + 4 * fn.total
+        cost = fn.cost
         if self.stack_cost + cost >= STACK_LIMIT:
             return NUM
         env = Env(self.context, fn.r, fn.c, fn.env, ())

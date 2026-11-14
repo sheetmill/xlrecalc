@@ -23,9 +23,9 @@ core function receives the evaluation context first, then the coerced arguments:
 - ``function``: a function value (a ``Lambda``: ``MAP``'s last argument), untouched.
 
 A function value given at any other kind's position never reaches the core: the call is
-``#VALUE!``, except that ``ISERROR`` and ``ISREF`` give FALSE and ``TYPE`` 128 (capture
-``lambda_calls``). ``branch`` arguments pass one through, so ``IF`` and ``CHOOSE`` can choose
-one to call.
+``#VALUE!``, except that the ``IS`` functions give FALSE (``ISNONTEXT`` TRUE) and ``TYPE`` 128
+(captures ``lambda_calls``, ``lambda_more``). ``branch`` arguments pass one through, so ``IF``
+and ``CHOOSE`` can choose one to call.
 
 When an argument of a one-value kind (or a ``branch``) is an array, the function is applied to
 each element and returns an array (§7.7).
@@ -207,9 +207,12 @@ _EMPTY_OPTIONAL_IS_DEFAULT = frozenset(
     ]
 )
 
-# What these give for a function value, where any other function gives #VALUE! (capture
-# lambda_calls).
-_GIVEN_LAMBDA: dict[str, Any] = {"ISERROR": False, "ISREF": False, "TYPE": 128.0}
+# What these give for a function value, where any other function gives #VALUE! (captures
+# lambda_calls, lambda_more).
+_GIVEN_LAMBDA: dict[str, Any] = {
+    "ISERROR": False, "ISERR": False, "ISNA": False, "ISREF": False, "ISBLANK": False,
+    "ISNUMBER": False, "ISTEXT": False, "ISLOGICAL": False, "ISNONTEXT": True, "TYPE": 128.0,
+}  # fmt: skip
 _TAKES_LAMBDA = frozenset({"branch", "function"})
 
 

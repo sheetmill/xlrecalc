@@ -138,14 +138,17 @@ class Lambda:
     the body calls a function value itself, a generator the call stack in ``Ops`` runs;
     ``env`` the environment the ``LAMBDA`` was evaluated in, so a body reads the names around
     it (a closure); ``r`` and ``c`` the cell it was made in. Its ``required`` parameters come
-    first, then the optional ones (``[y]``), ``total`` in all.
+    first, then the optional ones (``[y]``), ``total`` in all; a call of it costs ``cost`` of
+    Excel's recursion budget while it runs.
     """
 
-    __slots__ = ("body", "c", "env", "r", "required", "total")
+    __slots__ = ("body", "c", "cost", "env", "r", "required", "total")
 
-    def __init__(self, body: Any, env: Any, r: int, c: int, required: int, total: int) -> None:
+    def __init__(
+        self, body: Any, env: Any, r: int, c: int, required: int, total: int, cost: int
+    ) -> None:
         self.body, self.env, self.r, self.c = body, env, r, c
-        self.required, self.total = required, total
+        self.required, self.total, self.cost = required, total, cost
 
     def __repr__(self) -> str:
         return f"Lambda({self.required}/{self.total})"

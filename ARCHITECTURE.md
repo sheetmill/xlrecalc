@@ -374,27 +374,33 @@ in, so a body reads the names around it, `LET`'s and an outer `LAMBDA`'s. Calls 
 (`ADDONE(1)`), check the argument count (`#VALUE!` otherwise) and pass arguments as they are,
 references and errors included; an argument not given, or given empty, reads as a blank and
 makes `ISOMITTED` TRUE. A function value is no cell's value: a cell or spilled element holding
-one is `#CALC!`, an operator or function given one `#VALUE!` (but `ISERROR` and `ISREF` FALSE,
-`TYPE` 128, and `IF`'s and `CHOOSE`'s results pass it on to be called), checked where the
-registry receives every function's arguments. A call of any other value is reported, not
-computed.
+one is `#CALC!`, an operator or function given one `#VALUE!` (but the `IS` functions FALSE,
+`ISNONTEXT` TRUE, `TYPE` 128, and `IF`'s and `CHOOSE`'s results pass it on to be called),
+checked where the registry receives every function's arguments. A call of any other value is
+`#VALUE!` (a name holding 5 called); a call of the result of a function that never gives a
+function value (`SUM(1)(2)`, which Excel refuses in a file) is reported, not computed. A
+parenthesized callee is one too (`(LAMBDA(x,x))(2)` is 2).
 
 Recursion runs on an explicit stack, never Python's: a body that calls a function value is a
 generator that yields each call (`ops.request`), and `ops.call`'s loop runs it and sends its
 result back; lazy branches and `LET` bindings that call one are generators too, run through the
 generator forms of the lazy helpers (`ops.glazy_if`...). Excel stops recursion at a budget,
 which the stack charges: each call in progress costs 8 plus 4 a parameter (declared ones,
-optional ones included), and a call that would bring the total to 65,536 is `#NUM!` (5,461 calls
-of one parameter, 4,095 of two, 3,276 of three). A function that calls a function value itself
-(`MAP`) starts a stack of its own, so Python's stack grows only with such functions nested
-through function values, which past 64 deep is reported.
+optional ones included, given or not) and 4 a `LET` name its body binds, and a call that would
+bring the total to 65,536 is `#NUM!` (5,461 calls of one parameter, 4,095 of two or of one and
+a `LET` name, 3,276 of three). A function that calls a function value itself (`MAP`) starts a
+stack of its own, so Python's stack grows only with such functions nested through function
+values; Excel takes 20 such calls one inside another and gives `#VALUE!` for the next, and so
+does the package (capture `lambda_more`).
 
 The helpers (capture `lambda_helpers`) take a function value as an argument of kind `function`.
 `MAP` passes a range's elements as references to their cells and an array's as values, padding a
-shorter argument with `#N/A`; `REDUCE` and `SCAN` go row by row from their initial value (an
-empty one a blank); `BYROW` and `BYCOL` pass each row or column, of a range as a reference;
-`MAKEARRAY` takes positive whole sizes only (2.7 is `#VALUE!`) and checks its size against the
-array limit before any call. A call whose result is not one value (a range, an array of several)
+smaller argument with `#N/A`, one of a single element too; `REDUCE` and `SCAN` go row by row
+from their initial value (an empty one a blank) and pass a range's elements as references too;
+`BYROW` and `BYCOL` pass each row or column, of a range as a reference; an empty array argument
+is `#VALUE!` (capture `empty_args`); `MAKEARRAY` takes positive whole sizes only (2.7 is
+`#VALUE!`; an empty size is taken as 1, unverified) and checks its size against the array limit
+before any call. A call whose result is not one value (a range, an array of several)
 makes the whole result `#CALC!`, except for `REDUCE`, whose last result may be a range that
 spills.
 

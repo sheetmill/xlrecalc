@@ -103,13 +103,11 @@ so the error `#N/A` and the text `"#N/A"` stay apart.
   financial and bond functions, the database functions, complex numbers. The
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 75,819 formulas computed by Excel and compared with xlrecalc's results: 75,024
+- **Evidence**: 75,895 formulas computed by Excel and compared with xlrecalc's results: 75,111
   match, bit for bit or within a small tolerance declared per function (a few units in the last
   place, or a relative one: 1E-9 for the iterative functions, 1E-15 to 1E-12 for the beta,
   gamma, chi-squared, F and t distributions), 784 known deviations, each listed with its reason
-  in [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md), and 11 not
-  evaluated: they call a defined name that calls `LET` as a function Excel does not know
-  (`_xludf.LET`), which Excel shows as `#NAME?` and xlrecalc reports. Each listed
+  in [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md). Each listed
   deviation is still computed and compared with Excel on every test run, and one that starts to
   match fails the run, except a few that can match by chance (a random result, a result Excel
   varies between runs, a row that depends on the platform's math library). The largest group of deviations is `BINOM.DIST`,

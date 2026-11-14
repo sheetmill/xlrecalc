@@ -49,6 +49,8 @@ _REFERENCE_ONLY = frozenset({
 # An empty argument at these positions makes Excel refuse a file, and F() is position 0 (capture
 # empty_args, refused rows in tests/captures/empty_args_refused.tsv).
 _EMPTY_REFUSED: dict[str, tuple[int, ...]] = {
+    "LAMBDA": (0,),  # any empty parameter or body (capture empty_args, with _EMPTY_REPEATING)
+    "ISOMITTED": (0,),
     "ERF.PRECISE": (0,),
     "ERFC": (0,),
     "ERFC.PRECISE": (0,),
@@ -197,7 +199,7 @@ _EMPTY_REFUSED: dict[str, tuple[int, ...]] = {
 # counts as the same position of the first (capture empty_args).
 _EMPTY_REPEATING = {
     "COUNTIFS": (0, 2), "SUMIFS": (1, 2), "AVERAGEIFS": (1, 2), "MAXIFS": (1, 2), "MINIFS": (1, 2),
-    "IFS": (0, 2), "SWITCH": (1, 2),
+    "IFS": (0, 2), "SWITCH": (1, 2), "LAMBDA": (0, 1),
 }  # fmt: skip
 
 
@@ -257,6 +259,7 @@ _ARRAY_COUNTS: dict[str, tuple[int, int | None]] = {
     "_XLFN.MODE.MULT": (1, None),
     "_XLFN.TEXTSPLIT": (2, 6),
     "_XLFN.RANDARRAY": (0, 5),
+    "_XLFN.REDUCE": (3, None),  # two refused (refusal_probe, Excel 16.115); more not captured
 }  # fmt: skip
 # Without its prefix in a file, SORT or FILTER makes Excel refuse it; UNIQUE, SORTBY and
 # SEQUENCE are names it does not know (capture dyn_*).

@@ -49,10 +49,10 @@ KNOWN: dict[tuple[str, str], str] = {
 }
 """Cells where the engine differs from Excel, with the reason (``QUIRKS.md``). Strict: a listed
 cell that matches fails."""
-REPORTED = {(DEPTH, "_XLUDF.LET")}
-"""Reported calls a capture holds on purpose: ``BLETX``'s name was stored with ``LET`` as an
-unknown function (``_xludf.LET``), which Excel shows as ``#NAME?`` at every depth, as does the
-engine, reporting it."""
+MORE = "lambda_more"
+"""The budget's optional parameters and LET names, recursion through MAP, and the choices
+without a capture before it: replayed in a child process under the watchdog, as is DEPTH."""
+DEEP = (DEPTH, MORE)
 BOUNDARY = ("A11", "A16", "A31", "A36", "A66", "A71", "A111", "A116")
 """The rows at the edge of the budget for one, two and three parameters, in the default run."""
 
@@ -180,18 +180,18 @@ def test_every_formula_is_computed(suite: str) -> None:
     assert not report.unsupported, dict(report.unsupported)
 
 
-def _depth_failures(only: tuple[str, ...]) -> list[str]:
-    """Capture lambda_depth's cells (``only`` these, if given) that differ from Excel unlisted, or
-    match it though listed; and calls reported unexpectedly."""
-    e = load(io.BytesIO(workbook(DEPTH, only)))
+def _depth_failures(only: tuple[str, ...], suite: str = DEPTH) -> list[str]:
+    """A deep suite's cells (``only`` these, if given) that differ from Excel unlisted, or
+    match it though listed; and calls reported."""
+    e = load(io.BytesIO(workbook(suite, only)))
     report = e.recalculate(full=True)
-    problems = [f"reported: {k}" for k in report.unsupported if (DEPTH, k) not in REPORTED]
-    for row in _rows(DEPTH):
+    problems = [f"reported: {k}" for k in report.unsupported]
+    for row in _rows(suite):
         if row[0] != "cell" or (only and row[3] not in only):
             continue
         r, c = _cell(str(row[3]))
         got, want = e.get(0, r - 1, c - 1), expected(row)
-        listed = (DEPTH, row[3]) in KNOWN
+        listed = (suite, row[3]) in KNOWN
         if same(got, want) == listed:
             problems.append(f"{row[3]} {row[2]}: {got!r}, Excel {want!r}, listed {listed}")
     return problems
@@ -209,12 +209,19 @@ def test_recursion_matches_excel_at_every_captured_depth() -> None:
     assert _depth_failures(()) == []
 
 
+@bounded
+def test_the_further_lambda_capture_matches_excel() -> None:
+    """Capture ``lambda_more``: every cell, recursion with optional parameters and LET names
+    to the budget, and through MAP to its limit, included."""
+    assert _depth_failures((), MORE) == []
+
+
 def _outcomes_here() -> list[tuple[str, str, str]]:
     """Each typed formula of the four captures (suite, file form) and how it fares: ``match``
     when every cell of its result matches Excel, ``listed`` when one is a known deviation,
     ``not evaluated`` when the engine reports it, else ``differs``."""
     out = []
-    for suite in (*SUITES, DEPTH):
+    for suite in (*SUITES, *DEEP):
         e = load(io.BytesIO(workbook(suite)))
         report = e.recalculate(full=True)
         reported = {(ref.row, ref.col) for ref in report.uncomputed}
@@ -282,30 +289,33 @@ _RUNAWAY = {
 @bounded
 def test_runaway_recursion_stops_at_the_budget() -> None:
     """Recursion that never ends stops with ``#NUM!``, on the explicit stack, in bounded memory;
-    so does recursion through a ``LET`` binding and mutual recursion past the budget."""
+    so does recursion through a ``LET`` binding (a name costing 4, as a parameter) and mutual
+    recursion past the budget."""
     values, reported = _computed(
         _RUNAWAY,
         {
             "A1": "TAIL(1)",
             "A2": "GROW(1)",
-            "A3": "LETS(5000)",
-            "A4": "LETS(5461)",
+            "A3": "LETS(4094)",
+            "A4": "LETS(4095)",
             "A5": "ISEV(5000)",
             "A6": "ISEV(6000)",
         },
     )
     num = ErrorValue.NUM
-    assert values == {"A1": num, "A2": num, "A3": 5000.0, "A4": num, "A5": True, "A6": num}
+    assert values == {"A1": num, "A2": num, "A3": 4094.0, "A4": num, "A5": True, "A6": num}
     assert reported == []
 
 
 @bounded
 def test_recursion_through_a_function_that_calls_a_lambda_is_bounded() -> None:
     """Each ``MAP`` inside the recursion is a call stack inside the one before, so Python's own:
-    shallow, it computes; past ``NESTED_RUNS`` the formula is reported, not computed."""
-    values, reported = _computed(_RUNAWAY, {"A1": "VIAMAP(20)", "A2": "VIAMAP(1000)"})
-    assert values["A1"] == 20.0
-    assert reported == ["calls of LAMBDA nested through functions too deeply"]
+    20 deep computes, past ``NESTED_HELPERS`` it is ``#VALUE!``, as in Excel, however deep."""
+    values, reported = _computed(
+        _RUNAWAY, {"A1": "VIAMAP(20)", "A2": "VIAMAP(21)", "A3": "VIAMAP(100000)"}
+    )
+    assert values == {"A1": 20.0, "A2": ErrorValue.VALUE, "A3": ErrorValue.VALUE}
+    assert reported == []
 
 
 _FAMILY = ("LAMBDA", "ISOMITTED", "MAP", "REDUCE", "SCAN", "BYROW", "BYCOL", "MAKEARRAY")
@@ -379,7 +389,7 @@ def _typed() -> list[tuple[str, str, bool]]:
     """Every typed formula of the LAMBDA captures: suite, file form, and whether Excel marked it."""
     return [
         (suite, str(row[6]), row[7] == "array")
-        for suite in (*SUITES, DEPTH)
+        for suite in (*SUITES, *DEEP)
         for row in _rows(suite)
         if row[0] == "cell" and row[6] is not None
     ]

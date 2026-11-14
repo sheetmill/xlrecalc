@@ -62,8 +62,8 @@ so the page counts them together and is the same on every platform.
 | `BITOR` | engineering | implemented | 199 | 199 | 0 |  |  |
 | `BITRSHIFT` | engineering | implemented | 227 | 227 | 0 |  |  |
 | `BITXOR` | engineering | implemented | 199 | 199 | 0 |  |  |
-| `BYCOL` | logical | implemented | 2 | 2 | 0 |  |  |
-| `BYROW` | logical | implemented | 2 | 2 | 0 |  |  |
+| `BYCOL` | logical | implemented | 5 | 5 | 0 |  |  |
+| `BYROW` | logical | implemented | 5 | 5 | 0 |  |  |
 | `CALL` | | absent | | | | | |
 | `CEILING` | math | implemented | 275 | 275 | 0 |  |  |
 | `CEILING.MATH` | math | implemented | 245 | 245 | 0 |  |  |
@@ -268,25 +268,25 @@ so the page counts them together and is the same on every platform.
 | `INTRATE` | financial | implemented | 380 | 380 | 0 | 4 ulps |  |
 | `IPMT` | financial | implemented | 91 | 83 | 8 | 4 ulps |  |
 | `IRR` | financial | implemented | 182 | 149 | 33 | 1e-09 relative |  |
-| `ISBLANK` | information | implemented | 34 | 34 | 0 |  |  |
-| `ISERR` | information | implemented | 17 | 17 | 0 |  |  |
+| `ISBLANK` | information | implemented | 35 | 35 | 0 |  |  |
+| `ISERR` | information | implemented | 18 | 18 | 0 |  |  |
 | `ISERROR` | information | implemented | 23 | 23 | 0 |  |  |
 | `ISEVEN` | information | implemented | 58 | 57 | 1 |  |  |
 | `ISFORMULA` | information | implemented | 24 | 23 | 1 |  |  |
-| `ISLOGICAL` | information | implemented | 18 | 18 | 0 |  |  |
-| `ISNA` | information | implemented | 20 | 20 | 0 |  |  |
-| `ISNONTEXT` | information | implemented | 58 | 57 | 1 |  |  |
-| `ISNUMBER` | information | implemented | 49 | 49 | 0 |  |  |
+| `ISLOGICAL` | information | implemented | 19 | 19 | 0 |  |  |
+| `ISNA` | information | implemented | 21 | 21 | 0 |  |  |
+| `ISNONTEXT` | information | implemented | 59 | 58 | 1 |  |  |
+| `ISNUMBER` | information | implemented | 50 | 50 | 0 |  |  |
 | `ISO.CEILING` | math | implemented | 304 | 304 | 0 |  |  |
 | `ISODD` | information | implemented | 58 | 57 | 1 |  |  |
-| `ISOMITTED` | information | implemented | 4 | 4 | 0 |  |  |
+| `ISOMITTED` | information | implemented | 5 | 5 | 0 |  |  |
 | `ISOWEEKNUM` | date and time | implemented | 41 | 41 | 0 |  |  |
 | `ISPMT` | financial | implemented | 1325 | 1325 | 0 | 4 ulps |  |
-| `ISREF` | information | implemented | 38 | 38 | 0 |  |  |
-| `ISTEXT` | information | implemented | 20 | 20 | 0 |  |  |
+| `ISREF` | information | implemented | 40 | 40 | 0 |  |  |
+| `ISTEXT` | information | implemented | 21 | 21 | 0 |  |  |
 | `JIS` | | absent | | | | | |
 | `KURT` | statistical | implemented | 32 | 30 | 2 | 4 ulps |  |
-| `LAMBDA` | logical | implemented | 54 | 54 | 0 |  |  |
+| `LAMBDA` | logical | implemented | 86 | 86 | 0 |  |  |
 | `LARGE` | statistical | implemented | 31 | 30 | 1 |  |  |
 | `LCM` | math | implemented | 213 | 213 | 0 |  |  |
 | `LEFT` | text | implemented | 36 | 36 | 0 |  |  |
@@ -305,8 +305,8 @@ so the page counts them together and is the same on every platform.
 | `LOGNORMDIST` | statistical | implemented | 50 | 49 | 1 | 4 ulps |  |
 | `LOOKUP` | lookup and reference | implemented | 45 | 45 | 0 |  |  |
 | `LOWER` | text | implemented | 22 | 22 | 0 |  |  |
-| `MAKEARRAY` | logical | implemented | 4 | 4 | 0 |  |  |
-| `MAP` | logical | implemented | 11 | 11 | 0 |  |  |
+| `MAKEARRAY` | logical | implemented | 8 | 8 | 0 |  |  |
+| `MAP` | logical | implemented | 16 | 16 | 0 |  |  |
 | `MATCH` | lookup and reference | implemented | 94 | 94 | 0 |  |  |
 | `MAX` | statistical | implemented | 16 | 16 | 0 |  |  |
 | `MAXA` | statistical | implemented | 37 | 37 | 0 |  |  |
@@ -331,7 +331,7 @@ so the page counts them together and is the same on every platform.
 | `MROUND` | math | implemented | 275 | 275 | 0 |  |  |
 | `MULTINOMIAL` | math | implemented | 45 | 31 | 14 |  |  |
 | `MUNIT` | math | implemented | 38 | 38 | 0 |  |  |
-| `N` | lookup and reference | implemented | 18 | 18 | 0 |  |  |
+| `N` | lookup and reference | implemented | 19 | 19 | 0 |  |  |
 | `NA` | information | implemented | 33 | 33 | 0 |  |  |
 | `NEGBINOM.DIST` | statistical | implemented | 395 | 381 | 14 | 8 ulps |  |
 | `NEGBINOMDIST` | statistical | implemented | 31 | 31 | 0 | 8 ulps |  |
@@ -401,7 +401,7 @@ so the page counts them together and is the same on every platform.
 | `RANK.EQ` | statistical | implemented | 20 | 20 | 0 |  |  |
 | `RATE` | financial | implemented | 97 | 84 | 13 | 1e-09 relative |  |
 | `RECEIVED` | financial | implemented | 380 | 380 | 0 | 4 ulps |  |
-| `REDUCE` | logical | implemented | 4 | 4 | 0 |  |  |
+| `REDUCE` | logical | implemented | 8 | 8 | 0 |  |  |
 | `REGEXEXTRACT` | | absent | | | | | |
 | `REGEXREPLACE` | | absent | | | | | |
 | `REGEXTEST` | | absent | | | | | |
@@ -420,7 +420,7 @@ so the page counts them together and is the same on every platform.
 | `RRI` | financial | implemented | 644 | 644 | 0 | 4 ulps |  |
 | `RSQ` | statistical | implemented | 24 | 24 | 0 | 4 ulps |  |
 | `RTD` | | absent | | | | | |
-| `SCAN` | logical | implemented | 4 | 4 | 0 |  |  |
+| `SCAN` | logical | implemented | 9 | 9 | 0 |  |  |
 | `SEARCH` | text | implemented | 402 | 402 | 0 |  |  |
 | `SEARCHB` | text | implemented | 352 | 352 | 0 |  |  |
 | `SEC` | math | implemented | 30 | 30 | 0 | 4 ulps |  |
@@ -454,7 +454,7 @@ so the page counts them together and is the same on every platform.
 | `STOCKHISTORY` | | absent | | | | | |
 | `SUBSTITUTE` | text | implemented | 520 | 520 | 0 |  |  |
 | `SUBTOTAL` | math | implemented | 16 | 16 | 0 |  |  |
-| `SUM` | math | implemented | 107 | 107 | 0 |  |  |
+| `SUM` | math | implemented | 111 | 111 | 0 |  |  |
 | `SUMIF` | math | implemented | 86 | 86 | 0 |  |  |
 | `SUMIFS` | math | implemented | 43 | 43 | 0 |  |  |
 | `SUMPRODUCT` | math | implemented | 10 | 10 | 0 |  |  |
@@ -464,7 +464,7 @@ so the page counts them together and is the same on every platform.
 | `SUMXMY2` | math | implemented | 8 | 8 | 0 |  |  |
 | `SWITCH` | logical | implemented | 39 | 39 | 0 |  |  |
 | `SYD` | financial | implemented | 260 | 260 | 0 |  |  |
-| `T` | text | implemented | 31 | 31 | 0 |  |  |
+| `T` | text | implemented | 32 | 32 | 0 |  |  |
 | `T.DIST` | statistical | implemented | 232 | 225 | 7 | 1e-12 relative |  |
 | `T.DIST.2T` | statistical | implemented | 102 | 95 | 7 | 1e-13 relative |  |
 | `T.DIST.RT` | statistical | implemented | 106 | 99 | 7 | 1e-13 relative |  |

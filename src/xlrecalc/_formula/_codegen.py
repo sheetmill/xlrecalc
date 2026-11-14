@@ -270,6 +270,7 @@ class _Generator:
         self.generators: list[set[str]] = []
         self.parameters: list[bool] = []
         self.bodies = 0  # LAMBDA bodies around the node being compiled
+        self.let_names = 0  # LET names the innermost LAMBDA body binds (its cost a call)
         self.yields = False  # the function being generated calls a function value
 
     def ranged(self, node: Node) -> bool:
@@ -366,6 +367,8 @@ class _Generator:
             case Call(name, _, args, _, _, prefix):
                 return self.call(name, prefix, args)
             case Invoke(callee, _, args):
+                if _calls_a_value(callee, self.registry):  # SUM(1)(2): Excel refuses the file
+                    self.features.add("a call of a function's result that is no LAMBDA")
                 return self.invoke(self.expr(callee), args)
             case ArrayConstant(_, rows):
                 return self.constant(
@@ -474,6 +477,7 @@ class _Generator:
         writes it back. A binding sees the names before it, the calculation all of them.
         """
         self.calls.add("_XLFN.LET")
+        self.let_names += len(args) // 2
         pairs = args if len(args) % 2 == 0 else args[:-1]
         body = pairs[-2] if len(args) % 2 == 0 else args[-1]
         names: dict[str, int] = {}
@@ -673,7 +677,9 @@ class _Generator:
         self.parameters.append(True)
         outer = [(folded, self.values.pop(folded, None)) for folded in names]
         self.bodies += 1
+        saved_names, self.let_names = self.let_names, 0
         body, _ = self.function_of_env(args[-1])
+        bound, self.let_names = self.let_names, saved_names
         self.bodies -= 1
         for folded, value in outer:
             if value is not None:
@@ -682,7 +688,9 @@ class _Generator:
         self.generators.pop()
         self.parameters.pop()
         total = len(names)
-        return self.emit(f"ops.closure({body}, {self.env}, r, c, {required:d}, {total:d})")
+        return self.emit(
+            f"ops.closure({body}, {self.env}, r, c, {required:d}, {total:d}, {bound:d})"
+        )
 
     def invoke(self, callee: str, args: list[Node], parts: list[str] | None = None) -> str:
         """A call of a function value: inside a ``LAMBDA`` body, yielded to the call stack.
@@ -717,6 +725,23 @@ class _Generator:
             self.refs.append(RefSpec("box", where, r, c, r, c))
             return self.emit(f"ctx.cref({sheet}, {self.axis(r, 'r')}, {self.axis(c, 'c')})")
         return self.expr(node)
+
+
+# Functions whose result may be a function value, called where they are (capture lambda_calls).
+_MAY_GIVE_A_FUNCTION = frozenset(
+    {"_XLFN.LAMBDA", "_XLFN.LET", "IF", "CHOOSE", "_XLFN.IFS", "_XLFN.SWITCH", "IFERROR"}
+    | {"_XLFN.IFNA"}
+)
+
+
+def _calls_a_value(callee: Node, registry: Mapping[str, Callable[..., Any]]) -> bool:
+    """A call of a registered function's result where that result is never a function value."""
+    while isinstance(callee, Group):
+        callee = callee.inner
+    if not isinstance(callee, Call) or callee.prefix is not None:
+        return False
+    name = callee.name.text.upper()
+    return name in registry and name not in _MAY_GIVE_A_FUNCTION
 
 
 def _is_union(node: Node) -> bool:
