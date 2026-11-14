@@ -24,7 +24,8 @@ VALUE, CALC = ErrorValue.VALUE, ErrorValue("#CALC!")
 MAX_ROWS, MAX_COLS = 1_048_576, 16_384
 _ERROR_ORDER = {
     "#NULL!": 1, "#DIV/0!": 2, "#VALUE!": 3, "#REF!": 4, "#NAME?": 5, "#NUM!": 6, "#N/A": 7,
-    "#GETTING_DATA": 8, "#SPILL!": 9, "#CALC!": 14,
+    "#GETTING_DATA": 8, "#SPILL!": 9, "#CONNECT!": 10, "#BLOCKED!": 11, "#UNKNOWN!": 12,
+    "#FIELD!": 13, "#CALC!": 14, "#BUSY!": 16, "#TIMEOUT!": 20,
 }  # fmt: skip
 
 Grid = tuple[tuple[Any, ...], ...]

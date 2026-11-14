@@ -289,9 +289,11 @@ def TYPE(ctx: Context, v: Any) -> float:
     return 16.0 if isinstance(v, ErrorValue) else 1.0
 
 
+# Excel's numbers (Excel 16.115; the newer errors from a capture of each read from a file).
 _ERROR_TYPES = {
     "#NULL!": 1.0, "#DIV/0!": 2.0, "#VALUE!": 3.0, "#REF!": 4.0, "#NAME?": 5.0, "#NUM!": 6.0,
-    "#N/A": 7.0, "#GETTING_DATA": 8.0, "#SPILL!": 9.0, "#CALC!": 14.0,
+    "#N/A": 7.0, "#GETTING_DATA": 8.0, "#SPILL!": 9.0, "#CONNECT!": 10.0, "#BLOCKED!": 11.0,
+    "#UNKNOWN!": 12.0, "#FIELD!": 13.0, "#CALC!": 14.0, "#BUSY!": 16.0, "#TIMEOUT!": 20.0,
 }  # fmt: skip
 
 

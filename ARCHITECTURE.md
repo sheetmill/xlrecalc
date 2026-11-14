@@ -737,7 +737,10 @@ nothing, and clearing the cell lets it spill again. `A1#` (`_xlfn.ANCHORARRAY(A1
 the dynamic array at A1 spills into; `@x` (`_xlfn.SINGLE(x)`) is the implicit intersection of
 `x`. Excel caches `#SPILL!` in a file as `#VALUE!` with a rich value behind it (`vm`, error type
 8); the reader decodes it, and the writer writes `#VALUE!` without the rich value, as other
-readers see such a cell.
+readers see such a cell. The other error types decoded are those captured (Excel 16.115):
+9 `#CONNECT!`, 10 `#BLOCKED!`, 11 `#UNKNOWN!`, 12 `#FIELD!`, 13 `#CALC!`, 15 `#BUSY!`, 19
+`#TIMEOUT!`; another type stays the `#VALUE!` written. `ERROR.TYPE` gives Excel's numbers for
+them (9 to 14, 16 and 20), and `#GETTING_DATA` is written as `#N/A`, as Excel writes it back.
 
 **Functions that make arrays** (`_functions/_dynamic.py`, `_functions/_reshape.py`; captures
 `dyn_*`) take their array arguments whole in every formula. A count or other one-value argument

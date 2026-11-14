@@ -127,7 +127,15 @@ def _value_element(prefix: bytes, new: FileValue) -> bytes:
     else:
         # Excel caches the newer errors (#SPILL!, #CALC!, ...) as #VALUE!, the real one in a
         # rich value (capture arrays); a written file holds #VALUE!, as other readers see it.
-        text = str(value) if value in _FILE_ERRORS else "#VALUE!"
+        # Excel writes #GETTING_DATA back as #N/A (a capture of Excel 16.115 reading each error
+        # from a file), and an error a file cannot hold as text as #VALUE!.
+        text = (
+            "#N/A"
+            if value == "#GETTING_DATA"
+            else str(value)
+            if value in _FILE_ERRORS
+            else "#VALUE!"
+        )
     # Excel drops leading and trailing whitespace of a <v> not marked to preserve it.
     space = b""
     if kind == "str" and text and (text[0] in _SPACE or text[-1] in _SPACE):

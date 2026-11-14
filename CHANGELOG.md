@@ -43,6 +43,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   units in the last place that 3.11 leaves past them.
 
 ### Fixed
+- `ERROR.TYPE` gives Excel's numbers for `#CONNECT!` (10), `#BLOCKED!` (11), `#UNKNOWN!` (12), `#FIELD!` (13),
+  `#BUSY!` (16) and `#TIMEOUT!` (20), where it gave `#N/A`, and a file's rich-value errors of those kinds are read as
+  them, where they were read as `#VALUE!` (a capture of Excel 16.115 reading each from a file). `#GETTING_DATA` is
+  written as `#N/A`, as Excel writes it back.
 - A formula reading a defined name that refers to another name, or calls one holding a `LAMBDA`, is recalculated when
   a cell the other name reads changes; only the first name's own references were followed.
 - A wildcard's `?` in criteria (`COUNTIF` and the other `IF` functions, the database functions), `MATCH`, `XMATCH`

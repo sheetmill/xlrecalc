@@ -25,8 +25,12 @@ _RELS = (
     "{http://purl.oclc.org/ooxml/officeDocument/relationships}",
 )
 _TRUE = ("1", "true")
-# Rich-value error types, as captured (capture arrays: a blocked spill is errorType 8).
-_RICH_ERRORS = {"8": "#SPILL!", "13": "#CALC!"}  # captures arrays, dyn_filter
+# Rich-value error types, as captured (capture arrays: a blocked spill is errorType 8; the others
+# from a capture of Excel 16.115 reading each from a file). Another type is read as #VALUE!.
+_RICH_ERRORS = {
+    "8": "#SPILL!", "9": "#CONNECT!", "10": "#BLOCKED!", "11": "#UNKNOWN!", "12": "#FIELD!",
+    "13": "#CALC!", "15": "#BUSY!", "19": "#TIMEOUT!",
+}  # fmt: skip
 
 
 @dataclass(frozen=True, slots=True)
