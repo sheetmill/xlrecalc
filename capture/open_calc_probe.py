@@ -7,15 +7,16 @@ openpyxl writes a workbook (A1 = 2; A2:A6 formulas of it, as in ``writeback_prob
 volatile ``RAND()*0+A1`` in a second one); Excel saves a copy of each, a file with Excel's own
 cached values, ``calcPr`` and calculation chain. Each variant plants wrong cached values
 (sentinels: 999, "SENT", FALSE, #N/A, 777, and 555 in A7) in that copy and changes one thing:
-nothing; ``calcPr`` removed; ``calcId`` older or newer than the copy's; ``fullCalcOnLoad``; the
-volatile cell; manual calculation (``calcMode="manual"``). Two more are openpyxl's own files:
+nothing; ``calcPr`` removed; ``calcId`` older or newer than the copy's, or removed;
+``fullCalcOnLoad``; the volatile cell; manual calculation (``calcMode="manual"``), alone, with
+``fullCalcOnLoad`` and with an old ``calcId``. Two more are openpyxl's own files:
 with no cached values, and with the sentinels. Each variant is opened with alerts off and read
 (``open_read.applescript``: value, displayed text, formula, saved flag and calculation mode),
 closed without saving, then opened again and saved as a copy whose cached values are read. A
 cell showing its sentinel was taken from the file; one showing its right value was recalculated.
 
 Excel's calculation mode belongs to the application and the first workbook opened sets it, so
-the manual variant comes last and ``calc_automatic.applescript`` sets the mode back after it.
+the manual variants come last and ``calc_automatic.applescript`` sets the mode back after each.
 Workbooks live in Excel's container and are removed after; the record is written to
 ``capture/build/open_calc_probe.out`` and the capture to ``tests/captures/open_calc.tsv``. Rerun
 it after every Excel update: ``VERIFIED_CALC_ID`` (``_load.py``) follows the threshold it finds.
@@ -141,10 +142,29 @@ def main() -> None:
         "volatile": (vbase, volatile_sentinels, lambda t: t),
         "openpyxl_no_values": (src, None, lambda t: t),
         "openpyxl_patched": (src, patch_sentinels, lambda t: t),
+        "calcpr_without_calcid": (
+            base,
+            patch_sentinels,
+            lambda t: re.sub(r'\scalcId="\d+"', "", t),
+        ),
         "manual": (
             base,
             patch_sentinels,
             lambda t: re.sub(r"<calcPr\b", '<calcPr calcMode="manual"', t, count=1),
+        ),
+        "manual_fullcalconload": (
+            base,
+            patch_sentinels,
+            lambda t: re.sub(
+                r"<calcPr\b", '<calcPr calcMode="manual" fullCalcOnLoad="1"', t, count=1
+            ),
+        ),
+        "manual_calcid_124519": (
+            base,
+            patch_sentinels,
+            lambda t: re.sub(
+                r"<calcPr\b", '<calcPr calcMode="manual"', with_id(124519)(t), count=1
+            ),
         ),
     }
     if sys.argv[1:2] == ["--calc-ids"]:  # only these calcId variants, to place a threshold
@@ -170,6 +190,8 @@ def main() -> None:
             shown_texts = " ".join(map(repr, texts))
             fields_out = (name, calc_attributes(path), saved_values(path), shown_texts, mode)
             rows.append("\t".join((*fields_out, saved_values(copy))))
+            if name.startswith("manual"):  # the application's mode back to automatic each time
+                log("  restore: " + osascript("calc_automatic.applescript", str(base)))
     finally:
         log("\nrestore: " + osascript("calc_automatic.applescript", str(base)))
         OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")

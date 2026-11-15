@@ -503,16 +503,18 @@ def recalc_mode(
     return mode
 
 
-def recalculates_on_opening(calc: CalcProperties, volatile: bool) -> bool:
+def recalculates_on_opening(calc: CalcProperties, volatile: bool, saving: bool = False) -> bool:
     """Whether Excel recalculates every formula of a workbook on opening it (capture ``open_calc``).
 
-    It does when the workbook has no ``calcPr`` (or one without ``calcId``, taken as none:
-    unverified), asks for it (``fullCalcOnLoad``), was calculated by an older Excel (``calcId``
-    below ``VERIFIED_CALC_ID``), or holds a volatile function, which recalculates every formula,
-    not only its dependents. It does not in manual calculation; that manual mode wins over the
-    other reasons is a choice, not captured.
+    It does when the workbook has no ``calcPr`` or one without ``calcId``, asks for it
+    (``fullCalcOnLoad``), was calculated by an older Excel (``calcId`` below
+    ``VERIFIED_CALC_ID``), or holds a volatile function, which recalculates every formula, not
+    only its dependents. In manual calculation it shows the cached values on opening whatever
+    the reason, and saves them recalculated where a reason holds: ``saving`` asks about the copy
+    it saves after opening. A volatile function in manual calculation is taken as the other
+    reasons are (not captured).
     """
-    if calc.calc_mode == "manual":
+    if calc.calc_mode == "manual" and not saving:
         return False
     return (
         calc.full_calc_on_load
@@ -534,13 +536,15 @@ def load(
     limits: ReadLimits | None = None,
     recalc_on_load: RecalcOnLoad = "excel",
     today: dt.date | None = None,
+    saving: bool = False,
 ) -> Engine:
     """Read a workbook into an engine; formulas whose cached values are trusted stay unevaluated.
 
     ``recalc_on_load``: ``"excel"`` evaluates every formula where Excel would recalculate on
     opening (``recalculates_on_opening``) and trusts the cached values elsewhere; ``"always"``
     evaluates every formula; ``"never"`` trusts every cached value the file holds. A formula
-    without one, and a volatile one, is evaluated in every mode.
+    without one, and a volatile one, is evaluated in every mode. ``saving``: the load is followed
+    by a save, as in ``recalculate(path)``, whose result is the copy Excel saves after opening.
     """
     if recalc_on_load not in RECALC_ON_LOAD:
         raise ValueError(f"recalc_on_load must be one of {RECALC_ON_LOAD}: {recalc_on_load!r}")
@@ -565,13 +569,13 @@ def load(
         row, col = book.active_cell(book.sheets[active])
         engine.active = (active, row - 1, col - 1)
         full = recalc_on_load == "always" or (
-            recalc_on_load == "excel" and recalculates_on_opening(book.calc, False)
+            recalc_on_load == "excel" and recalculates_on_opening(book.calc, False, saving)
         )
         for index, sheet in enumerate(book.sheets):
             if sheet.kind == "worksheet":
                 _load_sheet(engine, book, index, full)
         volatile = not full and recalc_on_load == "excel" and engine.has_volatile()
-        if volatile and recalculates_on_opening(book.calc, True):  # every formula, as Excel
+        if volatile and recalculates_on_opening(book.calc, True, saving):  # every formula
             engine.make_all_stale()
     return engine
 

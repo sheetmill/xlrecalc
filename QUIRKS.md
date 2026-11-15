@@ -101,7 +101,7 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   `SUM` with four or eight arguments stops one or two calls earlier (3 rows). It also runs a call
   in tail position, with nothing after it in the body, past the budget, to between 8,000 and
   10,000 calls (2 rows). The package charges both as any other call. A `LET` name is charged
-  whether or not the branch holding it runs (not captured).
+  whether or not the branch holding it runs, as in Excel (capture `lambda_more`).
 - A function given an array of references (`N(OFFSET(Z1,{0;1;2;3},0))`, `SUBTOTAL(9,OFFSET(...))`,
   `COUNTIF(INDIRECT({"Z1";"Z2"}),">0")`) is not computed: the formula keeps the value the file
   holds and is reported (16 formulas of capture `array_refs`, listed in

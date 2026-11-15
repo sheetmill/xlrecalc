@@ -399,7 +399,7 @@ smaller argument with `#N/A`, one of a single element too; `REDUCE` and `SCAN` g
 from their initial value (an empty one a blank) and pass a range's elements as references too;
 `BYROW` and `BYCOL` pass each row or column, of a range as a reference; an empty array argument
 is `#VALUE!` (capture `empty_args`); `MAKEARRAY` takes positive whole sizes only (2.7 is
-`#VALUE!`; an empty size is taken as 1, unverified) and checks its size against the array limit
+`#VALUE!`; an empty size is 1, capture `lambda_more`) and checks its size against the array limit
 before any call. A call whose result is not one value (a range, an array of several)
 makes the whole result `#CALC!`, except for `REDUCE`, whose last result may be a range that
 spills.
@@ -654,8 +654,10 @@ and in manual calculation. `load` and `recalculate(path)` follow it by default
 `VERIFIED_CALC_ID`, which the capture sets and is rerun after every Excel update);
 `recalc_on_load="always"` treats every formula as stale and `"never"` trusts every cached value
 the file holds. A formula with no cached value, and a volatile one, is evaluated in every mode.
-Not captured, so chosen: a `calcPr` without `calcId` counts as none, and manual calculation wins
-over the other reasons. Following Excel rather than always recalculating loses nothing: a file
+A `calcPr` without `calcId` counts as none, as in Excel. In manual calculation Excel shows the
+cached values on opening whatever the reason, and saves them recalculated where a reason holds,
+so a load trusts them and `recalculate(path)`, an opening and a save, recalculates (a volatile
+function in manual calculation is taken as the other reasons are: not captured). Following Excel rather than always recalculating loses nothing: a file
 openpyxl writes asks for a full calculation anyway, and where the rules trust a value it is the
 value Excel computed. A file xlrecalc wrote with `fullCalcOnLoad` set (the default, §9.2) is
 therefore loaded with every formula stale: reading it again costs a full recalculation, never a
@@ -825,8 +827,10 @@ than 0, or `OFFSET` a height or width that is not a number, so that the size is 
 value may give anything, so it is marked (`=LAMBDA(x,x)(Z1)`, `=ADDONE(1)` through a defined
 name, `=ROW(LAMBDA(x,x)(Z2))`, `ROW` and `COLUMN` carrying their reference), and so is an uncalled
 `LAMBDA` as the formula's result (`=LAMBDA(x,x+1)`), but not one an operation or a function takes
-(`=LAMBDA(x,x)+1`, `=IF(TRUE,LAMBDA(x,x))`, `=ISREF(ADDONE)`): every typed formula of the four
-`lambda_*` captures is marked as Excel marked it. The registry flags the
+(`=LAMBDA(x,x)+1`, `=IF(TRUE,LAMBDA(x,x))`, `=ISREF(ADDONE)`); `ROWS` and `COLUMNS` of a
+function that calls a function value are marked (`=ROWS(MAKEARRAY(,2,...))`), unlike
+`=ROWS(SEQUENCE(1))`: every typed formula of the `lambda_*` captures is marked as Excel marked
+it. The registry flags the
 functions that make arrays (`makes_array`), and a test holds the flags to the captures: set
 exactly for the functions a dynamic array spilled from or a typed call on literals and references
 marked although it neither spills nor intersects. The writer does the

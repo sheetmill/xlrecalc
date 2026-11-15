@@ -1,12 +1,14 @@
 # suite: lambda_more
 # excel: 16.115 for Mac, locale en_US
 # edition: Microsoft 365 Subscription, update channel Current
-# captured: 2026-11-13
+# captured: 2026-11-14
 # generator: capture/lambda_probe.py --paste lambda_more (each formula pasted as text, which
 #   enters it as typing does; data 1, 2, 3 in Z1:Z3 and 10, 20, 30 in AA1:AA3; formula k
 #   in A<5k+1>, its block A to D of rows 5k+1 to 5k+4)
 # name rows: name, name, text, sheet scope (Python repr)
 # cell rows: cell, k, typed, address, type, value, file form, f_t, f_ref, cm, rich error
+'name'	'BLETBASE'	'_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,_xlfn.LET(_xlpm.z,0,_xlpm.z),1+BLETBASE(_xlpm.n-1)))'	None
+'name'	'BLETNEVER'	'_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,0,IF(FALSE,_xlfn.LET(_xlpm.z,1,_xlpm.z),1)+BLETNEVER(_xlpm.n-1)))'	None
 'name'	'BLETTWO'	'_xlfn.LAMBDA(_xlpm.n,_xlfn.LET(_xlpm.m,_xlpm.n-1,_xlpm.k,1,IF(_xlpm.n<=0,0,_xlpm.k+BLETTWO(_xlpm.m))))'	None
 'name'	'COPT'	'_xlfn.LAMBDA(_xlpm.n,_xlop.a,IF(_xlpm.n<=0,0,1+COPT(_xlpm.n-1)))'	None
 'name'	'COPTG'	'_xlfn.LAMBDA(_xlpm.n,_xlop.a,IF(_xlpm.n<=0,0,1+COPTG(_xlpm.n-1,1)))'	None
@@ -70,3 +72,17 @@
 'cell'	49	'=BLETTWO(3276)'	'A246'	'e'	'#NUM!'	'BLETTWO(3276)'	'array'	'A246'	'1'	None
 'cell'	50	'=BLETTWO(4094)'	'A251'	'e'	'#NUM!'	'BLETTWO(4094)'	'array'	'A251'	'1'	None
 'cell'	51	'=BLETTWO(4095)'	'A256'	'e'	'#NUM!'	'BLETTWO(4095)'	'array'	'A256'	'1'	None
+'cell'	52	'=MAKEARRAY(,2,LAMBDA(r,c,r*10+c))'	'A261'	'n'	11.0	'_xlfn.MAKEARRAY(,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r*10+_xlpm.c))'	'array'	'A261:B261'	'1'	None
+'cell'	52	'=MAKEARRAY(,2,LAMBDA(r,c,r*10+c))'	'B261'	'n'	12.0	None	None	None	None	None
+'cell'	53	'=MAKEARRAY(2,,LAMBDA(r,c,r*10+c))'	'A266'	'n'	11.0	'_xlfn.MAKEARRAY(2,,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r*10+_xlpm.c))'	'array'	'A266:A267'	'1'	None
+'cell'	53	'=MAKEARRAY(2,,LAMBDA(r,c,r*10+c))'	'A267'	'n'	21.0	None	None	None	None	None
+'cell'	54	'=ROWS(MAKEARRAY(,2,LAMBDA(r,c,r*10+c)))'	'A271'	'n'	1.0	'ROWS(_xlfn.MAKEARRAY(,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r*10+_xlpm.c)))'	'array'	'A271'	'1'	None
+'cell'	55	'=COLUMNS(MAKEARRAY(2,,LAMBDA(r,c,r*10+c)))'	'A276'	'n'	1.0	'COLUMNS(_xlfn.MAKEARRAY(2,,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r*10+_xlpm.c)))'	'array'	'A276'	'1'	None
+'cell'	56	'=BLETBASE(4094)'	'A281'	'n'	4094.0	'BLETBASE(4094)'	'array'	'A281'	'1'	None
+'cell'	57	'=BLETBASE(4095)'	'A286'	'e'	'#NUM!'	'BLETBASE(4095)'	'array'	'A286'	'1'	None
+'cell'	58	'=BLETBASE(5460)'	'A291'	'e'	'#NUM!'	'BLETBASE(5460)'	'array'	'A291'	'1'	None
+'cell'	59	'=BLETBASE(5461)'	'A296'	'e'	'#NUM!'	'BLETBASE(5461)'	'array'	'A296'	'1'	None
+'cell'	60	'=BLETNEVER(4094)'	'A301'	'n'	4094.0	'BLETNEVER(4094)'	'array'	'A301'	'1'	None
+'cell'	61	'=BLETNEVER(4095)'	'A306'	'e'	'#NUM!'	'BLETNEVER(4095)'	'array'	'A306'	'1'	None
+'cell'	62	'=BLETNEVER(5460)'	'A311'	'e'	'#NUM!'	'BLETNEVER(5460)'	'array'	'A311'	'1'	None
+'cell'	63	'=BLETNEVER(5461)'	'A316'	'e'	'#NUM!'	'BLETNEVER(5461)'	'array'	'A316'	'1'	None

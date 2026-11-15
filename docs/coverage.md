@@ -84,7 +84,7 @@ so the page counts them together and is the same on every platform.
 | `CLEAN` | text | implemented | 28 | 28 | 0 |  |  |
 | `CODE` | text | implemented | 19 | 19 | 0 |  |  |
 | `COLUMN` | lookup and reference | implemented | 4 | 4 | 0 |  |  |
-| `COLUMNS` | lookup and reference | implemented | 9 | 9 | 0 |  |  |
+| `COLUMNS` | lookup and reference | implemented | 10 | 10 | 0 |  |  |
 | `COMBIN` | math | implemented | 289 | 289 | 0 | 4 ulps |  |
 | `COMBINA` | math | implemented | 207 | 207 | 0 | 4 ulps |  |
 | `COMPLEX` | engineering | implemented | 384 | 384 | 0 |  |  |
@@ -286,7 +286,7 @@ so the page counts them together and is the same on every platform.
 | `ISTEXT` | information | implemented | 21 | 21 | 0 |  |  |
 | `JIS` | | absent | | | | | |
 | `KURT` | statistical | implemented | 32 | 30 | 2 | 4 ulps |  |
-| `LAMBDA` | logical | implemented | 86 | 86 | 0 |  |  |
+| `LAMBDA` | logical | implemented | 90 | 90 | 0 |  |  |
 | `LARGE` | statistical | implemented | 31 | 30 | 1 |  |  |
 | `LCM` | math | implemented | 213 | 213 | 0 |  |  |
 | `LEFT` | text | implemented | 36 | 36 | 0 |  |  |
@@ -305,7 +305,7 @@ so the page counts them together and is the same on every platform.
 | `LOGNORMDIST` | statistical | implemented | 50 | 49 | 1 | 4 ulps |  |
 | `LOOKUP` | lookup and reference | implemented | 45 | 45 | 0 |  |  |
 | `LOWER` | text | implemented | 22 | 22 | 0 |  |  |
-| `MAKEARRAY` | logical | implemented | 8 | 8 | 0 |  |  |
+| `MAKEARRAY` | logical | implemented | 12 | 12 | 0 |  |  |
 | `MAP` | logical | implemented | 16 | 16 | 0 |  |  |
 | `MATCH` | lookup and reference | implemented | 94 | 94 | 0 |  |  |
 | `MAX` | statistical | implemented | 16 | 16 | 0 |  |  |
@@ -416,7 +416,7 @@ so the page counts them together and is the same on every platform.
 | `ROUNDDOWN` | math | implemented | 677 | 677 | 0 |  |  |
 | `ROUNDUP` | math | implemented | 677 | 677 | 0 |  |  |
 | `ROW` | lookup and reference | implemented | 8 | 8 | 0 |  |  |
-| `ROWS` | lookup and reference | implemented | 15 | 15 | 0 |  |  |
+| `ROWS` | lookup and reference | implemented | 16 | 16 | 0 |  |  |
 | `RRI` | financial | implemented | 644 | 644 | 0 | 4 ulps |  |
 | `RSQ` | statistical | implemented | 24 | 24 | 0 | 4 ulps |  |
 | `RTD` | | absent | | | | | |

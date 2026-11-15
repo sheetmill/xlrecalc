@@ -361,6 +361,20 @@ _CARRIED = {"N": (0,), "INDEX": (0,)}
 _CARRIED |= {"ROW": (0,), "COLUMN": (0,)}
 
 
+def _calls_a_function(node: Node) -> bool:
+    """A call of a function value, or of a function that calls one (``MAP``, ``MAKEARRAY``...)."""
+    while isinstance(node, Group):
+        node = node.inner
+    if isinstance(node, Invoke):
+        return True
+    if not isinstance(node, Call):
+        return False
+    spec = SPECS.get(
+        ((node.prefix.text if node.prefix is not None else "") + node.name.text).upper()
+    )
+    return spec is not None and "function" in spec.kinds
+
+
 def _may_be_array(text: str, name_text: Callable[[str], str | None] | None = None) -> bool:
     """Whether a formula (file form) may give an array, read from its text as Excel reads it.
 
@@ -447,6 +461,8 @@ def _may_be_array(text: str, name_text: Callable[[str], str | None] | None = Non
                 return True
             if name == "INDEX" and any(not _nonzero_number(a) for a in node.args[1:3]):
                 return True
+            if name in ("ROWS", "COLUMNS") and any(_calls_a_function(a) for a in node.args):
+                return True  # capture lambda_more: ROWS(MAKEARRAY(...)); not ROWS(SEQUENCE(1))
             if name == "OFFSET" and any(
                 not isinstance(a, Missing) and not _nonzero_number(a) for a in node.args[3:5]
             ):

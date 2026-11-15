@@ -74,12 +74,30 @@ def _loaded(row: list[str], **options: object) -> dict[str, object]:
     return {ref: wb.value(ref) for ref in _cells(row[2]) if ref in FORMULAS}
 
 
+def _shown(row: list[str]) -> list[str]:
+    return ast.literal_eval("[" + row[3].replace("' '", "', '") + "]")  # type: ignore[no-any-return]
+
+
 @pytest.mark.parametrize("row", _rows(), ids=lambda r: r[0])
 def test_a_load_recalculates_where_excel_does_on_opening(row: list[str]) -> None:
-    saved = _cells(row[5])
+    """A load gives what Excel shows on opening: the planted values or the right ones."""
+    kept = _shown(row)[0] == "999"
+    cells = _cells(row[2] if kept else row[5])
     got = _loaded(row)
-    want = {ref: _value(*saved[ref]) for ref in got}  # type: ignore[arg-type]
+    want = {ref: _value(*cells[ref]) for ref in got}  # type: ignore[arg-type]
     assert all(same(got[r], want[r]) for r in got), (row[0], got, want)
+
+
+@pytest.mark.parametrize("row", _rows(), ids=lambda r: r[0])
+def test_recalculate_writes_what_excel_saves_after_opening(tmp_path: Path, row: list[str]) -> None:
+    """``recalculate(path)`` is an opening and a save: Excel's saved copy, manual mode included."""
+    path = tmp_path / "book.xlsx"
+    path.write_bytes(_workbook(row))
+    xlrecalc.recalculate(path, full_calc_on_load=False)
+    wb = xlrecalc.load(path, recalc_on_load="never")
+    saved = _cells(row[5])
+    for ref in (r for r in saved if r in FORMULAS and r != "A7"):  # A7: RAND, drawn anew
+        assert same(wb.value(ref), _value(*saved[ref])), (row[0], ref, wb.value(ref))
 
 
 @pytest.mark.parametrize("row", _rows(), ids=lambda r: r[0])
@@ -111,11 +129,16 @@ def test_the_threshold_is_the_capture_s() -> None:
     assert min(trusted) == VERIFIED_CALC_ID
 
 
-def test_displayed_values_are_the_saved_ones() -> None:
-    """What Excel shows on opening is what it saves after it, in every variant."""
+MANUAL_WITH_A_REASON = frozenset({"manual_fullcalconload", "manual_calcid_124519"})
+
+
+def test_displayed_values_are_the_saved_ones_but_in_manual_mode_with_a_reason() -> None:
+    """What Excel shows on opening is what it saves after it, except in manual calculation with a
+    reason to recalculate: it shows the cached values and saves them recalculated."""
     for row in _rows():
-        shown = ast.literal_eval("[" + row[3].replace("' '", "', '") + "]")
-        assert ("999" in shown[0]) == (_cells(row[5])["A2"][1] == "999"), row[0]
+        shown_kept = _shown(row)[0] == "999"
+        saved_kept = _cells(row[5])["A2"][1] == "999"
+        assert (shown_kept != saved_kept) == (row[0] in MANUAL_WITH_A_REASON), row[0]
 
 
 @pytest.mark.parametrize(

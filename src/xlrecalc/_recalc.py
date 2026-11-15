@@ -65,7 +65,8 @@ def recalculate(
         OSError: The file cannot be read, or the result cannot be written.
     """
     mode = recalc_mode(recalc_on_load, "full", full, stacklevel=2)
-    engine = load(source, quirks=quirks, limits=limits, recalc_on_load=mode)
+    # A load, then a save: in manual calculation Excel saves recalculated what it showed as cached.
+    engine = load(source, quirks=quirks, limits=limits, recalc_on_load=mode, saving=True)
     engine.recalculate(full=mode == "always")
     engine.save_run()  # an opening, then a save: Excel's saved copy (§7.2)
     target = source if destination is None else destination

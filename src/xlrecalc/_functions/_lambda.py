@@ -168,7 +168,7 @@ def BYCOL(ctx: Any, array: Any, fn: Any) -> Any:
 def _dimension(v: Any, ctx: Any) -> int | ErrorValue:
     """A size: a positive whole number, else ``#VALUE!`` (2.7 included: capture lambda_helpers).
 
-    An empty size is 1. Unverified: capture ``empty_args`` shows only that one computes.
+    An empty size is 1 (captures ``empty_args``, ``lambda_more``: ``MAKEARRAY(,2,...)`` is 1 by 2).
     """
     if v is MISSING:
         return 1

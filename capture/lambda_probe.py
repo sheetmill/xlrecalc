@@ -266,6 +266,11 @@ _MORE_NAMES = {
     "FIVE": "5",
     "BLETTWO": "_xlfn.LAMBDA(_xlpm.n,_xlfn.LET(_xlpm.m,_xlpm.n-1,_xlpm.k,1,"
     "IF(_xlpm.n<=0,0,_xlpm.k+BLETTWO(_xlpm.m))))",
+    # A LET name only in the branch taken at the bottom, and in a branch never taken.
+    "BLETBASE": "_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,_xlfn.LET(_xlpm.z,0,_xlpm.z),"
+    "1+BLETBASE(_xlpm.n-1)))",
+    "BLETNEVER": "_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,0,"
+    "IF(FALSE,_xlfn.LET(_xlpm.z,1,_xlpm.z),1)+BLETNEVER(_xlpm.n-1)))",
     "VIAMAP": "_xlfn.LAMBDA(_xlpm.n,IF(_xlpm.n<=0,0,"
     "SUM(_xlfn.MAP({1},_xlfn.LAMBDA(_xlpm.x,1+VIAMAP(_xlpm.n-1))))))",
 }
@@ -293,6 +298,13 @@ PASTED["lambda_more"] = (
         *(f"=VIAMAP({n})" for n in range(21, 30)),
         # A LET binding in a recursive body: two of them (one stops where two parameters do).
         *(f"=BLETTWO({n})" for n in (3275, 3276, 4094, 4095)),
+        # MAKEARRAY with an empty size, every element shown; LET names in untaken branches.
+        "=MAKEARRAY(,2,LAMBDA(r,c,r*10+c))",
+        "=MAKEARRAY(2,,LAMBDA(r,c,r*10+c))",
+        "=ROWS(MAKEARRAY(,2,LAMBDA(r,c,r*10+c)))",
+        "=COLUMNS(MAKEARRAY(2,,LAMBDA(r,c,r*10+c)))",
+        *(f"=BLETBASE({n})" for n in (4094, 4095, 5460, 5461)),
+        *(f"=BLETNEVER({n})" for n in (4094, 4095, 5460, 5461)),
     ],
     _MORE_NAMES,
 )

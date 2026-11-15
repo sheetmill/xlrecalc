@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   name Excel does not know (`#NAME?`), and is reported with that cause (capture `prefixes`).
 - A formula set through the API that calls a function value, or gives an uncalled `LAMBDA` as its result, is a
   dynamic array, as Excel marks it typed (every typed formula of the `lambda_*` captures).
-- README's evidence counts the 221 formulas of the `lambda_*` captures, 5 of them known deviations of the recursion
+- README's evidence counts the 233 formulas of the `lambda_*` captures, 5 of them known deviations of the recursion
   budget, and the 24 `empty_args` rows of the eight functions. The coverage page counts them per function.
 
 ### Changed
@@ -37,8 +37,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   recalculates every formula, not only its dependents; never in manual calculation. Before, only `fullCalcOnLoad` made
   a load evaluate everything. The new option `recalc_on_load` of `load` and `recalculate` chooses: `"excel"` (the
   default), `"always"` (evaluate every formula) or `"never"` (trust every cached value the file holds; a formula
-  without one, or a volatile one, is evaluated all the same). A `calcPr` without `calcId`, and manual calculation
-  beside another reason, are not captured: the first counts as no `calcPr`, the second trusts the cached values.
+  without one, or a volatile one, is evaluated all the same). A `calcPr` without `calcId` counts as none. In manual
+  calculation Excel shows the cached values on opening and saves them recalculated where a reason holds, so a load
+  trusts them and `recalculate(path)` recalculates.
 - Excel 16.115 for Mac under Microsoft 365 is the reference: every capture made on 16.114 (Office Home & Business 2021)
   was rerun on it. Its differences: `LEN`, `MID`, `REPLACE`, `FIND` and `SEARCH` count a character outside the first
   plane (an emoji) as one, as `LEFT` and `RIGHT` did already (`LEN` of an emoji is 1, was 2), and so does the package;
