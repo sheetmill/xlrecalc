@@ -1299,6 +1299,7 @@ src/xlrecalc/
   _workbook.py     load(), Workbook: values, changes, saving (§11.2)
   _save.py         the engine's values in the writer's file terms (§9.2)
   _recalc.py       recalculate() (§9.2)
+  _evaluate.py     evaluate(), Formula: one formula outside a workbook (§11.2)
   _functions/      registry and one module per category (§8)
   _xlsx/           reader (Book, ReadLimits), surgical writer and zip writer (§9.1, §9.2);
                    standard library only, no imports from the rest of xlrecalc
@@ -1329,9 +1330,29 @@ wb.set_formula("Sheet1!B8", "=B7*2")   # as typed in the formula bar; FormulaErr
 wb.recalculate()                       # everything stale; full=True for everything -> Report
 wb.save("out.xlsx")                    # surgical write (§9.2); in place by default
 wb.report                              # unsupported functions, uncomputed cells, cycles
+
+xlrecalc.evaluate("=SUM(A1:A3)", {"A1:A3": [[1], [2], [3]]})          # 6.0, no workbook
+f = xlrecalc.Formula.parse("=A1>5", origin="A1")  # compiled once; also sheet=, legacy=
+f.evaluate(values, resolver=None, at="A2", names=None)  # relative references move to A2
+f.references, f.names, f.functions, f.unsupported, f.volatile
 ```
 
-One workbook is used from one thread at a time.
+One workbook is used from one thread at a time, and so is one `Formula`.
+
+**One formula outside a workbook** (`_evaluate.py`). The formula is compiled as a cell's
+formula would be, at `origin`, and its template is run at `at` on an engine that holds no
+formula cells: it is not placed in a cell, since a conditional format's formula may read the
+cell it applies to. Text starting with `=` is the formula bar's form (the file-form printer adds
+prefixes, §5.2); text without it is the file form, as a file stores it, used as it is. Cell
+values come from the mapping, then from the resolver, asked once for each box the evaluation
+reads (`OFFSET` and `INDIRECT` included); a cell neither gives is blank, as in Excel. The
+formula is a dynamic array unless `legacy=True`; a dynamic result comes back as rows. A name
+Excel does not know evaluates to `#NAME?`; a function Excel has (`EXCEL_NAMES`, from the
+`formula_bar` capture's function list) that the package does not compute raises
+`UnsupportedError`, as do structured references, which need tables. The template is run by the
+engine that compiled it, since the operators read that engine's position; each call clears its
+cells and names first. Tests: `tests/test_evaluate.py`, where every captured formula evaluated
+alone gives the engine's value in the capture's sheet.
 
 ## 12. Open decisions
 
@@ -1362,7 +1383,10 @@ After 0.2.0, in this order: an order, not a promise or a date.
    `TRIMRANGE`, then `AGGREGATE` and the others one by one; those with large questions of their
    own (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable.
    `docs/coverage.md` lists what exists.
-5. `xlrecalc.evaluate(text)` for one formula outside a workbook, and callbacks (§12).
+5. For one formula outside a workbook: a capture of how Excel evaluates a conditional
+   format's formula (one returning a range or an array; whether it takes structured
+   references), structured references given table definitions, and `Workbook.evaluate`; then
+   callbacks (§12).
 6. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
    vectorized templates (numpy as an optional extra), a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,

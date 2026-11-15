@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from xlrecalc._evaluate import Formula, Reference, UnsupportedError, evaluate
 from xlrecalc._quirks import Quirks
 from xlrecalc._recalc import recalculate
 from xlrecalc._report import CellRef, Report
@@ -15,14 +16,18 @@ __all__ = [
     "CellRef",
     "CellValue",
     "ErrorValue",
+    "Formula",
     "FormulaError",
     "LimitError",
     "PackageError",
     "Quirks",
     "ReadLimits",
+    "Reference",
     "Report",
+    "UnsupportedError",
     "Workbook",
     "__version__",
+    "evaluate",
     "load",
     "recalculate",
 ]

@@ -101,6 +101,31 @@ makes its dependents stale; `save` writes the changed cells and the new values.
 back as floats, as Excel holds them; errors as `xlrecalc.ErrorValue`, which is not a string,
 so the error `#N/A` and the text `"#N/A"` stay apart.
 
+## Evaluating one formula
+
+`evaluate` computes one formula without a workbook, from cell values given as a mapping or
+by a callback; a cell given no value is blank, as in Excel. A formula starting with `=` is
+read as typed in Excel's formula bar; without `=`, in the file form a file stores.
+
+```python
+>>> xlrecalc.evaluate("=SUM(A1:A3)*Rate", {"A1:A3": [[1], [2], [3]]}, names={"Rate": 2})
+12.0
+>>> xlrecalc.evaluate("=SEQUENCE(2,2)")  # a dynamic array: its rows
+((1.0, 2.0), (3.0, 4.0))
+>>> rule = xlrecalc.Formula.parse("=A1>5", origin="A1")  # compiled once
+>>> [rule.evaluate({"A1:A3": [[3], [9], [6]]}, at=f"A{r}") for r in (1, 2, 3)]
+[False, True, True]
+>>> rule.references
+(Reference(sheet=None, first_row=1, first_col=1, last_row=1, last_col=1),)
+>>> xlrecalc.evaluate("=SUM(Data!B:B)", resolver=lambda ref: [[10], [20]])
+30.0
+```
+
+Relative references move from `origin` to the cell `at`, as a conditional format's formula
+does over its range. Errors are values (`#DIV/0!`, and `#NAME?` for a name Excel does not
+know); a function Excel has that xlrecalc does not compute raises `UnsupportedError`
+(`Formula.unsupported` names it before evaluating).
+
 ## What it computes, and what not yet
 
 - **Functions**: 469 of Excel's functions (17 of them partly): math, statistics,

@@ -5,6 +5,14 @@
 
 .. autofunction:: xlrecalc.load
 
+.. autofunction:: xlrecalc.evaluate
+
+.. autoclass:: xlrecalc.Formula
+   :members:
+
+.. autoclass:: xlrecalc.Reference
+   :members:
+
 .. autoclass:: xlrecalc.Workbook
    :members:
 
@@ -13,6 +21,8 @@
 .. autoclass:: xlrecalc.ErrorValue
 
 .. autoexception:: xlrecalc.FormulaError
+
+.. autoexception:: xlrecalc.UnsupportedError
 
 .. autoclass:: xlrecalc.Report
 
