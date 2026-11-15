@@ -48,8 +48,8 @@ formulas Excel itself refuses in a file (`refused`); `unsupported` counts what w
 
 Only the cached values change: every other part of the file is copied as it was, byte for
 byte. By default the file also asks Excel to recalculate when it opens it, so a value
-xlrecalc got wrong never persists in what Excel shows (`full_calc_on_load=False` leaves the
-file's setting alone).
+xlrecalc got wrong never persists in what Excel shows (`full_calc_on_load=False` saves the
+file without that request, as Excel saves it).
 
 Which formulas it computes follows what Excel does on opening the file: every formula of a file
 Excel recalculates on opening (one openpyxl wrote, one an older Excel saved, one asking for it or

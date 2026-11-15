@@ -301,7 +301,8 @@ class Workbook:
 
         Args:
             path: Where to write; by default the file the workbook was loaded from.
-            full_calc_on_load: Ask Excel to recalculate when it opens the file.
+            full_calc_on_load: Ask Excel to recalculate when it opens the file; with
+                ``False`` a request the file held is removed, as Excel saves a file.
 
         Raises:
             ValueError: No ``path`` for a workbook loaded from a file object.

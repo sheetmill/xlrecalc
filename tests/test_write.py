@@ -233,6 +233,32 @@ def test_full_calc_on_load_is_set(tmp_path, workbook, expected):
     assert raw_entries(src) == raw_entries(tmp_path / "kept.xlsx")
 
 
+@pytest.mark.parametrize(
+    ("workbook", "expected"),
+    [
+        ('<calcPr fullCalcOnLoad="1" calcId="191029"/>', '<calcPr calcId="191029"/>'),
+        ("<calcPr calcId='1' fullCalcOnLoad='true'></calcPr>", "<calcPr calcId='1'></calcPr>"),
+    ],
+)
+def test_full_calc_on_load_false_clears_it(tmp_path, workbook, expected):
+    """Without the request the saved file holds none, as Excel saves a file."""
+    data = package(ROWS)
+    with zipfile.ZipFile(io.BytesIO(data)) as z:
+        parts = {n: z.read(n) for n in z.namelist()}
+    text = parts["xl/workbook.xml"].decode()
+    parts["xl/workbook.xml"] = text.replace("</sheets>", "</sheets>" + workbook).encode()
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+        for n, d in parts.items():
+            z.writestr(n, d)
+    src = save(tmp_path, buf.getvalue())
+    out = tmp_path / "out.xlsx"
+    write(src, out, {}, full_calc_on_load=False)
+    assert expected in workbook_xml(out)
+    with Book(out) as book:
+        assert not book.calc.full_calc_on_load
+
+
 def test_prefixed_workbook_gets_a_prefixed_calc_pr(tmp_path):
     data = package(ROWS)
     with zipfile.ZipFile(io.BytesIO(data)) as z:

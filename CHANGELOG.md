@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   budget, and the 24 `empty_args` rows of the eight functions. The coverage page counts them per function.
 
 ### Changed
+- `save(..., full_calc_on_load=False)` and `recalculate(..., full_calc_on_load=False)` save the file without a
+  request to recalculate on opening, removing one the file held, as Excel removes it when it saves; they left it.
 - A load trusts a file's cached values where Excel does on opening it, and evaluates every formula where Excel
   recalculates (capture `open_calc`, Excel 16.115): when the file has no `calcPr`, has `fullCalcOnLoad`, was last
   calculated by an older Excel (`calcId` below 191028, `VERIFIED_CALC_ID`), or holds a volatile function, which
@@ -70,6 +72,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (capture `text_family`).
 - The limit of a text in `&`, `CONCATENATE`, `CONCAT`, `TEXTJOIN` and `REPT` counts UTF-16 units, as Excel does; it
   counted characters (capture `text_family`).
+- A formula cell whose cached value Excel had stored as a rich value (a newer error such as `#SPILL!` or `#CALC!`,
+  cached as `#VALUE!` with `vm`) and that the package gave a new value kept its `vm`, in 0.2.0 and before: Excel,
+  opening the file without recalculating (`full_calc_on_load=False`), showed and saved the old error in place of the
+  new value, and a reader of rich values (this package's included) read it. A new value now drops `vm`; a cell still
+  holding the error its rich value stands for keeps it (`capture/vm_probe.py`, Excel 16.115).
+- A dynamic array that a trusted file caches as blocked (`#SPILL!`) spills when the cell in its way is cleared; in
+  0.2.0 and before it stayed `#SPILL!` until a full recalculation.
 
 ## [0.2.0] - 2026-11-10
 

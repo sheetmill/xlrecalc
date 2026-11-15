@@ -752,17 +752,21 @@ After a full recalculation every formula cell either has a newly computed value 
 row or column repeats across the range, a position past the end of the result is `#N/A`. Their
 cells cannot be changed one by one.
 
-**Dynamic arrays** are evaluated as arrays and spill: a result of `r` by `c` fills the `r` by `c`
-range from the formula's cell, and the file records it as the formula's `ref`. A non-empty cell
-in that range (a constant or a formula) blocks the spill: the formula is `#SPILL!` and fills
-nothing, and clearing the cell lets it spill again. `A1#` (`_xlfn.ANCHORARRAY(A1)`) is the range
-the dynamic array at A1 spills into; `@x` (`_xlfn.SINGLE(x)`) is the implicit intersection of
-`x`. Excel caches `#SPILL!` in a file as `#VALUE!` with a rich value behind it (`vm`, error type
-8); the reader decodes it, and the writer writes `#VALUE!` without the rich value, as other
-readers see such a cell. The other error types decoded are those captured (Excel 16.115):
-9 `#CONNECT!`, 10 `#BLOCKED!`, 11 `#UNKNOWN!`, 12 `#FIELD!`, 13 `#CALC!`, 15 `#BUSY!`, 19
-`#TIMEOUT!`; another type stays the `#VALUE!` written. `ERROR.TYPE` gives Excel's numbers for
-them (9 to 14, 16 and 20), and `#GETTING_DATA` is written as `#N/A`, as Excel writes it back.
+**Dynamic arrays** are evaluated as arrays and spill: a result of `r` by `c` fills the `r` by
+`c` range from the formula's cell, and the file records it as the formula's `ref`. A non-empty
+cell in that range (a constant or a formula) blocks the spill: the formula is `#SPILL!` and
+fills nothing, and clearing the cell lets it spill again (a blocked array a trusting load reads
+from a file is evaluated on loading, to the same `#SPILL!`, to learn the range it wants). `A1#`
+(`_xlfn.ANCHORARRAY(A1)`) is the range the dynamic array at A1 spills into; `@x`
+(`_xlfn.SINGLE(x)`) is the implicit intersection of `x`. Excel caches `#SPILL!` in a file as
+`#VALUE!` with a rich value behind it (`vm`, error type 8); the reader decodes it, and the
+writer writes `#VALUE!` without the rich value, as other readers see such a cell. A cell given a
+new value loses its `vm`, which Excel would show over the new `<v>` (`capture/vm_probe.py`); one
+still holding the error its rich value stands for keeps it. The other error types decoded are
+those captured (Excel 16.115): 9 `#CONNECT!`, 10 `#BLOCKED!`, 11 `#UNKNOWN!`, 12 `#FIELD!`, 13
+`#CALC!`, 15 `#BUSY!`, 19 `#TIMEOUT!`; another type stays the `#VALUE!` written. `ERROR.TYPE`
+gives Excel's numbers for them (9 to 14, 16 and 20), and `#GETTING_DATA` is written as `#N/A`,
+as Excel writes it back.
 
 **Functions that make arrays** (`_functions/_dynamic.py`, `_functions/_reshape.py`; captures
 `dyn_*`) take their array arguments whole in every formula. A count or other one-value argument
@@ -1112,9 +1116,11 @@ engine:
   whitespace (Excel drops it otherwise, §9.1, §9.4);
 - `<calcPr fullCalcOnLoad="1">` is kept where present and set where absent (inserted where the
   schema puts `calcPr`), so Excel recalculates when it opens the file and a value xlrecalc got
-  wrong never persists in what Excel shows; `full_calc_on_load=False` leaves the file's setting
-  as it was, for files Excel should show as written. A file with the setting makes a later
-  load treat every formula as stale (§7.4): a full recalculation, a cost and never an error;
+  wrong never persists in what Excel shows; `full_calc_on_load=False` removes a request the
+  file holds, as Excel does when it saves (the copies Excel 16.115 saves in
+  `capture/open_calc_probe.py` hold none), for files Excel should show as written. A file with
+  the setting makes a later load treat every formula as stale (§7.4): a full recalculation, a
+  cost and never an error;
 - cells on or after a circular reference are written as Excel saves them (§7.2): with iteration
   off, each keeps the value the file holds, and one with no value is the empty text (0 for a
   formula set through the API); with iteration on, each has the value the save's run gives.

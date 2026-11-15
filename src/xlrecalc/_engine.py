@@ -464,6 +464,11 @@ class Engine:
             if self.templates[tid].volatile:
                 self.stale.add(n)
                 self._unclosed.append(n)
+            elif array is not None and array[0] and cached == SPILL:
+                # A blocked dynamic array is evaluated (to the same #SPILL!) to learn the range
+                # it wants, so that clearing a cell there lets it spill; its dependents stay
+                # trusted.
+                self.stale.add(n)
 
     def set_member(self, sheet: int, row: int, col: int, anchor: int, value: Value | None) -> None:
         """A cell an anchor fills, holding the value the file caches for it."""

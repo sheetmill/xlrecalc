@@ -34,12 +34,10 @@ CAPTURED = [  # rich value errorType, the error Excel shows, its ERROR.TYPE
 ]
 
 
-def _book(error_type: str) -> bytes:
-    """A1 a rich-value error of this type, as Excel saves one; B1 =ERROR.TYPE(A1)."""
-    row = (
-        '<row r="1"><c r="A1" t="e" vm="1"><v>#VALUE!</v></c>'
-        '<c r="B1"><f>ERROR.TYPE(A1)</f></c></row>'
-    )
+def _book(error_type: str, b1: str = '<c r="B1"><f>ERROR.TYPE(A1)</f></c>') -> bytes:
+    """A1 a rich-value error of this type, as Excel saves one; B1 =ERROR.TYPE(A1) by default."""
+    row = f'<row r="1"><c r="A1" t="e" vm="1"><v>#VALUE!</v></c>{b1}</row>'
+
     values = f'<rvData xmlns="{RICH}" count="1"><rv s="0"><v>{error_type}</v><v>0</v></rv></rvData>'
     structures = (
         f'<rvStructures xmlns="{RICH}" count="1"><s t="_error"><k n="errorType" t="i"/>'
@@ -81,6 +79,69 @@ def test_an_uncaptured_rich_type_reads_as_the_value_error_written() -> None:
     e = load(io.BytesIO(_book("16")))
     e.recalculate(full=True)
     assert e.get(0, 0, 0) == ErrorValue.VALUE
+
+
+@pytest.mark.parametrize(("error_type", "error", "_number"), CAPTURED, ids=lambda x: str(x))
+def test_a_new_value_drops_the_old_rich_value(  # type: ignore[no-untyped-def]
+    tmp_path, error_type: str, error: str, _number: float
+) -> None:
+    """A cell caching a newer error (``#VALUE!`` and ``vm``) keeps ``vm`` only while it holds it.
+
+    Excel shows a cell's rich value over its ``<v>`` (capture ``vm_probe``: a stale ``vm`` made
+    Excel show and save the old error for 5, TRUE, ``#DIV/0!`` and a plain ``#VALUE!``). Excel
+    refuses a file storing these codes as error values, so a new one is written as ``#VALUE!``.
+    """
+    path = tmp_path / "book.xlsx"
+    b1 = '<c r="B1" t="e" vm="1"><f>IF(C1=1,"a"+1,IF(C1=2,5,A1))</f><v>#VALUE!</v></c>'
+    path.write_bytes(_book(error_type, b1))
+    book = xlrecalc.load(path, recalc_on_load="always")
+    assert book.value("B1") == ErrorValue(error)
+    book.set("D1", 1.0)  # an edit elsewhere: B1 holds the error its vm stands for
+    book.save()
+    with zipfile.ZipFile(path) as z:
+        sheet = z.read("xl/worksheets/sheet1.xml").decode()
+    assert '<c r="B1" t="e" vm="1">' in sheet
+    assert '<c r="A1" t="e" vm="1"><v>#VALUE!</v></c>' in sheet  # a constant is kept as it is
+    for c1, cell in ((1.0, ' t="e">'), (2.0, ">")):  # a plain #VALUE!, then 5
+        book.set("C1", c1)
+        book.save()
+        with zipfile.ZipFile(path) as z:
+            sheet = z.read("xl/worksheets/sheet1.xml").decode()
+        assert f'<c r="B1"{cell}' in sheet
+        assert xlrecalc.load(path, recalc_on_load="never").value("B1") == book.value("B1")
+
+
+def test_a_blocked_spill_read_from_a_file_spills_once_cleared() -> None:
+    """A dynamic array a file caches as blocked spills when a trusting load clears the blocker."""
+    b1 = (
+        '<c r="B1" t="e" cm="1" vm="1"><f t="array" ref="B1">D1:E1</f><v>#VALUE!</v></c>'
+        '<c r="C1" t="inlineStr"><is><t>x</t></is></c><c r="D1"><v>1</v></c><c r="E1"><v>2</v></c>'
+    )
+    book = xlrecalc.load(io.BytesIO(_book("8", b1)), recalc_on_load="never")
+    assert book.value("B1") == ErrorValue("#SPILL!")
+    book.set("C1", None)
+    assert (book.value("B1"), book.value("C1")) == (1.0, 2.0)
+
+
+def test_computed_spill_and_calc_errors_are_written_as_the_value_error(  # type: ignore[no-untyped-def]
+    tmp_path,
+) -> None:
+    """``#SPILL!`` and ``#CALC!``, which formulas compute, reach no cell as their own codes."""
+    path = tmp_path / "book.xlsx"
+    path.write_bytes(
+        package('<row r="1"><c r="A1"><v>1</v></c></row><row r="2"><c r="A2"><v>2</v></c>'
+                '<c r="C2"><v>9</v></c></row>')
+    )  # fmt: skip
+    book = xlrecalc.load(path)
+    book.set_formula("C1", "=A1:A2")  # blocked by C2
+    book.set_formula("D1", "=FILTER(A1:A2,A1:A2>5)")  # nothing left
+    assert (book.value("C1"), book.value("D1")) == (ErrorValue("#SPILL!"), ErrorValue("#CALC!"))
+    book.save()
+    with zipfile.ZipFile(path) as z:
+        sheet = z.read("xl/worksheets/sheet1.xml").decode()
+    assert sheet.count("<v>#VALUE!</v>") == 2
+    for _type, error, _number in CAPTURED:
+        assert f"<v>{error}</v>" not in sheet
 
 
 def test_getting_data_is_written_as_excel_writes_it_back(tmp_path) -> None:  # type: ignore[no-untyped-def]
