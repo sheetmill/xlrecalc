@@ -1,8 +1,8 @@
 -- Set formulas into one open workbook as a person's formula bar would take them, and read each back.
 -- Argument 1: the workbook (Excel's container); argument 2: a UTF-8 file, one formula a line, each in
--- the formula bar's form with its "="; argument 3: "formula" (AppleScript's legacy formula) for now.
--- Formula k goes into A<k> of the first sheet. A formula Excel refuses leaves the cell unchanged
--- without an error, so the reply is the formula read back, empty for a refusal.
+-- the formula bar's form with its "=", set as AppleScript's legacy formula. Formula k goes into A<k>
+-- of the first sheet. A formula Excel refuses leaves the cell unchanged without an error, so the
+-- reply is the formula read back, empty for a refusal.
 -- Alerts off on every path; the workbook is closed without saving. Opens only the workbook given.
 --
 -- Output: one line per formula: k, ASCII 31, the formula read back (or "error " and the number).

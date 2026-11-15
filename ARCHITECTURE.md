@@ -60,7 +60,7 @@ three `SUM` cells over whole columns. Full tables in `bench/results/SUMMARY.md`.
 
 | finding | number | consequence |
 |---|---|---|
-| Existing pure-Python engines are slow on the same workbooks | an order of magnitude or more longer to evaluate and more memory; the measurements and scripts are in `bench/` | 10x to 50x is available |
+| Existing pure-Python engines take longer and use more memory on the same workbooks | an order of magnitude or more longer to evaluate and more memory; the measurements and scripts are in `bench/` | 10x to 50x is available |
 | A plain Python evaluation loop is fast enough | about 400k trivial formulas per second | CPython is not the bottleneck; structure is |
 | Per-cell Python objects are the memory problem | a dict of floats costs 148 B per cell; a per-cell dependency graph about 1.5 KB per formula | no per-cell objects, no per-cell edge lists |
 | Formulas are massively repetitive | 16 distinct templates for 3M formulas | compile once per template, store a template id per cell |
@@ -302,10 +302,10 @@ already the rule there). It refuses a file holding the spill operator (its file 
   line breaks as LF. The prefixes come from the captures, through `tools/prefix_table.py`:
   `formula_bar` (calls of about 500 function names with 0 to 6 arguments, and with range
   arguments where the formula bar wants them) and `prefixes` (`capture/prefix_probe.py`: a
-  call written with and without `_xlfn.`, the form Excel computes being the file form), so 146
-  functions; `LAMBDA`'s comes from `formula_forms`. On the corpus the printer gives Excel's own
-  file form for 229 of the 237 formulas the formula bar takes, the others differing only where
-  `tests/test_fileform.py` lists why; Excel opens a file holding all 245 the API takes
+  call written with and without `_xlfn.`, the form Excel computes being the file form), so 156
+  functions. On the corpus the printer gives Excel's own file form for 233 of the 237 formulas
+  the formula bar takes: 2 differ where `tests/test_fileform.py` lists why, and 2 are longer
+  than the 255 characters AppleScript enters and are not compared; Excel opens a file holding all 245 the API takes
   (`tests/test_excel_live.py`). `display_form`, the inverse, shows a file's formula in the
   formula bar's form (`Workbook.formula`). Formulas that came from the file and were not
   changed are written back byte for byte.
@@ -882,7 +882,7 @@ search, which neither side computes to the last bit. Where either side is exactl
 tolerance applies, and a row past a function's tolerance is a listed deviation, never a
 reason to raise it.
 
-### 8.2 Status
+### 8.2 Status and behavior
 
 `docs/coverage.md` lists every function Excel has and its status, with the captured evidence for
 each, generated from the registry and the captures (`tools/coverage.py`). Each registered function

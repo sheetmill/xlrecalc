@@ -58,6 +58,7 @@ def test_no_personal_data(path):
     with zipfile.ZipFile(path) as archive:
         names = archive.namelist()
         assert "docProps/custom.xml" not in names, "custom document properties"
+        assert "docMetadata/LabelInfo.xml" not in names, "a sensitivity label"
         for name in names:
             assert not COMMENTS.search(name), f"{name}: comments name their authors"
             _check_part(name, archive.read(name))

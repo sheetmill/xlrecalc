@@ -3,11 +3,10 @@
     uv run python tools/prefix_table.py        # rewrites src/xlrecalc/_formula/_prefixes.py
 
 Sources, all under ``tests/captures/``: ``formula_bar`` and ``formula_bar_ranges`` (the prefix
-Excel's file form gives a call typed in the formula bar), ``prefixes`` (the form Excel computes
-when the formula bar could not settle it: with ``_xlfn.`` a value, without it ``#NAME?``), and
-``formula_forms`` (a prefixed call Excel keeps as written in a file: ``LAMBDA``). A function
-that needs none is left out. ``tests/test_fileform.py`` checks the committed module against
-this derivation.
+Excel's file form gives a call typed in the formula bar) and ``prefixes`` (the form Excel
+computes when the formula bar could not settle it: with ``_xlfn.`` a value, without it
+``#NAME?``). A function that needs none is left out. ``tests/test_fileform.py`` checks the
+committed module against this derivation.
 """
 
 from __future__ import annotations
@@ -20,9 +19,6 @@ ROOT = Path(__file__).resolve().parents[1]
 CAPTURES = ROOT / "tests" / "captures"
 MODULE = ROOT / "src" / "xlrecalc" / "_formula" / "_prefixes.py"
 _SAVED = re.compile(r"(_xlfn\._xlws\.|_xlfn\.)?([A-Z][A-Z0-9.]*)\(")
-# Prefixed calls of formula_forms that Excel kept as written, and whose call the formula bar's
-# legacy formula does not know.
-_FROM_FILE_FORMS = ("LAMBDA",)
 
 
 def _rows(name: str) -> list[list[str]]:
@@ -48,12 +44,6 @@ def prefix_table() -> dict[str, str]:
         computed.setdefault(name, {})[ast.literal_eval(prefix)] = "" if kind == "e" else value
     for name, forms in computed.items():
         if forms.get("_xlfn.") and not forms.get(""):
-            table[name] = "_xlfn."
-    kept = {
-        ast.literal_eval(written) for written, excel in _rows("formula_forms") if written == excel
-    }
-    for name in _FROM_FILE_FORMS:
-        if any(f.startswith(f"_xlfn.{name}(") for f in kept):
             table[name] = "_xlfn."
     return dict(sorted(table.items()))
 

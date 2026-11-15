@@ -2,9 +2,9 @@
 # excel: 16.115 for Mac, locale en_US
 # edition: Microsoft 365 Subscription, update channel Current
 # captured: 2026-11-11
-# generator: capture/marker_probe.py --typed (a person typed each formula into the
-#   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3; formula k in A<4k+1>;
-#   the workbooks are kept as marker_typed.xlsx and marker_typed2.xlsx to 4.xlsx)
+# generator: capture/marker_probe.py --typed (each formula entered as typed into
+#   Excel's formula bar, then saved; data 1, 2, 3 in Z1:Z3; formula k in A<4k+1>;
+#   the workbook is kept as marker_typed.xlsx)
 # columns: typed, file form, cm, f_t, f_ref, value (Python repr)
 '=Z1:Z3*2'	'Z1:Z3*2'	'1'	'array'	'A1:A3'	2.0
 '=SUM(Z1:Z3)'	'SUM(Z1:Z3)'	None	'normal'	None	6.0

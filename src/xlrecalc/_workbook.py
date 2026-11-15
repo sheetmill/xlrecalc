@@ -531,7 +531,7 @@ def load(
         recalc_on_load: ``"excel"``, Excel's rule above; ``"always"``, evaluate every formula;
             ``"never"``, trust every cached value the file holds. A formula with no cached
             value, and a volatile one (``RAND``, ``NOW``...), is evaluated in every mode.
-        trust_cached: Deprecated, removed in 1.0: ``False`` is ``recalc_on_load="always"``,
+        trust_cached: Deprecated, to be removed in 1.0: ``False`` is ``recalc_on_load="always"``,
             ``True`` the default.
 
     Raises:

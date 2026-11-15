@@ -54,7 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   units in the last place that 3.11 leaves past them.
 
 ### Deprecated
-- `load(..., trust_cached=...)` and `recalculate(..., full=...)`, removed in 1.0: they warn (`DeprecationWarning`) and
+- `load(..., trust_cached=...)` and `recalculate(..., full=...)`, to be removed in 1.0: they warn (`DeprecationWarning`) and
   map to `recalc_on_load` (`trust_cached=False` and `full=True` are `"always"`; `trust_cached=True` and `full=False`
   the default, `"excel"`). `Workbook.recalculate(full=True)` stays.
 

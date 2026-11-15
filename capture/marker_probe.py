@@ -11,13 +11,11 @@ the cell carries the dynamic-array marker (``cm``) and the formula's ``t`` and `
 Writes ``tests/captures/marker_<way>.tsv``. Both ways enter legacy formulas (no marker, implicit
 intersection), so AppleScript cannot enter a formula as Excel 365's formula bar does.
 
-``--typed PATH ...`` reads instead the workbooks in which a person typed ``TYPED[k]`` into cell
-``A<4k+1>`` in Excel's formula bar and saved them, and writes ``tests/captures/marker_typed.tsv``.
-Each workbook holds one batch, built by ``typed_workbook`` from the batch's first formula on:
-``xlrecalc_marker_typed.xlsx`` the formulas before ``SECOND_START``,
-``xlrecalc_marker_typed2.xlsx`` those from ``SECOND_START`` to ``THIRD_START``,
-``xlrecalc_marker_typed3.xlsx`` from ``THIRD_START`` to ``FOURTH_START``, and
-``xlrecalc_marker_typed4.xlsx`` from ``FOURTH_START`` on.
+``--typed PATH`` reads instead the workbook in which ``TYPED[k]`` was entered into cell
+``A<4k+1>`` as typed in Excel's formula bar (by a person, or pasted as text by
+``capture/paste_probe.py``) and saved, keeps it as ``tests/captures/marker_typed.xlsx`` and writes
+``tests/captures/marker_typed.tsv``. ``typed_workbook`` builds the workbook to type into; its
+``start`` lets a later batch (``SECOND_START`` and on) go into a workbook of its own.
 """
 
 from __future__ import annotations
@@ -182,12 +180,12 @@ def typed_workbook(path: Path, start: int = 0) -> None:
     wb.save(path)
 
 
-KEPT = tuple(CAPTURES / f"marker_typed{n}.xlsx" for n in ("", "2", "3", "4"))
-"""The typed workbooks as committed, without who saved them or where: the capture's evidence."""
+KEPT = (CAPTURES / "marker_typed.xlsx",)
+"""The typed workbook as committed, without who saved it or where: the capture's evidence."""
 
 
 def read_typed(*paths: Path) -> None:
-    """Keep the typed workbooks (``KEPT``) and write ``marker_typed.tsv`` from the kept copies."""
+    """Keep the typed workbook (``KEPT``) and write ``marker_typed.tsv`` from the kept copies."""
     from capture.pipeline import excel_version
 
     for path, kept in zip(paths, KEPT, strict=True):
@@ -197,9 +195,9 @@ def read_typed(*paths: Path) -> None:
         f"# excel: {excel_version()} for Mac, locale en_US",
         edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
-        "# generator: capture/marker_probe.py --typed (a person typed each formula into the",
-        "#   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3; formula k in A<4k+1>;",
-        "#   the workbooks are kept as marker_typed.xlsx and marker_typed2.xlsx to 4.xlsx)",
+        "# generator: capture/marker_probe.py --typed (each formula entered as typed into",
+        "#   Excel's formula bar, then saved; data 1, 2, 3 in Z1:Z3; formula k in A<4k+1>;",
+        "#   the workbook is kept as marker_typed.xlsx)",
         "# columns: typed, file form, cm, f_t, f_ref, value (Python repr)",
     ]
     body = typed_rows(*KEPT)

@@ -37,7 +37,7 @@ function may have another core for an array context (``in_array``): ``ROW`` of a
 range is its first row in a legacy formula, and all of them in an array context. Names are the
 file form, upper case, with ``_xlfn.`` for functions newer than Excel 2007.
 
-Results are compared with Excel's bit for bit. A function whose results stay off after a fixed
+Results are compared with Excel's bit for bit. A function whose results still differ after a fixed
 time spent fitting Excel's last bits declares a small tolerance in units in the last place
 (``ulps``) with its reason (``ulps_reason``); the capture tests count rows within it separately
 from exact matches, and ``QUIRKS.md`` lists it as a known deviation. An iterative function

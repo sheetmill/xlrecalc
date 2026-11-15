@@ -13,11 +13,9 @@ file form, ``t`` and ``ref``, ``cm`` (the dynamic-array marker) and the error a 
 and each defined name as Excel stored it. A formula Excel refuses is typed as text, after an
 apostrophe, and recorded as such.
 
-The ``LET`` formulas (``LET_COUNT``) are written to ``tests/captures/let_typed.tsv``. Office Home &
-Business 2021 for Mac lacks ``LAMBDA`` and its helpers, so their rows, the defined names and the
-workbook are kept in ``capture/build/`` (not committed) as a record of what that edition does,
-until an edition that has them is captured; its formula bar refuses ``r`` and ``c`` as parameter
-names (R1C1 shorthand), which a recapture renames.
+The ``LET`` formulas (``LET_COUNT``) are written to ``tests/captures/let_typed.tsv``. The rows of
+``LAMBDA`` and its helpers, the defined names and the workbook are kept in ``capture/build/`` (not
+committed): the ``lambda_*`` captures hold their typed forms and values.
 """
 
 from __future__ import annotations

@@ -94,7 +94,7 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   computes `CORREL` over ten columns (captures `array_size`, `array_functions`). `LINEST`,
   `XIRR` and `XNPV` were not captured at that size. The database functions walk their non-blank
   cells, and are computed at any size.
-- Recursion through `LAMBDA` (captures `lambda_depth`, 99 rows, and `lambda_more`): Excel stops it
+- Recursion through `LAMBDA` (captures `lambda_depth`, 99 formulas, and `lambda_more`): Excel stops it
   with `#NUM!` at a budget of 65,536, each call in progress costing 8 plus 4 a parameter (optional
   ones too, given or not) and 4 a `LET` name its body binds, which the package follows exactly
   for plain bodies. Excel counts what a body evaluates at its deepest call too: a body that calls
@@ -248,8 +248,8 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   tolerance, and 79 are listed: from some guesses Excel's `IRR` and `RATE` reach another root,
   a rate where the package gives `#NUM!`, or the reverse; `XIRR` stops about 1E-8 from the
   root (sometimes after what looks like a bracketing search); and three `IRR` results at a
-  rate of 0 differ by less than 1E-14, where a relative tolerance cannot apply. Compared with
-  the capture, each in at most five variants: Newton on the rate, on 1 + rate and on 1 / (1 + rate), analytic and
-  numerical derivatives, stops on the step or on the NPV, 20 to 100 iterations, damping. Excel's
-  iteration is on the Roadmap (ARCHITECTURE.md §13). Each row is listed in
-  `tests/test_captures.py`.
+  rate of 0 differ by less than 1E-14, where a relative tolerance cannot apply. Iteration
+  methods compared with the capture, each in at most five variants of its parameters: Newton on
+  the rate, on 1 + rate and on 1 / (1 + rate), analytic and numerical derivatives, stops on the
+  step or on the NPV, 20 to 100 iterations, damping. Excel's iteration is on the Roadmap
+  (ARCHITECTURE.md §13). Each row is listed in `tests/test_captures.py`.

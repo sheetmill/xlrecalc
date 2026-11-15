@@ -490,7 +490,7 @@ def recalc_mode(
     """``recalc_on_load``, or what a deprecated alias given instead maps to, with its warning.
 
     ``trust_cached=False`` and ``full=True`` map to ``"always"``; ``trust_cached=True`` and
-    ``full=False`` to ``"excel"``, the default. Both aliases are removed at 1.0.
+    ``full=False`` to ``"excel"``, the default. Both aliases will be removed in 1.0.
     """
     if value is None:
         return recalc_on_load

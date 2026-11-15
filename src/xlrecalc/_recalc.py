@@ -51,7 +51,7 @@ def recalculate(
             the package's parts and sizes, the cells an array may hold, and the evaluations of
             one run of iterative calculation.
         quirks: Which Excel quirks to reproduce; all by default.
-        full: Deprecated, removed in 1.0: ``True`` is ``recalc_on_load="always"``.
+        full: Deprecated, to be removed in 1.0: ``True`` is ``recalc_on_load="always"``.
 
     Returns:
         What could not be done: unsupported functions, uncomputed cells (whose cached values
