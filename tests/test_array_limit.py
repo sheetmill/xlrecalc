@@ -176,7 +176,7 @@ def test_the_writer_keeps_the_cached_value():
     with tempfile.TemporaryDirectory() as folder:
         path = Path(folder) / "book.xlsx"
         path.write_bytes(two_sheets("SUMPRODUCT(D!A:XFD*1)", cached="3"))
-        report = xlrecalc.recalculate(path, full=True)
+        report = xlrecalc.recalculate(path, recalc_on_load="always")
         assert any(str(c) == "S!A1" for c in report.uncomputed)
         with Book(path) as book:  # the file's own cached value, untouched
             (cell,) = list(book.cells("S"))

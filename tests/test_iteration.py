@@ -225,14 +225,14 @@ def test_a_trusting_recalculation_of_it_changes_nothing(excel_saved: Path) -> No
 def test_a_full_recalculation_of_it_is_excels_opening_and_saving(excel_saved: Path) -> None:
     import xlrecalc
 
-    xlrecalc.recalculate(excel_saved, full=True)
+    xlrecalc.recalculate(excel_saved, recalc_on_load="always")
     assert _loop_values(excel_saved) == _cached_steps()["open_save"]
 
 
 def test_an_untrusting_load_then_save_is_excels_opening_and_saving(excel_saved: Path) -> None:
     import xlrecalc
 
-    wb = xlrecalc.load(excel_saved, trust_cached=False)
+    wb = xlrecalc.load(excel_saved, recalc_on_load="always")
     wb.save(excel_saved)
     assert _loop_values(excel_saved) == _cached_steps()["open_save"]
 

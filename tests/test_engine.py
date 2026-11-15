@@ -71,7 +71,7 @@ ROWS = (
 
 
 def test_cached_values_are_trusted():
-    e = load(io.BytesIO(package(ROWS)))
+    e = load(io.BytesIO(package(ROWS, workbook_extra='<calcPr calcId="191029"/>')))
     e.recalculate()
     assert value(e, "B1") == 999.0  # trusted: the file's cached value
     assert value(e, "C1") == 777.0
@@ -80,7 +80,7 @@ def test_cached_values_are_trusted():
 
 
 def test_full_calculation_on_load_or_on_request():
-    e = load(io.BytesIO(package(ROWS)), trust_cached=False)
+    e = load(io.BytesIO(package(ROWS)), recalc_on_load="always")
     e.recalculate()
     assert (value(e, "B1"), value(e, "C1")) == (6.0, 7.0)
     flagged = package(
@@ -322,7 +322,7 @@ def test_a_lone_surrogate_is_written_as_excel_stores_it(tmp_path):
     book.active["A1"] = "=MIDB(B1,2,2)"
     source, out = tmp_path / "in.xlsx", tmp_path / "out.xlsx"
     book.save(source)
-    recalculate(source, out, full=True)
+    recalculate(source, out, recalc_on_load="always")
     with zipfile.ZipFile(out) as written:
         assert "<v>_xDE00_a</v>" in written.read("xl/worksheets/sheet1.xml").decode("utf-8")
 

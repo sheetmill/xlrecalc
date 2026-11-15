@@ -21,6 +21,7 @@ from xlrecalc._values import ErrorValue
 from xlrecalc._xlsx import Book
 
 FLAG = '<calcPr fullCalcOnLoad="1"/>'
+SAVED = '<calcPr calcId="191029"/>'  # as Excel 16.115 saves it: trusted on opening
 ABSENT = "NOSUCHFN(F1)"
 
 
@@ -85,7 +86,7 @@ def test_the_formula_and_what_is_computed_from_it_are_named(tmp_path: Path) -> N
 
 @pytest.mark.parametrize("full", [True, False])
 def test_value_gives_the_kept_value(tmp_path: Path, full: bool) -> None:
-    wb = xlrecalc.load(book(tmp_path, chain()), trust_cached=not full)
+    wb = xlrecalc.load(book(tmp_path, chain()), recalc_on_load="always" if full else "excel")
     assert values(wb, "A1", "B1", "C1", "D1", "E1") == [10.0, 20.0, 21.0, 23.0, 4.0]
     assert wb.report.from_kept == refs("A1", "B1", "C1", "D1")
 
@@ -120,7 +121,7 @@ def test_a_change_upstream_moves_them_to_uncomputed(tmp_path: Path) -> None:
 
 
 def test_a_change_upstream_on_a_trusting_load(tmp_path: Path) -> None:
-    wb = xlrecalc.load(book(tmp_path, chain(), calc=""))
+    wb = xlrecalc.load(book(tmp_path, chain(), calc=SAVED))
     wb.set("F1", 2.0)
     assert values(wb, "A1", "B1", "C1") == [10.0, 999.0, 999.0]
     assert wb.report.uncomputed == refs("A1", "B1", "C1", "D1")
@@ -221,7 +222,7 @@ def test_a_long_chain_after_a_change_upstream(tmp_path: Path) -> None:
 
 
 def test_a_trusting_run_that_evaluates_nothing_claims_nothing(tmp_path: Path) -> None:
-    source = book(tmp_path, chain(), calc="")
+    source = book(tmp_path, chain(), calc=SAVED)
     out = tmp_path / "out.xlsx"
     report = xlrecalc.recalculate(source, out)
     assert not report.from_kept
@@ -230,11 +231,11 @@ def test_a_trusting_run_that_evaluates_nothing_claims_nothing(tmp_path: Path) ->
 
 
 def test_a_trusting_load_names_what_an_edit_makes_it_evaluate(tmp_path: Path) -> None:
-    wb = xlrecalc.load(book(tmp_path, chain(), calc=""))
+    wb = xlrecalc.load(book(tmp_path, chain(), calc=SAVED))
     wb.set("G1", 7.0)
     assert values(wb, "D1", "E1") == [1006.0, 8.0]  # B1's cached 999 is trusted, and rests on A1
     assert wb.report.from_kept == refs("A1", "D1")
-    wb2 = xlrecalc.load(book(tmp_path, chain(), calc=""))
+    wb2 = xlrecalc.load(book(tmp_path, chain(), calc=SAVED))
     wb2.set_formula("B1", "=A1*2+G1")
     assert wb2.value("B1") == 23.0
     wb2.recalculate()
@@ -261,15 +262,15 @@ def test_an_external_or_3d_reference_keeps_its_value(tmp_path: Path, formula: st
     """It keeps the file's value in the store as an absent function does, so a lazy read, a full
     recalculation and the written file agree, and what is computed from it is named."""
     source = book(tmp_path, chain(formula))
-    lazy = xlrecalc.load(source, trust_cached=False)
+    lazy = xlrecalc.load(source, recalc_on_load="always")
     assert [lazy.value(a) for a in ("C1", "A1", "B1", "D1")] == [21.0, 10.0, 20.0, 23.0]
-    full = xlrecalc.load(source, trust_cached=False)
+    full = xlrecalc.load(source, recalc_on_load="always")
     full.recalculate()
     assert values(full, "A1", "B1", "C1", "D1", "E1") == [10.0, 20.0, 21.0, 23.0, 4.0]
     assert full.report.from_kept == refs("A1", "B1", "C1", "D1")
     assert full.report.unsupported["external or 3-D reference"] == 1
     out = tmp_path / "out.xlsx"
-    report = xlrecalc.recalculate(source, out, full=True)
+    report = xlrecalc.recalculate(source, out, recalc_on_load="always")
     assert report.from_kept == refs("A1", "B1", "C1", "D1")
     assert not report.uncomputed
     written = in_file(out)

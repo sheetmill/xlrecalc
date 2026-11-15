@@ -575,8 +575,9 @@ evaluation pass ends, as Excel does:
   always", `<f ca="1">`), once for every edit, whether or not the loop reads the edited cell, once for
   every `calculate`, and once on saving (captures `iterate_calc`, `iterate_cached`). The engine runs
   where Excel does, with one departure: a trusting load runs nothing, so the file's values are the
-  ones Excel saved, though Excel would run once more on opening it. An evaluating load (`full=True`,
-  `trust_cached=False`, `fullCalcOnLoad`, or a loop without cached values) runs once, as an opening;
+  ones Excel saved, though Excel would run once more on opening it. An evaluating load (a file Excel
+  recalculates on opening, `recalc_on_load="always"`, or a loop without cached values) runs once,
+  as an opening;
   each edit runs once (the file's `ca="1"` formulas become stale, so a loop a trusting load never
   met runs too); each recalculation runs once; and `Workbook.save` runs once more once a loop has
   run, so saving changes the values in memory as well as the file's, as Excel's saving changes
@@ -627,10 +628,12 @@ whole-column reference costs what the column holds, not a million positions.
 A workbook loaded from a file starts with the cached values the file holds. The rule:
 
 1. A formula cell's cached value is **trusted** when the cell has one (a `<v>` with content, or
-   `t="str"` with an empty `<v/>`, which is the empty string) and the workbook does not ask for a
-   full calculation on load (`<calcPr fullCalcOnLoad="1">`).
-2. Otherwise the cell is **stale**: no cached value (what openpyxl writes, `<v />`), or the flag
-   is set (openpyxl sets it on every file it saves), or the template is volatile.
+   `t="str"` with an empty `<v/>`, which is the empty string) and the workbook is not one Excel
+   recalculates on opening (below: `fullCalcOnLoad`, no `calcPr`, an older `calcId`, a volatile
+   function; `recalc_on_load`).
+2. Otherwise the cell is **stale**: no cached value (what openpyxl writes, `<v />`), or the
+   workbook is one Excel recalculates on opening (openpyxl sets `fullCalcOnLoad` on every file it
+   saves), or the template is volatile.
 3. A cell that depends on a stale cell is stale.
 4. A change made through the API makes the changed cell's dependents stale.
 
@@ -638,14 +641,25 @@ A workbook loaded from a file starts with the cached values the file holds. The 
 their master's template without parsing, array formulas become anchors whose ranges' cells are
 their members (§7.7), data tables keep their cached values (reported), and a formula Excel
 refuses in a file becomes a constant (§9.5). Reading a
-value evaluates only what is stale among its precedents. `recalculate(..., full=True)`
-and `load(..., trust_cached=False)` treat every formula as stale. The rule matches Excel's own
-behavior in the probe of §9.4: Excel shows a file's cached values without recalculating unless
-`fullCalcOnLoad` is set or the file was last calculated by an older calculation engine
-(`calcId`). xlrecalc ignores `calcId`: values from an older Excel are still Excel's values. A
-file xlrecalc wrote with `fullCalcOnLoad` set (the default, §9.2) is therefore loaded with every
-formula stale: reading it again costs a full recalculation, never a wrong value;
-`full_calc_on_load=False` writes a file whose values a later load trusts.
+value evaluates only what is stale among its precedents.
+
+Which cached values a load trusts is Excel's rule on opening a file (capture `open_calc`,
+`capture/open_calc_probe.py`: each variant a copy Excel saved, its cached values planted wrong;
+what Excel showed on opening was what it saved after): Excel recalculates every formula when the
+file has no `calcPr`, has `fullCalcOnLoad`, has a `calcId` below 191028 (Excel 16.115's own is
+191029; 191028 and anything higher, 999999 included, is trusted), or holds a volatile function,
+which recalculates every formula, not only its dependents; it trusts the cached values otherwise,
+and in manual calculation. `load` and `recalculate(path)` follow it by default
+(`recalc_on_load="excel"`, the rule in `recalculates_on_opening`, the threshold in
+`VERIFIED_CALC_ID`, which the capture sets and is rerun after every Excel update);
+`recalc_on_load="always"` treats every formula as stale and `"never"` trusts every cached value
+the file holds. A formula with no cached value, and a volatile one, is evaluated in every mode.
+Not captured, so chosen: a `calcPr` without `calcId` counts as none, and manual calculation wins
+over the other reasons. Following Excel rather than always recalculating loses nothing: a file
+openpyxl writes asks for a full calculation anyway, and where the rules trust a value it is the
+value Excel computed. A file xlrecalc wrote with `fullCalcOnLoad` set (the default, §9.2) is
+therefore loaded with every formula stale: reading it again costs a full recalculation, never a
+wrong value; `full_calc_on_load=False` writes a file whose values a later load trusts.
 
 ### 7.5 Cell store
 
@@ -1290,8 +1304,8 @@ bench/             benchmarks, a separate uv project with the other engines it m
 import xlrecalc
 
 report = xlrecalc.recalculate("model.xlsx")              # in place, atomically (§9.2)
-report = xlrecalc.recalculate("model.xlsx", "out.xlsx", full=True)
-# recalculate(source, destination=None, *, full=False, full_calc_on_load=True,
+report = xlrecalc.recalculate("model.xlsx", "out.xlsx", recalc_on_load="always")
+# recalculate(source, destination=None, *, recalc_on_load="excel", full_calc_on_load=True,
 #             limits=None, quirks=None) -> Report
 report.uncomputed                      # {CellRef("Sheet 1", 7, 2), ...}; str(): 'Sheet 1'!B7
 

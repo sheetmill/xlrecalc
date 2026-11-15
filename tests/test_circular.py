@@ -191,8 +191,8 @@ def test_the_engine_keeps_them_as_excel_does(tmp_path, variant, full):
     cells = capture_cells(variant)
     source = book(tmp_path, cells, '<calcPr fullCalcOnLoad="1"/>')
     out = tmp_path / "out.xlsx"
-    report = xlrecalc.recalculate(source, out, full=full)
-    wb = xlrecalc.load(source, trust_cached=not full)
+    report = xlrecalc.recalculate(source, out, recalc_on_load="always" if full else "excel")
+    wb = xlrecalc.load(source, recalc_on_load="always" if full else "excel")
     wb.recalculate()
     with zipfile.ZipFile(out) as z:
         sheet = z.read("xl/worksheets/sheet1.xml").decode()
@@ -219,7 +219,7 @@ def _edited_engine(tmp_path) -> xlrecalc.Workbook:
             ("dependent", "A1*2", "903", None),
             ("control", "B1*2", "904", None),
         ]
-    return xlrecalc.load(book(tmp_path, cells, "<calcPr/>"))
+    return xlrecalc.load(book(tmp_path, cells, '<calcPr calcId="191029"/>'))  # as Excel saves
 
 
 @pytest.mark.parametrize(

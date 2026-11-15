@@ -17,7 +17,8 @@ cell showing its sentinel was taken from the file; one showing its right value w
 Excel's calculation mode belongs to the application and the first workbook opened sets it, so
 the manual variant comes last and ``calc_automatic.applescript`` sets the mode back after it.
 Workbooks live in Excel's container and are removed after; the record is written to
-``capture/build/open_calc_probe.out``.
+``capture/build/open_calc_probe.out`` and the capture to ``tests/captures/open_calc.tsv``. Rerun
+it after every Excel update: ``VERIFIED_CALC_ID`` (``_load.py``) follows the threshold it finds.
 """
 
 from __future__ import annotations
@@ -30,6 +31,7 @@ from pathlib import Path
 
 import openpyxl
 
+from capture.edition import edition_line
 from capture.excel_watch import preflight
 from capture.writeback_probe import (
     CONTAINER,
@@ -43,6 +45,10 @@ from capture.writeback_probe import (
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "build" / "open_calc_probe.out"
+CAPTURE = HERE.parent / "tests" / "captures" / "open_calc.tsv"
+# calcIds around the threshold, and those of earlier Excel versions (2010 to 2019).
+CALC_IDS = (145621, 152511, 162913, 171027, 181029, 190000, 191000, 191001, 191010, 191020)
+CALC_IDS += (191025, 191027, 191028)
 US = "\x1f"
 ROWS = 7
 
@@ -123,8 +129,8 @@ def main() -> None:
     variants = {
         "patched": (base, patch_sentinels, lambda t: t),
         "no_calcpr": (base, patch_sentinels, lambda t: re.sub(r"<calcPr\b[^>]*/>", "", t)),
-        "calcid_older_by_1": (base, patch_sentinels, with_id(calc_id - 1)),
         "calcid_124519": (base, patch_sentinels, with_id(124519)),
+        **{f"calcid_{n}": (base, patch_sentinels, with_id(n)) for n in CALC_IDS},
         "calcid_newer_by_1": (base, patch_sentinels, with_id(calc_id + 1)),
         "calcid_999999": (base, patch_sentinels, with_id(999999)),
         "fullcalconload": (
@@ -144,6 +150,7 @@ def main() -> None:
     if sys.argv[1:2] == ["--calc-ids"]:  # only these calcId variants, to place a threshold
         ids = [int(n) for n in sys.argv[2].split(",")]
         variants = {f"calcid_{n}": (base, patch_sentinels, with_id(n)) for n in ids}
+    rows: list[str] = []
     try:
         for name, (origin, sheet, edit) in variants.items():
             path = CONTAINER / f"xlrecalc_oc_{name}.xlsx"
@@ -158,9 +165,26 @@ def main() -> None:
             copy = CONTAINER / f"xlrecalc_oc_{name}_saved.xlsx"
             osascript("save_copy.applescript", str(path), str(copy))
             log(f"  saved copy: calcPr {calc_attributes(copy)}; {saved_values(copy)}")
+            texts = [fields[2 + 3 * i] for i in range(1, ROWS)]  # displayed text of A2:A7
+            mode = fields[-1].removeprefix("calc=calculation ")
+            shown_texts = " ".join(map(repr, texts))
+            fields_out = (name, calc_attributes(path), saved_values(path), shown_texts, mode)
+            rows.append("\t".join((*fields_out, saved_values(copy))))
     finally:
         log("\nrestore: " + osascript("calc_automatic.applescript", str(base)))
         OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        if rows and sys.argv[1:2] != ["--calc-ids"]:
+            header = [
+                "# suite: open_calc (when Excel recalculates a workbook on opening)",
+                f"# excel: {version} for Mac, locale en_US",
+                edition_line(),
+                "# generator: capture/open_calc_probe.py (cached values planted wrong in a copy",
+                "#   Excel saved: 999, SENT, FALSE, #N/A, 777 in A2:A6, 555 in A7 where volatile;",
+                "#   right values 6, x2, TRUE, #DIV/0!, 8, 2)",
+                "# columns: variant, calcPr as written, the file's cells, displayed text of A2:A7",
+                "#   on opening, calculation mode after opening, the cells of the copy Excel saved",
+            ]
+            CAPTURE.write_text("\n".join([*header, *rows]) + "\n", encoding="utf-8")
         for p in CONTAINER.glob("xlrecalc_oc_*.xlsx"):
             p.unlink()
 

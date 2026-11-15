@@ -24,7 +24,7 @@ from xlrecalc._values import ErrorValue
 from xlrecalc._xlsx import Book
 
 FLAG = '<calcPr iterate="1" fullCalcOnLoad="1"/>'
-TRUST = '<calcPr iterate="1"/>'
+TRUST = '<calcPr calcId="191029" iterate="1"/>'  # as Excel 16.115 saves it: trusted on opening
 OFF = '<calcPr fullCalcOnLoad="1"/>'
 LOOP = {"A1": 5.0, "B1": 7.0, "C1": 999.0}
 LABEL = "iterative calculation"
@@ -99,7 +99,7 @@ def test_a_file_asking_for_a_full_calculation(tmp_path: Path) -> None:
 def test_full_recalculation_is_an_opening_and_a_save(tmp_path: Path) -> None:
     source = book(tmp_path, TRUST)
     out = tmp_path / "out.xlsx"
-    assert_computed(xlrecalc.recalculate(source, out, full=True))
+    assert_computed(xlrecalc.recalculate(source, out, recalc_on_load="always"))
     assert written(out) == {**SAVED, "D1": 1.0, "F1": 0.0}
 
 
@@ -127,7 +127,7 @@ def test_each_run_of_a_written_file_starts_from_what_it_holds(tmp_path: Path) ->
     ids=["no_trust", "flag", "both"],
 )
 def test_value_gives_one_run(tmp_path: Path, calc: str, trust: bool) -> None:
-    wb = xlrecalc.load(book(tmp_path, calc), trust_cached=trust)
+    wb = xlrecalc.load(book(tmp_path, calc), recalc_on_load="excel" if trust else "always")
     wb.recalculate()
     assert {a: wb.value(a) for a in ONE_RUN} == ONE_RUN
     assert wb.value("D1") == 1.0

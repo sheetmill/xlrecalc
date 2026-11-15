@@ -89,7 +89,7 @@ def test_getting_data_is_written_as_excel_writes_it_back(tmp_path) -> None:  # t
     path.write_bytes(
         package('<row r="1"><c r="A1" t="e"><v>#GETTING_DATA</v></c><c r="B1"><f>A1</f></c></row>')
     )
-    xlrecalc.recalculate(path, full=True)
+    xlrecalc.recalculate(path, recalc_on_load="always")
     with zipfile.ZipFile(path) as z:
         sheet = z.read("xl/worksheets/sheet1.xml").decode()
     assert '<c r="B1" t="e"><f>A1</f><v>#N/A</v></c>' in sheet

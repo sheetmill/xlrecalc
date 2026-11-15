@@ -1,8 +1,9 @@
 """Build an engine from an xlsx file read by ``_xlsx`` (ARCHITECTURE.md §7.4, §9.1, §9.5).
 
 Cached values are kept and trusted per §7.4: a formula is stale when the file holds no cached
-value for it, when the workbook asks for a full calculation on load, or when its template is
-volatile; cells depending on a stale cell become stale when the engine recalculates. A formula
+value for it, when the workbook is one Excel recalculates on opening (``recalc_on_load``), or
+when its template is volatile; cells depending on a stale cell become stale when the engine
+recalculates. A formula
 Excel refuses in a file is dropped and its cell keeps its cached value, as Excel's repair does
 (§9.5), and the report lists it.
 """
@@ -12,8 +13,9 @@ from __future__ import annotations
 import datetime as dt
 import decimal
 import os
+import warnings
 from collections.abc import Iterable
-from typing import Any, BinaryIO
+from typing import Any, BinaryIO, Literal
 
 from xlrecalc._dates import date_serial
 from xlrecalc._engine import Engine, node
@@ -25,7 +27,7 @@ from xlrecalc._numtext import DBL_MIN
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef
 from xlrecalc._values import BLANK, ErrorValue, Value
-from xlrecalc._xlsx import Book, Cell, ReadLimits, SheetRows
+from xlrecalc._xlsx import Book, CalcProperties, Cell, ReadLimits, SheetRows
 from xlrecalc._xlsx._cells import _column as _cell
 
 __all__ = ["load", "refused_in_file"]
@@ -472,6 +474,54 @@ def _iso_serial(text: str, date1904: bool, quirks: Quirks) -> Value:
     return days + seconds / 86400
 
 
+VERIFIED_CALC_ID = 191028
+"""The lowest ``calcId`` whose cached values the newest Excel build verified trusts on opening:
+Excel 16.115 for Mac (its own ``calcId`` 191029) recalculates a file of ``calcId`` 191027 or
+lower and trusts one of 191028 or higher (capture ``open_calc``, ``capture/open_calc_probe.py``,
+rerun after every Excel update)."""
+
+RecalcOnLoad = Literal["excel", "always", "never"]
+RECALC_ON_LOAD = ("excel", "always", "never")
+
+
+def recalc_mode(
+    recalc_on_load: RecalcOnLoad, alias: str, value: bool | None, *, stacklevel: int
+) -> RecalcOnLoad:
+    """``recalc_on_load``, or what a deprecated alias given instead maps to, with its warning.
+
+    ``trust_cached=False`` and ``full=True`` map to ``"always"``; ``trust_cached=True`` and
+    ``full=False`` to ``"excel"``, the default. Both aliases are removed at 1.0.
+    """
+    if value is None:
+        return recalc_on_load
+    mode: RecalcOnLoad = "always" if (value if alias == "full" else not value) else "excel"
+    warnings.warn(
+        f'{alias} is deprecated and will be removed in 1.0: use recalc_on_load="{mode}"',
+        DeprecationWarning,
+        stacklevel=stacklevel + 1,
+    )
+    return mode
+
+
+def recalculates_on_opening(calc: CalcProperties, volatile: bool) -> bool:
+    """Whether Excel recalculates every formula of a workbook on opening it (capture ``open_calc``).
+
+    It does when the workbook has no ``calcPr`` (or one without ``calcId``, taken as none:
+    unverified), asks for it (``fullCalcOnLoad``), was calculated by an older Excel (``calcId``
+    below ``VERIFIED_CALC_ID``), or holds a volatile function, which recalculates every formula,
+    not only its dependents. It does not in manual calculation; that manual mode wins over the
+    other reasons is a choice, not captured.
+    """
+    if calc.calc_mode == "manual":
+        return False
+    return (
+        calc.full_calc_on_load
+        or calc.calc_id is None
+        or calc.calc_id < VERIFIED_CALC_ID
+        or volatile
+    )
+
+
 def _iterate_count(count: int | None) -> int:
     """The file's ``iterateCount`` in Excel's range, 1 to 32,767; 100 when absent or unreadable."""
     return 100 if count is None or count < 1 else min(count, 32_767)
@@ -482,10 +532,18 @@ def load(
     *,
     quirks: Quirks | None = None,
     limits: ReadLimits | None = None,
-    trust_cached: bool = True,
+    recalc_on_load: RecalcOnLoad = "excel",
     today: dt.date | None = None,
 ) -> Engine:
-    """Read a workbook into an engine; formulas whose cached values are trusted stay unevaluated."""
+    """Read a workbook into an engine; formulas whose cached values are trusted stay unevaluated.
+
+    ``recalc_on_load``: ``"excel"`` evaluates every formula where Excel would recalculate on
+    opening (``recalculates_on_opening``) and trusts the cached values elsewhere; ``"always"``
+    evaluates every formula; ``"never"`` trusts every cached value the file holds. A formula
+    without one, and a volatile one, is evaluated in every mode.
+    """
+    if recalc_on_load not in RECALC_ON_LOAD:
+        raise ValueError(f"recalc_on_load must be one of {RECALC_ON_LOAD}: {recalc_on_load!r}")
     with Book(source, limits) as book:
         engine = Engine(
             quirks,
@@ -506,10 +564,15 @@ def load(
         active = book.active_tab if 0 <= book.active_tab < len(book.sheets) else 0
         row, col = book.active_cell(book.sheets[active])
         engine.active = (active, row - 1, col - 1)
-        full = book.calc.full_calc_on_load or not trust_cached
+        full = recalc_on_load == "always" or (
+            recalc_on_load == "excel" and recalculates_on_opening(book.calc, False)
+        )
         for index, sheet in enumerate(book.sheets):
             if sheet.kind == "worksheet":
                 _load_sheet(engine, book, index, full)
+        volatile = not full and recalc_on_load == "excel" and engine.has_volatile()
+        if volatile and recalculates_on_opening(book.calc, True):  # every formula, as Excel
+            engine.make_all_stale()
     return engine
 
 

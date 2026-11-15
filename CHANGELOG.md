@@ -31,6 +31,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   budget, and the 24 `empty_args` rows of the eight functions. The coverage page counts them per function.
 
 ### Changed
+- A load trusts a file's cached values where Excel does on opening it, and evaluates every formula where Excel
+  recalculates (capture `open_calc`, Excel 16.115): when the file has no `calcPr`, has `fullCalcOnLoad`, was last
+  calculated by an older Excel (`calcId` below 191028, `VERIFIED_CALC_ID`), or holds a volatile function, which
+  recalculates every formula, not only its dependents; never in manual calculation. Before, only `fullCalcOnLoad` made
+  a load evaluate everything. The new option `recalc_on_load` of `load` and `recalculate` chooses: `"excel"` (the
+  default), `"always"` (evaluate every formula) or `"never"` (trust every cached value the file holds; a formula
+  without one, or a volatile one, is evaluated all the same). A `calcPr` without `calcId`, and manual calculation
+  beside another reason, are not captured: the first counts as no `calcPr`, the second trusts the cached values.
 - Excel 16.115 for Mac under Microsoft 365 is the reference: every capture made on 16.114 (Office Home & Business 2021)
   was rerun on it. Its differences: `LEN`, `MID`, `REPLACE`, `FIND` and `SEARCH` count a character outside the first
   plane (an emoji) as one, as `LEFT` and `RIGHT` did already (`LEN` of an emoji is 1, was 2), and so does the package;
@@ -43,6 +51,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   math library. The rows that depend on that library are held strictly only on a named reference platform (macOS 26.5,
   arm64, Python 3.11): Python 3.14 on the same system brings four `BINOM.DIST` rows of `distributions_family` within 8
   units in the last place that 3.11 leaves past them.
+
+### Deprecated
+- `load(..., trust_cached=...)` and `recalculate(..., full=...)`, removed in 1.0: they warn (`DeprecationWarning`) and
+  map to `recalc_on_load` (`trust_cached=False` and `full=True` are `"always"`; `trust_cached=True` and `full=False`
+  the default, `"excel"`). `Workbook.recalculate(full=True)` stays.
 
 ### Fixed
 - `ERROR.TYPE` gives Excel's numbers for `#CONNECT!` (10), `#BLOCKED!` (11), `#UNKNOWN!` (12), `#FIELD!` (13),

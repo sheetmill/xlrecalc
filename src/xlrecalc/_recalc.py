@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 
 from xlrecalc._formula._fastkey import translate
-from xlrecalc._load import load
+from xlrecalc._load import RecalcOnLoad, load, recalc_mode
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import Report
 from xlrecalc._save import array_edits, lookups
@@ -19,25 +19,29 @@ def recalculate(
     source: str | os.PathLike[str],
     destination: str | os.PathLike[str] | None = None,
     *,
-    full: bool = False,
+    recalc_on_load: RecalcOnLoad = "excel",
     full_calc_on_load: bool = True,
     limits: ReadLimits | None = None,
     quirks: Quirks | None = None,
+    full: bool | None = None,
 ) -> Report:
     """Recalculate a workbook and write the results into the file as its cached values.
 
     Readers that take cached values, such as pandas and openpyxl's data-only mode, then see
-    the results. Formulas whose cached values the file already holds and trusts (a file Excel
-    saved) are not evaluated unless something they depend on is; a file openpyxl wrote holds
-    none, so every formula is. Only the cached values of formula cells whose value changed are
-    rewritten; every other part of the file is copied byte for byte.
+    the results. Formulas are evaluated as Excel evaluates them on opening the file
+    (``recalc_on_load``): every one in a file Excel recalculates on opening (one openpyxl wrote,
+    for instance), otherwise only those without a cached value and what depends on them. Only
+    the cached values of formula cells whose value changed are rewritten; every other part of
+    the file is copied byte for byte.
 
     Args:
         source: The xlsx file.
         destination: Where to write the result; by default ``source`` itself. Either way the
             file is written to a temporary file next to it and moved into place, so a failure
             never leaves a partial file.
-        full: Evaluate every formula, trusting no cached value.
+        recalc_on_load: ``"excel"``, Excel's rule (as :func:`load`); ``"always"``, evaluate
+            every formula, trusting no cached value; ``"never"``, trust every cached value
+            the file holds (a formula without one, or a volatile one, is evaluated all the same).
         full_calc_on_load: Ask Excel to recalculate when it opens the file
             (``<calcPr fullCalcOnLoad="1">``), so a value computed differently here never
             persists in what Excel shows. With ``False`` the file's setting stays as it was and
@@ -47,6 +51,7 @@ def recalculate(
             the package's parts and sizes, the cells an array may hold, and the evaluations of
             one run of iterative calculation.
         quirks: Which Excel quirks to reproduce; all by default.
+        full: Deprecated, removed in 1.0: ``True`` is ``recalc_on_load="always"``.
 
     Returns:
         What could not be done: unsupported functions, uncomputed cells (whose cached values
@@ -59,8 +64,9 @@ def recalculate(
         LimitError: The file exceeds ``limits``.
         OSError: The file cannot be read, or the result cannot be written.
     """
-    engine = load(source, quirks=quirks, limits=limits, trust_cached=not full)
-    engine.recalculate(full=full)
+    mode = recalc_mode(recalc_on_load, "full", full, stacklevel=2)
+    engine = load(source, quirks=quirks, limits=limits, recalc_on_load=mode)
+    engine.recalculate(full=mode == "always")
     engine.save_run()  # an opening, then a save: Excel's saved copy (§7.2)
     target = source if destination is None else destination
     edits, fills = array_edits(engine)

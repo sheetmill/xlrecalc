@@ -32,8 +32,8 @@ from xlrecalc._formula._nodes import (
 from xlrecalc._formula._tokens import Kind, column_number
 from xlrecalc._functions import REGISTRY, SPECS
 from xlrecalc._functions._registry import _LIFTED
+from xlrecalc._load import RecalcOnLoad, recalc_mode, refused_in_file
 from xlrecalc._load import load as _load_engine
-from xlrecalc._load import refused_in_file
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef, Report
 from xlrecalc._save import array_edits, file_value, lookups
@@ -495,13 +495,16 @@ def load(
     *,
     quirks: Quirks | None = None,
     limits: ReadLimits | None = None,
-    trust_cached: bool = True,
+    recalc_on_load: RecalcOnLoad = "excel",
+    trust_cached: bool | None = None,
 ) -> Workbook:
     """Read an xlsx workbook.
 
-    Nothing is evaluated yet: cached values the file holds are trusted (ARCHITECTURE.md §7.4)
-    unless the file asks for a full calculation on load or ``trust_cached`` is false, and a
-    value is evaluated when it is read.
+    Nothing is evaluated yet: a value is evaluated when it is read. Cached values the file
+    holds are trusted (ARCHITECTURE.md §7.4) where Excel trusts them on opening the file, by
+    default: every formula is evaluated when the file has no ``calcPr``, asks for a full
+    calculation on load (``fullCalcOnLoad``), was last calculated by an older Excel
+    (``calcId``) or holds a volatile function, and none in manual calculation.
 
     Args:
         source: The file, as a path or a binary file object (read into memory).
@@ -509,7 +512,11 @@ def load(
         limits: Limits on what reading and computing the workbook may cost (``ReadLimits``):
             the package's parts and sizes, the cells an array may hold, and the evaluations of
             one run of iterative calculation.
-        trust_cached: Treat the file's cached values as current.
+        recalc_on_load: ``"excel"``, Excel's rule above; ``"always"``, evaluate every formula;
+            ``"never"``, trust every cached value the file holds. A formula with no cached
+            value, and a volatile one (``RAND``, ``NOW``...), is evaluated in every mode.
+        trust_cached: Deprecated, removed in 1.0: ``False`` is ``recalc_on_load="always"``,
+            ``True`` the default.
 
     Raises:
         PackageError: The file is not a readable xlsx package.
@@ -517,5 +524,6 @@ def load(
     """
     if not isinstance(source, (str, os.PathLike)):
         source = io.BytesIO(source.read())
-    engine = _load_engine(source, quirks=quirks, limits=limits, trust_cached=trust_cached)
+    mode = recalc_mode(recalc_on_load, "trust_cached", trust_cached, stacklevel=2)
+    engine = _load_engine(source, quirks=quirks, limits=limits, recalc_on_load=mode)
     return Workbook(engine, source, limits)

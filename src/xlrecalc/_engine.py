@@ -669,12 +669,20 @@ class Engine:
         if self.loop_live():
             self.recalculate()
 
+    def has_volatile(self) -> bool:
+        """Whether a formula cell's template is volatile (``RAND``, ``NOW``, ``OFFSET``...)."""
+        return bool(self._volatile)
+
+    def make_all_stale(self) -> None:
+        """Every formula stale: evaluated when next read or recalculated."""
+        for s, sheet in enumerate(self.sheets):
+            self.stale.update((s << SHEET_SHIFT) | k for k in sheet.templates)
+        self._unclosed.clear()
+
     def recalculate(self, full: bool = False, targets: Iterable[int] | None = None) -> Report:
         """Evaluate stale cells (every formula with ``full``) in dependency order."""
         if full:
-            for s, sheet in enumerate(self.sheets):
-                self.stale.update((s << SHEET_SHIFT) | k for k in sheet.templates)
-            self._unclosed.clear()
+            self.make_all_stale()
         if targets is None:
             self._changed = True  # a recalculation evaluates volatile formulas again
             self._close()

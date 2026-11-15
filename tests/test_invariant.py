@@ -76,7 +76,7 @@ def stale_and_unreported(data: bytes) -> tuple[list[str], int]:
     with tempfile.TemporaryDirectory() as folder:
         path = Path(folder) / "book.xlsx"
         path.write_bytes(data)
-        report = xlrecalc.recalculate(path, full=True)
+        report = xlrecalc.recalculate(path, recalc_on_load="always")
         reported = {
             str(c)
             for c in report.uncomputed | report.circular | report.from_kept | set(report.refused)
@@ -194,7 +194,7 @@ def test_every_such_form_in_the_formula_corpus_is_reported():
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / "book.xlsx"
             path.write_bytes(data)
-            report = xlrecalc.recalculate(path, full=True)
+            report = xlrecalc.recalculate(path, recalc_on_load="always")
         if not (report.uncomputed or report.from_kept or report.refused or report.circular):
             wrong.append(text)
     assert wrong == []

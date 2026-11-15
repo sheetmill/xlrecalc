@@ -51,6 +51,11 @@ byte. By default the file also asks Excel to recalculate when it opens it, so a 
 xlrecalc got wrong never persists in what Excel shows (`full_calc_on_load=False` leaves the
 file's setting alone).
 
+Which formulas it computes follows what Excel does on opening the file: every formula of a file
+Excel recalculates on opening (one openpyxl wrote, one an older Excel saved, one asking for it or
+holding a volatile function), and otherwise only those without a cached value and what depends
+on them. `recalc_on_load="always"` computes every formula; `"never"` trusts every cached value.
+
 ### Functions newer than Excel 2007, written with openpyxl
 
 In a file, Excel writes a function added since Excel 2007 with a prefix, and openpyxl writes a

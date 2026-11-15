@@ -1,0 +1,31 @@
+# suite: open_calc (when Excel recalculates a workbook on opening)
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# generator: capture/open_calc_probe.py (cached values planted wrong in a copy
+#   Excel saved: 999, SENT, FALSE, #N/A, 777 in A2:A6, 555 in A7 where volatile;
+#   right values 6, x2, TRUE, #DIV/0!, 8, 2)
+# columns: variant, calcPr as written, the file's cells, displayed text of A2:A7
+#   on opening, calculation mode after opening, the cells of the copy Excel saved
+patched	<calcPr calcId="191029"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'999' 'SENT' 'FALSE' '#N/A' '777' ''	automatic	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777
+no_calcpr	(no calcPr)	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_124519	<calcPr calcId="124519"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_145621	<calcPr calcId="145621"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_152511	<calcPr calcId="152511"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_162913	<calcPr calcId="162913"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_171027	<calcPr calcId="171027"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_181029	<calcPr calcId="181029"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_190000	<calcPr calcId="190000"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_191000	<calcPr calcId="191000"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_191001	<calcPr calcId="191001"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_191010	<calcPr calcId="191010"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_191020	<calcPr calcId="191020"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_191025	<calcPr calcId="191025"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_191027	<calcPr calcId="191027"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+calcid_191028	<calcPr calcId="191028"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'999' 'SENT' 'FALSE' '#N/A' '777' ''	automatic	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777
+calcid_newer_by_1	<calcPr calcId="191030"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'999' 'SENT' 'FALSE' '#N/A' '777' ''	automatic	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777
+calcid_999999	<calcPr calcId="999999"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'999' 'SENT' 'FALSE' '#N/A' '777' ''	automatic	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777
+fullcalconload	<calcPr fullCalcOnLoad="1" calcId="191029"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+volatile	<calcPr calcId="191029"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777 A7=555	'6' 'x2' 'TRUE' '#DIV/0!' '8' '2'	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8 A7=2
+openpyxl_no_values	<calcPr calcId="124519" fullCalcOnLoad="1" />	A1=n:2 A2=- A3=- A4=- A5=- A6=-	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+openpyxl_patched	<calcPr calcId="124519" fullCalcOnLoad="1" />	A1=n:2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'6' 'x2' 'TRUE' '#DIV/0!' '8' ''	automatic	A1=2 A2=6 A3=str:x2 A4=b:1 A5=e:#DIV/0! A6=8
+manual	<calcPr calcMode="manual" calcId="191029"/>	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777	'999' 'SENT' 'FALSE' '#N/A' '777' ''	manual	A1=2 A2=999 A3=str:SENT A4=b:0 A5=e:#N/A A6=777

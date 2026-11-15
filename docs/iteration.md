@@ -7,8 +7,8 @@ Options > Formulas on Windows; the setting is saved in the file), xlrecalc itera
 does: the same order of cells, the same `iterateCount` and `iterateDelta`, the same stopping test,
 and the same starting values, checked against Excel's results for each case it was captured on.
 
-- For a file it evaluates (with `full=True`, a file that asks for a full calculation, or formulas
-  without values, as openpyxl writes them), `recalculate(path)` gives what Excel would save after
+- For a file it evaluates (with `recalc_on_load="always"`, a file Excel recalculates on opening,
+  or formulas without values, as openpyxl writes them), `recalculate(path)` gives what Excel would save after
   opening the file: Excel's opening runs the loop once and its saving once more, and so does
   `recalculate`, whether or not the loop holds cached values.
 - A trusting load (`load(path)`, or `recalculate(path)` of a file whose values are trusted) changes
@@ -24,5 +24,5 @@ and the same starting values, checked against Excel's results for each case it w
 - After a trusting load, an edit finds a loop through the file's own marking: Excel marks a loop's
   formulas "calculate always" (`ca="1"`) when it saves. A file with cached loop values but no such
   marking, as another tool might write it, does not run its loop on an edit, unless the edit
-  reaches a cell the loop reads, or until a full recalculation (`full=True`). openpyxl writes no
+  reaches a cell the loop reads, or until a full recalculation (`recalc_on_load="always"`). openpyxl writes no
   cached values at all, so its files are always evaluated and are not affected.
