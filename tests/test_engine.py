@@ -71,7 +71,11 @@ ROWS = (
 
 
 def test_cached_values_are_trusted():
-    e = load(io.BytesIO(package(ROWS, workbook_extra='<calcPr calcId="191029"/>')))
+    e = load(
+        io.BytesIO(
+            package(ROWS, workbook_extra='<fileVersion appName="xl"/><calcPr calcId="191029"/>')
+        )
+    )
     e.recalculate()
     assert value(e, "B1") == 999.0  # trusted: the file's cached value
     assert value(e, "C1") == 777.0

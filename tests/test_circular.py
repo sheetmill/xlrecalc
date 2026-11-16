@@ -219,7 +219,9 @@ def _edited_engine(tmp_path) -> xlrecalc.Workbook:
             ("dependent", "A1*2", "903", None),
             ("control", "B1*2", "904", None),
         ]
-    return xlrecalc.load(book(tmp_path, cells, '<calcPr calcId="191029"/>'))  # as Excel saves
+    return xlrecalc.load(
+        book(tmp_path, cells, '<fileVersion appName="xl"/><calcPr calcId="191029"/>')
+    )  # as Excel saves
 
 
 @pytest.mark.parametrize(

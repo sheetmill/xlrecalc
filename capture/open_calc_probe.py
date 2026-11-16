@@ -9,11 +9,14 @@ cached values, ``calcPr`` and calculation chain. Each variant plants wrong cache
 (sentinels: 999, "SENT", FALSE, #N/A, 777, and 555 in A7) in that copy and changes one thing:
 nothing; ``calcPr`` removed; ``calcId`` older or newer than the copy's, or removed;
 ``fullCalcOnLoad``; the volatile cell; manual calculation (``calcMode="manual"``), alone, with
-``fullCalcOnLoad`` and with an old ``calcId``. Two more are openpyxl's own files:
-with no cached values, and with the sentinels. Each variant is opened with alerts off and read
-(``open_read.applescript``: value, displayed text, formula, saved flag and calculation mode),
-closed without saving, then opened again and saved as a copy whose cached values are read. A
-cell showing its sentinel was taken from the file; one showing its right value was recalculated.
+``fullCalcOnLoad`` and with an old ``calcId``. Two more are openpyxl's own files: with no cached
+values, and with the sentinels. Four look for another trigger, one difference between openpyxl's
+file and Excel's each: openpyxl's file with Excel's ``calcId`` and no ``fullCalcOnLoad``; Excel's
+copy without its calculation chain, without ``<fileVersion>``, and without ``docProps/app.xml`` (a
+part is dropped with its relationship and content type). Each variant is opened with alerts off and
+read (``open_read.applescript``: value, displayed text, formula, saved flag and calculation mode),
+closed without saving, then opened again and saved as a copy whose cached values are read. A cell
+showing its sentinel was taken from the file; one showing its right value was recalculated.
 
 Excel's calculation mode belongs to the application and the first workbook opened sets it, so
 the manual variants come last and ``calc_automatic.applescript`` sets the mode back after each.
@@ -62,22 +65,53 @@ def build_volatile(path: Path) -> None:
 
 
 def calc_attributes(path: Path) -> str:
+    """The workbook part's ``<fileVersion>`` and ``<calcPr>`` as written, each when present."""
     with zipfile.ZipFile(path) as z:
         workbook = z.read("xl/workbook.xml").decode()
-    found = re.search(r"<calcPr\b[^>]*>", workbook)
-    return found.group(0) if found else "(no calcPr)"
+    found = [m.group(0) for m in re.finditer(r"<(?:fileVersion|calcPr)\b[^>]*>", workbook)]
+    return "".join(found) if found else "(neither)"
 
 
-def edit_calc(src: Path, dst: Path, sheet, edit) -> None:  # type: ignore[no-untyped-def]
-    """Copy ``src`` with the sheet patched and ``edit`` applied to workbook.xml's text."""
+def edit_calc(  # type: ignore[no-untyped-def]
+    src: Path, dst: Path, sheet, edit, drop: str | None = None
+) -> None:
+    """Copy ``src`` with the sheet patched and ``edit`` applied to workbook.xml's text.
+
+    ``drop`` removes a part with its relationship and its content-type override, so the package
+    stays whole (a dangling relationship would make Excel offer a repair).
+    """
     rewrite(src, dst, sheet=sheet)
     with zipfile.ZipFile(dst) as zin:
         items = [(info, zin.read(info.filename)) for info in zin.infolist()]
+    target = drop.rsplit("/", 1)[-1] if drop else None
     with zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED) as zout:
         for info, data in items:
+            if info.filename == drop:
+                continue
             if info.filename == "xl/workbook.xml":
                 data = edit(data.decode()).encode()
+            if target and info.filename.endswith(".rels"):
+                data = re.sub(
+                    rf'<Relationship\b[^>]*Target="[^"]*{re.escape(target)}"[^>]*/>',
+                    "",
+                    data.decode(),
+                ).encode()
+            if drop and info.filename == "[Content_Types].xml":
+                data = re.sub(
+                    rf'<Override\b[^>]*PartName="/{re.escape(drop)}"[^>]*/>', "", data.decode()
+                ).encode()
             zout.writestr(info, data)
+
+
+def _fileversion(find: str, replace: str):  # type: ignore[no-untyped-def]
+    """An edit of workbook.xml's ``<fileVersion>`` element alone."""
+
+    def edit(text: str) -> str:
+        return re.sub(
+            r"<fileVersion\b[^>]*/>", lambda m: re.sub(find, replace, m.group(0)), text, count=1
+        )
+
+    return edit
 
 
 def saved_values(path: Path) -> str:
@@ -140,6 +174,33 @@ def main() -> None:
             lambda t: re.sub(r"<calcPr\b", '<calcPr fullCalcOnLoad="1"', t, count=1),
         ),
         "volatile": (vbase, volatile_sentinels, lambda t: t),
+        # What else makes Excel recalculate: one difference between openpyxl's file and Excel's.
+        "openpyxl_calcid_current": (
+            src,
+            patch_sentinels,
+            lambda t: re.sub(r"\s*fullCalcOnLoad=\"1\"", "", with_id(calc_id)(t)),
+        ),
+        "no_calcchain": (base, patch_sentinels, lambda t: t, "xl/calcChain.xml"),
+        "no_fileversion": (
+            base,
+            patch_sentinels,
+            lambda t: re.sub(r"<fileVersion\b[^>]*/>", "", t),
+        ),
+        "no_app_properties": (base, patch_sentinels, lambda t: t, "docProps/app.xml"),
+        # Which part of <fileVersion> matters (Excel 16.115 writes appName, lastEdited and
+        # lowestEdited 7, and rupBuild).
+        **{
+            f"fileversion_{label}": (base, patch_sentinels, _fileversion(find, replace))
+            for label, find, replace in (
+                ("no_appname", r'\sappName="[^"]*"', ""),
+                ("appname_calc", r'appName="[^"]*"', 'appName="Calc"'),
+                ("no_rupbuild", r'\srupBuild="[^"]*"', ""),
+                ("rupbuild_4505", r'rupBuild="[^"]*"', 'rupBuild="4505"'),
+                ("lastedited_6", r'lastEdited="[^"]*"', 'lastEdited="6"'),
+                ("lastedited_4", r'lastEdited="[^"]*"', 'lastEdited="4"'),
+                ("lowestedited_4", r'lowestEdited="[^"]*"', 'lowestEdited="4"'),
+            )
+        },
         "openpyxl_no_values": (src, None, lambda t: t),
         "openpyxl_patched": (src, patch_sentinels, lambda t: t),
         "calcpr_without_calcid": (
@@ -172,9 +233,9 @@ def main() -> None:
         variants = {f"calcid_{n}": (base, patch_sentinels, with_id(n)) for n in ids}
     rows: list[str] = []
     try:
-        for name, (origin, sheet, edit) in variants.items():
+        for name, (origin, sheet, edit, *drop) in variants.items():
             path = CONTAINER / f"xlrecalc_oc_{name}.xlsx"
-            edit_calc(origin, path, sheet, edit)
+            edit_calc(origin, path, sheet, edit, *drop)
             log(f"\n{name}: calcPr {calc_attributes(path)}; file {saved_values(path)}")
             fields = osascript("open_read.applescript", str(path), str(ROWS)).split(US)
             if fields[0] != "open":
@@ -203,8 +264,9 @@ def main() -> None:
                 "# generator: capture/open_calc_probe.py (cached values planted wrong in a copy",
                 "#   Excel saved: 999, SENT, FALSE, #N/A, 777 in A2:A6, 555 in A7 where volatile;",
                 "#   right values 6, x2, TRUE, #DIV/0!, 8, 2)",
-                "# columns: variant, calcPr as written, the file's cells, displayed text of A2:A7",
-                "#   on opening, calculation mode after opening, the cells of the copy Excel saved",
+                "# columns: variant, fileVersion and calcPr as written, the file's cells,",
+                "#   displayed text of A2:A7 on opening, calculation mode after opening, the cells",
+                "#   of the copy Excel saved",
             ]
             CAPTURE.write_text("\n".join([*header, *rows]) + "\n", encoding="utf-8")
         for p in CONTAINER.glob("xlrecalc_oc_*.xlsx"):

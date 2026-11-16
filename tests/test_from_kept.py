@@ -21,7 +21,8 @@ from xlrecalc._report import CellRef
 from xlrecalc._values import ErrorValue
 
 FLAG = '<calcPr fullCalcOnLoad="1"/>'
-SAVED = '<calcPr calcId="191029"/>'  # as Excel 16.115 saves it: trusted on opening
+# As Excel 16.115 saves it: trusted on opening.
+SAVED = '<fileVersion appName="xl"/><calcPr calcId="191029"/>'
 ABSENT = "NOSUCHFN(F1)"
 
 

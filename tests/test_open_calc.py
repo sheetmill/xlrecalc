@@ -59,7 +59,7 @@ def _value(kind: str | None, text: str) -> object:
 
 
 def _workbook(row: list[str]) -> bytes:
-    calc = row[1] if row[1].startswith("<calcPr") else ""
+    calc = row[1] if row[1].startswith("<") else ""  # <fileVersion> and <calcPr> as written
     cells = []
     for ref, (kind, value) in _cells(row[2]).items():
         t = f' t="{kind}"' if kind and kind != "n" else ""

@@ -50,7 +50,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   request to recalculate on opening, removing one the file held, as Excel removes it when it saves; they left it.
 - A load trusts a file's cached values where Excel does on opening it, and evaluates every formula where Excel
   recalculates (capture `open_calc`, Excel 16.115): when the file has no `calcPr`, has `fullCalcOnLoad`, was last
-  calculated by an older Excel (`calcId` below 191028, `VERIFIED_CALC_ID`), or holds a volatile function, which
+  calculated by an older Excel (`calcId` below 191028, `VERIFIED_CALC_ID`), was not saved by Excel (no
+  `<fileVersion appName="xl">`: openpyxl writes none), or holds a volatile function, which
   recalculates every formula, not only its dependents; never in manual calculation. Before, only `fullCalcOnLoad` made
   a load evaluate everything. The new option `recalc_on_load` of `load` and `recalculate` chooses: `"excel"` (the
   default), `"always"` (evaluate every formula) or `"never"` (trust every cached value the file holds; a formula

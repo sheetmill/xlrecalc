@@ -501,17 +501,18 @@ def recalc_mode(
 
 
 def recalculates_on_opening(
-    calc: xlio.CalcProperties, volatile: bool, saving: bool = False
+    calc: xlio.CalcProperties, app_name: str | None, volatile: bool, saving: bool = False
 ) -> bool:
     """Whether Excel recalculates every formula of a workbook on opening it (capture ``open_calc``).
 
     It does when the workbook has no ``calcPr`` or one without ``calcId``, asks for it
     (``fullCalcOnLoad``), was calculated by an older Excel (``calcId`` below
-    ``VERIFIED_CALC_ID``), or holds a volatile function, which recalculates every formula, not
-    only its dependents. In manual calculation it shows the cached values on opening whatever
-    the reason, and saves them recalculated where a reason holds: ``saving`` asks about the copy
-    it saves after opening. A volatile function in manual calculation is taken as the other
-    reasons are (not captured).
+    ``VERIFIED_CALC_ID``), was not saved by Excel (``app_name``, ``<fileVersion appName>``, is
+    not ``"xl"``: openpyxl writes no ``<fileVersion>``, LibreOffice ``"Calc"``), or holds a
+    volatile function, which recalculates every formula, not only its dependents. In manual
+    calculation it shows the cached values on opening whatever the reason, and saves them
+    recalculated where a reason holds: ``saving`` asks about the copy it saves after opening. A
+    volatile function in manual calculation is taken as the other reasons are (not captured).
     """
     if calc.calc_mode == "manual" and not saving:
         return False
@@ -519,6 +520,7 @@ def recalculates_on_opening(
         calc.full_calc_on_load
         or calc.calc_id is None
         or calc.calc_id < VERIFIED_CALC_ID
+        or app_name != "xl"
         or volatile
     )
 
@@ -573,15 +575,19 @@ def load(
             active = 0
         row, col = _active_cell(book.sheets[active])
         engine.active = (active, row - 1, col - 1)
+        app = next(  # <fileVersion appName>: "xl" when Excel saved the file
+            (u.element.get("appName") for u in book.unparsed if u.path == "workbook/fileVersion"),
+            None,
+        )
         full = recalc_on_load == "always" or (
-            recalc_on_load == "excel" and recalculates_on_opening(book.calc, False, saving)
+            recalc_on_load == "excel" and recalculates_on_opening(book.calc, app, False, saving)
         )
         dynamic = book.cell_metadata.dynamic_arrays
         for index, sheet in enumerate(book.sheets):
             if sheet.kind == "worksheet":
                 _load_sheet(engine, sheet, dynamic, index, full)
         volatile = not full and recalc_on_load == "excel" and engine.has_volatile()
-        if volatile and recalculates_on_opening(book.calc, True, saving):  # every formula
+        if volatile and recalculates_on_opening(book.calc, app, True, saving):  # every formula
             engine.make_all_stale()
     return engine
 

@@ -24,7 +24,8 @@ from xlrecalc._report import CellRef, column_letters
 from xlrecalc._values import ErrorValue
 
 FLAG = '<calcPr iterate="1" fullCalcOnLoad="1"/>'
-TRUST = '<calcPr calcId="191029" iterate="1"/>'  # as Excel 16.115 saves it: trusted on opening
+# As Excel 16.115 saves it: trusted on opening.
+TRUST = '<fileVersion appName="xl"/><calcPr calcId="191029" iterate="1"/>'
 OFF = '<calcPr fullCalcOnLoad="1"/>'
 LOOP = {"A1": 5.0, "B1": 7.0, "C1": 999.0}
 LABEL = "iterative calculation"
