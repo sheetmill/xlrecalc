@@ -16,7 +16,7 @@ from xml.sax.saxutils import escape
 import pytest
 
 import xlrecalc
-from tests.test_xlsx import package
+from tests.xlsx_files import package
 from xlrecalc._engine import Engine
 from xlrecalc._formula._tokens import column_number
 

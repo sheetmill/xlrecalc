@@ -21,8 +21,8 @@ import warnings
 from pathlib import Path
 
 import openpyxl
-
-from xlrecalc._xlsx import Book, PackageError
+import xlio
+from xlio import PackageError
 
 
 def _openpyxl(path: Path, data_only: bool) -> dict[str, dict[tuple[int, int], tuple[object, str]]]:
@@ -45,10 +45,10 @@ def _openpyxl(path: Path, data_only: bool) -> dict[str, dict[tuple[int, int], tu
 
 def _ours(path: Path) -> dict[str, dict[tuple[int, int], object]]:
     out = {}
-    with Book(path) as book:
+    with xlio.open(path) as book:
         for sheet in book.sheets:
             if sheet.kind == "worksheet":
-                out[sheet.name] = {(c.row, c.column): c for c in book.cells(sheet)}
+                out[sheet.name] = {(c.row, c.column): c for c in sheet.cells()}
     return out
 
 

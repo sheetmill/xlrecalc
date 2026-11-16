@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from tests.test_xlsx import cells, package
+from tests.xlsx_files import cells, package
 
 CAPTURE = Path(__file__).with_name("captures") / "whitespace.tsv"
 ROWS = [

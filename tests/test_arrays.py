@@ -15,14 +15,14 @@ import zipfile
 from pathlib import Path
 
 import pytest
+from capture._file import text_escape
 
 from tests.test_captures import same
-from tests.test_xlsx import MAIN, package
+from tests.xlsx_files import MAIN, package
 from xlrecalc._engine import node
 from xlrecalc._formula._tokens import column_number
 from xlrecalc._load import load
 from xlrecalc._values import BLANK, ErrorValue
-from xlrecalc._xlsx._write import text_escape
 
 CAPTURES = Path(__file__).with_name("captures")
 ROWS = [

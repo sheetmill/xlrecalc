@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from tests.test_xlsx import package
+from tests.xlsx_files import package
 from xlrecalc import recalculate
 from xlrecalc._engine import Engine
 from xlrecalc._functions import REGISTRY, function
@@ -417,7 +417,7 @@ def test_a_bare_prefixed_name_in_a_file_is_reported_with_its_fix(tmp_path):
     and FILTER (captures dyn_*). The report names the cause and the prefix to write.
     """
     import xlrecalc
-    from tests.test_xlsx import package
+    from tests.xlsx_files import package
 
     cells = (
         '<c r="A1"><v>1</v></c>'
@@ -449,11 +449,12 @@ def test_number_literals_as_excel_takes_them_in_a_file():
     Excel reads them, 15 digits cut, a value below the smallest double as 0 (number_literals)."""
     import io
 
+    from capture._file import text_escape
+
     from tests.test_captures import same
-    from tests.test_xlsx import package
+    from tests.xlsx_files import package
     from xlrecalc._load import load, refused_in_file
     from xlrecalc._values import ErrorValue
-    from xlrecalc._xlsx._write import text_escape
 
     lines = (Path(__file__).parent / "captures" / "number_literals.tsv").read_text("utf-8")
     rows = [line.split("\t") for line in lines.splitlines() if not line.startswith("#")]

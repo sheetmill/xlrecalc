@@ -26,9 +26,9 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from capture._file import Book
 from capture.edition import edition_line
 from capture.strip import strip
-from xlrecalc._xlsx import Book
 
 HERE = Path(__file__).resolve().parent
 CAPTURES = HERE.parent / "tests" / "captures"  # as capture.pipeline, which needs openpyxl

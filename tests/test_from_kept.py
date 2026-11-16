@@ -13,12 +13,12 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 import pytest
+from capture._file import Book
 
 import xlrecalc
-from tests.test_xlsx import package
+from tests.xlsx_files import package
 from xlrecalc._report import CellRef
 from xlrecalc._values import ErrorValue
-from xlrecalc._xlsx import Book
 
 FLAG = '<calcPr fullCalcOnLoad="1"/>'
 SAVED = '<calcPr calcId="191029"/>'  # as Excel 16.115 saves it: trusted on opening

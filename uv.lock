@@ -1152,10 +1152,20 @@ wheels = [
 ]
 
 [[package]]
+name = "xlio"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ba/90/0e1c68886eb05cd95e9f7ab1cf59b8f59e4eb67aaad61acd449960f37803/xlio-0.1.0.tar.gz", hash = "sha256:3b863b81300e81899f3682ecb7a2992e89aaa2aa4fd82aa2d690a51691295536", size = 249625, upload-time = "2026-11-16T04:47:28.736Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/20/04/3f0d25a3bc560d8d1e4d6e24891ccc008277ce1bfac55d46d207fd1e2319/xlio-0.1.0-py3-none-any.whl", hash = "sha256:e4cd43b83880a555c4f89d20ad7baba5645aae30bde6e1cc9c0bad09f52b938a", size = 112305, upload-time = "2026-11-16T04:47:27.134Z" },
+]
+
+[[package]]
 name = "xlrecalc"
 source = { editable = "." }
 dependencies = [
     { name = "xlformat" },
+    { name = "xlio" },
 ]
 
 [package.dev-dependencies]
@@ -1176,7 +1186,10 @@ docs = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "xlformat", specifier = ">=0.3,<1" }]
+requires-dist = [
+    { name = "xlformat", specifier = ">=0.3,<1" },
+    { name = "xlio", specifier = "==0.1.*" },
+]
 
 [package.metadata.requires-dev]
 dev = [

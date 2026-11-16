@@ -7,8 +7,9 @@ import datetime as dt
 from dataclasses import dataclass
 from pathlib import Path
 
+from capture._file import unescape
+
 from xlrecalc._values import BLANK, ErrorValue, Value
-from xlrecalc._xlsx._cells import unescape
 
 CAPTURES = Path(__file__).with_name("captures")
 EMPTY_TEXT = '=""'

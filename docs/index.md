@@ -15,7 +15,8 @@ which the Quirks and Capturing pages cite by section (§), is described in
 [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md).
 
 xlrecalc is part of the [sheetmill](https://github.com/sheetmill) project, with
-[xlformat](https://github.com/sheetmill/xlformat), which applies Excel number formats, and
+[xlformat](https://github.com/sheetmill/xlformat), which applies Excel number formats,
+[xlio](https://github.com/sheetmill/xlio), which reads and surgically writes xlsx files, and
 [sheetpeek](https://github.com/sheetmill/sheetpeek), which shows workbooks as Excel does.
 
 ```{toctree}

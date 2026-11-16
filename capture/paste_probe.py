@@ -21,9 +21,9 @@ import openpyxl
 from openpyxl.workbook.defined_name import DefinedName
 
 from capture import lambda_probe, marker_probe
+from capture._file import Book
 from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER
-from xlrecalc._xlsx import Book
 
 HERE = Path(__file__).resolve().parent
 

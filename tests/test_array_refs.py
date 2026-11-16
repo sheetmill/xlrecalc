@@ -17,17 +17,17 @@ import zipfile
 from pathlib import Path
 
 import pytest
+from capture._file import text_escape
 
 import xlrecalc
 from tests.test_array_limit import two_sheets
 from tests.test_captures import column_letters, same
-from tests.test_xlsx import MAIN, PKG, package
 from tests.watchdog import GIB, bounded, in_child
+from tests.xlsx_files import MAIN, PKG, package
 from xlrecalc._engine import Engine, node
 from xlrecalc._formula._tokens import column_number
 from xlrecalc._load import load
 from xlrecalc._values import BLANK, ErrorValue
-from xlrecalc._xlsx._write import text_escape
 
 CAPTURES = Path(__file__).with_name("captures")
 DOC = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"

@@ -153,12 +153,12 @@ def test_the_public_path_gives_excels_saved_copy(
     text.
     """
     pytest.importorskip("openpyxl")
+    from capture._file import Book
     from capture.iterate_probe import build
     from capture.iterate_uncached_probe import CALC
 
     import xlrecalc
     from xlrecalc._report import column_letters
-    from xlrecalc._xlsx import Book
 
     constants = {"probe_conv": {"B1": "3"}, "probe_interest": {"B1": "1000"}}
     constants["probe_sumself"] = {"A1": "1", "A2": "2", "A3": "3", "A4": "4"}
@@ -196,7 +196,7 @@ def _cached_steps() -> dict[str, tuple[float, float]]:
 
 
 def _loop_values(path: Path) -> tuple[object, object]:
-    from xlrecalc._xlsx import Book
+    from capture._file import Book
 
     with Book(path) as book:
         cells = {(c.row, c.column): c.value for c in book.cells("S")}

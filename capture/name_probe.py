@@ -20,11 +20,11 @@ from pathlib import Path
 import openpyxl
 from openpyxl.workbook.defined_name import DefinedName
 
+from capture._file import Book
 from capture.edition import edition_line
 from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from xlrecalc._report import column_letters
-from xlrecalc._xlsx import Book
 
 HERE = Path(__file__).resolve().parent
 

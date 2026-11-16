@@ -16,11 +16,12 @@ import zipfile
 from pathlib import Path
 
 import pytest
+from capture._file import text_escape
 from capture.dynamic_suites import BLOCK, REFUSED
 
 from tests.test_arrays import DOC, _cell, _metadata
 from tests.test_captures import same
-from tests.test_xlsx import package
+from tests.xlsx_files import package
 from xlrecalc._engine import Engine, node
 from xlrecalc._formula import parse
 from xlrecalc._formula._nodes import Call, Group, Leaf, Reference
@@ -28,7 +29,6 @@ from xlrecalc._functions import SPECS
 from xlrecalc._load import load
 from xlrecalc._quirks import Quirks
 from xlrecalc._values import BLANK, ErrorValue
-from xlrecalc._xlsx._write import text_escape
 
 CAPTURES = Path(__file__).with_name("captures")
 SUITES = (

@@ -14,6 +14,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 import pytest
+from capture._file import Book
 
 import xlrecalc
 from tests import test_array_refs, test_arrays
@@ -21,12 +22,11 @@ from tests.captures import Formula, load
 from tests.formula_corpus import CORPUS as FORMULAS
 from tests.test_array_limit import two_sheets
 from tests.test_captures import SUITES, column_letters, formula_text
-from tests.test_xlsx import MAIN, package
+from tests.xlsx_files import MAIN, package
 from xlrecalc._formula import FormulaSyntaxError, TokenizeError, parse
 from xlrecalc._formula._nodes import Call, Invoke, Union
 from xlrecalc._formula._template import cell_axes
 from xlrecalc._values import BLANK, ErrorValue
-from xlrecalc._xlsx import Book
 
 SENTINEL = 987654.125
 

@@ -66,12 +66,13 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
+import xlio
+
 from xlrecalc._arrays import ArrayLimitError, NotImplementedFormError, element, is_array, shape
 from xlrecalc._engine import COLS, Engine, node, unpack
 from xlrecalc._load import _value, load
 from xlrecalc._report import CellRef
 from xlrecalc._values import BLANK, ErrorValue, Ref
-from xlrecalc._xlsx import Book
 
 UNTIMELY = frozenset({"NOW", "TODAY", "RAND", "RANDBETWEEN", "RANDARRAY", "INFO", "CELL"})
 _STRING = re.compile(r'"(?:[^"]|"")*"')
@@ -185,15 +186,15 @@ def _members(engine: Engine, n: int) -> list[tuple[int, int]]:
 def _cached_values(engine: Engine, path: str) -> dict[int, Any]:
     """Excel's cached value of every formula cell and every cell an array formula fills."""
     out: dict[int, Any] = {}
-    with Book(path) as book:
-        for index, info in enumerate(book.sheets):
-            if info.kind != "worksheet":
+    with xlio.open(path) as book:
+        for index, sheet in enumerate(book.sheets):
+            if sheet.kind != "worksheet":
                 continue
-            for cell in book.cells(info):
+            for cell in sheet.cells():
                 n = node(index, cell.row - 1, cell.column - 1)
                 if cell.formula is None and engine.member_of(n) is None:
                     continue
-                value = _value(cell, engine.date1904, engine.quirks, book.value_errors)
+                value = _value(cell, engine.date1904, engine.quirks)
                 if value is not None:
                     out[n] = value
     return out
@@ -351,13 +352,13 @@ def compare_workbook(path: str) -> dict[str, Any]:
 
     downstream = {label: len(set(engine.dependents(seeds))) for label, seeds in label_seeds.items()}
     after_own = len(set(engine.dependents(alone_differs))) if alone_differs else 0
-    with Book(path) as book:
+    with xlio.open(path) as book:
         calc = book.calc
         tables = 0
-        for info in book.sheets:
-            if info.kind == "worksheet":
+        for sheet in book.sheets:
+            if sheet.kind == "worksheet":
                 tables += sum(
-                    1 for c in book.cells(info) if c.formula and c.formula.kind == "dataTable"
+                    1 for c in sheet.cells() if c.formula and c.formula.kind == "dataTable"
                 )
     return {
         "counts": dict(counts),

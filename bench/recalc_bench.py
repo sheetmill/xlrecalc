@@ -20,9 +20,10 @@ import tempfile
 import time
 from pathlib import Path
 
+import xlio
+
 from xlrecalc._load import load
 from xlrecalc._save import lookups
-from xlrecalc._xlsx._write import write
 
 DATA = Path(__file__).resolve().parent / "data"
 
@@ -41,9 +42,9 @@ def main(n: int, out: Path | None) -> None:
     t1 = time.perf_counter()
     engine.recalculate()
     t2 = time.perf_counter()
-    written = write(path, path, lookups(engine))
+    written = xlio.patch(path, path, cached=lookups(engine))
     t3 = time.perf_counter()
-    unchanged = write(path, folder / "again.xlsx", lookups(engine))
+    unchanged = xlio.patch(path, folder / "again.xlsx", cached=lookups(engine))
     t4 = time.perf_counter()
     print(
         json.dumps(

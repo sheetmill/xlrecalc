@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import os
 
+import xlio
+
 from xlrecalc._formula._fastkey import translate
+from xlrecalc._limits import ReadLimits, io_limits
 from xlrecalc._load import RecalcOnLoad, load, recalc_mode
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import Report
 from xlrecalc._save import array_edits, lookups
-from xlrecalc._xlsx import ReadLimits
-from xlrecalc._xlsx._write import write
 
 __all__ = ["recalculate"]
 
@@ -73,14 +74,14 @@ def recalculate(
     engine.save_run()  # an opening, then a save: Excel's saved copy (§7.2)
     target = source if destination is None else destination
     edits, fills = array_edits(engine)
-    write(
+    xlio.patch(
         source,
         target,
-        lookups(engine),
-        edits=edits,
+        cached=lookups(engine),
+        cells=edits,
         fills=fills,
         translate=translate,
         full_calc_on_load=full_calc_on_load,
-        limits=limits,
+        limits=io_limits(limits),
     )
     return engine.report

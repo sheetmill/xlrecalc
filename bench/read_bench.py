@@ -30,13 +30,13 @@ def child(mode: str, files: list[str]) -> None:
     start = time.perf_counter()
     cells = 0
     if mode == "xlrecalc":
-        from xlrecalc._xlsx import Book
+        import xlio
 
         for f in files:
-            with Book(f) as book:
+            with xlio.open(f) as book:
                 for sheet in book.sheets:
                     if sheet.kind == "worksheet":
-                        for _ in book.cells(sheet):
+                        for _ in sheet.cells():
                             cells += 1
     else:
         import warnings

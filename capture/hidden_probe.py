@@ -17,10 +17,10 @@ from pathlib import Path
 
 import openpyxl
 
+from capture._file import Book
 from capture.edition import edition_line
 from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
-from xlrecalc._xlsx import Book
 
 HERE = Path(__file__).resolve().parent
 RANGES = {"Filtered": "A2:A7", "Hand": "A2:A7", "Both": "A2:A7"}

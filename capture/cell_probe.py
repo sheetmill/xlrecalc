@@ -20,9 +20,9 @@ from pathlib import Path
 
 import openpyxl
 
+from capture._file import Book
 from capture.edition import edition_line
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
-from xlrecalc._xlsx import Book
 
 HERE = Path(__file__).resolve().parent
 FORMULAS = ['CELL("address")', 'CELL("filename")', 'CELL("row")', 'CELL("col")']

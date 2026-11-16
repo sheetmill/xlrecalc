@@ -22,14 +22,13 @@ from pathlib import Path
 
 import openpyxl
 
+from capture._file import Book, number_text
 from capture.array_probe import add_dynamic
 from capture.dynamic_suites import BLOCK, SUITES, anchor_of, layout
 from capture.edition import edition_line
 from capture.excel_watch import osascript_or_exit
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
 from xlrecalc._values import ErrorValue
-from xlrecalc._xlsx import Book
-from xlrecalc._xlsx._write import number_text
 
 HERE = Path(__file__).resolve().parent
 

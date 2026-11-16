@@ -8,12 +8,12 @@ from pathlib import Path
 
 import pytest
 import xlformat
+from capture._file import Book
 
 import xlrecalc
 from tests.test_write import cells_of, raw_entries, sheet_xml
-from tests.test_xlsx import MAIN, package
+from tests.xlsx_files import MAIN, package
 from xlrecalc import CellRef, ErrorValue, FormulaError, load
-from xlrecalc._xlsx import Book
 
 DOC = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 ROWS = (
@@ -396,3 +396,20 @@ def test_set_formula_writes_what_excel_writes_for_a_typed_let(tmp_path, k):
             assert cell.formula is not None
             assert (cell.formula.text, cell.formula.kind, cell.formula.ref) == (form, kind, ref)
             assert (cell.cm is not None) is (cm is not None)
+
+
+def test_a_sheet_without_a_part_does_not_shift_sheet_scopes() -> None:
+    """``localSheetId`` and ``activeTab`` count every ``<sheet>``, one without a part too."""
+    data = package(
+        '<row r="1"><c r="A1"><v>5</v></c><c r="B1"><f>Rate</f></c></row>',
+        sheets=(
+            '<sheet name="Gone" sheetId="2" r:id=""/><sheet name="Data" sheetId="1" r:id="rId1"/>'
+        ),
+        workbook_extra=(
+            '<definedNames><definedName name="Rate" localSheetId="1">Data!$A$1</definedName>'
+            '<definedName name="Lost" localSheetId="0">1</definedName></definedNames>'
+        ),
+    )
+    wb = xlrecalc.load(io.BytesIO(data), recalc_on_load="always")
+    assert wb.sheet_names == ["Data"]
+    assert wb.value("B1") == 5.0

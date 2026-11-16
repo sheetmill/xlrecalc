@@ -26,9 +26,10 @@ Excel's results are captured for the tests. Measured numbers are in `bench/resul
      100k formulas) or large ranges.
 4. **Low memory.** Under 200 bytes per formula cell and under 50 bytes per value cell in the
    default store, with a path to much less.
-5. **Pure Python.** No office suite, no compiled extension. The one required dependency is
-   xlformat (pure Python, no dependencies of its own), which formats values for `TEXT`. There
-   are no optional extras; any added later (§13) are never needed for correctness.
+5. **Pure Python.** No office suite, no compiled extension. The two required dependencies,
+   both pure Python with no dependencies of their own, are xlformat, which formats values for
+   `TEXT`, and xlio, which reads and writes xlsx files (§9). There are no optional extras; any
+   added later (§13) are never needed for correctness.
 6. **Complete function coverage** as the long-term goal (Excel has about 500 worksheet
    functions), with a coverage matrix generated from the function registry (§8.4).
 
@@ -996,9 +997,9 @@ tool runs in the repository, since it needs the captures and the capture tests.
 
 ### 9.1 Reader
 
-xlrecalc reads xlsx files with its own reader in the private subpackage `xlrecalc._xlsx`
-(standard library only, and it imports nothing from the rest of xlrecalc; a test enforces both).
-`Book` opens a package and reads:
+xlrecalc reads xlsx files with xlio, the sheetmill package that reads and surgically writes them
+(standard library only). xlrecalc uses only xlio's public names (a test enforces it).
+`xlio.open` opens a package and reads:
 - the package: relationships, and the workbook part found through the package's own
   relationships;
 - the workbook: sheets with their names, states and kinds (worksheet, chartsheet, dialog or
@@ -1011,8 +1012,10 @@ xlrecalc reads xlsx files with its own reader in the private subpackage `xlrecal
   `inlineStr`, `b`, `e`, `d`, or none for an uncached formula), its formula with the shared and
   array metadata (`t`, `ref`, `si`, all attributes as written), and its `cm` and `vm` (the
   dynamic-array and value-metadata markers), with the workbook's metadata part read so that a
-  `cm` marking a dynamic array and a `vm` holding a rich-value error (`#SPILL!`) are known
-  (§7.7);
+  `cm` marking a dynamic array is known (§7.7) and a cell whose `vm` holds a rich-value error
+  reads as that error (`#SPILL!`), and a subnormal number as 0, as Excel reads them;
+- each worksheet's structure, in a second pass that skips the cells: hidden rows and the filter
+  mode (for `SUBTOTAL`), and the views, for the active cell (for `CELL` without a reference);
 - the tables on a worksheet (name, display name, range, columns, header and totals rows), for
   structured references.
 
@@ -1099,13 +1102,13 @@ fetches anything a file names:
 
 ### 9.2 Surgical writer
 
-`xlrecalc._xlsx._write` produces a new package from the source package and new cached values,
-given per sheet as a lookup from a formula cell to its value in the file's terms (`n`, `str`,
-`b`, `e`, as the reader returns them); `_save.py`, outside `_xlsx`, builds the lookups from the
-engine:
-- every part it does not change is copied byte for byte, compressed data included: the
-  package's own zip writer (`_xlsx/_zip.py`) copies an entry's local header, data and data
-  descriptor as stored and writes the central directory, with Zip64 records where needed;
+`xlio.patch` produces a new package from the source package and new cached values, given per
+sheet as a lookup from a formula cell to its value as a Python value (`float`, `str`, `bool`,
+`xlio.ErrorCode`, or `None` to keep the cell); `_save.py` builds the lookups from the engine,
+and gives an error the file format has no code for (`#FIELD!`, `#BLOCKED!`) as `#VALUE!`:
+- every part it does not change is copied byte for byte, compressed data included: the zip
+  writer in xlio copies an entry's local header, data and data descriptor as stored and writes
+  the central directory, with Zip64 records where needed;
 - a sheet part is rewritten by a streaming scan of its bytes: expat reports where each `<c>`
   starts and ends, and for a formula cell whose new value differs from the one the file holds
   only the `t` attribute and the `<v>` element are replaced; everything else, the `<f>`
@@ -1271,12 +1274,13 @@ effects or file or network access (`WEBSERVICE`, `FILTERXML`, `RTD`, `CALL`, `RE
 exclusion covers formulas taken from those workbooks. Capture suites written for this package call
 `CELL`, `HYPERLINK`, `FILTERXML` and the like directly, with fixed local input.
 
-**Other tests.** Tokenizer and printer round trip over the formula corpus; normalizer (template keys,
-anchors, sheets); code generation safety (§5.4); dependency index (property tests: reverse
-lookup agrees with brute force); scheduler (chains, fan-out, cycles, volatility); reader
-(against openpyxl on the same files); writer (untouched parts byte-identical, text and numbers read back as written, atomic
-replacement; `tests/test_write.py`); Excel opening what the writer wrote, with `--tier excel`
-(§9.4). The default `pytest` run needs neither Excel nor openpyxl. `bench/` reruns the measurements of §2 and the acceptance test of §6.4.
+**Other tests.** Tokenizer and printer round trip over the formula corpus; normalizer (template
+keys, anchors, sheets); code generation safety (§5.4); dependency index (property tests: reverse
+lookup agrees with brute force); scheduler (chains, fan-out, cycles, volatility); reader and writer
+(in xlio; here, `recalculate` end to end and crafted files through the engine,
+`tests/test_write.py`, `tests/test_crafted.py`); Excel opening what the writer wrote, with `--tier
+excel` (§9.4). The default `pytest` run needs neither Excel nor openpyxl. `bench/` reruns the
+measurements of §2 and the acceptance test of §6.4.
 
 ## 11. Package layout and API
 
@@ -1302,12 +1306,11 @@ src/xlrecalc/
   _load.py         an engine from an xlsx file: the trust rule, refused formulas (§7.4, §9.5)
   _report.py       Report, CellRef (§7.6)
   _workbook.py     load(), Workbook: values, changes, saving (§11.2)
-  _save.py         the engine's values in the writer's file terms (§9.2)
+  _save.py         the engine's values as xlio's writer takes them (§9.2)
+  _limits.py       ReadLimits, and the archive limits as xlio takes them (§9.1)
   _recalc.py       recalculate() (§9.2)
   _evaluate.py     evaluate(), Formula: one formula outside a workbook (§11.2)
   _functions/      registry and one module per category (§8)
-  _xlsx/           reader (Book, ReadLimits), surgical writer and zip writer (§9.1, §9.2);
-                   standard library only, no imports from the rest of xlrecalc
 capture/           capture tooling (not in the wheel)
 tools/             developer tools: the formula round trip over a set of workbooks, the
                    prefix table from the captures, the coverage matrix
@@ -1364,7 +1367,6 @@ alone gives the engine's value in the capture's sheet.
 | question | leaning |
 |---|---|
 | callbacks | what is not Excel's own computation (custom functions, database connections, outside providers) is a callback the caller supplies, never something the engine reaches for; registration per workbook or engine, not process-wide; a rule for a file naming a function not installed. Their API is settled before any function that needs one is built |
-| the `_xlsx` subpackage's future | extracted into its own package once a second user (sheetpeek) needs its API |
 | numpy | optional extra, never required |
 
 ## 13. Roadmap
@@ -1394,8 +1396,8 @@ After 0.2.0, in this order: an order, not a promise or a date.
    callbacks (§12).
 6. Before 1.0: the newer errors written in Excel's own form, `#VALUE!` with a rich-value record
    behind `vm` (§7.7), so that a file Excel opens without recalculating shows `#SPILL!` or
-   `#CALC!` and a later load reads a blocked spill as one; the rich-value parts belong to the
-   reader and writer, which are moving into a package of their own.
+   `#CALC!` and a later load reads a blocked spill as one; the rich-value parts are `xlio`'s, the
+   reader and writer.
 7. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
    vectorized templates (numpy as an optional extra), a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,

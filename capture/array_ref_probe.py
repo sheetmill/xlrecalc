@@ -34,11 +34,10 @@ from openpyxl.utils import get_column_letter
 from openpyxl.workbook.defined_name import DefinedName
 from openpyxl.worksheet.formula import ArrayFormula
 
+from capture._file import Book, number_text
 from capture.array_probe import add_dynamic
 from capture.edition import edition_line
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
-from xlrecalc._xlsx import Book
-from xlrecalc._xlsx._write import number_text
 
 HERE = Path(__file__).resolve().parent
 DATA = {"Z": [1, 2, 2, 3, 5], "AA": [10, 20, 30, 40, 50], "AB": list("abcde")}

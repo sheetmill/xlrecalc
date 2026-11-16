@@ -1,4 +1,4 @@
-"""Build an engine from an xlsx file read by ``_xlsx`` (ARCHITECTURE.md §7.4, §9.1, §9.5).
+"""Build an engine from an xlsx file read by ``xlio`` (ARCHITECTURE.md §7.4, §9.1, §9.5).
 
 Cached values are kept and trusted per §7.4: a formula is stale when the file holds no cached
 value for it, when the workbook is one Excel recalculates on opening (``recalc_on_load``), or
@@ -17,18 +17,18 @@ import warnings
 from collections.abc import Iterable
 from typing import Any, BinaryIO, Literal
 
+import xlio
+
 from xlrecalc._dates import date_serial
 from xlrecalc._engine import Engine, node
 from xlrecalc._formula import FormulaSyntaxError, Kind, Token, TokenizeError, parse, tokenize
 from xlrecalc._formula._fastkey import raw_key
 from xlrecalc._formula._nodes import Call, Reference
 from xlrecalc._formula._prefixes import PREFIXES
-from xlrecalc._numtext import DBL_MIN
+from xlrecalc._limits import ReadLimits, io_limits
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef
 from xlrecalc._values import BLANK, ErrorValue, Value
-from xlrecalc._xlsx import Book, CalcProperties, Cell, ReadLimits, SheetRows
-from xlrecalc._xlsx._cells import _column as _cell
 
 __all__ = ["load", "refused_in_file"]
 
@@ -428,25 +428,22 @@ def _filled_by(boxes: list[tuple[int, int, int, int, int]], row: int, col: int) 
     return None
 
 
-def _value(
-    cell: Cell, date1904: bool, quirks: Quirks, errors: dict[str, str] | None = None
-) -> Value | None:
+def _value(cell: xlio.Cell, date1904: bool, quirks: Quirks) -> Value | None:
     """A cell's cached value as the engine holds it; ``None`` when there is none.
 
-    An error a file caches as ``#VALUE!`` with a rich value behind it (``vm``) is that error
-    (a blocked spill is ``#SPILL!``: capture ``arrays``).
+    ``xlio`` reads values as Excel does: a subnormal number is 0, and an error a file caches as
+    ``#VALUE!`` with a rich value behind it (``vm``) is that error (a blocked spill is
+    ``#SPILL!``: capture ``arrays``).
     """
     t, v = cell.type, cell.value
     if t == "none" or v is None:
         return None
     if t == "n":
         assert isinstance(v, float)
-        return 0.0 if -DBL_MIN < v < DBL_MIN else v  # Excel reads a subnormal as 0
+        return v
     if t == "b":
         return bool(v)
     if t == "e":
-        if errors and cell.vm is not None and cell.vm in errors:
-            return ErrorValue(errors[cell.vm])
         try:
             return ErrorValue(str(v))
         except ValueError:
@@ -503,7 +500,9 @@ def recalc_mode(
     return mode
 
 
-def recalculates_on_opening(calc: CalcProperties, volatile: bool, saving: bool = False) -> bool:
+def recalculates_on_opening(
+    calc: xlio.CalcProperties, volatile: bool, saving: bool = False
+) -> bool:
     """Whether Excel recalculates every formula of a workbook on opening it (capture ``open_calc``).
 
     It does when the workbook has no ``calcPr`` or one without ``calcId``, asks for it
@@ -548,7 +547,7 @@ def load(
     """
     if recalc_on_load not in RECALC_ON_LOAD:
         raise ValueError(f"recalc_on_load must be one of {RECALC_ON_LOAD}: {recalc_on_load!r}")
-    with Book(source, limits) as book:
+    with xlio.open(source, limits=io_limits(limits)) as book:
         engine = Engine(
             quirks,
             book.date1904,
@@ -563,34 +562,54 @@ def load(
             engine.path = os.path.abspath(os.fspath(source))
         for sheet in book.sheets:
             engine.add_sheet(sheet.name)
+        # localSheetId counts every <sheet>, one without a part too: a name local to that is dropped
+        index_of = {sheet.position: i for i, sheet in enumerate(book.sheets)}
         for name in book.defined_names:
-            engine.define_name(name.name, name.text, name.sheet)
-        active = book.active_tab if 0 <= book.active_tab < len(book.sheets) else 0
-        row, col = book.active_cell(book.sheets[active])
+            scope = None if name.sheet is None else index_of.get(name.sheet)
+            if name.sheet is None or scope is not None:
+                engine.define_name(name.name, name.text, scope)
+        active = book.views[0].active_tab if book.views else 0
+        if not 0 <= active < len(book.sheets):
+            active = 0
+        row, col = _active_cell(book.sheets[active])
         engine.active = (active, row - 1, col - 1)
         full = recalc_on_load == "always" or (
             recalc_on_load == "excel" and recalculates_on_opening(book.calc, False, saving)
         )
+        dynamic = book.cell_metadata.dynamic_arrays
         for index, sheet in enumerate(book.sheets):
             if sheet.kind == "worksheet":
-                _load_sheet(engine, book, index, full)
+                _load_sheet(engine, sheet, dynamic, index, full)
         volatile = not full and recalc_on_load == "excel" and engine.has_volatile()
         if volatile and recalculates_on_opening(book.calc, True, saving):  # every formula
             engine.make_all_stale()
     return engine
 
 
-def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
+def _active_cell(sheet: xlio.Sheet) -> tuple[int, int]:
+    """A worksheet's active cell in its first view, 1-based (row, col); A1 without a view.
+
+    As Excel reads it (``xlio``'s capture ``views``): ``activeCell`` when it lies in the
+    selection, else the selection's first cell.
+    """
+    if sheet.kind != "worksheet" or not sheet.views:
+        return 1, 1
+    cell = sheet.views[0].active_cell
+    return cell.row, cell.column
+
+
+def _load_sheet(
+    engine: Engine, sheet: xlio.Sheet, dynamic_cm: frozenset[int], index: int, full: bool
+) -> None:
     s = engine.sheets[index]
     masters: dict[int, int] = {}  # shared-formula index -> template id
     refusals: dict[str, object] = {}
     dependents: list[tuple[int, int, int, Value | None]] = []
     report = engine.report
     boxes: list[tuple[int, int, int, int, int]] = []  # ranges array formulas fill (§7.7)
-    rows = SheetRows()
-    for cell in book.cells(book.sheets[index], rows):
+    for cell in sheet.cells():
         row, col = cell.row - 1, cell.column - 1
-        cached = _value(cell, engine.date1904, engine.quirks, book.value_errors)
+        cached = _value(cell, engine.date1904, engine.quirks)
         f = cell.formula
         if f is None:
             anchor = _filled_by(boxes, row, col)
@@ -604,7 +623,7 @@ def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
             dependents.append((row, col, f.si or 0, cached))
             continue
         box = _box(f.ref) if f.kind in ("array", "dataTable") and f.ref else None
-        dynamic = f.kind == "array" and cell.cm is not None and cell.cm in book.dynamic_cm
+        dynamic = f.kind == "array" and cell.cm is not None and cell.cm in dynamic_cm
         if box is not None and not dynamic:  # cells Excel does not let one change one by one
             engine.locked.setdefault(index, []).append(box)
         if f.kind == "dataTable" or f.text is None:
@@ -654,8 +673,8 @@ def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
         engine.set_formula(index, row, col, template=tid, cached=cached, stale=full)
         if engine.iterate and f.attributes.get("ca") in ("1", "true"):
             engine.calc_always.add(node(index, row, col))
-    s.hidden_rows = frozenset(r - 1 for r in rows.hidden)
-    s.filter_mode = rows.filter_mode
+    s.hidden_rows = frozenset(r - 1 for r, f in sheet.rows.items() if f.hidden)
+    s.filter_mode = sheet.properties.filter_mode
     for row, col, si, cached in dependents:
         master = masters.get(si)
         if master is None:  # no master in the file: keep the value, as there is no formula
@@ -663,6 +682,20 @@ def _load_sheet(engine: Engine, book: Book, index: int, full: bool) -> None:
                 s.set(row, col, cached)
             continue
         engine.set_formula(index, row, col, template=master, cached=cached, stale=full)
+
+
+def _cell(ref: str) -> tuple[int, int]:
+    """A cell reference such as ``B2`` as 1-based (row, col)."""
+    col = 0
+    for i, ch in enumerate(ref):
+        o = ord(ch)
+        if 65 <= o <= 90:
+            col = col * 26 + o - 64
+        elif 97 <= o <= 122:
+            col = col * 26 + o - 96
+        else:
+            return int(ref[i:]), col
+    raise ValueError(f"not a cell reference: {ref!r}")
 
 
 def _box(ref: str) -> tuple[int, int, int, int] | None:

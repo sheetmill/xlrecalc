@@ -39,6 +39,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   budget, and the 24 `empty_args` rows of the eight functions. The coverage page counts them per function.
 
 ### Changed
+- xlsx files are read and written by [xlio](https://github.com/sheetmill/xlio), a new required dependency
+  (`xlio==0.1.*`), which holds the reader and surgical writer this package had in `xlrecalc._xlsx`; that private
+  subpackage is gone. `PackageError` and `LimitError` are xlio's, re-exported, so `except xlrecalc.PackageError` works as
+  before; `ReadLimits` keeps its five fields and import path. Every value computed and every byte written is unchanged on
+  the capture and benchmark workbooks. Two readings follow Excel where the old reader did not (xlio's captures): a cell
+  whose format or metadata index is past its table makes the file refused (`PackageError`), as Excel refuses it, where
+  it was read; the active cell is `activeCell` when it lies in the selection, else the selection's first cell.
 - `save(..., full_calc_on_load=False)` and `recalculate(..., full_calc_on_load=False)` save the file without a
   request to recalculate on opening, removing one the file held, as Excel removes it when it saves; they left it.
 - A load trusts a file's cached values where Excel does on opening it, and evaluates every formula where Excel

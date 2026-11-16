@@ -15,11 +15,12 @@ import zipfile
 import zlib
 
 import pytest
+from capture._file import Book
 
 import xlrecalc
-from tests.test_xlsx import MAIN, package
 from tests.watchdog import bounded
-from xlrecalc._xlsx import Book, PackageError
+from tests.xlsx_files import MAIN, package
+from xlrecalc import PackageError
 
 SHEET = "xl/worksheets/sheet1.xml"
 DTD = '<!DOCTYPE x [<!ENTITY e "boom">]>'
@@ -264,17 +265,6 @@ def test_damaged_data_is_refused():
         load(bytes(buf))
 
 
-def test_a_part_read_twice_at_once_reads_the_same():
-    data = package('<row r="1"><c r="A1" t="s"><v>0</v></c></row>', strings=["<si><t>a</t></si>"])
-    with Book(io.BytesIO(data)) as book:
-        whole = sheet_bytes(data)
-        with book._package.part(SHEET) as first, book._package.part(SHEET) as second:
-            head = first.read(10)
-            assert second.read() == whole
-            assert head + first.read() == whole
-        assert [c.value for c in book.cells("Data")] == ["a"]
-
-
 # --- the grid: cells far away, huge ranges, rows and columns off the sheet
 
 
@@ -419,12 +409,17 @@ def test_calculation_settings_that_are_not_numbers_are_ignored(attribute):
     [
         '<c r="A1" s="nan"><v>2</v></c>',
         '<c r="A1" s="-1"><v>2</v></c>',
-        '<c r="A1" cm="99999999999"><v>2</v></c>',
         '<c r="A1" vm="nan"><v>2</v></c>',
     ],
 )
 def test_style_and_metadata_indexes_that_lead_nowhere_are_harmless(cell):
     assert load(package(f'<row r="1">{cell}</row>')).value("A1") == 2.0
+
+
+def test_a_metadata_index_past_its_table_is_refused_as_excel_refuses_it():
+    """``xlio``'s capture ``attributes``: Excel refuses a cell whose ``cm`` is past its table."""
+    with pytest.raises(PackageError, match="past its table"):
+        load(package('<row r="1"><c r="A1" cm="99999999999"><v>2</v></c></row>'))
 
 
 @pytest.mark.parametrize("tab", ["99999999999", "-1", "nan"])

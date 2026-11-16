@@ -31,10 +31,9 @@ from pathlib import Path
 import openpyxl
 from openpyxl.worksheet.formula import ArrayFormula
 
+from capture._file import Book, number_text, text_escape
 from capture.edition import edition_line
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
-from xlrecalc._xlsx import Book
-from xlrecalc._xlsx._write import number_text, text_escape
 
 HERE = Path(__file__).resolve().parent
 NS = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"

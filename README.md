@@ -12,9 +12,10 @@ Documentation: <https://xlrecalc.readthedocs.io>.
 pip install xlrecalc
 ```
 
-Python 3.11 or later. The one dependency is [xlformat](https://github.com/sheetmill/xlformat),
-which applies Excel's number formats for `TEXT`. The examples below make their workbooks with
-openpyxl, installed separately (`pip install openpyxl`); xlrecalc itself does not need it.
+Python 3.11 or later. The two dependencies are [xlformat](https://github.com/sheetmill/xlformat),
+which applies Excel's number formats for `TEXT`, and [xlio](https://github.com/sheetmill/xlio),
+which reads and writes the xlsx files. The examples below make their workbooks with openpyxl,
+installed separately (`pip install openpyxl`); xlrecalc itself does not need it.
 
 <!-- usage-start -->
 ## Recalculating a file
@@ -182,7 +183,8 @@ uv run python bench/engine_bench.py 1000000 --xlsx  # compute, then change A1
 ## Part of sheetmill
 
 xlrecalc is part of the [sheetmill](https://github.com/sheetmill) project, with
-[xlformat](https://github.com/sheetmill/xlformat), which applies Excel number formats, and
+[xlformat](https://github.com/sheetmill/xlformat), which applies Excel number formats,
+[xlio](https://github.com/sheetmill/xlio), which reads and surgically writes xlsx files, and
 [sheetpeek](https://github.com/sheetmill/sheetpeek), which shows workbooks as Excel does.
 
 ## Development

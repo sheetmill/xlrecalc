@@ -15,13 +15,13 @@ import zipfile
 from pathlib import Path
 
 import pytest
+from capture._file import Book
 
 import xlrecalc
-from tests.test_xlsx import package
+from tests.xlsx_files import package
 from xlrecalc._engine import ITERATION_LIMIT
 from xlrecalc._report import CellRef, column_letters
 from xlrecalc._values import ErrorValue
-from xlrecalc._xlsx import Book
 
 FLAG = '<calcPr iterate="1" fullCalcOnLoad="1"/>'
 TRUST = '<calcPr calcId="191029" iterate="1"/>'  # as Excel 16.115 saves it: trusted on opening

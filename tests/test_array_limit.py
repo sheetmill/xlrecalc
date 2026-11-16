@@ -16,12 +16,12 @@ from pathlib import Path
 from xml.sax.saxutils import escape as xml_escape
 
 import pytest
+from capture._file import Book
 
 import xlrecalc
-from tests.test_xlsx import DOC, MAIN, PKG, package
 from tests.watchdog import GIB, bounded
+from tests.xlsx_files import DOC, MAIN, PKG, package
 from xlrecalc import ReadLimits
-from xlrecalc._xlsx import Book
 
 CAPTURES = Path(__file__).with_name("captures")
 LIMIT_LABEL = "an array of more than"

@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 from tools.corpus_compare import compare, compare_workbook, kind_of
 
-from tests.test_xlsx import package
+from tests.xlsx_files import package
 from xlrecalc._values import ErrorValue
 
 

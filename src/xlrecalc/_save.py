@@ -1,40 +1,47 @@
 """The engine's values in the writer's file terms (ARCHITECTURE.md §9.2).
 
-The writer in ``_xlsx`` knows nothing of the engine's types; this gives it, per sheet, a lookup
-from a formula cell to its new cached value as the file stores it, or ``None`` for a cell whose
-cached value must stay as it is: not a formula in the engine (a refused, array or data-table
-formula, kept as its cached value), or uncomputed (§7.6).
+``xlio``'s writer knows nothing of the engine's types; this gives it, per sheet, a lookup from
+a formula cell to its new cached value as a Python value, or ``None`` for a cell whose cached
+value must stay as it is: not a formula in the engine (a refused, array or data-table formula,
+kept as its cached value), or uncomputed (§7.6).
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable
 
+from xlio import ArrayFill, CachedValues, CellEdit, CellValue, ErrorCode
+
 from xlrecalc._engine import Engine, unpack
 from xlrecalc._report import column_letters
 from xlrecalc._store import COLS, Sheet, TemplateIds
 from xlrecalc._values import BLANK, ErrorValue, Value
-from xlrecalc._xlsx._write import Edit, FileValue, Fill, Lookup
 
 __all__ = ["array_edits", "file_value", "lookups"]
 
 
-def file_value(value: Value) -> FileValue | None:
-    """A cell value as a file stores a formula's result; ``None`` for a blank."""
-    if isinstance(value, bool):
-        return ("b", value)
-    if isinstance(value, float):
-        return ("n", value)
-    if isinstance(value, str):
-        return ("str", value)
+_CODES = {e.value: e for e in ErrorCode}
+
+
+def file_value(value: Value) -> CellValue | None:
+    """A cell value as the writer takes a formula's result; ``None`` for a blank.
+
+    An error the file format has no code for (``#FIELD!``, ``#BLOCKED!``, ...) is ``#VALUE!``,
+    as Excel caches the newer errors (capture ``arrays``); the writer writes ``#SPILL!`` and
+    ``#CALC!`` as ``#VALUE!`` too. ``#GETTING_DATA`` is ``#N/A``, as Excel writes it back.
+    """
     if isinstance(value, ErrorValue):
-        return ("e", value.code)
+        if value.code == ErrorCode.GETTING_DATA:
+            return ErrorCode.NA
+        return _CODES.get(value.code, ErrorCode.VALUE)
+    if isinstance(value, bool | float | str):
+        return value
     return None
 
 
-def lookups(engine: Engine) -> dict[str, Lookup]:
+def lookups(engine: Engine) -> dict[str, CachedValues]:
     """Per sheet holding formulas, the lookup the writer asks for each formula cell."""
-    out: dict[str, Lookup] = {}
+    out: dict[str, CachedValues] = {}
     uncomputed: dict[str, set[tuple[int, int]]] = {}
     for cell in engine.report.uncomputed:
         uncomputed.setdefault(cell.sheet.casefold(), set()).add((cell.row, cell.col))
@@ -51,8 +58,10 @@ def lookups(engine: Engine) -> dict[str, Lookup]:
     return out
 
 
-def _lookup(templates: TemplateIds, values: dict[int, Value], skip: set[tuple[int, int]]) -> Lookup:
-    def lookup(row: int, col: int) -> FileValue | None:
+def _lookup(
+    templates: TemplateIds, values: dict[int, Value], skip: set[tuple[int, int]]
+) -> CachedValues:
+    def lookup(row: int, col: int) -> CellValue | None:
         key = (row - 1) * COLS + col - 1
         if key not in templates or (row, col) in skip:
             return None
@@ -68,15 +77,15 @@ def _a1(row: int, col: int) -> str:
 
 def array_edits(
     engine: Engine,
-) -> tuple[dict[str, dict[tuple[int, int], Edit]], dict[str, list[Fill]]]:
+) -> tuple[dict[str, dict[tuple[int, int], CellEdit]], dict[str, list[ArrayFill]]]:
     """The cells array formulas evaluated here fill, as edits and fills (§7.7, §9.2).
 
     For each anchor evaluated since loading: the anchor with its range (``ref``) and value as an
     edit, the other cells of its range as a fill (each value read from the store when written),
     and every cell it filled before and fills no more as an edit that clears it.
     """
-    out: dict[str, dict[tuple[int, int], Edit]] = {}
-    fills: dict[str, list[Fill]] = {}
+    out: dict[str, dict[tuple[int, int], CellEdit]] = {}
+    fills: dict[str, list[ArrayFill]] = {}
     uncomputed = {(c.sheet.casefold(), c.row, c.col) for c in engine.report.uncomputed}
     for n in engine.evaluated_anchors:
         anchor = engine.anchors.get(n)
@@ -91,27 +100,29 @@ def array_edits(
             continue
         ref = _a1(r1, c1) if (r1, c1) == (r2, c2) else f"{_a1(r1, c1)}:{_a1(r2, c2)}"
         if (s.name.casefold(), row + 1, col + 1) in uncomputed:
-            cells[row + 1, col + 1] = Edit(text, None, ref, anchor.dynamic)
+            cells[row + 1, col + 1] = CellEdit(text, None, ref, anchor.dynamic)
             continue
-        cells[row + 1, col + 1] = Edit(
+        cells[row + 1, col + 1] = CellEdit(
             text, file_value(s.values.get(row * COLS + col, BLANK)), ref, anchor.dynamic
         )
         if (r1, c1, r2, c2) != (row, col, row, col):
-            fills.setdefault(s.name, []).append(Fill(r1 + 1, c1 + 1, r2 + 1, c2 + 1, _reader(s)))
+            fills.setdefault(s.name, []).append(
+                ArrayFill(r1 + 1, c1 + 1, r2 + 1, c2 + 1, _reader(s))
+            )
     for m in engine.released:
         if engine.member_of(m) is not None:
             continue
         sheet, row, col = unpack(m)
         s = engine.sheets[sheet]
         if row * COLS + col not in s.templates:
-            out.setdefault(s.name, {}).setdefault((row + 1, col + 1), Edit(None, None))
+            out.setdefault(s.name, {}).setdefault((row + 1, col + 1), CellEdit(None, None))
     return out, fills
 
 
-def _reader(sheet: Sheet) -> Callable[[int, int], FileValue | None]:
+def _reader(sheet: Sheet) -> Callable[[int, int], CellValue | None]:
     values = sheet.values
 
-    def value_at(row: int, col: int) -> FileValue | None:
+    def value_at(row: int, col: int) -> CellValue | None:
         return file_value(values.get((row - 1) * COLS + col - 1, BLANK))
 
     return value_at

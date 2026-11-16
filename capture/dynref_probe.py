@@ -23,9 +23,9 @@ from pathlib import Path
 import openpyxl
 from openpyxl.workbook.defined_name import DefinedName
 
+from capture._file import Book
 from capture.edition import edition_line
 from capture.pipeline import CAPTURES, CONTAINER, excel_version
-from xlrecalc._xlsx import Book
 
 HERE = Path(__file__).resolve().parent
 FORMULAS = [

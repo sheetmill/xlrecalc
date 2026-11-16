@@ -15,8 +15,8 @@ import zipfile
 
 import openpyxl
 
+from capture._file import Book
 from capture.pipeline import CONTAINER, HERE
-from xlrecalc._xlsx import Book
 
 RAW = ["a_x000D_b", "_x005F_x0041_", "x_x0041_y", "a_x000d_b", "a_x000Db", "a_x00410_b"]
 

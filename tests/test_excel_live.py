@@ -26,6 +26,8 @@ import zipfile
 from pathlib import Path
 
 import pytest
+import xlio
+from capture._file import Book
 
 import xlrecalc
 from tests.captures import load as load_capture
@@ -43,8 +45,6 @@ from xlrecalc._formula._fileform import display_form
 from xlrecalc._load import load
 from xlrecalc._values import ErrorValue
 from xlrecalc._workbook import _file_formula
-from xlrecalc._xlsx import Book
-from xlrecalc._xlsx._write import write
 
 pytestmark = pytest.mark.excel_app
 
@@ -177,9 +177,14 @@ def test_excel_reads_written_values_exactly(container):
     save_copy(src, base)  # Excel's own file: its calcId, its values, its calcChain
 
     def lookup(row: int, col: int):
-        return SENTINELS[row - 1] if col == 1 and row <= len(SENTINELS) else None
+        if col != 1 or row > len(SENTINELS):
+            return None
+        kind, value = SENTINELS[row - 1]
+        return xlio.ErrorCode(value) if kind == "e" else value
 
-    assert write(base, patched, {"probe": lookup}, full_calc_on_load=False) == len(SENTINELS)
+    assert xlio.patch(base, patched, cached={"probe": lookup}, full_calc_on_load=False) == len(
+        SENTINELS
+    )
     save_copy(patched, copy)
     got = values(copy)
     wrong = []

@@ -11,6 +11,9 @@ import re
 from collections.abc import Callable
 from typing import BinaryIO, TypeAlias
 
+import xlio
+from xlio import CellEdit
+
 from xlrecalc._engine import Engine, node
 from xlrecalc._formula import FormulaSyntaxError, TokenizeError, parse, tokenize
 from xlrecalc._formula._codegen import kind_at
@@ -32,6 +35,7 @@ from xlrecalc._formula._nodes import (
 from xlrecalc._formula._tokens import Kind, column_number
 from xlrecalc._functions import REGISTRY, SPECS
 from xlrecalc._functions._registry import _LIFTED
+from xlrecalc._limits import ReadLimits, io_limits
 from xlrecalc._load import RecalcOnLoad, recalc_mode, refused_in_file
 from xlrecalc._load import load as _load_engine
 from xlrecalc._quirks import Quirks
@@ -39,8 +43,6 @@ from xlrecalc._report import CellRef, Report
 from xlrecalc._save import array_edits, file_value, lookups
 from xlrecalc._store import COLS, MAX_COL, MAX_ROW
 from xlrecalc._values import BLANK, ErrorValue, Value
-from xlrecalc._xlsx import ReadLimits
-from xlrecalc._xlsx._write import Edit, write
 
 __all__ = ["CellValue", "FormulaError", "Workbook", "load"]
 
@@ -317,7 +319,7 @@ class Workbook:
         if not live:
             engine.save_run()  # the recalculation was the opening's: the save's run follows
         uncomputed = {(c.sheet.casefold(), c.row, c.col) for c in engine.report.uncomputed}
-        edits: dict[str, dict[tuple[int, int], Edit]] = {}
+        edits: dict[str, dict[tuple[int, int], CellEdit]] = {}
         for sheet, cells in self._edits.items():
             s = engine.sheets[sheet]
             out = edits.setdefault(s.name, {})
@@ -325,9 +327,9 @@ class Workbook:
                 value = s.values.get((row - 1) * COLS + col - 1, BLANK)
                 text = engine.formula_text(sheet, row - 1, col - 1) if is_formula else None
                 if text is not None and (s.name.casefold(), row, col) in uncomputed:
-                    out[row, col] = Edit(text, None)
+                    out[row, col] = CellEdit(text, None)
                 else:
-                    out[row, col] = Edit(text, file_value(value))
+                    out[row, col] = CellEdit(text, file_value(value))
         filled_edits, fills = array_edits(engine)
         for name, filled in filled_edits.items():
             index = self._sheet(name)
@@ -336,21 +338,21 @@ class Workbook:
                 if edit.formula is not None and not self._needs_marker(index, row - 1, col - 1):
                     marked = self._marked.get((index, row - 1, col - 1))
                     text = edit.formula if marked is None else marked[1]
-                    edit = Edit(text, edit.value)  # a plain formula means the same
+                    edit = CellEdit(text, edit.value)  # a plain formula means the same
                 target[row, col] = edit
         source = self._source
         if not isinstance(source, (str, os.PathLike)):
             source.seek(0)
-        write(
+        xlio.patch(
             source,
             path,
-            lookups(engine),
-            edits=edits,
+            cached=lookups(engine),
+            cells=edits,
             fills=fills,
             translate=translate,
             drop_calc_chain=self._formula_removed,
             full_calc_on_load=full_calc_on_load,
-            limits=self._limits,
+            limits=io_limits(self._limits),
         )
 
 

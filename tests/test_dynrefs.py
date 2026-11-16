@@ -14,13 +14,13 @@ import zipfile
 from pathlib import Path
 
 import pytest
+from capture._file import text_escape
 
 from tests.test_captures import same
 from xlrecalc._engine import Engine
 from xlrecalc._formula._tokens import column_number
 from xlrecalc._load import load, refused_in_file
 from xlrecalc._values import BLANK, ErrorValue
-from xlrecalc._xlsx._write import text_escape
 
 MAIN = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 REL = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"

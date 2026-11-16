@@ -91,7 +91,7 @@ def test_module_references_resolve(reference):
 def test_cited_public_names_exist():
     """Outside the Roadmap, ARCHITECTURE.md presents only API that exists.
 
-    Private modules (``xlrecalc._xlsx``) are named for the design, not as API.
+    Private modules (``xlrecalc._engine``) are named for the design, not as API.
     """
     import xlrecalc
 
