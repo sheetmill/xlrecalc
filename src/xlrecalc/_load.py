@@ -511,8 +511,9 @@ def recalculates_on_opening(
     not ``"xl"``: openpyxl writes no ``<fileVersion>``, LibreOffice ``"Calc"``), or holds a
     volatile function, which recalculates every formula, not only its dependents. In manual
     calculation it shows the cached values on opening whatever the reason, and saves them
-    recalculated where a reason holds: ``saving`` asks about the copy it saves after opening. A
-    volatile function in manual calculation is taken as the other reasons are (not captured).
+    recalculated where a reason holds: ``saving`` asks about the copy it saves after opening; a
+    volatile function is such a reason too (``manual_volatile``), and its own cells show their
+    cached values on opening.
     """
     if calc.calc_mode == "manual" and not saving:
         return False
@@ -544,8 +545,10 @@ def load(
     ``recalc_on_load``: ``"excel"`` evaluates every formula where Excel would recalculate on
     opening (``recalculates_on_opening``) and trusts the cached values elsewhere; ``"always"``
     evaluates every formula; ``"never"`` trusts every cached value the file holds. A formula
-    without one, and a volatile one, is evaluated in every mode. ``saving``: the load is followed
-    by a save, as in ``recalculate(path)``, whose result is the copy Excel saves after opening.
+    without one is evaluated in every mode, and so is a volatile one, except under ``"excel"``
+    in manual calculation, where Excel shows its cached value on opening. ``saving``: the load
+    is followed by a save, as in ``recalculate(path)``, whose result is the copy Excel saves
+    after opening.
     """
     if recalc_on_load not in RECALC_ON_LOAD:
         raise ValueError(f"recalc_on_load must be one of {RECALC_ON_LOAD}: {recalc_on_load!r}")
@@ -586,6 +589,13 @@ def load(
         for index, sheet in enumerate(book.sheets):
             if sheet.kind == "worksheet":
                 _load_sheet(engine, sheet, dynamic, index, full)
+        if (
+            not full
+            and recalc_on_load == "excel"
+            and book.calc.calc_mode == "manual"
+            and not saving
+        ):
+            engine.trust_volatile()  # shown as cached on opening, whatever the reason
         volatile = not full and recalc_on_load == "excel" and engine.has_volatile()
         if volatile and recalculates_on_opening(book.calc, app, True, saving):  # every formula
             engine.make_all_stale()

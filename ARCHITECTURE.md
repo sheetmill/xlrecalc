@@ -655,12 +655,12 @@ formula, not only its dependents; it trusts the cached values otherwise, and in 
 `load` and `recalculate(path)` follow it by default (`recalc_on_load="excel"`, the rule in
 `recalculates_on_opening`, the threshold in `VERIFIED_CALC_ID`, which the capture sets and is rerun
 after every Excel update); `recalc_on_load="always"` treats every formula as stale and `"never"`
-trusts every cached value the file holds. A formula with no cached value, and a volatile one, is
-evaluated in every mode. A `calcPr` without `calcId` counts as none, as in Excel. In manual
+trusts every cached value the file holds. A formula with no cached value is evaluated in every
+mode, and so is a volatile one but under `"excel"` in manual calculation, where Excel shows its
+cached value on opening (capture `open_calc`, `manual_volatile`). A `calcPr` without `calcId` counts as none, as in Excel. In manual
 calculation Excel shows the cached values on opening whatever the reason, and saves them
 recalculated where a reason holds, so a load trusts them and `recalculate(path)`, an opening and a
-save, recalculates (a volatile function in manual calculation is taken as the other reasons are:
-not captured). Following Excel rather than always recalculating loses nothing: a file openpyxl
+save, recalculates (a volatile function in manual calculation is such a reason too). Following Excel rather than always recalculating loses nothing: a file openpyxl
 writes asks for a full calculation anyway, and where the rules trust a value it is the value Excel
 computed. A file xlrecalc wrote with `fullCalcOnLoad` set (the default, §9.2) is therefore loaded
 with every formula stale: reading it again costs a full recalculation, never a wrong value;

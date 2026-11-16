@@ -9,14 +9,15 @@ cached values, ``calcPr`` and calculation chain. Each variant plants wrong cache
 (sentinels: 999, "SENT", FALSE, #N/A, 777, and 555 in A7) in that copy and changes one thing:
 nothing; ``calcPr`` removed; ``calcId`` older or newer than the copy's, or removed;
 ``fullCalcOnLoad``; the volatile cell; manual calculation (``calcMode="manual"``), alone, with
-``fullCalcOnLoad`` and with an old ``calcId``. Two more are openpyxl's own files: with no cached
-values, and with the sentinels. Four look for another trigger, one difference between openpyxl's
-file and Excel's each: openpyxl's file with Excel's ``calcId`` and no ``fullCalcOnLoad``; Excel's
-copy without its calculation chain, without ``<fileVersion>``, and without ``docProps/app.xml`` (a
-part is dropped with its relationship and content type). Each variant is opened with alerts off and
-read (``open_read.applescript``: value, displayed text, formula, saved flag and calculation mode),
-closed without saving, then opened again and saved as a copy whose cached values are read. A cell
-showing its sentinel was taken from the file; one showing its right value was recalculated.
+``fullCalcOnLoad``, with an old ``calcId`` and with the volatile cell. Two more are openpyxl's own
+files: with no cached values, and with the sentinels. Four look for another trigger, one difference
+between openpyxl's file and Excel's each: openpyxl's file with Excel's ``calcId`` and no
+``fullCalcOnLoad``; Excel's copy without its calculation chain, without ``<fileVersion>``, and
+without ``docProps/app.xml`` (a part is dropped with its relationship and content type). Each
+variant is opened with alerts off and read (``open_read.applescript``: value, displayed text,
+formula, saved flag and calculation mode), closed without saving, then opened again and saved as a
+copy whose cached values are read. A cell showing its sentinel was taken from the file; one showing
+its right value was recalculated.
 
 Excel's calculation mode belongs to the application and the first workbook opened sets it, so
 the manual variants come last and ``calc_automatic.applescript`` sets the mode back after each.
@@ -219,6 +220,11 @@ def main() -> None:
             lambda t: re.sub(
                 r"<calcPr\b", '<calcPr calcMode="manual" fullCalcOnLoad="1"', t, count=1
             ),
+        ),
+        "manual_volatile": (
+            vbase,
+            volatile_sentinels,
+            lambda t: re.sub(r"<calcPr\b", '<calcPr calcMode="manual"', t, count=1),
         ),
         "manual_calcid_124519": (
             base,

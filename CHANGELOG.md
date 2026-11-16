@@ -55,7 +55,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   recalculates every formula, not only its dependents; never in manual calculation. Before, only `fullCalcOnLoad` made
   a load evaluate everything. The new option `recalc_on_load` of `load` and `recalculate` chooses: `"excel"` (the
   default), `"always"` (evaluate every formula) or `"never"` (trust every cached value the file holds; a formula
-  without one, or a volatile one, is evaluated all the same). A `calcPr` without `calcId` counts as none. In manual
+  without one, or a volatile one, is evaluated all the same; in manual calculation `"excel"` keeps a volatile one's
+  cached value too, as Excel shows it on opening). A `calcPr` without `calcId` counts as none. In manual
   calculation Excel shows the cached values on opening and saves them recalculated where a reason holds, so a load
   trusts them and `recalculate(path)` recalculates.
 - Excel 16.115 for Mac under Microsoft 365 is the reference: every capture made on 16.114 (Office Home & Business 2021)

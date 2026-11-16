@@ -129,7 +129,9 @@ def test_the_threshold_is_the_capture_s() -> None:
     assert min(trusted) == VERIFIED_CALC_ID
 
 
-MANUAL_WITH_A_REASON = frozenset({"manual_fullcalconload", "manual_calcid_124519"})
+MANUAL_WITH_A_REASON = frozenset(
+    {"manual_fullcalconload", "manual_calcid_124519", "manual_volatile"}
+)
 
 
 def test_displayed_values_are_the_saved_ones_but_in_manual_mode_with_a_reason() -> None:

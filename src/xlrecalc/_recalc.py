@@ -42,7 +42,8 @@ def recalculate(
             never leaves a partial file.
         recalc_on_load: ``"excel"``, Excel's rule (as :func:`load`); ``"always"``, evaluate
             every formula, trusting no cached value; ``"never"``, trust every cached value
-            the file holds (a formula without one, or a volatile one, is evaluated all the same).
+            the file holds (a formula without one, or a volatile one, is evaluated all the same; a
+            volatile one keeps its value under ``"excel"`` in manual calculation, as in Excel).
         full_calc_on_load: Ask Excel to recalculate when it opens the file
             (``<calcPr fullCalcOnLoad="1">``), so a value computed differently here never
             persists in what Excel shows. With ``False`` the file asks nothing (a request it

@@ -523,7 +523,8 @@ def load(
     holds are trusted (ARCHITECTURE.md §7.4) where Excel trusts them on opening the file, by
     default: every formula is evaluated when the file has no ``calcPr``, asks for a full
     calculation on load (``fullCalcOnLoad``), was last calculated by an older Excel
-    (``calcId``) or holds a volatile function, and none in manual calculation.
+    (``calcId``), was not saved by Excel (no ``<fileVersion appName="xl">``) or holds a volatile
+    function, and none in manual calculation.
 
     Args:
         source: The file, as a path or a binary file object (read into memory).
@@ -533,7 +534,8 @@ def load(
             one run of iterative calculation.
         recalc_on_load: ``"excel"``, Excel's rule above; ``"always"``, evaluate every formula;
             ``"never"``, trust every cached value the file holds. A formula with no cached
-            value, and a volatile one (``RAND``, ``NOW``...), is evaluated in every mode.
+            value is evaluated in every mode, and so is a volatile one (``RAND``, ``NOW``...)
+            but under ``"excel"`` in manual calculation, where Excel shows its cached value.
         trust_cached: Deprecated, to be removed in 1.0: ``False`` is ``recalc_on_load="always"``,
             ``True`` the default.
 
