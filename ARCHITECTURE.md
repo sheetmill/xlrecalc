@@ -920,10 +920,10 @@ Behavior that is not the obvious reading, each from its capture:
   is one); basis-1 `COUPDAYS` is `EDATE` from the previous coupon date; `PRICE` and the durations
   take the days to the next coupon as `COUPDAYS - COUPDAYBS` in every basis; and `YIELD` with one
   period left uses Excel's closed form with A as `COUPDAYBS`, E as the actual period in bases 1 to
-  3, and the days to redemption in the basis's own count. A logical settlement is `#VALUE!` in
-  these functions, as in the other Analysis ToolPak functions; a coupon period that would begin
-  before the calendar's first year is `#NUM!` here, as any date outside the calendar is (not
-  captured).
+  3, and the days to redemption in the basis's own count. A logical settlement or maturity is
+  `#VALUE!` in these functions, as in the other Analysis ToolPak functions; a coupon period that
+  would begin before the calendar's first year is `#NUM!`, but in `COUPDAYS` outside basis 1,
+  which needs no coupon date and gives the period's length.
 - `WORKDAY`, `NETWORKDAYS` and their `.INTL` forms (capture `workdays`): weekend codes 1 to 7 and
   11 to 17 or a seven-character mask, holidays as a range or array, logical arguments `#VALUE!`, a
   day count floored; Excel also computes `_xlfn.WORKDAY.INTL`, so both spellings are registered,

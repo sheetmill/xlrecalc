@@ -1106,6 +1106,12 @@ def bonds() -> list[Case]:
         Case("mduration", "MDURATION(39493,43054,0.08,-0.5,2,0)"),
         Case("mduration", "MDURATION(39493,43054,-0.08,0.09,2,0)"),
     ]
+    # A settlement whose coupon period would begin before 1900, and a logical maturity.
+    for fn, args in [("PRICE", "{1},{2},0.0575,0.065,100"), ("YIELD", "{1},{2},0.0575,95,100"),
+                     ("MDURATION", "{1},{2},0.08,0.09"), ("DURATION", "{1},{2},0.08,0.09"),
+                     ("COUPNUM", "{1},{2}"), ("COUPDAYS", "{1},{2}")]:  # fmt: skip
+        for inputs in ((1.0, m), (100.0, m), (s, True)):
+            add(Case(fn.lower(), f"{fn}({args},2)", inputs))
     return cases
 
 

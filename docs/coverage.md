@@ -105,10 +105,10 @@ so the page counts them together and is the same on every platform.
 | `COUNTIF` | math | implemented | 106 | 106 | 0 |  |  |
 | `COUNTIFS` | math | implemented | 50 | 50 | 0 |  |  |
 | `COUPDAYBS` | financial | implemented | 95 | 95 | 0 |  |  |
-| `COUPDAYS` | financial | implemented | 106 | 105 | 1 |  |  |
+| `COUPDAYS` | financial | implemented | 109 | 108 | 1 |  |  |
 | `COUPDAYSNC` | financial | implemented | 95 | 95 | 0 |  |  |
 | `COUPNCD` | financial | implemented | 95 | 95 | 0 |  |  |
-| `COUPNUM` | financial | implemented | 106 | 106 | 0 |  |  |
+| `COUPNUM` | financial | implemented | 109 | 109 | 0 |  |  |
 | `COUPPCD` | financial | implemented | 95 | 95 | 0 |  |  |
 | `COVAR` | statistical | implemented | 24 | 24 | 0 | 4 ulps |  |
 | `COVARIANCE.P` | statistical | implemented | 24 | 24 | 0 | 4 ulps |  |
@@ -156,7 +156,7 @@ so the page counts them together and is the same on every platform.
 | `DSTDEV` | database | partial | 153 | 151 | 2 | 4 ulps | computed criteria are not supported |
 | `DSTDEVP` | database | partial | 153 | 151 | 2 | 4 ulps | computed criteria are not supported |
 | `DSUM` | database | partial | 141 | 140 | 1 |  | computed criteria are not supported |
-| `DURATION` | financial | implemented | 108 | 107 | 1 | 4 ulps |  |
+| `DURATION` | financial | implemented | 111 | 110 | 1 | 4 ulps |  |
 | `DVAR` | database | partial | 153 | 149 | 4 | 4 ulps | computed criteria are not supported |
 | `DVARP` | database | partial | 153 | 151 | 2 | 4 ulps | computed criteria are not supported |
 | `EDATE` | date and time | implemented | 41 | 41 | 0 |  |  |
@@ -312,7 +312,7 @@ so the page counts them together and is the same on every platform.
 | `MAXA` | statistical | implemented | 37 | 37 | 0 |  |  |
 | `MAXIFS` | math | implemented | 86 | 86 | 0 |  |  |
 | `MDETERM` | math | implemented | 57 | 57 | 0 |  |  |
-| `MDURATION` | financial | implemented | 111 | 110 | 1 | 4 ulps |  |
+| `MDURATION` | financial | implemented | 114 | 113 | 1 | 4 ulps |  |
 | `MEDIAN` | statistical | implemented | 37 | 37 | 0 |  |  |
 | `MID` | text | implemented | 113 | 113 | 0 |  |  |
 | `MIDB` | text | implemented | 452 | 452 | 0 |  |  |
@@ -381,7 +381,7 @@ so the page counts them together and is the same on every platform.
 | `POISSON.DIST` | statistical | implemented | 130 | 116 | 14 | 8 ulps |  |
 | `POWER` | math | implemented | 14 | 14 | 0 |  |  |
 | `PPMT` | financial | implemented | 81 | 81 | 0 | 4 ulps |  |
-| `PRICE` | financial | implemented | 119 | 117 | 2 | 8 ulps |  |
+| `PRICE` | financial | implemented | 122 | 120 | 2 | 8 ulps |  |
 | `PRICEDISC` | financial | implemented | 380 | 380 | 0 | 4 ulps |  |
 | `PRICEMAT` | | absent | | | | | |
 | `PROB` | statistical | implemented | 101 | 101 | 0 |  |  |
@@ -531,7 +531,7 @@ so the page counts them together and is the same on every platform.
 | `XOR` | logical | implemented | 128 | 128 | 0 |  |  |
 | `YEAR` | date and time | implemented | 37 | 37 | 0 |  |  |
 | `YEARFRAC` | date and time | implemented | 994 | 994 | 0 |  |  |
-| `YIELD` | financial | implemented | 120 | 119 | 1 | 1e-09 relative |  |
+| `YIELD` | financial | implemented | 123 | 122 | 1 | 1e-09 relative |  |
 | `YIELDDISC` | financial | implemented | 380 | 380 | 0 | 4 ulps |  |
 | `YIELDMAT` | | absent | | | | | |
 | `Z.TEST` | statistical | implemented | 72 | 72 | 0 | 1e-12 relative |  |

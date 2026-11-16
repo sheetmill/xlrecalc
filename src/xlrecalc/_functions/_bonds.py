@@ -224,12 +224,15 @@ class _Bond:
         return s2 - s1
 
 
-def _bond(settle: Any, mature: Any, freq: float, basis: float, ctx: Context) -> Any:
+def _bond(
+    settle: Any, mature: Any, freq: float, basis: float, ctx: Context, days_only: bool = False
+) -> Any:
     """The bond's coupon dates, or its error.
 
     Settlement and maturity are taken as the Analysis ToolPak functions take a number: a logical
     is ``#VALUE!`` (capture ``bonds``). A coupon period that would start before the calendar's
-    first year is ``#NUM!``, as a date outside the calendar is here (not captured).
+    first year is ``#NUM!`` (capture ``bonds``), but for ``COUPDAYS`` outside basis 1, which needs
+    no coupon date (``days_only``: the period's length is returned).
     """
     settle, mature = _analysis(settle, ctx), _analysis(mature, ctx)
     if isinstance(settle, ErrorValue):
@@ -245,6 +248,8 @@ def _bond(settle: Any, mature: Any, freq: float, basis: float, ctx: Context) -> 
         return NUM
     first = 1904 if ctx.date1904 else 1900
     if start[0] * 12 + start[1] - 1 - 12 // f < first * 12:
+        if days_only and b != 1:
+            return (365.0 if b == 3 else 360.0) / f
         return NUM
     return _Bond(s, m, f, b, ctx)
 
@@ -252,8 +257,8 @@ def _bond(settle: Any, mature: Any, freq: float, basis: float, ctx: Context) -> 
 def _coupon(name: str, method: Any) -> None:
     @function(name, "value", "value", "number", "number", min_args=3, category=C)
     def coup(ctx: Context, settle: Any, mature: Any, freq: float, basis: float = 0.0) -> Any:
-        bond = _bond(settle, mature, freq, basis, ctx)
-        return bond if isinstance(bond, ErrorValue) else method(bond)
+        bond = _bond(settle, mature, freq, basis, ctx, days_only=method is _Bond.days)
+        return bond if isinstance(bond, ErrorValue | float) else method(bond)
 
     coup.__doc__ = method.__doc__
 

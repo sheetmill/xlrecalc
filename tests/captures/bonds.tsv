@@ -2,7 +2,7 @@
 # excel: 16.115 for Mac, locale en_US
 # edition: Microsoft 365 Subscription, update channel Current
 # date_system: 1900
-# captured: 2026-11-11
+# captured: 2026-11-16
 # generator: capture/suites.py:bonds
 # method: openpyxl writes the formula in column A and the inputs in B onward (floats as
 #   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
@@ -2387,3 +2387,21 @@ bonds	yield	2374	YIELD(39493,39494,0.0575,99.99,100,2,0)	()	n	0.0909099502642991
 bonds	yield	2375	YIELD(39493,39600,0.0575,99,100,2,1)	()	n	0.0915280530567716
 bonds	mduration	2376	MDURATION(39493,43054,0.08,-0.5,2,0)	()	e	#NUM!
 bonds	mduration	2377	MDURATION(39493,43054,-0.08,0.09,2,0)	()	e	#NUM!
+bonds	price	2378	PRICE({1},{2},0.0575,0.065,100,2)	(1.0, 43054.0)	e	#NUM!
+bonds	price	2379	PRICE({1},{2},0.0575,0.065,100,2)	(100.0, 43054.0)	e	#NUM!
+bonds	price	2380	PRICE({1},{2},0.0575,0.065,100,2)	(39493.0, True)	e	#VALUE!
+bonds	yield	2381	YIELD({1},{2},0.0575,95,100,2)	(1.0, 43054.0)	e	#NUM!
+bonds	yield	2382	YIELD({1},{2},0.0575,95,100,2)	(100.0, 43054.0)	e	#NUM!
+bonds	yield	2383	YIELD({1},{2},0.0575,95,100,2)	(39493.0, True)	e	#VALUE!
+bonds	mduration	2384	MDURATION({1},{2},0.08,0.09,2)	(1.0, 43054.0)	e	#NUM!
+bonds	mduration	2385	MDURATION({1},{2},0.08,0.09,2)	(100.0, 43054.0)	e	#NUM!
+bonds	mduration	2386	MDURATION({1},{2},0.08,0.09,2)	(39493.0, True)	e	#VALUE!
+bonds	duration	2387	DURATION({1},{2},0.08,0.09,2)	(1.0, 43054.0)	e	#NUM!
+bonds	duration	2388	DURATION({1},{2},0.08,0.09,2)	(100.0, 43054.0)	e	#NUM!
+bonds	duration	2389	DURATION({1},{2},0.08,0.09,2)	(39493.0, True)	e	#VALUE!
+bonds	coupnum	2390	COUPNUM({1},{2},2)	(1.0, 43054.0)	e	#NUM!
+bonds	coupnum	2391	COUPNUM({1},{2},2)	(100.0, 43054.0)	e	#NUM!
+bonds	coupnum	2392	COUPNUM({1},{2},2)	(39493.0, True)	e	#VALUE!
+bonds	coupdays	2393	COUPDAYS({1},{2},2)	(1.0, 43054.0)	n	180.0
+bonds	coupdays	2394	COUPDAYS({1},{2},2)	(100.0, 43054.0)	n	180.0
+bonds	coupdays	2395	COUPDAYS({1},{2},2)	(39493.0, True)	e	#VALUE!

@@ -99,7 +99,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   local to a skipped sheet is dropped. In 0.2.0 and before such a name was defined on the following sheet.
 - `PRICE`, `YIELD`, `DURATION`, `MDURATION` and the `COUP` functions take a logical settlement or maturity as
   `#VALUE!`, as Excel does (capture `bonds`); `TRUE` was read as the date 1, and the result reached `#VALUE!` only
-  through an internal error. A coupon period that would begin before 1900 (1904) is `#NUM!`.
+  through an internal error. A coupon period that would begin before 1900 (1904) is `#NUM!`, as in Excel, but in `COUPDAYS` outside basis 1.
 - A dynamic array that a trusted file caches as blocked (`#SPILL!`) spills when the cell in its way is cleared; in
   0.2.0 and before it stayed `#SPILL!` until a full recalculation.
 
