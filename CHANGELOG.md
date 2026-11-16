@@ -40,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - xlsx files are read and written by [xlio](https://github.com/sheetmill/xlio), a new required dependency
-  (`xlio==0.1.*`), which holds the reader and surgical writer this package had in `xlrecalc._xlsx`; that private
+  (`xlio==0.2.*`), which holds the reader and surgical writer this package had in `xlrecalc._xlsx`; that private
   subpackage is gone. `PackageError` and `LimitError` are xlio's, re-exported, so `except xlrecalc.PackageError` works as
   before; `ReadLimits` keeps its five fields and import path. Every value computed and every byte written is unchanged on
   the capture and benchmark workbooks. Two readings follow Excel where the old reader did not (xlio's captures): a cell

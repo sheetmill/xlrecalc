@@ -85,24 +85,23 @@ def test_an_uncaptured_rich_type_reads_as_the_value_error_written() -> None:
 def test_a_new_value_drops_the_old_rich_value(  # type: ignore[no-untyped-def]
     tmp_path, error_type: str, error: str, _number: float
 ) -> None:
-    """A cell caching a newer error (``#VALUE!`` and ``vm``) given a value loses ``vm``.
+    """A cell caching a newer error (``#VALUE!`` and ``vm``) keeps ``vm`` only while it holds it.
 
     Excel shows a cell's rich value over its ``<v>`` (the probe ``capture/vm_probe.py``: a stale
     ``vm`` made Excel show and save the old error for 5, TRUE, ``#DIV/0!`` and a plain
-    ``#VALUE!``). Excel refuses a file storing these codes as error values, so a new one is written
-    as ``#VALUE!``. The writer drops ``vm`` from every formula cell it gives a value, the same
-    error included, so such a cell reads back as ``#VALUE!`` until a recalculation.
+    ``#VALUE!``). Excel refuses a file storing these codes as error values, so a new one is
+    written as ``#VALUE!``.
     """
     path = tmp_path / "book.xlsx"
     b1 = '<c r="B1" t="e" vm="1"><f>IF(C1=1,"a"+1,IF(C1=2,5,A1))</f><v>#VALUE!</v></c>'
     path.write_bytes(_book(error_type, b1))
     book = xlrecalc.load(path, recalc_on_load="always")
     assert book.value("B1") == ErrorValue(error)
-    book.set("D1", 1.0)  # an edit elsewhere: B1 still holds the error its vm stood for
+    book.set("D1", 1.0)  # an edit elsewhere: B1 holds the error its vm stands for
     book.save()
     with zipfile.ZipFile(path) as z:
         sheet = z.read("xl/worksheets/sheet1.xml").decode()
-    assert '<c r="B1" t="e"><f>' in sheet
+    assert '<c r="B1" t="e" vm="1">' in sheet
     assert '<c r="A1" t="e" vm="1"><v>#VALUE!</v></c>' in sheet  # a constant is kept as it is
     for c1, cell in ((1.0, ' t="e">'), (2.0, ">")):  # a plain #VALUE!, then 5
         book.set("C1", c1)

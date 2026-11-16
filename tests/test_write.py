@@ -136,3 +136,24 @@ def test_cell_ref_is_a_tuple():
     assert column_letters(1) == "A"
     assert column_letters(28) == "AB"
     assert column_letters(16384) == "XFD"
+
+
+@pytest.mark.parametrize(
+    ("calc", "expected"),
+    [
+        ('<calcPr fullCalcOnLoad="1" calcId="191029"/>', '<calcPr calcId="191029"/>'),
+        ("<calcPr calcId='1' fullCalcOnLoad='true'></calcPr>", "<calcPr calcId='1'></calcPr>"),
+        ('<calcPr fullCalcOnLoad="0" calcId="1"/>', '<calcPr fullCalcOnLoad="0" calcId="1"/>'),
+    ],
+)
+def test_full_calc_on_load_false_clears_it(tmp_path: Path, calc: str, expected: str) -> None:
+    """Without the request the saved file holds none, as Excel saves a file; a false one stays."""
+    path = tmp_path / "book.xlsx"
+    path.write_bytes(
+        package(
+            '<row r="1"><c r="A1"><v>2</v></c><c r="B1"><f>A1*2</f></c></row>', workbook_extra=calc
+        )
+    )
+    recalculate(path, full_calc_on_load=False)
+    with zipfile.ZipFile(path) as z:
+        assert expected in z.read("xl/workbook.xml").decode()
