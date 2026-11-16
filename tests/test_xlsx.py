@@ -394,3 +394,24 @@ def test_a_text_result_loses_unpreserved_outer_whitespace():
     )
     got = {(c.row, c.column): c.value for c in cells(package(rows))}
     assert got == {(1, 1): "a\n b", (1, 2): " a "}
+
+
+def test_a_sheet_without_a_part_does_not_shift_sheet_scopes() -> None:
+    """``localSheetId`` and ``activeTab`` count every ``<sheet>``, a skipped one too."""
+    data = package(
+        '<row r="1"><c r="A1"><v>5</v></c><c r="B1"><f>Rate</f></c></row>',
+        sheets=(
+            '<sheet name="Gone" sheetId="2" r:id=""/><sheet name="Data" sheetId="1" r:id="rId1"/>'
+        ),
+        workbook_extra=(
+            '<definedNames><definedName name="Rate" localSheetId="1">Data!$A$1</definedName>'
+            '<definedName name="Lost" localSheetId="0">1</definedName></definedNames>'
+        ),
+    )
+    with Book(io.BytesIO(data)) as book:
+        assert [s.name for s in book.sheets] == ["Data"]
+        assert [(n.name, n.sheet) for n in book.defined_names] == [("Rate", 0)]
+    import xlrecalc
+
+    wb = xlrecalc.load(io.BytesIO(data), recalc_on_load="always")
+    assert wb.value("B1") == 5.0

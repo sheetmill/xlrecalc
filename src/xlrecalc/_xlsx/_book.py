@@ -155,10 +155,12 @@ class Book:
         rels = package.relationships(workbook)
         root = package.xml(workbook)
         self.sheets: list[SheetInfo] = []
-        for sheet in _find(root, "sheet"):
+        kept: dict[int, int] = {}  # position among <sheet> elements -> index in self.sheets
+        for position, sheet in enumerate(_find(root, "sheet")):
             rel = rels.get(_attr(sheet, "id") or "")
-            if rel is None:
+            if rel is None:  # no part: skipped, but localSheetId and activeTab still count it
                 continue
+            kept[position] = len(self.sheets)
             kind = rel[0].rsplit("/", 1)[-1]
             self.sheets.append(
                 SheetInfo(
@@ -170,7 +172,7 @@ class Book:
             )
         views = _find(root, "workbookView")
         tab = views[0].get("activeTab", "0") if views else "0"  # type: ignore[attr-defined]
-        self.active_tab = int(tab) if tab.isdigit() else 0
+        self.active_tab = kept.get(int(tab), 0) if tab.isdigit() else 0
         """The sheet the workbook opens on (``workbookView activeTab``), 0-based."""
         props = _find(root, "workbookPr")
         self.date1904 = bool(props) and props[0].get("date1904", "0") in _TRUE  # type: ignore[attr-defined]
@@ -179,11 +181,16 @@ class Book:
         self.defined_names: list[DefinedName] = []
         for dn in _find(root, "definedName"):
             local = dn.get("localSheetId")  # type: ignore[attr-defined]
+            scope = None
+            if local is not None:
+                scope = kept.get(_integer(local, "localSheetId"))
+                if scope is None:  # scoped to a sheet that was skipped (or is not there)
+                    continue
             self.defined_names.append(
                 DefinedName(
                     dn.get("name", ""),  # type: ignore[attr-defined]
                     dn.text or "",  # type: ignore[attr-defined]
-                    _integer(local, "localSheetId") if local is not None else None,
+                    scope,
                     dn.get("hidden", "0") in _TRUE,  # type: ignore[attr-defined]
                 )
             )

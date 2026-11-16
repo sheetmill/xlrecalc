@@ -756,17 +756,19 @@ cells cannot be changed one by one.
 `c` range from the formula's cell, and the file records it as the formula's `ref`. A non-empty
 cell in that range (a constant or a formula) blocks the spill: the formula is `#SPILL!` and
 fills nothing, and clearing the cell lets it spill again (a blocked array a trusting load reads
-from a file is evaluated on loading, to the same `#SPILL!`, to learn the range it wants). `A1#`
-(`_xlfn.ANCHORARRAY(A1)`) is the range the dynamic array at A1 spills into; `@x`
-(`_xlfn.SINGLE(x)`) is the implicit intersection of `x`. Excel caches `#SPILL!` in a file as
-`#VALUE!` with a rich value behind it (`vm`, error type 8); the reader decodes it, and the
-writer writes `#VALUE!` without the rich value, as other readers see such a cell. A cell given a
-new value loses its `vm`, which Excel would show over the new `<v>` (`capture/vm_probe.py`); one
-still holding the error its rich value stands for keeps it. The other error types decoded are
-those captured (Excel 16.115): 9 `#CONNECT!`, 10 `#BLOCKED!`, 11 `#UNKNOWN!`, 12 `#FIELD!`, 13
-`#CALC!`, 15 `#BUSY!`, 19 `#TIMEOUT!`; another type stays the `#VALUE!` written. `ERROR.TYPE`
-gives Excel's numbers for them (9 to 14, 16 and 20), and `#GETTING_DATA` is written as `#N/A`,
-as Excel writes it back.
+from a file is evaluated on loading, to the same `#SPILL!`, to learn the range it wants; a file
+this package wrote with `full_calc_on_load=False` holds a blocked spill as a plain `#VALUE!`,
+which a trusting load keeps, so clearing the cell in its way does not spill it until a full
+recalculation: §13, item 6). `A1#` (`_xlfn.ANCHORARRAY(A1)`) is the range the dynamic array at
+A1 spills into; `@x` (`_xlfn.SINGLE(x)`) is the implicit intersection of `x`. Excel caches
+`#SPILL!` in a file as `#VALUE!` with a rich value behind it (`vm`, error type 8); the reader
+decodes it, and the writer writes `#VALUE!` without the rich value, as other readers see such a
+cell. A cell given a new value loses its `vm`, which Excel would show over the new `<v>`
+(`capture/vm_probe.py`); one still holding the error its rich value stands for keeps it. The
+other error types decoded are those captured (Excel 16.115): 9 `#CONNECT!`, 10 `#BLOCKED!`, 11
+`#UNKNOWN!`, 12 `#FIELD!`, 13 `#CALC!`, 15 `#BUSY!`, 19 `#TIMEOUT!`; another type stays the
+`#VALUE!` written. `ERROR.TYPE` gives Excel's numbers for them (9 to 14, 16 and 20), and
+`#GETTING_DATA` is written as `#N/A`, as Excel writes it back.
 
 **Functions that make arrays** (`_functions/_dynamic.py`, `_functions/_reshape.py`; captures
 `dyn_*`) take their array arguments whole in every formula. A count or other one-value argument
@@ -911,11 +913,14 @@ Behavior that is not the obvious reading, each from its capture:
   unlike `XNPV`.
 - Day counts and coupons (capture `bonds`): `DAYS360`'s US method and `YEARFRAC` basis 0 differ at
   the end of February; actual/actual takes year lengths from the calendar (1900 has 365 days
-  there); coupon dates step back from maturity keeping its day (the month's last day when
-  maturity is one); basis-1 `COUPDAYS` is `EDATE` from the previous coupon date; `PRICE` and the
-  durations take the days to the next coupon as `COUPDAYS - COUPDAYBS` in every basis; and
-  `YIELD` with one period left uses Excel's closed form with A as `COUPDAYBS`, E as the actual
-  period in bases 1 to 3, and the days to redemption in the basis's own count.
+  there); coupon dates step back from maturity keeping its day (the month's last day when maturity
+  is one); basis-1 `COUPDAYS` is `EDATE` from the previous coupon date; `PRICE` and the durations
+  take the days to the next coupon as `COUPDAYS - COUPDAYBS` in every basis; and `YIELD` with one
+  period left uses Excel's closed form with A as `COUPDAYBS`, E as the actual period in bases 1 to
+  3, and the days to redemption in the basis's own count. A logical settlement is `#VALUE!` in
+  these functions, as in the other Analysis ToolPak functions; a coupon period that would begin
+  before the calendar's first year is `#NUM!` here, as any date outside the calendar is (not
+  captured).
 - `WORKDAY`, `NETWORKDAYS` and their `.INTL` forms (capture `workdays`): weekend codes 1 to 7 and
   11 to 17 or a seven-character mask, holidays as a range or array, logical arguments `#VALUE!`, a
   day count floored; Excel also computes `_xlfn.WORKDAY.INTL`, so both spellings are registered,
@@ -1387,7 +1392,11 @@ After 0.2.0, in this order: an order, not a promise or a date.
    format's formula (one returning a range or an array; whether it takes structured
    references), structured references given table definitions, and `Workbook.evaluate`; then
    callbacks (§12).
-6. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
+6. Before 1.0: the newer errors written in Excel's own form, `#VALUE!` with a rich-value record
+   behind `vm` (§7.7), so that a file Excel opens without recalculating shows `#SPILL!` or
+   `#CALC!` and a later load reads a blocked spill as one; the rich-value parts belong to the
+   reader and writer, which are moving into a package of their own.
+7. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
    vectorized templates (numpy as an optional extra), a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,
    parallel evaluation of independent template columns on free-threaded Python, and a compiled

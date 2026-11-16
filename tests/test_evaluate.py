@@ -1,7 +1,8 @@
 """One formula evaluated outside a workbook: ``xlrecalc.evaluate`` and ``xlrecalc.Formula``.
 
 Every captured formula evaluated alone, its inputs read through a resolver, gives what the
-engine gives in the capture's sheet (which ``test_captures.py`` compares with Excel's value).
+engine gives in the capture's sheet (which ``test_captures.py`` compares with Excel's value),
+and no function raises on a captured row.
 """
 
 from __future__ import annotations
@@ -148,15 +149,14 @@ def _agrees(name: str, every: int) -> list[str]:
             for r in range(ref.first_row, min(ref.last_row, len(suite.rows) + 2) + 1)
         ]
 
-    differ = []
+    # A function that raises on a captured row reaches its value by accident (#VALUE!).
+    differ = [f"{name} {c}: {why}" for c, why in engine.report.exceptions.items()]
     for k, row in enumerate(suite.rows, 1):
         if k % every:
             continue
         template = engine.templates[sheet.templates[(k - 1) * COLS]]
         if template.unsupported or template.volatile:
             continue
-        if any(c.row == k and c.col == 1 for c in engine.report.exceptions):
-            continue  # an exception a function raised, which the engine made #VALUE!
         text = formula_text(row, k)
         try:
             f = Formula.parse(text, origin=f"A{k}", legacy=True)

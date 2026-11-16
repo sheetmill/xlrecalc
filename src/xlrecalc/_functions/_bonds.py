@@ -224,19 +224,34 @@ class _Bond:
         return s2 - s1
 
 
-def _bond(settle: float, mature: float, freq: float, basis: float, ctx: Context) -> Any:
+def _bond(settle: Any, mature: Any, freq: float, basis: float, ctx: Context) -> Any:
+    """The bond's coupon dates, or its error.
+
+    Settlement and maturity are taken as the Analysis ToolPak functions take a number: a logical
+    is ``#VALUE!`` (capture ``bonds``). A coupon period that would start before the calendar's
+    first year is ``#NUM!``, as a date outside the calendar is here (not captured).
+    """
+    settle, mature = _analysis(settle, ctx), _analysis(mature, ctx)
+    if isinstance(settle, ErrorValue):
+        return settle
+    if isinstance(mature, ErrorValue):
+        return mature
     s, m = math.trunc(settle), math.trunc(mature)
     f, b = math.trunc(freq), _basis(basis)
     if b is None or f not in (1, 2, 4) or s >= m or s < 0:
         return NUM
-    if _ymd(s, ctx) is None or _ymd(m, ctx) is None:
+    start = _ymd(s, ctx)
+    if start is None or _ymd(m, ctx) is None:
+        return NUM
+    first = 1904 if ctx.date1904 else 1900
+    if start[0] * 12 + start[1] - 1 - 12 // f < first * 12:
         return NUM
     return _Bond(s, m, f, b, ctx)
 
 
 def _coupon(name: str, method: Any) -> None:
-    @function(name, "number", "number", "number", "number", min_args=3, category=C)
-    def coup(ctx: Context, settle: float, mature: float, freq: float, basis: float = 0.0) -> Any:
+    @function(name, "value", "value", "number", "number", min_args=3, category=C)
+    def coup(ctx: Context, settle: Any, mature: Any, freq: float, basis: float = 0.0) -> Any:
         bond = _bond(settle, mature, freq, basis, ctx)
         return bond if isinstance(bond, ErrorValue) else method(bond)
 
@@ -270,7 +285,7 @@ def _price(b: _Bond, rate: float, yld: float, redemption: float) -> float:
 
 
 @function(
-    "PRICE", "number", "number", "number", "number", "number", "number", "number",
+    "PRICE", "value", "value", "number", "number", "number", "number", "number",
     min_args=6, category=C, ulps=8, ulps_reason=_PRICE_SUM,
 )  # fmt: skip
 def PRICE(
@@ -293,7 +308,7 @@ def PRICE(
 
 
 @function(
-    "YIELD", "number", "number", "number", "number", "number", "number", "number",
+    "YIELD", "value", "value", "number", "number", "number", "number", "number",
     min_args=6, category=C, rel=1e-9, rel_reason=_YIELD_ITERATION,
 )  # fmt: skip
 def YIELD(
@@ -357,7 +372,7 @@ def _duration(b: _Bond, coupon: float, yld: float) -> float:
 
 def _durations(name: str, modified: bool) -> None:
     @function(
-        name, "number", "number", "number", "number", "number", "number",
+        name, "value", "value", "number", "number", "number", "number",
         min_args=5, category=C, ulps=4, ulps_reason=_DURATION_SUM,
     )  # fmt: skip
     def dur(
