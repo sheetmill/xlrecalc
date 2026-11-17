@@ -420,10 +420,10 @@ def VDB(
 
 # Iterative functions -------------------------------------------------------------------------
 #
-# Excel finds IRR, XIRR and RATE by Newton's method from a guess (0.1 by default). Its iterates
-# are not reproduced bit for bit (they rest on its own NPV, whose last bits differ, §8.1), so
-# the method below is the one that agrees best with the captured outcomes: Newton's method on
-# 1 + rate, halving instead of stepping to 1 + rate <= 0, stopping when a step is below 1E-7,
+# Excel finds IRR, XIRR and RATE by Newton's method from a guess (0.1 by default). Its iterates are
+# not reproduced bit for bit (they rest on its own NPV, whose last bits differ; ARCHITECTURE.md
+# §8.1), so the method below is the one that agrees best with the captured outcomes: Newton's method
+# on 1 + rate, halving instead of stepping to 1 + rate <= 0, stopping when a step is below 1E-7,
 # #NUM! when it does not settle in time.
 
 

@@ -71,7 +71,7 @@ def _approximate(
 
 
 class _Grid:
-    """An array seen as a range: ``rows``, ``columns`` and ``value(row, col)`` (§7.7)."""
+    """An array as a range: ``rows``, ``columns``, ``value(row, col)`` (ARCHITECTURE.md §7.7)."""
 
     def __init__(self, array: tuple[tuple[Any, ...], ...]) -> None:
         self.array = array

@@ -25,7 +25,7 @@ C = "math"
 
 
 def _total(values: Any, ctx: Context) -> float | ErrorValue:
-    """A sum as Excel's SUM takes it: in order, each addition snapped (§4.4)."""
+    """A sum as Excel's SUM takes it: in order, each addition snapped (ARCHITECTURE.md §4.4)."""
     s = 0.0
     for v in values:
         if isinstance(v, ErrorValue):

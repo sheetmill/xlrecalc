@@ -1,4 +1,4 @@
-"""Position-independent templates: references relative to the formula's own cell (§5.3).
+"""Position-independent templates: references relative to the formula's cell (ARCHITECTURE.md §5.3).
 
 A cell reference without ``$`` becomes an offset from the formula's cell, one with ``$`` stays
 absolute. Two formulas whose references land the same way relative to their cells, such as

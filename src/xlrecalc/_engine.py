@@ -1,4 +1,4 @@
-"""The evaluator: store, templates, scheduling, the evaluation context and the report (§7).
+"""The evaluator: store, templates, scheduling, evaluation context and report (ARCHITECTURE.md §7).
 
 A cell is identified by one integer, ``sheet << 34 | row * 16384 + col`` (0-based). Formula
 cells hold a template id; a template is compiled once (``_formula``) and evaluated as

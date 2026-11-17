@@ -101,7 +101,7 @@ def LOWER(ctx: Context, text: str) -> str:
 
 @function("VALUE", "value", category=T)
 def VALUE_(ctx: Context, v: Any) -> float | ErrorValue:
-    """Text as a number; a logical is ``#VALUE!``, unlike in arithmetic (§4.3)."""
+    """Text as a number; a logical is ``#VALUE!``, unlike in arithmetic (ARCHITECTURE.md §4.3)."""
     if isinstance(v, bool):
         return VALUE
     return to_number(v, ctx)

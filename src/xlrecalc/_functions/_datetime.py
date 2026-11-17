@@ -38,7 +38,7 @@ def _parts(x: float, ctx: Context) -> tuple[int, int, int] | ErrorValue:
 
 @function("DATE", "number", "number", "number", category=D)
 def DATE(ctx: Context, y: float, m: float, d: float) -> float | ErrorValue:
-    """The serial of a date; months and days may overflow (§4.3)."""
+    """The serial of a date; months and days may overflow (ARCHITECTURE.md §4.3)."""
     return _serial(y, m, d, ctx)
 
 

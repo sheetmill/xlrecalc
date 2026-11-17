@@ -1,4 +1,4 @@
-"""``recalculate``: a workbook's formulas evaluated and their results written back (§9.2, §9.3)."""
+"""``recalculate``: formulas evaluated and results written back (ARCHITECTURE.md §9.2, §9.3)."""
 
 from __future__ import annotations
 

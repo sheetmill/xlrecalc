@@ -1,4 +1,4 @@
-"""Excel's arithmetic on doubles: no subnormal results, and cancellation snapping (§4.4).
+"""Excel's arithmetic on doubles: no subnormals, and cancellation snapping (ARCHITECTURE.md §4.4).
 
 Captured in ``tests/captures/cancellation.tsv``. Every result smaller in magnitude than the
 smallest normal double is 0 (``2.2250738585072014E-308/2`` is 0). With

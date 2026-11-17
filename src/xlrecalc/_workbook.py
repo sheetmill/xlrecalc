@@ -1,4 +1,4 @@
-"""``load`` and ``Workbook``: read values, change cells, recalculate, save (§11.2)."""
+"""``load`` and ``Workbook``: read and change cells, recalculate, save (ARCHITECTURE.md §11.2)."""
 
 from __future__ import annotations
 
