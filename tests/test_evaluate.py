@@ -1,8 +1,10 @@
 """One formula evaluated outside a workbook: ``xlrecalc.evaluate`` and ``xlrecalc.Formula``.
 
-Every captured formula evaluated alone, its inputs read through a resolver, gives what the
-engine gives in the capture's sheet (which ``test_captures.py`` compares with Excel's value),
-and no function raises on a captured row.
+A captured formula evaluated alone, its inputs read through a resolver, gives what the engine
+gives in the capture's sheet (which ``test_captures.py`` compares with Excel's value), and no
+function raises on a captured row: in every suite whose inputs are values (not formulas or fixed
+cells), unsupported and volatile formulas left out; every 25th row by default, every row in the
+slow tier.
 """
 
 from __future__ import annotations

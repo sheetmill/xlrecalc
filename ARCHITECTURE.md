@@ -1362,8 +1362,10 @@ Excel does not know evaluates to `#NAME?`; a function Excel has (`EXCEL_NAMES`, 
 `formula_bar` capture's function list) that the package does not compute raises
 `UnsupportedError`, as do structured references, which need tables. The template is run by the
 engine that compiled it, since the operators read that engine's position; each call clears its
-cells and names first. Tests: `tests/test_evaluate.py`, where every captured formula evaluated
-alone gives the engine's value in the capture's sheet.
+cells and names first. Tests: `tests/test_evaluate.py`, where a captured formula evaluated alone
+gives the engine's value in the capture's sheet, in every suite whose inputs are values (not
+formulas or fixed cells), unsupported and volatile formulas left out: every 25th row by default,
+every row in the slow tier.
 
 ## 12. Open decisions
 

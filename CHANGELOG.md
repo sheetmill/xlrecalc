@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   starting with `=` is read as typed, one without it in file form. Dynamic-array evaluation by default, `legacy=True`
   for implicit intersection; a dynamic result comes back as rows. A name Excel does not know gives `#NAME?`; a
   function Excel has and the package does not compute raises `UnsupportedError` (a `FormulaError`), which
-  `Formula.unsupported` names beforehand. Every captured formula evaluated alone gives the engine's value.
+  `Formula.unsupported` names beforehand. A captured formula evaluated alone gives the engine's value, in every
+  suite whose inputs are values (not formulas or fixed cells), the unsupported and volatile ones left out.
 - `LAMBDA` and `ISOMITTED`, captured from Excel (captures `lambda_calls`, `lambda_names`, `lambda_depth`,
   `lambda_more`): a function value called where it is made (`LAMBDA(x,x+1)(2)`, `(LAMBDA(x,x))(2)`), through a `LET`
   name or a parameter, or through a defined name that holds one (`ADDONE(1)`), recursion and mutual recursion
