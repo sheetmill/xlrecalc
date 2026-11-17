@@ -1153,11 +1153,11 @@ wheels = [
 
 [[package]]
 name = "xlio"
-version = "0.2.0"
+version = "0.3.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/d9/f5/c7a6f54d87eabb42a87fd3161cc8cde954c1e478aa2c829909d916c124f3/xlio-0.2.0.tar.gz", hash = "sha256:7c704ea0a233279a3e50bf7053f2be821abbfac1b96b09b3dc8d9d1ef476b676", size = 265561, upload-time = "2026-11-16T22:02:37.737Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b8/2f/76d7c41b8174e6b74973afcf6925c7ba71a394bb8c7a1f3d8053b0e8f7da/xlio-0.3.0.tar.gz", hash = "sha256:ab2192c66eb5c0f06f99fd9ea5c32a12f239f7f0b138d304a100c6d66dff77f9", size = 282509, upload-time = "2026-11-17T07:18:00.619Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d4/c1/4cf32254b1d815f94aa29c8c41f4b8b55fad2d012de479ca673ebfc502e3/xlio-0.2.0-py3-none-any.whl", hash = "sha256:89e5e5f7cc6788ab94fbd5024b22a59ac54cac5bdaab4a1252dc241102172aad", size = 113781, upload-time = "2026-11-16T22:02:36.231Z" },
+    { url = "https://files.pythonhosted.org/packages/13/28/3190cf7d734473937a18f34c71f13439722598111053795def0239c973bf/xlio-0.3.0-py3-none-any.whl", hash = "sha256:f767ff86da2cfd990d888ff03b21716ca252706e3a41d006fc6fd670ac5ae4ca", size = 123192, upload-time = "2026-11-17T07:17:59.13Z" },
 ]
 
 [[package]]
@@ -1188,7 +1188,7 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "xlformat", specifier = ">=0.3,<1" },
-    { name = "xlio", specifier = "==0.2.*" },
+    { name = "xlio", specifier = "==0.3.*" },
 ]
 
 [package.metadata.requires-dev]
