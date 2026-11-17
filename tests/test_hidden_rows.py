@@ -43,3 +43,21 @@ def test_filter_mode_read_where_rows_are_hidden(workbook: xlrecalc.Workbook) -> 
     assert modes["Both"]
     assert not modes["Hand"]
     assert all(engine.sheets[i].hidden_rows for i in range(3))
+
+
+def test_an_empty_row_is_not_hidden() -> None:
+    """A ``<row>`` with no cells and no formats, which xlio reports, hides nothing."""
+    import io
+
+    from tests.xlsx_files import package
+    from xlrecalc._load import load
+
+    rows = (
+        '<row r="1"><c r="A1"><v>1</v></c></row><row r="2"><c r="A2"><v>2</v></c></row>'
+        '<row r="3"/><row r="4"></row><row r="5" hidden="1"><c r="A5"><v>4</v></c></row>'
+        '<row r="6" hidden="0"/><row r="7"><c r="A7"><f>SUBTOTAL(109,A1:A6)</f></c></row>'
+    )
+    engine = load(io.BytesIO(package(rows)))
+    assert engine.sheets[0].hidden_rows == frozenset({4})
+    engine.recalculate(full=True)
+    assert engine.get(0, 6, 0) == 3.0  # row 5 left out, the empty rows count nothing
