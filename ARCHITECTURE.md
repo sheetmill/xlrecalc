@@ -1384,7 +1384,7 @@ tier.
 
 ## 13. Roadmap
 
-After 0.2.0, in this order: an order, not a promise or a date.
+After 0.3.0, in this order: an order, not a promise or a date.
 
 1. Excel's iteration for `IRR`, `XIRR`, `RATE` and `YIELD` (its starting step, update
    rule and stopping test, inferred from capture sweeps), aiming to match the rows QUIRKS.md
