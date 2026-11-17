@@ -26,7 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and a call of anything but a function value is `#VALUE!`. A function value as a cell's value is `#CALC!`, given to an
   operator or a function `#VALUE!` (the `IS` functions FALSE, `ISNONTEXT` TRUE, `TYPE` 128). Recursion runs on an
   explicit stack and stops with `#NUM!` at Excel's budget: 65,536, each call in progress costing 8 plus 4 a parameter
-  (optional ones included) and 4 a `LET` name its body binds (5,461 calls of one parameter). Excel refuses a file
+  (optional ones included) and 4 a `LET` name its body binds (5,461 calls of one parameter); where Excel stops a
+  call or two earlier, or runs a call in tail position past the budget, the package charges it as any other (5 of
+  the 233 captured formulas, listed in QUIRKS.md). Excel refuses a file
   with an empty `LAMBDA` parameter or body, `ISOMITTED()` or `REDUCE` of two arguments, and so does the package.
 - `MAP`, `REDUCE`, `SCAN`, `BYROW`, `BYCOL` and `MAKEARRAY`, captured from Excel (captures `lambda_helpers`,
   `lambda_more`, `empty_args`): `MAP` passes a range's elements as references and an array's as values, padding a
@@ -37,8 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   name Excel does not know (`#NAME?`), and is reported with that cause (capture `prefixes`).
 - A formula set through the API that calls a function value, or gives an uncalled `LAMBDA` as its result, is a
   dynamic array, as Excel marks it typed (every typed formula of the `lambda_*` captures).
-- README's evidence counts the 233 formulas of the `lambda_*` captures, 5 of them known deviations of the recursion
-  budget, and the 24 `empty_args` rows of the eight functions. The coverage page counts them per function.
 
 ### Changed
 - xlsx files are read and written by [xlio](https://github.com/sheetmill/xlio), a new required dependency
