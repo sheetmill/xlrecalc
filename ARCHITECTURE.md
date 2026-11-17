@@ -1380,6 +1380,7 @@ tier.
 |---|---|
 | callbacks | what is not Excel's own computation (custom functions, database connections, outside providers) is a callback the caller supplies, never something the engine reaches for; registration per workbook or engine, not process-wide; a rule for a file naming a function not installed. Their API is settled before any function that needs one is built |
 | numpy | optional extra, never required |
+| an error and its text | `ErrorValue` equals and hashes as its text (`ErrorValue.NA == "#N/A"`) because it must equal xlformat's `ExcelError`, which is a `str`; so `{ErrorValue("#N/A"), "#N/A"}` holds one element, and a dict key or a pandas filter does not tell the error `#N/A` from the text `"#N/A"`. Whether the two stay equal is decided for xlrecalc and xlformat together, before 1.0; until then the README tells callers to check the type |
 
 ## 13. Roadmap
 
@@ -1410,7 +1411,10 @@ After 0.2.0, in this order: an order, not a promise or a date.
    behind `vm` (§7.7), so that a file Excel opens without recalculating shows `#SPILL!` or
    `#CALC!` and a later load reads a blocked spill as one; the rich-value parts are `xlio`'s, the
    reader and writer.
-7. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
+7. A strict option for `recalculate` and `Workbook.save` that raises where a cell cannot be
+   computed (`Report.uncomputed`), rather than writing it with the file's value or none; and
+   streams as well as paths for `save` and `recalculate`, as `load` takes one.
+8. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
    vectorized templates (numpy as an optional extra), a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,
    parallel evaluation of independent template columns on free-threaded Python, and a compiled
