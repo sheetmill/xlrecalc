@@ -2,7 +2,7 @@
 
     uv run python -m capture.marker_probe [value|formula_local]
     uv run python -m capture.marker_probe --typed-workbook PATH [START]
-    uv run python -m capture.marker_probe --typed PATH [PATH ...]
+    uv run python -m capture.marker_probe --typed PATH
 
 Non-interactive. Formulas are entered into cells of a workbook openpyxl wrote (data in
 Z1:Z3), through AppleScript's ``value`` of a cell or its ``formula local`` (``marker_probe
@@ -106,8 +106,6 @@ TYPED += [
     "=WRAPROWS(1,1)",
     "=WRAPCOLS(1,1)",
 ]
-THIRD_START = len(TYPED)
-"""Where the third batch starts."""
 TYPED += [
     # an array carried through a lifted function, an operator, a branch; consumed by SUM
     "=ABS(SEQUENCE(1))",
@@ -123,8 +121,6 @@ TYPED += [
     '=INDIRECT("Z1:Z1")',
 ]
 
-FOURTH_START = len(TYPED)
-"""Where the fourth batch starts; it runs to the end of ``TYPED``."""
 TYPED += [
     # array constants, written and lifted into OFFSET; a defined name holding SEQUENCE(1)
     "={1}",
@@ -205,7 +201,10 @@ def read_typed(*paths: Path) -> None:
 
 
 def typed_rows(*paths: Path) -> list[str]:
-    """The capture's rows from the typed workbooks given (``KEPT``), each cell from the first."""
+    """The capture's rows from the typed workbooks given (``KEPT``).
+
+    A cell is read from the first workbook that holds a formula there.
+    """
     cells: dict[tuple[int, int], Any] = {}
     for path in paths:
         with Book(path) as book:

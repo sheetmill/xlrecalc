@@ -2,6 +2,7 @@
 
     uv run python -m capture.lambda_probe --typed-workbook PATH
     uv run python -m capture.lambda_probe --typed PATH
+    uv run python -m capture.lambda_probe --paste SUITE [SUITE ...] [--depths N,N,... [NAME,...]]
 
 AppleScript enters only legacy formulas and does not know ``LAMBDA`` calls (capture
 ``formula_bar``), and openpyxl's plain formulas holding ``LAMBDA`` show ``#NAME?`` in Excel
@@ -16,6 +17,12 @@ apostrophe, and recorded as such.
 The ``LET`` formulas (``LET_COUNT``) are written to ``tests/captures/let_typed.tsv``. The rows of
 ``LAMBDA`` and its helpers, the defined names and the workbook are kept in ``capture/build/`` (not
 committed): the ``lambda_*`` captures hold their typed forms and values.
+
+``--paste`` makes those captures without a person: it builds each suite's workbook (``PASTED``),
+has Excel paste its formulas as text, which enters them as typing them does (CAPTURING.md §2),
+and writes ``tests/captures/<suite>.tsv``. ``--depths`` first replaces ``lambda_depth``'s
+formulas with countdowns to the given depths through the given names (``CD`` by default), to
+find where Excel's recursion stops a few depths a run.
 """
 
 from __future__ import annotations
