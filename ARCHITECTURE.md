@@ -1038,15 +1038,15 @@ in a fresh process, Apple M4 Pro; versions in `bench/results/SUMMARY.md`):
 
 | files | xlio, one pass (formulas and values) | openpyxl read-only, one pass | openpyxl normal |
 |---|---|---|---|
-| benchmark, 10k rows | 0.12 s, 30 MB | 0.13 s (values 0.10 s), 34 MB | 0.16 s, 58 MB |
-| benchmark, 100k rows | 0.79 s, 30 MB | 0.83 s (values 0.76 s), 42 MB | 1.74 s, 281 MB |
-| 300 real-world workbooks, 35 MB | 9.4 s, 41 MB | 11.6 s (values 10.7 s), 113 MB | 156 s, 1,779 MB |
+| benchmark, 10k rows | 0.11 s, 33 MB | 0.12 s (values 0.09 s), 34 MB | 0.15 s, 59 MB |
+| benchmark, 100k rows | 0.76 s, 34 MB | 0.78 s (values 0.72 s), 42 MB | 1.61 s, 281 MB |
+| 300 real-world workbooks, 35 MB | 7.8 s, 43 MB | 10.7 s (values 9.7 s), 118 MB | 145 s, 1,797 MB |
 
 openpyxl gives formulas or cached values in a pass, never both, so loading a workbook for the
-engine costs it two passes: xlio's one pass takes 1.9 to 2.4 times less than that, and is
-within about 20% of a single openpyxl pass either way (slower on the 10k-row file's values,
-faster on the real-world sample). Its memory stays flat (30 to 41 MB here, the interpreter
-included); openpyxl's read-only mode used 113 MB on the real-world sample.
+engine costs it two passes: xlio's one pass takes 1.9 to 2.6 times less than that. Against a
+single openpyxl pass it ranges from about 20% slower (the 10k-row file's values) to about a
+third faster (the real-world sample's formulas). Its memory stays flat (33 to 43 MB here, the
+interpreter included); openpyxl's read-only mode used 118 MB on the real-world sample.
 
 **What the reader reads differently from openpyxl** (`bench/read_compare.py` on 300 real-world
 workbooks, 5.2 million cells, 363,000 formulas; every number, logical and error agreed):
@@ -1166,8 +1166,8 @@ and gives an error the file format has no code for (`#FIELD!`, `#BLOCKED!`) as `
   permissions (the source's for a new file) and moved into place, so a failure leaves the
   target as it was. Only UTF-8 parts are rewritten.
 
-On the 1M-row benchmark (3,000,003 formulas, openpyxl's file) the write takes 21.8 s, the load
-19.3 s and the evaluation 13.1 s; a write that changes nothing, 14.8 s (`bench/recalc_bench.py`,
+On the 1M-row benchmark (3,000,003 formulas, openpyxl's file) the write takes 20.7 s, the load
+17.7 s and the evaluation 12.1 s; a write that changes nothing, 14.1 s (`bench/recalc_bench.py`,
 `bench/results/SUMMARY.md`).
 
 Changes made through the API (constants, formulas) are recorded per sheet in a change set the

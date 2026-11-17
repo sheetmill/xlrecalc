@@ -186,8 +186,8 @@ text shows before evaluating.
 
 On a workbook of 1,000,000 rows and 3,000,003 formulas written by openpyxl (so no formula has
 a cached value), `recalculate` reads the file, computes every formula and writes the values
-back in 50.6 s, with a peak memory of 1,163 MB. Changing the first cell of a dependency chain
-a million cells long and computing again takes 5.1 s. Measured on an Apple M4 Pro with 24 GB,
+back in 50.5 s, with a peak memory of 887 MB. Changing the first cell of a dependency chain
+a million cells long and computing again takes 5.3 s. Measured on an Apple M4 Pro with 24 GB,
 CPython 3.11.18. Formulas of the same relative shape share one compiled function, and
 dependents come from their geometry rather than per-cell links, so most of the memory holds
 the cells' values.
