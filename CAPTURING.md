@@ -208,8 +208,7 @@ channel beside the build (`# edition: Office Home & Business 2021, update channe
 `capture/edition.py`). No file on the Mac states the license plainly, so the person capturing
 states the edition, as shown in Excel > About Excel, in `capture/build/excel_edition.txt` or the
 variable `XLRECALC_EXCEL_EDITION`, and a capture refuses to run without it; the channel is
-Microsoft AutoUpdate's. A capture without the line was made before the rule, under Office Home &
-Business 2021 for Mac.
+Microsoft AutoUpdate's.
 
 **After every Excel update**, rerun `capture/open_calc_probe.py` (it rewrites
 `tests/captures/open_calc.tsv`): which `calcId` Excel trusts on opening moves with its build, and
