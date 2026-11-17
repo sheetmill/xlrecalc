@@ -93,7 +93,7 @@ def main() -> None:
     build = CONTAINER / "xlrecalc_paste_lambda.xlsx"
     lambda_probe.typed_workbook(build)
     truth = lambda_probe.HELD / "lambda_typed.xlsx"
-    with Book(truth) as book:  # the names as the person defined them, in their file form
+    with Book(truth) as book:  # the names as defined by hand in the typed workbook, in file form
         names = [(n.name, n.text) for n in book.defined_names]
     wb = openpyxl.load_workbook(build)
     for name, text in names:

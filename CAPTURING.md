@@ -158,19 +158,19 @@ opened by Launch Services, as a double-click in the Finder opens it (Excel 16.11
 warning does not block requests about the workbook, asks the person in a dialog of its own to say
 when it is answered (the header records the reply); then it reads and saves the workbook through
 AppleScript (`read_save.applescript`). Earlier captures of `circular_alerts` opened the file through
-AppleScript and saw no warning. `capture/marker_probe.py --typed` reads a workbook whose formulas
-were entered as typed and saved (AppleScript can only enter legacy formulas), by a person or pasted
-as below.
+AppleScript and saw no warning. `capture/marker_probe.py --typed` reads a workbook a person typed
+formulas into and saved (AppleScript can only enter legacy formulas); that workbook is kept as
+`tests/captures/marker_typed.xlsx`.
 
 **Formulas as typed, without a person.** Pasting a column of formulas as text enters them as typing
 them does: `capture/paste_probe.py` (`paste_formulas.applescript`: the text on the clipboard,
-Excel's `paste worksheet` into A1) rebuilt the typed workbook of `marker_typed` (75 formulas) and
-that of `lambda_probe --typed` (6 `LET`, 23 `LAMBDA` formulas and two named lambdas, the names
-written as Excel stored them), and every anchor cell matched the typed one on Excel 16.115: the
-formula's text with its prefixes (`_xlfn.`, `_xlpm.`, `_xlop.`), its `t` and `ref`, the
-dynamic-array marker (`cm`) and the cached value, except `RANDARRAY()`'s random value. Captures of
-typed formulas use this method; a macro setting `Range.Formula2` and keystrokes were not needed (and
-not tried).
+Excel's `paste worksheet` into A1) built a copy of the typed workbook of `marker_typed` (75
+formulas) and of that of `lambda_probe --typed` (6 `LET`, 23 `LAMBDA` formulas and two named
+lambdas, the names written as Excel stored them), and every anchor cell matched the typed one on
+Excel 16.115: the formula's text with its prefixes (`_xlfn.`, `_xlpm.`, `_xlop.`), its `t` and
+`ref`, the dynamic-array marker (`cm`) and the cached value, except `RANDARRAY()`'s random value.
+Captures of typed formulas use this method; a macro setting `Range.Formula2` and keystrokes were not
+needed (and not tried).
 
 **A fresh Excel after LAMBDA captures.** After pasting `lambda_probe`'s recursion cases (deep recursion, recursion
 through `MAP` past its limit), the same Excel session computed `#NUM!` for ten unrelated rows of `empty_args`

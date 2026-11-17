@@ -13,9 +13,10 @@ intersection), so AppleScript cannot enter a formula as Excel 365's formula bar 
 
 ``--typed PATH`` reads instead the workbook in which ``TYPED[k]`` was entered into cell
 ``A<4k+1>`` as typed in Excel's formula bar and saved, keeps it as
-``tests/captures/marker_typed.xlsx`` and writes ``tests/captures/marker_typed.tsv``. The kept
-workbook's formulas were pasted as text by ``capture/paste_probe.py``, which enters them as typing
-them does (CAPTURING.md §2). ``typed_workbook`` builds the workbook to type into; its ``start``
+``tests/captures/marker_typed.xlsx`` and writes ``tests/captures/marker_typed.tsv``. A person
+typed the kept workbook's formulas into Excel's formula bar; ``capture/paste_probe.py`` pastes
+them as text into a copy and finds every one entered as the typed one (CAPTURING.md §2), but
+writes nothing here. ``typed_workbook`` builds the workbook to type into; its ``start``
 lets a later batch (``NEXT_BATCH``) go into a workbook of its own.
 """
 
