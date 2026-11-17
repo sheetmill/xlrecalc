@@ -337,10 +337,9 @@ it and 58.8 s parsing every formula, and 8.5 s from the prototypes' pickled tabl
 xlsx reader; the current load times are in `bench/results/SUMMARY.md` (17.2 s from the file).
 
 A template records its canonical text, the compiled callable, its constants table, its reference
-list (offsets, anchors, sheets, cell or range), whether it is volatile (`NOW`, `TODAY`, `RAND`,
-`RANDBETWEEN`, `OFFSET`, `INDIRECT`, `CELL`, `INFO`), whether it has dynamic references, whether
-it can spill, and which functions it uses (for the unsupported-function report). Templates are
-interned per workbook.
+list (offsets, anchors, sheets, cell or range), whether it is volatile (§6.3), whether it has
+dynamic references, whether it can spill, and which functions it uses (for the
+unsupported-function report). Templates are interned per workbook.
 
 ### 5.4 Code generation
 
@@ -488,10 +487,11 @@ formula on a static cycle is evaluated, every read. So `INDIRECT("C8")+1` waits 
 does not follow, is 5, as in Excel. `IF`, `IFERROR`, `IFNA` and `CHOOSE` evaluate an argument
 only when they take it (§5.4).
 
-**Volatility.** `OFFSET`, `INDIRECT` and `CELL` are volatile, as in Excel, with `NOW`, `TODAY`,
-`RAND` and `RANDBETWEEN`: after any change, and at every `recalculate()`, they are evaluated
-again with their dependents, so a reference that moves follows. `INDEX` is not volatile; its
-references stay within its static range.
+**Volatility.** The functions the registry marks volatile, as in Excel, are `CELL`, `INDIRECT`,
+`NOW`, `OFFSET`, `RAND`, `RANDARRAY`, `RANDBETWEEN` and `TODAY` (`tests/test_volatile.py` holds
+this list and the glossary's to the registry): after any change, and at every `recalculate()`,
+they are evaluated again with their dependents, so a reference that moves follows. `INDEX` is
+not volatile; its references stay within its static range.
 
 ### 6.4 Dirty sets as runs, and the acceptance test
 
