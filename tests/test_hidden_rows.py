@@ -33,3 +33,13 @@ def workbook(tmp_path_factory: pytest.TempPathFactory) -> xlrecalc.Workbook:
 def test_matches_excel(workbook: xlrecalc.Workbook, row: list[str]) -> None:
     number, _formula, _kind, text = row
     assert workbook.value(f"R!A{number}") == ast.literal_eval(text)
+
+
+def test_filter_mode_read_where_rows_are_hidden(workbook: xlrecalc.Workbook) -> None:
+    """``filterMode`` is read on a sheet with hidden rows, the only case where it matters."""
+    engine = workbook._engine
+    modes = {s.name: s.filter_mode for s in engine.sheets}
+    assert modes["Filtered"]
+    assert modes["Both"]
+    assert not modes["Hand"]
+    assert all(engine.sheets[i].hidden_rows for i in range(3))

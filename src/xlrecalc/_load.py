@@ -690,7 +690,9 @@ def _load_sheet(
         if engine.iterate and f.attributes.get("ca") in ("1", "true"):
             engine.calc_always.add(node(index, row, col))
     s.hidden_rows = frozenset(r - 1 for r, f in sheet.rows.items() if f.hidden)
-    s.filter_mode = sheet.properties.filter_mode
+    # filterMode only decides whether SUBTOTAL leaves out hidden rows: with none hidden it changes
+    # nothing, and reading it costs xlio a second parse of the part's head
+    s.filter_mode = bool(s.hidden_rows) and sheet.properties.filter_mode
     for row, col, si, cached in dependents:
         master = masters.get(si)
         if master is None:  # no master in the file: keep the value, as there is no formula
