@@ -9,9 +9,8 @@ xlrecalc computes, and your Excel version and platform.
 ## Pull requests
 
 The project is just getting started, so pull requests aren't being accepted yet while
-the test-capture workflow, release process and review practices settle. This will be
-revisited after the first releases. In the meantime, if you have a change in mind,
-please open an issue describing it.
+the test-capture workflow, release process and review practices settle. In the meantime,
+if you have a change in mind, please open an issue describing it.
 
 When pull requests open, these rules will apply:
 
@@ -67,11 +66,11 @@ commands.
 
 The result of a formula is what Excel computes. Expected results are captured from Excel for
 Mac by the scripts in `capture/`: Excel recalculates a workbook built from formulas and inputs,
-saves a copy, and the values are read from the saved file (`CAPTURING.md`). Excel behaviors
-reproduced on purpose and switchable are listed in `QUIRKS.md`. They are never written from memory
-and never taken from another program's output or another file's cached values. Captured files
-are never edited by hand. A capture that changes any expected result is reviewed as a change of
-evidence.
+saves a copy, and the values are read from the saved file (`CAPTURING.md`). Expected results
+are never written from memory and never taken from another program's output or another file's
+cached values. Captured files are never edited by hand. A capture that changes any expected
+result is reviewed as a change of evidence. Excel behaviors reproduced on purpose and switchable
+are listed in `QUIRKS.md`.
 
 ## Commit messages
 
