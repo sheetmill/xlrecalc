@@ -12,10 +12,11 @@ Writes ``tests/captures/marker_<way>.tsv``. Both ways enter legacy formulas (no 
 intersection), so AppleScript cannot enter a formula as Excel 365's formula bar does.
 
 ``--typed PATH`` reads instead the workbook in which ``TYPED[k]`` was entered into cell
-``A<4k+1>`` as typed in Excel's formula bar (by a person, or pasted as text by
-``capture/paste_probe.py``) and saved, keeps it as ``tests/captures/marker_typed.xlsx`` and writes
-``tests/captures/marker_typed.tsv``. ``typed_workbook`` builds the workbook to type into; its
-``start`` lets a later batch (``SECOND_START`` and on) go into a workbook of its own.
+``A<4k+1>`` as typed in Excel's formula bar and saved, keeps it as
+``tests/captures/marker_typed.xlsx`` and writes ``tests/captures/marker_typed.tsv``. The kept
+workbook's formulas were pasted as text by ``capture/paste_probe.py``, which enters them as typing
+them does (CAPTURING.md §2). ``typed_workbook`` builds the workbook to type into; its ``start``
+lets a later batch (``NEXT_BATCH``) go into a workbook of its own.
 """
 
 from __future__ import annotations
@@ -73,8 +74,6 @@ TYPED = [
     "=SUM(SEQUENCE(3))",
     "=ROWS(UNIQUE(Z1:Z3))",
 ]
-SECOND_START = len(TYPED)
-"""Where the second batch starts: the formulas before it went into the first typed workbook."""
 TYPED += [
     # a function that makes an array under a branch, an explicit @ and an operator
     "=IF(TRUE,SEQUENCE(1))",
@@ -155,7 +154,7 @@ TYPED += [
 NEXT_BATCH: list[str] = []
 """Formulas for the next typed batch, joined to ``TYPED`` once captured."""
 NAMES = {"one_seq": "_xlfn.SEQUENCE(1)"}
-"""Defined names the typed workbooks read (``=one_seq`` in the fourth); each is built with them."""
+"""Defined names the typed formulas read (``=one_seq``); the workbook is built with them."""
 
 
 def typed_workbook(path: Path, start: int = 0) -> None:
@@ -185,7 +184,7 @@ KEPT = (CAPTURES / "marker_typed.xlsx",)
 
 
 def read_typed(*paths: Path) -> None:
-    """Keep the typed workbook (``KEPT``) and write ``marker_typed.tsv`` from the kept copies."""
+    """Keep the typed workbook (``KEPT``) and write ``marker_typed.tsv`` from what is kept."""
     from capture.pipeline import excel_version
 
     for path, kept in zip(paths, KEPT, strict=True):
@@ -205,7 +204,7 @@ def read_typed(*paths: Path) -> None:
 
 
 def typed_rows(*paths: Path) -> list[str]:
-    """The capture's rows from the typed workbooks: each cell from the first that has it."""
+    """The capture's rows from the typed workbooks given (``KEPT``), each cell from the first."""
     cells: dict[tuple[int, int], Any] = {}
     for path in paths:
         with Book(path) as book:

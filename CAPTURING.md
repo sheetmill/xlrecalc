@@ -140,27 +140,27 @@ registry instead ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/m
 `XLRECALC_CAPTURE_KEEP=1` the pipeline keeps the copy Excel saved, to read the formulas as
 Excel wrote them (the file form of a function, for example).
 
-Driving Excel: scripts are files under `capture/`, non-interactive, with `display alerts` off
-and restored on every exit path (the setting otherwise persists until Excel quits, and Excel
-then silently fails to open or repair files opened by hand); they open only workbooks they
-create, and refuse to run when a workbook of the same name is open. One script uses the clipboard:
+Driving Excel: scripts are files under `capture/`, non-interactive, with `display alerts` off and
+restored on every exit path (the setting otherwise persists until Excel quits, and Excel then
+silently fails to open or repair files opened by hand); they open only workbooks they create, and
+refuse to run when a workbook of the same name is open. One script uses the clipboard:
 `paste_formulas.applescript` (below), which saves the clipboard's text first and restores it after
-(anything on the clipboard that is not text is lost).
-With alerts off, a file Excel would offer to repair fails to open with error -50 ("Parameter
-error"), which is how probes detect a repair prompt without a person at the keyboard.
-`capture/repair_probe.py` and `capture/circular_probe.py --interactive` are the interactive
-captures, and whether a dialog appears depends on how the file is opened, dialog by dialog.
-Excel shows its repair dialogs for a file AppleScript opens with alerts on, so `repair_probe`
-opens it that way and waits for a person to accept them. It does not show its
+(anything on the clipboard that is not text is lost). With alerts off, a file Excel would offer to
+repair fails to open with error -50 ("Parameter error"), which is how probes detect a repair prompt
+without a person at the keyboard. `capture/repair_probe.py` and `capture/circular_probe.py
+--interactive` are the interactive captures, and whether a dialog appears depends on how the file is
+opened, dialog by dialog. Excel shows its repair dialogs for a file AppleScript opens with alerts
+on, so `repair_probe` opens it that way and waits for a person to accept them. It does not show its
 circular-reference warning for a file AppleScript opens, with alerts on or off; it does for one
-opened by Launch Services, as a double-click in the Finder opens it (Excel 16.115: a small loop
-with `fullCalcOnLoad` showed the warning when double-clicked and none under AppleScript). So
+opened by Launch Services, as a double-click in the Finder opens it (Excel 16.115: a small loop with
+`fullCalcOnLoad` showed the warning when double-clicked and none under AppleScript). So
 `circular_probe --interactive` opens the file with `open -a "Microsoft Excel"` and, since the
-warning does not block requests about the workbook, asks the person in a dialog of its own to
-say when it is answered (the header records the reply); then it reads and saves the workbook
-through AppleScript (`read_save.applescript`). Earlier captures of `circular_alerts` opened the file through
-AppleScript and saw no warning. `capture/marker_probe.py --typed` reads a workbook a person
-typed formulas into and saved (AppleScript can only enter legacy formulas).
+warning does not block requests about the workbook, asks the person in a dialog of its own to say
+when it is answered (the header records the reply); then it reads and saves the workbook through
+AppleScript (`read_save.applescript`). Earlier captures of `circular_alerts` opened the file through
+AppleScript and saw no warning. `capture/marker_probe.py --typed` reads a workbook whose formulas
+were entered as typed and saved (AppleScript can only enter legacy formulas), by a person or pasted
+as below.
 
 **Formulas as typed, without a person.** Pasting a column of formulas as text enters them as typing
 them does: `capture/paste_probe.py` (`paste_formulas.applescript`: the text on the clipboard, Excel's
