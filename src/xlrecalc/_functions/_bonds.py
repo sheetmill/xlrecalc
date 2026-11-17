@@ -231,7 +231,7 @@ def _bond(
 
     Settlement and maturity are taken as the Analysis ToolPak functions take a number: a logical
     is ``#VALUE!`` (capture ``bonds``). A coupon period that would start before the calendar's
-    first year is ``#NUM!`` (capture ``bonds``), but for ``COUPDAYS`` outside basis 1, which needs
+    first year is ``#NUM!`` (capture ``bonds``), except in ``COUPDAYS`` outside basis 1, which needs
     no coupon date (``days_only``: the period's length is returned).
     """
     settle, mature = _analysis(settle, ctx), _analysis(mature, ctx)

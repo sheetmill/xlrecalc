@@ -128,7 +128,7 @@ def numbers(
             for v in arg.values():
                 if isinstance(v, float | ErrorValue):
                     yield v
-        elif arg is MISSING:  # an empty argument is 0, but for PRODUCT (capture statistics_family)
+        elif arg is MISSING:  # an empty argument is 0; PRODUCT skips it (capture statistics_family)
             if not skip_empty:
                 yield 0.0
         elif isinstance(arg, bool):

@@ -367,19 +367,19 @@ name bound twice or written without `_xlpm.`, or a number where a name goes, mak
 the file. Formulas without `LET` compile as before.
 
 **`LAMBDA`** (captures `lambda_calls`, `lambda_names`, `lambda_depth`) is compiled as `LET` is:
-its parameters are a scope resolved at compile time (`_xlpm.` names, optional ones `_xlop.` in the
-list, typed `[y]`), and its body a function of their environment (`b0(ctx, r, c, E)`).
+its parameters are a scope resolved at compile time (`_xlpm.` names, optional ones `_xlop.` in
+the list, typed `[y]`), and its body a function of their environment (`b0(ctx, r, c, E)`).
 Evaluating `LAMBDA` makes a function value (`ops.closure`) over the environment it is evaluated
 in, so a body reads the names around it, `LET`'s and an outer `LAMBDA`'s. Calls of one, as
 `LAMBDA(x,x+1)(2)`, through a `LET` name or a parameter, or through a defined name holding one
 (`ADDONE(1)`), check the argument count (`#VALUE!` otherwise) and pass arguments as they are,
 references and errors included; an argument not given, or given empty, reads as a blank and
 makes `ISOMITTED` TRUE. A function value is no cell's value: a cell or spilled element holding
-one is `#CALC!`, an operator or function given one `#VALUE!` (but the `IS` functions FALSE,
-`ISNONTEXT` TRUE, `TYPE` 128, and `IF`'s and `CHOOSE`'s results pass it on to be called),
-checked where the registry receives every function's arguments. A call of any other value is
-`#VALUE!` (a name holding 5 called); a call of the result of a function that never gives a
-function value (`SUM(1)(2)`, which Excel refuses in a file) is reported, not computed. A
+one is `#CALC!`, an operator or function given one `#VALUE!` (except that the `IS` functions
+give FALSE, `ISNONTEXT` TRUE, `TYPE` 128, and `IF`'s and `CHOOSE`'s results pass it on to be
+called), checked where the registry receives every function's arguments. A call of any other
+value is `#VALUE!` (a name holding 5 called); a call of the result of a function that never
+gives a function value (`SUM(1)(2)`, which Excel refuses in a file) is reported, not computed. A
 parenthesized callee is one too (`(LAMBDA(x,x))(2)` is 2).
 
 Recursion runs on an explicit stack, never Python's: a body that calls a function value is a
@@ -649,22 +649,24 @@ Which cached values a load trusts is Excel's rule on opening a file (capture `op
 what Excel showed on opening was what it saved after): Excel recalculates every formula when the
 file has no `calcPr`, has `fullCalcOnLoad`, has a `calcId` below 191028 (Excel 16.115's own is
 191029; 191028 and anything higher, 999999 included, is trusted), has no `<fileVersion>` with
-`appName="xl"` (the element missing, as openpyxl writes it, its `appName` missing or another name;
-its other attributes do not matter), or holds a volatile function, which recalculates every
-formula, not only its dependents; it trusts the cached values otherwise, and in manual calculation.
-`load` and `recalculate(path)` follow it by default (`recalc_on_load="excel"`, the rule in
-`recalculates_on_opening`, the threshold in `VERIFIED_CALC_ID`, which the capture sets and is rerun
-after every Excel update); `recalc_on_load="always"` treats every formula as stale and `"never"`
-trusts every cached value the file holds. A formula with no cached value is evaluated in every
-mode, and so is a volatile one but under `"excel"` in manual calculation, where Excel shows its
-cached value on opening (capture `open_calc`, `manual_volatile`). A `calcPr` without `calcId` counts as none, as in Excel. In manual
-calculation Excel shows the cached values on opening whatever the reason, and saves them
-recalculated where a reason holds, so a load trusts them and `recalculate(path)`, an opening and a
-save, recalculates (a volatile function in manual calculation is such a reason too). Following Excel rather than always recalculating loses nothing: a file openpyxl
-writes asks for a full calculation anyway, and where the rules trust a value it is the value Excel
-computed. A file xlrecalc wrote with `fullCalcOnLoad` set (the default, §9.2) is therefore loaded
-with every formula stale: reading it again costs a full recalculation, never a wrong value;
-`full_calc_on_load=False` writes a file whose values a later load trusts.
+`appName="xl"` (the element missing, as openpyxl writes it, its `appName` missing or another
+name; its other attributes do not matter), or holds a volatile function, which recalculates
+every formula, not only its dependents; it trusts the cached values otherwise, and in manual
+calculation. `load` and `recalculate(path)` follow it by default (`recalc_on_load="excel"`, the
+rule in `recalculates_on_opening`, the threshold in `VERIFIED_CALC_ID`, which the capture sets
+and is rerun after every Excel update); `recalc_on_load="always"` treats every formula as stale
+and `"never"` trusts every cached value the file holds. A formula with no cached value is
+evaluated in every mode, and so is a volatile one except under `"excel"` in manual calculation,
+where Excel shows its cached value on opening (capture `open_calc`, `manual_volatile`). A
+`calcPr` without `calcId` counts as none, as in Excel. In manual calculation Excel shows the
+cached values on opening whatever the reason, and saves them recalculated where a reason holds,
+so a load trusts them and `recalculate(path)`, an opening and a save, recalculates (a volatile
+function in manual calculation is such a reason too). Following Excel rather than always
+recalculating loses nothing: a file openpyxl writes asks for a full calculation anyway, and
+where the rules trust a value it is the value Excel computed. A file xlrecalc wrote with
+`fullCalcOnLoad` set (the default, §9.2) is therefore loaded with every formula stale: reading
+it again costs a full recalculation, never a wrong value; `full_calc_on_load=False` writes a
+file whose values a later load trusts.
 
 ### 7.5 Cell store
 
@@ -923,7 +925,7 @@ Behavior that is not the obvious reading, each from its capture:
   period left uses Excel's closed form with A as `COUPDAYBS`, E as the actual period in bases 1 to
   3, and the days to redemption in the basis's own count. A logical settlement or maturity is
   `#VALUE!` in these functions, as in the other Analysis ToolPak functions; a coupon period that
-  would begin before the calendar's first year is `#NUM!`, but in `COUPDAYS` outside basis 1,
+  would begin before the calendar's first year is `#NUM!`, except in `COUPDAYS` outside basis 1,
   which needs no coupon date and gives the period's length.
 - `WORKDAY`, `NETWORKDAYS` and their `.INTL` forms (capture `workdays`): weekend codes 1 to 7 and
   11 to 17 or a seven-character mask, holidays as a range or array, logical arguments `#VALUE!`, a
