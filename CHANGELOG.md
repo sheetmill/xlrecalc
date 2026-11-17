@@ -102,7 +102,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `PRICE`, `YIELD`, `DURATION`, `MDURATION` and the `COUP` functions take a logical settlement or maturity as
   `#VALUE!`, as Excel does (capture `bonds`); `TRUE` was read as the date 1, and the result reached `#VALUE!` only
   through an internal error. A coupon period that would begin before 1900 (1904) is `#NUM!`, as in Excel, except
-  in `COUPDAYS` outside basis 1.
+  in `COUPDAYS` outside basis 1, which needs no coupon date and gives the period's length: 365 days (basis 3) or 360
+  (the others) divided by the frequency.
 - A dynamic array that a trusted file caches as blocked (`#SPILL!`) spills when the cell in its way is cleared; in
   0.2.0 and before it stayed `#SPILL!` until a full recalculation.
 
