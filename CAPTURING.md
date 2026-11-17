@@ -90,6 +90,11 @@ and update channel (§2), date system, capture date, generator and method. `test
 `tests/test_formula_forms.py` compare the package with them: each suite becomes one engine
 sheet laid out as Excel's workbook was, and every formula cell must equal what Excel saved.
 
+Where a fact belongs to [xlio](https://github.com/sheetmill/xlio), which reads and writes the
+files, its capture is cited here rather than repeated: [`errors`](https://github.com/sheetmill/xlio/blob/main/tests/captures/errors.tsv)
+(Excel 16.115) gives the rich-value error types and their `ERROR.TYPE` numbers in
+`tests/test_error_types.py`, and `#GETTING_DATA` written back as `#N/A`.
+
 ## 2. The pipeline
 
 ```
@@ -283,7 +288,11 @@ stops and asks.
 
 The probes behind the design (`capture/writeback_probe.py`, `capture/semantics_probe.py`,
 `capture/formula_forms.py`) use the same conventions; their results are in [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md)
-§5.2 and §9.4.
+§5.2 and §9.4. `capture/vm_probe.py` is such a probe; its output (`capture/build/vm_probe.out`) is
+not kept, and its result is in ARCHITECTURE.md §7.7: Excel 16.115 shows and saves the rich value's
+error, not the new `<v>`, for a cell given a new value that keeps the old value's `vm` (a number, a
+logical, `#DIV/0!` and a plain `#VALUE!` alike), so a new value drops `vm`
+(`tests/test_error_types.py`).
 
 ## 3. Formulas as Excel writes them
 

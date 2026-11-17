@@ -768,10 +768,11 @@ A1 spills into; `@x` (`_xlfn.SINGLE(x)`) is the implicit intersection of `x`. Ex
 decodes it, and the writer writes `#VALUE!` without the rich value, as other readers see such a
 cell. A cell given a new value loses its `vm`, which Excel would show over the new `<v>`
 (`capture/vm_probe.py`); one still holding the error its rich value stands for keeps it. The
-other error types decoded are those captured (Excel 16.115): 9 `#CONNECT!`, 10 `#BLOCKED!`, 11
-`#UNKNOWN!`, 12 `#FIELD!`, 13 `#CALC!`, 15 `#BUSY!`, 19 `#TIMEOUT!`; another type stays the
-`#VALUE!` written. `ERROR.TYPE` gives Excel's numbers for them (9 to 14, 16 and 20), and
-`#GETTING_DATA` is written as `#N/A`, as Excel writes it back.
+other error types decoded are those xlio's capture [`errors`](https://github.com/sheetmill/xlio/blob/main/tests/captures/errors.tsv)
+records (Excel 16.115): 9 `#CONNECT!`, 10 `#BLOCKED!`, 11 `#UNKNOWN!`, 12 `#FIELD!`, 13
+`#CALC!`, 15 `#BUSY!`, 19 `#TIMEOUT!`; another type stays the `#VALUE!` written. `ERROR.TYPE`
+gives Excel's numbers for them (9 to 14, 16 and 20), and `#GETTING_DATA` is written as `#N/A`,
+as Excel writes it back.
 
 **Functions that make arrays** (`_functions/_dynamic.py`, `_functions/_reshape.py`; captures
 `dyn_*`) take their array arguments whole in every formula. A count or other one-value argument

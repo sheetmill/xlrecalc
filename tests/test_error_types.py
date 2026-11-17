@@ -1,9 +1,10 @@
 """Excel's newer errors read from a file, and ``ERROR.TYPE`` over them.
 
-Excel 16.115 (a capture of each error written into a cell, alone, opened and saved by Excel)
-caches a newer error as ``#VALUE!`` with a rich value holding its type, and gives
-``ERROR.TYPE`` 9 ``#SPILL!``, 10 ``#CONNECT!``, 11 ``#BLOCKED!``, 12 ``#UNKNOWN!``, 13 ``#FIELD!``,
-14 ``#CALC!``, 16 ``#BUSY!``, 20 ``#TIMEOUT!``; it writes ``#GETTING_DATA`` back as ``#N/A``.
+Excel 16.115 (xlio's capture ``errors``, ``tests/captures/errors.tsv`` in its repository: each
+error written into a cell, alone, opened and saved by Excel) caches a newer error as ``#VALUE!``
+with a rich value holding its type, and gives ``ERROR.TYPE`` 9 ``#SPILL!``, 10 ``#CONNECT!``, 11
+``#BLOCKED!``, 12 ``#UNKNOWN!``, 13 ``#FIELD!``, 14 ``#CALC!``, 16 ``#BUSY!``, 20 ``#TIMEOUT!``;
+it writes ``#GETTING_DATA`` back as ``#N/A``.
 """
 
 from __future__ import annotations
