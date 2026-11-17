@@ -122,10 +122,11 @@ read as typed in Excel's formula bar; without `=`, in the file form a file store
 30.0
 ```
 
-Relative references move from `origin` to the cell `at`, as a conditional format's formula
-does over its range. Errors are values (`#DIV/0!`, and `#NAME?` for a name Excel does not
-know); a function Excel has that xlrecalc does not compute raises `UnsupportedError`
-(`Formula.unsupported` names it before evaluating).
+Relative references move from `origin` to the cell `at`, as a conditional format's formula does
+over its range. Errors are values (`#DIV/0!`, and `#NAME?` for a name Excel does not know); a
+function or form Excel computes and xlrecalc does not (a union of ranges, a table reference,
+`CELL("format")`) raises `UnsupportedError`, and `Formula.unsupported` names those the formula's
+text shows before evaluating.
 
 ## What it computes, and what not yet
 

@@ -17,7 +17,7 @@ from typing import Any
 from xlrecalc._arrays import check_area
 from xlrecalc._coerce import Context, to_number, to_text
 from xlrecalc._formula import MISSING, Kind, TokenizeError, tokenize
-from xlrecalc._formula._codegen import sheet_text
+from xlrecalc._formula._codegen import CELL_FORMATTING, sheet_text
 from xlrecalc._formula._fileform import display_form
 from xlrecalc._formula._template import cell_axes, line_axes
 from xlrecalc._functions._registry import function
@@ -230,7 +230,7 @@ def CELL(ctx: Any, info: str, ref: Any = MISSING) -> Any:
             return ""
         folder, book = posixpath.split(ctx.path)
         return f"{folder}/[{book}]{ctx.sheets[ref.sheet].name}"
-    if kind in ("format", "protect", "width", "prefix", "color", "parentheses"):
+    if kind in CELL_FORMATTING:
         return ctx.unsupported(f'CELL("{kind}")')
     return VALUE
 

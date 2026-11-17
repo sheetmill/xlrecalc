@@ -8,6 +8,7 @@ a conditional format's formula may read the cell it applies to.
 from __future__ import annotations
 
 import math
+import re
 from collections.abc import Callable, Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
@@ -29,7 +30,11 @@ _OWN = "*"  # the formula's own sheet when it has no name: no sheet can be calle
 
 
 class UnsupportedError(FormulaError):
-    """The formula calls a function Excel has and this package does not compute.
+    """The formula uses what Excel computes and this package does not: a function or a form.
+
+    The forms: a union of ranges, a structured, 3-D or external reference, ``CELL``'s
+    formatting kinds, ``LINEST`` with several regressors, and the others the workbook's report
+    names (``Report.unsupported``).
 
     A name Excel itself does not know is no error here: it evaluates to ``#NAME?``, as in Excel.
     """
@@ -100,7 +105,7 @@ def evaluate(
 
     Raises:
         FormulaError: Excel's formula bar would not take the formula.
-        UnsupportedError: It calls a function this package does not compute.
+        UnsupportedError: It uses a function or form this package does not compute.
     """
     parsed = Formula.parse(formula, sheet=sheet, origin=at, legacy=legacy, quirks=quirks)
     return parsed.evaluate(values, resolver=resolver, names=names, date1904=date1904)
@@ -186,11 +191,19 @@ class Formula:
 
     @property
     def unsupported(self) -> frozenset[str]:
-        """Functions it calls that Excel has and this package does not compute.
+        """What it uses that Excel computes and this package does not, as the report names it.
 
-        A name Excel does not know is not here: it evaluates to ``#NAME?``, as in Excel.
+        Functions Excel has (``_XLFN.AGGREGATE``) and forms: a union of ranges, a structured, 3-D
+        or external reference, ``CELL`` given a formatting kind as text (``CELL("format")``). A
+        name Excel does not know is not here: it evaluates to ``#NAME?``, as in Excel. What
+        depends on the values (``CELL`` given its kind in a cell, ``LINEST`` with several
+        regressors) is found while evaluating, which raises ``UnsupportedError`` then.
         """
-        return frozenset(n for n in self._template.unsupported if _excel_knows(n))
+        template = self._template
+        return (
+            frozenset(n for n in template.unsupported if _excel_knows(n) or not _is_name(n))
+            | template.forms
+        )
 
     @property
     def volatile(self) -> bool:
@@ -209,7 +222,7 @@ class Formula:
         """Its value at ``at`` (default its origin); see :func:`evaluate`.
 
         Raises:
-            UnsupportedError: It calls a function this package does not compute.
+            UnsupportedError: It uses a function or form this package does not compute.
         """
         if self.unsupported:
             raise UnsupportedError(
@@ -365,7 +378,7 @@ class _AdHoc(Engine):
         return super().cell(sheet, row, col)
 
     def unsupported(self, label: str, *args: Any) -> Value:
-        if " " not in label and not _excel_knows(label):  # a name Excel does not know
+        if _is_name(label) and not _excel_knows(label):  # a name Excel does not know
             return ErrorValue.NAME
         raise UnsupportedError(f"not computed by this package: {label}")
 
@@ -396,6 +409,14 @@ def _excel_knows(name: str) -> bool:
             name = name[len(prefix) :]
             break
     return name in EXCEL_NAMES
+
+
+def _is_name(label: str) -> bool:
+    """Whether an unsupported label is a function's name, not a form (``CELL("format")``)."""
+    return _NAME.fullmatch(label) is not None
+
+
+_NAME = re.compile(r"[A-Za-z_\\][A-Za-z0-9_.\\]*")
 
 
 def _is_grid(value: Any) -> bool:

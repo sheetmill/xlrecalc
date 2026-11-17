@@ -1353,22 +1353,26 @@ f.references, f.names, f.functions, f.unsupported, f.volatile
 
 One workbook is used from one thread at a time, and so is one `Formula`.
 
-**One formula outside a workbook** (`_evaluate.py`). The formula is compiled as a cell's
-formula would be, at `origin`, and its template is run at `at` on an engine that holds no
-formula cells: it is not placed in a cell, since a conditional format's formula may read the
-cell it applies to. Text starting with `=` is the formula bar's form (the file-form printer adds
-prefixes, §5.2); text without it is the file form, as a file stores it, used as it is. Cell
-values come from the mapping, then from the resolver, asked once for each box the evaluation
-reads (`OFFSET` and `INDIRECT` included); a cell neither gives is blank, as in Excel. The
-formula is a dynamic array unless `legacy=True`; a dynamic result comes back as rows. A name
-Excel does not know evaluates to `#NAME?`; a function Excel has (`EXCEL_NAMES`, from the
-`formula_bar` capture's function list) that the package does not compute raises
-`UnsupportedError`, as do structured references, which need tables. The template is run by the
-engine that compiled it, since the operators read that engine's position; each call clears its
-cells and names first. Tests: `tests/test_evaluate.py`, where a captured formula evaluated alone
-gives the engine's value in the capture's sheet, in every suite whose inputs are values (not
-formulas or fixed cells), unsupported and volatile formulas left out: every 25th row by default,
-every row in the slow tier.
+**One formula outside a workbook** (`_evaluate.py`). The formula is compiled as a cell's formula
+would be, at `origin`, and its template is run at `at` on an engine that holds no formula cells:
+it is not placed in a cell, since a conditional format's formula may read the cell it applies
+to. Text starting with `=` is the formula bar's form (the file-form printer adds prefixes,
+§5.2); text without it is the file form, as a file stores it, used as it is. Cell values come
+from the mapping, then from the resolver, asked once for each box the evaluation reads (`OFFSET`
+and `INDIRECT` included); a cell neither gives is blank, as in Excel. The formula is a dynamic
+array unless `legacy=True`; a dynamic result comes back as rows. A name Excel does not know
+evaluates to `#NAME?`; a function Excel has (`EXCEL_NAMES`, from the `formula_bar` capture's
+function list) that the package does not compute raises `UnsupportedError`, as does a form it
+does not compute (a union of ranges, a structured, 3-D or external reference, `CELL`'s
+formatting kinds: what the report names in a workbook). `Formula.unsupported` names what the
+text shows, the code generator recording the forms it meets (`Compiled.forms`); a case that
+depends on the values (`CELL` given its kind in a cell, `LINEST` with several regressors) raises
+while evaluating. The template is run by the engine that compiled it, since the operators read
+that engine's position; each call clears its cells and names first. Tests:
+`tests/test_evaluate.py`, where a captured formula evaluated alone gives the engine's value in
+the capture's sheet, in every suite whose inputs are values (not formulas or fixed cells),
+unsupported and volatile formulas left out: every 25th row by default, every row in the slow
+tier.
 
 ## 12. Open decisions
 

@@ -84,6 +84,8 @@ class Template:
     """Compiled as a legacy formula, it takes an implicit intersection somewhere (§7.7)."""
     array_mode: bool = False
     """Compiled as an array formula: ranges are arrays, the result may be an array."""
+    forms: frozenset[str] = frozenset()
+    """Forms its text uses that are not computed where evaluation reaches them (``Compiled``)."""
 
 
 @dataclass
@@ -372,6 +374,7 @@ class Engine:
             (formula.text(), row, col),
             compiled.intersects,
             array_mode,
+            compiled.forms,
         )
         tid = len(self.templates)
         self.templates.append(template)

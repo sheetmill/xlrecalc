@@ -14,8 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   sheet-qualified) and then a callback given a `Reference`; a cell neither gives is blank, as in Excel. A formula
   starting with `=` is read as typed, one without it in file form. Dynamic-array evaluation by default, `legacy=True`
   for implicit intersection; a dynamic result comes back as rows. A name Excel does not know gives `#NAME?`; a
-  function Excel has and the package does not compute raises `UnsupportedError` (a `FormulaError`), which
-  `Formula.unsupported` names beforehand. A captured formula evaluated alone gives the engine's value, in every
+  function or form Excel computes and the package does not (a union of ranges, a structured, 3-D or external
+  reference, `CELL`'s formatting kinds) raises `UnsupportedError` (a `FormulaError`); `Formula.unsupported` names
+  beforehand what the text shows. A captured formula evaluated alone gives the engine's value, in every
   suite whose inputs are values (not formulas or fixed cells), the unsupported and volatile ones left out.
 - `LAMBDA` and `ISOMITTED`, captured from Excel (captures `lambda_calls`, `lambda_names`, `lambda_depth`,
   `lambda_more`): a function value called where it is made (`LAMBDA(x,x+1)(2)`, `(LAMBDA(x,x))(2)`), through a `LET`

@@ -170,6 +170,9 @@ class Compiled:
     calls: frozenset[str] = frozenset()
     features: frozenset[str] = frozenset()
     """Features the formula uses that are not implemented yet."""
+    forms: frozenset[str] = frozenset()
+    """Forms in its text that are not computed when evaluation reaches them (a union of ranges, a
+    structured reference, ``CELL`` given a formatting kind as text), named for ``Formula``."""
     intersects: bool = False
     """Whether, as a legacy formula, it takes an implicit intersection somewhere: an operator or
     a one-value argument given a range outside an array argument (§7.7)."""
@@ -233,7 +236,8 @@ def compile_formula(
         tuple(gen.refs),
         frozenset(gen.calls),
         frozenset(gen.features),
-        gen.intersects,
+        intersects=gen.intersects,
+        forms=frozenset(gen.forms),
     )
 
 
@@ -257,6 +261,7 @@ class _Generator:
         self.refs: list[RefSpec] = []
         self.calls: set[str] = set()
         self.features: set[str] = set()
+        self.forms: set[str] = set()
         self.arrays = 0  # array contexts around the node being compiled (§7.7)
         self.array_formula = False  # the formula itself is an array formula
         self.branches: list[str] = []  # functions for the branches of IF and friends
@@ -357,12 +362,14 @@ class _Generator:
                 if op.text == "%":
                     code = self.operand(operand, self.expr(operand))
                     return self.emit(f"ops.percent({code})")
+                self.forms.add("spill reference")
                 return self.emit(f"ctx.spill({self.expr(operand)})")
             case Binary():
                 return self.chain(node, top)
             case Group(_, inner, _):
                 return self.expr(inner)
             case Union(items, _):
+                self.forms.add("a union of ranges")
                 return self.emit(f"ops.union({', '.join(self.expr(i) for i in items)})")
             case Call(name, _, args, _, _, prefix):
                 return self.call(name, prefix, args)
@@ -438,6 +445,7 @@ class _Generator:
                 f"ctx.{method}({sheet}, {self.axis(first, var)}, {self.axis(second, var)})"
             )
         if token.kind is Kind.STRUCTURED:
+            self.forms.add("structured reference")
             return self.emit(f"ctx.structured({self.constant(token.text)})")
         if token.kind is Kind.ERROR:
             return self.constant(ErrorValue(token.text))
@@ -593,6 +601,9 @@ class _Generator:
         if name.text.upper() in ("AREAS", "ISREF") and len(args) == 1 and _is_union(args[0]):
             self.calls.add(name.text.upper())  # known from the formula alone (capture info_family)
             return self.constant(float(_areas(args[0])) if name.text.upper() == "AREAS" else True)
+        kind = _text_literal(args[0]) if name.text.upper() == "CELL" and args else None
+        if kind is not None and kind.lower() in CELL_FORMATTING:
+            self.forms.add(f'CELL("{kind.lower()}")')
         if self.arrays:
             fn = getattr(fn, "in_array", fn)
         kinds: tuple[str, ...] = getattr(fn, "kinds", ())
@@ -742,6 +753,19 @@ def _calls_a_value(callee: Node, registry: Mapping[str, Callable[..., Any]]) -> 
         return False
     name = callee.name.text.upper()
     return name in registry and name not in _MAY_GIVE_A_FUNCTION
+
+
+CELL_FORMATTING = ("format", "protect", "width", "prefix", "color", "parentheses")
+"""``CELL``'s kinds that read a cell's formatting, which this package does not compute."""
+
+
+def _text_literal(node: Node) -> str | None:
+    """A text literal's value (``"format"`` gives ``format``), or ``None`` for anything else."""
+    while isinstance(node, Group):
+        node = node.inner
+    if isinstance(node, Leaf) and node.token.kind is Kind.STRING:
+        return node.token.text[1:-1].replace('""', '"')
+    return None
 
 
 def _is_union(node: Node) -> bool:

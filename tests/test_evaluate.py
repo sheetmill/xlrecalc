@@ -9,6 +9,8 @@ slow tier.
 
 from __future__ import annotations
 
+import re
+
 import pytest
 from tools.excel_names import module_text
 
@@ -106,6 +108,47 @@ def test_a_function_excel_has_and_the_package_does_not_compute_raises() -> None:
     with pytest.raises(UnsupportedError, match="structured reference"):
         evaluate("=Table1[Price]")
     assert issubclass(UnsupportedError, FormulaError)
+
+
+@pytest.mark.parametrize(
+    ("text", "label"),
+    [
+        ('=CELL("format",A1)', 'CELL("format")'),
+        ('=CELL("Width",A1)', 'CELL("width")'),
+        ('=CELL("color",A1)', 'CELL("color")'),
+        ("=SUM((A1,A2))", "a union of ranges"),
+        ("=Table1[Price]", "structured reference"),
+        ("=Sheet1:Sheet2!A1", "external or 3-D reference"),
+        ("=[1]Sheet1!A1", "external or 3-D reference"),
+    ],
+)
+def test_an_unsupported_form_is_named_and_raises(text: str, label: str) -> None:
+    """What the workbook's report names as not computed is named beforehand, and raises."""
+    f = Formula.parse(text)
+    assert label in f.unsupported
+    with pytest.raises(UnsupportedError, match=re.escape(label)):
+        f.evaluate({"A1": 1, "A2": 2})
+
+
+@pytest.mark.parametrize(
+    ("text", "label"),
+    [
+        ("=CELL(B1,A1)", 'CELL("format")'),
+        ("=LINEST(A1:A3,B1:C3)", "LINEST with several regressors"),
+    ],
+)
+def test_an_unsupported_case_found_only_by_its_values_raises(text: str, label: str) -> None:
+    """``CELL`` given its kind in a cell is not known beforehand; evaluating raises, not #NAME?."""
+    f = Formula.parse(text)
+    assert not f.unsupported
+    with pytest.raises(UnsupportedError, match=re.escape(label)):
+        f.evaluate({"A1": 1, "A2": 2, "B1": "format"})
+
+
+def test_computed_cases_beside_the_unsupported_ones_are_values() -> None:
+    assert evaluate('=CELL("row",B7)') == 7.0
+    assert evaluate("=ROW((A1,A2))") == ErrorValue.REF  # of several areas
+    assert evaluate("=NOSUCHFN(1)") == ErrorValue.NAME
 
 
 def test_text_the_formula_bar_refuses() -> None:
