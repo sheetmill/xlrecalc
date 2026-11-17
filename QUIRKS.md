@@ -6,6 +6,12 @@ what `strict` does instead, and the evidence: rows captured from Excel 16.115 fo
 `tests/captures/`, with the method in `CAPTURING.md`. `leap_year_1900` and
 `fifteen_digit_precision` are shared with xlformat and mean the same there.
 
+Evidence is cited by capture suite and row: a suite (`text_family`, `empty_args`) is a file of
+formulas Excel computed and the values it saved (`tests/captures/<suite>.tsv`), and a row is one
+formula of it. Most of this page lists the known deviations, the rows where the package and Excel
+still differ, each with its reason; the [glossary](https://xlrecalc.readthedocs.io/en/latest/glossary.html)
+explains the terms.
+
 ## `leap_year_1900`
 
 **Excel**: in the 1900 date system, serial 60 is February 29, 1900, a day that did not exist.
@@ -241,14 +247,16 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   did not reproduce. `MULTINOMIAL` is exact, where Excel's result carries noise from its logarithm of the gamma
   function (279.99999999999966 for 280); 12 rows of `math_integers` listed in `tests/test_captures.py`, with one of
   `statistics_family` and one of `empty_args`, 14 in all.
-- `IRR`, `XIRR`, `RATE`, `YIELD` ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1, §8.2): a relative tolerance of
-  1E-9, declared per function, since Excel's Newton iterates rest on its own NPV, whose last
-  bits are not reproduced, and Excel guarantees its result only to its documented stopping
-  tolerance. Of the 402 rows of `iterative`, 323 match, exactly or within the relative
-  tolerance, and 79 are listed: from some guesses Excel's `IRR` and `RATE` reach another root,
-  a rate where the package gives `#NUM!`, or the reverse; `XIRR` stops about 1E-8 from the
-  root (sometimes after what looks like a bracketing search); and three `IRR` results at a
-  rate of 0 differ by less than 1E-14, where a relative tolerance cannot apply. Iteration
+- `IRR`, `XIRR`, `RATE`, `YIELD`
+  ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1,
+  §8.2): a relative tolerance of 1E-9, declared per function, since Excel's Newton iterates
+  rest on its own NPV, whose last bits are not reproduced, and Excel guarantees its result only
+  to its documented stopping tolerance. Of the 402 rows of `iterative`, 323 match, exactly or
+  within the relative tolerance, and 79 are listed, all among its 352 rows of `IRR`, `XIRR` and
+  `RATE` (the other 50 are `NPV` and `MIRR`): from some guesses Excel's `IRR` and `RATE` reach
+  another root, a rate where the package gives `#NUM!`, or the reverse; `XIRR` stops about 1E-8
+  from the root (sometimes after what looks like a bracketing search); and three `IRR` results
+  at a rate of 0 differ by less than 1E-14, where a relative tolerance cannot apply. Iteration
   methods compared with the capture, each in at most five variants of its parameters: Newton on
   the rate, on 1 + rate and on 1 / (1 + rate), analytic and numerical derivatives, stops on the
   step or on the NPV, 20 to 100 iterations, damping. Excel's iteration is on the Roadmap

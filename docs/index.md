@@ -26,6 +26,7 @@ usage
 iteration
 coverage
 quirks
+glossary
 capturing
 api
 changelog
