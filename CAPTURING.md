@@ -322,8 +322,8 @@ they cannot contain a newer function, and a count of zero says nothing about one
 
 - Expected values never come from another program or from another file's cached values: a
   formula worth capturing is put into a fresh workbook and Excel computes it.
-- A downloaded workbook is never opened in Excel. It is read only by this package's reader or
-  openpyxl, in a directory of its own, and only `.xlsx` files are read (never `.xlsm`).
+- A downloaded workbook is never opened in Excel. It is read only by xlio (the reader this
+  package uses) or openpyxl, in a directory of its own, and only `.xlsx` files are read (never `.xlsm`).
 - Before a formula from such a workbook goes into a workbook for Excel, `capture/corpus_filter.py`
   drops and counts DDE links, references to other workbooks, and functions that reach outside
   the workbook (files, network, programs, the machine) or `HYPERLINK`.

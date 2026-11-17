@@ -1269,15 +1269,16 @@ workbooks this project generates, never from a third party's cached values. Real
 collections of workbooks hold personal data: they are used locally, for formula text and
 function frequencies, and never committed. Formula text from openly licensed test suites is
 committed only where the license allows, with attribution. Downloaded workbooks are untrusted:
-they are opened only by this package's reader or openpyxl, in a directory of their own, never in
-Excel, and only `.xlsx` files are read. To capture Excel's result for a formula found in one,
-the capture tooling writes a fresh workbook with openpyxl holding only that formula and the
-constant inputs it refers to; before writing, `capture/corpus_filter.py` drops and counts DDE
-formulas (`app|'topic'!item`), references to other workbooks, and calls of functions with side
-effects or file or network access (`WEBSERVICE`, `FILTERXML`, `RTD`, `CALL`, `REGISTER.ID`,
-`INFO`, `CELL`) or `HYPERLINK` (harmless, but not worth capturing from such a formula). The
-exclusion covers formulas taken from those workbooks. Capture suites written for this package call
-`CELL`, `HYPERLINK`, `FILTERXML` and the like directly, with fixed local input.
+they are opened only by xlio (the reader this package uses) or openpyxl, in a directory of their
+own, never in Excel, and only `.xlsx` files are read. To capture Excel's result for a formula
+found in one, the capture tooling writes a fresh workbook with openpyxl holding only that
+formula and the constant inputs it refers to; before writing, `capture/corpus_filter.py` drops
+and counts DDE formulas (`app|'topic'!item`), references to other workbooks, and calls of
+functions with side effects or file or network access (`WEBSERVICE`, `FILTERXML`, `RTD`, `CALL`,
+`REGISTER.ID`, `INFO`, `CELL`) or `HYPERLINK` (harmless, but not worth capturing from such a
+formula). The exclusion covers formulas taken from those workbooks. Capture suites written for
+this package call `CELL`, `HYPERLINK`, `FILTERXML` and the like directly, with fixed local
+input.
 
 **Other tests.** Tokenizer and printer round trip over the formula corpus; normalizer (template
 keys, anchors, sheets); code generation safety (§5.4); dependency index (property tests: reverse
