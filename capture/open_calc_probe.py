@@ -13,11 +13,12 @@ nothing; ``calcPr`` removed; ``calcId`` older or newer than the copy's, or remov
 files: with no cached values, and with the sentinels. Four look for another trigger, one difference
 between openpyxl's file and Excel's each: openpyxl's file with Excel's ``calcId`` and no
 ``fullCalcOnLoad``; Excel's copy without its calculation chain, without ``<fileVersion>``, and
-without ``docProps/app.xml`` (a part is dropped with its relationship and content type). Each
-variant is opened with alerts off and read (``open_read.applescript``: value, displayed text,
-formula, saved flag and calculation mode), closed without saving, then opened again and saved as a
-copy whose cached values are read. A cell showing its sentinel was taken from the file; one showing
-its right value was recalculated.
+without ``docProps/app.xml`` (a part is dropped with its relationship and content type). Seven
+change one attribute of Excel's ``<fileVersion>``: ``appName`` removed or ``"Calc"``, ``rupBuild``
+removed or ``4505``, ``lastEdited`` 6 or 4, ``lowestEdited`` 4. Each variant is opened with alerts
+off and read (``open_read.applescript``: value, displayed text, formula, saved flag and calculation
+mode), closed without saving, then opened again and saved as a copy whose cached values are read. A
+cell showing its sentinel was taken from the file; one showing its right value was recalculated.
 
 Excel's calculation mode belongs to the application and the first workbook opened sets it, so
 the manual variants come last and ``calc_automatic.applescript`` sets the mode back after each.
