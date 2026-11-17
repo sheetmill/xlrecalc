@@ -1,4 +1,4 @@
-"""Time and memory of reading every cell: xlrecalc's reader against openpyxl.
+"""Time and memory of reading every cell: xlio, the reader xlrecalc uses, against openpyxl.
 
     uv run python bench/read_bench.py FILE_OR_DIRECTORY ... [--sample N] [--seed S]
 
@@ -6,7 +6,7 @@ Runs in the package's own environment. Each reader runs in a fresh process over 
 and reads every cell of every worksheet, keeping nothing; the child reports its time and peak
 resident memory (the import of the reader included). Modes:
 
-- ``xlrecalc``: one pass, formulas and cached values together;
+- ``xlio``: one pass, formulas and cached values together (what ``xlrecalc.load`` reads);
 - ``openpyxl read-only``: formulas (``read_only=True``);
 - ``openpyxl read-only data_only``: cached values (the engine needs both passes);
 - ``openpyxl normal``: ``load_workbook`` in normal mode, formulas.
@@ -21,15 +21,16 @@ import resource
 import subprocess
 import sys
 import time
+from importlib import metadata
 from pathlib import Path
 
-MODES = ["xlrecalc", "openpyxl read-only", "openpyxl read-only data_only", "openpyxl normal"]
+MODES = ["xlio", "openpyxl read-only", "openpyxl read-only data_only", "openpyxl normal"]
 
 
 def child(mode: str, files: list[str]) -> None:
     start = time.perf_counter()
     cells = 0
-    if mode == "xlrecalc":
+    if mode == "xlio":
         import xlio
 
         for f in files:
@@ -77,7 +78,8 @@ def main() -> int:
     if args.sample:
         files = random.Random(args.seed).sample(files, min(args.sample, len(files)))
     size = sum(Path(f).stat().st_size for f in files) / 1e6
-    print(f"{len(files)} files, {size:.1f} MB")
+    versions = ", ".join(f"{d} {metadata.version(d)}" for d in ("xlio", "openpyxl"))
+    print(f"{len(files)} files, {size:.1f} MB; {versions}, Python {sys.version.split()[0]}")
     for mode in args.modes.split(","):
         out = subprocess.run(
             [sys.executable, __file__, "--child", mode, *files],

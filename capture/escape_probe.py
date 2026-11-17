@@ -4,7 +4,7 @@
 
 Text cells hold raw escapes written into the XML (openpyxl's own text is replaced after it
 writes). Excel computes ``LEN``, the code of the second character, and the text through ``&``;
-Excel saves a copy, read with the package's reader and as raw XML. Prints the results.
+Excel saves a copy, read with ``xlio`` and as raw XML. Prints the results.
 """
 
 from __future__ import annotations

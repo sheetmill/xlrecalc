@@ -1,4 +1,4 @@
-"""The engine's values in the writer's file terms (ARCHITECTURE.md §9.2).
+"""The engine's values in the terms of xlio's writer (ARCHITECTURE.md §9.2).
 
 ``xlio``'s writer knows nothing of the engine's types; this gives it, per sheet, a lookup from
 a formula cell to its new cached value as a Python value, or ``None`` for a cell whose cached

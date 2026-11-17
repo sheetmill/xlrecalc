@@ -33,8 +33,9 @@ formulas sums with compensation (996035.662 against 996035.6619999994).
 
 "Full" = load + evaluate everything. "A1" = change A1 (dirties the whole C chain + summaries).
 "Alast" = change A in the last row (15 dependents). Peak = the process's largest footprint.
-The engine reads either the pickled table (as the prototype) or openpyxl's xlsx file through its
-own reader (as the other engines).
+The engine reads either the pickled table (as the prototype) or openpyxl's xlsx file (as the
+other engines). The engine's rows in these tables were measured with xlrecalc 0.2.0, whose xlsx
+reader was then its own; xlio now holds it (see "Reading workbooks").
 
 ## 10k rows (30,003 formulas)
 
@@ -161,26 +162,39 @@ rows, the runs these tables first came from).
 
 `uv run python bench/read_bench.py FILE_OR_DIRECTORY ... [--sample N]`, run from the repository
 root in the package's environment: every cell of every worksheet, each reader in a fresh process,
-Apple M4 Pro, Python 3.11, openpyxl 3.1.5. The real-world sample is 300 workbooks drawn with seed 1
-from a local corpus (`CAPTURING.md` §4). `bench/read_compare.py` compares what the two readers
-read, cell by cell.
+one run each, Apple M4 Pro, Python 3.11.18, xlio 0.2.0 (the reader xlrecalc uses), openpyxl 3.1.5.
+The real-world sample is 300 workbooks drawn with seed 1 from a local corpus (`CAPTURING.md` §4).
+`bench/read_compare.py` compares what the two readers read, cell by cell.
 
-| files | xlrecalc reader (formulas and values) | openpyxl read-only (formulas) | openpyxl read-only (values) | openpyxl normal |
+| files | xlio (formulas and values) | openpyxl read-only (formulas) | openpyxl read-only (values) | openpyxl normal |
 |---|---|---|---|---|
-| bench_10000.xlsx | 0.07 s, 25 MB | 0.12 s, 32 MB | 0.10 s, 32 MB | 0.16 s, 56 MB |
-| bench_100000.xlsx | 0.59 s, 25 MB | 0.78 s, 40 MB | 0.71 s, 40 MB | 1.60 s, 279 MB |
-| 300 real-world workbooks, 35 MB | 5.9 s, 28 MB | 10.5 s, 118 MB | 10.5 s, 112 MB | 149 s, 1,796 MB |
+| bench_10000.xlsx | 0.12 s, 30 MB | 0.13 s, 34 MB | 0.10 s, 34 MB | 0.16 s, 58 MB |
+| bench_100000.xlsx | 0.79 s, 30 MB | 0.83 s, 42 MB | 0.76 s, 42 MB | 1.74 s, 281 MB |
+| 300 real-world workbooks, 35 MB | 9.42 s, 41 MB | 11.56 s, 113 MB | 10.66 s, 112 MB | 155.9 s, 1,779 MB |
+
+xlrecalc 0.2.0's own reader, measured the same way before it moved into xlio: 0.07 s and 25 MB,
+0.59 s and 25 MB, 5.9 s and 28 MB.
 
 ## Recalculating a file and writing the values back
 
 `uv run python bench/recalc_bench.py N`, run from the repository root in the package's
 environment (Python 3.11, Apple M4 Pro): openpyxl's `bench_<N>.xlsx` (no cached values, so every
-formula is evaluated) is loaded with the package's reader, evaluated, and written in place by the
+formula is evaluated) is loaded (through xlio), evaluated, and written in place by xlio's
 surgical writer, which patches every formula cell; then written once more, now holding its
-values, which patches nothing. Raw output in `current_py311.jsonl`. The write takes about 7%
-longer than when the writer was first measured (18.9 s at 1M rows in alternating runs on the
-same machine; the writer's first measurement is in `recalc.jsonl`), the cost of the edits it
-now applies while streaming.
+values, which patches nothing. One run each, xlio 0.2.0:
+
+| rows | formulas | load | evaluate | write | total | write, nothing changed | file before / after | peak |
+|---|---|---|---|---|---|---|---|---|
+| 1,000 | 3,003 | 0.02 s | 0.01 s | 0.02 s | 0.05 s | 0.02 s | 0.04 / 0.05 MB | 34 MB |
+| 10,000 | 30,003 | 0.17 s | 0.11 s | 0.22 s | 0.49 s | 0.15 s | 0.3 / 0.5 MB | 44 MB |
+| 100,000 | 300,003 | 1.68 s | 1.18 s | 2.18 s | 5.05 s | 1.49 s | 3.3 / 5.1 MB | 135 MB |
+| 1,000,000 | 3,000,003 | 19.25 s | 13.07 s | 21.76 s | 54.08 s | 14.78 s | 33.7 / 50.7 MB | 833 MB |
+
+Measured with xlrecalc 0.2.0, whose reader and writer were then its own (raw output in
+`current_py311.jsonl`; the README states these figures). Its write took about 7% longer than
+when the writer was first measured (18.9 s at 1M rows in alternating runs on the same machine;
+the writer's first measurement is in `recalc.jsonl`), the cost of the edits it applies while
+streaming.
 
 | rows | formulas | load | evaluate | write | total | write, nothing changed | file before / after | peak |
 |---|---|---|---|---|---|---|---|---|

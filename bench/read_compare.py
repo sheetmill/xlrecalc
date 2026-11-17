@@ -1,10 +1,10 @@
-"""Compare what xlrecalc's reader and openpyxl read from the same workbooks, cell by cell.
+"""Compare what xlio (xlrecalc's reader) and openpyxl read from the same workbooks, cell by cell.
 
     uv run python bench/read_compare.py FILE_OR_DIRECTORY ... [--sample N] [--seed S]
 
-Runs in the package's own environment (it needs xlrecalc and openpyxl). For every worksheet,
+Runs in the package's own environment (it needs xlio and openpyxl). For every worksheet,
 openpyxl is read twice in read-only mode with its date conversion off (formulas, then cached
-values); xlrecalc's reader once. Differences are classified and counted, with examples. A
+values); xlio once. Differences are classified and counted, with examples. A
 shared formula's dependent cells hold no text in the file; openpyxl writes the translated
 formula there, the reader reports the reference to the master, so those cells are compared by
 value only. Only reads files; prints a report.

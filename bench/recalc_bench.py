@@ -5,9 +5,9 @@
 Runs in the package's own environment, from the repository root. Copies ``bench/data/
 bench_<N>.xlsx`` (openpyxl's file: no cached values, so every formula is evaluated) to ``OUT``
 (default: a temporary directory), then does what ``recalculate`` does, timing each stage: the
-load through the package's reader, the full evaluation, and the surgical write in place. Then
-writes the file once more, now holding its values, to time a write that changes nothing. Prints
-one JSON line.
+load (``xlrecalc``'s, reading through ``xlio``), the full evaluation, and ``xlio``'s surgical
+write in place. Then writes the file once more, now holding its values, to time a write that
+changes nothing. Prints one JSON line.
 """
 
 from __future__ import annotations

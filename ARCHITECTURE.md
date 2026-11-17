@@ -1019,8 +1019,9 @@ xlrecalc reads xlsx files with xlio, the sheetmill package that reads and surgic
   dynamic-array and value-metadata markers), with the workbook's metadata part read so that a
   `cm` marking a dynamic array is known (§7.7) and a cell whose `vm` holds a rich-value error
   reads as that error (`#SPILL!`), and a subnormal number as 0, as Excel reads them;
-- each worksheet's structure, in a second pass that skips the cells: hidden rows and the filter
-  mode (for `SUBTOTAL`), and the views, for the active cell (for `CELL` without a reference);
+- hidden rows, with the cells, and from what precedes the cells in the part, read apart from
+  them: the filter mode (for `SUBTOTAL`, read only on a sheet with hidden rows, where alone it
+  matters) and the active sheet's views, for the active cell (for `CELL` without a reference);
 - the tables on a worksheet (name, display name, range, columns, header and totals rows), for
   structured references.
 
@@ -1032,20 +1033,20 @@ are decoded from OOXML's `_xHHHH_` escapes, as Excel decodes them (`capture/esca
 an incomplete `a_x000Db` stays as written, and the formula `="_x0041_"` written into a file
 reads as `="A"`). openpyxl is not used at run time.
 
-The reader is built on expat callbacks rather than ElementTree's `iterparse` (1.8 times faster on
-the same sheet) and keeps its state in closure variables. Measured (`bench/read_bench.py`,
-reading every cell of every worksheet in a fresh process, Apple M4 Pro):
+xlio streams each part. Measured (`bench/read_bench.py`, reading every cell of every worksheet
+in a fresh process, Apple M4 Pro; versions in `bench/results/SUMMARY.md`):
 
-| files | xlrecalc, one pass (formulas and values) | openpyxl read-only, one pass | openpyxl normal |
+| files | xlio, one pass (formulas and values) | openpyxl read-only, one pass | openpyxl normal |
 |---|---|---|---|
-| benchmark, 10k rows | 0.07 s, 25 MB | 0.12 s (values 0.10 s), 32 MB | 0.16 s, 56 MB |
-| benchmark, 100k rows | 0.59 s, 25 MB | 0.78 s (values 0.71 s), 40 MB | 1.60 s, 279 MB |
-| 300 real-world workbooks, 35 MB | 5.9 s, 28 MB | 10.5 s (values 10.5 s), 118 MB | 149 s, 1,796 MB |
+| benchmark, 10k rows | 0.12 s, 30 MB | 0.13 s (values 0.10 s), 34 MB | 0.16 s, 58 MB |
+| benchmark, 100k rows | 0.79 s, 30 MB | 0.83 s (values 0.76 s), 42 MB | 1.74 s, 281 MB |
+| 300 real-world workbooks, 35 MB | 9.4 s, 41 MB | 11.6 s (values 10.7 s), 113 MB | 156 s, 1,779 MB |
 
 openpyxl gives formulas or cached values in a pass, never both, so loading a workbook for the
-engine costs it two passes: the reader is 2.5 to 3.6 times faster than that, and against a
-single openpyxl pass 1.3 to 1.8 times faster. Its memory stays flat (25 to 28 MB here, the
-interpreter included); openpyxl's read-only mode used 118 MB on the real-world sample.
+engine costs it two passes: xlio's one pass takes 1.9 to 2.4 times less than that, and is
+within about 20% of a single openpyxl pass either way (slower on the 10k-row file's values,
+faster on the real-world sample). Its memory stays flat (30 to 41 MB here, the interpreter
+included); openpyxl's read-only mode used 113 MB on the real-world sample.
 
 **What the reader reads differently from openpyxl** (`bench/read_compare.py` on 300 real-world
 workbooks, 5.2 million cells, 363,000 formulas; every number, logical and error agreed):
@@ -1165,9 +1166,9 @@ and gives an error the file format has no code for (`#FIELD!`, `#BLOCKED!`) as `
   permissions (the source's for a new file) and moved into place, so a failure leaves the
   target as it was. Only UTF-8 parts are rewritten.
 
-On the 1M-row benchmark (3,000,003 formulas, openpyxl's file) the write takes 20.2 s, the
-reader's load 17.2 s and the evaluation 13.2 s; a write that changes nothing, 13.8 s
-(`bench/recalc_bench.py`, `bench/results/SUMMARY.md`).
+On the 1M-row benchmark (3,000,003 formulas, openpyxl's file) the write takes 21.8 s, the load
+19.3 s and the evaluation 13.1 s; a write that changes nothing, 14.8 s (`bench/recalc_bench.py`,
+`bench/results/SUMMARY.md`).
 
 Changes made through the API (constants, formulas) are recorded per sheet in a change set the
 writer consumes; formula results need none, as above. A file Excel saved, with shared formulas
@@ -1210,7 +1211,7 @@ without a cached value as `<c r="A2"><f>A1*3</f><v /></c>` (no `t`), writes no `
 and sets `<calcPr calcId="124519" fullCalcOnLoad="1"/>`; loading an Excel file and saving it with
 openpyxl drops every cached value and `calcChain.xml` and adds `fullCalcOnLoad="1"`.
 
-Written by the package's own writer (`tests/test_excel_live.py`, run with `--tier excel`):
+Written by xlio's writer for this package (`tests/test_excel_live.py`, run with `--tier excel`):
 Excel opens every written file without a repair (each capture suite's workbook, the benchmark
 workbooks up to a million rows), and a file Excel saved, given cached values of every kind with
 `fullCalcOnLoad` left off, shows and saves again exactly the values written: 17-digit numbers,

@@ -4,7 +4,7 @@
 
 Runs in the package's own environment, from the repository root. Loads ``bench/data/
 bench_<N>.pkl`` (the table ``gen.py`` writes) into an engine, or with ``--xlsx`` reads
-``bench/data/bench_<N>.xlsx`` (openpyxl's file) through the package's reader. Then: a full
+``bench/data/bench_<N>.xlsx`` (openpyxl's file) through ``xlio``. Then: a full
 recalculation; the dependency index build; changing A1 (the dirty set alone, then the change
 re-evaluated); changing the last row's A. ``--parse-every-formula`` turns off the raw-text
 template key (§5.3), to measure what it saves. Prints one JSON line, like the prototypes.
