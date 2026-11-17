@@ -4,7 +4,8 @@ xlrecalc recalculates Excel workbooks in pure Python. It evaluates a workbook's 
 the results Excel computes and writes them back into the file as the cached values Excel
 stores, so that openpyxl's data-only mode, pandas and other readers see values where a
 workbook written by a program has only formulas. Results are tested against values captured
-from Excel 16 for Mac under Microsoft 365.
+on Excel for Mac 16.115 (Microsoft 365); they are not yet checked against Excel for Windows,
+and Excel in other languages and locales is not yet supported.
 
 Documentation: <https://xlrecalc.readthedocs.io>.
 
@@ -16,6 +17,10 @@ Python 3.11 or later. The two dependencies are [xlformat](https://github.com/she
 which applies Excel's number formats for `TEXT`, and [xlio](https://github.com/sheetmill/xlio),
 which reads and writes the xlsx files. The examples below make their workbooks with openpyxl,
 installed separately (`pip install openpyxl`); xlrecalc itself does not need it.
+
+It reads `.xlsx`, `.xlsm`, `.xltx` and `.xltm` files and writes each back as its own type, macros
+kept as they are and never run; a binary (`.xlsb`) or legacy (`.xls`) workbook is refused with
+`xlrecalc.PackageError`.
 
 <!-- usage-start -->
 ## Recalculating a file
@@ -42,15 +47,19 @@ None
 set()
 ```
 
-`uncomputed` is not the only place a cell left as it was can be: the report also names cells
-that keep the file's value because they rely on a function or feature xlrecalc does not
-implement (`from_kept`), cells on a circular reference with iteration off (`circular`), and
-formulas Excel itself refuses in a file (`refused`); `unsupported` counts what was missing.
+A cell xlrecalc cannot compute keeps the value the file holds for it; a file openpyxl wrote holds
+none, so such a cell, and every cell depending on it, is written with no value. Nothing is
+raised: check `report.uncomputed` after each `recalculate`. It is not the only place a cell left
+as it was can be: the report also names cells that keep the file's value because they rely on a
+function or feature xlrecalc does not implement (`from_kept`), cells on a circular reference
+with iteration off (`circular`), and formulas Excel itself refuses in a file (`refused`);
+`unsupported` counts what was missing, and `exceptions` names cells where an internal error was
+caught, each written as `#VALUE!`.
 
-Only the cached values change: every other part of the file is copied as it was, byte for
-byte. By default the file also asks Excel to recalculate when it opens it, so a value
-xlrecalc got wrong never persists in what Excel shows (`full_calc_on_load=False` saves the
-file without that request, as Excel saves it).
+Only the cached values and the request to recalculate change: every other part of the file is
+copied as it was, byte for byte. By default the file asks Excel to recalculate when it opens it,
+so a value xlrecalc got wrong never persists in what Excel shows (`full_calc_on_load=False`
+saves the file without that request, as Excel saves it).
 
 Which formulas it computes follows what Excel does on opening the file: every formula of a file
 Excel recalculates on opening (one openpyxl wrote, one an older Excel saved, one asking for it or
@@ -74,8 +83,10 @@ ws["F1"] = "=_xlfn.LET(_xlpm.x,A1,_xlpm.x*2)"  # LET's names take _xlpm.
 xlrecalc reads such a file as Excel does and names the cause in the report:
 `Report.unsupported` holds `UNIQUE written without Excel's file prefix (_xlfn.): Excel shows
 #NAME?`, and a bare `SORT` or `FILTER`, or a `LET` name without `_xlpm.`, is in
-`Report.refused`. `Workbook.set_formula` takes the names as typed in Excel and writes the
-prefixes itself, and for a function that makes an array, the marker that lets the result spill.
+`Report.refused`. openpyxl writes no dynamic-array marker either, so its formulas are legacy
+ones, computed with implicit intersection: `D1` above gets one value and does not spill.
+`Workbook.set_formula` takes the names as typed in Excel and writes the prefixes itself, and for
+a function that makes an array, the marker that lets the result spill.
 
 ## Working with a workbook
 
@@ -98,9 +109,17 @@ makes its dependents stale; `save` writes the changed cells and the new values.
 ```
 
 `set` always stores a constant, unlike openpyxl, where assigning `"=A1"` makes a formula:
-`book.set("A2", "=A1")` stores the text `=A1`. Use `set_formula` for formulas. Numbers come
-back as floats, as Excel holds them; errors as `xlrecalc.ErrorValue`, which is not a string,
-so the error `#N/A` and the text `"#N/A"` stay apart.
+`book.set("A2", "=A1")` stores the text `=A1`. Use `set_formula` for formulas. Numbers come back
+as floats, as Excel holds them; errors as `xlrecalc.ErrorValue`. An error compares equal to its
+text (`ErrorValue.NA == "#N/A"`, as xlformat's errors do), so a set or a dict key holds the
+error `#N/A` and the text `"#N/A"` as one: tell them apart by type, `isinstance(v,
+xlrecalc.ErrorValue)`.
+
+`load` takes a path or a binary stream; `save` and `recalculate` take paths, writing a temporary
+file beside the target and moving it into place. One workbook is used from one thread at a time.
+Every file is read as untrusted: nothing it names is run or fetched, and
+`limits=xlrecalc.ReadLimits(...)` bounds what one file may cost. The defaults admit any workbook
+Excel opens, so a service that takes files from others should lower them.
 
 ## Evaluating one formula
 
@@ -159,8 +178,8 @@ text shows before evaluating.
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists as absent;
   unions of ranges; structured (table) references and 3-D references; `CELL`'s formatting
   kinds; computed criteria in the database functions; `LINEST` with several regressors;
-  inserting or deleting rows and columns. A formula xlrecalc cannot compute keeps the value the file holds, and the report
-  lists it.
+  inserting or deleting rows and columns. A formula xlrecalc cannot compute keeps the value the
+  file holds, or is written with none where the file holds none, and the report lists it.
 
 <!-- usage-end -->
 ## Speed and memory
