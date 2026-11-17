@@ -472,10 +472,10 @@ def _iso_serial(text: str, date1904: bool, quirks: Quirks) -> Value:
 
 
 VERIFIED_CALC_ID = 191028
-"""The lowest ``calcId`` whose cached values the newest Excel build verified trusts on opening:
-Excel 16.115 for Mac (its own ``calcId`` 191029) recalculates a file of ``calcId`` 191027 or
-lower and trusts one of 191028 or higher (capture ``open_calc``, ``capture/open_calc_probe.py``,
-rerun after every Excel update)."""
+"""The lowest ``calcId`` at which Excel trusts a file's cached values on opening, as verified on
+the newest Excel build captured: Excel 16.115 for Mac (its own ``calcId`` 191029) recalculates a
+file of ``calcId`` 191027 or lower and trusts one of 191028 or higher (capture ``open_calc``,
+``capture/open_calc_probe.py``, rerun after every Excel update)."""
 
 RecalcOnLoad = Literal["excel", "always", "never"]
 RECALC_ON_LOAD = ("excel", "always", "never")
