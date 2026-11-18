@@ -4387,7 +4387,7 @@ def clean_controls() -> list[Case]:
 
 
 _COLLATE_CHARS = [chr(n) for n in range(32, 127)] + list("æßœéñüøåÆŒÉÑÜØÅçÇðþÞÿµªº¡¿«»§¶")
-"""The printable ASCII characters, then 30 Latin-1 letters, ligatures and signs."""
+"""The printable ASCII characters, then 28 Latin-1 letters and signs, and ``œ``, ``Œ``."""
 
 
 def collate_chars() -> list[Case]:
@@ -4415,21 +4415,21 @@ def collate_words() -> list[Case]:
     return cases
 
 
-_USERS_WORDS = (
+_FUNCTIONS_WORDS = (
     "coop", "co-op", "co'op", "a-b", "ab", "aa", "a b", "-a", "a", "A", "ae", "æ", "ss", "ß", "oe",
     "œ", "a9", "a10", "résumé", "resume", "naive", "naïve", "a_b", "b",
 )  # fmt: skip
-_USERS_RANGE = f"BA1:BA{len(_USERS_WORDS)}"
-_USERS_TABLE: dict[str, Input] = {f"BA{i}": w for i, w in enumerate(_USERS_WORDS, 1)}
-_SORTED = f"_xlfn._xlws.SORT({_USERS_RANGE})"
+_FUNCTIONS_RANGE = f"BA1:BA{len(_FUNCTIONS_WORDS)}"
+_FUNCTIONS_TABLE: dict[str, Input] = {f"BA{i}": w for i, w in enumerate(_FUNCTIONS_WORDS, 1)}
+_SORTED = f"_xlfn._xlws.SORT({_FUNCTIONS_RANGE})"
 
 
-def collate_users() -> list[Case]:
+def collate_functions() -> list[Case]:
     """Whether sorting, criteria and lookups order and match text as ``<`` and ``=`` do."""
-    r, n = _USERS_RANGE, len(_USERS_WORDS)
+    r, n = _FUNCTIONS_RANGE, len(_FUNCTIONS_WORDS)
     cases = [Case("sort", f"INDEX({_SORTED},{{1}})", (float(k),)) for k in range(1, n + 1)]
     cases.append(Case("unique", f"ROWS(_xlfn.UNIQUE({r}))"))
-    for w in _USERS_WORDS:
+    for w in _FUNCTIONS_WORDS:
         cases += [
             Case("countif_lt", f'COUNTIF({r},"<"&{{1}})', (w,)),
             Case("countif_eq", f"COUNTIF({r},{{1}})", (w,)),
@@ -4484,5 +4484,5 @@ SUITES = {
     "clean_controls": Suite(clean_controls),
     "collate_chars": Suite(collate_chars),
     "collate_words": Suite(collate_words),
-    "collate_users": Suite(collate_users, fixed=_USERS_TABLE),
+    "collate_functions": Suite(collate_functions, fixed=_FUNCTIONS_TABLE),
 }

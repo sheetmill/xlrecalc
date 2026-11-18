@@ -102,7 +102,7 @@ def LET(ctx: Context, *args: Any) -> Any:
     """``LET``: names bound to values for a calculation, compiled by the code generator.
 
     Its names are resolved when the formula is compiled and its bindings evaluated only when
-    read (``_codegen.let``; capture ``dyn_let``); this core is never called.
+    read (``_codegen._Generator.let``; capture ``dyn_let``); this core is never called.
     """
     raise AssertionError("LET is compiled by the code generator")
 
@@ -112,7 +112,7 @@ def LAMBDA(ctx: Context, *args: Any) -> Any:
     """``LAMBDA``: a function value, compiled by the code generator.
 
     Its parameters are resolved when the formula is compiled and its body runs when it is
-    called (``_codegen.closure``; capture ``lambda_calls``); this core is never called.
+    called (``_codegen._Generator.closure``; capture ``lambda_calls``); this core is never called.
     """
     raise AssertionError("LAMBDA is compiled by the code generator")
 
@@ -121,8 +121,8 @@ def LAMBDA(ctx: Context, *args: Any) -> Any:
 def ISOMITTED(ctx: Context, v: Any) -> bool:
     """Whether a ``LAMBDA`` parameter was given no argument; FALSE for anything but a parameter.
 
-    A parameter is compiled by the code generator (``_codegen.omitted``); this core sees the
-    rest (capture ``lambda_calls``: ``ISOMITTED(Z1)`` is FALSE).
+    A parameter is compiled by the code generator (``_codegen._Generator.omitted``); this core
+    sees the rest (capture ``lambda_calls``: ``ISOMITTED(Z1)`` is FALSE).
     """
     return False
 

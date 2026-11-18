@@ -24,7 +24,7 @@ Excel's calculation mode belongs to the application and the first workbook opene
 the manual variants come last and ``calc_automatic.applescript`` sets the mode back after each.
 Workbooks live in Excel's container and are removed after; the record is written to
 ``capture/build/open_calc_probe.out`` and the capture to ``tests/captures/open_calc.tsv``. Rerun
-it after every Excel update: ``VERIFIED_CALC_ID`` (``_load.py``) follows the threshold it finds.
+it after every Excel update: ``VERIFIED_CALC_ID`` (``_opening.py``) follows the threshold it finds.
 """
 
 from __future__ import annotations

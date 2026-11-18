@@ -82,6 +82,12 @@ the smaller operand, the snapped and kept cases overlap.
 `CODE` of a character outside the set is 95. Excel for Windows uses Windows-1252 instead;
 there is no setting for it yet.
 
+On opening a file whose calculation properties let it keep the cached values, Excel recalculates
+the cells whose formula carries `ca="1"`, the mark it writes on every volatile cell and every cell
+depending on one, and keeps the rest; a volatile function in a cell's own text without the mark,
+as another program may write it, makes it recalculate every formula (capture `volatile_names`;
+`open_calc`'s `volatile` row is that unmarked case).
+
 Matched unconditionally, because no caller would want otherwise or there is no meaningful
 alternative: no subnormal numbers (a result or a constant below 2.2250738585072014E-308 in
 magnitude is 0); `=0^0` and `POWER(0,0)` are `#NUM!`; text compares without case; a blank is 0,
@@ -205,14 +211,14 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   period by period rounds differently from Excel's, and a straight-line amount computed once or a closed-form book value
   fit no more rows. Listed in `tests/test_captures.py`.
 - An empty argument: `VDB` with an empty `factor` is `#DIV/0!` in Excel and 0 here (two rows of `empty_args`). Four others there carry the known noise of `MULTINOMIAL`, `CUMIPMT` and `XIRR`.
-- How text orders is captured for printable ASCII and 30 Latin-1 letters, ligatures and signs (every
+- How text orders is captured for printable ASCII, 28 Latin-1 letters and signs, and `œ`, `Œ` (every
   pair of 125 characters, capture `collate_chars`), 40 words (`collate_words`) and the pairs of
   `modern`, on Excel 16.115 for Mac: one consistent order, followed exactly. Other characters (another
-  script, a symbol outside Latin-1) sort after the letters by code point and controls first, our
+  script, a symbol outside this set) sort after the letters by code point and controls first, our
   choice, so they may not sort as Excel sorts them. Sorting, ordered criteria and approximate
   lookups follow the same order; a criterion's equality (`COUNTIF(r,"ß")` counts `ss`) and
   `XMATCH`'s binary search follow `=`, while an exact `MATCH`, `VLOOKUP` or `XLOOKUP` scan ignores
-  case only (`MATCH("ß",r,0)` passes over `ss`; capture `collate_users`). Excel for Windows'
+  case only (`MATCH("ß",r,0)` passes over `ss`; capture `collate_functions`). Excel for Windows'
   order may differ.
 - A row off Excel's grid in a file (`r="99999999999"`): Excel opens the file and drops the cell
   (capture `value_forms`), though it refuses rows 0 and 1048577; the reader refuses every row
@@ -225,9 +231,10 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   `DSTDEVP` declare 4 units in the last place for Excel's sum of squares; two rows are 6 and 10 units away. Blank records
   are counted up to the sheet's last row holding a value, where Excel's used range also counts formatted rows.
 - Random numbers: two rows of `misc` draw them (`RANDBETWEEN(1.5,2.5)`, and two draws compared), and four of
-  `empty_args` (`RANDARRAY` with bounds that leave a range), so no result can be expected to repeat Excel's; all six are
-  listed whatever the draw. `RANDARRAY`'s dynamic arrays (capture `dyn_randarray`) are checked through plain formulas that
-  count their elements within the bounds, and whole ones with the integer flag.
+  `empty_args` (`RANDARRAY` with bounds that leave a range), so no result can be expected to repeat Excel's; those six
+  rows are listed whatever the draw. So are the drawn cells of `RANDARRAY`'s six dynamic-array cases (capture
+  `dyn_randarray`), which plain formulas check instead: they count the elements within the bounds, and the whole ones
+  with the integer flag.
 - Declared tolerances ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1), statistics: the variances and standard
   deviations (five formulas tried), `CORREL`, `LINEST` and the normal distribution within 4
   units in the last place on every captured row of `statistics` but 21: `LINEST` near

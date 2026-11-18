@@ -16,8 +16,9 @@ intersection), so AppleScript cannot enter a formula as Excel 365's formula bar 
 ``tests/captures/marker_typed.xlsx`` and writes ``tests/captures/marker_typed.tsv``. A person
 typed the kept workbook's formulas into Excel's formula bar; ``capture/paste_probe.py`` pastes
 them as text into a copy and finds every one entered as the typed one (CAPTURING.md §2), but
-writes nothing here. ``typed_workbook`` builds the workbook to type into; its ``start``
-lets a later batch (``NEXT_BATCH``) go into a workbook of its own.
+writes nothing here. ``typed_workbook`` builds the workbook to type into. One typed workbook is
+kept today (``KEPT``); a later batch (``NEXT_BATCH``) would be typed into a workbook of its own
+(``start``), kept beside it in ``KEPT`` and read with ``--typed`` as the first was.
 """
 
 from __future__ import annotations
@@ -201,9 +202,9 @@ def read_typed(*paths: Path) -> None:
 
 
 def typed_rows(*paths: Path) -> list[str]:
-    """The capture's rows from the typed workbooks given (``KEPT``).
+    """The capture's rows from the kept typed workbooks (``KEPT``, one today).
 
-    A cell is read from the first workbook that holds a formula there.
+    Were there several, a cell would be read from the first that holds a formula there.
     """
     cells: dict[tuple[int, int], Any] = {}
     for path in paths:

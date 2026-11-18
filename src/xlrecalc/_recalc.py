@@ -29,9 +29,10 @@ def recalculate(
     """Recalculate a workbook and write the results into the file as its cached values.
 
     Readers that take cached values, such as pandas and openpyxl's data-only mode, then see
-    the results. Formulas are evaluated as Excel evaluates them on opening the file
-    (``recalc_on_load``): every one in a file Excel recalculates on opening (one openpyxl wrote,
-    for instance), otherwise only those without a cached value and what depends on them. Only
+    the results. Formulas are evaluated as Excel evaluates them on opening the file and saving it
+    (``recalc_on_load``, as :func:`load`): every one in a file Excel recalculates in full (one
+    openpyxl wrote, for instance); otherwise those without a cached value, the cells Excel marked
+    ``ca="1"`` (volatile cells and their dependents), and what depends on a changed value. Only
     the cached values of formula cells whose value changed are rewritten; every other part of
     the file is copied byte for byte.
 
@@ -42,8 +43,8 @@ def recalculate(
             never leaves a partial file.
         recalc_on_load: ``"excel"``, Excel's rule (as :func:`load`); ``"always"``, evaluate
             every formula, trusting no cached value; ``"never"``, trust every cached value
-            the file holds (a formula without one, or a volatile one, is evaluated all the
-            same).
+            the file holds but the volatile formulas' (a formula without one is evaluated in
+            every mode).
         full_calc_on_load: Ask Excel to recalculate when it opens the file
             (``<calcPr fullCalcOnLoad="1">``), so a value computed differently here never
             persists in what Excel shows. With ``False`` the file asks nothing (a request it

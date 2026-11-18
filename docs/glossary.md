@@ -15,11 +15,12 @@ Recalculation on opening; a trusting and an evaluating load
 : Excel recalculates every formula of some files when it opens them (no calculation settings, a
   request to recalculate, a calculation by an older Excel, a file Excel did not save, a volatile
   function in a cell without Excel's `ca="1"` mark); of the others it recalculates the cells so
-  marked (volatile cells and what depends on them) and shows the rest's cached values. `load` and
-  `recalculate` follow the same rule by default (`recalc_on_load="excel"`): a trusting load keeps
-  the file's cached values and computes only what changes, an evaluating load computes every
-  formula.
-  `recalc_on_load="always"` and `"never"` choose one or the other for every file.
+  marked (volatile cells and what depends on them) and shows the rest's cached values; in manual
+  calculation it shows every cached value. `load` and `recalculate` follow the same rule by
+  default (`recalc_on_load="excel"`): a trusting load keeps the file's cached values and computes
+  what Excel recalculates and what changes, an evaluating load computes every formula.
+  `recalc_on_load="always"` evaluates every file; `"never"` keeps every cached value but the
+  volatile formulas'. In every mode a formula without a cached value is computed.
 
 Volatile function
 : A function whose result can change with nothing it reads changing: `RAND`, `RANDBETWEEN`,

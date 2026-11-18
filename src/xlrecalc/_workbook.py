@@ -525,8 +525,8 @@ def load(
     calculation on load (``fullCalcOnLoad``), was last calculated by an older Excel
     (``calcId``), was not saved by Excel (no ``<fileVersion appName="xl">``) or calls a volatile
     function in a cell without Excel's ``ca="1"`` mark; otherwise the cells so marked (volatile
-    cells and their dependents) are evaluated; none in manual calculation (``RecalcCheck`` gives
-    the same answer without building an engine).
+    cells and their dependents) are evaluated; in manual calculation every cached value is
+    trusted (``RecalcCheck`` gives the same answer without building an engine).
 
     Args:
         source: The file, as a path or a binary file object (read into memory).

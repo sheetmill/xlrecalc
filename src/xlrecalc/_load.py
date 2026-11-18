@@ -548,11 +548,11 @@ def load(
     """Read a workbook into an engine; formulas whose cached values are trusted stay unevaluated.
 
     ``recalc_on_load``: ``"excel"`` evaluates what Excel recalculates on opening (``Rule``:
-    every formula, or the cells marked ``ca="1"``) and trusts the cached values elsewhere;
-    ``"always"`` evaluates every formula; ``"never"`` trusts every cached value the file holds
-    but the volatile formulas'. A formula without one is evaluated in every mode. ``saving``: the
-    load is followed by a save, as in ``recalculate(path)``, whose result is the copy Excel saves
-    after opening.
+    every formula, the cells marked ``ca="1"``, or in manual calculation none) and trusts the
+    cached values elsewhere; ``"always"`` evaluates every formula; ``"never"`` trusts every cached
+    value the file holds but the volatile formulas'. A formula without one is evaluated in every
+    mode. ``saving``: the load is followed by a save, as in ``recalculate(path)``, whose result is
+    the copy Excel saves after opening.
     """
     if recalc_on_load not in RECALC_ON_LOAD:
         raise ValueError(f"recalc_on_load must be one of {RECALC_ON_LOAD}: {recalc_on_load!r}")

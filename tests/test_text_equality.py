@@ -1,4 +1,4 @@
-"""Which equality of text each kind of comparison uses (capture ``collate_users``).
+"""Which equality of text each kind of comparison uses (capture ``collate_functions``).
 
 The operators' ``=`` folds ``ß`` to ``ss``; a criterion's equality and a binary search follow it,
 an exact lookup's scan ignores case only, and a binary search finds the first of equal entries.
@@ -30,7 +30,7 @@ def test_exact_lookup_ignores_case_only():
     assert evaluate('_xlfn.XLOOKUP("ß",{"ss";"ß"},{1;2})') == 2.0
 
 
-# SORT of the table of capture collate_users, as Excel gave it
+# SORT of the table of capture collate_functions, as Excel gave it
 SORTED = (
     "-a", "a", "A", "a b", "a_b", "a-b", "a10", "a9", "aa", "ab", "ae", "æ", "b", "co-op", "co'op",
     "coop", "naive", "naïve", "oe", "œ", "resume", "résumé", "ss", "ß",
@@ -43,7 +43,7 @@ def _xmatch(key: str, words: tuple[str, ...], search: int) -> object:
 
 
 def test_binary_search_finds_the_first_equal_entry():
-    # Excel's values (capture collate_users); the bisection reaches "A" and "ß" first
+    # Excel's values (capture collate_functions); the bisection reaches "A" and "ß" first
     assert _xmatch("a", SORTED, 2) == 2.0
     assert _xmatch("A", SORTED, 2) == 2.0
     assert _xmatch("ss", SORTED, 2) == 23.0

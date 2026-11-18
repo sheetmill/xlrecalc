@@ -467,7 +467,7 @@ def _x_compare(key: Any, v: Any, ctx: Context, ordered: bool = False) -> int | N
     """-1, 0 or 1 for a cell against the key; ``None`` for an error, which no search takes.
 
     A scan finds text equal as ``lookup_equal`` has it (``"ß"`` is not ``"ss"``); a bisection
-    (``ordered``) as ``=`` has it, where they are equal (capture ``collate_users``).
+    (``ordered``) as ``=`` has it, where they are equal (capture ``collate_functions``).
     """
     if isinstance(v, ErrorValue) or v is BLANK:
         return None
@@ -535,7 +535,7 @@ def _x_binary(
     """Bisection over the cells, sorted ascending (``search`` 2) or descending (-2).
 
     Of a run of cells equal to the key it finds the first, as Excel does (``XMATCH("a",...,0,2)``
-    over ``a``, ``A`` is 1; capture ``collate_users``): an equal cell narrows to its left.
+    over ``a``, ``A`` is 1; capture ``collate_functions``): an equal cell narrows to its left.
     """
     lo, hi = 0, len(cells) - 1
     below = above = equal = None

@@ -8,30 +8,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- `RecalcCheck`: whether `load` would compute any formula of a workbook (`"all"`, `"some"` or `"none"`), without
-  building an engine. It reads only the workbook part, which alone decides most files, and is then fed the formula
-  cells the caller reads (`add`, then `finish`), as `hashlib`'s objects are fed. Its answer comes from the same rule
-  as `load`'s.
+- `RecalcCheck`: whether `load` would compute any formula of a workbook, `"all"`, `"some"` or `"none"`, without
+  building an engine, for a program that reads the cells itself. Created from the file (`source`, with
+  `recalc_on_load`, `saving` and `limits` as `load` takes them), it reads only the workbook part, which alone decides
+  most files (14,067 of 15,871 workbooks of the Enron spreadsheet corpus, by an older `calcId` or `fullCalcOnLoad`);
+  it is then fed the formula cells the caller reads (`add(formula, cached=, ca=)`, then `finish()`), as `hashlib`'s
+  objects are fed, and `result` is `"all"` as soon as that is certain. Its answer comes from the same rule as
+  `load`'s.
+
+### Changed
+- `recalc_on_load="excel"` (the default of `load` and `recalculate`) on a file Excel saved with a volatile function
+  computes what Excel recalculates on opening, the cells whose formula Excel marked `ca="1"` (every volatile cell and
+  every cell depending on one), and keeps every other cached value; it computed every formula. A volatile function in
+  a cell without the mark, as another program may write it, still computes every formula, as in Excel; in manual
+  calculation the same holds for the copy a save writes. Capture `volatile_names` (18 variants, Excel 16.115 for
+  Mac); the earlier rule came from capture `open_calc`, whose volatile cell had lost Excel's mark when its value was
+  planted.
+- `recalc_on_load="never"` computes a formula volatile through a defined name, as it computes `=OFFSET(...)`.
 
 ### Fixed
-- A load under `recalc_on_load="excel"` of a file Excel saved with a volatile function recomputes what Excel
-  recomputes on opening, the cells Excel marked `ca="1"` (every volatile cell and every cell depending on one), and
-  keeps the other cached values; it recomputed every formula (capture `volatile_names`: 18 variants, Excel 16.115).
-  A volatile function in a cell without the mark, as another program may write it, still recomputes every formula,
-  as in Excel. Manual calculation does the same when saving.
 - A formula volatile only through a defined name (`N` = `OFFSET(...)`, a chain of names, a `LAMBDA` name calling
-  `NOW()`) counts as volatile: `"never"` computes it, as it computes `=OFFSET(...)`; it kept its cached value.
+  `NOW()`) counts as volatile: it is computed again after a change and at every `recalculate()`, with its dependents;
+  it kept its cached value. A function name inside a string literal is not a call, and a volatile name no formula uses
+  changes nothing.
 - `CODE` of a C1 control character (U+0080 to U+009F) is its code, 128 to 159, as in Excel; it was 95, the code of
   a character outside Mac OS Roman. `CLEAN` removes those characters as well as the codes below 32, as Excel does; it
   kept them (captures `codepage`, `clean_controls`).
-- Text compares, sorts and looks up in Excel for Mac's order for Latin-1 signs and letters as well as ASCII: `¡ ¿ « »
-  § ¶` among the marks, `æ`, `ð`, `ø`, `œ`, `þ` and `µ` as letters of their own, `ª` and `º` equal to `a` and `o`;
-  they were ordered by code point after the letters (captures `collate_chars`, `collate_words`: 23,375 and 2,380 rows,
-  where 1,918 and 84 differed).
+- Text compares, sorts and looks up in Excel for Mac's order for Latin-1 signs and letters and `œ` as well as ASCII:
+  `¡ ¿ « » § ¶` among the marks, `æ`, `ð`, `ø`, `œ`, `þ` and `µ` as letters of their own, `ª` and `º` equal to `a` and
+  `o`; they were ordered by code point after the letters (captures `collate_chars`, `collate_words`: 23,375 and 2,380
+  rows, where 1,918 and 84 differed).
 - A criterion's text equality is the `=` operator's, as in Excel: `COUNTIF(r,"ß")` counts `ss`; it counted only `ß`.
   An exact `MATCH`, `VLOOKUP` or `XLOOKUP` scan ignores case only, as in Excel: `MATCH("ß",r,0)` passes over `ss`;
   it found it. `XMATCH` and `XLOOKUP`'s binary search finds the first of a run of equal entries and compares as `=`
-  does, as in Excel; it could find a later one (capture `collate_users`: 169 rows, where 5 differed).
+  does, as in Excel; it could find a later one (capture `collate_functions`: 169 rows, where 5 differed).
 
 ## [0.3.0] - 2026-11-17
 

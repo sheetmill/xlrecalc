@@ -1320,6 +1320,8 @@ src/xlrecalc/
   _engine.py       templates, scheduling, evaluation context, report (§7)
   _deps.py         the reverse-dependency index and dirty runs (§6)
   _load.py         an engine from an xlsx file: the trust rule, refused formulas (§7.4, §9.5)
+  _opening.py      what opening computes: volatility, the file-level rule, the ca marks (§7.4)
+  _check.py        RecalcCheck: load's answer without an engine (§7.4)
   _report.py       Report, CellRef (§7.6)
   _workbook.py     load(), Workbook: values, changes, saving (§11.2)
   _save.py         the engine's values as xlio's writer takes them (§9.2)
@@ -1354,6 +1356,12 @@ wb.set_formula("Sheet1!B8", "=B7*2")   # as typed in the formula bar; FormulaErr
 wb.recalculate()                       # everything stale; full=True for everything -> Report
 wb.save("out.xlsx")                    # surgical write (§9.2); in place by default
 wb.report                              # unsupported functions, uncomputed cells, cycles
+
+check = xlrecalc.RecalcCheck("model.xlsx")   # reads the workbook part only (§7.4)
+if check.result is None:                     # undecided by the file: feed the formula cells read
+    for text, has_value, ca in formula_cells:
+        check.add(text, cached=has_value, ca=ca)
+check.finish()                               # "all" | "some" | "none": what load would compute
 
 xlrecalc.evaluate("=SUM(A1:A3)", {"A1:A3": [[1], [2], [3]]})          # 6.0, no workbook
 f = xlrecalc.Formula.parse("=A1>5", origin="A1")  # compiled once; also sheet=, legacy=
@@ -1394,7 +1402,7 @@ tier.
 
 ## 13. Roadmap
 
-After 0.3.0, in this order: an order, not a promise or a date.
+After 0.4.0, in this order: an order, not a promise or a date.
 
 1. Excel's iteration for `IRR`, `XIRR`, `RATE` and `YIELD` (its starting step, update
    rule and stopping test, inferred from capture sweeps), aiming to match the rows QUIRKS.md

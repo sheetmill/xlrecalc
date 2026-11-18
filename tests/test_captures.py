@@ -943,7 +943,7 @@ SUITES = [
     "clean_controls",
     "collate_chars",
     "collate_words",
-    "collate_users",
+    "collate_functions",
 ]
 
 

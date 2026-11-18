@@ -72,20 +72,53 @@ def names(module: Path) -> set[str]:
 EXCEL_PREFIXES = {"_xlfn", "_xlws", "_xludf", "_xlpm"}
 
 
-@pytest.mark.parametrize(
-    "reference",
-    sorted(
-        ref
-        for ref in set(re.findall(r"`(_[a-z_]+)\.(\w+(?:\.\w+)?)`", ARCHITECTURE))
-        if ref[0] not in EXCEL_PREFIXES
-    ),
+def _docstrings(path: Path) -> str:
+    """Every docstring of a Python file, the module's included."""
+    tree = ast.parse(path.read_text(encoding="utf-8"))
+    nodes = [tree, *ast.walk(tree)]
+    kinds = (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
+    return "\n".join(ast.get_docstring(n) or "" for n in nodes if isinstance(n, kinds))
+
+
+def _reference_texts() -> dict[str, str]:
+    """The texts whose module references are checked: the design documents and docstrings."""
+    texts = {"ARCHITECTURE.md": ARCHITECTURE}
+    for doc in ("CAPTURING.md", "QUIRKS.md"):
+        if (ROOT / doc).is_file():
+            texts[doc] = (ROOT / doc).read_text(encoding="utf-8")
+    for path in [*sorted((ROOT / "capture").glob("*.py")), *sorted(PACKAGE.rglob("*.py"))]:
+        texts[str(path.relative_to(ROOT))] = _docstrings(path)
+    return texts
+
+
+_TICK = r"``?"
+# `_module.name` (or `_module.py`), `NAME` in `_module.py`, and ``NAME`` (``_module.py``)
+_DOTTED = re.compile(rf"{_TICK}(_[a-z_]+)\.(\w+(?:\.\w+)?){_TICK}")
+_IN_MODULE = re.compile(
+    rf"{_TICK}([A-Za-z_]\w*(?:\.\w+)?){_TICK}(?: in | \(){_TICK}(_[a-z_]+)\.py{_TICK}"
 )
+
+
+def _references() -> list[tuple[str, str, str]]:
+    found = set()
+    for source, text in _reference_texts().items():
+        found |= {(source, module, name) for module, name in _DOTTED.findall(text)}
+        found |= {(source, module, name) for name, module in _IN_MODULE.findall(text)}
+    return sorted(ref for ref in found if ref[1] not in EXCEL_PREFIXES)
+
+
+def _module_files(module: str) -> list[Path]:
+    return sorted(PACKAGE.rglob(f"{module}.py"))
+
+
+@pytest.mark.parametrize("reference", _references(), ids=lambda r: f"{r[0]}:{r[1]}.{r[2]}")
 def test_module_references_resolve(reference):
-    module, name = reference
-    if name == "py":
-        assert (PACKAGE / f"{module}.py").is_file(), f"{module}.py"
-    else:
-        assert name in names(PACKAGE / f"{module}.py"), f"{module}.{name}"
+    """A module a document or docstring cites exists and holds the name it is cited for."""
+    source, module, name = reference
+    files = _module_files(module)
+    assert files, f"{source}: no module {module}.py"
+    if name != "py":
+        assert any(name in names(f) for f in files), f"{source}: {name} is not in {module}.py"
 
 
 def test_cited_public_names_exist():

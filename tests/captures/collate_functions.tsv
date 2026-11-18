@@ -1,0 +1,182 @@
+# suite: collate_functions
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# date_system: 1900
+# captured: 2026-11-17
+# generator: capture/suites.py:collate_functions
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# fixed: {'BA1': 'coop', 'BA2': 'co-op', 'BA3': "co'op", 'BA4': 'a-b', 'BA5': 'ab', 'BA6': 'aa', 'BA7': 'a b', 'BA8': '-a', 'BA9': 'a', 'BA10': 'A', 'BA11': 'ae', 'BA12': 'æ', 'BA13': 'ss', 'BA14': 'ß', 'BA15': 'oe', 'BA16': 'œ', 'BA17': 'a9', 'BA18': 'a10', 'BA19': 'résumé', 'BA20': 'resume', 'BA21': 'naive', 'BA22': 'naïve', 'BA23': 'a_b', 'BA24': 'b'}
+# columns: suite tag case formula inputs expected_type expected_repr
+collate_functions	sort	1	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(1.0,)	str	'-a'
+collate_functions	sort	2	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(2.0,)	str	'a'
+collate_functions	sort	3	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(3.0,)	str	'A'
+collate_functions	sort	4	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(4.0,)	str	'a b'
+collate_functions	sort	5	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(5.0,)	str	'a_b'
+collate_functions	sort	6	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(6.0,)	str	'a-b'
+collate_functions	sort	7	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(7.0,)	str	'a10'
+collate_functions	sort	8	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(8.0,)	str	'a9'
+collate_functions	sort	9	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(9.0,)	str	'aa'
+collate_functions	sort	10	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(10.0,)	str	'ab'
+collate_functions	sort	11	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(11.0,)	str	'ae'
+collate_functions	sort	12	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(12.0,)	str	'æ'
+collate_functions	sort	13	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(13.0,)	str	'b'
+collate_functions	sort	14	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(14.0,)	str	'co-op'
+collate_functions	sort	15	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(15.0,)	str	"co'op"
+collate_functions	sort	16	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(16.0,)	str	'coop'
+collate_functions	sort	17	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(17.0,)	str	'naive'
+collate_functions	sort	18	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(18.0,)	str	'naïve'
+collate_functions	sort	19	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(19.0,)	str	'oe'
+collate_functions	sort	20	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(20.0,)	str	'œ'
+collate_functions	sort	21	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(21.0,)	str	'resume'
+collate_functions	sort	22	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(22.0,)	str	'résumé'
+collate_functions	sort	23	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(23.0,)	str	'ss'
+collate_functions	sort	24	INDEX(_xlfn._xlws.SORT(BA1:BA24),{1})	(24.0,)	str	'ß'
+collate_functions	unique	25	ROWS(_xlfn.UNIQUE(BA1:BA24))	()	n	22.0
+collate_functions	countif_lt	26	COUNTIF(BA1:BA24,"<"&{1})	('coop',)	n	15.0
+collate_functions	countif_eq	27	COUNTIF(BA1:BA24,{1})	('coop',)	n	1.0
+collate_functions	match_exact	28	MATCH({1},BA1:BA24,0)	('coop',)	n	1.0
+collate_functions	match_sorted	29	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('coop',)	n	16.0
+collate_functions	xmatch_binary	30	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('coop',)	n	16.0
+collate_functions	vlookup_sorted	31	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('coop',)	str	'coop'
+collate_functions	countif_lt	32	COUNTIF(BA1:BA24,"<"&{1})	('co-op',)	n	13.0
+collate_functions	countif_eq	33	COUNTIF(BA1:BA24,{1})	('co-op',)	n	1.0
+collate_functions	match_exact	34	MATCH({1},BA1:BA24,0)	('co-op',)	n	2.0
+collate_functions	match_sorted	35	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('co-op',)	n	14.0
+collate_functions	xmatch_binary	36	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('co-op',)	n	14.0
+collate_functions	vlookup_sorted	37	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('co-op',)	str	'co-op'
+collate_functions	countif_lt	38	COUNTIF(BA1:BA24,"<"&{1})	("co'op",)	n	14.0
+collate_functions	countif_eq	39	COUNTIF(BA1:BA24,{1})	("co'op",)	n	1.0
+collate_functions	match_exact	40	MATCH({1},BA1:BA24,0)	("co'op",)	n	3.0
+collate_functions	match_sorted	41	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	("co'op",)	n	15.0
+collate_functions	xmatch_binary	42	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	("co'op",)	n	15.0
+collate_functions	vlookup_sorted	43	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	("co'op",)	str	"co'op"
+collate_functions	countif_lt	44	COUNTIF(BA1:BA24,"<"&{1})	('a-b',)	n	5.0
+collate_functions	countif_eq	45	COUNTIF(BA1:BA24,{1})	('a-b',)	n	1.0
+collate_functions	match_exact	46	MATCH({1},BA1:BA24,0)	('a-b',)	n	4.0
+collate_functions	match_sorted	47	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('a-b',)	n	6.0
+collate_functions	xmatch_binary	48	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('a-b',)	n	6.0
+collate_functions	vlookup_sorted	49	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('a-b',)	str	'a-b'
+collate_functions	countif_lt	50	COUNTIF(BA1:BA24,"<"&{1})	('ab',)	n	9.0
+collate_functions	countif_eq	51	COUNTIF(BA1:BA24,{1})	('ab',)	n	1.0
+collate_functions	match_exact	52	MATCH({1},BA1:BA24,0)	('ab',)	n	5.0
+collate_functions	match_sorted	53	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('ab',)	n	10.0
+collate_functions	xmatch_binary	54	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('ab',)	n	10.0
+collate_functions	vlookup_sorted	55	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('ab',)	str	'ab'
+collate_functions	countif_lt	56	COUNTIF(BA1:BA24,"<"&{1})	('aa',)	n	8.0
+collate_functions	countif_eq	57	COUNTIF(BA1:BA24,{1})	('aa',)	n	1.0
+collate_functions	match_exact	58	MATCH({1},BA1:BA24,0)	('aa',)	n	6.0
+collate_functions	match_sorted	59	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('aa',)	n	9.0
+collate_functions	xmatch_binary	60	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('aa',)	n	9.0
+collate_functions	vlookup_sorted	61	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('aa',)	str	'aa'
+collate_functions	countif_lt	62	COUNTIF(BA1:BA24,"<"&{1})	('a b',)	n	3.0
+collate_functions	countif_eq	63	COUNTIF(BA1:BA24,{1})	('a b',)	n	1.0
+collate_functions	match_exact	64	MATCH({1},BA1:BA24,0)	('a b',)	n	7.0
+collate_functions	match_sorted	65	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('a b',)	n	4.0
+collate_functions	xmatch_binary	66	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('a b',)	n	4.0
+collate_functions	vlookup_sorted	67	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('a b',)	str	'a b'
+collate_functions	countif_lt	68	COUNTIF(BA1:BA24,"<"&{1})	('-a',)	n	0.0
+collate_functions	countif_eq	69	COUNTIF(BA1:BA24,{1})	('-a',)	n	1.0
+collate_functions	match_exact	70	MATCH({1},BA1:BA24,0)	('-a',)	n	8.0
+collate_functions	match_sorted	71	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('-a',)	n	1.0
+collate_functions	xmatch_binary	72	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('-a',)	n	1.0
+collate_functions	vlookup_sorted	73	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('-a',)	str	'-a'
+collate_functions	countif_lt	74	COUNTIF(BA1:BA24,"<"&{1})	('a',)	n	1.0
+collate_functions	countif_eq	75	COUNTIF(BA1:BA24,{1})	('a',)	n	2.0
+collate_functions	match_exact	76	MATCH({1},BA1:BA24,0)	('a',)	n	9.0
+collate_functions	match_sorted	77	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('a',)	n	3.0
+collate_functions	xmatch_binary	78	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('a',)	n	2.0
+collate_functions	vlookup_sorted	79	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('a',)	str	'A'
+collate_functions	countif_lt	80	COUNTIF(BA1:BA24,"<"&{1})	('A',)	n	1.0
+collate_functions	countif_eq	81	COUNTIF(BA1:BA24,{1})	('A',)	n	2.0
+collate_functions	match_exact	82	MATCH({1},BA1:BA24,0)	('A',)	n	9.0
+collate_functions	match_sorted	83	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('A',)	n	3.0
+collate_functions	xmatch_binary	84	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('A',)	n	2.0
+collate_functions	vlookup_sorted	85	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('A',)	str	'A'
+collate_functions	countif_lt	86	COUNTIF(BA1:BA24,"<"&{1})	('ae',)	n	10.0
+collate_functions	countif_eq	87	COUNTIF(BA1:BA24,{1})	('ae',)	n	1.0
+collate_functions	match_exact	88	MATCH({1},BA1:BA24,0)	('ae',)	n	11.0
+collate_functions	match_sorted	89	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('ae',)	n	11.0
+collate_functions	xmatch_binary	90	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('ae',)	n	11.0
+collate_functions	vlookup_sorted	91	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('ae',)	str	'ae'
+collate_functions	countif_lt	92	COUNTIF(BA1:BA24,"<"&{1})	('æ',)	n	11.0
+collate_functions	countif_eq	93	COUNTIF(BA1:BA24,{1})	('æ',)	n	1.0
+collate_functions	match_exact	94	MATCH({1},BA1:BA24,0)	('æ',)	n	12.0
+collate_functions	match_sorted	95	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('æ',)	n	12.0
+collate_functions	xmatch_binary	96	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('æ',)	n	12.0
+collate_functions	vlookup_sorted	97	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('æ',)	str	'æ'
+collate_functions	countif_lt	98	COUNTIF(BA1:BA24,"<"&{1})	('ss',)	n	22.0
+collate_functions	countif_eq	99	COUNTIF(BA1:BA24,{1})	('ss',)	n	2.0
+collate_functions	match_exact	100	MATCH({1},BA1:BA24,0)	('ss',)	n	13.0
+collate_functions	match_sorted	101	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('ss',)	n	24.0
+collate_functions	xmatch_binary	102	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('ss',)	n	23.0
+collate_functions	vlookup_sorted	103	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('ss',)	str	'ß'
+collate_functions	countif_lt	104	COUNTIF(BA1:BA24,"<"&{1})	('ß',)	n	22.0
+collate_functions	countif_eq	105	COUNTIF(BA1:BA24,{1})	('ß',)	n	2.0
+collate_functions	match_exact	106	MATCH({1},BA1:BA24,0)	('ß',)	n	14.0
+collate_functions	match_sorted	107	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('ß',)	n	24.0
+collate_functions	xmatch_binary	108	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('ß',)	n	23.0
+collate_functions	vlookup_sorted	109	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('ß',)	str	'ß'
+collate_functions	countif_lt	110	COUNTIF(BA1:BA24,"<"&{1})	('oe',)	n	18.0
+collate_functions	countif_eq	111	COUNTIF(BA1:BA24,{1})	('oe',)	n	1.0
+collate_functions	match_exact	112	MATCH({1},BA1:BA24,0)	('oe',)	n	15.0
+collate_functions	match_sorted	113	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('oe',)	n	19.0
+collate_functions	xmatch_binary	114	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('oe',)	n	19.0
+collate_functions	vlookup_sorted	115	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('oe',)	str	'oe'
+collate_functions	countif_lt	116	COUNTIF(BA1:BA24,"<"&{1})	('œ',)	n	19.0
+collate_functions	countif_eq	117	COUNTIF(BA1:BA24,{1})	('œ',)	n	1.0
+collate_functions	match_exact	118	MATCH({1},BA1:BA24,0)	('œ',)	n	16.0
+collate_functions	match_sorted	119	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('œ',)	n	20.0
+collate_functions	xmatch_binary	120	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('œ',)	n	20.0
+collate_functions	vlookup_sorted	121	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('œ',)	str	'œ'
+collate_functions	countif_lt	122	COUNTIF(BA1:BA24,"<"&{1})	('a9',)	n	7.0
+collate_functions	countif_eq	123	COUNTIF(BA1:BA24,{1})	('a9',)	n	1.0
+collate_functions	match_exact	124	MATCH({1},BA1:BA24,0)	('a9',)	n	17.0
+collate_functions	match_sorted	125	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('a9',)	n	8.0
+collate_functions	xmatch_binary	126	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('a9',)	n	8.0
+collate_functions	vlookup_sorted	127	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('a9',)	str	'a9'
+collate_functions	countif_lt	128	COUNTIF(BA1:BA24,"<"&{1})	('a10',)	n	6.0
+collate_functions	countif_eq	129	COUNTIF(BA1:BA24,{1})	('a10',)	n	1.0
+collate_functions	match_exact	130	MATCH({1},BA1:BA24,0)	('a10',)	n	18.0
+collate_functions	match_sorted	131	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('a10',)	n	7.0
+collate_functions	xmatch_binary	132	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('a10',)	n	7.0
+collate_functions	vlookup_sorted	133	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('a10',)	str	'a10'
+collate_functions	countif_lt	134	COUNTIF(BA1:BA24,"<"&{1})	('résumé',)	n	21.0
+collate_functions	countif_eq	135	COUNTIF(BA1:BA24,{1})	('résumé',)	n	1.0
+collate_functions	match_exact	136	MATCH({1},BA1:BA24,0)	('résumé',)	n	19.0
+collate_functions	match_sorted	137	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('résumé',)	n	22.0
+collate_functions	xmatch_binary	138	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('résumé',)	n	22.0
+collate_functions	vlookup_sorted	139	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('résumé',)	str	'résumé'
+collate_functions	countif_lt	140	COUNTIF(BA1:BA24,"<"&{1})	('resume',)	n	20.0
+collate_functions	countif_eq	141	COUNTIF(BA1:BA24,{1})	('resume',)	n	1.0
+collate_functions	match_exact	142	MATCH({1},BA1:BA24,0)	('resume',)	n	20.0
+collate_functions	match_sorted	143	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('resume',)	n	21.0
+collate_functions	xmatch_binary	144	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('resume',)	n	21.0
+collate_functions	vlookup_sorted	145	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('resume',)	str	'resume'
+collate_functions	countif_lt	146	COUNTIF(BA1:BA24,"<"&{1})	('naive',)	n	16.0
+collate_functions	countif_eq	147	COUNTIF(BA1:BA24,{1})	('naive',)	n	1.0
+collate_functions	match_exact	148	MATCH({1},BA1:BA24,0)	('naive',)	n	21.0
+collate_functions	match_sorted	149	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('naive',)	n	17.0
+collate_functions	xmatch_binary	150	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('naive',)	n	17.0
+collate_functions	vlookup_sorted	151	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('naive',)	str	'naive'
+collate_functions	countif_lt	152	COUNTIF(BA1:BA24,"<"&{1})	('naïve',)	n	17.0
+collate_functions	countif_eq	153	COUNTIF(BA1:BA24,{1})	('naïve',)	n	1.0
+collate_functions	match_exact	154	MATCH({1},BA1:BA24,0)	('naïve',)	n	22.0
+collate_functions	match_sorted	155	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('naïve',)	n	18.0
+collate_functions	xmatch_binary	156	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('naïve',)	n	18.0
+collate_functions	vlookup_sorted	157	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('naïve',)	str	'naïve'
+collate_functions	countif_lt	158	COUNTIF(BA1:BA24,"<"&{1})	('a_b',)	n	4.0
+collate_functions	countif_eq	159	COUNTIF(BA1:BA24,{1})	('a_b',)	n	1.0
+collate_functions	match_exact	160	MATCH({1},BA1:BA24,0)	('a_b',)	n	23.0
+collate_functions	match_sorted	161	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('a_b',)	n	5.0
+collate_functions	xmatch_binary	162	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('a_b',)	n	5.0
+collate_functions	vlookup_sorted	163	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('a_b',)	str	'a_b'
+collate_functions	countif_lt	164	COUNTIF(BA1:BA24,"<"&{1})	('b',)	n	12.0
+collate_functions	countif_eq	165	COUNTIF(BA1:BA24,{1})	('b',)	n	1.0
+collate_functions	match_exact	166	MATCH({1},BA1:BA24,0)	('b',)	n	24.0
+collate_functions	match_sorted	167	MATCH({1},_xlfn._xlws.SORT(BA1:BA24),1)	('b',)	n	13.0
+collate_functions	xmatch_binary	168	_xlfn.XMATCH({1},_xlfn._xlws.SORT(BA1:BA24),0,2)	('b',)	n	13.0
+collate_functions	vlookup_sorted	169	VLOOKUP({1},_xlfn._xlws.SORT(BA1:BA24),1,TRUE)	('b',)	str	'b'

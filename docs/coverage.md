@@ -6,10 +6,11 @@ its formula), how many match Excel, exactly or within the function's declared
 tolerance (in units in the last place, or relative for the iterative functions and
 the beta, gamma, chi-squared, F and t distributions), and how many are listed
 deviations with their reasons (`QUIRKS.md`, `tests/test_captures.py`,
-`tests/test_dynamic_arrays.py`). A random draw is listed, held by its properties,
-never counted as matching by chance. Whether a matching row is exact or within its
-tolerance depends on the platform's math library, so the page counts them together
-and is the same on every platform.
+`tests/test_dynamic_arrays.py`). A random draw counts as listed: it is tested by its
+properties, not its value, so a draw that equals Excel's by chance is never counted
+as matching. Whether a matching row is exact or within its tolerance depends on the
+platform's math library, so the page counts them together and is the same on every
+platform.
 
 452 implemented, 17 partial, 54 absent.
 

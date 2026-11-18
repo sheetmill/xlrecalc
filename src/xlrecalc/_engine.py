@@ -341,7 +341,7 @@ class Engine:
 
     @property
     def volatility(self) -> Volatility:
-        """Which formulas are volatile, given the names defined so far (``_volatile``).
+        """Which formulas are volatile, given the names defined so far (``_opening.Volatility``).
 
         A template's flag is taken when it is compiled: names are defined before formulas.
         """
@@ -697,8 +697,11 @@ class Engine:
     def trust_volatile(self) -> None:
         """Volatile formulas holding a cached value keep it.
 
-        As Excel shows them on opening a workbook in manual calculation (capture ``open_calc``,
-        ``manual_volatile``).
+        As Excel keeps them on opening a workbook whose cells it does not recalculate in full:
+        in manual calculation (capture ``open_calc``, ``manual_volatile``), and otherwise unless
+        their formula is marked ``ca="1"`` (capture ``volatile_names``), which the load then
+        makes stale. ``load`` calls it under ``recalc_on_load="excel"`` when it does not evaluate
+        every formula.
         """
         trusted = {
             n for n in self._volatile if (n & KEY_MASK) in self.sheets[n >> SHEET_SHIFT].values

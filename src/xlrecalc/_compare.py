@@ -14,7 +14,7 @@ though ``ErrorValue`` equals its text for interoperation (§4.2). Captured in
   operators and for criteria; exact lookups (``MATCH``, ``VLOOKUP``) compare exactly;
 - an exact lookup's scan ignores case only (``lower``: ``"ß"`` does not find ``"ss"``), while
   a criterion's equality is ``=``'s (``COUNTIF(r,"ß")`` counts ``"ss"``; capture
-  ``collate_users``);
+  ``collate_functions``);
 - a lookup never matches a blank cell; ``""`` matches an empty text;
 - a criterion text spelled like an error code (``"#N/A"``, ``"#n/a"``) matches that error,
   never the text; ``"="`` matches blank cells only, ``"<>"`` every cell that is not blank,
@@ -159,7 +159,7 @@ def lookup_equal(lookup: Value, cell: Value) -> bool:
     """Whether an exact lookup (``MATCH`` type 0, ``VLOOKUP`` FALSE) matches a cell.
 
     Text ignores case only, without ``=``'s folding: ``MATCH("ß",r,0)`` passes over ``"ss"``
-    (capture ``collate_users``). The caller has already returned an error lookup value as the
+    (capture ``collate_functions``). The caller has already returned an error lookup value as the
     result.
     """
     if cell is BLANK or isinstance(cell, ErrorValue):

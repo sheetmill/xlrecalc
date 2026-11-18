@@ -126,8 +126,8 @@ def _dynamic_evidence(found: dict[str, Evidence]) -> None:
             if not called:
                 continue
             mine = [a for a in cells if dyn._cell(a)[1] < 27 and dyn._case(a) == case]
-            # a random draw is held by its properties, as a _RANDOM row is: listed, never compared
-            # by value, so a draw that matches Excel's by chance cannot change the page
+            # a random draw is tested by its properties, as a _RANDOM row is, not by its value: it
+            # counts as listed, so a draw that equals Excel's by chance cannot change the page
             if (suite, case) in dyn.RANDOM_CASES or any((suite, a) in dyn.KNOWN for a in mine):
                 outcome = "listed"
             else:
@@ -165,10 +165,11 @@ def matrix() -> str:
         "tolerance (in units in the last place, or relative for the iterative functions and",
         "the beta, gamma, chi-squared, F and t distributions), and how many are listed",
         "deviations with their reasons (`QUIRKS.md`, `tests/test_captures.py`,",
-        "`tests/test_dynamic_arrays.py`). A random draw is listed, held by its properties,",
-        "never counted as matching by chance. Whether a matching row is exact or within its",
-        "tolerance depends on the platform's math library, so the page counts them together",
-        "and is the same on every platform.",
+        "`tests/test_dynamic_arrays.py`). A random draw counts as listed: it is tested by its",
+        "properties, not its value, so a draw that equals Excel's by chance is never counted",
+        "as matching. Whether a matching row is exact or within its tolerance depends on the",
+        "platform's math library, so the page counts them together and is the same on every",
+        "platform.",
         "",
         f"{counts['implemented']} implemented, {counts['partial']} partial, "
         f"{counts['absent']} absent.",

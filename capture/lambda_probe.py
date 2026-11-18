@@ -22,7 +22,7 @@ committed): the ``lambda_*`` captures hold their typed forms and values.
 has Excel paste its formulas as text, which enters them as typing them does (CAPTURING.md §2),
 and writes ``tests/captures/<suite>.tsv``. ``--depths`` first replaces ``lambda_depth``'s
 formulas with countdowns to the given depths through the given names (``CD`` by default), to
-find where Excel's recursion stops a few depths a run.
+find where Excel's recursion stops, testing a few depths per run.
 """
 
 from __future__ import annotations
@@ -412,7 +412,7 @@ def main() -> None:
     elif sys.argv[1:2] == ["--typed"]:
         read_typed(Path(sys.argv[2]))
     elif sys.argv[1:2] == ["--paste"]:
-        if "--depths" in sys.argv:  # a bisection of the recursion limit, a few depths a run
+        if "--depths" in sys.argv:  # a bisection of the recursion limit, a few depths per run
             at = sys.argv.index("--depths")
             values = [int(n) for n in sys.argv[at + 1].split(",")]
             names = tuple(sys.argv[at + 2].split(",")) if len(sys.argv) > at + 2 else ("CD",)

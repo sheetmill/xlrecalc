@@ -136,7 +136,7 @@ def recalculates_on_opening(
     ``<fileVersion appName>``, is not ``"xl"``: openpyxl writes no ``<fileVersion>``, LibreOffice
     ``"Calc"``). In manual calculation it shows the cached values on opening whatever the reason,
     and saves them recalculated where a reason holds: ``saving`` asks about the copy it saves
-    after opening. Otherwise the formulas decide (``_volatile``: cells marked ``ca="1"``, volatile
+    after opening. Otherwise the formulas decide (``Rule``: the cells marked ``ca="1"``, volatile
     cells and their dependents; every formula when a volatile function is unmarked).
     """
     if shows_cached(calc, saving):
