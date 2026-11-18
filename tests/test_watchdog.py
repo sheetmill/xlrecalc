@@ -66,11 +66,20 @@ HOLD = "import os, sys, time; open(sys.argv[1], 'w').write(str(os.getpid())); ti
 
 
 def _alive(pid):
+    """Whether the process runs: a zombie, killed but not yet reaped by its parent, does not.
+
+    Where nothing reaps orphans (a container whose first process is a shell), a killed command
+    stays a zombie, which ``os.kill(pid, 0)`` still finds; Linux names its state ``Z``.
+    """
     try:
         os.kill(pid, 0)
     except ProcessLookupError:
         return False
-    return True
+    try:
+        state = Path(f"/proc/{pid}/stat").read_text().rsplit(")", 1)[1].split()[0]
+    except (OSError, IndexError):  # no /proc (macOS): a process found runs
+        return True
+    return state != "Z"
 
 
 @pytest.mark.parametrize("sig", [signal.SIGTERM, signal.SIGKILL], ids=["SIGTERM", "SIGKILL"])
