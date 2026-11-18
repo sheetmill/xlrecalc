@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 import re
+from dataclasses import dataclass
 from decimal import ROUND_HALF_UP, Decimal, localcontext
 from typing import Any, cast
 
@@ -155,26 +156,51 @@ def REPLACE(ctx: Context, old: str, start: float, count: float, new: str) -> str
     return _limited(old[: s - 1] + new + old[s - 1 + n :])
 
 
-# Excel for Mac numbers characters in the Mac OS Roman set (capture misc); Excel for Windows
-# uses its ANSI code page instead.
+@dataclass(frozen=True)
+class CodePage:
+    """The 8-bit character set ``CHAR`` and ``CODE`` number characters in.
+
+    ``codec`` maps codes 1 to 255 to characters; ``missing`` is ``CODE`` of a character the set
+    lacks; ``passed`` are code points ``CODE`` gives as themselves though the set lacks them.
+    """
+
+    codec: str
+    missing: int
+    passed: range
+
+    def char(self, code: int) -> str:
+        return bytes([code]).decode(self.codec)
+
+    def code(self, char: str) -> int:
+        try:
+            return char.encode(self.codec)[0]
+        except UnicodeEncodeError:
+            return ord(char) if ord(char) in self.passed else self.missing
+
+
+MAC_ROMAN = CodePage("mac_roman", 95, range(0x80, 0xA0))
+"""Excel for Mac's (captures ``misc``, ``codepage``): Mac OS Roman, 95 for a character outside it,
+and the C1 controls U+0080 to U+009F as their own codes."""
+
+CODE_PAGE = MAC_ROMAN
+"""The one place the code page is chosen; ``CHAR`` and ``CODE`` read it."""
+
+
 @function("CHAR", "number", category=T)
 def CHAR(ctx: Context, n: float) -> str | ErrorValue:
-    """The character with a code from 1 to 255 (Mac OS Roman on the Mac)."""
+    """The character with a code from 1 to 255 in the code page (``CODE_PAGE``)."""
     k = math.trunc(n)
     if not 1 <= k <= 255:
         return VALUE
-    return bytes([k]).decode("mac_roman")
+    return CODE_PAGE.char(k)
 
 
 @function("CODE", "text", category=T)
 def CODE(ctx: Context, text: str) -> float | ErrorValue:
-    """The code of a text's first character (Mac OS Roman; 95 outside it)."""
+    """The code of a text's first character in the code page (``CODE_PAGE``)."""
     if not text:
         return VALUE
-    try:
-        return float(text[0].encode("mac_roman")[0])
-    except UnicodeEncodeError:
-        return 95.0
+    return float(CODE_PAGE.code(text[0]))
 
 
 def _fixed_text(x: float, decimals: float, grouping: bool) -> str | ErrorValue:
@@ -334,12 +360,14 @@ def PROPER(ctx: Context, text: str) -> str:
     return "".join(out)
 
 
-_CONTROLS = dict.fromkeys(range(32))
+_CONTROLS = dict.fromkeys([*range(32), *range(0x80, 0xA0)])
+"""What ``CLEAN`` removes: the codes below 32 and the C1 controls U+0080 to U+009F, not 127
+(capture ``clean_controls``)."""
 
 
 @function("CLEAN", "text", category=T)
 def CLEAN(ctx: Context, text: str) -> str:
-    """The text without the characters below 32."""
+    """The text without the control characters (``_CONTROLS``)."""
     return text.translate(_CONTROLS)
 
 

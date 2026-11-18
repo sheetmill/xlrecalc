@@ -939,6 +939,8 @@ SUITES = [
     "empty_args",
     "cum_large",
     "combin_limit",
+    "codepage",
+    "clean_controls",
 ]
 
 

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- `CODE` of a C1 control character (U+0080 to U+009F) is its code, 128 to 159, as in Excel; it was 95, the code of
+  a character outside Mac OS Roman. `CLEAN` removes those characters as well as the codes below 32, as Excel does; it
+  kept them (captures `codepage`, `clean_controls`).
+
 ## [0.3.0] - 2026-11-17
 
 ### Added

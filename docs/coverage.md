@@ -71,7 +71,7 @@ and is the same on every platform.
 | `CEILING.MATH` | math | implemented | 245 | 245 | 0 |  |  |
 | `CEILING.PRECISE` | math | implemented | 304 | 304 | 0 |  |  |
 | `CELL` | information | partial | 2 | 2 | 0 |  | the kinds that depend on formatting are unsupported: styles are not read |
-| `CHAR` | text | implemented | 274 | 274 | 0 |  |  |
+| `CHAR` | text | implemented | 1045 | 1045 | 0 |  |  |
 | `CHIDIST` | statistical | implemented | 15 | 15 | 0 | 1e-14 relative |  |
 | `CHIINV` | statistical | implemented | 33 | 29 | 4 | 1e-14 relative |  |
 | `CHISQ.DIST` | statistical | implemented | 196 | 196 | 0 | 1e-12 relative |  |
@@ -83,8 +83,8 @@ and is the same on every platform.
 | `CHOOSE` | lookup and reference | implemented | 12 | 12 | 0 |  |  |
 | `CHOOSECOLS` | lookup and reference | implemented | 42 | 42 | 0 |  |  |
 | `CHOOSEROWS` | lookup and reference | implemented | 28 | 28 | 0 |  |  |
-| `CLEAN` | text | implemented | 28 | 28 | 0 |  |  |
-| `CODE` | text | implemented | 19 | 19 | 0 |  |  |
+| `CLEAN` | text | implemented | 538 | 538 | 0 |  |  |
+| `CODE` | text | implemented | 417 | 417 | 0 |  |  |
 | `COLUMN` | lookup and reference | implemented | 4 | 4 | 0 |  |  |
 | `COLUMNS` | lookup and reference | implemented | 10 | 10 | 0 |  |  |
 | `COMBIN` | math | implemented | 289 | 289 | 0 | 4 ulps |  |
@@ -293,7 +293,7 @@ and is the same on every platform.
 | `LCM` | math | implemented | 213 | 213 | 0 |  |  |
 | `LEFT` | text | implemented | 36 | 36 | 0 |  |  |
 | `LEFTB` | text | implemented | 91 | 91 | 0 |  |  |
-| `LEN` | text | implemented | 162 | 162 | 0 |  |  |
+| `LEN` | text | implemented | 417 | 417 | 0 |  |  |
 | `LENB` | text | implemented | 28 | 28 | 0 |  |  |
 | `LET` | logical | implemented | 58 | 58 | 0 |  |  |
 | `LINEST` | statistical | partial | 72 | 62 | 10 | 4 ulps | one regressor only |
@@ -501,8 +501,8 @@ and is the same on every platform.
 | `TRUNC` | math | implemented | 306 | 306 | 0 |  |  |
 | `TTEST` | statistical | implemented | 334 | 334 | 0 | 1e-14 relative |  |
 | `TYPE` | information | implemented | 59 | 58 | 1 |  |  |
-| `UNICHAR` | text | implemented | 38 | 38 | 0 |  |  |
-| `UNICODE` | text | implemented | 28 | 28 | 0 |  |  |
+| `UNICHAR` | text | implemented | 689 | 689 | 0 |  |  |
+| `UNICODE` | text | implemented | 285 | 285 | 0 |  |  |
 | `UNIQUE` | lookup and reference | implemented | 34 | 34 | 0 |  |  |
 | `UPPER` | text | implemented | 23 | 23 | 0 |  |  |
 | `USDOLLAR` | text | implemented | 197 | 197 | 0 |  |  |
