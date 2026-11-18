@@ -4355,6 +4355,92 @@ def complex_family() -> list[Case]:
     return cases
 
 
+# Code page and text order ------------------------------------------------------------------
+# The same cases on any Excel: which character each code is, which characters CLEAN removes, and
+# how text compares, sorts and matches, so that two Excel builds can be compared case by case.
+
+_OUTSIDE = (
+    0x2603, 0x1F600, 0x3A9, 0x109, 0x2264, 0x3C0, 0xF8FF, 0x2122, 0x2020, 0x152, 0x20AC, 0x192,
+)  # fmt: skip
+"""Code points in one 8-bit code page and not another, or in neither (``CODE`` of ``UNICHAR``)."""
+
+
+def codepage() -> list[Case]:
+    """``CHAR``, ``UNICODE(CHAR)`` and ``CODE(CHAR)`` for 0 to 256; ``CODE(UNICHAR)`` past 126."""
+    cases = [Case("char", "CHAR({1})", (float(n),)) for n in range(257)]
+    cases += [Case("unicode", "_xlfn.UNICODE(CHAR({1}))", (float(n),)) for n in range(257)]
+    cases += [Case("code", "CODE(CHAR({1}))", (float(n),)) for n in range(257)]
+    code_unichar = "CODE(_xlfn.UNICHAR({1}))"
+    cases += [Case("code_unichar", code_unichar, (float(n),)) for n in range(127, 256)]
+    cases += [Case("code_unichar", code_unichar, (float(n),)) for n in _OUTSIDE]
+    return cases
+
+
+def clean_controls() -> list[Case]:
+    """Which characters ``CLEAN`` removes: ``UNICHAR(n)`` alone and between two letters."""
+    cases = [Case("clean", "CLEAN(_xlfn.UNICHAR({1}))", (float(n),)) for n in range(1, 256)]
+    cases += [
+        Case("clean_len", 'LEN(CLEAN("a"&_xlfn.UNICHAR({1})&"b"))', (float(n),))
+        for n in range(1, 256)
+    ]
+    return cases
+
+
+_COLLATE_CHARS = [chr(n) for n in range(32, 127)] + list("æßœéñüøåÆŒÉÑÜØÅçÇðþÞÿµªº¡¿«»§¶")
+"""The printable ASCII characters, then 30 Latin-1 letters, ligatures and signs."""
+
+
+def collate_chars() -> list[Case]:
+    """``<`` over every ordered pair of different characters, ``=`` over every unordered pair."""
+    chars = _COLLATE_CHARS
+    cases = [Case("lt", "{1}<{2}", (x, y)) for x in chars for y in chars if x != y]
+    cases += [Case("eq", "{1}={2}", (x, y)) for i, x in enumerate(chars) for y in chars[i:]]
+    return cases
+
+
+_COLLATE_WORDS = (
+    "co-op", "coop", "co--op", "-coop", "coop-", "co'op", "coops", "a-b", "ab", "aa", "a'b", "a b",
+    "-a", "a", "A", "aB", "Ab", "AB", "ae", "æ", "Æ", "AE", "ss", "ß", "SS", "oe", "œ", "Œ", "a9",
+    "a10", "a1", "a01", "résumé", "resume", "Resume", "naïve", "naive", "a_b", "a.b", "a/b",
+)  # fmt: skip
+"""Words that separate the rules of a word sort: hyphens and apostrophes inside, leading and
+trailing, case, expansions (``æ``, ``ß``, ``œ``), digits and accents."""
+
+
+def collate_words() -> list[Case]:
+    """``<`` over every ordered pair of two different words, ``=`` over every unordered pair."""
+    words = _COLLATE_WORDS
+    cases = [Case("lt", "{1}<{2}", (x, y)) for x in words for y in words if x != y]
+    cases += [Case("eq", "{1}={2}", (x, y)) for i, x in enumerate(words) for y in words[i:]]
+    return cases
+
+
+_USERS_WORDS = (
+    "coop", "co-op", "co'op", "a-b", "ab", "aa", "a b", "-a", "a", "A", "ae", "æ", "ss", "ß", "oe",
+    "œ", "a9", "a10", "résumé", "resume", "naive", "naïve", "a_b", "b",
+)  # fmt: skip
+_USERS_RANGE = f"BA1:BA{len(_USERS_WORDS)}"
+_USERS_TABLE: dict[str, Input] = {f"BA{i}": w for i, w in enumerate(_USERS_WORDS, 1)}
+_SORTED = f"_xlfn._xlws.SORT({_USERS_RANGE})"
+
+
+def collate_users() -> list[Case]:
+    """Whether sorting, criteria and lookups order and match text as ``<`` and ``=`` do."""
+    r, n = _USERS_RANGE, len(_USERS_WORDS)
+    cases = [Case("sort", f"INDEX({_SORTED},{{1}})", (float(k),)) for k in range(1, n + 1)]
+    cases.append(Case("unique", f"ROWS(_xlfn.UNIQUE({r}))"))
+    for w in _USERS_WORDS:
+        cases += [
+            Case("countif_lt", f'COUNTIF({r},"<"&{{1}})', (w,)),
+            Case("countif_eq", f"COUNTIF({r},{{1}})", (w,)),
+            Case("match_exact", f"MATCH({{1}},{r},0)", (w,)),
+            Case("match_sorted", f"MATCH({{1}},{_SORTED},1)", (w,)),
+            Case("xmatch_binary", f"_xlfn.XMATCH({{1}},{_SORTED},0,2)", (w,)),
+            Case("vlookup_sorted", f"VLOOKUP({{1}},{_SORTED},1,TRUE)", (w,)),
+        ]
+    return cases
+
+
 SUITES = {
     "number_text": Suite(number_text),
     "text_number": Suite(text_number),
@@ -4394,4 +4480,9 @@ SUITES = {
     "distributions_family": Suite(distributions_family),
     "continuous_family": Suite(continuous_family, fixed=_CONTINUOUS_TABLE),
     "complex_family": Suite(complex_family),
+    "codepage": Suite(codepage),
+    "clean_controls": Suite(clean_controls),
+    "collate_chars": Suite(collate_chars),
+    "collate_words": Suite(collate_words),
+    "collate_users": Suite(collate_users, fixed=_USERS_TABLE),
 }
