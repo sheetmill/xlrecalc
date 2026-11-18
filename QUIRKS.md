@@ -199,12 +199,12 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   period by period rounds differently from Excel's, and a straight-line amount computed once or a closed-form book value
   fit no more rows. Listed in `tests/test_captures.py`.
 - An empty argument: `VDB` with an empty `factor` is `#DIV/0!` in Excel and 0 here (two rows of `empty_args`). Four others there carry the known noise of `MULTINOMIAL`, `CUMIPMT` and `XIRR`.
-- How text orders is captured only in part: every pair of 39 ASCII characters and 24 pairs of words,
-  on Excel 16 for Mac (capture `modern`). Those give one consistent order, marks and symbols before
-  digits before letters, with accents after their base letter. The rest is approximated: other
-  ASCII controls sort first and other characters after the letters, by code point, so another
-  script or a symbol outside ASCII may not sort as Excel sorts it. Excel for Windows' order has not
-  been captured and may differ.
+- How text orders is captured for printable ASCII and 30 Latin-1 letters, ligatures and signs (every
+  pair of 125 characters, capture `collate_chars`), 40 words (`collate_words`) and the pairs of
+  `modern`, on Excel 16.115 for Mac: one consistent order, followed exactly. Other characters (another
+  script, a symbol outside Latin-1) sort after the letters by code point and controls first, our
+  choice, so they may not sort as Excel sorts them. Excel for Windows' order has not been captured
+  and may differ.
 - A row off Excel's grid in a file (`r="99999999999"`): Excel opens the file and drops the cell
   (capture `value_forms`), though it refuses rows 0 and 1048577; the reader refuses every row
   off the grid with a `PackageError`.

@@ -941,6 +941,8 @@ SUITES = [
     "combin_limit",
     "codepage",
     "clean_controls",
+    "collate_chars",
+    "collate_words",
 ]
 
 

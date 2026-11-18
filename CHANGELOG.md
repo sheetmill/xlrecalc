@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `CODE` of a C1 control character (U+0080 to U+009F) is its code, 128 to 159, as in Excel; it was 95, the code of
   a character outside Mac OS Roman. `CLEAN` removes those characters as well as the codes below 32, as Excel does; it
   kept them (captures `codepage`, `clean_controls`).
+- Text compares, sorts and looks up in Excel for Mac's order for Latin-1 signs and letters as well as ASCII: `¡ ¿ « »
+  § ¶` among the marks, `æ`, `ð`, `ø`, `œ`, `þ` and `µ` as letters of their own, `ª` and `º` equal to `a` and `o`;
+  they were ordered by code point after the letters (captures `collate_chars`, `collate_words`: 23,375 and 2,380 rows,
+  where 1,918 and 84 differed).
 
 ## [0.3.0] - 2026-11-17
 

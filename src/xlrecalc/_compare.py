@@ -75,28 +75,44 @@ def _resolve_blank(v: Value, other: Value) -> Value:
     return 0.0
 
 
-# The order of ASCII marks and symbols in Excel for Mac, none ignored (capture ``modern``, every
-# pair of 39 characters); digits and letters follow them. It agrees with CLDR's root collation
-# on the characters captured; the agreement is not assumed elsewhere. Other characters are
-# approximated (QUIRKS.md).
-_MARKS = {ch: i for i, ch in enumerate(" _-,;:!?.'\"()[]{}@*/\\&#%`^+<=>|~$", 1)}
+# Excel for Mac's order of text (captures ``modern``, ``collate_chars``, ``collate_words``): after
+# folding case, marks and symbols in this order, none ignored, then digits, then letters, with
+# ``æ``, ``ð``, ``ø``, ``œ``, ``þ``, ``µ`` letters of their own; ``ª``, ``º`` are ``a``, ``o``;
+# an accent counts only between texts otherwise equal (``e`` < ``é`` < ``f``); ``ß`` folds to
+# ``ss``. A character the captures leave out sorts after all of these, by code point (our choice,
+# CAPTURING.md), and a control character before them.
+MAC_ORDER = " _-,;:!¡?¿.'\"«»()[]{}§¶@*/\\&#%`^+<=>|~$0123456789aæbcdðefghijklmnoøœpqrstuvwxyzþμ"
+"""Excel for Mac's primary order of the characters captured, as they are after ``casefold``."""
+
+MAC_ALIASES = {"ª": "a", "º": "o"}
+"""Characters Excel for Mac orders as another (``ª`` equals ``a``)."""
 
 
-def _collation_key(text: str) -> tuple[list[int], list[int]]:
-    """A folded text's sort key: base characters, then accents for ties (``e`` < ``é`` < ``f``).
+def collation(order: str, aliases: dict[str, str]) -> Callable[[str], tuple[list[int], list[int]]]:
+    """A sort key for folded text: primary weights from ``order``, accents for ties."""
+    weights = {ch: i for i, ch in enumerate(order, 1)}
+    weights.update({ch: weights[to] for ch, to in aliases.items()})
+    beyond = len(order) + 1
 
-    Control characters sort first and other characters after the letters, by code point.
-    """
-    bases: list[int] = []
-    accents: list[int] = []
-    for ch in unicodedata.normalize("NFD", text):
-        if unicodedata.combining(ch):
-            accents.append(ord(ch))
-            continue
-        mark = _MARKS.get(ch)
-        code = ord(ch)
-        bases.append(mark if mark is not None else (code - 0x20 if code < 0x20 else code + 0x40))
-    return bases, accents
+    def key(text: str) -> tuple[list[int], list[int]]:
+        bases: list[int] = []
+        accents: list[int] = []
+        for ch in unicodedata.normalize("NFD", text):
+            if unicodedata.combining(ch):
+                accents.append(ord(ch))
+                continue
+            weight = weights.get(ch)
+            if weight is None:
+                code = ord(ch)
+                weight = code - 0x20 if code < 0x20 else beyond + code
+            bases.append(weight)
+        return bases, accents
+
+    return key
+
+
+COLLATION = collation(MAC_ORDER, MAC_ALIASES)
+"""The one place the order of text is chosen; every comparison of text reads it."""
 
 
 def compare(a: Value, b: Value, op: Op, quirks: Quirks = Quirks.EXCEL) -> bool | ErrorValue:
@@ -118,7 +134,7 @@ def compare(a: Value, b: Value, op: Op, quirks: Quirks = Quirks.EXCEL) -> bool |
         elif x.isalnum() and y.isalnum() and x.isascii() and y.isascii():
             order = 1 if x > y else -1  # digits before letters, as the code points are
         else:
-            kx, ky = _collation_key(x), _collation_key(y)
+            kx, ky = COLLATION(x), COLLATION(y)
             order = 0 if kx == ky else (1 if kx > ky else -1)
     elif ra == 2:
         order = int(bool(a)) - int(bool(b))

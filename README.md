@@ -154,7 +154,7 @@ text shows before evaluating.
   financial and bond functions, the database functions, complex numbers. The
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 77,347 formulas computed by Excel and compared with xlrecalc's results: 76,563
+- **Evidence**: 103,102 formulas computed by Excel and compared with xlrecalc's results: 102,318
   match, bit for bit or within a small tolerance declared per function (a few units in the last
   place, or a relative one: 1E-9 for the iterative functions, 1E-15 to 1E-12 for the beta,
   gamma, chi-squared, F and t distributions), 784 known deviations, each listed with its reason
