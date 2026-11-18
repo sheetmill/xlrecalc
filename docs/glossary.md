@@ -14,15 +14,17 @@ Data-only mode
 Recalculation on opening; a trusting and an evaluating load
 : Excel recalculates every formula of some files when it opens them (no calculation settings, a
   request to recalculate, a calculation by an older Excel, a file Excel did not save, a volatile
-  function anywhere) and shows the cached values of the others. `load` and `recalculate` follow
-  the same rule by default (`recalc_on_load="excel"`): a trusting load keeps the file's cached
-  values and computes only what changes, an evaluating load computes every formula.
+  function in a cell without Excel's `ca="1"` mark); of the others it recalculates the cells so
+  marked (volatile cells and what depends on them) and shows the rest's cached values. `load` and
+  `recalculate` follow the same rule by default (`recalc_on_load="excel"`): a trusting load keeps
+  the file's cached values and computes only what changes, an evaluating load computes every
+  formula.
   `recalc_on_load="always"` and `"never"` choose one or the other for every file.
 
 Volatile function
 : A function whose result can change with nothing it reads changing: `RAND`, `RANDBETWEEN`,
-  `RANDARRAY`, `NOW`, `TODAY`, `OFFSET`, `INDIRECT` and `CELL`. Excel recalculates a file holding
-  one on opening.
+  `RANDARRAY`, `NOW`, `TODAY`, `OFFSET`, `INDIRECT` and `CELL`. A formula calling one, itself or
+  through a defined name, is volatile; Excel recalculates it and its dependents on opening.
 
 Dynamic array; spill
 : A formula Excel 365 marks in the file (the dynamic-array cell metadata) gives all of an array

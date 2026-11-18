@@ -194,6 +194,12 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   where the double below it is written `1i` (9 rows, 5 of them among the 63), another platform's last bit can round
   the text the other way: on Linux, `IMSEC("-2.5-1.5j")` gives `-0.364130793588459+...` where Excel gives
   `-0.36413079358846+...`. `tests/test_complex_boundary.py` derives the rows. They are listed on every platform.
+- A cell volatile only through a defined name, in a file whose formula lacks Excel's `ca="1"` mark (Excel writes it on
+  every such cell; another program may not): Excel keeps its cached value on opening and does not count it volatile
+  until the formula is entered again, so a save keeps it too; xlrecalc keeps it on opening and computes it at the next
+  calculation, a save included (capture `volatile_names`, `offset_name_no_ca`). A cell marked `ca="1"` without being
+  volatile is recomputed on opening as in Excel, and its dependents follow when its value changes, where Excel keeps
+  an unmarked dependent's cached value (`plain_add_ca`); in a file Excel saved the two agree.
 - `VDB` from a fractional start, or late in a schedule, differs in its last bits on 75 of the 317 rows of `finance` that
   sweep fractional periods (5 to 1,131 units in the last place, Excel's rule otherwise reproduced): the book value carried
   period by period rounds differently from Excel's, and a straight-line amount computed once or a closed-form book value

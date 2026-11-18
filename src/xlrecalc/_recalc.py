@@ -42,14 +42,14 @@ def recalculate(
             never leaves a partial file.
         recalc_on_load: ``"excel"``, Excel's rule (as :func:`load`); ``"always"``, evaluate
             every formula, trusting no cached value; ``"never"``, trust every cached value
-            the file holds (a formula without one, or a volatile one, is evaluated all the same; a
-            volatile one keeps its value under ``"excel"`` in manual calculation, as in Excel).
+            the file holds (a formula without one, or a volatile one, is evaluated all the
+            same).
         full_calc_on_load: Ask Excel to recalculate when it opens the file
             (``<calcPr fullCalcOnLoad="1">``), so a value computed differently here never
             persists in what Excel shows. With ``False`` the file asks nothing (a request it
             held is removed, as Excel removes it when it saves), and Excel shows the written
-            values unless its own rules recalculate (an older ``calcId``, a volatile
-            function). A file with the setting also makes a later ``recalculate`` of it
+            values unless its own rules recalculate (an older ``calcId``, a volatile cell and
+            its dependents). A file with the setting also makes a later ``recalculate`` of it
             evaluate every formula again.
         limits: Limits on what reading and computing the workbook may cost (``ReadLimits``):
             the package's parts and sizes, the cells an array may hold, and the evaluations of

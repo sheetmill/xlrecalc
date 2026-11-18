@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from xlio import LimitError, PackageError
 
+from xlrecalc._check import RecalcCheck
 from xlrecalc._evaluate import Formula, Reference, UnsupportedError, evaluate
 from xlrecalc._limits import ReadLimits
 from xlrecalc._quirks import Quirks
@@ -24,6 +25,7 @@ __all__ = [
     "PackageError",
     "Quirks",
     "ReadLimits",
+    "RecalcCheck",
     "Reference",
     "Report",
     "UnsupportedError",

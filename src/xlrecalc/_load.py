@@ -1,10 +1,9 @@
 """Build an engine from an xlsx file read by ``xlio`` (ARCHITECTURE.md §7.4, §9.1, §9.5).
 
 Cached values are kept and trusted per §7.4: a formula is stale when the file holds no cached
-value for it, when the workbook is one Excel recalculates on opening (``recalc_on_load``), or
-when its template is volatile; cells depending on a stale cell become stale when the engine
-recalculates. A formula
-Excel refuses in a file is dropped and its cell keeps its cached value, as Excel's repair does
+value for it, or when Excel recalculates it on opening (``recalc_on_load``, ``_opening.Rule``);
+cells depending on a stale cell become stale when the engine recalculates. A formula Excel
+refuses in a file is dropped and its cell keeps its cached value, as Excel's repair does
 (§9.5), and the report lists it.
 """
 
@@ -26,11 +25,14 @@ from xlrecalc._formula._fastkey import raw_key
 from xlrecalc._formula._nodes import Call, Reference
 from xlrecalc._formula._prefixes import PREFIXES
 from xlrecalc._limits import ReadLimits, io_limits
+from xlrecalc._opening import (
+    Rule,
+)
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef
 from xlrecalc._values import BLANK, ErrorValue, Value
 
-__all__ = ["load", "refused_in_file"]
+__all__ = ["defined_names", "file_app", "load", "refused_in_file"]
 
 _UNSEEN = object()
 
@@ -471,12 +473,6 @@ def _iso_serial(text: str, date1904: bool, quirks: Quirks) -> Value:
     return days + seconds / 86400
 
 
-VERIFIED_CALC_ID = 191028
-"""The lowest ``calcId`` at which Excel trusts a file's cached values on opening, as verified on
-the newest Excel build captured: Excel 16.115 for Mac (its own ``calcId`` 191029) recalculates a
-file of ``calcId`` 191027 or lower and trusts one of 191028 or higher (capture ``open_calc``,
-``capture/open_calc_probe.py``, rerun after every Excel update)."""
-
 RecalcOnLoad = Literal["excel", "always", "never"]
 RECALC_ON_LOAD = ("excel", "always", "never")
 
@@ -500,29 +496,38 @@ def recalc_mode(
     return mode
 
 
-def recalculates_on_opening(
-    calc: xlio.CalcProperties, app_name: str | None, volatile: bool, saving: bool = False
-) -> bool:
-    """Whether Excel recalculates every formula of a workbook on opening it (capture ``open_calc``).
+class _Formulas:
+    """What a load's formulas showed, for ``Rule.decide``."""
 
-    It does when the workbook has no ``calcPr`` or one without ``calcId``, asks for it
-    (``fullCalcOnLoad``), was calculated by an older Excel (``calcId`` below
-    ``VERIFIED_CALC_ID``), was not saved by Excel (``app_name``, ``<fileVersion appName>``, is
-    not ``"xl"``: openpyxl writes no ``<fileVersion>``, LibreOffice ``"Calc"``), or holds a
-    volatile function, which recalculates every formula, not only its dependents. In manual
-    calculation it shows the cached values on opening whatever the reason, and saves them
-    recalculated where a reason holds: ``saving`` asks about the copy it saves after opening; a
-    volatile function is such a reason too (``manual_volatile``), and its own cells show their
-    cached values on opening.
+    __slots__ = ("marked", "marked_stale", "own", "own_unmarked")
+
+    def __init__(self, marked_stale: bool) -> None:
+        self.marked_stale = marked_stale  # a cell marked ca="1" is computed (``Rule.marked``)
+        self.marked: list[int] = []  # those cells, made stale once the formulas are read
+        self.own: dict[int, bool] = {}  # template id -> calls a volatile function in its text
+        self.own_unmarked = False
+
+
+def defined_names(book: xlio.Workbook) -> list[tuple[str, str, int | None]]:
+    """The workbook's defined names as (name, text, scope), scope the sheet's index or ``None``.
+
+    ``localSheetId`` counts every ``<sheet>``, one without a part too: a name local to that is
+    dropped.
     """
-    if calc.calc_mode == "manual" and not saving:
-        return False
-    return (
-        calc.full_calc_on_load
-        or calc.calc_id is None
-        or calc.calc_id < VERIFIED_CALC_ID
-        or app_name != "xl"
-        or volatile
+    index_of = {sheet.position: i for i, sheet in enumerate(book.sheets)}
+    names = []
+    for name in book.defined_names:
+        scope = None if name.sheet is None else index_of.get(name.sheet)
+        if name.sheet is None or scope is not None:
+            names.append((name.name, name.text, scope))
+    return names
+
+
+def file_app(book: xlio.Workbook) -> str | None:
+    """``<fileVersion appName>``: ``"xl"`` when Excel saved the file."""
+    return next(
+        (u.element.get("appName") for u in book.unparsed if u.path == "workbook/fileVersion"),
+        None,
     )
 
 
@@ -542,12 +547,11 @@ def load(
 ) -> Engine:
     """Read a workbook into an engine; formulas whose cached values are trusted stay unevaluated.
 
-    ``recalc_on_load``: ``"excel"`` evaluates every formula where Excel would recalculate on
-    opening (``recalculates_on_opening``) and trusts the cached values elsewhere; ``"always"``
-    evaluates every formula; ``"never"`` trusts every cached value the file holds. A formula
-    without one is evaluated in every mode, and so is a volatile one, except under ``"excel"``
-    in manual calculation, where Excel shows its cached value on opening. ``saving``: the load
-    is followed by a save, as in ``recalculate(path)``, whose result is the copy Excel saves
+    ``recalc_on_load``: ``"excel"`` evaluates what Excel recalculates on opening (``Rule``:
+    every formula, or the cells marked ``ca="1"``) and trusts the cached values elsewhere;
+    ``"always"`` evaluates every formula; ``"never"`` trusts every cached value the file holds
+    but the volatile formulas'. A formula without one is evaluated in every mode. ``saving``: the
+    load is followed by a save, as in ``recalculate(path)``, whose result is the copy Excel saves
     after opening.
     """
     if recalc_on_load not in RECALC_ON_LOAD:
@@ -567,38 +571,26 @@ def load(
             engine.path = os.path.abspath(os.fspath(source))
         for sheet in book.sheets:
             engine.add_sheet(sheet.name)
-        # localSheetId counts every <sheet>, one without a part too: a name local to that is dropped
-        index_of = {sheet.position: i for i, sheet in enumerate(book.sheets)}
-        for name in book.defined_names:
-            scope = None if name.sheet is None else index_of.get(name.sheet)
-            if name.sheet is None or scope is not None:
-                engine.define_name(name.name, name.text, scope)
+        for name, text, scope in defined_names(book):
+            engine.define_name(name, text, scope)
         active = book.views[0].active_tab if book.views else 0
         if not 0 <= active < len(book.sheets):
             active = 0
         row, col = _active_cell(book.sheets[active])
         engine.active = (active, row - 1, col - 1)
-        app = next(  # <fileVersion appName>: "xl" when Excel saved the file
-            (u.element.get("appName") for u in book.unparsed if u.path == "workbook/fileVersion"),
-            None,
-        )
-        full = recalc_on_load == "always" or (
-            recalc_on_load == "excel" and recalculates_on_opening(book.calc, app, False, saving)
-        )
+        app = file_app(book)
+        rule = Rule.of(book.calc, app, recalc_on_load, saving)
+        full = rule.everything
+        seen = _Formulas(rule.marked)
         dynamic = book.cell_metadata.dynamic_arrays
         for index, sheet in enumerate(book.sheets):
             if sheet.kind == "worksheet":
-                _load_sheet(engine, sheet, dynamic, index, full)
-        if (
-            not full
-            and recalc_on_load == "excel"
-            and book.calc.calc_mode == "manual"
-            and not saving
-        ):
-            engine.trust_volatile()  # shown as cached on opening, whatever the reason
-        volatile = not full and recalc_on_load == "excel" and engine.has_volatile()
-        if volatile and recalculates_on_opening(book.calc, app, True, saving):  # every formula
-            engine.make_all_stale()
+                _load_sheet(engine, sheet, dynamic, index, full, seen)
+        if not full and not rule.volatile:
+            engine.trust_volatile()  # kept on opening unless marked ca="1" (or manual)
+        engine.stale.update(seen.marked)  # what Excel recalculates on opening
+        if not full and rule.decide(False, False, False, seen.own_unmarked) == "all":
+            engine.make_all_stale()  # a volatile function without ca="1": every formula
     return engine
 
 
@@ -615,12 +607,17 @@ def _active_cell(sheet: xlio.Sheet) -> tuple[int, int]:
 
 
 def _load_sheet(
-    engine: Engine, sheet: xlio.Sheet, dynamic_cm: frozenset[int], index: int, full: bool
+    engine: Engine,
+    sheet: xlio.Sheet,
+    dynamic_cm: frozenset[int],
+    index: int,
+    full: bool,
+    seen: _Formulas,
 ) -> None:
     s = engine.sheets[index]
     masters: dict[int, int] = {}  # shared-formula index -> template id
     refusals: dict[str, object] = {}
-    dependents: list[tuple[int, int, int, Value | None]] = []
+    dependents: list[tuple[int, int, int, Value | None, bool]] = []
     report = engine.report
     boxes: list[tuple[int, int, int, int, int]] = []  # ranges array formulas fill (§7.7)
     for cell in sheet.cells():
@@ -636,7 +633,9 @@ def _load_sheet(
             continue
         where = CellRef(s.name, cell.row, cell.column)
         if f.kind == "shared" and f.text is None:
-            dependents.append((row, col, f.si or 0, cached))
+            dependents.append(
+                (row, col, f.si or 0, cached, f.attributes.get("ca") in ("1", "true"))
+            )
             continue
         box = _box(f.ref) if f.kind in ("array", "dataTable") and f.ref else None
         dynamic = f.kind == "array" and cell.cm is not None and cell.cm in dynamic_cm
@@ -657,6 +656,8 @@ def _load_sheet(
                 report.refused[where] = str(exc)
                 s.set(row, col, BLANK if cached is None else cached)
                 continue
+            marked = f.attributes.get("ca") in ("1", "true")
+            _volatile_seen(engine, seen, tid, f.text, marked)
             engine.set_formula(
                 index,
                 row,
@@ -666,6 +667,8 @@ def _load_sheet(
                 stale=full,
                 array=(dynamic, box),
             )
+            if marked and seen.marked_stale:
+                seen.marked.append(node(index, row, col))
             boxes.append((*box, node(index, row, col)))
             continue
         # Whether Excel refuses a formula depends only on its text outside the references, so
@@ -686,20 +689,40 @@ def _load_sheet(
             continue
         if f.kind == "shared" and f.si is not None:
             masters[f.si] = tid
+        marked = f.attributes.get("ca") in ("1", "true")
+        _volatile_seen(engine, seen, tid, f.text, marked)
         engine.set_formula(index, row, col, template=tid, cached=cached, stale=full)
-        if engine.iterate and f.attributes.get("ca") in ("1", "true"):
+        if marked and seen.marked_stale:
+            seen.marked.append(node(index, row, col))
+        if engine.iterate and marked:
             engine.calc_always.add(node(index, row, col))
     s.hidden_rows = frozenset(r - 1 for r, f in sheet.rows.items() if f.hidden)
     # filterMode only decides whether SUBTOTAL leaves out hidden rows: with none hidden it changes
     # nothing, and reading it costs xlio a second parse of the part's head
     s.filter_mode = bool(s.hidden_rows) and sheet.properties.filter_mode
-    for row, col, si, cached in dependents:
+    for row, col, si, cached, marked in dependents:
         master = masters.get(si)
         if master is None:  # no master in the file: keep the value, as there is no formula
             if cached is not None:
                 s.set(row, col, cached)
             continue
         engine.set_formula(index, row, col, template=master, cached=cached, stale=full)
+        if marked and seen.marked_stale:
+            seen.marked.append(node(index, row, col))
+
+
+def _volatile_seen(engine: Engine, seen: _Formulas, tid: int, text: str, marked: bool) -> None:
+    """Note a formula cell that calls a volatile function in its own text without ``ca="1"``.
+
+    Only cells holding their text are looked at (a shared formula's master, not its dependents),
+    as ``RecalcCheck.add`` sees them.
+    """
+    if marked or seen.own_unmarked or not engine.templates[tid].volatile:
+        return
+    own = seen.own.get(tid)
+    if own is None:
+        own = seen.own[tid] = engine.volatility.own(text)
+    seen.own_unmarked = own
 
 
 def _cell(ref: str) -> tuple[int, int]:

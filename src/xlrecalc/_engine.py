@@ -39,7 +39,8 @@ from xlrecalc._formula._codegen import EXTERNAL, RefSpec
 from xlrecalc._formula._fastkey import raw_key, translate
 from xlrecalc._formula._prefixes import PREFIXES
 from xlrecalc._formula._template import Axis
-from xlrecalc._functions import REGISTRY, SPECS
+from xlrecalc._functions import REGISTRY
+from xlrecalc._opening import Volatility
 from xlrecalc._ops import Ops
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef, Report
@@ -54,7 +55,6 @@ NAME, REF, VALUE = ErrorValue.NAME, ErrorValue.REF, ErrorValue.VALUE
 SPILL, CALC = ErrorValue("#SPILL!"), ErrorValue("#CALC!")
 ITERATION_LIMIT = "iterative calculation past ReadLimits.max_iteration_evaluations"
 ITERATION_UNREAD = "iterative calculation reading a cell its pass did not evaluate"
-_VOLATILE = frozenset(n for n, s in SPECS.items() if s.volatile)
 
 
 def node(sheet: int, row: int, col: int) -> int:
@@ -232,6 +232,7 @@ class Engine:
         self.checked = _CheckedCells(self)
         self._strict = False  # every read checked (a formula on a static cycle, §6.3)
         self._volatile: set[int] = set()  # formula cells of volatile templates
+        self._volatility: Volatility | None = None  # from the names, rebuilt when one changes
         self._hold_volatile = False  # the load's own changes do not make them stale (manual)
         self._changed = False  # a cell changed since volatile cells were last made stale
         # Cells on a cycle or depending on one (§7.2), each with whether it holds a cached value,
@@ -316,6 +317,7 @@ class Engine:
 
     def define_name(self, name: str, text: str, scope: int | None = None) -> None:
         self.names[(scope, name.casefold())] = text
+        self._volatility = None
         self._name_templates.clear()
         self._index = None
 
@@ -336,6 +338,16 @@ class Engine:
             tid = self._parsed_template(text, row, col, array_mode)
             self._raw_ids[raw] = tid
         return tid
+
+    @property
+    def volatility(self) -> Volatility:
+        """Which formulas are volatile, given the names defined so far (``_volatile``).
+
+        A template's flag is taken when it is compiled: names are defined before formulas.
+        """
+        if self._volatility is None:
+            self._volatility = Volatility((name, text) for (_, name), text in self.names.items())
+        return self._volatility
 
     def _parsed_template(self, text: str, row: int, col: int, array_mode: bool = False) -> int:
         formula = parse(text)
@@ -368,7 +380,7 @@ class Engine:
             compiled.fn,
             compiled.refs,
             compiled.calls,
-            bool(compiled.calls & _VOLATILE),
+            self.volatility(formula.text()),
             frozenset(unsupported),
             "SUBTOTAL" in compiled.calls,
             (formula.text(), row, col),

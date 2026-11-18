@@ -7,7 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `RecalcCheck`: whether `load` would compute any formula of a workbook (`"all"`, `"some"` or `"none"`), without
+  building an engine. It reads only the workbook part, which alone decides most files, and is then fed the formula
+  cells the caller reads (`add`, then `finish`), as `hashlib`'s objects are fed. Its answer comes from the same rule
+  as `load`'s.
+
 ### Fixed
+- A load under `recalc_on_load="excel"` of a file Excel saved with a volatile function recomputes what Excel
+  recomputes on opening, the cells Excel marked `ca="1"` (every volatile cell and every cell depending on one), and
+  keeps the other cached values; it recomputed every formula (capture `volatile_names`: 18 variants, Excel 16.115).
+  A volatile function in a cell without the mark, as another program may write it, still recomputes every formula,
+  as in Excel. Manual calculation does the same when saving.
+- A formula volatile only through a defined name (`N` = `OFFSET(...)`, a chain of names, a `LAMBDA` name calling
+  `NOW()`) counts as volatile: `"never"` computes it, as it computes `=OFFSET(...)`; it kept its cached value.
 - `CODE` of a C1 control character (U+0080 to U+009F) is its code, 128 to 159, as in Excel; it was 95, the code of
   a character outside Mac OS Roman. `CLEAN` removes those characters as well as the codes below 32, as Excel does; it
   kept them (captures `codepage`, `clean_controls`).

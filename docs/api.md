@@ -5,6 +5,9 @@
 
 .. autofunction:: xlrecalc.load
 
+.. autoclass:: xlrecalc.RecalcCheck
+   :members:
+
 .. autofunction:: xlrecalc.evaluate
 
 .. autoclass:: xlrecalc.Formula

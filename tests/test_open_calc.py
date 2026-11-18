@@ -19,7 +19,7 @@ import pytest
 import xlrecalc
 from tests.test_captures import same
 from tests.xlsx_files import package
-from xlrecalc._load import VERIFIED_CALC_ID
+from xlrecalc._opening import VERIFIED_CALC_ID
 from xlrecalc._values import ErrorValue
 
 CAPTURE = Path(__file__).with_name("captures") / "open_calc.tsv"

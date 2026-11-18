@@ -64,6 +64,7 @@ def test_public_names():
             "PackageError",
             "Quirks",
             "ReadLimits",
+            "RecalcCheck",
             "Reference",
             "Report",
             "UnsupportedError",

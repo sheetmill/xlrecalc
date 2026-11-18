@@ -62,9 +62,10 @@ so a value xlrecalc got wrong never persists in what Excel shows (`full_calc_on_
 saves the file without that request, as Excel saves it).
 
 Which formulas it computes follows what Excel does on opening the file: every formula of a file
-Excel recalculates on opening (one openpyxl wrote, one an older Excel saved, one asking for it or
-holding a volatile function), and otherwise only those without a cached value and what depends
-on them. `recalc_on_load="always"` computes every formula; `"never"` trusts every cached value.
+Excel recalculates on opening (one openpyxl wrote, one an older Excel saved, one asking for it),
+and otherwise only those without a cached value, those Excel recalculates on opening (volatile
+cells, marked `ca="1"`), and what depends on them. `RecalcCheck` gives the same answer from the
+formulas a caller reads, without building an engine. `recalc_on_load="always"` computes every formula; `"never"` trusts every cached value.
 
 ### Functions newer than Excel 2007, written with openpyxl
 
