@@ -28,13 +28,15 @@ def recalculate(
 ) -> Report:
     """Recalculate a workbook and write the results into the file as its cached values.
 
-    Readers that take cached values, such as pandas and openpyxl's data-only mode, then see
-    the results. Formulas are evaluated as Excel evaluates them on opening the file and saving it
+    Readers that take cached values, such as pandas and openpyxl's data-only mode, then see the
+    results. Formulas are evaluated as Excel evaluates them on opening the file and saving it
     (``recalc_on_load``, as :func:`load`): every one in a file Excel recalculates in full (one
-    openpyxl wrote, for instance); otherwise those without a cached value, the cells Excel marked
-    ``ca="1"`` (volatile cells and their dependents), and what depends on a changed value. Only
-    the cached values of formula cells whose value changed are rewritten; every other part of
-    the file is copied byte for byte.
+    openpyxl wrote, for instance); otherwise those without a cached value, the cells Excel
+    marked ``ca="1"`` (volatile cells and their dependents), and what depends on a changed
+    value. In manual calculation it computes what Excel recalculates when it saves, where
+    :func:`load` keeps every cached value, as Excel shows them on opening. Only the cached
+    values of formula cells whose value changed are rewritten; every other part of the file is
+    copied byte for byte.
 
     Args:
         source: The xlsx file.

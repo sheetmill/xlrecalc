@@ -185,3 +185,24 @@ def test_result_before_finish_and_add_after() -> None:
     assert xlrecalc.RecalcCheck(io.BytesIO(old)).result == "all"  # decided by the file alone
     with pytest.raises(ValueError, match="recalc_on_load"):
         xlrecalc.RecalcCheck(io.BytesIO(old), recalc_on_load="sometimes")  # type: ignore[arg-type]
+
+
+def test_manual_calculation_load_keeps_and_recalculate_computes(tmp_path: Path) -> None:
+    """Manual calculation: ``load`` keeps every cached value, as Excel shows them on opening;
+    ``recalculate``, which saves, writes what Excel's save recalculates, the cells marked
+    ``ca="1"`` (capture ``volatile_names``, ``manual_rand_in_cell``)."""
+    row = next(r for r in _rows() if r[0] == "manual_rand_in_cell")
+    assert 'calcMode="manual"' in row[4]
+    assert 'ca="1"' in row[5]
+    data = _workbook(row)
+    loaded = xlrecalc.load(io.BytesIO(data))
+    assert {ref: loaded.value(ref) for ref in REFS} == PLANTED
+    path = tmp_path / "manual.xlsx"
+    path.write_bytes(data)
+    xlrecalc.recalculate(path, full_calc_on_load=False)
+    with xlio.open(path) as book:  # the cached values as written, not computed again
+        written = {f"A{c.row}": c.value for c in book.sheets[0].cells() if c.formula is not None}
+    assert written == {"A2": 999.0, "A3": 6.0, "A4": 7.0}
+    assert _numbers(row[8]) == {"A1": 2.0, "A2": 999.0, "A3": 6.0, "A4": 7.0}  # Excel's saved copy
+    assert _checked(data) == "none"
+    assert _checked(data, saving=True) == "some"

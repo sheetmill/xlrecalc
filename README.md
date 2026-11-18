@@ -65,8 +65,10 @@ Which formulas it computes follows what Excel does on opening the file (`recalc_
 the default). Every formula, when the file is one Excel recalculates in full: one openpyxl wrote,
 one an older Excel saved, one asking for a full calculation, or one with a volatile function in a
 cell Excel did not mark `ca="1"`. Otherwise, in a file Excel saved, the cells it marked `ca="1"`
-(every volatile cell and every cell depending on one), and the cached values of the rest are kept;
-in manual calculation every cached value is kept. `recalc_on_load="always"` computes every
+(every volatile cell and every cell depending on one), and the cached values of the rest are kept.
+In manual calculation Excel keeps every cached value on opening and recalculates when it saves:
+`load` keeps a manual-calculation file's cached values, and `recalculate`, which saves, computes
+what Excel recalculates when it saves one. `recalc_on_load="always"` computes every
 formula; `"never"` keeps every cached value but the volatile formulas'. In every mode a formula
 without a cached value is computed, and so is what depends on a cell whose value changes.
 `RecalcCheck` says whether a load would compute any formula, from the formulas a caller reads,

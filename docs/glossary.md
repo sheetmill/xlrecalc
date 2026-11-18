@@ -15,10 +15,13 @@ Recalculation on opening; a trusting and an evaluating load
 : Excel recalculates every formula of some files when it opens them (no calculation settings, a
   request to recalculate, a calculation by an older Excel, a file Excel did not save, a volatile
   function in a cell without Excel's `ca="1"` mark); of the others it recalculates the cells so
-  marked (volatile cells and what depends on them) and shows the rest's cached values; in manual
-  calculation it shows every cached value. `load` and `recalculate` follow the same rule by
-  default (`recalc_on_load="excel"`): a trusting load keeps the file's cached values and computes
-  what Excel recalculates and what changes, an evaluating load computes every formula.
+  marked (volatile cells and what depends on them) and shows the rest's cached values. In manual
+  calculation it shows every cached value on opening and recalculates as above when it saves.
+  `load` follows the rule for opening and `recalculate`, which saves, the rule for saving, by
+  default (`recalc_on_load="excel"`): `load` keeps a manual-calculation file's cached values,
+  `recalculate` computes what Excel recalculates when saving it. A trusting load keeps the file's
+  cached values and computes what Excel recalculates and what changes, an evaluating load
+  computes every formula.
   `recalc_on_load="always"` evaluates every file; `"never"` keeps every cached value but the
   volatile formulas'. In every mode a formula without a cached value is computed.
 
