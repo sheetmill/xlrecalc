@@ -5,9 +5,11 @@ evidence: captured rows that call the function (a row counts for every function 
 its formula), how many match Excel, exactly or within the function's declared
 tolerance (in units in the last place, or relative for the iterative functions and
 the beta, gamma, chi-squared, F and t distributions), and how many are listed
-deviations with their reasons (`QUIRKS.md`, `tests/test_captures.py`). Whether a
-matching row is exact or within its tolerance depends on the platform's math library,
-so the page counts them together and is the same on every platform.
+deviations with their reasons (`QUIRKS.md`, `tests/test_captures.py`,
+`tests/test_dynamic_arrays.py`). A random draw is listed, held by its properties,
+never counted as matching by chance. Whether a matching row is exact or within its
+tolerance depends on the platform's math library, so the page counts them together
+and is the same on every platform.
 
 452 implemented, 17 partial, 54 absent.
 
@@ -394,7 +396,7 @@ so the page counts them together and is the same on every platform.
 | `QUOTIENT` | math | implemented | 207 | 207 | 0 |  |  |
 | `RADIANS` | math | implemented | 30 | 30 | 0 |  |  |
 | `RAND` | math | implemented | 4 | 3 | 1 |  |  |
-| `RANDARRAY` | math | implemented | 27 | 17 | 4 |  |  |
+| `RANDARRAY` | math | implemented | 27 | 17 | 10 |  |  |
 | `RANDBETWEEN` | math | implemented | 8 | 6 | 2 |  |  |
 | `RANK` | statistical | implemented | 20 | 20 | 0 |  |  |
 | `RANK.AVG` | statistical | implemented | 20 | 20 | 0 |  |  |
