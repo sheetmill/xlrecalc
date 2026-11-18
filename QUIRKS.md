@@ -203,8 +203,11 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
   pair of 125 characters, capture `collate_chars`), 40 words (`collate_words`) and the pairs of
   `modern`, on Excel 16.115 for Mac: one consistent order, followed exactly. Other characters (another
   script, a symbol outside Latin-1) sort after the letters by code point and controls first, our
-  choice, so they may not sort as Excel sorts them. Excel for Windows' order has not been captured
-  and may differ.
+  choice, so they may not sort as Excel sorts them. Sorting, ordered criteria and approximate
+  lookups follow the same order; a criterion's equality (`COUNTIF(r,"ß")` counts `ss`) and
+  `XMATCH`'s binary search follow `=`, while an exact `MATCH`, `VLOOKUP` or `XLOOKUP` scan ignores
+  case only (`MATCH("ß",r,0)` passes over `ss`; capture `collate_users`). Excel for Windows'
+  order may differ.
 - A row off Excel's grid in a file (`r="99999999999"`): Excel opens the file and drops the cell
   (capture `value_forms`), though it refuses rows 0 and 1048577; the reader refuses every row
   off the grid with a `PackageError`.

@@ -104,7 +104,7 @@ and is the same on every platform.
 | `COUNT` | statistical | implemented | 16 | 16 | 0 |  |  |
 | `COUNTA` | statistical | implemented | 16 | 16 | 0 |  |  |
 | `COUNTBLANK` | statistical | implemented | 6 | 6 | 0 |  |  |
-| `COUNTIF` | math | implemented | 106 | 106 | 0 |  |  |
+| `COUNTIF` | math | implemented | 154 | 154 | 0 |  |  |
 | `COUNTIFS` | math | implemented | 50 | 50 | 0 |  |  |
 | `COUPDAYBS` | financial | implemented | 95 | 95 | 0 |  |  |
 | `COUPDAYS` | financial | implemented | 109 | 108 | 1 |  |  |
@@ -262,7 +262,7 @@ and is the same on every platform.
 | `IMSUB` | engineering | implemented | 69 | 69 | 0 |  |  |
 | `IMSUM` | engineering | implemented | 71 | 71 | 0 |  |  |
 | `IMTAN` | engineering | implemented | 34 | 32 | 2 |  |  |
-| `INDEX` | lookup and reference | implemented | 463 | 453 | 10 |  |  |
+| `INDEX` | lookup and reference | implemented | 487 | 477 | 10 |  |  |
 | `INDIRECT` | lookup and reference | implemented | 14 | 14 | 0 |  |  |
 | `INFO` | | absent | | | | | |
 | `INT` | math | implemented | 18 | 17 | 1 |  |  |
@@ -309,7 +309,7 @@ and is the same on every platform.
 | `LOWER` | text | implemented | 22 | 22 | 0 |  |  |
 | `MAKEARRAY` | logical | implemented | 12 | 12 | 0 |  |  |
 | `MAP` | logical | implemented | 16 | 16 | 0 |  |  |
-| `MATCH` | lookup and reference | implemented | 94 | 94 | 0 |  |  |
+| `MATCH` | lookup and reference | implemented | 142 | 142 | 0 |  |  |
 | `MAX` | statistical | implemented | 16 | 16 | 0 |  |  |
 | `MAXA` | statistical | implemented | 37 | 37 | 0 |  |  |
 | `MAXIFS` | math | implemented | 86 | 86 | 0 |  |  |
@@ -418,7 +418,7 @@ and is the same on every platform.
 | `ROUNDDOWN` | math | implemented | 677 | 677 | 0 |  |  |
 | `ROUNDUP` | math | implemented | 677 | 677 | 0 |  |  |
 | `ROW` | lookup and reference | implemented | 8 | 8 | 0 |  |  |
-| `ROWS` | lookup and reference | implemented | 16 | 16 | 0 |  |  |
+| `ROWS` | lookup and reference | implemented | 17 | 17 | 0 |  |  |
 | `RRI` | financial | implemented | 644 | 644 | 0 | 4 ulps |  |
 | `RSQ` | statistical | implemented | 24 | 24 | 0 | 4 ulps |  |
 | `RTD` | | absent | | | | | |
@@ -441,7 +441,7 @@ and is the same on every platform.
 | `SLN` | financial | implemented | 40 | 40 | 0 |  |  |
 | `SLOPE` | statistical | implemented | 24 | 24 | 0 | 4 ulps |  |
 | `SMALL` | statistical | implemented | 31 | 30 | 1 |  |  |
-| `SORT` | lookup and reference | implemented | 40 | 40 | 0 |  |  |
+| `SORT` | lookup and reference | implemented | 136 | 136 | 0 |  |  |
 | `SORTBY` | lookup and reference | implemented | 25 | 25 | 0 |  |  |
 | `SQRT` | math | implemented | 17 | 17 | 0 |  |  |
 | `SQRTPI` | math | implemented | 30 | 30 | 0 |  |  |
@@ -503,7 +503,7 @@ and is the same on every platform.
 | `TYPE` | information | implemented | 59 | 58 | 1 |  |  |
 | `UNICHAR` | text | implemented | 689 | 689 | 0 |  |  |
 | `UNICODE` | text | implemented | 285 | 285 | 0 |  |  |
-| `UNIQUE` | lookup and reference | implemented | 34 | 34 | 0 |  |  |
+| `UNIQUE` | lookup and reference | implemented | 35 | 35 | 0 |  |  |
 | `UPPER` | text | implemented | 23 | 23 | 0 |  |  |
 | `USDOLLAR` | text | implemented | 197 | 197 | 0 |  |  |
 | `VALUE` | text | implemented | 149 | 149 | 0 |  |  |
@@ -515,7 +515,7 @@ and is the same on every platform.
 | `VARP` | statistical | implemented | 37 | 37 | 0 | 4 ulps |  |
 | `VARPA` | statistical | implemented | 37 | 37 | 0 | 4 ulps |  |
 | `VDB` | financial | implemented | 504 | 422 | 82 | 4 ulps |  |
-| `VLOOKUP` | lookup and reference | implemented | 68 | 68 | 0 |  |  |
+| `VLOOKUP` | lookup and reference | implemented | 92 | 92 | 0 |  |  |
 | `VSTACK` | lookup and reference | implemented | 24 | 24 | 0 |  |  |
 | `WEBSERVICE` | | absent | | | | | |
 | `WEEKDAY` | date and time | implemented | 75 | 75 | 0 |  |  |
@@ -528,7 +528,7 @@ and is the same on every platform.
 | `WRAPROWS` | lookup and reference | implemented | 33 | 33 | 0 |  |  |
 | `XIRR` | financial | implemented | 90 | 55 | 35 | 1e-09 relative |  |
 | `XLOOKUP` | lookup and reference | partial | 325 | 324 | 1 |  | the regular-expression match mode is not implemented |
-| `XMATCH` | lookup and reference | partial | 463 | 462 | 1 |  | the regular-expression match mode is not implemented |
+| `XMATCH` | lookup and reference | partial | 487 | 486 | 1 |  | the regular-expression match mode is not implemented |
 | `XNPV` | financial | implemented | 31 | 31 | 0 |  |  |
 | `XOR` | logical | implemented | 128 | 128 | 0 |  |  |
 | `YEAR` | date and time | implemented | 37 | 37 | 0 |  |  |

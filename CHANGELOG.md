@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   § ¶` among the marks, `æ`, `ð`, `ø`, `œ`, `þ` and `µ` as letters of their own, `ª` and `º` equal to `a` and `o`;
   they were ordered by code point after the letters (captures `collate_chars`, `collate_words`: 23,375 and 2,380 rows,
   where 1,918 and 84 differed).
+- A criterion's text equality is the `=` operator's, as in Excel: `COUNTIF(r,"ß")` counts `ss`; it counted only `ß`.
+  An exact `MATCH`, `VLOOKUP` or `XLOOKUP` scan ignores case only, as in Excel: `MATCH("ß",r,0)` passes over `ss`;
+  it found it. `XMATCH` and `XLOOKUP`'s binary search finds the first of a run of equal entries and compares as `=`
+  does, as in Excel; it could find a later one (capture `collate_users`: 169 rows, where 5 differed).
 
 ## [0.3.0] - 2026-11-17
 

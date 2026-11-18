@@ -6,11 +6,15 @@ though ``ErrorValue`` equals its text for interoperation (§4.2). Captured in
 ``tests/captures/compare.tsv``:
 
 - operators order numbers < text < logicals; text compares without case (``casefold``, so
-  ``"straße"="STRASSE"``), marks before digits before letters (capture ``modern``); a blank
+  ``"straße"="STRASSE"``), marks before digits before letters (captures ``modern``,
+  ``collate_chars``, ``collate_words``); a blank
   is 0, ``""`` or FALSE by what it meets; an error operand
   gives that error;
 - with ``comparison_rounding``, numbers that agree to 15 significant digits are equal, for the
   operators and for criteria; exact lookups (``MATCH``, ``VLOOKUP``) compare exactly;
+- an exact lookup's scan ignores case only (``lower``: ``"ß"`` does not find ``"ss"``), while
+  a criterion's equality is ``=``'s (``COUNTIF(r,"ß")`` counts ``"ss"``; capture
+  ``collate_users``);
 - a lookup never matches a blank cell; ``""`` matches an empty text;
 - a criterion text spelled like an error code (``"#N/A"``, ``"#n/a"``) matches that error,
   never the text; ``"="`` matches blank cells only, ``"<>"`` every cell that is not blank,
@@ -154,7 +158,9 @@ def compare(a: Value, b: Value, op: Op, quirks: Quirks = Quirks.EXCEL) -> bool |
 def lookup_equal(lookup: Value, cell: Value) -> bool:
     """Whether an exact lookup (``MATCH`` type 0, ``VLOOKUP`` FALSE) matches a cell.
 
-    The caller has already returned an error lookup value as the result.
+    Text ignores case only, without ``=``'s folding: ``MATCH("ß",r,0)`` passes over ``"ss"``
+    (capture ``collate_users``). The caller has already returned an error lookup value as the
+    result.
     """
     if cell is BLANK or isinstance(cell, ErrorValue):
         return False
@@ -162,9 +168,7 @@ def lookup_equal(lookup: Value, cell: Value) -> bool:
         return isinstance(lookup, bool) and isinstance(cell, bool) and lookup == cell
     if isinstance(lookup, str) or isinstance(cell, str):
         return (
-            isinstance(lookup, str)
-            and isinstance(cell, str)
-            and (lookup.casefold() == cell.casefold())
+            isinstance(lookup, str) and isinstance(cell, str) and (lookup.lower() == cell.lower())
         )
     return float(lookup) == float(cell)  # type: ignore[arg-type]
 
@@ -192,12 +196,13 @@ def lookup_key(value: Value) -> tuple[str, object]:
     if isinstance(value, bool):
         return ("logical", value)
     if isinstance(value, str):
-        return ("text", value.casefold())
+        return ("text", value.lower())
     if isinstance(value, float):
         return ("number", value)
     return ("blank", None)
 
 
+_WILD = re.compile(r"[*?~]")
 _CRITERION = re.compile(r"(<=|>=|<>|=|<|>)?(.*)", re.S)
 
 
@@ -254,6 +259,8 @@ def _equal_to(target: Value, quirks: Quirks) -> Callable[[Value], bool]:
     if isinstance(target, bool):
         return lambda cell: isinstance(cell, bool) and cell == target
     if isinstance(target, str):
+        if not _WILD.search(target):  # equality as ``=`` has it: ``"ß"`` counts ``"ss"``
+            return _text_equal_to(target)
         pattern = wildcard(utf16_units(target))
         return lambda cell: (
             isinstance(cell, str) and pattern.fullmatch(utf16_units(cell)) is not None
@@ -264,6 +271,25 @@ def _equal_to(target: Value, quirks: Quirks) -> Callable[[Value], bool]:
         and not isinstance(cell, bool)
         and numbers_equal(cell, number, quirks)
     )
+
+
+def _text_equal_to(target: str) -> Callable[[Value], bool]:
+    """``cell = target`` for text, as ``compare`` has it, with the target folded once."""
+    folded = target.casefold()
+    ascii_target = folded.isascii()
+    key = COLLATION(folded)
+
+    def test(cell: Value) -> bool:
+        if not isinstance(cell, str):
+            return False
+        text = cell.casefold()
+        if text == folded:
+            return True
+        if ascii_target and text.isascii():  # ASCII keys are equal only when the texts are
+            return False
+        return COLLATION(text) == key
+
+    return test
 
 
 def _ordered(target: Value, op: str, quirks: Quirks) -> Callable[[Value], bool]:

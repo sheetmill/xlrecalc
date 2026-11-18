@@ -463,8 +463,12 @@ def _x_rank(v: Any) -> int:
     return 0 if isinstance(v, float) else 3
 
 
-def _x_compare(key: Any, v: Any, ctx: Context) -> int | None:
-    """-1, 0 or 1 for a cell against the key; ``None`` for an error, which no search takes."""
+def _x_compare(key: Any, v: Any, ctx: Context, ordered: bool = False) -> int | None:
+    """-1, 0 or 1 for a cell against the key; ``None`` for an error, which no search takes.
+
+    A scan finds text equal as ``lookup_equal`` has it (``"ß"`` is not ``"ss"``); a bisection
+    (``ordered``) as ``=`` has it, where they are equal (capture ``collate_users``).
+    """
     if isinstance(v, ErrorValue) or v is BLANK:
         return None
     if key is BLANK:
@@ -472,8 +476,14 @@ def _x_compare(key: Any, v: Any, ctx: Context) -> int | None:
     a, b = _x_rank(v), _x_rank(key)
     if a != b:
         return -1 if a < b else 1
+    if ordered:
+        return 0 if compare(v, key, "=", ctx.quirks) is True else _x_below(key, v, ctx)
     if lookup_equal(key, v):
         return 0
+    return _x_below(key, v, ctx)
+
+
+def _x_below(key: Any, v: Any, ctx: Context) -> int:
     return -1 if compare(v, key, "<", ctx.quirks) is True else 1
 
 
@@ -522,15 +532,20 @@ def _x_search(
 def _x_binary(
     key: Any, cells: list[tuple[int, Any]], match: int, search: int, ctx: Context
 ) -> int | None:
-    """Bisection over the cells, sorted ascending (``search`` 2) or descending (-2)."""
+    """Bisection over the cells, sorted ascending (``search`` 2) or descending (-2).
+
+    Of a run of cells equal to the key it finds the first, as Excel does (``XMATCH("a",...,0,2)``
+    over ``a``, ``A`` is 1; capture ``collate_users``): an equal cell narrows to its left.
+    """
     lo, hi = 0, len(cells) - 1
-    below = above = None
+    below = above = equal = None
     while lo <= hi:
         mid = (lo + hi) // 2
         i, v = cells[mid]
-        c = _x_compare(key, v, ctx)
+        c = _x_compare(key, v, ctx, ordered=True)
         if c == 0:
-            return i
+            equal, hi = i, mid - 1
+            continue
         step_up = (c is None or c < 0) if search == 2 else (c is not None and c > 0)
         if c is not None:
             if c < 0:
@@ -542,6 +557,8 @@ def _x_binary(
             lo = mid + 1
         else:
             hi = mid - 1
+    if equal is not None:
+        return equal
     return below if match == -1 else above if match == 1 else None
 
 
