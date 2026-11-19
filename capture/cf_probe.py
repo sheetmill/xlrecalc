@@ -39,10 +39,9 @@ from pathlib import Path
 
 from capture.edition import edition_line
 from capture.excel_watch import osascript_or_exit, preflight
-from capture.open_calc_probe import saved_values
-from capture.writeback_probe import CONTAINER, rewrite
 
 HERE = Path(__file__).resolve().parent
+CONTAINER = Path.home() / "Library/Containers/com.microsoft.Excel/Data/Documents/xlrecalc"
 OUT = HERE / "build" / "cf_probe.out"
 CAPTURE = HERE.parent / "tests" / "captures" / "cf_rules.tsv"
 RS, US = "\x1e", "\x1f"
@@ -568,6 +567,7 @@ def volatile_open(log) -> list[str]:  # type: ignore[no-untyped-def]
     import openpyxl
     from openpyxl.formatting.rule import Rule as XlRule
 
+    from capture.open_calc_probe import saved_values
     from capture.volatile_name_probe import cell_xml
 
     rows = []
@@ -627,6 +627,7 @@ def volatile_open(log) -> list[str]:  # type: ignore[no-untyped-def]
 
 def _plant(src: Path, dst: Path, values: dict[str, str]) -> None:
     """A copy with each named cell's ``<v>`` text replaced, the rest as Excel wrote it."""
+    from capture.writeback_probe import rewrite
 
     def edit(xml: str) -> str:
         for ref, value in values.items():
