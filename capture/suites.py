@@ -4613,6 +4613,110 @@ def convert_pairs() -> list[Case]:
     ]
 
 
+# Whole columns and rows ----------------------------------------------------------------------
+#
+# References to whole columns and rows, where the cells past the data count: sizes, blanks counted,
+# reads past the last value, OFFSET, an empty column, and whole rows. Formulas are plain (not array
+# formulas), so a whole column becomes an array only where a function takes one. The data: Z1:Z10
+# (text and numbers, Z6 blank), AA1:AA10 (1 to 10), one value at AB1048576, AC empty, and row 1000
+# in BA:BE (below the cases).
+
+_WHOLE_TABLE: dict[str, Input] = {
+    **{f"Z{r}": v for r, v in enumerate(["a", 2.0, "b", 4.0, "c", None, 7.0, "d", 9.0, "e"], 1)
+       if v is not None},
+    **{f"AA{r}": float(r) for r in range(1, 11)},
+    "AB1048576": 5.0,
+    "BA1000": 1.0,
+    "BB1000": "x",
+    "BD1000": 3.0,
+    "BE1000": True,
+}  # fmt: skip
+
+
+def whole_columns() -> list[Case]:
+    xm = "_xlfn.XMATCH"
+    forms = [
+        # sizes
+        "ROWS(Z:Z)",
+        "ROWS(Z:Z*1)",
+        'COLUMNS(Z:AA&"")',
+        "COLUMNS(1000:1000)",
+        "ROWS(1000:1000)",
+        # blanks counted
+        "COUNTBLANK(Z:Z)",
+        'SUMPRODUCT(--(Z:Z=""))',
+        "SUMPRODUCT(--ISBLANK(Z:Z))",
+        'COUNTIF(Z:Z,"")',
+        'COUNTIF(Z:Z,"<>")',
+        "SUMPRODUCT(--ISNUMBER(Z:Z))",
+        'SUMPRODUCT(--(Z:AA=""))',
+        'SUMPRODUCT(--(AB:AB<>""))',
+        # past the last value
+        "INDEX(Z:Z,20)",
+        "INDEX(Z:Z,1048576)",
+        "INDEX(Z:Z*1,1048576)",
+        'INDEX(Z:Z&"",20)',
+        'MATCH("",Z:Z&"",0)',
+        'MATCH(TRUE,INDEX(Z:Z="",0),0)',
+        f'{xm}("",Z:Z&"",0,-1)',
+        'LOOKUP(2,1/(Z:Z<>""),Z:Z)',
+        'LOOKUP(2,1/(AB:AB<>""),AB:AB)',
+        'LOOKUP(2,1/(AB:AB<>""),ROW(AB:AB))',
+        "MATCH(5,AB:AB,0)",
+        "INDEX(AB:AB,1048576)",
+        "SUMPRODUCT(AB:AB*1)",
+        "SUMPRODUCT((AA:AA>5)*AA:AA)",
+        'SUMPRODUCT((Z:Z="b")*AA:AA)',
+        "MATCH(0,AA:AA*1,0)",
+        f"{xm}(0,AA:AA*1,0,-1)",
+        # extremes over the cells past the data
+        "SUMPRODUCT(MIN(AA:AA*1))",
+        "SUMPRODUCT(MAX(-AA:AA))",
+        "SUMPRODUCT(MAX(AA:AA))",
+        'SUMPRODUCT(AND(Z:Z<>"x"))',
+        'SUMPRODUCT(OR(Z:Z=""))',
+        # OFFSET from a whole column
+        "ROWS(OFFSET(Z:Z,0,1))",
+        "OFFSET(Z:Z,1,0)",
+        "ROWS(OFFSET(Z:Z,1,0))",
+        "SUM(OFFSET(Z:Z,0,1))",
+        "ROWS(OFFSET(Z:Z,0,0,10))",
+        "SUM(OFFSET(AA1,0,0,1048576))",
+        "ROWS(OFFSET(AA1,1,0,1048576))",
+        # an empty column
+        "COUNTBLANK(AC:AC)",
+        "COUNTA(AC:AC)",
+        'SUMPRODUCT((AC:AC="")*1)',
+        'SUMPRODUCT(--(AC:AC<>""))',
+        "MAX(AC:AC)",
+        "SUMPRODUCT(MAX(AC:AC*1))",
+        "INDEX(AC:AC,1)",
+        "MATCH(0,AC:AC,0)",
+        "MATCH(0,AC:AC*1,0)",
+        'LOOKUP(2,1/(AC:AC<>""),AC:AC)',
+        # whole rows
+        'SUMPRODUCT(--(1000:1000<>""))',
+        'SUMPRODUCT(--(1000:1000=""))',
+        "COUNTBLANK(1000:1000)",
+        "SUMPRODUCT(--ISNUMBER(1000:1000))",
+        'LOOKUP(2,1/(1000:1000<>""),1000:1000)',
+        'SUMPRODUCT(--(BA:BE<>""))',
+        'MATCH("x",1000:1000,0)',
+        "INDEX(1000:1000,16384)",
+    ]
+    cases = [Case("whole", f) for f in forms]
+    # MATCH given one value as its lookup array (a plain formula reduces Z:Z&"" to its own row)
+    scalar = [
+        "MATCH(0,0,0)", "MATCH(1,1,0)", 'MATCH("a","a",0)', 'MATCH("","",0)', 'MATCH("",{""},0)',
+        'MATCH("",AC1,0)', 'MATCH("",AC1&"",0)', "MATCH(0,AC1*1,0)", "MATCH(1,AA1*1,0)",
+        'MATCH("a",Z1&"",0)', "MATCH(1,AA1,0)", "MATCH(TRUE,TRUE,0)", "MATCH(1,1)", "MATCH(1,1,-1)",
+        'MATCH("a",Z:Z&"",0)', "MATCH(2,AA:AA*1,0)", 'MATCH("",Z1:Z1&"",0)', 'MATCH("x","",0)',
+        'MATCH("","a",0)', 'MATCH("a","a",1)', 'MATCH("a","a",-1)', 'MATCH("a","b")',
+        'MATCH(1,"1",0)', 'MATCH(1,"a")', 'MATCH(TRUE,"TRUE",0)', 'MATCH("a",AA1:AB2,0)',
+    ]  # fmt: skip
+    return cases + [Case("match_scalar", f) for f in scalar]
+
+
 SUITES = {
     "number_text": Suite(number_text),
     "text_number": Suite(text_number),
@@ -4660,4 +4764,5 @@ SUITES = {
     "bessel_family": Suite(bessel_family),
     "convert_family": Suite(convert_family),
     "convert_pairs": Suite(convert_pairs),
+    "whole_columns": Suite(whole_columns, fixed=_WHOLE_TABLE),
 }

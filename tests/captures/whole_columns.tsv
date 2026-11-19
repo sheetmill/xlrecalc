@@ -1,0 +1,99 @@
+# suite: whole_columns
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# date_system: 1900
+# captured: 2026-11-19
+# generator: capture/suites.py:whole_columns
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# fixed: {'Z1': 'a', 'Z2': 2.0, 'Z3': 'b', 'Z4': 4.0, 'Z5': 'c', 'Z7': 7.0, 'Z8': 'd', 'Z9': 9.0, 'Z10': 'e', 'AA1': 1.0, 'AA2': 2.0, 'AA3': 3.0, 'AA4': 4.0, 'AA5': 5.0, 'AA6': 6.0, 'AA7': 7.0, 'AA8': 8.0, 'AA9': 9.0, 'AA10': 10.0, 'AB1048576': 5.0, 'BA1000': 1.0, 'BB1000': 'x', 'BD1000': 3.0, 'BE1000': True}
+# columns: suite tag case formula inputs expected_type expected_repr
+whole_columns	whole	1	ROWS(Z:Z)	()	n	1048576.0
+whole_columns	whole	2	ROWS(Z:Z*1)	()	n	1048576.0
+whole_columns	whole	3	COLUMNS(Z:AA&"")	()	n	2.0
+whole_columns	whole	4	COLUMNS(1000:1000)	()	n	16384.0
+whole_columns	whole	5	ROWS(1000:1000)	()	n	1.0
+whole_columns	whole	6	COUNTBLANK(Z:Z)	()	n	1048567.0
+whole_columns	whole	7	SUMPRODUCT(--(Z:Z=""))	()	n	1048567.0
+whole_columns	whole	8	SUMPRODUCT(--ISBLANK(Z:Z))	()	n	1048567.0
+whole_columns	whole	9	COUNTIF(Z:Z,"")	()	n	1048567.0
+whole_columns	whole	10	COUNTIF(Z:Z,"<>")	()	n	9.0
+whole_columns	whole	11	SUMPRODUCT(--ISNUMBER(Z:Z))	()	n	4.0
+whole_columns	whole	12	SUMPRODUCT(--(Z:AA=""))	()	n	2097133.0
+whole_columns	whole	13	SUMPRODUCT(--(AB:AB<>""))	()	n	1.0
+whole_columns	whole	14	INDEX(Z:Z,20)	()	n	0.0
+whole_columns	whole	15	INDEX(Z:Z,1048576)	()	n	0.0
+whole_columns	whole	16	INDEX(Z:Z*1,1048576)	()	n	0.0
+whole_columns	whole	17	INDEX(Z:Z&"",20)	()	str	''
+whole_columns	whole	18	MATCH("",Z:Z&"",0)	()	e	#VALUE!
+whole_columns	whole	19	MATCH(TRUE,INDEX(Z:Z="",0),0)	()	n	6.0
+whole_columns	whole	20	_xlfn.XMATCH("",Z:Z&"",0,-1)	()	n	1048576.0
+whole_columns	whole	21	LOOKUP(2,1/(Z:Z<>""),Z:Z)	()	str	'e'
+whole_columns	whole	22	LOOKUP(2,1/(AB:AB<>""),AB:AB)	()	n	5.0
+whole_columns	whole	23	LOOKUP(2,1/(AB:AB<>""),ROW(AB:AB))	()	n	1048576.0
+whole_columns	whole	24	MATCH(5,AB:AB,0)	()	n	1048576.0
+whole_columns	whole	25	INDEX(AB:AB,1048576)	()	n	5.0
+whole_columns	whole	26	SUMPRODUCT(AB:AB*1)	()	n	5.0
+whole_columns	whole	27	SUMPRODUCT((AA:AA>5)*AA:AA)	()	n	40.0
+whole_columns	whole	28	SUMPRODUCT((Z:Z="b")*AA:AA)	()	n	3.0
+whole_columns	whole	29	MATCH(0,AA:AA*1,0)	()	e	#N/A
+whole_columns	whole	30	_xlfn.XMATCH(0,AA:AA*1,0,-1)	()	n	1048576.0
+whole_columns	whole	31	SUMPRODUCT(MIN(AA:AA*1))	()	n	0.0
+whole_columns	whole	32	SUMPRODUCT(MAX(-AA:AA))	()	n	0.0
+whole_columns	whole	33	SUMPRODUCT(MAX(AA:AA))	()	n	10.0
+whole_columns	whole	34	SUMPRODUCT(AND(Z:Z<>"x"))	()	n	0.0
+whole_columns	whole	35	SUMPRODUCT(OR(Z:Z=""))	()	n	0.0
+whole_columns	whole	36	ROWS(OFFSET(Z:Z,0,1))	()	n	1048576.0
+whole_columns	whole	37	OFFSET(Z:Z,1,0)	()	e	#REF!
+whole_columns	whole	38	ROWS(OFFSET(Z:Z,1,0))	()	e	#REF!
+whole_columns	whole	39	SUM(OFFSET(Z:Z,0,1))	()	n	55.0
+whole_columns	whole	40	ROWS(OFFSET(Z:Z,0,0,10))	()	n	10.0
+whole_columns	whole	41	SUM(OFFSET(AA1,0,0,1048576))	()	n	55.0
+whole_columns	whole	42	ROWS(OFFSET(AA1,1,0,1048576))	()	e	#REF!
+whole_columns	whole	43	COUNTBLANK(AC:AC)	()	n	1048576.0
+whole_columns	whole	44	COUNTA(AC:AC)	()	n	0.0
+whole_columns	whole	45	SUMPRODUCT((AC:AC="")*1)	()	n	1048576.0
+whole_columns	whole	46	SUMPRODUCT(--(AC:AC<>""))	()	n	0.0
+whole_columns	whole	47	MAX(AC:AC)	()	n	0.0
+whole_columns	whole	48	SUMPRODUCT(MAX(AC:AC*1))	()	n	0.0
+whole_columns	whole	49	INDEX(AC:AC,1)	()	n	0.0
+whole_columns	whole	50	MATCH(0,AC:AC,0)	()	e	#N/A
+whole_columns	whole	51	MATCH(0,AC:AC*1,0)	()	e	#N/A
+whole_columns	whole	52	LOOKUP(2,1/(AC:AC<>""),AC:AC)	()	e	#N/A
+whole_columns	whole	53	SUMPRODUCT(--(1000:1000<>""))	()	n	4.0
+whole_columns	whole	54	SUMPRODUCT(--(1000:1000=""))	()	n	16380.0
+whole_columns	whole	55	COUNTBLANK(1000:1000)	()	n	16380.0
+whole_columns	whole	56	SUMPRODUCT(--ISNUMBER(1000:1000))	()	n	2.0
+whole_columns	whole	57	LOOKUP(2,1/(1000:1000<>""),1000:1000)	()	b	True
+whole_columns	whole	58	SUMPRODUCT(--(BA:BE<>""))	()	n	4.0
+whole_columns	whole	59	MATCH("x",1000:1000,0)	()	n	54.0
+whole_columns	whole	60	INDEX(1000:1000,16384)	()	n	0.0
+whole_columns	match_scalar	61	MATCH(0,0,0)	()	e	#N/A
+whole_columns	match_scalar	62	MATCH(1,1,0)	()	e	#N/A
+whole_columns	match_scalar	63	MATCH("a","a",0)	()	e	#VALUE!
+whole_columns	match_scalar	64	MATCH("","",0)	()	e	#VALUE!
+whole_columns	match_scalar	65	MATCH("",{""},0)	()	n	1.0
+whole_columns	match_scalar	66	MATCH("",AC1,0)	()	e	#N/A
+whole_columns	match_scalar	67	MATCH("",AC1&"",0)	()	e	#VALUE!
+whole_columns	match_scalar	68	MATCH(0,AC1*1,0)	()	e	#N/A
+whole_columns	match_scalar	69	MATCH(1,AA1*1,0)	()	e	#N/A
+whole_columns	match_scalar	70	MATCH("a",Z1&"",0)	()	e	#VALUE!
+whole_columns	match_scalar	71	MATCH(1,AA1,0)	()	n	1.0
+whole_columns	match_scalar	72	MATCH(TRUE,TRUE,0)	()	e	#N/A
+whole_columns	match_scalar	73	MATCH(1,1)	()	e	#N/A
+whole_columns	match_scalar	74	MATCH(1,1,-1)	()	e	#N/A
+whole_columns	match_scalar	75	MATCH("a",Z:Z&"",0)	()	e	#VALUE!
+whole_columns	match_scalar	76	MATCH(2,AA:AA*1,0)	()	e	#N/A
+whole_columns	match_scalar	77	MATCH("",Z1:Z1&"",0)	()	e	#VALUE!
+whole_columns	match_scalar	78	MATCH("x","",0)	()	e	#VALUE!
+whole_columns	match_scalar	79	MATCH("","a",0)	()	e	#VALUE!
+whole_columns	match_scalar	80	MATCH("a","a",1)	()	e	#VALUE!
+whole_columns	match_scalar	81	MATCH("a","a",-1)	()	e	#VALUE!
+whole_columns	match_scalar	82	MATCH("a","b")	()	e	#VALUE!
+whole_columns	match_scalar	83	MATCH(1,"1",0)	()	e	#N/A
+whole_columns	match_scalar	84	MATCH(1,"a")	()	e	#VALUE!
+whole_columns	match_scalar	85	MATCH(TRUE,"TRUE",0)	()	e	#VALUE!
+whole_columns	match_scalar	86	MATCH("a",AA1:AB2,0)	()	e	#N/A

@@ -951,6 +951,32 @@ REFUSED = (
     f"{LT}(1,1,1)",
 )
 
+# Whole columns as arrays: array-evaluated, where every cell past the data counts. Column Z is
+# empty; AA holds 8 numbers, AC a mix with a blank (AC5) and an empty text (AC12). The bare
+# whole-column array, last, cannot spill a million rows from its anchor.
+WHOLE = [
+    DynCase('SUM(IF(AC:AC="",1))'),
+    DynCase('MAX(IF(AA:AA<>"",ROW(AA:AA)))'),
+    DynCase("_xlfn.TAKE(AC:AC,12)"),
+    DynCase(f"ROWS({UNQ}(AA:AA))"),
+    DynCase(f"COUNTA({UNQ}(AC:AC))"),
+    DynCase(f'ROWS({FLT}(AC:AC,AC:AC<>""))'),
+    DynCase(f"ROWS({SRT}(AA:AA))"),
+    DynCase(f"INDEX({SRT}(AA:AA),1)"),
+    DynCase(f"INDEX({SRT}(AA:AA,,-1),1)"),
+    DynCase(f"INDEX({SRT}(AA:AA),1048576)"),
+    DynCase('SUM(--(Z:Z=""))'),
+    DynCase("MIN(AA:AA*1)"),
+    DynCase("MAX(-AA:AA)"),
+    DynCase('_xlfn.XMATCH("",AC:AC&"",0,-1)'),
+    DynCase('LOOKUP(2,1/(AC:AC<>""),AC:AC)'),
+    DynCase('ROWS(AA:AA&"")'),
+    DynCase("INDEX(AA:AA*1,1048576)"),
+    DynCase("MATCH(0,AA:AA*1,0)"),
+    DynCase("SUM(IF(ISBLANK(AC:AC),1))"),
+    DynCase("AA:AA*1"),
+]
+
 SUITES: dict[str, list[DynCase]] = {
     "sequence": SEQUENCE,
     "mmult": MMULT,
@@ -969,6 +995,7 @@ SUITES: dict[str, list[DynCase]] = {
     "textsplit": TEXTSPLIT,
     "randarray": RANDARRAY,
     "let": LET,
+    "whole_columns": WHOLE,
 }
 
 

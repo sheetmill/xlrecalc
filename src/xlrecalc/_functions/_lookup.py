@@ -125,8 +125,11 @@ def MATCH(ctx: Context, lookup: Any, ref: Any, kind: Any = 1.0) -> float | Error
         cells = list(enumerate(x for row in ref for x in row))
     elif isinstance(ref, Ref) and (ref.rows == 1 or ref.columns == 1):
         cells = _walked(ref, ref.rows == 1) if kind == 0 else _line(ref, ref.rows == 1)
-    else:
+    elif isinstance(ref, Ref):
         return NA
+    else:  # one value: Excel converts it to a number, then finds nothing (capture whole_columns)
+        n = to_number(ref, ctx)
+        return n if isinstance(n, ErrorValue) else NA
     k = 0 if kind == 0 else (1 if kind > 0 else -1)
     i = _exact(v, cells) if k == 0 else _approximate(v, cells, k < 0, ctx)
     return NA if i is None else float(i + 1)
