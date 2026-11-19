@@ -110,10 +110,9 @@ def _continuous_spread() -> dict[str, float]:
     """Per function, the largest relative difference from Excel on its rows not listed."""
     outer = re.compile(r"^(?:_xlfn\.)?([A-Z][A-Z0-9.]*)\(")
     suite = load("continuous_family")
-    engine, sheet = tc.run(suite)
     spread: dict[str, float] = {}
-    for k, row in enumerate(suite.rows):
-        found, got, want = outer.match(row.formula), engine.get(sheet, k, 0), row.expected
+    for row, (_, got) in zip(suite.rows, tc.computed("continuous_family"), strict=True):
+        found, want = outer.match(row.formula), row.expected
         if ("continuous_family", row.case) in tc.KNOWN_DEVIATIONS or not found:
             continue
         if isinstance(got, float) and isinstance(want, float) and want and not tc.same(got, want):

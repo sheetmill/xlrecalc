@@ -70,10 +70,11 @@ def test_a_cell_within_the_allowance_is_computed(tmp_path: Path) -> None:
 
 @pytest.mark.slow
 def test_the_default_allowance_computes_a_workbook_of_such_cells(tmp_path: Path) -> None:
-    """Twenty cells charge 200 million steps, a fifth of the default; about 13 s."""
-    wb = xlrecalc.load(crafted(tmp_path, 20))
+    """Three cells charge 30 million steps, more than the untrusted preset allows; about 2 s."""
+    assert xlrecalc.ReadLimits.UNTRUSTED.max_function_steps < 3 * STEPS
+    wb = xlrecalc.load(crafted(tmp_path, 3))
     wb.recalculate()
-    assert {wb.value(f"A{r}") for r in range(1, 21)} == {0.0}
+    assert {wb.value(f"A{r}") for r in range(1, 4)} == {0.0}
     assert not wb.report.uncomputed
 
 

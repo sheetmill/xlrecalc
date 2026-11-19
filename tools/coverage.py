@@ -32,8 +32,8 @@ from tests.test_captures import (  # noqa: E402
     _CALL,
     KNOWN_DEVIATIONS,
     SUITES,
+    computed,
     relative,
-    run,
     same,
     tolerance,
     within,
@@ -65,15 +65,13 @@ class Evidence:
 def evidence() -> dict[str, Evidence]:
     """Per function (formula-bar name), the captured rows that call it and how they fare."""
     found: dict[str, Evidence] = collections.defaultdict(Evidence)
+    registered = {display(n) for n in SPECS}
     for name in SUITES:
         suite = load(name)
-        engine, sheet = run(suite)
-        for k, row in enumerate(suite.rows, 1):
-            called = {display(n) for n in _CALL.findall(row.formula)}
-            called &= {display(n) for n in SPECS}
+        for row, (_, got) in zip(suite.rows, computed(name), strict=True):
+            called = {display(n) for n in _CALL.findall(row.formula)} & registered
             if not called:
                 continue
-            got = engine.get(sheet, k - 1, 0)
             if (name, row.case) in KNOWN_DEVIATIONS:  # first: a random row may match by chance
                 outcome = "listed"
             elif (

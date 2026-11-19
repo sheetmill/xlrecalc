@@ -1063,22 +1063,39 @@ def run(suite: Suite) -> tuple[Engine, int]:
 
 
 @functools.cache
+def computed(name: str) -> tuple[tuple[frozenset[str], Value], ...]:
+    """Per row of a suite, the functions its formula calls that are not implemented, and its value.
+
+    A suite is computed once a session; ``outcomes``, ``tools/coverage.py`` and the figures in
+    ``QUIRKS.md`` all read this one result.
+    """
+    suite = load(name)
+    engine, s = run(suite)
+    sheet = engine.sheets[s]
+    return tuple(
+        (
+            frozenset(engine.templates[sheet.templates[(k - 1) * 16384]].unsupported),
+            engine.get(s, k - 1, 0),
+        )
+        for k in range(1, len(suite.rows) + 1)
+    )
+
+
+@functools.cache
 def outcomes(name: str) -> tuple[dict[str, int], dict[str, int], tuple[str, ...]]:
     """A suite's rows by outcome, why rows were not evaluated, and the rows that differ."""
     suite = load(name)
-    engine, s = run(suite)
+    results = computed(name)
     counts = dict.fromkeys(("match", "ulps", "rel", "listed", "not evaluated"), 0)
     reasons: dict[str, int] = {}
     failures = []
     reference = _reference_platform()
-    for k, row in enumerate(suite.rows, 1):
-        template = engine.templates[engine.sheets[s].templates[(k - 1) * 16384]]
-        if template.unsupported:
+    for k, (row, (unsupported, got)) in enumerate(zip(suite.rows, results, strict=True), 1):
+        if unsupported:
             counts["not evaluated"] += 1
-            why = "not implemented: " + ", ".join(sorted(template.unsupported))
+            why = "not implemented: " + ", ".join(sorted(unsupported))
             reasons[why] = reasons.get(why, 0) + 1
             continue
-        got = engine.get(s, k - 1, 0)
         if same(got, row.expected):
             outcome = "match"
         elif within(got, row.expected, tolerance(row.formula)):
