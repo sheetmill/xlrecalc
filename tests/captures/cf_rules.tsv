@@ -1,0 +1,209 @@
+# suite: cf_rules (how Excel evaluates a conditional format's formula)
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# generator: capture/cf_probe.py (cases in CASES; a rule's format is a red fill and bold;
+#   read through display format, cell by cell, against the control sheet ctl)
+# columns: case, group, workbook, rules (sqref|kind|operator|formulas, joined by ' ;; '),
+#   cell, displayed text, interior color, bold, applied / not applied / mixed / refused
+anchor_col_one_area	A	anchor_col_one_area	B2:C4|expression|-|COLUMN(A1)=1	B2		255,0,0	true	applied
+anchor_col_one_area	A	anchor_col_one_area	B2:C4|expression|-|COLUMN(A1)=1	C2		255,255,255	false	not applied
+anchor_col_one_area	A	anchor_col_one_area	B2:C4|expression|-|COLUMN(A1)=1	B3		255,0,0	true	applied
+anchor_col_one_area	A	anchor_col_one_area	B2:C4|expression|-|COLUMN(A1)=1	C3		255,255,255	false	not applied
+anchor_col_one_area	A	anchor_col_one_area	B2:C4|expression|-|COLUMN(A1)=1	B4		255,0,0	true	applied
+anchor_col_one_area	A	anchor_col_one_area	B2:C4|expression|-|COLUMN(A1)=1	C4		255,255,255	false	not applied
+anchor_col_two_areas	A	anchor_col_two_areas	D2:D3 B4:C5|expression|-|COLUMN(A1)=1	D2		255,255,255	false	not applied
+anchor_col_two_areas	A	anchor_col_two_areas	D2:D3 B4:C5|expression|-|COLUMN(A1)=1	D3		255,255,255	false	not applied
+anchor_col_two_areas	A	anchor_col_two_areas	D2:D3 B4:C5|expression|-|COLUMN(A1)=1	B4		255,0,0	true	applied
+anchor_col_two_areas	A	anchor_col_two_areas	D2:D3 B4:C5|expression|-|COLUMN(A1)=1	C4		255,255,255	false	not applied
+anchor_col_two_areas	A	anchor_col_two_areas	D2:D3 B4:C5|expression|-|COLUMN(A1)=1	B5		255,0,0	true	applied
+anchor_col_two_areas	A	anchor_col_two_areas	D2:D3 B4:C5|expression|-|COLUMN(A1)=1	C5		255,255,255	false	not applied
+anchor_col_two_areas_reversed	A	anchor_col_two_areas_reversed	B4:C5 D2:D3|expression|-|COLUMN(A1)=1	B4		255,0,0	true	applied
+anchor_col_two_areas_reversed	A	anchor_col_two_areas_reversed	B4:C5 D2:D3|expression|-|COLUMN(A1)=1	C4		255,255,255	false	not applied
+anchor_col_two_areas_reversed	A	anchor_col_two_areas_reversed	B4:C5 D2:D3|expression|-|COLUMN(A1)=1	B5		255,0,0	true	applied
+anchor_col_two_areas_reversed	A	anchor_col_two_areas_reversed	B4:C5 D2:D3|expression|-|COLUMN(A1)=1	C5		255,255,255	false	not applied
+anchor_col_two_areas_reversed	A	anchor_col_two_areas_reversed	B4:C5 D2:D3|expression|-|COLUMN(A1)=1	D2		255,255,255	false	not applied
+anchor_col_two_areas_reversed	A	anchor_col_two_areas_reversed	B4:C5 D2:D3|expression|-|COLUMN(A1)=1	D3		255,255,255	false	not applied
+anchor_col_two_cells	A	anchor_col_two_cells	D5 B2|expression|-|COLUMN(A1)=1	D5		255,255,255	false	not applied
+anchor_col_two_cells	A	anchor_col_two_cells	D5 B2|expression|-|COLUMN(A1)=1	B2		255,0,0	true	applied
+anchor_col_whole_column	A	anchor_col_whole_column	C:C|expression|-|COLUMN(A1)=1	C1		255,0,0	true	applied
+anchor_col_whole_column	A	anchor_col_whole_column	C:C|expression|-|COLUMN(A1)=1	C2		255,0,0	true	applied
+anchor_col_whole_column	A	anchor_col_whole_column	C:C|expression|-|COLUMN(A1)=1	C3		255,0,0	true	applied
+anchor_relative_data	A	anchor_relative_data	B2:B5|expression|-|A2>2	B2		255,255,255	false	not applied
+anchor_relative_data	A	anchor_relative_data	B2:B5|expression|-|A2>2	B3		255,0,0	true	applied
+anchor_relative_data	A	anchor_relative_data	B2:B5|expression|-|A2>2	B4		255,0,0	true	applied
+anchor_relative_data	A	anchor_relative_data	B2:B5|expression|-|A2>2	B5		255,0,0	true	applied
+anchor_row_one_area	A	anchor_row_one_area	B2:C4|expression|-|ROW(A1)=1	B2		255,0,0	true	applied
+anchor_row_one_area	A	anchor_row_one_area	B2:C4|expression|-|ROW(A1)=1	C2		255,0,0	true	applied
+anchor_row_one_area	A	anchor_row_one_area	B2:C4|expression|-|ROW(A1)=1	B3		255,255,255	false	not applied
+anchor_row_one_area	A	anchor_row_one_area	B2:C4|expression|-|ROW(A1)=1	C3		255,255,255	false	not applied
+anchor_row_one_area	A	anchor_row_one_area	B2:C4|expression|-|ROW(A1)=1	B4		255,255,255	false	not applied
+anchor_row_one_area	A	anchor_row_one_area	B2:C4|expression|-|ROW(A1)=1	C4		255,255,255	false	not applied
+anchor_row_two_areas	A	anchor_row_two_areas	D2:D3 B4:C5|expression|-|ROW(A1)=1	D2		255,0,0	true	applied
+anchor_row_two_areas	A	anchor_row_two_areas	D2:D3 B4:C5|expression|-|ROW(A1)=1	D3		255,255,255	false	not applied
+anchor_row_two_areas	A	anchor_row_two_areas	D2:D3 B4:C5|expression|-|ROW(A1)=1	B4		255,255,255	false	not applied
+anchor_row_two_areas	A	anchor_row_two_areas	D2:D3 B4:C5|expression|-|ROW(A1)=1	C4		255,255,255	false	not applied
+anchor_row_two_areas	A	anchor_row_two_areas	D2:D3 B4:C5|expression|-|ROW(A1)=1	B5		255,255,255	false	not applied
+anchor_row_two_areas	A	anchor_row_two_areas	D2:D3 B4:C5|expression|-|ROW(A1)=1	C5		255,255,255	false	not applied
+anchor_row_two_areas_reversed	A	anchor_row_two_areas_reversed	B4:C5 D2:D3|expression|-|ROW(A1)=1	B4		255,255,255	false	not applied
+anchor_row_two_areas_reversed	A	anchor_row_two_areas_reversed	B4:C5 D2:D3|expression|-|ROW(A1)=1	C4		255,255,255	false	not applied
+anchor_row_two_areas_reversed	A	anchor_row_two_areas_reversed	B4:C5 D2:D3|expression|-|ROW(A1)=1	B5		255,255,255	false	not applied
+anchor_row_two_areas_reversed	A	anchor_row_two_areas_reversed	B4:C5 D2:D3|expression|-|ROW(A1)=1	C5		255,255,255	false	not applied
+anchor_row_two_areas_reversed	A	anchor_row_two_areas_reversed	B4:C5 D2:D3|expression|-|ROW(A1)=1	D2		255,0,0	true	applied
+anchor_row_two_areas_reversed	A	anchor_row_two_areas_reversed	B4:C5 D2:D3|expression|-|ROW(A1)=1	D3		255,255,255	false	not applied
+anchor_row_two_cells	A	anchor_row_two_cells	D5 B2|expression|-|ROW(A1)=1	D5		255,255,255	false	not applied
+anchor_row_two_cells	A	anchor_row_two_cells	D5 B2|expression|-|ROW(A1)=1	B2		255,0,0	true	applied
+anchor_row_whole_column	A	anchor_row_whole_column	C:C|expression|-|ROW(A1)=1	C1		255,0,0	true	applied
+anchor_row_whole_column	A	anchor_row_whole_column	C:C|expression|-|ROW(A1)=1	C2		255,255,255	false	not applied
+anchor_row_whole_column	A	anchor_row_whole_column	C:C|expression|-|ROW(A1)=1	C3		255,255,255	false	not applied
+cellis_between	H	cellis_between	A1:A5|cellIs|between|2 ~ 4	A1	1	255,255,255	false	not applied
+cellis_between	H	cellis_between	A1:A5|cellIs|between|2 ~ 4	A2	2	255,0,0	true	applied
+cellis_between	H	cellis_between	A1:A5|cellIs|between|2 ~ 4	A3	3	255,0,0	true	applied
+cellis_between	H	cellis_between	A1:A5|cellIs|between|2 ~ 4	A4	4	255,0,0	true	applied
+cellis_between	H	cellis_between	A1:A5|cellIs|between|2 ~ 4	A5	5	255,255,255	false	not applied
+cellis_between_relative	H	cellis_between_relative	A1:A5|cellIs|between|B1 ~ $Z$1	A1	1	255,255,255	false	not applied
+cellis_between_relative	H	cellis_between_relative	A1:A5|cellIs|between|B1 ~ $Z$1	A2	2	255,0,0	true	applied
+cellis_between_relative	H	cellis_between_relative	A1:A5|cellIs|between|B1 ~ $Z$1	A3	3	255,255,255	false	not applied
+cellis_between_relative	H	cellis_between_relative	A1:A5|cellIs|between|B1 ~ $Z$1	A4	4	255,255,255	false	not applied
+cellis_between_relative	H	cellis_between_relative	A1:A5|cellIs|between|B1 ~ $Z$1	A5	5	255,0,0	true	applied
+cellis_between_reversed	H	cellis_between_reversed	A1:A5|cellIs|between|4 ~ 2	A1	1	255,255,255	false	not applied
+cellis_between_reversed	H	cellis_between_reversed	A1:A5|cellIs|between|4 ~ 2	A2	2	255,0,0	true	applied
+cellis_between_reversed	H	cellis_between_reversed	A1:A5|cellIs|between|4 ~ 2	A3	3	255,0,0	true	applied
+cellis_between_reversed	H	cellis_between_reversed	A1:A5|cellIs|between|4 ~ 2	A4	4	255,0,0	true	applied
+cellis_between_reversed	H	cellis_between_reversed	A1:A5|cellIs|between|4 ~ 2	A5	5	255,255,255	false	not applied
+cellis_equal_formula	H	cellis_equal_formula	A1:A5|cellIs|equal|B1*0+3	A1	1	255,255,255	false	not applied
+cellis_equal_formula	H	cellis_equal_formula	A1:A5|cellIs|equal|B1*0+3	A2	2	255,255,255	false	not applied
+cellis_equal_formula	H	cellis_equal_formula	A1:A5|cellIs|equal|B1*0+3	A3	3	255,0,0	true	applied
+cellis_equal_formula	H	cellis_equal_formula	A1:A5|cellIs|equal|B1*0+3	A4	4	255,255,255	false	not applied
+cellis_equal_formula	H	cellis_equal_formula	A1:A5|cellIs|equal|B1*0+3	A5	5	255,255,255	false	not applied
+cellis_greater_absolute	H	cellis_greater_absolute	A1:A5|cellIs|greaterThan|$Z$1	A1	1	255,255,255	false	not applied
+cellis_greater_absolute	H	cellis_greater_absolute	A1:A5|cellIs|greaterThan|$Z$1	A2	2	255,255,255	false	not applied
+cellis_greater_absolute	H	cellis_greater_absolute	A1:A5|cellIs|greaterThan|$Z$1	A3	3	255,0,0	true	applied
+cellis_greater_absolute	H	cellis_greater_absolute	A1:A5|cellIs|greaterThan|$Z$1	A4	4	255,0,0	true	applied
+cellis_greater_absolute	H	cellis_greater_absolute	A1:A5|cellIs|greaterThan|$Z$1	A5	5	255,0,0	true	applied
+cellis_greater_relative	H	cellis_greater_relative	A1:A5|cellIs|greaterThan|B1	A1	1	255,255,255	false	not applied
+cellis_greater_relative	H	cellis_greater_relative	A1:A5|cellIs|greaterThan|B1	A2	2	255,255,255	false	not applied
+cellis_greater_relative	H	cellis_greater_relative	A1:A5|cellIs|greaterThan|B1	A3	3	255,0,0	true	applied
+cellis_greater_relative	H	cellis_greater_relative	A1:A5|cellIs|greaterThan|B1	A4	4	255,0,0	true	applied
+cellis_greater_relative	H	cellis_greater_relative	A1:A5|cellIs|greaterThan|B1	A5	5	255,255,255	false	not applied
+cellis_not_equal_text	H	cellis_not_equal_text	A1:A5|cellIs|notEqual|"x"	A1	1	255,0,0	true	applied
+cellis_not_equal_text	H	cellis_not_equal_text	A1:A5|cellIs|notEqual|"x"	A2	2	255,0,0	true	applied
+cellis_not_equal_text	H	cellis_not_equal_text	A1:A5|cellIs|notEqual|"x"	A3	3	255,0,0	true	applied
+cellis_not_equal_text	H	cellis_not_equal_text	A1:A5|cellIs|notEqual|"x"	A4	4	255,0,0	true	applied
+cellis_not_equal_text	H	cellis_not_equal_text	A1:A5|cellIs|notEqual|"x"	A5	5	255,0,0	true	applied
+contains_text	H	contains_text	A1:A5|containsText|containsText|NOT(ISERROR(SEARCH("b",A1)))	A1	abc	255,0,0	true	applied
+contains_text	H	contains_text	A1:A5|containsText|containsText|NOT(ISERROR(SEARCH("b",A1)))	A2	xyz	255,255,255	false	not applied
+contains_text	H	contains_text	A1:A5|containsText|containsText|NOT(ISERROR(SEARCH("b",A1)))	A3	ABC	255,0,0	true	applied
+contains_text	H	contains_text	A1:A5|containsText|containsText|NOT(ISERROR(SEARCH("b",A1)))	A4	12	255,255,255	false	not applied
+contains_text	H	contains_text	A1:A5|containsText|containsText|NOT(ISERROR(SEARCH("b",A1)))	A5	b	255,0,0	true	applied
+other_sheet_by_name	D	d_name	A1|expression|-|OTHERCELL>2	A1		255,0,0	true	applied
+other_sheet_plain	D	d_plain	A1|expression|-|other!$A$1>2	A1		255,0,0	true	applied
+other_sheet_x14	D	d_x14	A1|expression|-|other!$A$1>2	A1		255,0,0	true	applied
+table_column_sum	E	e_column_sum	B2:B4|expression|-|SUM(Table1[Col])>5	-	-	-	-	refused
+table_this_row	E	e_this_row	B2:B4|expression|-|Table1[[#This Row],[Col]]>1	-	-	-	-	refused
+merged	I	merged	A1:B1|expression|-|TRUE	A1		255,0,0	true	applied
+merged	I	merged	A1:B1|expression|-|TRUE	B1		255,0,0	true	applied
+name_constant	F	names	B1:B5|expression|-|A1>LIMIT	B1		255,255,255	false	not applied
+name_constant	F	names	B1:B5|expression|-|A1>LIMIT	B2		255,255,255	false	not applied
+name_constant	F	names	B1:B5|expression|-|A1>LIMIT	B3		255,0,0	true	applied
+name_constant	F	names	B1:B5|expression|-|A1>LIMIT	B4		255,0,0	true	applied
+name_constant	F	names	B1:B5|expression|-|A1>LIMIT	B5		255,0,0	true	applied
+name_cell	F	names	B1|expression|-|SPOT>2	B1		255,0,0	true	applied
+name_local	F	names	B1:B5|expression|-|A1>LOCALLIMIT	B1		255,255,255	false	not applied
+name_local	F	names	B1:B5|expression|-|A1>LOCALLIMIT	B2		255,255,255	false	not applied
+name_local	F	names	B1:B5|expression|-|A1>LOCALLIMIT	B3		255,255,255	false	not applied
+name_local	F	names	B1:B5|expression|-|A1>LOCALLIMIT	B4		255,0,0	true	applied
+name_local	F	names	B1:B5|expression|-|A1>LOCALLIMIT	B5		255,0,0	true	applied
+name_lambda	F	names	B1:B5|expression|-|BIG(A1)	B1		255,255,255	false	not applied
+name_lambda	F	names	B1:B5|expression|-|BIG(A1)	B2		255,255,255	false	not applied
+name_lambda	F	names	B1:B5|expression|-|BIG(A1)	B3		255,255,255	false	not applied
+name_lambda	F	names	B1:B5|expression|-|BIG(A1)	B4		255,255,255	false	not applied
+name_lambda	F	names	B1:B5|expression|-|BIG(A1)	B5		255,0,0	true	applied
+rule_error	I	rule_error	A1:A2|expression|-|1/0	A1		255,255,255	false	not applied
+rule_error	I	rule_error	A1:A2|expression|-|1/0	A2		255,255,255	false	not applied
+shape_array_false_first	C	shape_array_false_first	C1:C5|expression|-|{FALSE,TRUE}	-	-	-	-	refused
+shape_array_true_first	C	shape_array_true_first	C1:C5|expression|-|{TRUE,FALSE}	-	-	-	-	refused
+shape_index_column	C	shape_index_column	C1:C5|expression|-|INDEX($D$1:$D$3,0)>0	C1		255,255,255	false	not applied
+shape_index_column	C	shape_index_column	C1:C5|expression|-|INDEX($D$1:$D$3,0)>0	C2		255,255,255	false	not applied
+shape_index_column	C	shape_index_column	C1:C5|expression|-|INDEX($D$1:$D$3,0)>0	C3		255,255,255	false	not applied
+shape_index_column	C	shape_index_column	C1:C5|expression|-|INDEX($D$1:$D$3,0)>0	C4		255,255,255	false	not applied
+shape_index_column	C	shape_index_column	C1:C5|expression|-|INDEX($D$1:$D$3,0)>0	C5		255,255,255	false	not applied
+shape_range_absolute	C	shape_range_absolute	C1:C5|expression|-|$D$1:$D$3	C1		255,255,255	false	not applied
+shape_range_absolute	C	shape_range_absolute	C1:C5|expression|-|$D$1:$D$3	C2		255,255,255	false	not applied
+shape_range_absolute	C	shape_range_absolute	C1:C5|expression|-|$D$1:$D$3	C3		255,255,255	false	not applied
+shape_range_absolute	C	shape_range_absolute	C1:C5|expression|-|$D$1:$D$3	C4		255,255,255	false	not applied
+shape_range_absolute	C	shape_range_absolute	C1:C5|expression|-|$D$1:$D$3	C5		255,255,255	false	not applied
+shape_range_compared	C	shape_range_compared	C1:C5|expression|-|$D$1:$D$3>0	C1		255,255,255	false	not applied
+shape_range_compared	C	shape_range_compared	C1:C5|expression|-|$D$1:$D$3>0	C2		255,255,255	false	not applied
+shape_range_compared	C	shape_range_compared	C1:C5|expression|-|$D$1:$D$3>0	C3		255,255,255	false	not applied
+shape_range_compared	C	shape_range_compared	C1:C5|expression|-|$D$1:$D$3>0	C4		255,255,255	false	not applied
+shape_range_compared	C	shape_range_compared	C1:C5|expression|-|$D$1:$D$3>0	C5		255,255,255	false	not applied
+shape_range_relative	C	shape_range_relative	C1:C5|expression|-|D1:D3	C1		255,255,255	false	not applied
+shape_range_relative	C	shape_range_relative	C1:C5|expression|-|D1:D3	C2		255,0,0	true	applied
+shape_range_relative	C	shape_range_relative	C1:C5|expression|-|D1:D3	C3		255,0,0	true	applied
+shape_range_relative	C	shape_range_relative	C1:C5|expression|-|D1:D3	C4		255,255,255	false	not applied
+shape_range_relative	C	shape_range_relative	C1:C5|expression|-|D1:D3	C5		255,255,255	false	not applied
+shape_row_of_range	C	shape_row_of_range	C1:C5|expression|-|ROW($D$1:$D$3)=ROW()	C1		255,0,0	true	applied
+shape_row_of_range	C	shape_row_of_range	C1:C5|expression|-|ROW($D$1:$D$3)=ROW()	C2		255,255,255	false	not applied
+shape_row_of_range	C	shape_row_of_range	C1:C5|expression|-|ROW($D$1:$D$3)=ROW()	C3		255,255,255	false	not applied
+shape_row_of_range	C	shape_row_of_range	C1:C5|expression|-|ROW($D$1:$D$3)=ROW()	C4		255,255,255	false	not applied
+shape_row_of_range	C	shape_row_of_range	C1:C5|expression|-|ROW($D$1:$D$3)=ROW()	C5		255,255,255	false	not applied
+shape_sequence	C	shape_sequence	C1:C5|expression|-|_xlfn.SEQUENCE(2)>1	C1		255,255,255	false	not applied
+shape_sequence	C	shape_sequence	C1:C5|expression|-|_xlfn.SEQUENCE(2)>1	C2		255,255,255	false	not applied
+shape_sequence	C	shape_sequence	C1:C5|expression|-|_xlfn.SEQUENCE(2)>1	C3		255,255,255	false	not applied
+shape_sequence	C	shape_sequence	C1:C5|expression|-|_xlfn.SEQUENCE(2)>1	C4		255,255,255	false	not applied
+shape_sequence	C	shape_sequence	C1:C5|expression|-|_xlfn.SEQUENCE(2)>1	C5		255,255,255	false	not applied
+shape_single_at	C	shape_single_at	C1:C5|expression|-|_xlfn.SINGLE($D$1:$D$3)>0	C1		255,255,255	false	not applied
+shape_single_at	C	shape_single_at	C1:C5|expression|-|_xlfn.SINGLE($D$1:$D$3)>0	C2		255,0,0	true	applied
+shape_single_at	C	shape_single_at	C1:C5|expression|-|_xlfn.SINGLE($D$1:$D$3)>0	C3		255,0,0	true	applied
+shape_single_at	C	shape_single_at	C1:C5|expression|-|_xlfn.SINGLE($D$1:$D$3)>0	C4		255,255,255	false	not applied
+shape_single_at	C	shape_single_at	C1:C5|expression|-|_xlfn.SINGLE($D$1:$D$3)>0	C5		255,255,255	false	not applied
+shape_sum_of_range	C	shape_sum_of_range	C1:C5|expression|-|SUM($D$1:$D$3)>1	C1		255,0,0	true	applied
+shape_sum_of_range	C	shape_sum_of_range	C1:C5|expression|-|SUM($D$1:$D$3)>1	C2		255,0,0	true	applied
+shape_sum_of_range	C	shape_sum_of_range	C1:C5|expression|-|SUM($D$1:$D$3)>1	C3		255,0,0	true	applied
+shape_sum_of_range	C	shape_sum_of_range	C1:C5|expression|-|SUM($D$1:$D$3)>1	C4		255,0,0	true	applied
+shape_sum_of_range	C	shape_sum_of_range	C1:C5|expression|-|SUM($D$1:$D$3)>1	C5		255,0,0	true	applied
+stop_if_true	I	stop_if_true	A1|expression|-|TRUE|stop ;; A1|expression|-|TRUE	A1		255,255,255	true	mixed
+truth_blank_cell	B	truth_blank_cell	B1|expression|-|Z1	B1		255,255,255	false	not applied
+truth_cell_text	B	truth_cell_text	B1|expression|-|Z5	B1		255,255,255	false	not applied
+truth_cell_text_true	B	truth_cell_text_true	B1|expression|-|Z2	B1		255,0,0	true	applied
+truth_cell_true	B	truth_cell_true	B1|expression|-|Z3	B1		255,0,0	true	applied
+truth_cell_two	B	truth_cell_two	B1|expression|-|Z6	B1		255,0,0	true	applied
+truth_cell_zero	B	truth_cell_zero	B1|expression|-|Z4	B1		255,255,255	false	not applied
+truth_div0	B	truth_div0	B1|expression|-|1/0	B1		255,255,255	false	not applied
+truth_empty_string_formula	B	truth_empty_string_formula	B1|expression|-|IF(TRUE,"")	B1		255,255,255	false	not applied
+truth_false	B	truth_false	B1|expression|-|FALSE	B1		255,255,255	false	not applied
+truth_half	B	truth_half	B1|expression|-|0.5	B1		255,0,0	true	applied
+truth_minus_one	B	truth_minus_one	B1|expression|-|-1	B1		255,0,0	true	applied
+truth_na	B	truth_na	B1|expression|-|NA()	B1		255,255,255	false	not applied
+truth_one	B	truth_one	B1|expression|-|1	B1		255,0,0	true	applied
+truth_text_empty	B	truth_text_empty	B1|expression|-|""	B1		255,255,255	false	not applied
+truth_text_one	B	truth_text_one	B1|expression|-|"1"	B1		255,255,255	false	not applied
+truth_text_true	B	truth_text_true	B1|expression|-|"TRUE"	B1		255,0,0	true	applied
+truth_text_x	B	truth_text_x	B1|expression|-|"x"	B1		255,255,255	false	not applied
+truth_tiny	B	truth_tiny	B1|expression|-|1E-300	B1		255,0,0	true	applied
+truth_true	B	truth_true	B1|expression|-|TRUE	B1		255,0,0	true	applied
+truth_value	B	truth_value	B1|expression|-|"a"+1	B1		255,255,255	false	not applied
+truth_zero	B	truth_zero	B1|expression|-|0	B1		255,255,255	false	not applied
+volatile_indirect	G	volatile_indirect	B1:B5|expression|-|INDIRECT("A"&ROW())>2	B1		255,255,255	false	not applied
+volatile_indirect	G	volatile_indirect	B1:B5|expression|-|INDIRECT("A"&ROW())>2	B2		255,255,255	false	not applied
+volatile_indirect	G	volatile_indirect	B1:B5|expression|-|INDIRECT("A"&ROW())>2	B3		255,0,0	true	applied
+volatile_indirect	G	volatile_indirect	B1:B5|expression|-|INDIRECT("A"&ROW())>2	B4		255,0,0	true	applied
+volatile_indirect	G	volatile_indirect	B1:B5|expression|-|INDIRECT("A"&ROW())>2	B5		255,0,0	true	applied
+volatile_offset	G	volatile_offset	B1:B5|expression|-|OFFSET(A1,0,0)>2	B1		255,255,255	false	not applied
+volatile_offset	G	volatile_offset	B1:B5|expression|-|OFFSET(A1,0,0)>2	B2		255,255,255	false	not applied
+volatile_offset	G	volatile_offset	B1:B5|expression|-|OFFSET(A1,0,0)>2	B3		255,0,0	true	applied
+volatile_offset	G	volatile_offset	B1:B5|expression|-|OFFSET(A1,0,0)>2	B4		255,0,0	true	applied
+volatile_offset	G	volatile_offset	B1:B5|expression|-|OFFSET(A1,0,0)>2	B5		255,0,0	true	applied
+volatile_rand	G	volatile_rand	B1:B5|expression|-|RAND()<2	B1		255,0,0	true	applied
+volatile_rand	G	volatile_rand	B1:B5|expression|-|RAND()<2	B2		255,0,0	true	applied
+volatile_rand	G	volatile_rand	B1:B5|expression|-|RAND()<2	B3		255,0,0	true	applied
+volatile_rand	G	volatile_rand	B1:B5|expression|-|RAND()<2	B4		255,0,0	true	applied
+volatile_rand	G	volatile_rand	B1:B5|expression|-|RAND()<2	B5		255,0,0	true	applied
+volatile_today	G	volatile_today	B1:B5|expression|-|TODAY()>DATE(2000,1,1)	B1		255,0,0	true	applied
+volatile_today	G	volatile_today	B1:B5|expression|-|TODAY()>DATE(2000,1,1)	B2		255,0,0	true	applied
+volatile_today	G	volatile_today	B1:B5|expression|-|TODAY()>DATE(2000,1,1)	B3		255,0,0	true	applied
+volatile_today	G	volatile_today	B1:B5|expression|-|TODAY()>DATE(2000,1,1)	B4		255,0,0	true	applied
+volatile_today	G	volatile_today	B1:B5|expression|-|TODAY()>DATE(2000,1,1)	B5		255,0,0	true	applied
+open_rule_rand	G	open	A2|expression|-|RAND()<2	A2:A3	999 888	A1=2 A2=999 A3=888	-	kept
+open_rule_offset	G	open	A2|expression|-|OFFSET(A1,0,0)>0	A2:A3	999 888	A1=2 A2=999 A3=888	-	kept
+open_rule_plain	G	open	A2|expression|-|A1>0	A2:A3	999 888	A1=2 A2=999 A3=888	-	kept

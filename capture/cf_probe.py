@@ -11,8 +11,8 @@ patched into the sheet's XML: a ``sqref`` of several areas in a given order (ope
 them), a rule in the Excel 2010 extension (``x14:conditionalFormatting``, where Excel keeps a rule
 reading another sheet), and structured references, written in file form. Every workbook holds the
 control sheet ``ctl`` (``=TRUE`` over A1, ``=FALSE`` over A2): a case's reading counts only when
-the control reads applied and not applied. A case that might make Excel offer a repair has a
-workbook of its own, so one refusal (error -50 with alerts off) loses one case.
+the control reads applied and not applied. Every case has a workbook of its own (group F's
+share one), so a file Excel would offer to repair (error -50 with alerts off) loses one case.
 
 Each workbook is opened with alerts off and read through ``display format`` one cell at a time
 (``cf_read.applescript``: the cell's text, its interior color, its boldness), then closed without
@@ -34,7 +34,7 @@ from __future__ import annotations
 import re
 import sys
 import zipfile
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 from capture.edition import edition_line
@@ -73,7 +73,7 @@ class Case:
     rules: tuple[Rule, ...]
     cells: dict[str, object] = field(default_factory=dict)
     read: tuple[str, ...] = ()
-    workbook: str = "main"
+    workbook: str = ""  # its own workbook (named after the case) unless one is named
     form: str = "plain"  # or "x14": the rule in the 2010 extension
     names: dict[str, str] = field(default_factory=dict)  # workbook names: name -> text
     local_names: dict[str, str] = field(default_factory=dict)  # names local to the case's sheet
@@ -296,7 +296,7 @@ def _cases() -> list[Case]:
     return cases
 
 
-CASES = _cases()
+CASES = [c if c.workbook else replace(c, workbook=c.name) for c in _cases()]
 SHEET_OF = {}
 for _book in sorted({c.workbook for c in CASES}):
     for _i, _case in enumerate(c for c in CASES if c.workbook == _book):
@@ -428,8 +428,8 @@ def _sheet_parts(z: zipfile.ZipFile) -> dict[str, str]:
     }
 
 
-def read(path: Path, cells: list[str]) -> list[str] | None:
-    """``[text, color, bold]`` per cell, or ``None`` when Excel refused the file."""
+def read(path: Path, cells: list[str]) -> list[str] | str:
+    """``[text, color, bold]`` per cell, or Excel's error when it refused the file."""
     result = osascript_or_exit(
         str(HERE / "cf_read.applescript"), str(path), RS.join(cells), seconds=120
     )
@@ -437,7 +437,7 @@ def read(path: Path, cells: list[str]) -> list[str] | None:
         raise RuntimeError(result.stderr.strip())
     fields = result.stdout.rstrip("\n").split(US)
     if fields[0] != "open":
-        return None
+        return " ".join(fields[1:])
     return fields[1:]
 
 
@@ -463,8 +463,8 @@ def main() -> None:
                 f"{SHEET_OF[c.name]}|{a}" for c in cases for a in cells_read(c)
             ]
             fields = read(path, cells)
-            if fields is None:
-                log(f"{book}: REFUSED")
+            if isinstance(fields, str):
+                log(f"{book}: REFUSED {fields}")
                 rows += [
                     f"{c.name}\t{c.group}\t{book}\t{_rules(c)}\t-\t-\t-\t-\trefused" for c in cases
                 ]
