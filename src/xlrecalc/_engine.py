@@ -217,6 +217,7 @@ class Engine:
         self.max_function_steps = max_function_steps
         """Steps functions may take in one recalculation (``ReadLimits.max_function_steps``)."""
         self._steps_left = max_function_steps
+        self._report_due = False  # reads deferred the report's passes (``settled_report``)
         self.reference_array: Any = None
         """An array of references made while the current cell is evaluated."""
         self.date1904 = date1904
@@ -682,9 +683,9 @@ class Engine:
             self._close()
         anchor = self.member_of(n)
         if anchor is not None and anchor in self.stale:
-            self.recalculate(targets=[anchor])
+            self.recalculate(targets=[anchor], defer_report=True)
         if n in self.stale:
-            self.recalculate(targets=[n])
+            self.recalculate(targets=[n], defer_report=True)
         return self.sheets[sheet].values.get(row * COLS + col, BLANK)
 
     def loop_live(self) -> bool:
@@ -722,8 +723,19 @@ class Engine:
             self.stale.update((s << SHEET_SHIFT) | k for k in sheet.templates)
         self._unclosed.clear()
 
-    def recalculate(self, full: bool = False, targets: Iterable[int] | None = None) -> Report:
-        """Evaluate stale cells (every formula with ``full``) in dependency order."""
+    def recalculate(
+        self,
+        full: bool = False,
+        targets: Iterable[int] | None = None,
+        *,
+        defer_report: bool = False,
+    ) -> Report:
+        """Evaluate stale cells (every formula with ``full``) in dependency order.
+
+        ``defer_report``: leave the report's whole-workbook passes (what is uncomputed and what
+        rests on a kept value) for :meth:`settled_report`, so that reading cells one by one, each
+        read evaluating only what that cell needs, does not repeat them for every cell.
+        """
         self._steps_left = self.max_function_steps
         if full:
             self.make_all_stale()
@@ -738,11 +750,25 @@ class Engine:
         self._settle()
         if targets is None:
             self._before_pass.clear()  # nothing is left stale: no later pass can need them
+        if defer_report:
+            self._report_due = True
+        else:
+            self._finish_report()
+        if not self.stale:
+            self.stale.clear()  # a set keeps its table when emptied; clearing frees it
+        return self.report
+
+    def _finish_report(self) -> None:
+        """The report's whole-workbook passes, each a function of the engine's state."""
         self._report_held_back()
         self._taint()
         self._report_from_kept()
-        if not self.stale:
-            self.stale.clear()  # a set keeps its table when emptied; clearing frees it
+        self._report_due = False
+
+    def settled_report(self) -> Report:
+        """The report, with the passes deferred by the reads since the last one run."""
+        if self._report_due:
+            self._finish_report()
         return self.report
 
     def _stale_in_store_order(self) -> Iterator[int]:

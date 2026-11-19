@@ -127,7 +127,7 @@ class Workbook:
     @property
     def report(self) -> Report:
         """What evaluation could not do so far (unsupported functions, uncomputed cells, ...)."""
-        return self._engine.report
+        return self._engine.settled_report()
 
     @property
     def sheet_names(self) -> list[str]:
@@ -318,7 +318,9 @@ class Workbook:
         engine.recalculate()  # with a live loop, this is the save's run
         if not live:
             engine.save_run()  # the recalculation was the opening's: the save's run follows
-        uncomputed = {(c.sheet.casefold(), c.row, c.col) for c in engine.report.uncomputed}
+        uncomputed = {
+            (c.sheet.casefold(), c.row, c.col) for c in engine.settled_report().uncomputed
+        }
         edits: dict[str, dict[tuple[int, int], CellEdit]] = {}
         for sheet, cells in self._edits.items():
             s = engine.sheets[sheet]

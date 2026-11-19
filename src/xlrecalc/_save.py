@@ -43,7 +43,7 @@ def lookups(engine: Engine) -> dict[str, CachedValues]:
     """Per sheet holding formulas, the lookup the writer asks for each formula cell."""
     out: dict[str, CachedValues] = {}
     uncomputed: dict[str, set[tuple[int, int]]] = {}
-    for cell in engine.report.uncomputed:
+    for cell in engine.settled_report().uncomputed:
         uncomputed.setdefault(cell.sheet.casefold(), set()).add((cell.row, cell.col))
     for name, row, col in engine.kept_with_values():  # the file holds it already (§7.2)
         uncomputed.setdefault(name.casefold(), set()).add((row, col))
@@ -86,7 +86,7 @@ def array_edits(
     """
     out: dict[str, dict[tuple[int, int], CellEdit]] = {}
     fills: dict[str, list[ArrayFill]] = {}
-    uncomputed = {(c.sheet.casefold(), c.row, c.col) for c in engine.report.uncomputed}
+    uncomputed = {(c.sheet.casefold(), c.row, c.col) for c in engine.settled_report().uncomputed}
     for n in engine.evaluated_anchors:
         anchor = engine.anchors.get(n)
         if anchor is None:

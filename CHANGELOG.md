@@ -35,6 +35,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   1,000,000 iteration evaluations and 20,000,000 function steps, about a second each.
 
 ### Fixed
+- Reading cells one by one with `Workbook.value` was quadratic when formulas rest on a value the package keeps (a
+  function it does not compute): each read of a cell that needed computing finished the report again, walking every
+  cell resting on the kept value (8,000 such cells took 21 s; a corpus workbook over an hour). The report's
+  whole-workbook passes now run once, when `Workbook.report` is read or the workbook is saved; the reads cost what
+  one recalculation costs (8,000 cells: 0.05 s). The report is the same either way, and `recalc_on_load` is unchanged.
 - The README and the glossary said that in manual calculation every cached value is kept, for `load` and
   `recalculate` alike. That holds for `load`; `recalculate`, which saves, computes what Excel recalculates when it
   saves such a file (the cells marked `ca="1"`, or every formula), as the 0.4.0 entry says. They now state the two

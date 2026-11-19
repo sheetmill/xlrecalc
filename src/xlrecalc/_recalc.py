@@ -88,4 +88,4 @@ def recalculate(
         full_calc_on_load=full_calc_on_load,
         limits=io_limits(limits),
     )
-    return engine.report
+    return engine.settled_report()
