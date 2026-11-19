@@ -774,7 +774,7 @@ fills nothing, and clearing the cell lets it spill again (a blocked array a trus
 from a file is evaluated on loading, to the same `#SPILL!`, to learn the range it wants; a file
 this package wrote with `full_calc_on_load=False` holds a blocked spill as a plain `#VALUE!`,
 which a trusting load keeps, so clearing the cell in its way does not spill it until a full
-recalculation: §13, item 6). `A1#` (`_xlfn.ANCHORARRAY(A1)`) is the range the dynamic array at
+recalculation: §13, item 7). `A1#` (`_xlfn.ANCHORARRAY(A1)`) is the range the dynamic array at
 A1 spills into; `@x` (`_xlfn.SINGLE(x)`) is the implicit intersection of `x`. Excel caches
 `#SPILL!` in a file as `#VALUE!` with a rich value behind it (`vm`, error type 8); the reader
 decodes it, and the writer writes `#VALUE!` without the rich value, as other readers see such a
@@ -1430,37 +1430,43 @@ in a rule recalculates no cell on opening, so `RecalcCheck` reads no rule. Tests
 
 After 0.5.0, in this order: an order, not a promise or a date.
 
-1. Excel's iteration for `IRR`, `XIRR`, `RATE` and `YIELD` (its starting step, update
-   rule and stopping test, inferred from capture sweeps), aiming to match the rows QUIRKS.md
-   lists.
-2. A live openpyxl adapter: `xlrecalc.from_openpyxl(workbook)` would build an engine from an
+1. Whole-column and whole-row references clipped to the used range: every value the engine
+   computes stays the same on every capture and the corpus, only faster, and a formula whose
+   reference now passes the array limit (keeping the file's value, §7.7) computes. The cases
+   where clipping is not neutral (`ROWS`, `COLUMNS`, `COUNTBLANK`, `INDEX` and `MATCH` past the
+   used range, `OFFSET` from a whole column, an empty sheet, an array spilling into a whole
+   column) are captured first.
+2. Unions of ranges together with arrays of references, which QUIRKS.md lists as not
+   computed.
+3. The functions still absent, by family, each family's captures first: bonds with odd periods, the regression arrays (`TREND`, `GROWTH`, `LOGEST`) and
+   `TRIMRANGE`, then `AGGREGATE` and the others one by one; those with large questions of their
+   own (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable.
+   `docs/coverage.md` lists what exists.
+4. A live openpyxl adapter: `xlrecalc.from_openpyxl(workbook)` would build an engine from an
    in-memory openpyxl `Workbook` through its public API only (`iter_rows`, `cell.value` and
    `cell.data_type`, `ArrayFormula`, `wb.defined_names`, `ws.tables`, `wb.epoch`), evaluate
    values on demand, and after the caller edits the workbook rebuild only the cells whose value
    or formula changed (`engine.refresh()`, or `engine.changed("Sheet1!A1", ...)` naming them).
    It would answer code, not persist values: saving with values stays `recalculate`. openpyxl
    would be an optional extra, imported when the adapter is used.
-3. Unions of ranges together with arrays of references, which QUIRKS.md lists as not
-   computed.
-4. The functions still absent, by family, each family's captures first: bonds with odd periods, the regression arrays (`TREND`, `GROWTH`, `LOGEST`) and
-   `TRIMRANGE`, then `AGGREGATE` and the others one by one; those with large questions of their
-   own (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable.
-   `docs/coverage.md` lists what exists.
-5. For one formula outside a workbook: the other conditional-format rule types (top 10, above
+5. Excel's iteration for `IRR`, `XIRR`, `RATE` and `YIELD` (its starting step, update rule,
+   safeguards and stopping test), studied apart from this list from the capture sweeps and
+   adopted when it reproduces each captured outcome without losing a row that matches.
+6. For one formula outside a workbook: the other conditional-format rule types (top 10, above
    average, duplicates, text rules) where Excel's semantics would otherwise be restated by a
    caller, structured references given table definitions (Excel refuses them in a rule, but
    not elsewhere), and `Workbook.evaluate`; then callbacks (§12).
-6. Before 1.0: the newer errors written in Excel's own form, `#VALUE!` with a rich-value record
+7. Before 1.0: the newer errors written in Excel's own form, `#VALUE!` with a rich-value record
    behind `vm` (§7.7), so that a file Excel opens without recalculating shows `#SPILL!` or
    `#CALC!` and a later load reads a blocked spill as one; the rich-value parts are `xlio`'s, the
    reader and writer. A candidate too: `CONVERT` bit for bit, from an analysis of capture
    `convert_pairs` (`CONVERT` at 1, 2.5 and 3 over every pair of units in a category) that
    recovers the units Excel defines through others (QUIRKS.md lists the conversions that differ
    in the last bit or two).
-7. A strict option for `recalculate` and `Workbook.save` that raises where a cell cannot be
+8. A strict option for `recalculate` and `Workbook.save` that raises where a cell cannot be
    computed (`Report.uncomputed`), rather than writing it with the file's value or none; and
    streams as well as paths for `save` and `recalculate`, as `load` takes one.
-8. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
+9. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
    vectorized templates (numpy as an optional extra), a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,
    parallel evaluation of independent template columns on free-threaded Python, and a compiled
