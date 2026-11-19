@@ -12,7 +12,7 @@ from xlrecalc._quirks import Quirks
 from xlrecalc._recalc import recalculate
 from xlrecalc._report import CellRef, Report
 from xlrecalc._values import ErrorValue
-from xlrecalc._workbook import CellValue, FormulaError, Workbook, load
+from xlrecalc._workbook import CellValue, FormulaError, Loader, Workbook, load
 
 __version__ = "0.4.0"
 
@@ -24,6 +24,7 @@ __all__ = [
     "Formula",
     "FormulaError",
     "LimitError",
+    "Loader",
     "PackageError",
     "Quirks",
     "ReadLimits",

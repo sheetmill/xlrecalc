@@ -62,6 +62,7 @@ def test_public_names():
             "Formula",
             "FormulaError",
             "LimitError",
+            "Loader",
             "PackageError",
             "Quirks",
             "ReadLimits",

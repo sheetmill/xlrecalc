@@ -47,6 +47,14 @@ intersphinx_mapping = {
     "xlformat": ("https://xlformat.readthedocs.io/en/stable/", None),
 }
 
+# xlio's types in Loader's signature: documented by xlio, and named by the private modules that
+# define them, which no inventory lists.
+nitpick_ignore = [
+    ("py:class", "xlio._workbook.Workbook"),
+    ("py:class", "xlio._workbook.Sheet"),
+    ("py:class", "xlio._cells.Cell"),
+]
+
 html_theme = "furo"
 html_title = f"xlrecalc {release}"
 html_theme_options = {

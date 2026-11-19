@@ -14,7 +14,7 @@ import decimal
 import itertools
 import os
 import warnings
-from collections.abc import Iterable, Iterator
+from collections.abc import Generator, Iterable, Iterator
 from typing import Any, BinaryIO, Literal
 
 import xlio
@@ -626,6 +626,7 @@ class _Loader:
         self._seen = _Formulas(self._rule.marked)
         self._dynamic = book.cell_metadata.dynamic_arrays
         self._sheets: dict[int, _SheetLoad] = {}
+        self._running: list[Generator[xlio.Cell, None, None]] = []
         self._finished = False
 
     def _index(self, sheet: xlio.Sheet) -> int:
@@ -655,12 +656,16 @@ class _Loader:
         if sheet.kind != "worksheet":
             self._sheets[index] = _SheetLoad.done()
             return iter(())
-        return _load_sheet(self._state(index), sheet.cells())
+        cells = _load_sheet(self._state(index), sheet.cells())
+        self._running.append(cells)
+        return cells
 
     def finish(self) -> Engine:
         """Record every sheet not fed or fed part-way, then apply the opening rule."""
         if self._finished:
             raise ValueError("the loader has already finished")
+        for cells in self._running:  # a loop the caller still holds: it records no more
+            cells.close()
         for index, sheet in enumerate(self._book.sheets):
             if sheet.kind != "worksheet":
                 continue
@@ -728,7 +733,7 @@ class _SheetLoad:
         return state
 
 
-def _load_sheet(state: _SheetLoad, cells: Iterable[xlio.Cell]) -> Iterator[xlio.Cell]:
+def _load_sheet(state: _SheetLoad, cells: Iterable[xlio.Cell]) -> Generator[xlio.Cell, None, None]:
     """Record a worksheet's cells, yielding each one first; after the last, close the sheet.
 
     A cell is recorded when the caller asks for the next one, so a caller that stops after

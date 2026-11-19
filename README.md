@@ -127,7 +127,26 @@ xlrecalc.ErrorValue)`.
 file beside the target and moving it into place. One workbook is used from one thread at a time.
 Every file is read as untrusted: nothing it names is run or fetched, and
 `limits=xlrecalc.ReadLimits(...)` bounds what one file may cost. The defaults admit any workbook
-Excel opens, so a service that takes files from others should lower them.
+Excel opens, so a service that takes files from others should lower them, for instance to
+`xlrecalc.ReadLimits.UNTRUSTED`.
+
+A program that already reads a workbook's cells with `xlio` hands them to xlrecalc as they pass,
+so the file is read once:
+
+```python
+>>> import xlio
+>>> with xlio.open(path) as book:
+...     loader = xlrecalc.Loader(book)
+...     for sheet in book.sheets:
+...         for cell in loader.cells(sheet):
+...             pass  # the program's own use of the cell
+...     workbook = loader.finish()  # the Workbook load would give
+>>> workbook.value("Sheet!C4")
+2120.0
+```
+
+A sheet not fed, or left part-way, is read again by `finish`; a workbook made this way computes and
+changes as any other, but has no file to save over.
 
 ## Evaluating one formula
 

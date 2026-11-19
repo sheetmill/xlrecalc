@@ -30,6 +30,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   pass it keeps the value the file holds and is reported (`Report.uncomputed`; `Report.unsupported` names the limit).
   Its first users are the Bessel recurrences, about 20 million steps (0.7 to 1 s) for a cell at the largest order
   Excel computes, so a crafted file of such cells stops at the allowance instead of running for hours.
+- `Loader`: a workbook read from cells the caller already streams through `xlio`, so the file is read once.
+  `Loader(book, recalc_on_load=, limits=)` takes an open `xlio` workbook; `cells(sheet)` passes each cell through
+  while recording it, as `csv.reader` leaves the loop to its caller; `finish()` gives the `Workbook` that `load` gives,
+  reading again any sheet not fed or left part-way. `load` is a `Loader` with every sheet fed in order. Such a
+  workbook has no file to copy, so `save` raises.
 - `ReadLimits.UNTRUSTED`, a preset for files from strangers, stricter than the defaults on every field: `xlio`'s
   archive limits (10,000 parts, 256 MiB a part, 1 GiB in all), arrays of one full column (1,048,576 cells),
   1,000,000 iteration evaluations and 20,000,000 function steps, about a second each.

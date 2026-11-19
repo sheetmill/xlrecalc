@@ -8,7 +8,7 @@ import io
 import math
 import os
 import re
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from typing import BinaryIO, TypeAlias
 
 import xlio
@@ -36,7 +36,7 @@ from xlrecalc._formula._tokens import Kind, column_number
 from xlrecalc._functions import REGISTRY, SPECS
 from xlrecalc._functions._registry import _LIFTED
 from xlrecalc._limits import ReadLimits, io_limits
-from xlrecalc._load import RecalcOnLoad, recalc_mode, refused_in_file
+from xlrecalc._load import RecalcOnLoad, _Loader, recalc_mode, refused_in_file
 from xlrecalc._load import load as _load_engine
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef, Report
@@ -114,7 +114,10 @@ class Workbook:
     """
 
     def __init__(
-        self, engine: Engine, source: str | os.PathLike[str] | BinaryIO, limits: ReadLimits | None
+        self,
+        engine: Engine,
+        source: str | os.PathLike[str] | BinaryIO | None,
+        limits: ReadLimits | None,
     ) -> None:
         self._engine = engine
         self._source = source
@@ -307,8 +310,14 @@ class Workbook:
                 ``False`` a request the file held is removed, as Excel saves a file.
 
         Raises:
-            ValueError: No ``path`` for a workbook loaded from a file object.
+            ValueError: No ``path`` for a workbook loaded from a file object, or a workbook read
+                through a :class:`Loader`, which has no file to copy.
         """
+        if self._source is None:
+            raise ValueError(
+                "a workbook read through a Loader has no file to copy: load or recalculate the "
+                "file to save it"
+            )
         if path is None:
             if not isinstance(self._source, (str, os.PathLike)):
                 raise ValueError("a workbook loaded from a file object needs a path to save to")
@@ -552,3 +561,70 @@ def load(
     mode = recalc_mode(recalc_on_load, "trust_cached", trust_cached, stacklevel=2)
     engine = _load_engine(source, quirks=quirks, limits=limits, recalc_on_load=mode)
     return Workbook(engine, source, limits)
+
+
+class Loader:
+    """Read a workbook whose cells the caller already streams through ``xlio``, reading them once.
+
+    A caller that opens a workbook with ``xlio`` and reads every sheet's cells for its own use
+    would read the file a second time with :func:`load`. A ``Loader`` takes the open workbook
+    instead: each sheet's cells pass through :meth:`cells`, which records every cell and hands it
+    on, so the caller keeps its one loop over the cells, as with ``csv.reader`` over a file the
+    caller owns (the producer stays in the caller's loop). :meth:`finish` then gives the
+    :class:`Workbook` that :func:`load` would give, by the same code: ``load`` is a ``Loader``
+    with every sheet fed in order.
+
+    A sheet need not be fed: :meth:`finish` reads any sheet not fed, and any sheet whose loop the
+    caller left part-way, again from its start, recording the cells not yet recorded. The result
+    is the same either way; stopping early costs only the time of that second reading.
+
+    Example::
+
+        with xlio.open(path) as book:
+            loader = xlrecalc.Loader(book)
+            for sheet in book.sheets:
+                for cell in loader.cells(sheet):
+                    ...  # the caller's own use of the cell
+            workbook = loader.finish()
+
+    Args:
+        book: An open ``xlio`` workbook, which stays open until :meth:`finish` returns. Its
+            archive limits are the ones it was opened with.
+        recalc_on_load: As for :func:`load`: ``"excel"``, Excel's rule on opening;
+            ``"always"``; ``"never"``.
+        limits: The computing limits (``max_array_cells``, ``max_iteration_evaluations``,
+            ``max_function_steps``); the archive limits are the book's.
+
+    The workbook :meth:`finish` returns is computed and edited as any other, but has no file
+    to copy, so :meth:`Workbook.save` raises; :func:`recalculate` writes a file's values.
+    """
+
+    def __init__(
+        self,
+        book: xlio.Workbook,
+        *,
+        recalc_on_load: RecalcOnLoad = "excel",
+        limits: ReadLimits | None = None,
+    ) -> None:
+        self._loader = _Loader(book, recalc_on_load=recalc_on_load, limits=limits)
+        self._limits = limits
+
+    def cells(self, sheet: xlio.Sheet) -> Iterator[xlio.Cell]:
+        """Each cell of a sheet, in ``sheet.cells()`` order, recorded as it passes.
+
+        Args:
+            sheet: One of the book's sheets; a chart sheet passes no cells.
+
+        Raises:
+            ValueError: The sheet is not the book's, was fed already, or :meth:`finish` was
+                called.
+        """
+        return self._loader.cells(sheet)
+
+    def finish(self) -> Workbook:
+        """The workbook: sheets not fed or left part-way are read again, then the opening rule.
+
+        Raises:
+            ValueError: :meth:`finish` was called already.
+        """
+        return Workbook(self._loader.finish(), None, self._limits)
