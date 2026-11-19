@@ -4601,6 +4601,20 @@ def convert_family() -> list[Case]:
     return cases
 
 
+def convert_pairs() -> list[Case]:
+    """``CONVERT`` at 1, 2.5 and 3 over every ordered pair of units within each category: the
+    ratio Excel uses for each pair, and whether its result is that ratio times the number."""
+    form = "CONVERT({1},{2},{3})"
+    return [
+        Case(base.replace("/", "_per_"), form, (v, a, b))
+        for base, units in _UNITS.items()
+        for a in units
+        for b in units
+        if a != b
+        for v in (1.0, 2.5, 3.0)
+    ]
+
+
 SUITES = {
     "number_text": Suite(number_text),
     "text_number": Suite(text_number),
@@ -4647,4 +4661,5 @@ SUITES = {
     "collate_functions": Suite(collate_functions, fixed=_FUNCTIONS_TABLE),
     "bessel_family": Suite(bessel_family),
     "convert_family": Suite(convert_family),
+    "convert_pairs": Suite(convert_pairs),
 }
