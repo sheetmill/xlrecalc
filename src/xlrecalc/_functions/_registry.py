@@ -104,6 +104,10 @@ _EMPTY_REQUIRED_IS_NA = frozenset(
     [
         "NETWORKDAYS.INTL",
         "_XLFN.NETWORKDAYS.INTL",
+        "BESSELI",
+        "BESSELJ",
+        "BESSELK",
+        "BESSELY",
         "BIN2HEX",
         "BIN2OCT",
         "COUPDAYBS",

@@ -1081,9 +1081,11 @@ fetches anything a file names:
   defaults never refuse a workbook Excel opens; parts are streamed, so memory does not grow with
   them. The real protection is streaming and the DTD refusal below; the limits bound time.
   `load` and `recalculate` take `limits=ReadLimits(...)` (`max_parts`, `max_part_bytes`,
-  `max_total_bytes`, and two that bound computing: `max_array_cells`, §7.7, and
-  `max_iteration_evaluations`, §7.2); a service that accepts files from untrusted users should lower them to
-  what it is willing to spend on one file. Sizes
+  `max_total_bytes`, and three that bound computing: `max_array_cells`, §7.7,
+  `max_iteration_evaluations`, §7.2, and `max_function_steps`, the iterations of loops inside
+  functions such as the Bessel recurrences, an allowance for a recalculation shared by its
+  cells, 1,000,000,000 by default); a service that accepts files from untrusted users should
+  lower them to what it is willing to spend on one file. Sizes
   are counted while decompressing, and a part must inflate to exactly the size and CRC the
   archive states, or it is refused (`zipfile` stopped at the stated size, so bytes past it were
   dropped silently). A compression ratio is not a usable test: real sheet parts

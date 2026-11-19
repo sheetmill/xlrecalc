@@ -157,12 +157,12 @@ text shows before evaluating.
 
 ## What it computes, and what not yet
 
-- **Functions**: 469 of Excel's functions (17 of them partly): math, statistics,
+- **Functions**: 473 of Excel's functions (17 of them partly): math, statistics,
   logic, text, dates, lookup (`VLOOKUP`, `INDEX`, `MATCH`, `OFFSET`, `INDIRECT`...), the
-  financial and bond functions, the database functions, complex numbers. The
-  [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
+  financial and bond functions, the database functions, complex numbers, Bessel functions.
+  The [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 103,271 formulas computed by Excel and compared with xlrecalc's results: 102,487
+- **Evidence**: 107,642 formulas computed by Excel and compared with xlrecalc's results: 106,858
   match, bit for bit or within a small tolerance declared per function (a few units in the last
   place, or a relative one: 1E-9 for the iterative functions, 1E-15 to 1E-12 for the beta,
   gamma, chi-squared, F and t distributions), 784 known deviations, each listed with its reason

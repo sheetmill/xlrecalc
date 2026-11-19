@@ -40,6 +40,7 @@ from xlrecalc._formula._fastkey import raw_key, translate
 from xlrecalc._formula._prefixes import PREFIXES
 from xlrecalc._formula._template import Axis
 from xlrecalc._functions import REGISTRY
+from xlrecalc._limits import StepLimitError
 from xlrecalc._opening import Volatility
 from xlrecalc._ops import Ops
 from xlrecalc._quirks import Quirks
@@ -54,6 +55,7 @@ KEY_MASK = (1 << SHEET_SHIFT) - 1
 NAME, REF, VALUE = ErrorValue.NAME, ErrorValue.REF, ErrorValue.VALUE
 SPILL, CALC = ErrorValue("#SPILL!"), ErrorValue("#CALC!")
 ITERATION_LIMIT = "iterative calculation past ReadLimits.max_iteration_evaluations"
+STEP_LIMIT = "function steps past ReadLimits.max_function_steps"
 ITERATION_UNREAD = "iterative calculation reading a cell its pass did not evaluate"
 
 
@@ -190,6 +192,7 @@ class Engine:
         iterate_count: int = 100,
         iterate_delta: float = 0.001,
         max_iteration_evaluations: int | None = 100_000_000,
+        max_function_steps: int | None = 1_000_000_000,
     ) -> None:
         self.quirks = quirks or Quirks.EXCEL
         self.iterate = iterate
@@ -211,6 +214,9 @@ class Engine:
         marks a loop's: an edit makes them stale, so it runs a loop a trusting load never met."""
         self.max_array_cells = max_array_cells
         """The largest array a formula may make (``ReadLimits.max_array_cells``)."""
+        self.max_function_steps = max_function_steps
+        """Steps functions may take in one recalculation (``ReadLimits.max_function_steps``)."""
+        self._steps_left = max_function_steps
         self.reference_array: Any = None
         """An array of references made while the current cell is evaluated."""
         self.date1904 = date1904
@@ -718,6 +724,7 @@ class Engine:
 
     def recalculate(self, full: bool = False, targets: Iterable[int] | None = None) -> Report:
         """Evaluate stale cells (every formula with ``full``) in dependency order."""
+        self._steps_left = self.max_function_steps
         if full:
             self.make_all_stale()
         if targets is None:
@@ -859,6 +866,18 @@ class Engine:
 
         if self._iteration_due and not self._iterating:
             self._iterate()
+
+    def spend_steps(self, steps: int) -> None:
+        """Charge a function's loop to the recalculation's allowance before it runs.
+
+        Raises:
+            StepLimitError: The steps would pass ``ReadLimits.max_function_steps``.
+        """
+        if self._steps_left is None:
+            return
+        if steps > self._steps_left:
+            raise StepLimitError(self.max_function_steps or 0)
+        self._steps_left -= steps
 
     def _check(self, sheet: int, row: int, col: int) -> None:
         """Stop the formula being evaluated if this cell is not evaluated yet (§6.3)."""
@@ -1089,6 +1108,10 @@ class Engine:
             raise
         except ArrayLimitError as exc:  # keep the cached value, as for a function not supported
             self.report.unsupported[f"an array of more than {exc.limit:,} cells"] += 1
+            self.report.uncomputed.add(where)
+            return
+        except StepLimitError:  # likewise
+            self.report.unsupported[STEP_LIMIT] += 1
             self.report.uncomputed.add(where)
             return
         except NotImplementedFormError as exc:  # keep the cached value, likewise

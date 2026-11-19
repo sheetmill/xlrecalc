@@ -97,6 +97,31 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
 2^27, where `IMTAN` and `SIN` are `#NUM!`, and `IMLOG2` divides by the double just below ln 2, so `IMLOG2(1E20)` is
 66.4385618977473, a unit above the true value's 15th digit (capture `complex_family`).
 
+`BESSELI`, `BESSELJ`, `BESSELK` and `BESSELY` give Excel's values, not the exact functions': Excel
+computes them with the routines of Numerical Recipes in C (2nd edition, sections 6.5 and 6.6), accurate to
+about 1E-8 relative, and the package uses the same routines in doubles, which match every captured
+row bit for bit on macOS (capture `bessel_family`, 4,359 rows); where the platform's sine and cosine
+differ in the last bits, `BESSELJ` and `BESSELY` from x = 8 may differ by a few units in the last
+place (up to 4 on Linux x86_64; 8 are allowed). Excel's results differ from the printed routines in
+four places, and the package follows Excel:
+
+- J0 from x = 8: the coefficient printed as -0.1098628627E-2 is -0.1098628267E-2 (two digits
+  transposed).
+- J1 from x = 8: the coefficient -0.3516396496E-4 appears twice, which raises the degree of the
+  polynomial by one; `BESSELJ(8,1)` is 0.2346283865070744 where the function is 0.234636346853915,
+  and the error reaches about 3E-5 relative at x = 8, less beyond.
+- Y0 below x = 8: the logarithmic term is `0.636619772 * (J0(x) * ln x)`, not
+  `(0.636619772 * J0(x)) * ln x`.
+- Y0 and Y1 from x = 8: the second term is `z * (cos(xx) * a2)`, not `(z * cos(xx)) * a2`.
+
+The order n is refused below 0 before it is truncated (`BESSELJ(2.5,-0.5)` is `#NUM!`) and above
+1E7 (10,000,001 is `#NUM!`); a result that is not finite is `#NUM!` (`BESSELI(1E-10,50)`, where the
+downward recurrence ends in 0 / 0, and K and Y from n = 180 at x = 2.5, where the upward one
+overflows); one that underflows is 0. J and Y are `#NUM!` once the angle of the asymptotic form,
+x less 0.785398164 for order 0 or 2.356194491 for order 1, reaches 2^27 - 1, one below the angle
+`SIN` refuses; I is `#NUM!` past x = 709.7, before `exp` overflows (709.7 is computed, 709.71 is
+not). An empty argument is `#N/A`.
+
 ## Known deviations
 
 - An array past `ReadLimits.max_array_cells` (ten full columns by default) is not made: the

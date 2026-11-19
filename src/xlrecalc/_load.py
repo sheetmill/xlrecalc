@@ -566,6 +566,7 @@ def load(
             _iterate_count(book.calc.iterate_count),
             book.calc.iterate_delta if book.calc.iterate_delta is not None else 0.001,
             (limits or ReadLimits()).max_iteration_evaluations,
+            (limits or ReadLimits()).max_function_steps,
         )
         if isinstance(source, (str, os.PathLike)):
             engine.path = os.path.abspath(os.fspath(source))

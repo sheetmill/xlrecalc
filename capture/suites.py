@@ -3611,6 +3611,7 @@ _EMPTY_ADDED += (  # LAMBDA and the functions that call one
     "_XLFN.LAMBDA", "_XLFN.ISOMITTED", "_XLFN.MAP", "_XLFN.REDUCE", "_XLFN.SCAN", "_XLFN.BYROW",
     "_XLFN.BYCOL", "_XLFN.MAKEARRAY",
 )  # fmt: skip
+_EMPTY_ADDED += ("BESSELI", "BESSELJ", "BESSELK", "BESSELY")  # the Bessel functions
 
 # Functions whose arguments the generator cannot fill (LET's are names, the others take a
 # LAMBDA): their formulas as given.
@@ -4484,6 +4485,41 @@ def bessel_family() -> list[Case]:
         ("BESSELY", _BESSEL_N_MIDDLE),
     ):
         cases += [Case(f"{name.lower()}_limit", f"{name}({{1}},{{2}})", (2.5, n)) for n in ns]
+    # the limits between those rows: K and Y overflow from n = 180 in the routines; where I and J
+    # stop between 1E7 and 1E8; whether K and Y have an n limit where nothing overflows; the x
+    # where J and Y stop (SIN's 2^27?) and where I's exp overflows
+    probes: list[tuple[str, float, float]] = [
+        *((f, 2.5, n) for f in ("BESSELK", "BESSELY") for n in (179.0, 180.0)),
+        *((f, 2.5, n) for f in ("BESSELI", "BESSELJ") for n in (1.5e7, 2e7, 3e7, 5e7, 7e7)),
+        *(("BESSELK", 1e6, n) for n in (1e7, 2e7, 1e8)),
+        *(
+            (f, x, n)
+            for f in ("BESSELJ", "BESSELY")
+            for x in (134217727.0, 134217728.0)
+            for n in (0.0, 1.0)
+        ),
+        *(("BESSELI", x, n) for x in (709.78, 709.9, 710.0) for n in (0.0, 1.0)),
+    ]
+    cases += [Case(f"{f.lower()}_edge", f"{f}({{1}},{{2}})", (x, n)) for f, x, n in probes]
+    # narrower: the n limit between 1E7 and 1.5E7; the angle x - 0.785398164 (order 0) or
+    # x - 2.356194491 (order 1) where J and Y stop; the x where I stops below 709.78
+    narrow: list[tuple[str, float, float]] = [
+        *(
+            ("BESSELI", 2.5, n)
+            for n in (10000001.0, 10500000.0, 11000000.0, 12000000.0, 13000000.0)
+        ),
+        *(("BESSELK", 1e6, n) for n in (10000001.0, 11000000.0, 13000000.0)),
+        *(("BESSELJ", 134217727.0 + d, 0.0) for d in (0.5, 0.75, 0.8, 0.9)),
+        *(("BESSELJ", 134217727.0 + d, 1.0) for d in (2.0, 2.3, 2.4, 2.5, 3.0, 3.5)),
+        *(("BESSELY", 134217727.0 + d, 0.0) for d in (0.75, 0.8)),
+        *(("BESSELY", 134217727.0 + d, 1.0) for d in (2.3, 2.4, 3.0, 3.5)),
+        *(("BESSELI", x, 0.0) for x in (200.0, 400.0, 600.0, 700.0, 705.0, 708.0, 709.0, 709.5)),
+        *(("BESSELI", x, 1.0) for x in (700.0, 709.0)),
+        *(("BESSELI", x, 0.0) for x in (709.6, 709.7, 709.75, 709.77, 709.779, 709.7799)),
+        *(("BESSELI", x, 1.0) for x in (709.77, 709.779)),
+        *(("BESSELI", x, 0.0) for x in (709.71, 709.72, 709.73, 709.735, 709.74, 709.745)),
+    ]
+    cases += [Case(f"{f.lower()}_edge2", f"{f}({{1}},{{2}})", (x, n)) for f, x, n in narrow]
     return cases
 
 

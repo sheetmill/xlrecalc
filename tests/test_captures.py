@@ -944,6 +944,7 @@ SUITES = [
     "collate_chars",
     "collate_words",
     "collate_functions",
+    "bessel_family",
 ]
 
 

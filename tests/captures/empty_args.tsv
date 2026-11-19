@@ -2,7 +2,7 @@
 # excel: 16.115 for Mac, locale en_US
 # edition: Microsoft 365 Subscription, update channel Current
 # date_system: 1900
-# captured: 2026-11-13
+# captured: 2026-11-18
 # generator: capture/suites.py:empty_args
 # method: openpyxl writes the formula in column A and the inputs in B onward (floats as
 #   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
@@ -1208,12 +1208,12 @@ empty_args	textsplit	1194	_xlfn.TEXTSPLIT("a,b;c",",",,FALSE)	()	str	'a'
 empty_args	randarray	1195	_xlfn.RANDARRAY(1,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1196	_xlfn.RANDARRAY(,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1197	_xlfn.RANDARRAY(1,,5,5,FALSE)	()	n	5.0
-empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	3.185977808155534
+empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	3.1950028435565896
 empty_args	randarray	1199	_xlfn.RANDARRAY(1,1,5,,FALSE)	()	e	#VALUE!
 empty_args	randarray	1200	_xlfn.RANDARRAY(1,1,5,5,)	()	n	5.0
-empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.32306370122155315
-empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.4976333000322355
-empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.4348237036002631
+empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.3042349871435879
+empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.2116103555801494
+empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.04836982457747685
 empty_args	let	1204	_xlfn.LET(_xlpm.x,1,_xlpm.x+1)	()	n	2.0
 empty_args	let	1205	_xlfn.LET(_xlpm.x,,_xlpm.x+1)	()	n	1.0
 empty_args	let	1206	_xlfn.LET(_xlpm.x,1,)	()	n	0.0
@@ -1531,3 +1531,15 @@ empty_args	makearray	1517	_xlfn.MAKEARRAY(2,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm
 empty_args	makearray	1518	_xlfn.MAKEARRAY(,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c))	()	n	2.0
 empty_args	makearray	1519	_xlfn.MAKEARRAY(2,,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c))	()	n	2.0
 empty_args	makearray	1520	_xlfn.MAKEARRAY(2,2,)	()	e	#VALUE!
+empty_args	besseli	1521	BESSELI(2,2)	()	n	0.6889484491977633
+empty_args	besseli	1522	BESSELI(,2)	()	e	#N/A
+empty_args	besseli	1523	BESSELI(2,)	()	e	#N/A
+empty_args	besselj	1524	BESSELJ(2,2)	()	n	0.3528342075141756
+empty_args	besselj	1525	BESSELJ(,2)	()	e	#N/A
+empty_args	besselj	1526	BESSELJ(2,)	()	e	#N/A
+empty_args	besselk	1527	BESSELK(2,2)	()	n	0.25375976
+empty_args	besselk	1528	BESSELK(,2)	()	e	#N/A
+empty_args	besselk	1529	BESSELK(2,)	()	e	#N/A
+empty_args	bessely	1530	BESSELY(2,2)	()	n	-0.6174080983850512
+empty_args	bessely	1531	BESSELY(,2)	()	e	#N/A
+empty_args	bessely	1532	BESSELY(2,)	()	e	#N/A

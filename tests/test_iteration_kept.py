@@ -276,7 +276,7 @@ def loop(tmp_path: Path, a1: str, extra: str = "") -> Path:
 def test_an_absent_function_in_a_loop_keeps_its_value_and_the_rest_rests_on_it(
     tmp_path: Path,
 ) -> None:
-    wb = xlrecalc.load(loop(tmp_path, "B1+0*BESSELJ(1,1)"))
+    wb = xlrecalc.load(loop(tmp_path, 'B1+0*RTD("a","","b")'))
     wb.recalculate()
     assert [wb.value(a) for a in ("A1", "B1", "C1")] == [5.0, 2.5, 105.0]
     assert wb.report.from_kept == {CellRef("Data", 1, c) for c in (1, 2, 3)}

@@ -17,6 +17,7 @@ from xlrecalc._arrays import ArrayLimitError, NotImplementedFormError, element, 
 from xlrecalc._engine import Engine, Template, _at, _Cells
 from xlrecalc._formula import FormulaSyntaxError, TokenizeError
 from xlrecalc._functions._excel_names import EXCEL_NAMES
+from xlrecalc._limits import StepLimitError
 from xlrecalc._load import refused_in_file
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import column_letters
@@ -389,6 +390,8 @@ class _AdHoc(Engine):
             value = template.fn(self, row, col)
         except ArrayLimitError as exc:
             raise UnsupportedError(f"an array of more than {exc.limit:,} cells") from exc
+        except StepLimitError as exc:
+            raise UnsupportedError(f"function steps past the limit of {exc.limit:,}") from exc
         except NotImplementedFormError as exc:
             raise UnsupportedError(f"not computed by this package: {exc.label}") from exc
         if legacy or not is_array(value):

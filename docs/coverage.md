@@ -12,7 +12,7 @@ as matching. Whether a matching row is exact or within its tolerance depends on 
 platform's math library, so the page counts them together and is the same on every
 platform.
 
-452 implemented, 17 partial, 54 absent.
+456 implemented, 17 partial, 50 absent.
 
 | function | category | status | rows | match | listed | tolerance | note |
 |---|---|---|---:|---:|---:|---|---|
@@ -45,10 +45,10 @@ platform.
 | `AVERAGEIFS` | math | implemented | 86 | 86 | 0 |  |  |
 | `BAHTTEXT` | | absent | | | | | |
 | `BASE` | math | implemented | 304 | 304 | 0 |  |  |
-| `BESSELI` | | absent | | | | | |
-| `BESSELJ` | | absent | | | | | |
-| `BESSELK` | | absent | | | | | |
-| `BESSELY` | | absent | | | | | |
+| `BESSELI` | engineering | implemented | 1286 | 1286 | 0 |  |  |
+| `BESSELJ` | engineering | implemented | 1365 | 1365 | 0 | 8 ulps |  |
+| `BESSELK` | engineering | implemented | 758 | 758 | 0 |  |  |
+| `BESSELY` | engineering | implemented | 962 | 962 | 0 | 8 ulps |  |
 | `BETA.DIST` | statistical | implemented | 693 | 692 | 1 | 1e-13 relative |  |
 | `BETA.INV` | statistical | implemented | 165 | 155 | 10 | 1e-13 relative |  |
 | `BETADIST` | statistical | implemented | 32 | 32 | 0 | 1e-14 relative |  |

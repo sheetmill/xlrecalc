@@ -101,9 +101,9 @@ def test_a_name_excel_does_not_know_is_name_error() -> None:
 
 
 def test_a_function_excel_has_and_the_package_does_not_compute_raises() -> None:
-    f = Formula.parse("=BESSELJ(1,1)+1")
-    assert f.unsupported == frozenset({"BESSELJ"})
-    with pytest.raises(UnsupportedError, match="BESSELJ"):
+    f = Formula.parse('=RTD("a","","b")+1')
+    assert f.unsupported == frozenset({"RTD"})
+    with pytest.raises(UnsupportedError, match="RTD"):
         f.evaluate()
     with pytest.raises(UnsupportedError, match="structured reference"):
         evaluate("=Table1[Price]")

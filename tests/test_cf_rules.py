@@ -158,7 +158,7 @@ def test_what_the_class_refuses() -> None:
         ConditionalFormula.parse("[@Col]>1", sqref="A1")
     assert ConditionalFormula.parse('"{x}"="{x}"', sqref="A1").applies("A1")  # braces in text
     with pytest.raises(UnsupportedError):
-        ConditionalFormula.parse("BESSELJ(1,1)>0", sqref="A1").applies("A1")
+        ConditionalFormula.parse('RTD("a","","b")>0', sqref="A1").applies("A1")
     rule = ConditionalFormula.parse("TRUE", sqref="A1:A3")
     with pytest.raises(ValueError, match="not in the range"):
         rule.applies("B1")
