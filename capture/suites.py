@@ -4441,6 +4441,128 @@ def collate_functions() -> list[Case]:
     return cases
 
 
+# Bessel functions ---------------------------------------------------------------------------
+
+_BESSEL_X = (
+    0.0, 1e-10, 0.1, 0.5, *[k / 2 for k in range(2, 41)], 25.0, 30.0, 50.0, 100.0, 1e3, 1e5,
+    1e8, 1e10, 1e15, 1e100,
+)  # fmt: skip
+_BESSEL_N = (0.0, 1.0, 2.0, 3.0, 5.0, 10.0, 20.0, 50.0, 100.0)
+_BESSEL_N_EDGES: tuple[Input, ...] = (
+    1.5, 2.9, -1.0, -0.5, 1e3, 1e5, 1e9, "2", "abc", True, False, None, NA,
+)  # fmt: skip
+
+
+def bessel_family() -> list[Case]:
+    """``BESSELI``, ``BESSELJ``, ``BESSELK``, ``BESSELY`` (x, n): a grid, dense sweeps across the
+    x where common approximations switch (3.75 for I, 2 for K, 8 for J and Y), n's edges and x's
+    (coercion, domain, the largest n), so that the rows point to Excel's algorithm."""
+    cases: list[Case] = []
+    for name in ("BESSELI", "BESSELJ", "BESSELK", "BESSELY"):
+        tag = name.lower()
+        xs = list(_BESSEL_X)
+        if name in ("BESSELI", "BESSELJ"):
+            xs += [-x for x in _BESSEL_X if 0 < x <= 100]
+        else:
+            xs += [-1.0, -1e-10]
+        cases += [Case(tag, f"{name}({{1}},{{2}})", (x, n)) for x in xs for n in _BESSEL_N]
+        low, high, step = {"BESSELI": (3.0, 4.5, 0.01), "BESSELK": (1.5, 2.5, 0.01)}.get(
+            name, (7.5, 8.5, 0.005)
+        )
+        count = round((high - low) / step)
+        sweep = [round(low + k * step, 6) for k in range(count + 1)]
+        cases += [
+            Case(f"{tag}_sweep", f"{name}({{1}},{{2}})", (x, n)) for x in sweep for n in (0.0, 1.0)
+        ]
+        cases += [Case(f"{tag}_n", f"{name}({{1}},{{2}})", (2.5, n)) for n in _BESSEL_N_EDGES]
+        cases += [Case(f"{tag}_x", f"{name}({{1}},{{2}})", (x, 1.0)) for x in _EDGES]
+    # the largest n each takes (I and J: 1E5 computes, 1E9 is #NUM!; K and Y: 100 and 1000)
+    for name, ns in (
+        ("BESSELI", _BESSEL_N_LARGE),
+        ("BESSELJ", _BESSEL_N_LARGE),
+        ("BESSELK", _BESSEL_N_MIDDLE),
+        ("BESSELY", _BESSEL_N_MIDDLE),
+    ):
+        cases += [Case(f"{name.lower()}_limit", f"{name}({{1}},{{2}})", (2.5, n)) for n in ns]
+    return cases
+
+
+_BESSEL_N_LARGE = (2e5, 5e5, 1e6, 1e7, 1e8, 2147483647.0, 2147483648.0, 4294967296.0)
+_BESSEL_N_MIDDLE = (120.0, 150.0, 200.0, 250.0, 300.0, 400.0, 500.0, 700.0)
+
+
+# CONVERT ------------------------------------------------------------------------------------
+
+_UNITS: dict[str, tuple[str, ...]] = {
+    "g": ("g", "sg", "lbm", "u", "ozm", "grain", "cwt", "shweight", "uk_cwt", "lcwt", "stone",
+          "ton", "uk_ton", "LTON", "brton"),
+    "m": ("m", "mi", "Nmi", "in", "ft", "yd", "ang", "ell", "ly", "parsec", "pc", "Picapt", "Pica",
+          "pica", "survey_mi"),
+    "sec": ("sec", "s", "yr", "day", "d", "hr", "mn", "min"),
+    "Pa": ("Pa", "p", "atm", "at", "mmHg", "psi", "Torr"),
+    "N": ("N", "dyn", "dy", "lbf", "pond"),
+    "J": ("J", "e", "c", "cal", "eV", "ev", "HPh", "hh", "Wh", "wh", "flb", "BTU", "btu"),
+    "W": ("W", "w", "HP", "h", "PS"),
+    "T": ("T", "ga"),
+    "K": ("K", "kel", "C", "cel", "F", "fah", "Rank", "Reau"),
+    "m3": ("m3", "m^3", "tsp", "tspm", "tbs", "oz", "cup", "pt", "us_pt", "uk_pt", "qt", "uk_qt",
+           "gal", "uk_gal", "l", "L", "lt", "ang3", "ang^3", "barrel", "bushel", "ft3", "ft^3",
+           "in3", "in^3", "ly3", "ly^3", "mi3", "mi^3", "yd3", "yd^3", "Nmi3", "Nmi^3", "Pica3",
+           "Pica^3", "Picapt3", "Picapt^3", "GRT", "regton", "MTON"),
+    "m2": ("m2", "m^2", "uk_acre", "us_acre", "ang2", "ang^2", "ar", "ft2", "ft^2", "ha", "in2",
+           "in^2", "ly2", "ly^2", "mi2", "mi^2", "Nmi2", "Nmi^2", "Pica2", "Pica^2", "Picapt2",
+           "Picapt^2", "yd2", "yd^2", "Morgen"),
+    "bit": ("bit", "byte"),
+    "m/s": ("m/s", "m/sec", "m/h", "m/hr", "mph", "kn", "admkn"),
+}  # fmt: skip
+"""Units by category, keyed by the category's base unit, as Excel's documentation names them."""
+_DECIMAL_PREFIXES = ("Y", "Z", "E", "P", "T", "G", "M", "k", "h", "da", "e", "d", "c", "m", "u",
+                     "n", "p", "f", "a", "z", "y")  # fmt: skip
+_BINARY_PREFIXES = ("Yi", "Zi", "Ei", "Pi", "Ti", "Gi", "Mi", "ki")
+
+
+def convert_family() -> list[Case]:
+    """``CONVERT``: every unit to and from its category's base, pairs within categories, the
+    prefixes, temperatures, case and spelling, and the number's coercion."""
+    cases: list[Case] = []
+    form = "CONVERT({1},{2},{3})"
+    for base, units in _UNITS.items():
+        for unit in units:
+            cases.append(Case("to_base", form, (1.0, unit, base)))
+            cases.append(Case("from_base", form, (1.0, base, unit)))
+        pairs = [(a, b) for a in units for b in units if a != b]
+        cases += [Case("pair", form, (2.5, a, b)) for a, b in pairs[:: max(1, len(pairs) // 120)]]
+    for prefix in _DECIMAL_PREFIXES:
+        for unit in ("g", "m", "sec", "Pa", "J", "W", "l", "bit", "byte", "K", "in", "lbm"):
+            cases.append(Case("prefix", form, (1.0, prefix + unit, unit)))
+    for prefix in _BINARY_PREFIXES:
+        for unit in ("bit", "byte", "m"):
+            cases.append(Case("binary_prefix", form, (1.0, prefix + unit, unit)))
+    temperatures = ("C", "F", "K", "Rank", "Reau", "mK", "cel", "fah", "kel")
+    for value in (-40.0, 0.0, 37.0, 100.0, 1e6):
+        cases += [
+            Case("temperature", form, (value, a, b)) for a in temperatures for b in temperatures
+        ]
+    for a, b in (
+        ("kg", "KG"), ("KG", "kg"), ("Kg", "g"), ("kg", "g "), (" kg", "g"), ("m", "M"),
+        ("mi", "MI"), ("ft", "Ft"), ("g", "m"), ("C", "J"), ("x", "m"), ("m", "x"), ("", "m"),
+        ("m", ""), ("lbm", "kg"), ("ozm", "kg"), ("in", "cm"), ("km", "mi"), ("kmi", "m"),
+        ("Mmph", "m/s"), ("k m", "m"), ("m2", "cm2"), ("m3", "cm3"), ("m^2", "km^2"),
+        ("Gbyte", "byte"), ("Gibyte", "byte"), ("kibit", "bit"), ("dam", "m"), ("em", "m"),
+    ):  # fmt: skip
+        cases.append(Case("spelling", form, (1.0, a, b)))
+    for value in _EDGES:
+        cases.append(Case("number", form, (value, "m", "ft")))
+    cases.append(Case("unit_number", form, (1.0, 1.0, "m")))
+    cases.append(Case("unit_blank", form, (1.0, None, "m")))
+    cases.append(Case("unit_error", form, (1.0, NA, "m")))
+    # which units take a prefix: k, m and ki on every unit, to the unit itself
+    for units in _UNITS.values():
+        for unit in units:
+            cases += [Case("any_prefix", form, (1.0, p + unit, unit)) for p in ("k", "m", "ki")]
+    return cases
+
+
 SUITES = {
     "number_text": Suite(number_text),
     "text_number": Suite(text_number),
@@ -4485,4 +4607,6 @@ SUITES = {
     "collate_chars": Suite(collate_chars),
     "collate_words": Suite(collate_words),
     "collate_functions": Suite(collate_functions, fixed=_FUNCTIONS_TABLE),
+    "bessel_family": Suite(bessel_family),
+    "convert_family": Suite(convert_family),
 }

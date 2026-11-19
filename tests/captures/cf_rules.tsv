@@ -80,11 +80,61 @@ cellis_greater_absolute	H	cellis_greater_absolute	A1:A5|cellIs|greaterThan|$Z$1	
 cellis_greater_absolute	H	cellis_greater_absolute	A1:A5|cellIs|greaterThan|$Z$1	A3	3	255,0,0	true	applied
 cellis_greater_absolute	H	cellis_greater_absolute	A1:A5|cellIs|greaterThan|$Z$1	A4	4	255,0,0	true	applied
 cellis_greater_absolute	H	cellis_greater_absolute	A1:A5|cellIs|greaterThan|$Z$1	A5	5	255,0,0	true	applied
+cellis_greater_or_equal	H	cellis_greater_or_equal	A1:A5|cellIs|greaterThanOrEqual|3	A1	1	255,255,255	false	not applied
+cellis_greater_or_equal	H	cellis_greater_or_equal	A1:A5|cellIs|greaterThanOrEqual|3	A2	2	255,255,255	false	not applied
+cellis_greater_or_equal	H	cellis_greater_or_equal	A1:A5|cellIs|greaterThanOrEqual|3	A3	3	255,0,0	true	applied
+cellis_greater_or_equal	H	cellis_greater_or_equal	A1:A5|cellIs|greaterThanOrEqual|3	A4	4	255,0,0	true	applied
+cellis_greater_or_equal	H	cellis_greater_or_equal	A1:A5|cellIs|greaterThanOrEqual|3	A5	5	255,0,0	true	applied
 cellis_greater_relative	H	cellis_greater_relative	A1:A5|cellIs|greaterThan|B1	A1	1	255,255,255	false	not applied
 cellis_greater_relative	H	cellis_greater_relative	A1:A5|cellIs|greaterThan|B1	A2	2	255,255,255	false	not applied
 cellis_greater_relative	H	cellis_greater_relative	A1:A5|cellIs|greaterThan|B1	A3	3	255,0,0	true	applied
 cellis_greater_relative	H	cellis_greater_relative	A1:A5|cellIs|greaterThan|B1	A4	4	255,0,0	true	applied
 cellis_greater_relative	H	cellis_greater_relative	A1:A5|cellIs|greaterThan|B1	A5	5	255,255,255	false	not applied
+cellis_less_absolute	H	cellis_less_absolute	A1:A5|cellIs|lessThan|$Z$1	A1	1	255,0,0	true	applied
+cellis_less_absolute	H	cellis_less_absolute	A1:A5|cellIs|lessThan|$Z$1	A2	2	255,255,255	false	not applied
+cellis_less_absolute	H	cellis_less_absolute	A1:A5|cellIs|lessThan|$Z$1	A3	3	255,255,255	false	not applied
+cellis_less_absolute	H	cellis_less_absolute	A1:A5|cellIs|lessThan|$Z$1	A4	4	255,255,255	false	not applied
+cellis_less_absolute	H	cellis_less_absolute	A1:A5|cellIs|lessThan|$Z$1	A5	5	255,255,255	false	not applied
+cellis_less_or_equal	H	cellis_less_or_equal	A1:A5|cellIs|lessThanOrEqual|3	A1	1	255,0,0	true	applied
+cellis_less_or_equal	H	cellis_less_or_equal	A1:A5|cellIs|lessThanOrEqual|3	A2	2	255,0,0	true	applied
+cellis_less_or_equal	H	cellis_less_or_equal	A1:A5|cellIs|lessThanOrEqual|3	A3	3	255,0,0	true	applied
+cellis_less_or_equal	H	cellis_less_or_equal	A1:A5|cellIs|lessThanOrEqual|3	A4	4	255,255,255	false	not applied
+cellis_less_or_equal	H	cellis_less_or_equal	A1:A5|cellIs|lessThanOrEqual|3	A5	5	255,255,255	false	not applied
+cellis_mixed_between_numbers	H	cellis_mixed_between_numbers	A1:A5|cellIs|between|1 ~ 20	A1	abc	255,255,255	false	not applied
+cellis_mixed_between_numbers	H	cellis_mixed_between_numbers	A1:A5|cellIs|between|1 ~ 20	A2	12	255,0,0	true	applied
+cellis_mixed_between_numbers	H	cellis_mixed_between_numbers	A1:A5|cellIs|between|1 ~ 20	A3	12	255,255,255	false	not applied
+cellis_mixed_between_numbers	H	cellis_mixed_between_numbers	A1:A5|cellIs|between|1 ~ 20	A4	TRUE	255,255,255	false	not applied
+cellis_mixed_between_numbers	H	cellis_mixed_between_numbers	A1:A5|cellIs|between|1 ~ 20	A5		255,255,255	false	not applied
+cellis_mixed_equal_text_number	H	cellis_mixed_equal_text_number	A1:A5|cellIs|equal|"12"	A1	abc	255,255,255	false	not applied
+cellis_mixed_equal_text_number	H	cellis_mixed_equal_text_number	A1:A5|cellIs|equal|"12"	A2	12	255,255,255	false	not applied
+cellis_mixed_equal_text_number	H	cellis_mixed_equal_text_number	A1:A5|cellIs|equal|"12"	A3	12	255,0,0	true	applied
+cellis_mixed_equal_text_number	H	cellis_mixed_equal_text_number	A1:A5|cellIs|equal|"12"	A4	TRUE	255,255,255	false	not applied
+cellis_mixed_equal_text_number	H	cellis_mixed_equal_text_number	A1:A5|cellIs|equal|"12"	A5		255,255,255	false	not applied
+cellis_mixed_greater_number	H	cellis_mixed_greater_number	A1:A5|cellIs|greaterThan|5	A1	abc	255,0,0	true	applied
+cellis_mixed_greater_number	H	cellis_mixed_greater_number	A1:A5|cellIs|greaterThan|5	A2	12	255,0,0	true	applied
+cellis_mixed_greater_number	H	cellis_mixed_greater_number	A1:A5|cellIs|greaterThan|5	A3	12	255,0,0	true	applied
+cellis_mixed_greater_number	H	cellis_mixed_greater_number	A1:A5|cellIs|greaterThan|5	A4	TRUE	255,0,0	true	applied
+cellis_mixed_greater_number	H	cellis_mixed_greater_number	A1:A5|cellIs|greaterThan|5	A5		255,255,255	false	not applied
+cellis_mixed_less_number	H	cellis_mixed_less_number	A1:A5|cellIs|lessThan|5	A1	abc	255,255,255	false	not applied
+cellis_mixed_less_number	H	cellis_mixed_less_number	A1:A5|cellIs|lessThan|5	A2	12	255,255,255	false	not applied
+cellis_mixed_less_number	H	cellis_mixed_less_number	A1:A5|cellIs|lessThan|5	A3	12	255,255,255	false	not applied
+cellis_mixed_less_number	H	cellis_mixed_less_number	A1:A5|cellIs|lessThan|5	A4	TRUE	255,255,255	false	not applied
+cellis_mixed_less_number	H	cellis_mixed_less_number	A1:A5|cellIs|lessThan|5	A5		255,0,0	true	applied
+cellis_mixed_less_text	H	cellis_mixed_less_text	A1:A5|cellIs|lessThan|"b"	A1	abc	255,0,0	true	applied
+cellis_mixed_less_text	H	cellis_mixed_less_text	A1:A5|cellIs|lessThan|"b"	A2	12	255,0,0	true	applied
+cellis_mixed_less_text	H	cellis_mixed_less_text	A1:A5|cellIs|lessThan|"b"	A3	12	255,0,0	true	applied
+cellis_mixed_less_text	H	cellis_mixed_less_text	A1:A5|cellIs|lessThan|"b"	A4	TRUE	255,255,255	false	not applied
+cellis_mixed_less_text	H	cellis_mixed_less_text	A1:A5|cellIs|lessThan|"b"	A5		255,0,0	true	applied
+cellis_not_between	H	cellis_not_between	A1:A5|cellIs|notBetween|4 ~ 2	A1	1	255,0,0	true	applied
+cellis_not_between	H	cellis_not_between	A1:A5|cellIs|notBetween|4 ~ 2	A2	2	255,255,255	false	not applied
+cellis_not_between	H	cellis_not_between	A1:A5|cellIs|notBetween|4 ~ 2	A3	3	255,255,255	false	not applied
+cellis_not_between	H	cellis_not_between	A1:A5|cellIs|notBetween|4 ~ 2	A4	4	255,255,255	false	not applied
+cellis_not_between	H	cellis_not_between	A1:A5|cellIs|notBetween|4 ~ 2	A5	5	255,0,0	true	applied
+cellis_not_between_relative	H	cellis_not_between_relative	A1:A5|cellIs|notBetween|B1 ~ $Z$1	A1	1	255,0,0	true	applied
+cellis_not_between_relative	H	cellis_not_between_relative	A1:A5|cellIs|notBetween|B1 ~ $Z$1	A2	2	255,255,255	false	not applied
+cellis_not_between_relative	H	cellis_not_between_relative	A1:A5|cellIs|notBetween|B1 ~ $Z$1	A3	3	255,0,0	true	applied
+cellis_not_between_relative	H	cellis_not_between_relative	A1:A5|cellIs|notBetween|B1 ~ $Z$1	A4	4	255,0,0	true	applied
+cellis_not_between_relative	H	cellis_not_between_relative	A1:A5|cellIs|notBetween|B1 ~ $Z$1	A5	5	255,255,255	false	not applied
 cellis_not_equal_text	H	cellis_not_equal_text	A1:A5|cellIs|notEqual|"x"	A1	1	255,0,0	true	applied
 cellis_not_equal_text	H	cellis_not_equal_text	A1:A5|cellIs|notEqual|"x"	A2	2	255,0,0	true	applied
 cellis_not_equal_text	H	cellis_not_equal_text	A1:A5|cellIs|notEqual|"x"	A3	3	255,0,0	true	applied
