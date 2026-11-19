@@ -57,6 +57,7 @@ def test_public_names():
         [
             "CellRef",
             "CellValue",
+            "ConditionalFormula",
             "ErrorValue",
             "Formula",
             "FormulaError",

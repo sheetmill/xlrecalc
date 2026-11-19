@@ -16,6 +16,9 @@
 .. autoclass:: xlrecalc.Reference
    :members:
 
+.. autoclass:: xlrecalc.ConditionalFormula
+   :members:
+
 .. autoclass:: xlrecalc.Workbook
    :members:
 

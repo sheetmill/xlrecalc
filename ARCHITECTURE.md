@@ -1328,6 +1328,7 @@ src/xlrecalc/
   _limits.py       ReadLimits, and the archive limits as xlio takes them (§9.1)
   _recalc.py       recalculate() (§9.2)
   _evaluate.py     evaluate(), Formula: one formula outside a workbook (§11.2)
+  _conditional.py  ConditionalFormula: a conditional format's rule over its range (§11.2)
   _functions/      registry and one module per category (§8)
 capture/           capture tooling (not in the wheel)
 tools/             developer tools: the formula round trip over a set of workbooks, the
@@ -1367,6 +1368,11 @@ xlrecalc.evaluate("=SUM(A1:A3)", {"A1:A3": [[1], [2], [3]]})          # 6.0, no 
 f = xlrecalc.Formula.parse("=A1>5", origin="A1")  # compiled once; also sheet=, legacy=
 f.evaluate(values, resolver=None, at="A2", names=None)  # relative references move to A2
 f.references, f.names, f.functions, f.unsupported, f.volatile
+
+rule = xlrecalc.ConditionalFormula.parse("A2>2", sqref="D2:D3 B4:C5", sheet="Data")
+rule.anchor                                  # "B2": the corner of the box around the areas
+rule.applies("D3", resolver=cells)           # True where Excel shows the rule's format
+xlrecalc.ConditionalFormula.cell_is("between", ["$Z$1", "10"], sqref="A1:A5")
 ```
 
 One workbook is used from one thread at a time, and so is one `Formula`.
@@ -1391,6 +1397,24 @@ that engine's position; each call clears its cells and names first. Tests:
 the capture's sheet, in every suite whose inputs are values (not formulas or fixed cells),
 unsupported and volatile formulas left out: every 25th row by default, every row in the slow
 tier.
+
+**A conditional format's rule** (`_conditional.py`, `ConditionalFormula`; capture `cf_rules`,
+`capture/cf_probe.py`: 66 cases read through `display format` against a control rule). A rule's
+relative references are measured from the top-left corner of the box around every area of its
+range as stored (`sqref`), whatever the areas' order: for `D2:D3 B4:C5` and `B4:C5 D2:D3` alike
+that is B2, not the first area's corner. The formula is evaluated as a formula is today (a
+dynamic array), not as a legacy one, and a range or array result counts by its top-left element:
+`$D$1:$D$3>0` does not take the cell's own row, `@$D$1:$D$3>0` does. The format applies where
+`IF` would take its true branch on that element (`to_bool`: TRUE, a nonzero number, the text
+`"TRUE"` in any case); an error, FALSE, 0, other text and a blank show no format, so `applies`
+is False for them, while a function the package does not compute raises `UnsupportedError`, as
+`evaluate` does. A rule holding an array constant or a structured reference makes Excel offer
+to repair the file, so `parse` refuses it with `FormulaError`. A `cellIs` rule compares the
+cell's value with its bounds, each evaluated at the cell, by Excel's comparison (§4.2);
+`between` and `notBetween` take their bounds in either order (captured for `between`). A
+reference to another sheet works, directly, through a name and in Excel 2010's extension, and a
+volatile function in a rule recalculates no cell on opening, so `RecalcCheck` reads no rule.
+Tests: `tests/test_cf_rules.py` replays every case through the class.
 
 ## 12. Open decisions
 
@@ -1421,10 +1445,10 @@ After 0.4.0, in this order: an order, not a promise or a date.
    `TRIMRANGE`, then `AGGREGATE` and the others one by one; those with large questions of their
    own (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable.
    `docs/coverage.md` lists what exists.
-5. For one formula outside a workbook: a capture of how Excel evaluates a conditional
-   format's formula (one returning a range or an array; whether it takes structured
-   references), structured references given table definitions, and `Workbook.evaluate`; then
-   callbacks (§12).
+5. For one formula outside a workbook: the other conditional-format rule types (top 10, above
+   average, duplicates, text rules) where Excel's semantics would otherwise be restated by a
+   caller, structured references given table definitions (Excel refuses them in a rule, but
+   not elsewhere), and `Workbook.evaluate`; then callbacks (§12).
 6. Before 1.0: the newer errors written in Excel's own form, `#VALUE!` with a rich-value record
    behind `vm` (§7.7), so that a file Excel opens without recalculating shows `#SPILL!` or
    `#CALC!` and a later load reads a blocked spill as one; the rich-value parts are `xlio`'s, the

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `ConditionalFormula`: where Excel shows a conditional format's rule, cell by cell. `parse(formula, sqref=, sheet=)`
+  takes an expression rule's formula and `cell_is(operator, formulas, sqref=, sheet=)` a `cellIs` rule's operator and
+  bounds, as a file stores them; `applies(cell, values, resolver=, names=)` evaluates the rule there. Excel's rules
+  from capture `cf_rules` (Excel 16.115 for Mac, 66 cases, every readable cell matched): relative references are
+  measured from the top-left corner of the box around all the range's areas, whatever their order; the formula is a
+  dynamic array whose top-left element counts; the format applies where `IF` takes its true branch (TRUE, a nonzero
+  number, the text `"TRUE"`), not for an error or other text; `between` takes its bounds in either order. A formula
+  holding an array constant or a structured reference, which make Excel offer to repair the file, is refused with
+  `FormulaError`.
+
 ### Fixed
 - The README and the glossary said that in manual calculation every cached value is kept, for `load` and
   `recalculate` alike. That holds for `load`; `recalculate`, which saves, computes what Excel recalculates when it
