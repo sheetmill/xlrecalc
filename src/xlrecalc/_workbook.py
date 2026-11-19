@@ -608,17 +608,20 @@ class Loader:
         self._loader = _Loader(book, recalc_on_load=recalc_on_load, limits=limits)
         self._limits = limits
 
-    def cells(self, sheet: xlio.Sheet) -> Iterator[xlio.Cell]:
-        """Each cell of a sheet, in ``sheet.cells()`` order, recorded as it passes.
+    def cells(self, sheet: xlio.Sheet, *, rich: bool = False) -> Iterator[xlio.Cell]:
+        """Each cell of a sheet, as ``sheet.cells(rich=rich)`` gives it, recorded as it passes.
 
         Args:
             sheet: One of the book's sheets; a chart sheet passes no cells.
+            rich: As for ``xlio``'s ``Sheet.cells``: give string cells their runs and phonetic
+                guides (``Cell.rich``). What is recorded is the same either way, and a sheet
+                :meth:`finish` reads again is read without them.
 
         Raises:
             ValueError: The sheet is not the book's, was fed already, or :meth:`finish` was
                 called.
         """
-        return self._loader.cells(sheet)
+        return self._loader.cells(sheet, rich=rich)
 
     def finish(self) -> Workbook:
         """The workbook: sheets not fed or left part-way are read again, then the opening rule.

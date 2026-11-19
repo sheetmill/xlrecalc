@@ -646,8 +646,12 @@ class _Loader:
         )
         return state
 
-    def cells(self, sheet: xlio.Sheet) -> Iterator[xlio.Cell]:
-        """Each cell of the sheet, recorded as it passes; a sheet is fed once, before finish."""
+    def cells(self, sheet: xlio.Sheet, *, rich: bool = False) -> Iterator[xlio.Cell]:
+        """Each cell of the sheet, recorded as it passes; a sheet is fed once, before finish.
+
+        ``rich`` is passed to ``sheet.cells``: it adds a string's runs and phonetic guides to
+        the cells handed on, and changes nothing recorded (a cell's value is its text either way).
+        """
         if self._finished:
             raise ValueError("the loader has finished: no sheet can be fed after finish()")
         index = self._index(sheet)
@@ -656,7 +660,7 @@ class _Loader:
         if sheet.kind != "worksheet":
             self._sheets[index] = _SheetLoad.done()
             return iter(())
-        cells = _load_sheet(self._state(index), sheet.cells())
+        cells = _load_sheet(self._state(index), sheet.cells(rich=rich))
         self._running.append(cells)
         return cells
 

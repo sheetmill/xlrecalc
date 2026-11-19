@@ -146,8 +146,9 @@ so the file is read once:
 2120.0
 ```
 
-A sheet not fed, or left part-way, is read again by `finish`; a workbook made this way computes and
-changes as any other, but has no file to save over.
+`loader.cells(sheet, rich=True)` gives each cell as `sheet.cells(rich=True)` does, with its text's
+runs and phonetic guides. A sheet not fed, or left part-way, is read again by `finish`; a workbook
+made this way computes and changes as any other, but has no file to save over.
 
 ## Evaluating one formula
 

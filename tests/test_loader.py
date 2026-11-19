@@ -168,8 +168,9 @@ def test_misuse_raises() -> None:
         wb.save()
 
 
+@pytest.mark.parametrize("rich", [False, True])
 @pytest.mark.parametrize("row", _rows(), ids=lambda r: r[0])
-def test_the_opening_rule_is_the_check_s_and_excel_s(row: list[str]) -> None:
+def test_the_opening_rule_is_the_check_s_and_excel_s(row: list[str], rich: bool) -> None:
     """One stream feeds a ``RecalcCheck`` and a ``Loader``: the loader computes what Excel showed
     on opening, and the check answers what the loader computed."""
     data = _workbook(row)
@@ -177,7 +178,7 @@ def test_the_opening_rule_is_the_check_s_and_excel_s(row: list[str]) -> None:
     with xlio.open(io.BytesIO(data)) as book:
         loader = xlrecalc.Loader(book)
         for sheet in book.sheets:
-            for cell in loader.cells(sheet):
+            for cell in loader.cells(sheet, rich=rich):
                 f = cell.formula
                 if f is not None:
                     ca = f.attributes.get("ca") in ("1", "true")
@@ -186,3 +187,65 @@ def test_the_opening_rule_is_the_check_s_and_excel_s(row: list[str]) -> None:
     values = {ref: wb.value(ref) for ref in REFS}
     assert values == _shown(row), row[0]
     assert check.finish() == _answer(values), row[0]
+
+
+_RICH_STRINGS = [
+    # runs and a phonetic guide
+    '<si><r><rPr><b/></rPr><t>Bold</t></r><r><t xml:space="preserve"> text</t></r>'
+    '<rPh sb="0" eb="4"><t>ボ</t></rPh><phoneticPr fontId="0"/></si>',
+    "<si><t>plain</t></si>",
+]
+_RICH_CELLS = (
+    '<row r="1"><c r="A1" t="s"><v>0</v></c><c r="B1"><f>LEN(A1)</f><v>0</v></c></row>'
+    '<row r="2"><c r="A2" t="s" ph="1"><v>1</v></c>'
+    '<c r="B2" t="str"><f>A1&amp;A2</f><v>x</v></c></row>'
+    '<row r="3"><c r="A3" t="inlineStr"><is><r><t>in</t></r><r><rPr><i/></rPr><t>line</t></r>'
+    '<rPh sb="0" eb="2"><t>イン</t></rPh></is></c>'
+    '<c r="B3"><f>EXACT(A3,"inline")</f><v>0</v></c></row>'
+    '<row r="4"><c r="A4"><v>2.5</v></c><c r="B4"><f>A4*2</f><v>0</v></c></row>'
+)
+
+
+def _rich_book(calc: str) -> bytes:
+    return package(_RICH_CELLS, strings=_RICH_STRINGS, workbook_extra=calc)
+
+
+def _rich_state(wb: xlrecalc.Workbook) -> tuple[object, ...]:
+    refs = [f"{c}{r}" for r in range(1, 5) for c in "AB"]
+    report = wb.report
+    before = ([wb.value(r) for r in refs], sorted(report.uncomputed), sorted(report.from_kept))
+    wb.recalculate()
+    return (*before, [wb.value(r) for r in refs])
+
+
+def test_rich_cells_pass_through_as_xlio_gives_them() -> None:
+    data = _rich_book('<calcPr fullCalcOnLoad="1"/>')
+    with xlio.open(io.BytesIO(data)) as book:
+        direct = list(book.sheets[0].cells(rich=True))
+        loader = xlrecalc.Loader(book)
+        passed = list(loader.cells(book.sheets[0], rich=True))
+        loader.finish()
+    assert passed == direct
+    rich = passed[0].rich  # what a renderer reads
+    assert rich is not None
+    assert rich.phonetic
+
+
+@pytest.mark.parametrize("calc", ['<calcPr fullCalcOnLoad="1"/>', '<calcPr calcId="191029"/>'])
+@pytest.mark.parametrize("stop", [None, 0, 3])
+def test_rich_or_plain_records_the_same_workbook(calc: str, stop: int | None) -> None:
+    """Fed in full or left after ``stop`` cells, with runs or without: what ``load`` gives."""
+    data = _rich_book(calc)
+
+    def feed(rich: bool) -> object:
+        def run(loader: xlrecalc.Loader, book: xlio.Workbook) -> None:
+            cells = loader.cells(book.sheets[0], rich=rich)
+            for _ in itertools.islice(cells, stop):
+                pass
+
+        return run
+
+    expected = _rich_state(xlrecalc.load(io.BytesIO(data)))
+    assert expected[0][:3] == ["Bold text", 9.0, "plain"]  # the value is the text, runs joined
+    assert _rich_state(loaded(data, feed(True))) == expected
+    assert _rich_state(loaded(data, feed(False))) == expected

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `Loader.cells(sheet, rich=True)`: each cell as `xlio`'s `Sheet.cells(rich=True)` gives it, with its text's runs and
+  phonetic guides, for a caller that renders them; what the loader records is the same either way.
+
 ### Fixed
 - `MATCH` given one value as its lookup array, not a reference or an array, converts it to a number as Excel does:
   `#VALUE!` for a text that is not one (`MATCH("a","a",0)`, or `MATCH("",A:A&"",0)` in a plain formula, which reads
