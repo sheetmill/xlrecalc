@@ -4487,9 +4487,9 @@ def bessel_family() -> list[Case]:
         ("BESSELY", _BESSEL_N_MIDDLE),
     ):
         cases += [Case(f"{name.lower()}_limit", f"{name}({{1}},{{2}})", (2.5, n)) for n in ns]
-    # the limits between those rows: K and Y overflow from n = 180 in the routines; where I and J
-    # stop between 1E7 and 1E8; whether K and Y have an n limit where nothing overflows; the x
-    # where J and Y stop (SIN's 2^27?) and where I's exp overflows
+    # the limits between those rows: K and Y overflow to #NUM! from n = 180 at x = 2.5; n above 1E7
+    # is #NUM! for all four, K too where nothing overflows; J0 and Y0 stop at x = 2^27 where J1 and
+    # Y1 do not (the limit is on the asymptotic angle); I is #NUM! from x = 709.78
     probes: list[tuple[str, float, float]] = [
         *((f, 2.5, n) for f in ("BESSELK", "BESSELY") for n in (179.0, 180.0)),
         *((f, 2.5, n) for f in ("BESSELI", "BESSELJ") for n in (1.5e7, 2e7, 3e7, 5e7, 7e7)),
@@ -4503,8 +4503,8 @@ def bessel_family() -> list[Case]:
         *(("BESSELI", x, n) for x in (709.78, 709.9, 710.0) for n in (0.0, 1.0)),
     ]
     cases += [Case(f"{f.lower()}_edge", f"{f}({{1}},{{2}})", (x, n)) for f, x, n in probes]
-    # narrower: the n limit between 1E7 and 1.5E7; the angle x - 0.785398164 (order 0) or
-    # x - 2.356194491 (order 1) where J and Y stop; the x where I stops below 709.78
+    # narrower: n = 10,000,001 is #NUM! (the limit is 1E7); J and Y are #NUM! once x - 0.785398164
+    # (order 0) or x - 2.356194491 (order 1) reaches 2^27 - 1; I is computed at 709.7, not 709.71
     narrow: list[tuple[str, float, float]] = [
         *(
             ("BESSELI", 2.5, n)

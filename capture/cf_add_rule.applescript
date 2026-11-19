@@ -7,7 +7,7 @@
 -- of that name is already open, and closes it after saving.
 --
 -- Output: "added" with the rule's formula 1 as Excel reports it, or "error", the number and the
--- message (AppleScript may not create a format condition: the answer this script exists to find).
+-- message (the error branch reports a rule Excel would not create).
 on run argv
 	set xlPath to item 1 of argv
 	set xlSheet to item 2 of argv

@@ -61,7 +61,6 @@ def _applies(case: Case, rule: Rule, cell: str) -> bool:
     return _rule(case, rule).applies(cell, _values(case), names=_names(case))
 
 
-@pytest.mark.skipif(not CAPTURE.is_file(), reason="capture cf_rules not made yet")
 @pytest.mark.parametrize("row", _rows(), ids=lambda r: f"{r[0]}:{r[4]}")
 def test_a_rule_applies_where_excel_applies_it(row: list[str]) -> None:
     name, outcome, cell = row[0], row[8], row[4]
@@ -83,7 +82,6 @@ def _row(name: str) -> list[str]:
     return next(r for r in _rows() if r[0] == name)
 
 
-@pytest.mark.skipif(not CAPTURE.is_file(), reason="capture cf_rules not made yet")
 def test_what_excel_refuses_and_stacks() -> None:
     """A file holding a rule with an array constant or a structured reference is one Excel offers
     to repair; a rule with ``stopIfTrue`` that applies keeps the next rule's format off."""
@@ -101,7 +99,6 @@ def test_what_excel_refuses_and_stacks() -> None:
     assert (stop[6], stop[7]) == ("255,255,255", "true")  # the first rule's bold, no fill
 
 
-@pytest.mark.skipif(not CAPTURE.is_file(), reason="capture cf_rules not made yet")
 def test_a_volatile_function_in_a_rule_recalculates_nothing_on_opening() -> None:
     """Planted cached values stay on opening and in Excel's saved copy, whatever the rule calls."""
     for name in ("open_rule_rand", "open_rule_offset", "open_rule_plain"):

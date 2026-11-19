@@ -1412,7 +1412,7 @@ FALSE, 0, other text and a blank show no format, so `applies` is False for them,
 the package does not compute raises `UnsupportedError`, as `evaluate` does. A rule holding an array
 constant or a structured reference makes Excel offer to repair the file, so `parse` refuses it with
 `FormulaError`. A `cellIs` rule compares the cell's value with its bounds, each evaluated at the
-cell, by Excel's comparison (§4.2), for every operator and for text, logicals and blanks against
+cell, by Excel's comparison (§4.3), for every operator and for text, logicals and blanks against
 number and text bounds; `between` and `notBetween` take their bounds in either order. A reference to
 another sheet works, directly, through a name and in Excel 2010's extension, and a volatile function
 in a rule recalculates no cell on opening, so `RecalcCheck` reads no rule. Tests:
@@ -1453,9 +1453,10 @@ After 0.4.0, in this order: an order, not a promise or a date.
 6. Before 1.0: the newer errors written in Excel's own form, `#VALUE!` with a rich-value record
    behind `vm` (§7.7), so that a file Excel opens without recalculating shows `#SPILL!` or
    `#CALC!` and a later load reads a blocked spill as one; the rich-value parts are `xlio`'s, the
-   reader and writer. A candidate too: `CONVERT` bit for bit, from a capture of `CONVERT(1,a,b)`
-   over every pair of units in a category, to recover the units Excel defines through others
-   (QUIRKS.md lists the conversions that differ in the last bit or two).
+   reader and writer. A candidate too: `CONVERT` bit for bit, from an analysis of capture
+   `convert_pairs` (`CONVERT` at 1, 2.5 and 3 over every pair of units in a category) that
+   recovers the units Excel defines through others (QUIRKS.md lists the conversions that differ
+   in the last bit or two).
 7. A strict option for `recalculate` and `Workbook.save` that raises where a cell cannot be
    computed (`Report.uncomputed`), rather than writing it with the file's value or none; and
    streams as well as paths for `save` and `recalculate`, as `load` takes one.

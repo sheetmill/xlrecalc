@@ -189,8 +189,8 @@ _UNITS: dict[str, tuple[str, float, float]] = {
     "kn": ("m/s", 0.5144444444444445, 1.9438444924406046),
     "admkn": ("m/s", 0.5147733333333333, 1.9426025694156652),
 }  # fmt: skip
-
 """Units by name, keyed to their category's base unit (temperature apart, in ``_SCALES``)."""
+
 _PREFIXED = frozenset(
     {
         "J",
