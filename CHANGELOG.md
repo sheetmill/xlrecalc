@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the four places where Excel's results differ from the printed routines (QUIRKS.md). Capture `bessel_family` (Excel
   16.115 for Mac, 4,359 rows: x from 0 to 1E308, n from 0 to 2^32, coercion, errors and the limits of x and n): every row matches bit for bit
   on macOS; `BESSELJ` and `BESSELY` allow 8 units in the last place for the platform's sine and cosine.
+- `CONVERT`, every unit Excel documents with its aliases, decimal and binary prefixes, and temperatures by Excel's
+  formula for each pair of scales. Capture `convert_family` (Excel 16.115 for Mac, 2,558 rows): every conversion to
+  or from a category's base unit, every prefix and every temperature matches bit for bit; between two other units,
+  839 of 1,056 do and the rest are within 2 units in the last place, as declared (QUIRKS.md).
 - `ReadLimits.max_function_steps` (1,000,000,000 by default): the iterations that loops inside functions may take in
   one recalculation, an allowance shared by its cells and charged before each loop runs. A cell whose function would
   pass it keeps the value the file holds and is reported (`Report.uncomputed`; `Report.unsupported` names the limit).

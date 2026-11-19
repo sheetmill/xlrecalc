@@ -109,6 +109,7 @@ _EMPTY_REQUIRED_IS_NA = frozenset(
         "BESSELK",
         "BESSELY",
         "BIN2HEX",
+        "CONVERT",
         "BIN2OCT",
         "COUPDAYBS",
         "COUPDAYS",

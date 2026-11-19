@@ -945,6 +945,7 @@ SUITES = [
     "collate_words",
     "collate_functions",
     "bessel_family",
+    "convert_family",
 ]
 
 

@@ -1442,8 +1442,7 @@ After 0.4.0, in this order: an order, not a promise or a date.
    would be an optional extra, imported when the adapter is used.
 3. Unions of ranges together with arrays of references, which QUIRKS.md lists as not
    computed.
-4. The functions still absent, by family, each family's captures first: Bessel functions and
-   `CONVERT`, bonds with odd periods, the regression arrays (`TREND`, `GROWTH`, `LOGEST`) and
+4. The functions still absent, by family, each family's captures first: bonds with odd periods, the regression arrays (`TREND`, `GROWTH`, `LOGEST`) and
    `TRIMRANGE`, then `AGGREGATE` and the others one by one; those with large questions of their
    own (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable.
    `docs/coverage.md` lists what exists.
@@ -1454,7 +1453,9 @@ After 0.4.0, in this order: an order, not a promise or a date.
 6. Before 1.0: the newer errors written in Excel's own form, `#VALUE!` with a rich-value record
    behind `vm` (§7.7), so that a file Excel opens without recalculating shows `#SPILL!` or
    `#CALC!` and a later load reads a blocked spill as one; the rich-value parts are `xlio`'s, the
-   reader and writer.
+   reader and writer. A candidate too: `CONVERT` bit for bit, from a capture of `CONVERT(1,a,b)`
+   over every pair of units in a category, to recover the units Excel defines through others
+   (QUIRKS.md lists the conversions that differ in the last bit or two).
 7. A strict option for `recalculate` and `Workbook.save` that raises where a cell cannot be
    computed (`Report.uncomputed`), rather than writing it with the file's value or none; and
    streams as well as paths for `save` and `recalculate`, as `load` takes one.

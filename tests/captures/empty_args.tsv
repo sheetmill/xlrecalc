@@ -1208,12 +1208,12 @@ empty_args	textsplit	1194	_xlfn.TEXTSPLIT("a,b;c",",",,FALSE)	()	str	'a'
 empty_args	randarray	1195	_xlfn.RANDARRAY(1,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1196	_xlfn.RANDARRAY(,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1197	_xlfn.RANDARRAY(1,,5,5,FALSE)	()	n	5.0
-empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	3.1950028435565896
+empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	2.1111378928477134
 empty_args	randarray	1199	_xlfn.RANDARRAY(1,1,5,,FALSE)	()	e	#VALUE!
 empty_args	randarray	1200	_xlfn.RANDARRAY(1,1,5,5,)	()	n	5.0
-empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.3042349871435879
-empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.2116103555801494
-empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.04836982457747685
+empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.7848524891077318
+empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.4428789331197793
+empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.02584924212676576
 empty_args	let	1204	_xlfn.LET(_xlpm.x,1,_xlpm.x+1)	()	n	2.0
 empty_args	let	1205	_xlfn.LET(_xlpm.x,,_xlpm.x+1)	()	n	1.0
 empty_args	let	1206	_xlfn.LET(_xlpm.x,1,)	()	n	0.0
@@ -1543,3 +1543,7 @@ empty_args	besselk	1529	BESSELK(2,)	()	e	#N/A
 empty_args	bessely	1530	BESSELY(2,2)	()	n	-0.6174080983850512
 empty_args	bessely	1531	BESSELY(,2)	()	e	#N/A
 empty_args	bessely	1532	BESSELY(2,)	()	e	#N/A
+empty_args	convert	1533	CONVERT(1,"m","ft")	()	n	3.2808398950131235
+empty_args	convert	1534	CONVERT(,"m","ft")	()	e	#N/A
+empty_args	convert	1535	CONVERT(1,,"ft")	()	e	#N/A
+empty_args	convert	1536	CONVERT(1,"m",)	()	e	#N/A

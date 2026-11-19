@@ -3612,6 +3612,8 @@ _EMPTY_ADDED += (  # LAMBDA and the functions that call one
     "_XLFN.BYCOL", "_XLFN.MAKEARRAY",
 )  # fmt: skip
 _EMPTY_ADDED += ("BESSELI", "BESSELJ", "BESSELK", "BESSELY")  # the Bessel functions
+_EMPTY_ADDED += ("CONVERT",)
+_EMPTY_VALID["CONVERT"] = ("1", '"m"', '"ft"')
 
 # Functions whose arguments the generator cannot fill (LET's are names, the others take a
 # LAMBDA): their formulas as given.

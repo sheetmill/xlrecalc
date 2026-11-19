@@ -12,7 +12,7 @@ as matching. Whether a matching row is exact or within its tolerance depends on 
 platform's math library, so the page counts them together and is the same on every
 platform.
 
-456 implemented, 17 partial, 50 absent.
+457 implemented, 17 partial, 49 absent.
 
 | function | category | status | rows | match | listed | tolerance | note |
 |---|---|---|---:|---:|---:|---|---|
@@ -96,7 +96,7 @@ platform.
 | `CONFIDENCE` | statistical | implemented | 804 | 804 | 0 | 4 ulps |  |
 | `CONFIDENCE.NORM` | statistical | implemented | 804 | 804 | 0 | 4 ulps |  |
 | `CONFIDENCE.T` | statistical | implemented | 97 | 92 | 5 | 1e-14 relative |  |
-| `CONVERT` | | absent | | | | | |
+| `CONVERT` | engineering | implemented | 2562 | 2562 | 0 | 2 ulps |  |
 | `CORREL` | statistical | implemented | 15 | 15 | 0 | 4 ulps |  |
 | `COS` | math | implemented | 30 | 30 | 0 | 4 ulps |  |
 | `COSH` | math | implemented | 30 | 30 | 0 | 4 ulps |  |
