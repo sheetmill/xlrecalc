@@ -555,7 +555,7 @@ def load(
     evaluated in every mode. ``saving``: the load is followed by a save, as in
     ``recalculate(path)``, whose result is the copy Excel saves after opening.
     """
-    if recalc_on_load not in RECALC_ON_LOAD:  # before the file is opened, as it always was
+    if recalc_on_load not in RECALC_ON_LOAD:  # checked before the file is opened
         raise ValueError(f"recalc_on_load must be one of {RECALC_ON_LOAD}: {recalc_on_load!r}")
     with xlio.open(source, limits=io_limits(limits)) as book:
         path = (

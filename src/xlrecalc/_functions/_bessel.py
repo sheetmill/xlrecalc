@@ -47,7 +47,8 @@ _LARGEST_I = 709.7
 """The largest x for which I is computed: 709.7 is, 709.71 is ``#NUM!``, though ``exp`` would not
 overflow before 709.78; the limit is taken to be 709.7 itself."""
 _START = 40.0
-"""How far above n the downward recurrence starts: n + sqrt(40 n), rounded to even for J."""
+"""How far above n the downward recurrence starts: from 2 ((n + sqrt(40 n)) // 2) for J, from
+2 (n + sqrt(40 n)) for I."""
 _RESCALE_ABOVE, _RESCALE_BY = 1e10, 1e-10
 
 Coefficients = tuple[float, ...]

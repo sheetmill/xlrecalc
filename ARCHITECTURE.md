@@ -363,7 +363,7 @@ evaluated once. A lazy branch inside `LET` takes the environment too (`ops.bind`
 stays a reference; a legacy formula intersects it where it would intersect the range. With no
 calculation after the bindings, the last name is the calculation, as Excel writes it back. A
 name bound twice or written without `_xlpm.`, or a number where a name goes, makes Excel refuse
-the file. Formulas without `LET` compile as before.
+the file. Formulas without `LET` compile as described above.
 
 **`LAMBDA`** (captures `lambda_calls`, `lambda_names`, `lambda_depth`) is compiled as `LET` is:
 its parameters are a scope resolved at compile time (`_xlpm.` names, optional ones `_xlop.` in

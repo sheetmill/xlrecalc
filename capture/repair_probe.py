@@ -2,7 +2,7 @@
 
     uv run python -m capture.repair_probe [--uncached]
 
-The one interactive capture here: Excel refuses to open a file holding such a formula unless
+An interactive capture: Excel refuses to open a file holding such a formula unless
 a person accepts its repair dialog, so this opens the workbook with alerts on and waits for
 that. The workbook holds every formula ``capture/formula_forms.py`` found refused, one per row
 of column A, between control formulas. Every formula cell is given a deliberately wrong cached

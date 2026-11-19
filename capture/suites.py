@@ -4479,7 +4479,10 @@ def bessel_family() -> list[Case]:
         ]
         cases += [Case(f"{tag}_n", f"{name}({{1}},{{2}})", (2.5, n)) for n in _BESSEL_N_EDGES]
         cases += [Case(f"{tag}_x", f"{name}({{1}},{{2}})", (x, 1.0)) for x in _EDGES]
-    # the largest n each takes (I and J: 1E5 computes, 1E9 is #NUM!; K and Y: 100 and 1000)
+    # rows at the limits, which they establish: n up to 1E7 for all four (10,000,001 is #NUM!, K too
+    # where nothing overflows); K and Y overflow to #NUM! from n = 180 at x = 2.5; J and Y are #NUM!
+    # once x - 0.785398164 (order 0) or x - 2.356194491 (order 1) reaches 2^27 - 1; I is computed at
+    # x = 709.7 and #NUM! from 709.71
     for name, ns in (
         ("BESSELI", _BESSEL_N_LARGE),
         ("BESSELJ", _BESSEL_N_LARGE),
@@ -4487,9 +4490,6 @@ def bessel_family() -> list[Case]:
         ("BESSELY", _BESSEL_N_MIDDLE),
     ):
         cases += [Case(f"{name.lower()}_limit", f"{name}({{1}},{{2}})", (2.5, n)) for n in ns]
-    # the limits between those rows: K and Y overflow to #NUM! from n = 180 at x = 2.5; n above 1E7
-    # is #NUM! for all four, K too where nothing overflows; J0 and Y0 stop at x = 2^27 where J1 and
-    # Y1 do not (the limit is on the asymptotic angle); I is #NUM! from x = 709.78
     probes: list[tuple[str, float, float]] = [
         *((f, 2.5, n) for f in ("BESSELK", "BESSELY") for n in (179.0, 180.0)),
         *((f, 2.5, n) for f in ("BESSELI", "BESSELJ") for n in (1.5e7, 2e7, 3e7, 5e7, 7e7)),
@@ -4503,8 +4503,6 @@ def bessel_family() -> list[Case]:
         *(("BESSELI", x, n) for x in (709.78, 709.9, 710.0) for n in (0.0, 1.0)),
     ]
     cases += [Case(f"{f.lower()}_edge", f"{f}({{1}},{{2}})", (x, n)) for f, x, n in probes]
-    # narrower: n = 10,000,001 is #NUM! (the limit is 1E7); J and Y are #NUM! once x - 0.785398164
-    # (order 0) or x - 2.356194491 (order 1) reaches 2^27 - 1; I is computed at 709.7, not 709.71
     narrow: list[tuple[str, float, float]] = [
         *(
             ("BESSELI", 2.5, n)

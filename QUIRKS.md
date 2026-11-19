@@ -98,12 +98,13 @@ doubles (`ROUNDUP(2.675,2)` is 2.6799999999999997; capture `rounding`); `IMCOT` 
 66.4385618977473, a unit above the true value's 15th digit (capture `complex_family`).
 
 `BESSELI`, `BESSELJ`, `BESSELK` and `BESSELY` give Excel's values, not the exact functions': Excel
-computes them with the routines of Numerical Recipes in C (2nd edition, sections 6.5 and 6.6), accurate to
-about 1E-8 relative, and the package uses the same routines in doubles, which match every captured
-row bit for bit on macOS (capture `bessel_family`, 4,359 rows); where the platform's sine and cosine
-differ in the last bits, `BESSELJ` and `BESSELY` from x = 8 may differ by a few units in the last
-place (up to 4 on Linux x86_64; 8 are allowed). Excel's results differ from the printed routines in
-four places, and the package follows Excel:
+computes them with the approximations of Numerical Recipes in C (2nd edition, sections 6.5 and 6.6),
+accurate to about 1E-8 relative, and the package evaluates the same approximations, with their
+published coefficients, in its own code in doubles, which match every captured row bit for bit on
+macOS (capture `bessel_family`, 4,359 rows); where the platform's sine and cosine differ in the last
+bits, `BESSELJ` and `BESSELY` from x = 8 may differ by a few units in the last place (up to 4 on
+Linux x86_64; 8 are allowed). Excel's results differ from the printed approximations in four places,
+and the package follows Excel:
 
 - J0 from x = 8: the coefficient printed as -0.1098628627E-2 is -0.1098628267E-2 (two digits
   transposed).

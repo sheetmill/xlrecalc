@@ -17,8 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   number, the text `"TRUE"`), not for an error or other text; `between` and `notBetween` take their bounds in either order. A formula
   holding an array constant or a structured reference, which make Excel offer to repair the file, is refused with
   `FormulaError`.
-- `BESSELI`, `BESSELJ`, `BESSELK`, `BESSELY`, with Excel's values: the Numerical Recipes routines Excel uses, with
-  the four places where Excel's results differ from the printed routines (QUIRKS.md). Capture `bessel_family` (Excel
+- `BESSELI`, `BESSELJ`, `BESSELK`, `BESSELY`, with Excel's values: the approximations Excel uses, those of Numerical
+  Recipes in C (2nd edition, sections 6.5 and 6.6), evaluated with their published coefficients in the package's own
+  code, with the four places where Excel's results differ from the printed approximations (QUIRKS.md). Capture `bessel_family` (Excel
   16.115 for Mac, 4,359 rows: x from 0 to 1E308, n from 0 to 2^32, coercion, errors and the limits of x and n): every row matches bit for bit
   on macOS; `BESSELJ` and `BESSELY` allow 8 units in the last place for the platform's sine and cosine.
 - `CONVERT`, every unit Excel documents with its aliases, decimal and binary prefixes, and temperatures by Excel's

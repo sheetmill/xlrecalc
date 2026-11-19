@@ -543,8 +543,8 @@ def load(
         source: The file, as a path or a binary file object (read into memory).
         quirks: Which Excel quirks to reproduce; all by default.
         limits: Limits on what reading and computing the workbook may cost (``ReadLimits``):
-            the package's parts and sizes, the cells an array may hold, and the evaluations of
-            one run of iterative calculation.
+            the package's parts and sizes, the cells an array may hold, the evaluations of one
+            run of iterative calculation, and the steps of loops inside functions.
         recalc_on_load: ``"excel"``, Excel's rule above; ``"always"``, evaluate every formula;
             ``"never"``, trust every cached value the file holds but the volatile formulas'
             (``RAND``, ``NOW``..., through a defined name too). A formula with no cached value
@@ -566,13 +566,12 @@ def load(
 class Loader:
     """Read a workbook whose cells the caller already streams through ``xlio``, reading them once.
 
-    A caller that opens a workbook with ``xlio`` and reads every sheet's cells for its own use
-    would read the file a second time with :func:`load`. A ``Loader`` takes the open workbook
-    instead: each sheet's cells pass through :meth:`cells`, which records every cell and hands it
-    on, so the caller keeps its one loop over the cells, as with ``csv.reader`` over a file the
-    caller owns (the producer stays in the caller's loop). :meth:`finish` then gives the
-    :class:`Workbook` that :func:`load` would give, by the same code: ``load`` is a ``Loader``
-    with every sheet fed in order.
+    A caller that opens a workbook with ``xlio`` and reads every sheet's cells for its own use would
+    read the file a second time with :func:`load`. A ``Loader`` takes the open workbook instead:
+    each sheet's cells pass through :meth:`cells`, which records every cell and hands it on, so the
+    caller keeps its one loop over the cells, as with ``csv.reader`` over a file the caller owns.
+    :meth:`finish` then gives the :class:`Workbook` that :func:`load` would give, by the same code:
+    ``load`` is a ``Loader`` with every sheet fed in order.
 
     A sheet need not be fed: :meth:`finish` reads any sheet not fed, and any sheet whose loop the
     caller left part-way, again from its start, recording the cells not yet recorded. The result

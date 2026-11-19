@@ -1,7 +1,7 @@
 """How Excel evaluates a conditional format's formula: capture ``cf_rules``.
 
-    uv run python -m capture.cf_probe --feasibility     step 0: is a rule's fill and bold readable?
-    uv run python -m capture.cf_probe --add-rule        step 1: can AppleScript add a formula rule?
+    uv run python -m capture.cf_probe --feasibility     is a rule's fill and bold readable?
+    uv run python -m capture.cf_probe --add-rule        can AppleScript add a formula rule?
     uv run python -m capture.cf_probe                   every case: tests/captures/cf_rules.tsv
 
 Each case is a sheet of its own: a few constants, and one rule (two in group I) over a small range,
@@ -641,7 +641,7 @@ def _plant(src: Path, dst: Path, values: dict[str, str]) -> None:
 
 
 def feasibility() -> None:
-    """Step 0: the control sheet alone, read: does display format report a rule's fill and bold?"""
+    """The control sheet alone, read: does display format report a rule's fill and bold?"""
     preflight()
     CONTAINER.mkdir(parents=True, exist_ok=True)
     path = CONTAINER / "xlrecalc_cf_feasibility.xlsx"
@@ -653,7 +653,7 @@ def feasibility() -> None:
 
 
 def add_rule() -> None:
-    """Step 1: can AppleScript add a formula rule, and how does Excel store it?"""
+    """Can AppleScript add a formula rule, and how does Excel store it?"""
     import openpyxl
 
     preflight()

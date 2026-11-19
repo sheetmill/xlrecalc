@@ -55,8 +55,8 @@ def recalculate(
             its dependents). A file with the setting also makes a later ``recalculate`` of it
             evaluate every formula again.
         limits: Limits on what reading and computing the workbook may cost (``ReadLimits``):
-            the package's parts and sizes, the cells an array may hold, and the evaluations of
-            one run of iterative calculation.
+            the package's parts and sizes, the cells an array may hold, the evaluations of one
+            run of iterative calculation, and the steps of loops inside functions.
         quirks: Which Excel quirks to reproduce; all by default.
         full: Deprecated, to be removed in 1.0: ``True`` is ``recalc_on_load="always"``.
 
