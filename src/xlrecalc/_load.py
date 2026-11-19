@@ -11,9 +11,10 @@ from __future__ import annotations
 
 import datetime as dt
 import decimal
+import itertools
 import os
 import warnings
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
 from typing import Any, BinaryIO, Literal
 
 import xlio
@@ -554,9 +555,49 @@ def load(
     evaluated in every mode. ``saving``: the load is followed by a save, as in
     ``recalculate(path)``, whose result is the copy Excel saves after opening.
     """
-    if recalc_on_load not in RECALC_ON_LOAD:
+    if recalc_on_load not in RECALC_ON_LOAD:  # before the file is opened, as it always was
         raise ValueError(f"recalc_on_load must be one of {RECALC_ON_LOAD}: {recalc_on_load!r}")
     with xlio.open(source, limits=io_limits(limits)) as book:
+        path = (
+            os.path.abspath(os.fspath(source)) if isinstance(source, (str, os.PathLike)) else None
+        )
+        loader = _Loader(
+            book,
+            quirks=quirks,
+            limits=limits,
+            recalc_on_load=recalc_on_load,
+            today=today,
+            saving=saving,
+            path=path,
+        )
+        for sheet in book.sheets:
+            for _ in loader.cells(sheet):
+                pass
+        return loader.finish()
+
+
+class _Loader:
+    """A workbook read into an engine from an open ``xlio`` workbook, its cells fed by the caller.
+
+    The workbook's own parts (names, calculation properties, views) are read at once; each sheet's
+    cells pass through :meth:`cells` while they are recorded; :meth:`finish` records every sheet
+    not fed or fed part-way, reading it again, and applies the opening rule. ``load`` is this
+    with every sheet fed in order.
+    """
+
+    def __init__(
+        self,
+        book: xlio.Workbook,
+        *,
+        quirks: Quirks | None = None,
+        limits: ReadLimits | None = None,
+        recalc_on_load: RecalcOnLoad = "excel",
+        today: dt.date | None = None,
+        saving: bool = False,
+        path: str | None = None,
+    ) -> None:
+        if recalc_on_load not in RECALC_ON_LOAD:
+            raise ValueError(f"recalc_on_load must be one of {RECALC_ON_LOAD}: {recalc_on_load!r}")
         engine = Engine(
             quirks,
             book.date1904,
@@ -568,8 +609,8 @@ def load(
             (limits or ReadLimits()).max_iteration_evaluations,
             (limits or ReadLimits()).max_function_steps,
         )
-        if isinstance(source, (str, os.PathLike)):
-            engine.path = os.path.abspath(os.fspath(source))
+        if path is not None:
+            engine.path = path
         for sheet in book.sheets:
             engine.add_sheet(sheet.name)
         for name, text, scope in defined_names(book):
@@ -579,20 +620,63 @@ def load(
             active = 0
         row, col = _active_cell(book.sheets[active])
         engine.active = (active, row - 1, col - 1)
-        app = file_app(book)
-        rule = Rule.of(book.calc, app, recalc_on_load, saving)
+        self.engine = engine
+        self._book = book
+        self._rule = Rule.of(book.calc, file_app(book), recalc_on_load, saving)
+        self._seen = _Formulas(self._rule.marked)
+        self._dynamic = book.cell_metadata.dynamic_arrays
+        self._sheets: dict[int, _SheetLoad] = {}
+        self._finished = False
+
+    def _index(self, sheet: xlio.Sheet) -> int:
+        for index, candidate in enumerate(self._book.sheets):
+            if candidate is sheet:
+                return index
+        raise ValueError(f"sheet {sheet.name!r} is not a sheet of this workbook")
+
+    def _state(self, index: int) -> _SheetLoad:
+        state = self._sheets[index] = _SheetLoad(
+            self.engine,
+            self._book.sheets[index],
+            self._dynamic,
+            index,
+            self._rule.everything,
+            self._seen,
+        )
+        return state
+
+    def cells(self, sheet: xlio.Sheet) -> Iterator[xlio.Cell]:
+        """Each cell of the sheet, recorded as it passes; a sheet is fed once, before finish."""
+        if self._finished:
+            raise ValueError("the loader has finished: no sheet can be fed after finish()")
+        index = self._index(sheet)
+        if index in self._sheets:
+            raise ValueError(f"sheet {sheet.name!r} has already been fed")
+        if sheet.kind != "worksheet":
+            self._sheets[index] = _SheetLoad.done()
+            return iter(())
+        return _load_sheet(self._state(index), sheet.cells())
+
+    def finish(self) -> Engine:
+        """Record every sheet not fed or fed part-way, then apply the opening rule."""
+        if self._finished:
+            raise ValueError("the loader has already finished")
+        for index, sheet in enumerate(self._book.sheets):
+            if sheet.kind != "worksheet":
+                continue
+            state = self._sheets.get(index) or self._state(index)
+            if not state.closed:  # not fed, or left part-way: read again, recording the rest
+                for _ in _load_sheet(state, itertools.islice(sheet.cells(), state.fed, None)):
+                    pass
+        self._finished = True
+        engine, rule, seen = self.engine, self._rule, self._seen
         full = rule.everything
-        seen = _Formulas(rule.marked)
-        dynamic = book.cell_metadata.dynamic_arrays
-        for index, sheet in enumerate(book.sheets):
-            if sheet.kind == "worksheet":
-                _load_sheet(engine, sheet, dynamic, index, full, seen)
         if not full and not rule.volatile:
             engine.trust_volatile()  # kept on opening unless marked ca="1" (or manual)
         engine.stale.update(seen.marked)  # what Excel recalculates on opening
         if not full and rule.decide(False, False, False, seen.own_unmarked) == "all":
             engine.make_all_stale()  # a volatile function without ca="1": every formula
-    return engine
+        return engine
 
 
 def _active_cell(sheet: xlio.Sheet) -> tuple[int, int]:
@@ -607,100 +691,145 @@ def _active_cell(sheet: xlio.Sheet) -> tuple[int, int]:
     return cell.row, cell.column
 
 
-def _load_sheet(
-    engine: Engine,
-    sheet: xlio.Sheet,
-    dynamic_cm: frozenset[int],
-    index: int,
-    full: bool,
-    seen: _Formulas,
-) -> None:
+class _SheetLoad:
+    """What one worksheet's loading keeps between its cells, so that it can stop and go on.
+
+    ``fed`` counts the cells recorded. A reading the caller left part-way is continued by reading
+    the sheet again from its start and recording from cell ``fed`` on (``_Loader.finish``).
+    """
+
+    def __init__(
+        self,
+        engine: Engine,
+        sheet: xlio.Sheet,
+        dynamic_cm: frozenset[int],
+        index: int,
+        full: bool,
+        seen: _Formulas,
+    ) -> None:
+        self.engine = engine
+        self.sheet = sheet
+        self.dynamic_cm = dynamic_cm
+        self.index = index
+        self.full = full
+        self.seen = seen
+        self.masters: dict[int, int] = {}  # shared-formula index -> template id
+        self.refusals: dict[str, object] = {}
+        self.dependents: list[tuple[int, int, int, Value | None, bool]] = []
+        self.boxes: list[tuple[int, int, int, int, int]] = []  # ranges array formulas fill (§7.7)
+        self.fed = 0
+        self.closed = False
+
+    @classmethod
+    def done(cls) -> _SheetLoad:
+        """The state of a sheet with no cells to record (a chart sheet)."""
+        state = cls.__new__(cls)
+        state.fed, state.closed = 0, True
+        return state
+
+
+def _load_sheet(state: _SheetLoad, cells: Iterable[xlio.Cell]) -> Iterator[xlio.Cell]:
+    """Record a worksheet's cells, yielding each one first; after the last, close the sheet.
+
+    A cell is recorded when the caller asks for the next one, so a caller that stops after
+    receiving a cell leaves that cell unrecorded, and ``state.fed`` counts only what was recorded.
+    """
+    engine, index, full, seen = state.engine, state.index, state.full, state.seen
+    dynamic_cm = state.dynamic_cm
     s = engine.sheets[index]
-    masters: dict[int, int] = {}  # shared-formula index -> template id
-    refusals: dict[str, object] = {}
-    dependents: list[tuple[int, int, int, Value | None, bool]] = []
+    masters, refusals, dependents, boxes = (
+        state.masters,
+        state.refusals,
+        state.dependents,
+        state.boxes,
+    )
     report = engine.report
-    boxes: list[tuple[int, int, int, int, int]] = []  # ranges array formulas fill (§7.7)
-    for cell in sheet.cells():
-        row, col = cell.row - 1, cell.column - 1
-        cached = _value(cell, engine.date1904, engine.quirks)
-        f = cell.formula
-        if f is None:
-            anchor = _filled_by(boxes, row, col)
-            if anchor is not None:
-                engine.set_member(index, row, col, anchor, cached)
-            elif cached is not None:
-                s.set(row, col, cached)
-            continue
-        where = CellRef(s.name, cell.row, cell.column)
-        if f.kind == "shared" and f.text is None:
-            dependents.append(
-                (row, col, f.si or 0, cached, f.attributes.get("ca") in ("1", "true"))
-            )
-            continue
-        box = _box(f.ref) if f.kind in ("array", "dataTable") and f.ref else None
-        dynamic = f.kind == "array" and cell.cm is not None and cell.cm in dynamic_cm
-        if box is not None and not dynamic:  # cells Excel does not let one change one by one
-            engine.locked.setdefault(index, []).append(box)
-        if f.kind == "dataTable" or f.text is None:
-            label = "array formula" if f.kind == "array" else "data table"
-            _keep(engine, index, row, col, cached, label, where)
-            continue
-        if f.kind == "array" and box is not None:
-            if refused_in_file(f.text) is not None:
-                report.refused[where] = str(refused_in_file(f.text))
+    fed = state.fed
+    try:
+        for cell in cells:
+            yield cell
+            fed += 1
+            row, col = cell.row - 1, cell.column - 1
+            cached = _value(cell, engine.date1904, engine.quirks)
+            f = cell.formula
+            if f is None:
+                anchor = _filled_by(boxes, row, col)
+                if anchor is not None:
+                    engine.set_member(index, row, col, anchor, cached)
+                elif cached is not None:
+                    s.set(row, col, cached)
+                continue
+            where = CellRef(s.name, cell.row, cell.column)
+            if f.kind == "shared" and f.text is None:
+                dependents.append(
+                    (row, col, f.si or 0, cached, f.attributes.get("ca") in ("1", "true"))
+                )
+                continue
+            box = _box(f.ref) if f.kind in ("array", "dataTable") and f.ref else None
+            dynamic = f.kind == "array" and cell.cm is not None and cell.cm in dynamic_cm
+            if box is not None and not dynamic:  # cells Excel does not let one change one by one
+                engine.locked.setdefault(index, []).append(box)
+            if f.kind == "dataTable" or f.text is None:
+                label = "array formula" if f.kind == "array" else "data table"
+                _keep(engine, index, row, col, cached, label, where)
+                continue
+            if f.kind == "array" and box is not None:
+                if refused_in_file(f.text) is not None:
+                    report.refused[where] = str(refused_in_file(f.text))
+                    s.set(row, col, BLANK if cached is None else cached)
+                    continue
+                try:
+                    tid = engine.template_for(f.text, row, col, array_mode=True)
+                except (FormulaSyntaxError, TokenizeError) as exc:
+                    report.refused[where] = str(exc)
+                    s.set(row, col, BLANK if cached is None else cached)
+                    continue
+                marked = f.attributes.get("ca") in ("1", "true")
+                _volatile_seen(engine, seen, tid, f.text, marked)
+                engine.set_formula(
+                    index,
+                    row,
+                    col,
+                    template=tid,
+                    cached=cached,
+                    stale=full,
+                    array=(dynamic, box),
+                )
+                if marked and seen.marked_stale:
+                    seen.marked.append(node(index, row, col))
+                boxes.append((*box, node(index, row, col)))
+                continue
+            # Whether Excel refuses a formula depends only on its text outside the references, so
+            # it is decided once per raw-text key (§5.3), like the template.
+            raw = raw_key(f.text, row, col)
+            reason = refusals.get(raw, _UNSEEN)
+            if reason is _UNSEEN:
+                reason = refusals[raw] = refused_in_file(f.text)
+            if reason is not None:
+                report.refused[where] = str(reason)
                 s.set(row, col, BLANK if cached is None else cached)
                 continue
             try:
-                tid = engine.template_for(f.text, row, col, array_mode=True)
+                tid = engine.template_for(f.text, row, col, raw)
             except (FormulaSyntaxError, TokenizeError) as exc:
                 report.refused[where] = str(exc)
                 s.set(row, col, BLANK if cached is None else cached)
                 continue
+            if f.kind == "shared" and f.si is not None:
+                masters[f.si] = tid
             marked = f.attributes.get("ca") in ("1", "true")
             _volatile_seen(engine, seen, tid, f.text, marked)
-            engine.set_formula(
-                index,
-                row,
-                col,
-                template=tid,
-                cached=cached,
-                stale=full,
-                array=(dynamic, box),
-            )
+            engine.set_formula(index, row, col, template=tid, cached=cached, stale=full)
             if marked and seen.marked_stale:
                 seen.marked.append(node(index, row, col))
-            boxes.append((*box, node(index, row, col)))
-            continue
-        # Whether Excel refuses a formula depends only on its text outside the references, so
-        # it is decided once per raw-text key (§5.3), like the template.
-        raw = raw_key(f.text, row, col)
-        reason = refusals.get(raw, _UNSEEN)
-        if reason is _UNSEEN:
-            reason = refusals[raw] = refused_in_file(f.text)
-        if reason is not None:
-            report.refused[where] = str(reason)
-            s.set(row, col, BLANK if cached is None else cached)
-            continue
-        try:
-            tid = engine.template_for(f.text, row, col, raw)
-        except (FormulaSyntaxError, TokenizeError) as exc:
-            report.refused[where] = str(exc)
-            s.set(row, col, BLANK if cached is None else cached)
-            continue
-        if f.kind == "shared" and f.si is not None:
-            masters[f.si] = tid
-        marked = f.attributes.get("ca") in ("1", "true")
-        _volatile_seen(engine, seen, tid, f.text, marked)
-        engine.set_formula(index, row, col, template=tid, cached=cached, stale=full)
-        if marked and seen.marked_stale:
-            seen.marked.append(node(index, row, col))
-        if engine.iterate and marked:
-            engine.calc_always.add(node(index, row, col))
-    s.hidden_rows = frozenset(r - 1 for r, f in sheet.rows.items() if f.hidden)
+            if engine.iterate and marked:
+                engine.calc_always.add(node(index, row, col))
+    finally:
+        state.fed = fed
+    s.hidden_rows = frozenset(r - 1 for r, f in state.sheet.rows.items() if f.hidden)
     # filterMode only decides whether SUBTOTAL leaves out hidden rows: with none hidden it changes
     # nothing, and reading it costs xlio a second parse of the part's head
-    s.filter_mode = bool(s.hidden_rows) and sheet.properties.filter_mode
+    s.filter_mode = bool(s.hidden_rows) and state.sheet.properties.filter_mode
     for row, col, si, cached, marked in dependents:
         master = masters.get(si)
         if master is None:  # no master in the file: keep the value, as there is no formula
@@ -710,6 +839,8 @@ def _load_sheet(
         engine.set_formula(index, row, col, template=master, cached=cached, stale=full)
         if marked and seen.marked_stale:
             seen.marked.append(node(index, row, col))
+
+    state.closed = True
 
 
 def _volatile_seen(engine: Engine, seen: _Formulas, tid: int, text: str, marked: bool) -> None:
