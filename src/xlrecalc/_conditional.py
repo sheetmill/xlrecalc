@@ -171,8 +171,11 @@ class ConditionalFormula:
         """A ``cellIs`` rule: the format applies where the cell's value compares as stated.
 
         The comparison is Excel's operators' (numbers before text before logicals, text without
-        case). ``between`` and ``notBetween`` take their two bounds in either order (capture
-        ``cf_rules``: ``between`` with 4 and 2 is ``between`` with 2 and 4).
+        case). Captured (``cf_rules``): ``equal``, ``notEqual``, ``greaterThan`` and ``between``,
+        which takes its two bounds in either order (4 and 2 is 2 and 4), over numbers and
+        numbers against text. ``greaterThanOrEqual``, ``lessThan``, ``lessThanOrEqual`` and
+        ``notBetween`` (the negation of ``between``) use the same comparison and are not
+        captured yet, nor are text cells against number bounds.
 
         Args:
             operator: As the file stores it: ``equal``, ``notEqual``, ``greaterThan``,

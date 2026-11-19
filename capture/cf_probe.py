@@ -266,6 +266,26 @@ def _cases() -> list[Case]:
     ):
         rule = Rule("A1:A5", formulas, kind="cellIs", operator=operator)
         cases.append(Case(f"cellis_{label}", "H", (rule,), h))
+    for label, operator, formulas in (
+        ("less_absolute", "lessThan", ("$Z$1",)),
+        ("less_or_equal", "lessThanOrEqual", ("3",)),
+        ("greater_or_equal", "greaterThanOrEqual", ("3",)),
+        ("not_between", "notBetween", ("4", "2")),
+        ("not_between_relative", "notBetween", ("B1", "$Z$1")),
+    ):
+        rule = Rule("A1:A5", formulas, kind="cellIs", operator=operator)
+        cases.append(Case(f"cellis_{label}", "H", (rule,), h))
+    # text, logicals and a blank against number and text bounds (A5 blank)
+    mixed = {"A1": "abc", "A2": 12.0, "A3": "12", "A4": True}
+    for label, operator, formulas in (
+        ("mixed_greater_number", "greaterThan", ("5",)),
+        ("mixed_less_number", "lessThan", ("5",)),
+        ("mixed_equal_text_number", "equal", ('"12"',)),
+        ("mixed_less_text", "lessThan", ('"b"',)),
+        ("mixed_between_numbers", "between", ("1", "20")),
+    ):
+        rule = Rule("A1:A5", formulas, kind="cellIs", operator=operator)
+        cases.append(Case(f"cellis_{label}", "H", (rule,), mixed))
     words = {"A1": "abc", "A2": "xyz", "A3": "ABC", "A4": 12.0, "A5": "b"}
     cases.append(
         Case(
