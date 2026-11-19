@@ -14,7 +14,7 @@ from xlrecalc._report import CellRef, Report
 from xlrecalc._values import ErrorValue
 from xlrecalc._workbook import CellValue, FormulaError, Loader, Workbook, load
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 
 __all__ = [
     "CellRef",

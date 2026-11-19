@@ -1428,7 +1428,7 @@ in a rule recalculates no cell on opening, so `RecalcCheck` reads no rule. Tests
 
 ## 13. Roadmap
 
-After 0.4.0, in this order: an order, not a promise or a date.
+After 0.5.0, in this order: an order, not a promise or a date.
 
 1. Excel's iteration for `IRR`, `XIRR`, `RATE` and `YIELD` (its starting step, update
    rule and stopping test, inferred from capture sweeps), aiming to match the rows QUIRKS.md

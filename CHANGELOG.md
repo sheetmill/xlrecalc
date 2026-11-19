@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-19
+
 ### Added
 - `ConditionalFormula`: where Excel shows a conditional format's rule, cell by cell. `parse(formula, sqref=, sheet=)`
   takes an expression rule's formula and `cell_is(operator, formulas, sqref=, sheet=)` a `cellIs` rule's operator and
@@ -584,7 +586,8 @@ First release.
   calculation settings; archive limits (`ReadLimits`, `LimitError`) and a refusal of DTDs
   protect against hostile files; `PackageError` for a file that is not a readable package.
 
-[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/sheetmill/xlrecalc/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/sheetmill/xlrecalc/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/sheetmill/xlrecalc/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/sheetmill/xlrecalc/compare/v0.1.0...v0.2.0
