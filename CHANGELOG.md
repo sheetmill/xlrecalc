@@ -24,6 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `IF` over whole columns in an array formula read by one of these functions (`{=SUM(IF(A:A="k",B:B))}`,
   `{=MAX(IF(A:A<>"",B:B))}`) does the same: 4 to 120 ms where it took 3.2 to 4 s on a sheet of 1,000 rows.
 
+### Fixed
+- A volatile function in a cell's own text without `ca="1"` makes a load compute every formula (capture `volatile_names`)
+  also where xlrecalc's parser cannot read the rest of the formula (`RAND()+`): such a formula was left out, so the
+  load kept cached values that `RecalcCheck` answered would be computed. Both now decide from the text alone.
+
 ## [0.6.0] - 2026-11-20
 
 ### Added

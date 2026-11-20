@@ -505,7 +505,7 @@ class _Formulas:
     def __init__(self, marked_stale: bool) -> None:
         self.marked_stale = marked_stale  # a cell marked ca="1" is computed (``Rule.marked``)
         self.marked: list[int] = []  # those cells, made stale once the formulas are read
-        self.own: dict[int, bool] = {}  # template id -> calls a volatile function in its text
+        self.own: dict[object, bool] = {}  # raw key or text -> calls a volatile function in it
         self.own_unmarked = False
 
 
@@ -787,14 +787,14 @@ def _load_sheet(state: _SheetLoad, cells: Iterable[xlio.Cell]) -> Generator[xlio
                     report.refused[where] = str(refused_in_file(f.text))
                     s.set(row, col, BLANK if cached is None else cached)
                     continue
+                marked = f.attributes.get("ca") in ("1", "true")
+                _volatile_seen(engine, seen, (f.text,), f.text, marked)
                 try:
                     tid = engine.template_for(f.text, row, col, array_mode=True)
                 except (FormulaSyntaxError, TokenizeError) as exc:
                     report.refused[where] = str(exc)
                     s.set(row, col, BLANK if cached is None else cached)
                     continue
-                marked = f.attributes.get("ca") in ("1", "true")
-                _volatile_seen(engine, seen, tid, f.text, marked)
                 engine.set_formula(
                     index,
                     row,
@@ -818,6 +818,8 @@ def _load_sheet(state: _SheetLoad, cells: Iterable[xlio.Cell]) -> Generator[xlio
                 report.refused[where] = str(reason)
                 s.set(row, col, BLANK if cached is None else cached)
                 continue
+            marked = f.attributes.get("ca") in ("1", "true")
+            _volatile_seen(engine, seen, raw, f.text, marked)
             try:
                 tid = engine.template_for(f.text, row, col, raw)
             except (FormulaSyntaxError, TokenizeError) as exc:
@@ -826,8 +828,6 @@ def _load_sheet(state: _SheetLoad, cells: Iterable[xlio.Cell]) -> Generator[xlio
                 continue
             if f.kind == "shared" and f.si is not None:
                 masters[f.si] = tid
-            marked = f.attributes.get("ca") in ("1", "true")
-            _volatile_seen(engine, seen, tid, f.text, marked)
             engine.set_formula(index, row, col, template=tid, cached=cached, stale=full)
             if marked and seen.marked_stale:
                 seen.marked.append(node(index, row, col))
@@ -852,17 +852,19 @@ def _load_sheet(state: _SheetLoad, cells: Iterable[xlio.Cell]) -> Generator[xlio
     state.closed = True
 
 
-def _volatile_seen(engine: Engine, seen: _Formulas, tid: int, text: str, marked: bool) -> None:
+def _volatile_seen(engine: Engine, seen: _Formulas, key: object, text: str, marked: bool) -> None:
     """Note a formula cell that calls a volatile function in its own text without ``ca="1"``.
 
-    Only cells holding their text are looked at (a shared formula's master, not its dependents),
-    as ``RecalcCheck.add`` sees them.
+    Decided from the text alone, once per ``key`` (the raw-text key, or an array formula's text in
+    a tuple), so that a formula the parser cannot read counts as it counts for
+    ``RecalcCheck.add``. Only cells holding their text are looked at (a shared formula's master,
+    not its dependents).
     """
-    if marked or seen.own_unmarked or not engine.templates[tid].volatile:
+    if marked or seen.own_unmarked:
         return
-    own = seen.own.get(tid)
+    own = seen.own.get(key)
     if own is None:
-        own = seen.own[tid] = engine.volatility.own(text)
+        own = seen.own[key] = engine.volatility.own(text)
     seen.own_unmarked = own
 
 

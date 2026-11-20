@@ -249,3 +249,25 @@ def test_rich_or_plain_records_the_same_workbook(calc: str, stop: int | None) ->
     assert expected[0][:3] == ["Bold text", 9.0, "plain"]  # the value is the text, runs joined
     assert _rich_state(loaded(data, feed(True))) == expected
     assert _rich_state(loaded(data, feed(False))) == expected
+
+
+@pytest.mark.parametrize("ca", [False, True])
+@pytest.mark.parametrize("text", ["RAND()+", "(NOW()"])
+def test_a_formula_the_parser_cannot_read_counts_by_its_text(text: str, ca: bool) -> None:
+    """A volatile function in a cell's own text without ``ca="1"`` makes the load compute every
+    formula (capture ``volatile_names``), also where the parser cannot read the rest of the text,
+    as ``RecalcCheck`` answers."""
+    mark = ' ca="1"' if ca else ""
+    data = package(
+        '<row r="1"><c r="A1"><v>2</v></c></row>'
+        '<row r="2"><c r="A2"><f>A1*10</f><v>999</v></c></row>'
+        f'<row r="3"><c r="A3"><f{mark}>{text}</f><v>0</v></c></row>',
+        workbook_extra='<fileVersion appName="xl"/><calcPr calcId="191029"/>',
+    )
+    check = xlrecalc.RecalcCheck(io.BytesIO(data))
+    check.add(text, ca=ca)
+    check.add("A1*10")
+    wb = xlrecalc.load(io.BytesIO(data))
+    assert list(wb.report.refused) == [xlrecalc.CellRef("Data", 3, 1)]  # the parser's refusal
+    assert wb.value("A2") == (999.0 if ca else 20.0)
+    assert check.finish() == ("some" if ca else "all")

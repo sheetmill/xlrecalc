@@ -653,30 +653,30 @@ Which cached values a load trusts is Excel's rule on opening a file (capture `op
 what Excel showed on opening was what it saved after): Excel recalculates every formula when the
 file has no `calcPr`, has `fullCalcOnLoad`, has a `calcId` below 191028 (Excel 16.115's own is
 191029; 191028 and anything higher, 999999 included, is trusted), has no `<fileVersion>` with
-`appName="xl"` (the element missing, as openpyxl writes it, its `appName` missing or another
-name; its other attributes do not matter). Otherwise the formulas decide (capture
-`volatile_names`, `capture/volatile_name_probe.py`, the same method with a defined name or a
-`ca` mark changed): Excel recalculates the cells whose formula carries `ca="1"`, the mark it
-writes on every volatile cell and every cell depending on one (in 12,719 Enron workbooks every
-such cell had it), and keeps the cached values of the rest, a volatile cell without the mark
-included; a cell calling a volatile function in its own text without the mark, which only another
-program writes, makes it recalculate every formula. Under iterative calculation the mark is on a
-loop's cells too, which a trusting load keeps (captures `iterate_open`, `iterate_cached`), so it
-is not followed there. `load` and `recalculate(path)` follow these rules by default
-(`recalc_on_load="excel"`; `_opening.py`: the file-level rule in `recalculates_on_opening`, the
-threshold in `VERIFIED_CALC_ID`, which the capture sets and is rerun after every Excel update, and
-the rest in `Rule`, which `RecalcCheck` reads too); `recalc_on_load="always"` treats every formula
-as stale and `"never"` trusts every cached value the file holds but the volatile formulas'. A
-formula with no cached value is evaluated in every mode. A `calcPr` without `calcId` counts as
-none, as in Excel. In manual calculation Excel shows the cached values on opening whatever the
-reason, and saves them recalculated as above (captures `open_calc`, `manual_volatile`;
-`volatile_names`, `manual_rand_in_cell`), so a load trusts them and `recalculate(path)`, an
-opening and a save, recalculates. Following Excel rather than always
-recalculating loses nothing: a file openpyxl writes asks for a full calculation anyway, and
-where the rules trust a value it is the value Excel computed. A file xlrecalc wrote with
-`fullCalcOnLoad` set (the default, §9.2) is therefore loaded with every formula stale: reading
-it again costs a full recalculation, never a wrong value; `full_calc_on_load=False` writes a
-file whose values a later load trusts.
+`appName="xl"` (the element missing, as openpyxl writes it, its `appName` missing or another name;
+its other attributes do not matter). Otherwise the formulas decide (capture `volatile_names`,
+`capture/volatile_name_probe.py`, the same method with a defined name or a `ca` mark changed):
+Excel recalculates the cells whose formula carries `ca="1"`, the mark it writes on every volatile
+cell and every cell depending on one (in 12,719 Enron workbooks every such cell had it), and keeps
+the cached values of the rest, a volatile cell without the mark included; a cell calling a
+volatile function in its own text without the mark, which only another program writes, makes it
+recalculate every formula (decided from the text, also where the parser cannot read the rest of
+it). Under iterative calculation the mark is on a loop's cells too, which a trusting load keeps
+(captures `iterate_open`, `iterate_cached`), so it is not followed there. `load` and
+`recalculate(path)` follow these rules by default (`recalc_on_load="excel"`; `_opening.py`: the
+file-level rule in `recalculates_on_opening`, the threshold in `VERIFIED_CALC_ID`, which the
+capture sets and is rerun after every Excel update, and the rest in `Rule`, which `RecalcCheck`
+reads too); `recalc_on_load="always"` treats every formula as stale and `"never"` trusts every
+cached value the file holds but the volatile formulas'. A formula with no cached value is
+evaluated in every mode. A `calcPr` without `calcId` counts as none, as in Excel. In manual
+calculation Excel shows the cached values on opening whatever the reason, and saves them
+recalculated as above (captures `open_calc`, `manual_volatile`; `volatile_names`,
+`manual_rand_in_cell`), so a load trusts them and `recalculate(path)`, an opening and a save,
+recalculates. Following Excel rather than always recalculating loses nothing: a file openpyxl
+writes asks for a full calculation anyway, and where the rules trust a value it is the value Excel
+computed. A file xlrecalc wrote with `fullCalcOnLoad` set (the default, §9.2) is therefore loaded
+with every formula stale: reading it again costs a full recalculation, never a wrong value;
+`full_calc_on_load=False` writes a file whose values a later load trusts.
 
 ### 7.5 Cell store
 
