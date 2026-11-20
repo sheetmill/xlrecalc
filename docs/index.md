@@ -4,7 +4,8 @@ xlrecalc recalculates Excel workbooks in pure Python. It evaluates a workbook's 
 the results Excel computes and writes them back into the file as the cached values Excel
 stores, so that openpyxl's data-only mode, pandas and other readers see values where a
 workbook written by a program has only formulas. Results are tested against values captured
-from Excel 16 for Mac under Microsoft 365.
+from Excel 16 for Mac under Microsoft 365; they are not yet checked against Excel for Windows,
+and Excel in other languages and locales is not yet supported.
 
 ```bash
 pip install xlrecalc
