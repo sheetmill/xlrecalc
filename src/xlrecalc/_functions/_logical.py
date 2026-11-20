@@ -142,31 +142,31 @@ def IFNA(ctx: Context, value: Any, alternative: Any) -> Any:
     return value
 
 
-@function("ISNUMBER", "value", errors=True, category=INFO)
+@function("ISNUMBER", "value", errors=True, category=INFO, elementwise=True)
 def ISNUMBER(ctx: Context, v: Any) -> bool:
     """Whether the value is a number."""
     return isinstance(v, float) and not isinstance(v, bool)
 
 
-@function("ISTEXT", "value", errors=True, category=INFO)
+@function("ISTEXT", "value", errors=True, category=INFO, elementwise=True)
 def ISTEXT(ctx: Context, v: Any) -> bool:
     """Whether the value is text."""
     return isinstance(v, str)
 
 
-@function("ISLOGICAL", "value", errors=True, category=INFO)
+@function("ISLOGICAL", "value", errors=True, category=INFO, elementwise=True)
 def ISLOGICAL(ctx: Context, v: Any) -> bool:
     """Whether the value is a logical."""
     return isinstance(v, bool)
 
 
-@function("ISBLANK", "value", errors=True, category=INFO)
+@function("ISBLANK", "value", errors=True, category=INFO, elementwise=True)
 def ISBLANK(ctx: Context, v: Any) -> bool:
     """Whether the cell is empty (an empty text is not)."""
     return v is BLANK
 
 
-@function("ISERROR", "value", errors=True, category=INFO)
+@function("ISERROR", "value", errors=True, category=INFO, elementwise=True)
 def ISERROR(ctx: Context, v: Any) -> bool:
     """Whether the value is any error."""
     return isinstance(v, ErrorValue)
@@ -178,7 +178,7 @@ def ISERR(ctx: Context, v: Any) -> bool:
     return isinstance(v, ErrorValue) and v.code != "#N/A"
 
 
-@function("ISNA", "value", errors=True, category=INFO)
+@function("ISNA", "value", errors=True, category=INFO, elementwise=True)
 def ISNA(ctx: Context, v: Any) -> bool:
     """Whether the value is ``#N/A``."""
     return isinstance(v, ErrorValue) and v.code == "#N/A"

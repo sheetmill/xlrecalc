@@ -125,7 +125,7 @@ def INT(ctx: Context, x: float) -> float:
     return float(math.floor(x))
 
 
-@function("ABS", "number", category=C)
+@function("ABS", "number", category=C, elementwise=True)
 def ABS(ctx: Context, x: float) -> float:
     """Absolute value."""
     return abs(x)

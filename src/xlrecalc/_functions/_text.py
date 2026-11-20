@@ -66,7 +66,7 @@ def MID(ctx: Context, text: str, start: float, n: float) -> str | ErrorValue:
     return text[s - 1 : s - 1 + k]
 
 
-@function("LEN", "text", category=T)
+@function("LEN", "text", category=T, elementwise=True)
 def LEN(ctx: Context, text: str) -> float:
     """Number of characters."""
     return float(len(text))

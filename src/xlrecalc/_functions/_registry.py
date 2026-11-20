@@ -53,7 +53,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
-from xlrecalc._arrays import broadcast, to_array
+from xlrecalc._arrays import Padded, broadcast, is_array, to_array
 from xlrecalc._coerce import Context, scalar, to_bool, to_number, to_text
 from xlrecalc._formula import MISSING
 from xlrecalc._formula._codegen import kind_at
@@ -248,6 +248,7 @@ def function(
     reference: bool = False,
     makes_array: bool = False,
     padded: bool = False,
+    elementwise: bool = False,
 ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """Register a function under its file-form name.
 
@@ -258,6 +259,10 @@ def function(
 
     ``padded``: the function reads a :class:`~xlrecalc._arrays.Padded` array in its ``array``
     arguments, so the compiler may give it one there (ARCHITECTURE.md §7.7).
+
+    ``elementwise``: the function, given an array in its lifted argument, is applied to each
+    element and nothing else; given a padded array there, it maps the rows and the fill, and the
+    compiler lets one through only where its result reaches a reader of padded arrays.
     """
     if (ulps and not ulps_reason) or (rel and not rel_reason):
         raise ValueError(f"{name}: a tolerance needs its reason")
@@ -302,6 +307,23 @@ def function(
             if plain:  # every argument passed as it is (SUM, COUNT, ...): nothing to coerce
                 return core(ctx, *args)
             lifted = [kind_at(kinds, i, cycle) in _LIFTED for i in range(n)]
+            if any(lifted[i] and type(a) is Padded for i, a in enumerate(args)):
+                pads = [i for i, a in enumerate(args) if lifted[i] and type(a) is Padded]
+                arrays = [
+                    i
+                    for i, a in enumerate(args)
+                    if lifted[i] and (type(a) is tuple or (isinstance(a, Ref) and not a.is_cell()))
+                ]
+                if elementwise and len(pads) == 1 and not arrays:  # the rows, then the fill once
+                    k = pads[0]
+
+                    def one(x: Any) -> Any:
+                        v = call(ctx, *args[:k], x, *args[k + 1 :])
+                        return v[0][0] if is_array(v) else v
+
+                    return args[k].map(one)
+                limit = getattr(ctx, "max_array_cells", None)
+                args = tuple(a.dense(limit) if type(a) is Padded else a for a in args)
             if any(lifted[i] and type(a) is tuple for i, a in enumerate(args)):
                 spread = [
                     to_array(a) if lifted[i] and isinstance(a, Ref) and not a.is_cell() else a
@@ -329,6 +351,7 @@ def function(
         call.kinds = kinds  # type: ignore[attr-defined]
         call.cycle = cycle  # type: ignore[attr-defined]
         call.padded = padded  # type: ignore[attr-defined]
+        call.elementwise = elementwise  # type: ignore[attr-defined]
         call.__name__ = core.__name__
         call.__doc__ = core.__doc__
         return call

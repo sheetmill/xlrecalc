@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `INDEX`, `LOOKUP`, `XMATCH`, `ROWS`, `COLUMNS` and, in an array formula, `MATCH` over whole columns under operators (`LOOKUP(2,1/(A:A<>""),A:A)`
   for the last value of a column, `MATCH(TRUE,A:A="",0)`) read each column the same way: 1 to 2 ms where they took 1.3
   to 2.6 s on a sheet of 1,000 rows, with the same results.
+- `ISBLANK`, `ISNUMBER`, `ISTEXT`, `ISERROR`, `ISNA`, `ISLOGICAL`, `LEN` and `ABS` over whole columns, read by one of
+  these functions (`SUMPRODUCT(--ISBLANK(A:A))`, `MATCH(TRUE,ISBLANK(A:A),0)`), apply to each column's rows with data and
+  once to the rest: 2 to 120 ms where they took 1.9 to 3 s on a sheet of 1,000 rows, with the same results.
 
 ## [0.6.0] - 2026-11-20
 

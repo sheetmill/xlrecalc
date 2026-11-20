@@ -36,6 +36,9 @@ def _sheet(rng: random.Random, full: bool) -> list[tuple[int, int, object]]:
     return [(r, c, rng.choice(VALUES)) for r, c in cells if full or rng.random() < 0.5]
 
 
+ELEMENTWISE = ["ABS", "LEN", "ISBLANK", "ISNUMBER", "ISTEXT", "ISERROR", "ISNA", "ISLOGICAL"]
+
+
 def _operand(rng: random.Random, width: int, depth: int) -> str:
     """An array expression of ``width`` columns: a range under operators, sometimes wrapped in a
     function that is not taught (it must receive a dense array)."""
@@ -65,7 +68,7 @@ def _operand(rng: random.Random, width: int, depth: int) -> str:
     if form == 8:
         return f"({inner}={_operand(rng, width, depth - 1)})"
     if form == 9:
-        return f"{rng.choice(['ABS', 'N', 'LEN'])}({inner})"
+        return f"{rng.choice([*ELEMENTWISE, 'N'])}({inner})"  # N is not element-wise: dense
     return f'IF({inner}="",1,{inner})'
 
 
@@ -149,11 +152,11 @@ def test_a_padded_array_is_made_and_read(monkeypatch: pytest.MonkeyPatch) -> Non
     monkeypatch.setattr(engine_module, "_PAD_ROWS", 64)
     monkeypatch.setattr(Engine, "arr_padded", spy)
     cells = [(r, 0, float(r)) for r in range(10)]
-    assert _values(cells, ['SUMPRODUCT((A1:A200="")*1)', "SUMPRODUCT(ABS(A1:A200)*1)"]) == [
+    assert _values(cells, ['SUMPRODUCT((A1:A200="")*1)', "SUMPRODUCT(N(A1:A200)*1)"]) == [
         190.0,
-        45.0,
+        0.0,  # N reads one value of a range (A1), not each
     ]
-    assert len(made) == 1  # the first only: ABS is not taught, so its range is dense
+    assert len(made) == 1  # the first only: N is not taught, so its range is dense
 
 
 def test_the_fill_rows_add_one_by_one_unless_exact() -> None:
@@ -196,6 +199,13 @@ SEARCHES = [
     "_xlfn.XMATCH(5,A1:A200*1,-1)",
     "_xlfn.XMATCH(0,A1:A200*1,0,2)",  # bisection: made dense
     '_xlfn.XMATCH("*",A1:A200&"",2,-1)',
+    "SUMPRODUCT(--ISBLANK(A1:A200))",  # element-wise over a range: a fill of TRUE
+    "SUMPRODUCT(--ISNUMBER(A1:A200))",
+    "SUMPRODUCT(--ISERROR(1/A1:A200))",
+    'SUMPRODUCT(LEN(A1:A200&"x"))',
+    "SUMPRODUCT(ABS(-A1:A200))",
+    "MATCH(TRUE,ISBLANK(A1:A200),0)",
+    "SUMPRODUCT(--ISNA(MATCH(A1:A200,B1:B200,0)))",  # MATCH is not element-wise: dense
     "ROWS(A1:A200*1)",
     'COLUMNS(A1:B200&"")',
 ]

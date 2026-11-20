@@ -378,7 +378,10 @@ class _Generator:
                 self.forms.add("a union of ranges")
                 return self.emit(f"ops.union({', '.join(self.opaque(i) for i in items)})")
             case Call(name, _, args, _, _, prefix):
-                saved, self.padded = self.padded, False
+                # An element-wise function passes the outer mark on to its lifted argument.
+                fn = self.registry.get(name.text.upper()) if prefix is None else None
+                keep = self.padded and bool(getattr(fn, "elementwise", False))
+                saved, self.padded = self.padded, keep
                 try:
                     return self.call(name, prefix, args)
                 finally:
@@ -661,11 +664,15 @@ class _Generator:
                 self.arrays -= 1
                 self.padded = saved
                 continue
-            saved, self.padded = self.padded, kind == "raw" and bool(getattr(fn, "padded", False))
+            outer = self.padded  # set here only for an element-wise function, as expr() decides
+            if kind == "raw" and getattr(fn, "padded", False):
+                self.padded = True
+            elif not (kind in _LIFTED and getattr(fn, "elementwise", False)):
+                self.padded = False
             code = self.argument(arg)
-            self.padded = saved
+            self.padded = outer
             if self.arrays and kind in _LIFTED and not isinstance(arg, Leaf):
-                code = self.emit(f"ctx.arr({code})")
+                code = self.emit(f"ctx.{'arr_padded' if self.padded else 'arr'}({code})")
             elif not self.arrays and kind in _SCALAR and self.ranged(arg):
                 self.intersects = True
             parts.append(code)
