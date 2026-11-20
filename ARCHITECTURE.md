@@ -813,21 +813,22 @@ computes `SUMPRODUCT` over whole columns without making the array (capture `arra
 
 **Padded arrays.** A range taller than 4,096 rows whose data stops in its upper half, made into an
 array where only operators lie between it and a function that reads padded arrays (`SUMPRODUCT`,
-`INDEX` and `LOOKUP`, and `SUM`, `COUNT`, `COUNTA`, `MIN`, `MAX`, `AND`, `OR` and `MATCH` in an
-array context), is a `Padded` array: the rows down to the last one holding anything, and one fill
-value for every cell below. An operator applies to each element of the rows and once to the fill,
-so `D!A:A="x"` is the comparison of the cells that hold data and one `FALSE`. `SUMPRODUCT` sums the
-rows, then adds the fill rows' product as many times as there are fill rows (multiplied when every
-partial sum is an exact integer, so the result is the one cell-by-cell summation gives); the others
-take the fill as many times as there are fill cells, or once where repetition cannot change the
-result (`AND`, `OR`). An exact search tests the fill once, at its first position; a bisection
-(`MATCH` with match type 1 or -1, `LOOKUP`) indexes into the fill's run as if it were there;
-`INDEX` reads one element where it is, and makes the array dense when it returns a whole row or
-column. The limit counts the rows it makes, not the range's height. The compiler decides where a
-padded array may appear: it marks the `array` and `raw` arguments of a function that reads them and
-keeps the mark only through operators, so no other function, nor `IF`, `LET` or a spill, ever
-receives one. `tests/test_padded.py` computes random formulas twice, padded and dense, and requires
-the same value bit for bit.
+`INDEX`, `LOOKUP`, `XMATCH`, `ROWS` and `COLUMNS`, and `SUM`, `COUNT`, `COUNTA`, `MIN`, `MAX`,
+`AND`, `OR` and `MATCH` in an array context), is a `Padded` array: the rows down to the last one
+holding anything, and one fill value for every cell below. An operator applies to each element of
+the rows and once to the fill, so `D!A:A="x"` is the comparison of the cells that hold data and one
+`FALSE`. `SUMPRODUCT` sums the rows, then adds the fill rows' product as many times as there are
+fill rows (multiplied when every partial sum is an exact integer, so the result is the one
+cell-by-cell summation gives); the others take the fill as many times as there are fill cells, or
+once where repetition cannot change the result (`AND`, `OR`). An exact search tests the fill once,
+at its first position (`XMATCH` searching back, at its last; a blank key or a bisection makes
+`XMATCH`'s array dense); a bisection (`MATCH` with match type 1 or -1, `LOOKUP`) indexes into the
+fill's run as if it were there; `INDEX` reads one element where it is, and makes the array dense
+when it returns a whole row or column. The limit counts the rows it makes, not the range's height.
+The compiler decides where a padded array may appear: it marks the `array` and `raw` arguments of a
+function that reads them and keeps the mark only through operators, so no other function, nor `IF`,
+`LET` or a spill, ever receives one. `tests/test_padded.py` computes random formulas twice, padded
+and dense, and requires the same value bit for bit.
 
 `SUMIF`, `SUMIFS` and `COUNTIFS` make no array and need no limit: they walk non-blank cells, as
 `COUNTIF` does, and so do `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS` and `MINIFS`. A blank adds nothing

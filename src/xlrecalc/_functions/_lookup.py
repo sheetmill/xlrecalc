@@ -340,23 +340,27 @@ def CHOOSE(ctx: Context, index: float, *values: Any) -> Any:
     return 0.0 if v is MISSING else v
 
 
-@function("ROWS", "array", category=L)
+@function("ROWS", "array", category=L, padded=True)
 def ROWS(ctx: Context, ref: Any) -> float | ErrorValue:
     """Rows of a reference or array."""
     if isinstance(ref, Ref):
         return float(ref.rows)
     if isinstance(ref, tuple):
         return float(len(ref))
+    if type(ref) is Padded:
+        return float(ref.rows)
     return 1.0 if not isinstance(scalar(ref, ctx), ErrorValue) else scalar(ref, ctx)  # type: ignore[return-value]
 
 
-@function("COLUMNS", "array", category=L)
+@function("COLUMNS", "array", category=L, padded=True)
 def COLUMNS(ctx: Context, ref: Any) -> float | ErrorValue:
     """Columns of a reference or array."""
     if isinstance(ref, Ref):
         return float(ref.columns)
     if isinstance(ref, tuple):
         return float(len(ref[0]))
+    if type(ref) is Padded:
+        return float(ref.cols)
     return 1.0 if not isinstance(scalar(ref, ctx), ErrorValue) else scalar(ref, ctx)  # type: ignore[return-value]
 
 
@@ -642,6 +646,7 @@ def _x_binary(
     "raw",
     min_args=2,
     errors=True,
+    padded=True,
     status="partial",
     note="the regular-expression match mode is not implemented",
     category=L,
@@ -661,6 +666,17 @@ def XMATCH(ctx: Context, key: Any, array: Any, match: Any = MISSING, search: Any
         return s
     if m == 2 and s in (2, -2):
         return VALUE  # wildcards cannot be bisected (capture modern)
+    if type(array) is Padded:
+        if array.cols == 1 and v is not BLANK and s in (1, -1):
+            # A linear search meets the fill's run as one entry: every one is equal, and the
+            # first met in the search's direction is the one it can return (its first or last).
+            start = len(array.head)
+            cells = [(i, row[0]) for i, row in enumerate(array.head)]
+            if array.rows > start:
+                cells.append((start if s == 1 else array.rows - 1, array.fill))
+            found = _x_search(v, cells, array.rows, m, s, ctx)
+            return NA if found is None else float(found + 1)
+        array = array.dense(getattr(ctx, "max_array_cells", None))  # a gap or a bisection
     cells = _x_cells(array, lazily=s == 1 and v is not BLANK and m in (0, 2))
     if isinstance(cells, ErrorValue):
         return cells

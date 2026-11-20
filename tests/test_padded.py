@@ -96,11 +96,16 @@ POSITIONS = ["1", "5", "60", "61", "62", "150", "200", "201", "0"]
 def _lookup(rng: random.Random, operand: str, width: int) -> str:
     """``INDEX``, ``MATCH`` or ``LOOKUP`` over an operand (``MATCH`` over one column)."""
     form = rng.randrange(4)
+    if rng.random() < 0.1:
+        return f"{rng.choice(['ROWS', 'COLUMNS'])}({operand})"
     if form == 0 or width == 2:
         column = rng.choice(["", ",1", f",{width}"])
         return f"INDEX({operand},{rng.choice(POSITIONS)}{column})"
-    if form == 1:
+    if form == 1 and rng.random() < 0.5:
         return f"MATCH({rng.choice(KEYS)},{operand},{rng.choice(['0', '1', '-1'])})"
+    if form == 1:
+        match, search = rng.choice(["0", "1", "-1", "2"]), rng.choice(["1", "-1", "2", "-2"])
+        return f"_xlfn.XMATCH({rng.choice(KEYS)},{operand},{match},{search})"
     if form == 2:
         return f"LOOKUP({rng.choice(KEYS)},{operand})"
     return f"LOOKUP({rng.choice(KEYS)},{operand},B1:B200)"
@@ -184,6 +189,15 @@ SEARCHES = [
     "LOOKUP(0,A1:A200*1)",
     "INDEX(A1:A200*1,150)",
     "INDEX(A1:A200*1,0)",
+    "_xlfn.XMATCH(0,A1:A200*1,0,-1)",  # the fill's last position
+    "_xlfn.XMATCH(0,A1:A200*1)",
+    '_xlfn.XMATCH("",A1:A200&"",0,-1)',
+    "_xlfn.XMATCH(5,A1:A200*1,1,-1)",
+    "_xlfn.XMATCH(5,A1:A200*1,-1)",
+    "_xlfn.XMATCH(0,A1:A200*1,0,2)",  # bisection: made dense
+    '_xlfn.XMATCH("*",A1:A200&"",2,-1)',
+    "ROWS(A1:A200*1)",
+    'COLUMNS(A1:B200&"")',
 ]
 
 
