@@ -24,6 +24,7 @@ from xlrecalc._arith import flush
 from xlrecalc._arrays import (
     ArrayLimitError,
     NotImplementedFormError,
+    Padded,
     check_area,
     element,
     is_array,
@@ -133,6 +134,8 @@ class _Cells:
         return self.sheets[sheet].box_values(r1, c1, r2, c2)
 
 
+_PAD_ROWS = 4096
+"""A range taller than this whose data fills less than half of it is padded, not made dense."""
 _LARGE_BOX = 256  # cells: smaller boxes are listed again rather than remembered
 
 
@@ -649,6 +652,24 @@ class Engine:
         if isinstance(v, Ref):
             return v.value(0, 0) if v.is_cell() else to_array(v)
         return v
+
+    def arr_padded(self, v: Any) -> Any:
+        """As :meth:`arr`, but a tall range whose data stops early is a :class:`Padded` (§7.7).
+
+        The compiler calls this only where every reader of the array is an elementwise operator
+        or a function taught to read a padded array.
+        """
+        if not isinstance(v, Ref) or v.is_cell() or v.rows <= _PAD_ROWS:
+            return self.arr(v)
+        cells = {(r, c): x for r, c, x in v.cells()}
+        height = max((r for r, _ in cells), default=-1) + 1
+        if 2 * height > v.rows:
+            return to_array(v)
+        check_area(height, v.columns, self.max_array_cells)
+        head = tuple(
+            tuple(cells.get((r, c), BLANK) for c in range(v.columns)) for r in range(height)
+        )
+        return Padded(head, v.rows, v.columns, BLANK)
 
     def spill_range(self, ref: Any) -> Any:
         """``A1#`` (``_xlfn.ANCHORARRAY(A1)``): the range the dynamic array at A1 spills into."""

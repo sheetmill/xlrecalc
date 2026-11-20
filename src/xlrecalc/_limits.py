@@ -27,11 +27,12 @@ class ReadLimits:
         max_part_bytes: Decompressed bytes of any one part.
         max_total_bytes: Decompressed bytes of all parts read, together.
         max_array_cells: Cells in any one array a formula makes while it is computed: a range
-            an array formula fills, a reference taken as an array (``SUMPRODUCT(A:J*1)``), or
-            the result of an operation between arrays. A formula that would pass it keeps the
-            value the file holds and is reported (``Report.uncomputed``, and
-            ``Report.unsupported`` names the limit). The default is ten full columns, which
-            the package computes in about 2 GiB.
+            an array formula fills, a reference taken as an array (``{=SUM(A:J*1)}``), or the
+            result of an operation between arrays. Whole columns that ``SUMPRODUCT`` reads,
+            alone or under operators, count only their rows down to the last value. A formula
+            that would pass it keeps the value the file holds and is reported
+            (``Report.uncomputed``, and ``Report.unsupported`` names the limit). The default is
+            ten full columns, which the package computes in about 2 GiB.
         max_iteration_evaluations: Cell evaluations one run of iterative calculation may make:
             the cells on and after circular references times the iterations made, up to the
             file's ``iterateCount`` (at most 32,767). A run that would pass it leaves those cells

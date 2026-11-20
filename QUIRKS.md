@@ -125,13 +125,13 @@ not). An empty argument is `#N/A`.
 
 ## Known deviations
 
-- An array past `ReadLimits.max_array_cells` (ten full columns by default) is not made: the
-  formula keeps the value the file holds and is reported. Over a whole sheet this stops
-  `SUMPRODUCT`, `CORREL`, `LINEST`, `XIRR` and `XNPV`. Excel computes `SUMPRODUCT` there without making the
-  array; given `CORREL` over the whole sheet it too keeps the value the file holds, though it
-  computes `CORREL` over ten columns (captures `array_size`, `array_functions`). `LINEST`,
-  `XIRR` and `XNPV` were not captured at that size. The database functions walk their non-blank
-  cells, and are computed at any size.
+- An array past `ReadLimits.max_array_cells` (ten full columns by default) is not made: the formula keeps the value
+  the file holds and is reported. Over a whole sheet this stops `CORREL`, `LINEST`, `XIRR` and `XNPV`; given `CORREL`
+  over the whole sheet Excel too keeps the value the file holds, though it computes `CORREL` over ten columns
+  (captures `array_size`, `array_functions`). `LINEST`, `XIRR` and `XNPV` were not captured at that size. `SUMPRODUCT`
+  over whole columns reads each column down to its last value (a padded array, ARCHITECTURE.md §7.7) and computes over
+  the whole sheet, as Excel does; a whole column times a whole row, every pair, still passes the limit. The database
+  functions walk their non-blank cells, and are computed at any size.
 - Recursion through `LAMBDA` (captures `lambda_depth`, 99 formulas, and `lambda_more`): Excel stops it
   with `#NUM!` at a budget of 65,536, each call in progress costing 8 plus 4 a parameter (optional
   ones too, given or not) and 4 a `LET` name its body binds, which the package follows exactly

@@ -79,6 +79,7 @@ _BINARY = {
 _PREFIX = {"-": "neg", "+": "pos", "@": "single"}
 _CONTEXT = (
     "arr",
+    "arr_padded",
     "cell",
     "cref",
     "box",
@@ -263,6 +264,9 @@ class _Generator:
         self.features: set[str] = set()
         self.forms: set[str] = set()
         self.arrays = 0  # array contexts around the node being compiled (§7.7)
+        # Only operators lie between the node and a function taught to read a padded array
+        # (``padded`` on the function): a range made into an array here may be padded (§7.7).
+        self.padded = False
         self.array_formula = False  # the formula itself is an array formula
         self.branches: list[str] = []  # functions for the branches of IF and friends
         self.intersects = False
@@ -294,7 +298,9 @@ class _Generator:
     def operand(self, node: Node, code: str) -> str:
         """An operator's operand: an array in an array context, else implicitly intersected."""
         if self.arrays:
-            return code if isinstance(node, Leaf) else self.emit(f"ctx.arr({code})")
+            if isinstance(node, Leaf):
+                return code
+            return self.emit(f"ctx.{'arr_padded' if self.padded else 'arr'}({code})")
         if self.ranged(node):
             self.intersects = True
         return code
@@ -363,25 +369,41 @@ class _Generator:
                     code = self.operand(operand, self.expr(operand))
                     return self.emit(f"ops.percent({code})")
                 self.forms.add("spill reference")
-                return self.emit(f"ctx.spill({self.expr(operand)})")
+                return self.emit(f"ctx.spill({self.opaque(operand)})")
             case Binary():
                 return self.chain(node, top)
             case Group(_, inner, _):
                 return self.expr(inner)
             case Union(items, _):
                 self.forms.add("a union of ranges")
-                return self.emit(f"ops.union({', '.join(self.expr(i) for i in items)})")
+                return self.emit(f"ops.union({', '.join(self.opaque(i) for i in items)})")
             case Call(name, _, args, _, _, prefix):
-                return self.call(name, prefix, args)
+                saved, self.padded = self.padded, False
+                try:
+                    return self.call(name, prefix, args)
+                finally:
+                    self.padded = saved
             case Invoke(callee, _, args):
                 if _calls_a_value(callee, self.registry):  # SUM(1)(2): Excel refuses the file
                     self.features.add("a call of a function's result that is no LAMBDA")
-                return self.invoke(self.expr(callee), args)
+                saved, self.padded = self.padded, False
+                try:
+                    return self.invoke(self.expr(callee), args)
+                finally:
+                    self.padded = saved
             case ArrayConstant(_, rows):
                 return self.constant(
                     tuple(tuple(_element(e, self.quirks) for e in row) for row in rows)
                 )
         raise AssertionError(node)
+
+    def opaque(self, node: Node) -> str:
+        """Code for a node read by something other than an operator: nothing in it is padded."""
+        saved, self.padded = self.padded, False
+        try:
+            return self.expr(node)
+        finally:
+            self.padded = saved
 
     def chain(self, node: Binary, top: bool = False) -> str:
         """A left-deep run of binary operators (``A1+A2+...``), walked without recursion.
@@ -634,8 +656,10 @@ class _Generator:
                 continue
             if kind == "array":
                 self.arrays += 1
+                saved, self.padded = self.padded, bool(getattr(fn, "padded", False))
                 parts.append(self.argument(arg))
                 self.arrays -= 1
+                self.padded = saved
                 continue
             code = self.argument(arg)
             if self.arrays and kind in _LIFTED and not isinstance(arg, Leaf):

@@ -21,6 +21,7 @@ from xlrecalc._values import BLANK, ErrorValue, Ref
 __all__ = [
     "ArrayLimitError",
     "NotImplementedFormError",
+    "Padded",
     "broadcast",
     "check_area",
     "element",
@@ -72,6 +73,68 @@ def to_array(ref: Ref) -> Array:
     """A reference's values as an array (blanks stay blank), within the engine's array limit."""
     check_area(ref.rows, ref.columns, getattr(ref.source, "limit", None))
     return tuple(tuple(ref.value(r, c) for c in range(ref.columns)) for r in range(ref.rows))
+
+
+class Padded:
+    """An array of ``rows`` by ``cols`` stored as its top rows and one value for the rest.
+
+    A range of whole columns made into an array is mostly blank: ``head`` holds its rows down to
+    the last one holding anything, every row below holds ``fill`` in each column. It equals its
+    dense expansion (:meth:`dense`) in every respect. Only the elementwise operators and the
+    functions taught to read it ever receive one (ARCHITECTURE.md §7.7); the compiler hands it to
+    no other code.
+    """
+
+    __slots__ = ("cols", "fill", "head", "rows")
+
+    def __init__(self, head: Array, rows: int, cols: int, fill: Any) -> None:
+        self.head, self.rows, self.cols, self.fill = head, rows, cols, fill
+
+    @property
+    def padding(self) -> int:
+        """How many cells hold ``fill``: those below the head."""
+        return (self.rows - len(self.head)) * self.cols
+
+    def dense(self, limit: int | None = None) -> Array:
+        """The array in full, as ``to_array`` would make it, within ``limit``."""
+        check_area(self.rows, self.cols, limit)
+        row = (self.fill,) * self.cols
+        return self.head + (row,) * (self.rows - len(self.head))
+
+    def map(self, fn: Callable[[Any], Any]) -> Padded:
+        """``fn`` applied to every element: to each of the head's and once to the fill."""
+        head = tuple(tuple(fn(v) for v in row) for row in self.head)
+        return Padded(head, self.rows, self.cols, fn(self.fill))
+
+    def __repr__(self) -> str:
+        return f"Padded({len(self.head)} of {self.rows} by {self.cols} rows, fill {self.fill!r})"
+
+
+def pair(fn: Callable[[Any, Any], Any], a: Any, b: Any) -> Padded | None:
+    """``fn`` element by element over two operands, at least one padded, kept padded.
+
+    ``None`` when the result cannot keep one fill: two padded arrays of different sizes, or a
+    padded array with an array that is not padded (the caller then works on dense arrays).
+    """
+    if type(a) is Padded and type(b) is Padded:
+        if (a.rows, a.cols) != (b.rows, b.cols):
+            return None
+        height = max(len(a.head), len(b.head))
+        x, y = _rows(a, height), _rows(b, height)
+        head = tuple(
+            tuple(fn(u, v) for u, v in zip(r, s, strict=True)) for r, s in zip(x, y, strict=True)
+        )
+        return Padded(head, a.rows, a.cols, fn(a.fill, b.fill))
+    if type(a) is Padded and type(b) is not tuple:
+        return a.map(lambda v: fn(v, b))
+    if type(b) is Padded and type(a) is not tuple:
+        return b.map(lambda v: fn(a, v))
+    return None
+
+
+def _rows(a: Padded, height: int) -> Array:
+    """``a``'s first ``height`` rows, the head followed by rows of its fill."""
+    return a.head + ((a.fill,) * a.cols,) * (height - len(a.head))
 
 
 def shape(a: Array) -> tuple[int, int]:

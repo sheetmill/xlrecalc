@@ -11,7 +11,7 @@ from fractions import Fraction
 from typing import Any
 
 from xlrecalc._arith import flush, snap
-from xlrecalc._arrays import check_area, element, is_array, shape, to_array
+from xlrecalc._arrays import Padded, check_area, element, is_array, shape, to_array
 from xlrecalc._coerce import Context, numbers, scalar, to_number
 from xlrecalc._compare import criterion
 from xlrecalc._formula import MISSING
@@ -414,21 +414,28 @@ def COUNTIFS(ctx: Context, *pairs: Any) -> float | ErrorValue:
     return float(rows * cols - len(failed))
 
 
-@function("SUMPRODUCT", "array", min_args=1, variadic=True, category=C)
+@function("SUMPRODUCT", "array", min_args=1, variadic=True, category=C, padded=True)
 def SUMPRODUCT(ctx: Context, *arrays: Any) -> float | ErrorValue:
     """Sum of products of same-shaped ranges; non-numbers count as 0."""
-    grids = []
+    pad = getattr(ctx, "arr_padded", None)
+    limit = getattr(ctx, "max_array_cells", None)
+    grids: list[Any] = []
     for a in arrays:
+        if isinstance(a, Ref) and pad is not None and not a.is_cell():
+            a = pad(a)  # a tall range whose data stops early: its rows with data, then blanks
         if isinstance(a, Ref):
-            check_area(a.rows, a.columns, getattr(ctx, "max_array_cells", None))
+            check_area(a.rows, a.columns, limit)
             grids.append([[a.value(r, c) for c in range(a.columns)] for r in range(a.rows)])
-        elif isinstance(a, tuple):
-            grids.append([list(row) for row in a])
+        elif isinstance(a, (tuple, Padded)):
+            grids.append(a)
         else:
             v = scalar(a, ctx)
             if isinstance(v, ErrorValue):
                 return v
             grids.append([[v]])
+    if all(type(g) is Padded for g in grids):
+        return _sumproduct_padded(grids)
+    grids = [g.dense(limit) if type(g) is Padded else g for g in grids]
     shape = (len(grids[0]), len(grids[0][0]))
     if any((len(g), len(g[0])) != shape for g in grids):
         return VALUE
@@ -442,6 +449,53 @@ def SUMPRODUCT(ctx: Context, *arrays: Any) -> float | ErrorValue:
                     return v
                 p *= v if isinstance(v, float) and not isinstance(v, bool) else 0.0
             total += p
+    return flush(total) if math.isfinite(total) else NUM
+
+
+def _product(values: Any) -> float | ErrorValue:
+    """One cell's product over the arrays, as ``SUMPRODUCT`` takes it.
+
+    The first error among the values, else their product with every non-number as 0.
+    """
+    p = 1.0
+    for v in values:
+        if isinstance(v, ErrorValue):
+            return v
+        p *= v if isinstance(v, float) and not isinstance(v, bool) else 0.0
+    return p
+
+
+def _sumproduct_padded(grids: list[Padded]) -> float | ErrorValue:
+    """``SUMPRODUCT`` over padded arrays: the rows with data, then the fill rows at once.
+
+    The sum is the one cell by cell gives, row by row: the fill rows add the same products again
+    and again, which is skipped when they are 0, multiplied when every partial sum is an exact
+    integer, and added one by one otherwise.
+    """
+    rows, cols = grids[0].rows, grids[0].cols
+    if any((g.rows, g.cols) != (rows, cols) for g in grids):
+        return VALUE
+    height = max(len(g.head) for g in grids)
+    heads = [g.head + ((g.fill,) * cols,) * (height - len(g.head)) for g in grids]
+    total = 0.0
+    for r in range(height):
+        for c in range(cols):
+            p = _product([h[r][c] for h in heads])
+            if isinstance(p, ErrorValue):
+                return p
+            total += p
+    n = rows - height
+    if n:
+        p = _product([g.fill for g in grids])
+        if isinstance(p, ErrorValue):
+            return p
+        if p:
+            step = p * cols
+            if p.is_integer() and total.is_integer() and abs(total) + abs(step) * n < 2.0**53:
+                total += step * n
+            else:
+                for _ in range(n * cols):
+                    total += p
     return flush(total) if math.isfinite(total) else NUM
 
 

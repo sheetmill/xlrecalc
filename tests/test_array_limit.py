@@ -78,8 +78,6 @@ def test_a_declared_range_past_the_limit_keeps_its_value(array):
 @pytest.mark.parametrize(
     "formula",
     [
-        "SUMPRODUCT(D!A:XFD*1)",  # a reference made into an array
-        "SUMPRODUCT(D!A:XFD)",  # SUMPRODUCT's own grids
         "SUMPRODUCT((D!A1:A1048576+0)*(D!A1:XFD1+0))",  # a column times a row: every pair
         "SUMPRODUCT(ROW(D!A1:A1048576)*COLUMN(D!A1:XFD1))",  # the same from positions
     ],
@@ -87,6 +85,16 @@ def test_a_declared_range_past_the_limit_keeps_its_value(array):
 @bounded
 def test_an_array_made_past_the_limit_keeps_the_value(formula):
     assert_kept(recalculated(two_sheets(formula)))
+
+
+@pytest.mark.parametrize("formula", ["SUMPRODUCT(D!A:XFD*1)", "SUMPRODUCT(D!A:XFD)"])
+@bounded
+def test_sumproduct_over_every_column_is_computed_as_excel_does(formula):
+    """Each column is read down to its last value (a padded array): Excel's 3 for sheet D's two
+    cells (capture ``array_size``, ``SUMPRODUCT`` over every column)."""
+    book = recalculated(two_sheets(formula))
+    assert book.value("S!A1") == 3.0
+    assert not book.report.uncomputed
 
 
 @bounded
@@ -175,12 +183,15 @@ def test_the_sumif_family_makes_no_array():
 def test_the_writer_keeps_the_cached_value():
     with tempfile.TemporaryDirectory() as folder:
         path = Path(folder) / "book.xlsx"
-        path.write_bytes(two_sheets("SUMPRODUCT(D!A:XFD*1)", cached="3"))
+        path.write_bytes(two_sheets("SUMPRODUCT((D!A1:A1048576+0)*(D!A1:XFD1+0))", cached="3"))
         report = xlrecalc.recalculate(path, recalc_on_load="always")
         assert any(str(c) == "S!A1" for c in report.uncomputed)
         with Book(path) as book:  # the file's own cached value, untouched
             (cell,) = list(book.cells("S"))
-        assert (cell.value, cell.formula.text) == (3.0, "SUMPRODUCT(D!A:XFD*1)")
+        assert (cell.value, cell.formula.text) == (
+            3.0,
+            "SUMPRODUCT((D!A1:A1048576+0)*(D!A1:XFD1+0))",
+        )
 
 
 @pytest.mark.parametrize(

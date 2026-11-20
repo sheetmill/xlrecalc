@@ -12,7 +12,7 @@ from types import GeneratorType
 from typing import Any
 
 from xlrecalc._arith import flush, snap
-from xlrecalc._arrays import NotImplementedFormError, broadcast
+from xlrecalc._arrays import NotImplementedFormError, Padded, broadcast, pair
 from xlrecalc._coerce import Context, Raw, scalar, to_bool, to_number, to_text
 from xlrecalc._compare import compare, switch_equal, utf16_length
 from xlrecalc._formula import MISSING
@@ -33,6 +33,10 @@ NESTED_HELPERS = 20
 """Calls of a function value made by ``MAP`` and its siblings, one inside another, that Excel
 takes; the next is ``#VALUE!`` (capture ``lambda_more``: recursion through ``MAP`` 20 deep
 computes, 21 does not). Each such call is a call stack of its own, so this bounds Python's."""
+
+
+_ARRAYS = (tuple, Padded)
+"""What an operator works on element by element: an array, dense or padded."""
 
 
 def _finite(x: float) -> float | ErrorValue:
@@ -70,7 +74,7 @@ class Ops:
         if type(a) is float and type(b) is float:
             r = a + b
             return (0.0 if -DBL_MIN < r < DBL_MIN else r) if _isfinite(r) else NUM
-        if type(a) is tuple or type(b) is tuple:
+        if type(a) in _ARRAYS or type(b) in _ARRAYS:
             return self._each(self.add, a, b)
         p = self._pair(a, b)
         return p if isinstance(p, ErrorValue) else _finite(p[0] + p[1])
@@ -79,7 +83,7 @@ class Ops:
         if type(a) is float and type(b) is float:
             r = a - b
             return (0.0 if -DBL_MIN < r < DBL_MIN else r) if _isfinite(r) else NUM
-        if type(a) is tuple or type(b) is tuple:
+        if type(a) in _ARRAYS or type(b) in _ARRAYS:
             return self._each(self.sub, a, b)
         p = self._pair(a, b)
         return p if isinstance(p, ErrorValue) else _finite(p[0] - p[1])
@@ -88,7 +92,7 @@ class Ops:
         if type(a) is float and type(b) is float:
             r = a + b
             return snap(a, r, self.context.quirks) if _isfinite(r) else NUM
-        if type(a) is tuple or type(b) is tuple:
+        if type(a) in _ARRAYS or type(b) in _ARRAYS:
             return self._each(self.add_top, a, b)
         p = self._pair(a, b)
         if isinstance(p, ErrorValue):
@@ -100,7 +104,7 @@ class Ops:
         if type(a) is float and type(b) is float:
             r = a - b
             return snap(a, r, self.context.quirks) if _isfinite(r) else NUM
-        if type(a) is tuple or type(b) is tuple:
+        if type(a) in _ARRAYS or type(b) in _ARRAYS:
             return self._each(self.sub_top, a, b)
         p = self._pair(a, b)
         if isinstance(p, ErrorValue):
@@ -112,7 +116,7 @@ class Ops:
         if type(a) is float and type(b) is float:
             r = a * b
             return (0.0 if -DBL_MIN < r < DBL_MIN else r) if _isfinite(r) else NUM
-        if type(a) is tuple or type(b) is tuple:
+        if type(a) in _ARRAYS or type(b) in _ARRAYS:
             return self._each(self.mul, a, b)
         p = self._pair(a, b)
         return p if isinstance(p, ErrorValue) else _finite(p[0] * p[1])
@@ -123,7 +127,7 @@ class Ops:
                 return DIV0
             r = a / b
             return (0.0 if -DBL_MIN < r < DBL_MIN else r) if _isfinite(r) else NUM
-        if type(a) is tuple or type(b) is tuple:
+        if type(a) in _ARRAYS or type(b) in _ARRAYS:
             return self._each(self.div, a, b)
         p = self._pair(a, b)
         if isinstance(p, ErrorValue):
@@ -133,7 +137,7 @@ class Ops:
         return _finite(p[0] / p[1])
 
     def pow(self, a: Raw, b: Raw) -> Value:
-        if type(a) is tuple or type(b) is tuple:
+        if type(a) in _ARRAYS or type(b) in _ARRAYS:
             return self._each(self.pow, a, b)
         p = self._pair(a, b)
         if isinstance(p, ErrorValue):
@@ -143,22 +147,26 @@ class Ops:
         return power(*p)
 
     def neg(self, a: Raw) -> Value:
+        if type(a) is Padded:
+            return a.map(self.neg)  # type: ignore[return-value]
         if type(a) is tuple:
             return broadcast(self.neg, (a,), (True,), self._limit())  # type: ignore[return-value]
         x = to_number(a, self.context)
         return x if isinstance(x, ErrorValue) else -x if x else 0.0
 
     def pos(self, a: Raw) -> Value:
-        return a if type(a) is tuple else scalar(a, self.context)  # type: ignore[return-value]
+        return a if type(a) in _ARRAYS else scalar(a, self.context)  # type: ignore[return-value]
 
     def percent(self, a: Raw) -> Value:
+        if type(a) is Padded:
+            return a.map(self.percent)  # type: ignore[return-value]
         if type(a) is tuple:
             return broadcast(self.percent, (a,), (True,), self._limit())  # type: ignore[return-value]
         x = to_number(a, self.context)
         return x if isinstance(x, ErrorValue) else flush(x / 100)
 
     def concat(self, a: Raw, b: Raw) -> Value:
-        if type(a) is tuple or type(b) is tuple:
+        if type(a) in _ARRAYS or type(b) in _ARRAYS:
             return self._each(self.concat, a, b)
         x = to_text(a, self.context)
         if isinstance(x, ErrorValue):
@@ -171,7 +179,7 @@ class Ops:
         return x + y
 
     def _cmp(self, a: Raw, b: Raw, op: str) -> Value:
-        if type(a) is tuple or type(b) is tuple:
+        if type(a) in _ARRAYS or type(b) in _ARRAYS:
             return self._each(lambda x, y: self._cmp(x, y, op), a, b)
         if type(a) is Lambda or type(b) is Lambda:
             return VALUE
@@ -283,8 +291,14 @@ class Ops:
 
     def _each(self, op: Any, a: Raw, b: Raw) -> Value:
         """A binary operation over arrays, element by element (§7.7)."""
-        x = a if type(a) is tuple else scalar(a, self.context)
-        y = b if type(b) is tuple else scalar(b, self.context)
+        x = a if type(a) in _ARRAYS else scalar(a, self.context)
+        y = b if type(b) in _ARRAYS else scalar(b, self.context)
+        if type(x) is Padded or type(y) is Padded:
+            kept = pair(op, x, y)
+            if kept is not None:
+                return kept  # type: ignore[return-value]
+            x = x.dense(self._limit()) if type(x) is Padded else x
+            y = y.dense(self._limit()) if type(y) is Padded else y
         return broadcast(op, (x, y), (True, True), self._limit())  # type: ignore[return-value]
 
     def range(self, a: Raw, b: Raw) -> Value:

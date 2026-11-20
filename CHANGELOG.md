@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- `SUMPRODUCT` over whole columns, alone or under operators (`SUMPRODUCT((A:A="x")*B:B)`), reads each column down to
+  its last value instead of a million cells: about 3 ms where it took about 3 s and 300 MiB on a sheet of 1,000 rows.
+  Results are the same; `SUMPRODUCT` over every column of a sheet is now computed, as Excel computes it (capture
+  `array_size`), where it passed the array limit and kept the file's value.
+
 ## [0.6.0] - 2026-11-20
 
 ### Added

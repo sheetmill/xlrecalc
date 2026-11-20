@@ -247,6 +247,7 @@ def function(
     in_array: Callable[..., Any] | None = None,
     reference: bool = False,
     makes_array: bool = False,
+    padded: bool = False,
 ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """Register a function under its file-form name.
 
@@ -254,6 +255,9 @@ def function(
     formula whose text carries a call of it to the result is written with the dynamic-array
     marker whatever the size of its result, as Excel writes it typed (captures ``marker_typed``
     and ``dyn_*``; the rule is ``_workbook._may_be_array``).
+
+    ``padded``: the function reads a :class:`~xlrecalc._arrays.Padded` array in its ``array``
+    arguments, so the compiler may give it one there (ARCHITECTURE.md §7.7).
     """
     if (ulps and not ulps_reason) or (rel and not rel_reason):
         raise ValueError(f"{name}: a tolerance needs its reason")
@@ -324,6 +328,7 @@ def function(
 
         call.kinds = kinds  # type: ignore[attr-defined]
         call.cycle = cycle  # type: ignore[attr-defined]
+        call.padded = padded  # type: ignore[attr-defined]
         call.__name__ = core.__name__
         call.__doc__ = core.__doc__
         return call

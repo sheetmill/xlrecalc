@@ -805,12 +805,23 @@ legacy array over ten full columns (10,485,760 cells) is computed and written in
 
 **Size.** Every array a formula makes is checked against `ReadLimits.max_array_cells` (default
 10,485,760, ten full columns) before anything is allocated: a range an array formula fills, a
-reference taken as an array, the result of an operation between arrays (a column times a row
-makes every pair), and the ranges `SUMPRODUCT` walks position by position. A formula that would
-pass it keeps its cached value and is reported (§7.6). Excel itself refuses a file declaring an
-array over the whole sheet, opens one over ten full columns at a cost of about 3 GB of its own
-memory, and computes `SUMPRODUCT` over whole columns without making the array (capture
-`array_size`).
+reference taken as an array, the result of an operation between arrays (a column times a row makes
+every pair), and the ranges `SUMPRODUCT` walks position by position. A formula that would pass it
+keeps its cached value and is reported (§7.6). Excel itself refuses a file declaring an array over
+the whole sheet, opens one over ten full columns at a cost of about 3 GB of its own memory, and
+computes `SUMPRODUCT` over whole columns without making the array (capture `array_size`).
+
+**Padded arrays.** A range taller than 4,096 rows whose data stops in its upper half, made into an
+array where only operators lie between it and a function that reads padded arrays (`SUMPRODUCT`),
+is a `Padded` array: the rows down to the last one holding anything, and one fill value for every
+cell below. An operator applies to each element of the rows and once to the fill, so `D!A:A="x"` is
+the comparison of the cells that hold data and one `FALSE`. `SUMPRODUCT` sums the rows, then adds
+the fill rows' product as many times as there are fill rows (multiplied when every partial sum is
+an exact integer, so the result is the one cell-by-cell summation gives). The limit counts the rows
+it makes, not the range's height. The compiler decides where a padded array may appear: it marks
+the `array` arguments of a function that reads them and keeps the mark only through operators, so
+no other function, nor `IF`, `LET` or a spill, ever receives one. `tests/test_padded.py` computes
+random formulas twice, padded and dense, and requires the same value bit for bit.
 
 `SUMIF`, `SUMIFS` and `COUNTIFS` make no array and need no limit: they walk non-blank cells, as
 `COUNTIF` does, and so do `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS` and `MINIFS`. A blank adds nothing
