@@ -1,8 +1,9 @@
 """The file-form printer and its inverse (ARCHITECTURE.md §5.2).
 
 Captures ``formula_bar`` (each corpus formula typed in the formula bar, and Excel's file form of
-it) and ``formula_forms`` (each corpus formula written into a file, and the text Excel saved
-back): the printer must give Excel's text except for the differences listed with a reason.
+it), ``formula_bar_ranges`` (the same for functions that need range arguments) and
+``formula_forms`` (each corpus formula written into a file, and the text Excel saved back): the
+printer must give Excel's text except for the differences listed with a reason.
 """
 
 from __future__ import annotations
@@ -58,7 +59,9 @@ def test_prefixes():
 
 @pytest.mark.excel
 @pytest.mark.parametrize(
-    "row", [r for r in rows("formula_bar") if r[0] != "function"], ids=lambda r: r[1][:40]
+    "row",
+    [r for suite in ("formula_bar", "formula_bar_ranges") for r in rows(suite)],
+    ids=lambda r: r[1][:40],
 )
 def test_printer_matches_the_formula_bar(row):
     _tag, typed, saved = row
