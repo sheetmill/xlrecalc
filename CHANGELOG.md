@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `SUM`, `COUNT`, `COUNTA`, `MIN`, `MAX`, `AND` and `OR` over whole columns under operators in an array formula
   (`{=SUM(--(A:A<>""))}`, a dynamic array) read each column the same way: 1 to 120 ms where they took 1 to 2.7 s on a
   sheet of 1,000 rows, with the same results.
+- `INDEX`, `LOOKUP` and, in an array formula, `MATCH` over whole columns under operators (`LOOKUP(2,1/(A:A<>""),A:A)`
+  for the last value of a column, `MATCH(TRUE,A:A="",0)`) read each column the same way: 1 to 2 ms where they took 1.3
+  to 2.6 s on a sheet of 1,000 rows, with the same results.
 
 ## [0.6.0] - 2026-11-20
 

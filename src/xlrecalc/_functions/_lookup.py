@@ -11,7 +11,7 @@ import math
 import re
 from typing import Any
 
-from xlrecalc._arrays import check_area
+from xlrecalc._arrays import Padded, check_area
 from xlrecalc._coerce import Context, scalar, to_number
 from xlrecalc._compare import compare, lookup_equal, utf16_units, wildcard
 from xlrecalc._formula import MISSING
@@ -24,17 +24,48 @@ L = "lookup and reference"
 _WILD = re.compile(r"[*?~]")
 
 
-def _exact(lookup: Any, cells: list[tuple[int, Any]]) -> int | None:
+class _PaddedLine:
+    """A padded array's single column as (position, value): its rows, then the fill.
+
+    Searches read it without making the million entries: an exact one tests the fill once, at
+    its first position; a bisection indexes into the fill's run (``_Run``).
+    """
+
+    def __init__(self, padded: Padded) -> None:
+        self.head = [(i, row[0]) for i, row in enumerate(padded.head)]
+        self.rows, self.fill = padded.rows, padded.fill
+
+
+class _Run:
+    """The candidates of a bisection: a list, then ``count`` entries of one value from ``start``."""
+
+    def __init__(self, first: list[tuple[int, Any]], start: int, count: int, value: Any) -> None:
+        self.first, self.start, self.count, self.value = first, start, count, value
+
+    def __len__(self) -> int:
+        return len(self.first) + self.count
+
+    def __getitem__(self, k: int) -> tuple[int, Any]:
+        n = len(self.first)
+        return self.first[k] if k < n else (self.start + k - n, self.value)
+
+
+def _exact(lookup: Any, cells: Any) -> int | None:
     """The first position holding the value. A blank never matches, so only cells are visited."""
+    if type(cells) is _PaddedLine:  # the fill's first position is the only one that can be first
+        found = _exact(lookup, cells.head)
+        if found is None and cells.rows > len(cells.head):
+            found = _exact(lookup, [(len(cells.head), cells.fill)])
+        return found
     if isinstance(lookup, str) and _WILD.search(lookup):
         pattern = wildcard(utf16_units(lookup))
         for i, v in cells:
             if isinstance(v, str) and pattern.fullmatch(utf16_units(v)):
-                return i
+                return int(i)
         return None
     for i, v in cells:
         if lookup_equal(lookup, v):
-            return i
+            return int(i)
     return None
 
 
@@ -48,15 +79,19 @@ def _kind(v: Any) -> int:
     return -1
 
 
-def _approximate(
-    lookup: Any, cells: list[tuple[int, Any]], descending: bool, ctx: Context
-) -> int | None:
+def _approximate(lookup: Any, cells: Any, descending: bool, ctx: Context) -> int | None:
     """Last position whose value is <= lookup (>= when descending), by bisection.
 
     It bisects the cells of the lookup value's type: a blank is never one.
     """
     kind = _kind(lookup)
-    candidates = [cell for cell in cells if _kind(cell[1]) == kind]
+    candidates: Any
+    if type(cells) is _PaddedLine:
+        first = [cell for cell in cells.head if _kind(cell[1]) == kind]
+        count = cells.rows - len(cells.head) if _kind(cells.fill) == kind else 0
+        candidates = _Run(first, len(cells.head), count, cells.fill)
+    else:
+        candidates = [cell for cell in cells if _kind(cell[1]) == kind]
     lo, hi, found = 0, len(candidates) - 1, None
     while lo <= hi:
         mid = (lo + hi) // 2
@@ -82,8 +117,22 @@ class _Grid:
         return self.array[row][col]
 
 
-def _line(ref: Ref | _Grid, horizontal: bool) -> list[tuple[int, Any]]:
+class _PaddedGrid:
+    """A padded array as a range: ``rows``, ``columns``, ``value(row, col)``."""
+
+    def __init__(self, padded: Padded) -> None:
+        self.padded = padded
+        self.rows, self.columns = padded.rows, padded.cols
+
+    def value(self, row: int, col: int) -> Any:
+        head = self.padded.head
+        return head[row][col] if row < len(head) else self.padded.fill
+
+
+def _line(ref: Ref | _Grid | _PaddedGrid, horizontal: bool) -> Any:
     """A range's first row or column as (position, value), blanks left out (§7.7)."""
+    if isinstance(ref, _PaddedGrid) and not horizontal:
+        return _PaddedLine(ref.padded)
     if isinstance(ref, Ref):
         last_row, last_col = (ref.r1, ref.c2) if horizontal else (ref.r2, ref.c1)
         line = Ref(ref.source, ref.sheet, ref.r1, ref.c1, last_row, last_col)
@@ -111,7 +160,7 @@ def _lookup_value(lookup: Any, ctx: Context) -> Any:
     return 0.0 if v is BLANK else v
 
 
-@function("MATCH", "value", "raw", "number", min_args=2, errors=True, category=L)
+@function("MATCH", "value", "raw", "number", min_args=2, errors=True, category=L, padded=True)
 def MATCH(ctx: Context, lookup: Any, ref: Any, kind: Any = 1.0) -> float | ErrorValue:
     """Position of a value in a row or column: type 0 exact, 1 sorted ascending, -1 descending."""
     v = _lookup_value(lookup, ctx)
@@ -121,7 +170,12 @@ def MATCH(ctx: Context, lookup: Any, ref: Any, kind: Any = 1.0) -> float | Error
         return ref
     if isinstance(kind, ErrorValue):
         return kind
-    if isinstance(ref, tuple):
+    if type(ref) is Padded and ref.cols != 1:  # one column searched as it stands, else dense
+        ref = ref.dense(getattr(ctx, "max_array_cells", None))
+    cells: Any
+    if type(ref) is Padded:
+        cells = _PaddedLine(ref)
+    elif isinstance(ref, tuple):
         cells = list(enumerate(x for row in ref for x in row))
     elif isinstance(ref, Ref) and (ref.rows == 1 or ref.columns == 1):
         cells = _walked(ref, ref.rows == 1) if kind == 0 else _line(ref, ref.rows == 1)
@@ -219,7 +273,10 @@ def _whole(ref: Any, r: int, c: int, given: bool) -> Any:
     return (ref[r - 1],)
 
 
-@function("INDEX", "array", "number", "number", "number", min_args=2, reference=True, category=L)
+@function(
+    "INDEX", "array", "number", "number", "number",
+    min_args=2, reference=True, category=L, padded=True,
+)  # fmt: skip
 def INDEX(ctx: Context, ref: Any, row: float, col: float | None = None, area: float = 1.0) -> Any:
     """The value at ``row``, ``col`` (1-based) of a range; one index for a single row or column.
 
@@ -234,6 +291,11 @@ def INDEX(ctx: Context, ref: Any, row: float, col: float | None = None, area: fl
     if math.trunc(area) != 1:
         return ErrorValue.VALUE if area < 1 else ErrorValue.REF
     r, c = math.trunc(row), math.trunc(col) if col is not None else 0
+    if type(ref) is Padded:  # one element read as it stands; a whole row or column made dense
+        single = ref.rows == 1 or ref.cols == 1
+        element = (single and col is None) or (r != 0 and c != 0) or r < 0 or c < 0
+        if (r == 0 and c == 0) or not element:  # as _whole decides
+            ref = ref.dense(getattr(ctx, "max_array_cells", None))
     whole = _whole(ref, r, c, col is not None)
     if whole is not None:
         return whole
@@ -246,6 +308,9 @@ def INDEX(ctx: Context, ref: Any, row: float, col: float | None = None, area: fl
     elif isinstance(ref, Ref):
         rows, cols = ref.rows, ref.columns
         get = ref.value  # type: ignore[assignment]
+    elif type(ref) is Padded:
+        rows, cols = ref.rows, ref.cols
+        get = _PaddedGrid(ref).value  # type: ignore[assignment]
     else:
         v = scalar(ref, ctx)
         return v if (r, c) in ((1, 0), (1, 1), (0, 1)) else REF
@@ -372,15 +437,17 @@ def N(ctx: Context, value: Any) -> Any:
     return _n(value)
 
 
-def _grid(a: Any) -> Ref | _Grid:
+def _grid(a: Any) -> Ref | _Grid | _PaddedGrid:
     if isinstance(a, Ref):
         return a
+    if type(a) is Padded:
+        return _PaddedGrid(a)
     if isinstance(a, tuple):
         return _Grid(a)
     return _Grid(((a,),))
 
 
-@function("LOOKUP", "value", "array", "array", min_args=2, category=L)
+@function("LOOKUP", "value", "array", "array", min_args=2, category=L, padded=True)
 def LOOKUP(ctx: Context, value: Any, lookup: Any, result: Any = MISSING) -> Any:
     """The approximate match of ``value`` in a sorted row or column, and the matching result.
 
@@ -396,6 +463,8 @@ def LOOKUP(ctx: Context, value: Any, lookup: Any, result: Any = MISSING) -> Any:
         return lookup
     if result is not MISSING and isinstance(result, ErrorValue):
         return result
+    if type(result) is Padded:  # read position by position below: made dense
+        result = result.dense(getattr(ctx, "max_array_cells", None))
     grid = _grid(lookup)
     if result is MISSING:
         wide = grid.columns > grid.rows
