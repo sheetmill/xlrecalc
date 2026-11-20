@@ -336,6 +336,14 @@ was measured, loading openpyxl's 1M-row benchmark file (3M formulas, 4M cells) t
 it and 58.8 s parsing every formula, and 8.5 s from the prototypes' pickled table, which skips the
 xlsx reader; the current load times are in `bench/results/SUMMARY.md` (17.2 s from the file).
 
+A sheet is loaded in two stages. As its cells are read, every value goes into the store, a
+formula's cached value too, and each formula cell is queued with what the opening rule needs
+taken from its text (§7.4); a cell repeating a raw key queued before it on the sheet, whose text
+parses, is queued as its position and the key alone, about 16 bytes. The queued formulas are
+then compiled sheet by sheet, in the workbook's order whatever order the sheets were read in,
+with the same steps in the order read, so the templates, the report and its order are the same
+however a `Loader` was fed.
+
 A template records its canonical text, the compiled callable, its constants table, its reference
 list (offsets, anchors, sheets, cell or range), whether it is volatile (§6.3), whether it has
 dynamic references, whether it can spill, and which functions it uses (for the
@@ -1387,6 +1395,12 @@ if check.result is None:                     # undecided by the file: feed the f
         check.add(text, cached=has_value, ca=ca)
 check.finish()                               # "all" | "some" | "none": what load would compute
 
+with xlio.open("model.xlsx") as book:        # a caller reading the cells itself, read once
+    loader = xlrecalc.Loader(book)
+    for cell in loader.cells(book.sheets[1]): ...  # any sheet, in any order, recorded as passed
+    loader.opening                           # RecalcCheck's answer; None while cells decide it
+    wb = loader.workbook()                   # reads what was not fed; later feeds pass through
+
 xlrecalc.evaluate("=SUM(A1:A3)", {"A1:A3": [[1], [2], [3]]})          # 6.0, no workbook
 f = xlrecalc.Formula.parse("=A1>5", origin="A1")  # compiled once; also sheet=, legacy=
 f.evaluate(values, resolver=None, at="A2", names=None)  # relative references move to A2
@@ -1451,43 +1465,48 @@ in a rule recalculates no cell on opening, so `RecalcCheck` reads no rule. Tests
 
 After 0.6.0, in this order: an order, not a promise or a date.
 
-1. Whole-column and whole-row references clipped to the used range: every value the engine
+1. A `Loader` that reads a sheet only when an evaluation needs it (a reference, a range, a
+   defined name, `INDIRECT` or `OFFSET` reaching the sheet) and compiles a sheet's formulas only
+   when they are evaluated, so that a file whose cached values stand (`opening` is `"none"`)
+   compiles nothing; with `xlio`'s formulas-only reading, the opening rule decided without
+   reading values.
+2. Whole-column and whole-row references clipped to the used range: every value the engine
    computes stays the same on every capture and the corpus, only faster, and a formula whose
    reference now passes the array limit (keeping the file's value, §7.7) computes. The cases
    where clipping is not neutral (`ROWS`, `COLUMNS`, `COUNTBLANK`, `INDEX` and `MATCH` past the
    used range, `OFFSET` from a whole column, an empty sheet, an array spilling into a whole
    column) are captured first.
-2. Unions of ranges together with arrays of references, which QUIRKS.md lists as not
+3. Unions of ranges together with arrays of references, which QUIRKS.md lists as not
    computed.
-3. The functions still absent, by family, each family's captures first: bonds with odd periods, the regression arrays (`TREND`, `GROWTH`, `LOGEST`) and
+4. The functions still absent, by family, each family's captures first: bonds with odd periods, the regression arrays (`TREND`, `GROWTH`, `LOGEST`) and
    `TRIMRANGE`, then `AGGREGATE` and the others one by one; those with large questions of their
    own (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable.
    `docs/coverage.md` lists what exists.
-4. A live openpyxl adapter: `xlrecalc.from_openpyxl(workbook)` would build an engine from an
+5. A live openpyxl adapter: `xlrecalc.from_openpyxl(workbook)` would build an engine from an
    in-memory openpyxl `Workbook` through its public API only (`iter_rows`, `cell.value` and
    `cell.data_type`, `ArrayFormula`, `wb.defined_names`, `ws.tables`, `wb.epoch`), evaluate
    values on demand, and after the caller edits the workbook rebuild only the cells whose value
    or formula changed (`engine.refresh()`, or `engine.changed("Sheet1!A1", ...)` naming them).
    It would answer code, not persist values: saving with values stays `recalculate`. openpyxl
    would be an optional extra, imported when the adapter is used.
-5. Excel's iteration for `IRR`, `XIRR`, `RATE` and `YIELD` (its starting step, update rule,
+6. Excel's iteration for `IRR`, `XIRR`, `RATE` and `YIELD` (its starting step, update rule,
    safeguards and stopping test), studied apart from this list from the capture sweeps and
    adopted when it reproduces each captured outcome without losing a row that matches.
-6. For one formula outside a workbook: the other conditional-format rule types (top 10, above
+7. For one formula outside a workbook: the other conditional-format rule types (top 10, above
    average, duplicates, text rules) where Excel's semantics would otherwise be restated by a
    caller, structured references given table definitions (Excel refuses them in a rule, but
    not elsewhere), and `Workbook.evaluate`; then callbacks (§12).
-7. Before 1.0: the newer errors written in Excel's own form, `#VALUE!` with a rich-value record
+8. Before 1.0: the newer errors written in Excel's own form, `#VALUE!` with a rich-value record
    behind `vm` (§7.7), so that a file Excel opens without recalculating shows `#SPILL!` or
    `#CALC!` and a later load reads a blocked spill as one; the rich-value parts are `xlio`'s, the
    reader and writer. A candidate too: `CONVERT` bit for bit, from an analysis of capture
    `convert_pairs` (`CONVERT` at 1, 2.5 and 3 over every pair of units in a category) that
    recovers the units Excel defines through others (QUIRKS.md lists the conversions that differ
    in the last bit or two).
-8. A strict option for `recalculate` and `Workbook.save` that raises where a cell cannot be
+9. A strict option for `recalculate` and `Workbook.save` that raises where a cell cannot be
    computed (`Report.uncomputed`), rather than writing it with the file's value or none; and
    streams as well as paths for `save` and `recalculate`, as `load` takes one.
-9. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
+10. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
    vectorized templates (numpy as an optional extra), a setting for
    Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,
    parallel evaluation of independent template columns on free-threaded Python, and a compiled

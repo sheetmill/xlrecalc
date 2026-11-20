@@ -14,6 +14,7 @@ import pytest
 import xlio
 
 import xlrecalc
+from tests.test_loader_orders import Reads
 from tests.test_volatile_names import REFS, _answer, _rows, _shown, _workbook
 from tests.xlsx_files import DOC, MAIN, PKG, package
 
@@ -123,17 +124,18 @@ def test_a_sheet_left_part_way_and_one_not_fed_are_read_by_finish(stop: int) -> 
     assert state(loaded(data, feed)) == state(xlrecalc.load(io.BytesIO(data)))
 
 
-def test_a_loop_still_held_at_finish_records_nothing_twice() -> None:
-    """The caller keeps the iterator alive past ``finish``: what it recorded counts once, and it
-    records nothing after."""
+def test_a_loop_still_held_at_finish_hands_on_the_rest_unrecorded() -> None:
+    """The caller keeps the iterator alive past ``finish``: what it recorded counts once, and the
+    rest of its cells still come, recorded by the loader's own reading only."""
     data = two_sheets()
     with xlio.open(io.BytesIO(data)) as book:
+        direct = [(c.row, c.column, c.value) for c in book.sheets[0].cells()]
         loader = xlrecalc.Loader(book)
         held = loader.cells(book.sheets[0])
-        for _ in range(5):
-            next(held)
+        first = [next(held) for _ in range(5)]
         wb = loader.finish()
-        assert list(held) == []
+        rest = list(held)
+    assert [(c.row, c.column, c.value) for c in first + rest] == direct
     assert state(wb) == state(xlrecalc.load(io.BytesIO(data)))
 
 
@@ -158,10 +160,9 @@ def test_misuse_raises() -> None:
         with pytest.raises(ValueError, match="not a sheet of this workbook"):
             loader.cells(other.sheets[0])
         wb = loader.finish()
-        with pytest.raises(ValueError, match="after finish"):
-            loader.cells(book.sheets[1])
         with pytest.raises(ValueError, match="already finished"):
             loader.finish()
+        assert loader.workbook() is wb
     with pytest.raises(ValueError, match="recalc_on_load"):
         xlrecalc.Loader(book, recalc_on_load="sometimes")  # type: ignore[arg-type]
     with pytest.raises(ValueError, match="no file to copy"):
@@ -271,3 +272,111 @@ def test_a_formula_the_parser_cannot_read_counts_by_its_text(text: str, ca: bool
     assert list(wb.report.refused) == [xlrecalc.CellRef("Data", 3, 1)]  # the parser's refusal
     assert wb.value("A2") == (999.0 if ca else 20.0)
     assert check.finish() == ("some" if ca else "all")
+
+
+def test_the_workbook_before_any_feed_then_every_sheet_passed_through(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Values asked first: the loader reads each sheet once, and the caller's feeds after that
+    are each sheet's cells again, unrecorded."""
+    data = two_sheets()
+    reads = Reads(monkeypatch)
+    with xlio.open(io.BytesIO(data)) as book:
+        loader = xlrecalc.Loader(book)
+        wb = loader.workbook()
+        assert dict(reads.calls) == {"one": 1, "two": 1}
+        assert loader.workbook() is wb
+        wb.set("one!A1", 100)  # recording the sheet again would undo it
+        passed = [[(c.row, c.column) for c in loader.cells(s)] for s in book.sheets]
+        assert loader.finish() is wb
+    assert [len(p) for p in passed] == [11, 3]
+    assert dict(reads.calls) == {"one": 2, "two": 2}
+    eager = xlrecalc.load(io.BytesIO(data))
+    eager.set("one!A1", 100)
+    assert state(wb) == state(eager)
+
+
+def test_each_sheet_fed_in_full_is_read_once(monkeypatch: pytest.MonkeyPatch) -> None:
+    data = two_sheets()
+    reads = Reads(monkeypatch)
+    with xlio.open(io.BytesIO(data)) as book:
+        loader = xlrecalc.Loader(book)
+        for sheet in reversed(book.sheets):
+            for _ in loader.cells(sheet):
+                pass
+        loader.finish()
+    assert dict(reads.calls) == {"one": 1, "two": 1}
+    assert dict(reads.cells) == {"one": 11, "two": 3}
+
+
+@pytest.mark.parametrize(
+    ("calc", "early", "final"),
+    [
+        ('<fileVersion appName="xl"/><calcPr calcId="152511"/>', "all", "all"),  # an older Excel
+        ('<fileVersion appName="xl"/><calcPr calcId="191029"/>', None, "some"),  # E1 is marked
+    ],
+)
+def test_opening_is_known_when_the_file_or_every_formula_settles_it(
+    calc: str, early: str | None, final: str
+) -> None:
+    data = two_sheets(calc)
+    with xlio.open(io.BytesIO(data)) as book:
+        loader = xlrecalc.Loader(book)
+        assert loader.opening == early
+        list(loader.cells(book.sheets[0]))
+        assert loader.opening == early  # sheet "two" not read yet
+        list(loader.cells(book.sheets[1]))
+        assert loader.opening == final
+        loader.finish()
+        assert loader.opening == final
+
+
+def test_a_sheet_needed_after_the_file_is_closed_raises() -> None:
+    data = two_sheets()
+    with xlio.open(io.BytesIO(data)) as book:
+        loader = xlrecalc.Loader(book)
+        list(loader.cells(book.sheets[0]))
+    with pytest.raises(ValueError, match="file is closed"):
+        loader.workbook()
+    with xlio.open(io.BytesIO(data)) as book:
+        loader = xlrecalc.Loader(book)
+        for sheet in book.sheets:
+            list(loader.cells(sheet))
+    assert state(loader.finish()) == state(xlrecalc.load(io.BytesIO(data)))
+
+
+def test_a_repeated_formula_keeps_its_own_mark_and_cached_value() -> None:
+    """Cells repeating one formula (one raw-text key) are recorded without their text: each still
+    counts its own ``ca="1"`` and its own missing value (capture ``volatile_names``: a cell
+    volatile through a name keeps its value unless marked)."""
+    data = package(
+        '<row r="1"><c r="A1"><v>2</v></c><c r="B1"><f>A1*2</f><v>4</v></c>'
+        '<c r="C1"><f>vn*0+1</f><v>5</v></c></row>'  # kept
+        '<row r="2"><c r="A2"><v>3</v></c><c r="B2"><f>A2*2</f></c>'  # no cached value
+        '<c r="C2"><f ca="1">vn*0+1</f><v>7</v></c></row>',  # marked: computed
+        workbook_extra='<fileVersion appName="xl"/><calcPr calcId="191029"/>'
+        '<definedNames><definedName name="vn">NOW()</definedName></definedNames>',
+    )
+    with xlio.open(io.BytesIO(data)) as book:
+        loader = xlrecalc.Loader(book)
+        for sheet in book.sheets:
+            list(loader.cells(sheet))
+        wb = loader.finish()
+        assert loader.opening == "some"
+    assert [wb.value(r) for r in ("B1", "B2", "C1", "C2")] == [4.0, 6.0, 5.0, 1.0]
+    check = xlrecalc.RecalcCheck(io.BytesIO(data))
+    check.add("A2*2", cached=False)
+    assert check.finish() == "some"
+
+
+def test_a_repeated_formula_without_a_value_makes_the_opening_some() -> None:
+    data = package(
+        '<row r="1"><c r="A1"><v>2</v></c><c r="B1"><f>A1*2</f><v>4</v></c></row>'
+        '<row r="2"><c r="A2"><v>3</v></c><c r="B2"><f>A2*2</f></c></row>',
+        workbook_extra='<fileVersion appName="xl"/><calcPr calcId="191029"/>',
+    )
+    with xlio.open(io.BytesIO(data)) as book:
+        loader = xlrecalc.Loader(book)
+        list(loader.cells(book.sheets[0]))
+        assert loader.opening == "some"
+        assert loader.finish().value("B2") == 6.0

@@ -38,6 +38,7 @@ from xlrecalc._functions._registry import _LIFTED
 from xlrecalc._limits import ReadLimits, io_limits
 from xlrecalc._load import RecalcOnLoad, _Loader, recalc_mode, refused_in_file
 from xlrecalc._load import load as _load_engine
+from xlrecalc._opening import Opening
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef, Report
 from xlrecalc._save import array_edits, file_value, lookups
@@ -570,12 +571,15 @@ class Loader:
     read the file a second time with :func:`load`. A ``Loader`` takes the open workbook instead:
     each sheet's cells pass through :meth:`cells`, which records every cell and hands it on, so the
     caller keeps its one loop over the cells, as with ``csv.reader`` over a file the caller owns.
-    :meth:`finish` then gives the :class:`Workbook` that :func:`load` would give, by the same code:
-    ``load`` is a ``Loader`` with every sheet fed in order.
+    :meth:`workbook` then gives the :class:`Workbook` that :func:`load` would give, by the same
+    code: ``load`` is a ``Loader`` with every sheet fed in order.
 
-    A sheet need not be fed: :meth:`finish` reads any sheet not fed, and any sheet whose loop the
-    caller left part-way, again from its start, recording the cells not yet recorded. The result
-    is the same either way; stopping early costs only the time of that second reading.
+    Sheets are fed in any order, and any of them need not be fed: :meth:`workbook` reads any sheet
+    not fed, and any sheet whose loop the caller left part-way, again from its start, recording the
+    cells not yet recorded. A sheet the loader has read for itself can still be fed: its cells are
+    handed on from ``xlio`` again, unrecorded, and a loop the caller is still running when the
+    loader reads its sheet hands on the rest of its cells unrecorded. The result is the same
+    whatever the order; a sheet read twice costs only the time of that second reading.
 
     Example::
 
@@ -587,14 +591,15 @@ class Loader:
             workbook = loader.finish()
 
     Args:
-        book: An open ``xlio`` workbook, which stays open until :meth:`finish` returns. Its
-            archive limits are the ones it was opened with.
+        book: An open ``xlio`` workbook. The caller opens and closes it; it stays open until the
+            loader has read what it needs, which :meth:`finish` guarantees. Its archive limits
+            are the ones it was opened with.
         recalc_on_load: As for :func:`load`: ``"excel"``, Excel's rule on opening;
             ``"always"``; ``"never"``.
         limits: The computing limits (``max_array_cells``, ``max_iteration_evaluations``,
             ``max_function_steps``); the archive limits are the book's.
 
-    The workbook :meth:`finish` returns is computed and edited as any other, but has no file
+    The workbook :meth:`workbook` returns is computed and edited as any other, but has no file
     to copy, so :meth:`Workbook.save` raises; :func:`recalculate` writes a file's values.
     """
 
@@ -607,26 +612,53 @@ class Loader:
     ) -> None:
         self._loader = _Loader(book, recalc_on_load=recalc_on_load, limits=limits)
         self._limits = limits
+        self._workbook: Workbook | None = None
 
     def cells(self, sheet: xlio.Sheet, *, rich: bool = False) -> Iterator[xlio.Cell]:
         """Each cell of a sheet, as ``sheet.cells(rich=rich)`` gives it, recorded as it passes.
 
+        Valid for each sheet once, in any order, at any time: also after :meth:`workbook` or
+        :meth:`finish`. A sheet the loader has already read is handed on unrecorded.
+
         Args:
             sheet: One of the book's sheets; a chart sheet passes no cells.
             rich: As for ``xlio``'s ``Sheet.cells``: give string cells their runs and phonetic
-                guides (``Cell.rich``). What is recorded is the same either way, and a sheet
-                :meth:`finish` reads again is read without them.
+                guides (``Cell.rich``). What is recorded is the same either way, and a sheet the
+                loader reads for itself is read without them.
 
         Raises:
-            ValueError: The sheet is not the book's, was fed already, or :meth:`finish` was
-                called.
+            ValueError: The sheet is not the book's, or was fed already.
         """
         return self._loader.cells(sheet, rich=rich)
 
-    def finish(self) -> Workbook:
-        """The workbook: sheets not fed or left part-way are read again, then the opening rule.
+    @property
+    def opening(self) -> Opening | None:
+        """What the load computes on opening, ``"all"``, ``"some"`` or ``"none"`` formulas.
+
+        :class:`RecalcCheck`'s answer, from the same rule and the same facts about the formulas,
+        so a caller using a ``Loader`` needs no ``RecalcCheck``. ``None`` while the answer
+        depends on cells not recorded yet; ``"all"`` may come early, from the workbook's own
+        parts or from the first formula that settles it. A formula Excel refuses in a file is
+        left out (Excel refuses the file); ``RecalcCheck`` cannot tell one.
+        """
+        return self._loader.opening
+
+    def workbook(self) -> Workbook:
+        """The workbook: every sheet not fed, or left part-way, is read now; the same each call.
 
         Raises:
-            ValueError: :meth:`finish` was called already.
+            ValueError: A sheet must be read, and the book's file is closed.
         """
-        return Workbook(self._loader.finish(), None, self._limits)
+        if self._workbook is None:
+            self._workbook = Workbook(self._loader.settle(), None, self._limits)
+        return self._workbook
+
+    def finish(self) -> Workbook:
+        """:meth:`workbook`, at the end of the caller's reading: the same object.
+
+        Raises:
+            ValueError: :meth:`finish` was called already, or a sheet must be read and the
+                book's file is closed.
+        """
+        self._loader.finish()
+        return self.workbook()

@@ -7,7 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `Loader.workbook()`: the workbook at any moment, also before every sheet is fed; sheets not fed, or left part-way,
+  are read then. `Loader.finish()` returns the same object.
+- `Loader.opening`: what the load computes on opening, `"all"`, `"some"` or `"none"`, from the same rule and facts as
+  `RecalcCheck` (`None` while cells not read yet decide it), so a caller using a `Loader` needs no `RecalcCheck`.
+
 ### Changed
+- `Loader.cells` takes the sheets in any order and at any time, also after `workbook()` or `finish()`: a sheet the
+  loader has read already passes its cells through unrecorded instead of raising, and a loop the caller is still
+  running when the loader reads its sheet hands on the rest of its cells, unrecorded, where it stopped before.
+- Loading records a sheet's values as they are read and compiles its formulas afterwards, every sheet in the
+  workbook's order, whatever order the sheets were fed in.
 - `SUMPRODUCT` over whole columns, alone or under operators (`SUMPRODUCT((A:A="x")*B:B)`), reads each column down to
   its last value instead of a million cells: about 3 ms where it took about 3 s and 300 MiB on a sheet of 1,000 rows.
   Results are the same; `SUMPRODUCT` over every column of a sheet is now computed, as Excel computes it (capture

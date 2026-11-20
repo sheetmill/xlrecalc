@@ -147,8 +147,12 @@ so the file is read once:
 ```
 
 `loader.cells(sheet, rich=True)` gives each cell as `sheet.cells(rich=True)` does, with its text's
-runs and phonetic guides. A sheet not fed, or left part-way, is read again by `finish`; a workbook
-made this way computes and changes as any other, but has no file to save over.
+runs and phonetic guides. Sheets are fed in any order. `loader.workbook()` gives the workbook at
+any moment, reading again any sheet not fed or left part-way; a sheet fed after that passes its
+cells through unrecorded, and `finish` is `workbook()` at the end of the feeding.
+`loader.opening` is what the load computes on opening (`"all"`, `"some"` or `"none"`), as
+`RecalcCheck` answers it. A workbook made this way computes and changes as any other, but has no
+file to save over.
 
 ## Evaluating one formula
 
