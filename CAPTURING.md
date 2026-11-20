@@ -257,9 +257,10 @@ fails until they agree).
 
 Files the package writes are opened by Excel in `tests/test_excel_live.py`, which runs only with
 `pytest --tier excel`, under the same rules as the captures.
-Each Excel step there has a time limit (`tests/excel_steps.py`); when Excel then does not answer, the
-run ends with a message naming the test, and Excel is left for the person using it to look at. The pipeline
-has a limit too, 600 s and 0.1 s per case, and so do the probes that open a workbook and save a copy.
+Each Excel step there has a time limit (`tests/excel_steps.py`); when Excel then does not answer,
+the run ends with a message naming the test, and Excel is left as it is for you to look at. The
+pipeline has a limit too, 600 s and 0.1 s per case, and so do the probes that open a workbook and
+save a copy.
 
 **When Excel stops answering.** Excel can stop answering questions about its workbooks while it
 still answers `version`: at 0% CPU, with no dialog and its menus working, its main thread idle in
@@ -274,30 +275,29 @@ Preferences, any dialog) blocks every request about workbooks.
 
 The tools guard against it. A process that drives Excel keeps the display awake (`caffeinate -d`,
 from its first request until it ends, after declaring user activity once to wake a display that is
-off), and a hang record says whether it did and how the display stood when the run began. Before
-the first request, `capture/excel_watch.py` compares the windows Excel has on screen with the
-document windows it reports; a window more, or no answer, stops the run with a message naming the
-windows by size, before anything is sent. A request past its limit, or one AppleScript gives up on
-first (`AppleEvent timed out`, -1712), gets a record under `capture/build/excel_hangs/` (Excel's
-`sample`, uptime, CPU and memory, the display's last change, the request and its file), and Excel is
-asked about workbooks at once and after 1 and 5 minutes. When it answers, the workbooks the request
-named in Excel's container are closed without saving and alerts are turned back on, so a recovered
-hang leaves no probe's file open with alerts off. `uv run python -m capture.excel_watch [RECORD]`
-asks again and adds the answer to that record, or to the latest if it is from the last half hour
-(else to a record of its own): run it before anyone quits Excel.
+off), and a hang record says whether it did and how the display stood when the run began. Before the
+first request, `capture/excel_watch.py` compares the windows Excel has on screen with the document
+windows it reports; a window more, or no answer, stops the run with a message naming the windows by
+size, before anything is sent. A request past its limit, or one AppleScript gives up on first
+(`AppleEvent timed out`, -1712), gets a record under `capture/build/excel_hangs/` (Excel's `sample`,
+uptime, CPU and memory, the display's last change, the request and its file), and Excel is asked
+about workbooks at once and after 1 and 5 minutes. When it answers, the workbooks the request named
+in Excel's container are closed without saving and alerts are turned back on, so a recovered hang
+leaves no probe's file open with alerts off. `uv run python -m capture.excel_watch [RECORD]` asks
+again and adds the answer to that record, or to the latest if it is from the last half hour (else to
+a record of its own): run it before you quit Excel.
 
-The tools do not end Excel, since the person using it may have work open in it: they report and
-leave the decision to that person, with two exceptions, each only when nothing of anyone else's can
-be in Excel. `capture/array_size_probe.py` refuses to start with a workbook open, and ends Excel
-when a step passes its time limit or Excel passes 8 GB of memory; there, running past a limit is a
-result, as it is for `capture/value_probe.py`'s own limit. And a probe whose case can keep Excel
-calculating without end (a function at an extreme input; `capture/slow_probe.py`) may let the watch
-end it when `may_end` holds (`capture/excel_watch.py`, tested): the run began with Excel not running
-or holding no workbook, every Excel window on screen is the request's own (no more of them than its
-workbooks, and each title macOS gives one of their names), and one process is named Microsoft
-Excel. The watch then sends `TERM`, and `KILL` after 10 seconds, records it and goes on; the next
-request checks Excel's windows again (a recovery window would stop the run). In any other state it
-stops and asks.
+The tools do not end Excel, since you may have work open in it: they report and leave the decision
+to you, with two exceptions, each only when no workbook of yours can be open in Excel.
+`capture/array_size_probe.py` refuses to start with a workbook open, and ends Excel when a step
+passes its time limit or Excel passes 8 GB of memory; there, running past a limit is a result, as it
+is for `capture/value_probe.py`'s own limit. And a probe whose case can keep Excel calculating
+without end (a function at an extreme input; `capture/slow_probe.py`) may let the watch end it when
+`may_end` holds (`capture/excel_watch.py`, tested): the run began with Excel not running or holding
+no workbook, every Excel window on screen is the request's own (no more of them than its workbooks,
+and each title macOS gives one of their names), and one process is named Microsoft Excel. The watch
+then sends `TERM`, and `KILL` after 10 seconds, records it and goes on; the next request checks
+Excel's windows again (a recovery window would stop the run). In any other state it stops and asks.
 
 The probes behind the design (`capture/writeback_probe.py`, `capture/semantics_probe.py`,
 `capture/formula_forms.py`) use the same conventions; their results are in [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md)
