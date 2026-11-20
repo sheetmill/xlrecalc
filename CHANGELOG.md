@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-20
+
 ### Added
 - `Loader.cells(sheet, rich=True)`: each cell as `xlio`'s `Sheet.cells(rich=True)` gives it, with its text's runs and
   phonetic guides, for a caller that renders them; what the loader records is the same either way.
@@ -596,7 +598,8 @@ First release.
   calculation settings; archive limits (`ReadLimits`, `LimitError`) and a refusal of DTDs
   protect against hostile files; `PackageError` for a file that is not a readable package.
 
-[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/sheetmill/xlrecalc/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/sheetmill/xlrecalc/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/sheetmill/xlrecalc/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/sheetmill/xlrecalc/compare/v0.2.0...v0.3.0

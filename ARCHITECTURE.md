@@ -1428,7 +1428,7 @@ in a rule recalculates no cell on opening, so `RecalcCheck` reads no rule. Tests
 
 ## 13. Roadmap
 
-After 0.5.0, in this order: an order, not a promise or a date.
+After 0.6.0, in this order: an order, not a promise or a date.
 
 1. Whole-column and whole-row references clipped to the used range: every value the engine
    computes stays the same on every capture and the corpus, only faster, and a formula whose
