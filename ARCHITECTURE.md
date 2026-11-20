@@ -812,16 +812,19 @@ the whole sheet, opens one over ten full columns at a cost of about 3 GB of its 
 computes `SUMPRODUCT` over whole columns without making the array (capture `array_size`).
 
 **Padded arrays.** A range taller than 4,096 rows whose data stops in its upper half, made into an
-array where only operators lie between it and a function that reads padded arrays (`SUMPRODUCT`),
-is a `Padded` array: the rows down to the last one holding anything, and one fill value for every
-cell below. An operator applies to each element of the rows and once to the fill, so `D!A:A="x"` is
-the comparison of the cells that hold data and one `FALSE`. `SUMPRODUCT` sums the rows, then adds
-the fill rows' product as many times as there are fill rows (multiplied when every partial sum is
-an exact integer, so the result is the one cell-by-cell summation gives). The limit counts the rows
-it makes, not the range's height. The compiler decides where a padded array may appear: it marks
-the `array` arguments of a function that reads them and keeps the mark only through operators, so
-no other function, nor `IF`, `LET` or a spill, ever receives one. `tests/test_padded.py` computes
-random formulas twice, padded and dense, and requires the same value bit for bit.
+array where only operators lie between it and a function that reads padded arrays (`SUMPRODUCT`,
+and `SUM`, `COUNT`, `COUNTA`, `MIN`, `MAX`, `AND` and `OR` in an array context), is a `Padded`
+array: the rows down to the last one holding anything, and one fill value for every cell below. An
+operator applies to each element of the rows and once to the fill, so `D!A:A="x"` is the comparison
+of the cells that hold data and one `FALSE`. `SUMPRODUCT` sums the rows, then adds the fill rows'
+product as many times as there are fill rows (multiplied when every partial sum is an exact
+integer, so the result is the one cell-by-cell summation gives); the others take the fill as many
+times as there are fill cells, or once where repetition cannot change the result (`AND`, `OR`). The
+limit counts the rows it makes, not the range's height. The compiler decides where a padded array
+may appear: it marks the `array` and `raw` arguments of a function that reads them and keeps the
+mark only through operators, so no other function, nor `IF`, `LET` or a spill, ever receives one.
+`tests/test_padded.py` computes random formulas twice, padded and dense, and requires the same
+value bit for bit.
 
 `SUMIF`, `SUMIFS` and `COUNTIFS` make no array and need no limit: they walk non-blank cells, as
 `COUNTIF` does, and so do `AVERAGEIF`, `AVERAGEIFS`, `MAXIFS` and `MINIFS`. A blank adds nothing

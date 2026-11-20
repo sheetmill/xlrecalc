@@ -40,7 +40,9 @@ def _operand(rng: random.Random, width: int, depth: int) -> str:
     if depth == 0:
         return rng.choice(ranges)
     inner = _operand(rng, width, depth - 1)
-    form = rng.randrange(11)
+    form = rng.randrange(12)
+    if form == 11:
+        return f'(({inner})*1&"")'  # numeric text
     if form == 0:
         return f"-{inner}"
     if form == 1:
@@ -64,10 +66,19 @@ def _operand(rng: random.Random, width: int, depth: int) -> str:
     return f'IF({inner}="",1,{inner})'
 
 
+AGGREGATES = ["SUM", "COUNT", "COUNTA", "MIN", "MAX", "AND", "OR"]
+
+
 def _formula(rng: random.Random) -> str:
+    """``SUMPRODUCT`` or an aggregate over operands (each an array formula, see ``_values``)."""
     width = rng.choice((1, 1, 2))
     args = [_operand(rng, width, rng.randrange(4)) for _ in range(rng.choice((1, 1, 2)))]
-    return f"SUMPRODUCT({','.join(args)})"
+    if rng.random() < 0.4:
+        return f"SUMPRODUCT({','.join(args)})"
+    name = rng.choice(AGGREGATES)
+    if name in ("MIN", "MAX") and rng.random() < 0.5:
+        args[0] = f"-{args[0]}"
+    return f"{name}({','.join(args)})"
 
 
 def _values(cells: list[tuple[int, int, object]], formulas: list[str]) -> list[object]:
@@ -75,13 +86,13 @@ def _values(cells: list[tuple[int, int, object]], formulas: list[str]) -> list[o
     s = e.add_sheet("d")
     for r, c, v in cells:
         e.sheets[s].set(r, c, v)  # type: ignore[arg-type]
-    for i, f in enumerate(formulas):
-        e.set_formula(s, i, 5, f)
+    for i, f in enumerate(formulas):  # each a one-cell legacy array formula: an array context
+        e.set_formula(s, i, 5, f, array=(False, (i, 5, i, 5)))
     e.recalculate(full=True)
     return [e.get(s, i, 5) for i in range(len(formulas))]
 
 
-@pytest.mark.parametrize("seed", range(12))
+@pytest.mark.parametrize("seed", range(16))
 def test_padded_and_dense_agree(seed: int, monkeypatch: pytest.MonkeyPatch) -> None:
     rng = random.Random(seed)
     cells = _sheet(rng)

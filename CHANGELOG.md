@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   its last value instead of a million cells: about 3 ms where it took about 3 s and 300 MiB on a sheet of 1,000 rows.
   Results are the same; `SUMPRODUCT` over every column of a sheet is now computed, as Excel computes it (capture
   `array_size`), where it passed the array limit and kept the file's value.
+- `SUM`, `COUNT`, `COUNTA`, `MIN`, `MAX`, `AND` and `OR` over whole columns under operators in an array formula
+  (`{=SUM(--(A:A<>""))}`, a dynamic array) read each column the same way: 1 to 120 ms where they took 1 to 2.7 s on a
+  sheet of 1,000 rows, with the same results.
 
 ## [0.6.0] - 2026-11-20
 

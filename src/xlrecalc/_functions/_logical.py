@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
+from xlrecalc._arrays import Padded
 from xlrecalc._coerce import Context, scalar, to_bool, to_number
 from xlrecalc._compare import switch_equal
 from xlrecalc._formula import MISSING
@@ -35,6 +36,11 @@ def _logicals(args: tuple[Any, ...], ctx: Context) -> list[bool] | ErrorValue:
                 if isinstance(v, bool | float):
                     out.append(bool(v))
             continue
+        elif type(arg) is Padded:  # as a dense array; the fill once, which all() and any() read
+            out.extend(bool(x) for row in arg.head for x in row if isinstance(x, bool | float))
+            if arg.padding and isinstance(arg.fill, bool | float):
+                out.append(bool(arg.fill))
+            continue
         v = scalar(arg, ctx)
         if isinstance(v, ErrorValue):
             return v
@@ -52,7 +58,7 @@ def _logicals(args: tuple[Any, ...], ctx: Context) -> list[bool] | ErrorValue:
     return out
 
 
-@function("AND", "raw", min_args=1, variadic=True, category=L)
+@function("AND", "raw", min_args=1, variadic=True, category=L, padded=True)
 def AND(ctx: Context, *args: Any) -> bool | ErrorValue:
     """TRUE when every logical is; ``#VALUE!`` when there are none."""
     values = _logicals(args, ctx)
@@ -61,7 +67,7 @@ def AND(ctx: Context, *args: Any) -> bool | ErrorValue:
     return all(values) if values else VALUE
 
 
-@function("OR", "raw", min_args=1, variadic=True, category=L)
+@function("OR", "raw", min_args=1, variadic=True, category=L, padded=True)
 def OR(ctx: Context, *args: Any) -> bool | ErrorValue:
     """TRUE when any logical is; ``#VALUE!`` when there are none."""
     values = _logicals(args, ctx)

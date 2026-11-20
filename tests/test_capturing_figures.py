@@ -69,7 +69,11 @@ def test_stated_sizes_are_the_captures():
 
 def test_a_suite_no_test_compares_says_so():
     """A suite that neither capture test runs and no other test names must say in its row that it
-    is not compared, as evidence kept for a finding or for a later comparison."""
+    is not compared, as evidence kept for a finding or for a later comparison.
+
+    A test file that names a suite only in a docstring or comment counts as naming it: the check
+    is by name, not by what the test does with the capture.
+    """
     from tests.test_captures import SUITES as COMPARED
     from tests.test_dynamic_arrays import SUITES as DYNAMIC
 

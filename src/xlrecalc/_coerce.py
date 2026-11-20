@@ -7,9 +7,11 @@ without a year, and the cell being evaluated (for implicit intersection).
 from __future__ import annotations
 
 import datetime as dt
+import itertools
 from collections.abc import Iterator
 from typing import Protocol
 
+from xlrecalc._arrays import Padded
 from xlrecalc._formula import MISSING
 from xlrecalc._numtext import number_to_text, text_to_number
 from xlrecalc._quirks import Quirks
@@ -143,6 +145,14 @@ def numbers(
                 yield n
             elif direct_text == "convert":
                 yield VALUE
+        elif type(arg) is Padded:  # the rows with data, then the fill in every other cell
+            for row in arg.head:
+                for v in row:
+                    if isinstance(v, float | ErrorValue) and not isinstance(v, bool):
+                        yield v
+            fill = arg.fill
+            if isinstance(fill, float | ErrorValue) and not isinstance(fill, bool):
+                yield from itertools.repeat(fill, arg.padding)
         elif isinstance(arg, tuple):  # an array constant
             for row in arg:
                 for v in row:

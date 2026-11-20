@@ -661,7 +661,9 @@ class _Generator:
                 self.arrays -= 1
                 self.padded = saved
                 continue
+            saved, self.padded = self.padded, kind == "raw" and bool(getattr(fn, "padded", False))
             code = self.argument(arg)
+            self.padded = saved
             if self.arrays and kind in _LIFTED and not isinstance(arg, Leaf):
                 code = self.emit(f"ctx.arr({code})")
             elif not self.arrays and kind in _SCALAR and self.ranged(arg):

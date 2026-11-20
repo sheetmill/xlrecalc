@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
-from xlrecalc._arrays import to_array
+from xlrecalc._arrays import Padded, to_array
 from xlrecalc._coerce import Context, numbers, to_number
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._math import _total
@@ -49,21 +49,21 @@ def AVERAGE(ctx: Context, *args: Any) -> float | ErrorValue:
     return total if isinstance(total, ErrorValue) else total / len(values)
 
 
-@function("MIN", "raw", min_args=1, variadic=True, category=S)
+@function("MIN", "raw", min_args=1, variadic=True, category=S, padded=True)
 def MIN(ctx: Context, *args: Any) -> float | ErrorValue:
     """Smallest number; 0 when there are none."""
     values = _numbers(args, ctx)
     return values if isinstance(values, ErrorValue) else (min(values) if values else 0.0)
 
 
-@function("MAX", "raw", min_args=1, variadic=True, category=S)
+@function("MAX", "raw", min_args=1, variadic=True, category=S, padded=True)
 def MAX(ctx: Context, *args: Any) -> float | ErrorValue:
     """Largest number; 0 when there are none."""
     values = _numbers(args, ctx)
     return values if isinstance(values, ErrorValue) else (max(values) if values else 0.0)
 
 
-@function("COUNT", "raw", min_args=1, variadic=True, category=S)
+@function("COUNT", "raw", min_args=1, variadic=True, category=S, padded=True)
 def COUNT(ctx: Context, *args: Any) -> float:
     """Numbers among the values; errors and other values are not counted."""
     return float(
@@ -71,7 +71,7 @@ def COUNT(ctx: Context, *args: Any) -> float:
     )
 
 
-@function("COUNTA", "raw", min_args=1, variadic=True, category=S)
+@function("COUNTA", "raw", min_args=1, variadic=True, category=S, padded=True)
 def COUNTA(ctx: Context, *args: Any) -> float:
     """Values that are not blank (an empty text from a formula counts)."""
     n = 0
@@ -80,6 +80,8 @@ def COUNTA(ctx: Context, *args: Any) -> float:
             n += sum(1 for _ in arg.cells())
         elif isinstance(arg, tuple):
             n += sum(len(row) for row in arg)
+        elif type(arg) is Padded:  # every element counts, as in a dense array
+            n += sum(len(row) for row in arg.head) + arg.padding
         else:
             n += 1
     return float(n)

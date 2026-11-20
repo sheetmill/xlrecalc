@@ -35,7 +35,7 @@ def _total(values: Any, ctx: Context) -> float | ErrorValue:
     return s if math.isfinite(s) else NUM
 
 
-@function("SUM", "raw", min_args=1, variadic=True, category=C)
+@function("SUM", "raw", min_args=1, variadic=True, category=C, padded=True)
 def SUM(ctx: Context, *args: Any) -> float | ErrorValue:
     """Sum of numbers."""
     if len(args) == 1 and type(args[0]) is Ref:  # the common case, as _total in one loop

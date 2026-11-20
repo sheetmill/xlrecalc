@@ -29,7 +29,9 @@ class ReadLimits:
         max_array_cells: Cells in any one array a formula makes while it is computed: a range
             an array formula fills, a reference taken as an array (``{=SUM(A:J*1)}``), or the
             result of an operation between arrays. Whole columns that ``SUMPRODUCT`` reads,
-            alone or under operators, count only their rows down to the last value. A formula
+            alone or under operators, or ``SUM``, ``COUNT``, ``COUNTA``, ``MIN``, ``MAX``,
+            ``AND`` and ``OR`` read under operators in an array formula, count only their rows
+            down to the last value. A formula
             that would pass it keeps the value the file holds and is reported
             (``Report.uncomputed``, and ``Report.unsupported`` names the limit). The default is
             ten full columns, which the package computes in about 2 GiB.
