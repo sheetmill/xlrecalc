@@ -215,7 +215,7 @@ class Ops:
 
     def lazy_if(self, fn: Any, test: Raw, r: int, c: int, *branches: Any) -> Value:
         ctx = self.context
-        if type(test) is tuple:
+        if type(test) in _ARRAYS:
             return fn(ctx, test, *(b(ctx, r, c) for b in branches))  # type: ignore[no-any-return]
         t = to_bool(test, ctx)
         if isinstance(t, ErrorValue):
@@ -439,7 +439,7 @@ class Ops:
 
     def glazy_if(self, fn: Any, test: Raw, r: int, c: int, *branches: Any) -> Any:
         ctx = self.context
-        if type(test) is tuple:
+        if type(test) in _ARRAYS:
             done = yield from _taken(branches, ctx, r, c)
             return fn(ctx, test, *done)
         t = to_bool(test, ctx)

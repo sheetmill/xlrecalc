@@ -573,7 +573,7 @@ class _Generator:
             self.env = "E"
         code = self.argument(node)
         if self.arrays and kind in _LIFTED and not isinstance(node, Leaf):
-            code = self.emit(f"ctx.arr({code})")
+            code = self.emit(f"ctx.{'arr_padded' if self.padded else 'arr'}({code})")
         body = "".join(f"    {line}\n" for line in self.lines)
         self.branch_yields = self.yields
         self.lines, self.env, self.yields = saved, saved_env, saved_yields
@@ -590,7 +590,7 @@ class _Generator:
         kinds: tuple[str, ...] = getattr(fn, "kinds", ())
         first = self.argument(args[0]) if args else "MISSING"
         if args and self.arrays and not isinstance(args[0], Leaf):
-            first = self.emit(f"ctx.arr({first})")
+            first = self.emit(f"ctx.{'arr_padded' if self.padded else 'arr'}({first})")
         rest = []
         generator = False
         for k, a in enumerate(args[1:]):

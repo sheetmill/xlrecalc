@@ -229,6 +229,33 @@ def _given_lambda(name: str, kinds: tuple[str, ...], cycle: int, args: tuple[Any
     return None
 
 
+def _map_padded(call: Callable[..., Any], args: tuple[Any, ...], pads: list[int]) -> Padded:
+    """``call`` element by element over padded arguments of one size.
+
+    The other arguments are passed as they are. Each position of the rows with data (to the
+    tallest of them) is one call, and the fills one more.
+    """
+    first = args[pads[0]]
+    height = max(len(args[i].head) for i in pads)
+
+    def at(r: int, c: int) -> list[Any]:
+        out = list(args)
+        for i in pads:
+            a = args[i]
+            out[i] = a.head[r][c] if r < len(a.head) else a.fill
+        return out
+
+    def one(xs: list[Any]) -> Any:
+        v = call(*xs)
+        return v[0][0] if is_array(v) else v
+
+    head = tuple(tuple(one(at(r, c)) for c in range(first.cols)) for r in range(height))
+    fills = list(args)
+    for i in pads:
+        fills[i] = args[i].fill
+    return Padded(head, first.rows, first.cols, one(fills))
+
+
 def function(
     name: str,
     *kinds: str,
@@ -314,14 +341,9 @@ def function(
                     for i, a in enumerate(args)
                     if lifted[i] and (type(a) is tuple or (isinstance(a, Ref) and not a.is_cell()))
                 ]
-                if elementwise and len(pads) == 1 and not arrays:  # the rows, then the fill once
-                    k = pads[0]
-
-                    def one(x: Any) -> Any:
-                        v = call(ctx, *args[:k], x, *args[k + 1 :])
-                        return v[0][0] if is_array(v) else v
-
-                    return args[k].map(one)
+                sizes = {(args[i].rows, args[i].cols) for i in pads}
+                if elementwise and len(sizes) == 1 and not arrays:  # the rows, then the fill once
+                    return _map_padded(lambda *xs: call(ctx, *xs), args, pads)
                 limit = getattr(ctx, "max_array_cells", None)
                 args = tuple(a.dense(limit) if type(a) is Padded else a for a in args)
             if any(lifted[i] and type(a) is tuple for i, a in enumerate(args)):

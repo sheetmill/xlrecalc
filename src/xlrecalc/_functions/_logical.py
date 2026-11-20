@@ -16,7 +16,7 @@ NA, VALUE = ErrorValue.NA, ErrorValue.VALUE
 L, INFO = "logical", "information"
 
 
-@function("IF", "logical", "branch", "branch", min_args=1, category=L)
+@function("IF", "logical", "branch", "branch", min_args=1, category=L, elementwise=True)
 def IF(ctx: Context, test: bool, yes: Any = False, no: Any = False) -> Any:
     """``yes`` when the test is true, else ``no``; an omitted branch is 0, an absent one FALSE."""
     result = yes if test else no

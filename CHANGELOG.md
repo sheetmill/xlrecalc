@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ISBLANK`, `ISNUMBER`, `ISTEXT`, `ISERROR`, `ISNA`, `ISLOGICAL`, `LEN` and `ABS` over whole columns, read by one of
   these functions (`SUMPRODUCT(--ISBLANK(A:A))`, `MATCH(TRUE,ISBLANK(A:A),0)`), apply to each column's rows with data and
   once to the rest: 2 to 120 ms where they took 1.9 to 3 s on a sheet of 1,000 rows, with the same results.
+- `IF` over whole columns in an array formula read by one of these functions (`{=SUM(IF(A:A="k",B:B))}`,
+  `{=MAX(IF(A:A<>"",B:B))}`) does the same: 4 to 120 ms where it took 3.2 to 4 s on a sheet of 1,000 rows.
 
 ## [0.6.0] - 2026-11-20
 

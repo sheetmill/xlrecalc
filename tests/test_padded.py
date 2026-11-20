@@ -69,7 +69,14 @@ def _operand(rng: random.Random, width: int, depth: int) -> str:
         return f"({inner}={_operand(rng, width, depth - 1)})"
     if form == 9:
         return f"{rng.choice([*ELEMENTWISE, 'N'])}({inner})"  # N is not element-wise: dense
-    return f'IF({inner}="",1,{inner})'
+    choice = rng.randrange(4)
+    if choice == 0:
+        return f'IF({inner}="",1,{inner})'  # two padded arguments
+    if choice == 1:
+        return f"IF(1/{inner}>0,{inner})"  # an error test, no else: FALSE
+    if choice == 2:
+        return f'IF({inner}>1,"y",{rng.choice(SCALARS)})'
+    return f'IF(ISBLANK({inner}),{inner}&"",-{inner})'
 
 
 AGGREGATES = ["SUM", "COUNT", "COUNTA", "MIN", "MAX", "AND", "OR"]
@@ -206,6 +213,19 @@ SEARCHES = [
     "SUMPRODUCT(ABS(-A1:A200))",
     "MATCH(TRUE,ISBLANK(A1:A200),0)",
     "SUMPRODUCT(--ISNA(MATCH(A1:A200,B1:B200,0)))",  # MATCH is not element-wise: dense
+    'SUM(IF(A1:A200="",1))',  # IF in an array formula: a fill of 1
+    'MAX(IF(A1:A200<>"",ROW(A1:A200)))',  # ROW makes no fill: dense
+    "SUMPRODUCT(IF(A1:A200>5,A1:A200,0))",
+    "COUNT(IF(A1:A200>5,A1:A200))",
+    "MATCH(FALSE,IF(A1:A200>0,TRUE),0)",
+    "SUMPRODUCT(IFERROR(1/A1:A200,7))",  # lazy forms other than IF: dense
+    "SUMPRODUCT(IFNA(A1:A200*1,7))",
+    "SUMPRODUCT(CHOOSE(1,A1:A200*1,0))",
+    'IF(A1:A200="",1,2)',  # IF read by nothing that takes a padded array: dense
+    'N(IF(A1:A200="",1,2))',
+    "SUMPRODUCT(IFERROR(A1:A200,7)*1)",  # a bare range first: padded only if the form reads it
+    "IF(A1:A200,1,2)",
+    "SUM(IFNA(A1:A200,0))",
     "ROWS(A1:A200*1)",
     'COLUMNS(A1:B200&"")',
 ]
