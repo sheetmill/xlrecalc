@@ -188,15 +188,16 @@ not). An empty argument is `#N/A`.
   (`comparison_rounding`), nor does `ROUND`; a function that cuts at a boundary can, on a conversion that lands
   exactly on an integer: `INT(CONVERT(2.5,"in","pica"))` is 15 in Excel, whose result is exactly 15, and 14 here,
   where it is 14.999999999999998.
-- Declared tolerances, `distributions_family`: the discrete distributions (`BINOM.DIST`, `BINOMDIST`, `BINOM.DIST.RANGE`,
-  `NEGBINOM.DIST`, `NEGBINOMDIST`, `POISSON.DIST`, `POISSON`, `HYPGEOM.DIST`, `HYPGEOMDIST`) within 8 units in the last
-  place; `GAMMA`, `GAMMALN`, `ERF`, `ERFC` and their `.PRECISE` forms, `EXPON.DIST`, `WEIBULL.DIST`, `LOGNORM.DIST` and
-  `LOGNORM.INV` within 4 (`EXPON.DIST` matches bit for bit on the reference platform, but about ten of its rows lie within
-  0.15 units of a rounding midpoint, where another platform's `exp` can round the other way). 121 rows of the discrete ones are further, most at 1,000 trials and more, where Excel's terms are none of the
-  exact count of ways times the powers, `lgamma` or Loader's saddle point (the largest group of known deviations), and
-  48 of the others, for Excel's own `exp`, `pow`, `erf` and `gamma`; both groups rest on the platform's math library.
-  `BINOM.INV(TRUE,0.5,0.5)` is 1 in Excel, where a cumulative probability of 0.5 reaches alpha at 0, as documented and
-  as `BINOM.INV("3",0.5,0.5)` gives at its own tie (one row).
+- Declared tolerances, `distributions_family`: the discrete distributions (`BINOM.DIST`, `BINOMDIST`,
+  `BINOM.DIST.RANGE`, `NEGBINOM.DIST`, `NEGBINOMDIST`, `POISSON.DIST`, `POISSON`, `HYPGEOM.DIST`, `HYPGEOMDIST`)
+  within 8 units in the last place; `GAMMA`, `GAMMALN`, `ERF`, `ERFC` and their `.PRECISE` forms, `EXPON.DIST`,
+  `WEIBULL.DIST`, `LOGNORM.DIST` and `LOGNORM.INV` within 4 (`EXPON.DIST` matches bit for bit on the reference
+  platform, but about ten of its rows lie within 0.15 units of a rounding midpoint, where another platform's `exp` can
+  round the other way). 121 rows of the discrete ones are further, most at 1,000 trials and more, where Excel's terms
+  are none of the exact count of ways times the powers, `lgamma` or Catherine Loader's saddle-point algorithm (the
+  largest group of known deviations), and 48 of the others, for Excel's own `exp`, `pow`, `erf` and `gamma`; both
+  groups rest on the platform's math library. `BINOM.INV(TRUE,0.5,0.5)` is 1 in Excel, where a cumulative probability
+  of 0.5 reaches alpha at 0, as documented and as `BINOM.INV("3",0.5,0.5)` gives at its own tie (one row).
 - Declared tolerances, `continuous_family` (5,059 rows): the beta, gamma, chi-squared, F and t distributions, their
   inverses and tests declare a relative tolerance ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md)
   §8.1), each its largest difference from Excel on the capture (in parentheses, on the reference platform,

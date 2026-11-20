@@ -2,9 +2,9 @@
 
 Captured from Excel (``continuous_family``). The cumulative functions rest on the regularized
 incomplete beta and gamma functions, each tail computed directly where it is the smaller; an
-inverse is found by bisection on the smaller tail. At large shapes, where logarithms of the
-gamma function cancel, Loader's saddle point, DiDonato and Morris's expansion (BGRAT) and
-Temme's uniform expansion take over. Each function declares a relative tolerance, its largest
+inverse is found by bisection on the smaller tail. At large shapes, where logarithms of the gamma
+function cancel, Catherine Loader's saddle-point algorithm, DiDonato and Morris's expansion (BGRAT)
+and Temme's uniform expansion take over. Each function declares a relative tolerance, its largest
 difference from Excel on the capture rounded up to a power of ten (``tools/relative_spread.py``).
 """
 
