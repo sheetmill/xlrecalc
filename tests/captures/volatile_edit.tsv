@@ -4,32 +4,60 @@
 # captured: 2026-11-21
 # generator: capture/volatile_edit_probe.py
 # workbook: <fileVersion appName="xl" lastEdited="7" lowestEdited="7" rupBuild="11108"/><calcPr calcId="191029"/>
-# method: Excel's saved copy, B1 marked or not, B1 D1 E1 F1 planted; shown after
-#   opening, after C1 is set to 2, and after calculate full
-# columns: variant cell planted_xml shown_after_opening shown_after_edit shown_after_full
-name_no_ca	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	0.1	0.1
-name_no_ca	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	7.0	2.0
-name_no_ca	probe!C1	<c r="C1"><v>1</v></c>	1.0	2.0	2.0
-name_no_ca	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	20.0	20.0
-name_no_ca	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	999.0	0.3
-name_ca	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	0.1	0.1
-name_ca	probe!B1	<c r="B1"><f ca="1">vn</f><v>7</v></c>	1.0	2.0	2.0
-name_ca	probe!C1	<c r="C1"><v>1</v></c>	1.0	2.0	2.0
-name_ca	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	20.0	20.0
-name_ca	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	999.0	0.3
-own_no_ca	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	0.1	0.1
-own_no_ca	probe!B1	<c r="B1"><f>INDIRECT("probe!C1")</f><v>7</v></c>	1.0	2.0	2.0
-own_no_ca	probe!C1	<c r="C1"><v>1</v></c>	1.0	2.0	2.0
-own_no_ca	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	10.0	20.0	20.0
-own_no_ca	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	0.3	0.3	0.3
-now_no_ca	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	0.1	0.1
-now_no_ca	probe!B1	<c r="B1"><f>NOW()*0+A1</f><v>7</v></c>	0.1	0.1	0.1
-now_no_ca	probe!C1	<c r="C1"><v>1</v></c>	1.0	2.0	2.0
-now_no_ca	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	10.0	20.0	20.0
-now_no_ca	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	0.3	0.3	0.3
-now_no_ca	probe!F1	<c r="F1"><f ca="1">NOW()*0+3</f><v>999</v></c>	3.0	3.0	3.0
-name_dependent_no_ca	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	0.1	0.1
-name_dependent_no_ca	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	7.0	2.0
-name_dependent_no_ca	probe!C1	<c r="C1"><v>1</v></c>	1.0	2.0	2.0
-name_dependent_no_ca	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	20.0	20.0
-name_dependent_no_ca	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	999.0	0.3
+# method: Excel's saved copy, B1 marked or not, B1 D1 E1 F1 planted, fullCalcOnLoad
+#   written where the variant asks; shown after opening, after a calculate full where
+#   the variant asks ('-' else), after C1 (A1 where the variant edits it) is set to 2,
+#   and after calculate full; the workbook line is that of the files without the flag
+# columns: variant cell planted_xml shown_after_opening shown_after_full_first
+#   shown_after_edit shown_after_full
+name_no_ca	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+name_no_ca	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	2.0
+name_no_ca	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+name_no_ca	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+name_no_ca	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+name_ca	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+name_ca	probe!B1	<c r="B1"><f ca="1">vn</f><v>7</v></c>	1.0	-	2.0	2.0
+name_ca	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+name_ca	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+name_ca	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+own_no_ca	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+own_no_ca	probe!B1	<c r="B1"><f>INDIRECT("probe!C1")</f><v>7</v></c>	1.0	-	2.0	2.0
+own_no_ca	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+own_no_ca	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	10.0	-	20.0	20.0
+own_no_ca	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	0.3	-	0.3	0.3
+now_no_ca	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+now_no_ca	probe!B1	<c r="B1"><f>NOW()*0+A1</f><v>7</v></c>	0.1	-	0.1	0.1
+now_no_ca	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+now_no_ca	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	10.0	-	20.0	20.0
+now_no_ca	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	0.3	-	0.3	0.3
+now_no_ca	probe!F1	<c r="F1"><f ca="1">NOW()*0+3</f><v>999</v></c>	3.0	-	3.0	3.0
+name_dependent_no_ca	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+name_dependent_no_ca	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	2.0
+name_dependent_no_ca	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+name_dependent_no_ca	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+name_dependent_no_ca	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+plain_name	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+plain_name	probe!B1	<c r="B1"><f>vn+0</f><v>7</v></c>	7.0	-	2.0	2.0
+plain_name	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+plain_name	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+plain_name	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+name_offset_plus	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+name_offset_plus	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	2.0
+name_offset_plus	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+name_offset_plus	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+name_offset_plus	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+name_static_dependent	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	2.0	2.0
+name_static_dependent	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	3.0
+name_static_dependent	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	1.0	1.0
+name_static_dependent	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	999.0	10.0
+name_static_dependent	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	6.0	6.0
+name_no_ca_full_first	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	0.1	0.1	0.1
+name_no_ca_full_first	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	1.0	2.0	2.0
+name_no_ca_full_first	probe!C1	<c r="C1"><v>1</v></c>	1.0	1.0	2.0	2.0
+name_no_ca_full_first	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	10.0	20.0	20.0
+name_no_ca_full_first	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	0.3	0.3	0.3
+name_no_ca_full_on_load	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+name_no_ca_full_on_load	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	1.0	-	2.0	2.0
+name_no_ca_full_on_load	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+name_no_ca_full_on_load	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	10.0	-	20.0	20.0
+name_no_ca_full_on_load	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	0.3	-	0.3	0.3

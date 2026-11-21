@@ -67,26 +67,34 @@ def _volatile_edit() -> tuple[str, dict[str, list[list[str]]]]:
     return workbook, rows
 
 
-# An unmarked cell volatile through a defined name: Excel keeps its value through an edit (only a
-# full calculation computes it), also where the name's OFFSET names the edited cell; the engine
-# computes it (QUIRKS.md, known deviations).
-VOLATILE_EDIT_DEVIATIONS = {("name_no_ca", "probe!B1"), ("name_dependent_no_ca", "probe!B1")}
+# An unmarked cell volatile through a defined name, which Excel has not computed since opening, is
+# recomputed by an edit neither as volatile nor as a dependent through the name's references (a
+# plain name's are followed); once computed, every edit recomputes it (QUIRKS.md).
+VOLATILE_EDIT_DEVIATIONS = {
+    ("name_no_ca", "probe!B1"),
+    ("name_dependent_no_ca", "probe!B1"),
+    ("name_offset_plus", "probe!B1"),
+    ("name_static_dependent", "probe!B1"),
+}
 
 
 @pytest.mark.parametrize("read_first", [False, True])
 @pytest.mark.parametrize("variant", list(_volatile_edit()[1]))
 def test_an_edit_recomputes_what_excel_recomputes(variant: str, read_first: bool) -> None:
-    """Capture ``volatile_edit``: each file as Excel saved and the probe planted it, opened, C1
-    set to 2, then a full calculation; every cell as Excel showed it at each step, but the
-    deviations listed (strict: a listed cell that matches fails)."""
+    """Capture ``volatile_edit``: each file as Excel saved and the probe planted it, opened, fully
+    calculated first where the variant asks, edited (C1, or A1, set to 2), then calculated in
+    full; every cell as Excel showed it at each step, but the deviations listed (strict: a
+    listed cell that matches fails)."""
     import io
 
-    from capture.volatile_edit_cases import VARIANTS
+    from capture.volatile_edit_cases import EDITED, FULL_FIRST, FULL_ON_LOAD, VARIANTS
 
     import xlrecalc
     from tests.xlsx_files import package
 
     workbook, rows = _volatile_edit()
+    if variant in FULL_ON_LOAD:
+        workbook = workbook.replace("<calcPr ", '<calcPr fullCalcOnLoad="1" ', 1)
     cells = rows[variant]
     name = VARIANTS[variant][1]
     names = (
@@ -103,18 +111,24 @@ def test_an_edit_recomputes_what_excel_recomputes(variant: str, read_first: bool
     )
     wb = xlrecalc.load(io.BytesIO(data))
     refs = [c[1] for c in cells]
-    steps: list[list[object]] = [[wb.value(r) for r in refs] if read_first else [None] * len(refs)]
-    wb.set("probe!C1", 2)
+    unread = [None] * len(refs)
+    steps: list[list[object]] = [[wb.value(r) for r in refs] if read_first else unread]
+    if variant in FULL_FIRST:
+        wb.recalculate(full=True)
+        steps.append([wb.value(r) for r in refs])
+    else:
+        steps.append(unread)
+    wb.set(EDITED.get(variant, "probe!C1"), 2)
     steps.append([wb.value(r) for r in refs])
     wb.recalculate(full=True)
     steps.append([wb.value(r) for r in refs])
     differ = set()
     for i, c in enumerate(cells):
-        for step in range(3):
+        for step in range(4):
             got = steps[step][i]
+            if got is None or c[3 + step] == "-":
+                continue
             shown = float(c[3 + step])  # AppleScript's text of the value: 15 digits
-            if got is not None and not (
-                type(got) is float and math.isclose(got, shown, rel_tol=1e-11)
-            ):
+            if not (type(got) is float and math.isclose(got, shown, rel_tol=1e-11)):
                 differ.add((variant, c[1]))
     assert differ == {d for d in VOLATILE_EDIT_DEVIATIONS if d[0] == variant}
