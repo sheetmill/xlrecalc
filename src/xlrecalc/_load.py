@@ -1112,6 +1112,8 @@ def _compile_sheet(state: _SheetLoad) -> None:
         if f.kind == "dataTable" or f.text is None:
             label = "array formula" if f.kind == "array" else "data table"
             _keep(engine, index, row, col, cached, label, where)
+            if cached is not None:
+                engine.keep_constants(index, box or (row, col, row, col), label)
             continue
         if reason is not None:
             report.refused[where] = str(reason)

@@ -276,6 +276,10 @@ class Engine:
         # The labels of cells whose own formula was stopped or kept (limits, features not
         # implemented), for :meth:`status`.
         self._stopped: dict[int, set[str]] = {}
+        # The (cell, label) pairs ``Report.unsupported`` has counted, each once; and the cells a
+        # data table or an array formula with no text keeps with the file's values (§7.6).
+        self._labelled: set[tuple[int, str]] = set()
+        self._kept_constants: set[int] = set()
         self._evaluated: set[int] = set()
         self._dynamic_reads: dict[int, list[tuple[int, int, int, int, int]]] = {}
         self.active = (0, 0, 0)
@@ -891,6 +895,23 @@ class Engine:
             self._order_report()
         return self.report
 
+    def _count_labels(self, n: int, labels: Iterable[str]) -> None:
+        """Count a formula cell's own unsupported functions in the report, each once a cell."""
+        for label in labels:
+            if (n, label) not in self._labelled:
+                self._labelled.add((n, label))
+                self.report.unsupported[label] += 1
+
+    def keep_constants(self, sheet: int, box: tuple[int, int, int, int], label: str) -> None:
+        """Cells a data table or an array formula with no text keeps with the file's values."""
+        r1, c1, r2, c2 = box
+        for r in range(r1, r2 + 1):
+            for c in range(c1, c2 + 1):
+                n = node(sheet, r, c)
+                self._kept_constants.add(n)
+                self.stop(n, label)
+        self._report_due = True  # they are in ``from_kept`` from here on
+
     def stop(self, n: int, label: str) -> None:
         """Note a cell whose own formula was stopped or kept, under ``label`` (:meth:`status`)."""
         self._stopped.setdefault(n, set()).add(label)
@@ -936,6 +957,8 @@ class Engine:
             inherited = not own and error is None
             return CellStatus("uncomputed", own, error, inherited=inherited, anchor=anchor)
         if tid is None:
+            if where in report.from_kept:  # a data table's, or an array formula's with no text
+                return CellStatus("kept", own, anchor=anchor)
             return CellStatus("constant")
         if where in report.circular:
             return CellStatus("circular", anchor=anchor)
@@ -1015,7 +1038,10 @@ class Engine:
             self._held_back = self._out_of_date()
         self._changed = False
         if self._unclosed and len(self.stale) < self.formula_count():
-            self.stale |= self.dependents(self._unclosed)
+            reached = self.dependents(self._unclosed)
+            if self._kept:  # kept by a cycle closed since they were compiled: final until a change
+                reached -= self._kept.keys()
+            self.stale |= reached
         self._unclosed.clear()
 
     def formula_count(self) -> int:
@@ -1147,7 +1173,7 @@ class Engine:
 
     def dynamic_ref(self, sheet: int, r1: int, c1: int, r2: int, c2: int) -> Ref:
         """A reference made during evaluation (``OFFSET``, ``INDIRECT``): its reads are checked."""
-        if self._absent:
+        if self._absent or self._kept_constants:
             where = node(self.sheet, self.row, self.col)
             self._dynamic_reads.setdefault(where, []).append((sheet, r1, c1, r2, c2))
         return Ref(self.checked, sheet, r1, c1, r2, c2)
@@ -1324,7 +1350,7 @@ class Engine:
         template = self.templates[tid]
         where = CellRef(s.name, row + 1, col + 1)
         if template.unsupported:
-            self.report.unsupported.update(template.unsupported)
+            self._count_labels(n, template.unsupported)
         if self._held_back and n in self._held_back:  # rests on a value out of date (§7.6)
             if key not in s.values:
                 s.values[key] = NAME
@@ -1336,7 +1362,7 @@ class Engine:
             else:
                 self._reached.add(n)
             return
-        if self._absent:
+        if self._absent or self._kept_constants:
             self._evaluated.add(n)
             self._dynamic_reads.pop(n, None)
         if self._partial and not self._iterating and n not in self._before_pass:
@@ -1403,6 +1429,7 @@ class Engine:
         Their kept values are out of date from here on. A formula using ``OFFSET`` or ``INDIRECT``
         is never evaluated, so what it reads is not known: any change may reach it.
         """
+        self._report_due = True  # what the report's passes follow has changed
         if self._absent:
             self._outdated |= self._absent & self.dependents([n])
             self._outdated |= self._absent & self._volatile
@@ -1448,8 +1475,11 @@ class Engine:
             for n in self._out_of_date():
                 sheet, row, col = unpack(n)
                 s = self.sheets[sheet]
-                if row * COLS + col in s.templates:
+                tid = s.templates.get(row * COLS + col)
+                if tid is not None:
                     refs.add(CellRef(s.name, row + 1, col + 1))
+                    if self.templates[tid].unsupported:
+                        self._count_labels(n, self.templates[tid].unsupported)
         self._held_refs = refs
         report.uncomputed |= refs
 
@@ -1457,18 +1487,21 @@ class Engine:
         """Name what rests on a kept value: it, and every cell evaluated from it (§7.6)."""
         names = self.report.from_kept
         names.clear()
-        if not self._absent:
+        if not self._absent and not self._kept_constants:
             return
-        kept = self._absent - self._outdated
+        kept = (self._absent - self._outdated) | self._kept_constants
         rest = self._closure(kept) & self._evaluated if kept else set()
-        behind = kept & self._reached
+        behind = (kept & self._reached) | self._kept_constants
         if rest and not kept <= behind:
             behind |= self._kept_behind(rest, kept)
         for n in behind | rest:
             sheet, row, col = unpack(n)
             s = self.sheets[sheet]
-            if row * COLS + col in s.templates:
+            tid = s.templates.get(row * COLS + col)
+            if tid is not None or n in self._kept_constants:
                 names.add(CellRef(s.name, row + 1, col + 1))
+            if tid is not None and n in self._absent:  # named for its own function: counted
+                self._count_labels(n, self.templates[tid].unsupported)
         names -= self.report.uncomputed
         names -= self.report.circular
 
@@ -1512,6 +1545,10 @@ class Engine:
         for n in self.dependents(seeds):
             sheet, row, col = unpack(n)
             self.report.uncomputed.add(CellRef(self.sheets[sheet].name, row + 1, col + 1))
+            if n in self._absent:  # its own function, never evaluated: counted all the same
+                tid = self.sheets[sheet].templates.get(row * COLS + col)
+                if tid is not None:
+                    self._count_labels(n, self.templates[tid].unsupported)
 
     # Dependencies -------------------------------------------------------------------------------
 

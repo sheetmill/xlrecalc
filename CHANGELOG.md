@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `refusal`; `inherited`, when an uncomputed or kept state comes from a precedent; `anchor`, for a cell an array
   formula fills). It reads only the sheets that cell needs (its own, and those its evaluation reaches, through every
   reference of the formulas evaluated, branches not taken included), where `report` reads every sheet a lazy `Loader`
-  left, and it equals the report's entry for the cell. Reading a range's values first and then each cell's status runs the report's passes once.
+  left, and it equals the report's entry for the cell. Reading a range's values first and then each cell's status
+  runs the report's passes once.
 
 ### Changed
 - Reading formulas filled down a column without being shared (each cell holding its own text, as some programs
@@ -24,9 +25,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - A cell depending on a circular reference keeps the value the file holds, as Excel keeps it (capture
-  `circular_cached`), also where a `Loader` reads its sheet after the cycle was evaluated: such a cell was computed
-  from the cycle's kept value (in 0.7.0, with sheets not fed: `one!A1 = two!A1+1` read after `two`'s cycle gave 8
-  where Excel keeps 7).
+  `circular_cached`), when a `Loader` reads its sheet only after the cycle was evaluated. In 0.7.0, a workbook with
+  iterative calculation off and a cycle on a sheet the caller fed, read through `Loader.workbook()` with the dependent's
+  sheet not fed, computed that cell from the cycle's kept value: `one!A1 = two!A1+1`, read after `two`'s cycle
+  (cached 7), gave 8. `load()`, `finish()` and a `Loader` fed every sheet first gave 7.
+- With a `Loader`, a sheet read while a cycle is evaluated keeps the cells the cycle keeps on it: an array formula
+  depending on the cycle there was evaluated again on the next read, and the report listed it and the cells it read
+  as uncomputed where `load()` lists them as circular. The values were the same.
+- `Report.unsupported` counts each cell once for each function or feature it uses that is not implemented, as its
+  docstring says: a count grew with every recalculation that evaluated the cell, and a cell an edit held back, or one
+  uncomputed through a precedent, was not counted unless it was evaluated.
+- A data table, or an array formula's range with no formula text, keeps its cached values and is now in
+  `Report.from_kept`, with the cells computed from it, as `from_kept`'s docstring says; it was in none of the report's
+  sets, and `Workbook.status` gave it as `"constant"`.
 
 ## [0.7.0] - 2026-11-21
 

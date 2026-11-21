@@ -736,7 +736,9 @@ change counts as upstream of it. A dependent that reads through them is evaluate
 A change that removes the reliance (the formula replaced) takes the cells out of both. A read through
 `OFFSET` or `INDIRECT` of such a cell has no static edge, so each evaluation records its boxes, in a
 workbook holding such a formula only. A run that trusts cached values and evaluates nothing names
-nothing; one that evaluates a cell names it and the formula it rests on.
+nothing; one that evaluates a cell names it and the formula it rests on. A data table, or an
+array formula's range with no formula text, keeps its cached values: `from_kept` names its cells always, and the
+cells evaluated from them. `unsupported` counts each cell once for each label it carries.
 
 A formula set through `set_formula` is taken as the formula bar takes it: without its `_xlfn.` prefix it computes and is written with
 it. The same text read from a file is what Excel reads there, a name it does not know: `#NAME?`, reported under a label that names the prefix Excel writes (`XLOOKUP written without Excel's file prefix

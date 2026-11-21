@@ -87,6 +87,10 @@ def _sheet(rng: random.Random, sheets: int, excel: bool) -> tuple[str, set[str],
             body = text.replace("&", "&amp;").replace('"', "&quot;")
             rows[r].append(f'<c r="{c}{r}"><f>{body}</f>{cached}</c>')
     members: list[str] = []
+    if rng.random() < 0.3:  # a data table over C4, kept with its cached value, read by D4
+        rows[4] = [c for c in rows[4] if not c.startswith('<c r="C4"')]
+        rows[4].append('<c r="C4"><f t="dataTable" ref="C4" dt2D="0" dtr="0" r1="A1"/><v>8</v></c>')
+        rows[4].append('<c r="D4"><f>C4*2</f></c>')
     if rng.random() < 0.5:  # an array formula over D1:D2 that keeps its cached values
         text, names = rng.choice([('CUBEVALUE("c")', set()), ("A1:A2*2", set())])
         named |= names
@@ -140,7 +144,7 @@ def expected(report: Report, where: CellRef, formula: bool) -> str:
     if where in report.uncomputed:
         return "uncomputed"
     if not formula:
-        return "constant"
+        return "kept" if where in report.from_kept else "constant"
     if where in report.circular:
         return "circular"
     if where in report.from_kept:
@@ -164,9 +168,7 @@ def _check_status(
     assert status.anchor == (where if owner != ref else None), (ref, status)
     assert status.error == report.exceptions.get(where), (ref, status)
     assert status.refusal == report.refused.get(where), (ref, status)
-    text = (wb.formula(owner) or "").upper()
-    for label in status.labels:  # the cell's own formula's: counted or not (an edit holds it)
-        assert label in report.unsupported or label.split()[0] + "(" in text, (ref, status)
+    assert set(status.labels) <= set(report.unsupported), (ref, status)
     if status.inherited:
         assert status.state in ("uncomputed", "kept")
         assert not status.labels
@@ -203,13 +205,14 @@ def _check(seed: int, monkeypatch: pytest.MonkeyPatch) -> None:
                 for _ in loader.cells(sheet):
                     pass
         wb = loader.workbook()
+        settled = {name for name, calls in reads.calls.items() if calls}  # its rule's
         asked: list[str] = []
         touched: set[str] = set(fed)
         edited = False
         for _ in range(rng.randint(1, 12)):
             ref = rng.choice(refs)
             roll = rng.random()
-            if roll < 0.1 and ref[-2] != "D":  # an edit outside the array, in both
+            if roll < 0.1 and ref[-2] != "D" and not ref.endswith("C4"):  # not an array's
                 value = float(rng.randint(1, 9))
                 wb.set(ref, value)
                 twin.set(ref, value)
@@ -226,7 +229,7 @@ def _check(seed: int, monkeypatch: pytest.MonkeyPatch) -> None:
             TOLD["statuses"] += 1
             if not edited:
                 read = {name for name, calls in reads.calls.items() if calls}
-                assert read <= _reach(named, touched), (seed, read, touched)
+                assert read <= settled | _reach(named, touched), (seed, read, touched)
                 if len(read) < len(sheets):
                     TOLD["left unread"] += 1
         report = wb.report
@@ -390,3 +393,60 @@ def test_a_defined_name_s_sheets_are_read(monkeypatch: pytest.MonkeyPatch) -> No
         wb = xlrecalc.Loader(book).workbook()
         assert wb.status("a!A1") == CellStatus("kept", inherited=True)
         assert set(reads.calls) == {"a", "b"}
+
+
+def test_unsupported_counts_each_cell_it_stops_once() -> None:
+    """Evaluated twice, held back by an edit without being read, or uncomputed through a
+    precedent without being evaluated: each cell using the function counts once."""
+    rows = (
+        '<row r="1"><c r="A1"><v>1</v></c><c r="B1"><f>CUBEVALUE("c",A1)</f><v>5</v></c>'
+        '<c r="C1"><f>B1+1</f><v>6</v></c></row>'
+    )
+    full = xlrecalc.load(io.BytesIO(package(rows, workbook_extra='<calcPr fullCalcOnLoad="1"/>')))
+    full.value("Data!C1")
+    full.recalculate(full=True)
+    full.recalculate(full=True)
+    assert dict(full.report.unsupported) == {"CUBEVALUE": 1}
+    trusted = xlrecalc.load(io.BytesIO(package(rows, workbook_extra=EXCEL_SAVED)))
+    trusted.set("Data!A1", 2)
+    report = trusted.report  # nothing read: B1 is held back, never evaluated
+    assert CellRef("Data", 1, 2) in report.uncomputed
+    assert dict(report.unsupported) == {"CUBEVALUE": 1}
+    assert trusted.status("Data!B1") == CellStatus("uncomputed", ("CUBEVALUE",))
+    tainted = (
+        '<row r="1"><c r="A1"><f>CUBEVALUE("c")</f></c><c r="B1"><f>CUBEVALUE("c",A1)</f>'
+        "<v>5</v></c></row>"
+    )
+    wb = xlrecalc.load(io.BytesIO(package(tainted, workbook_extra=EXCEL_SAVED)))
+    wb.value("Data!A1")
+    report = wb.report  # B1 is uncomputed through A1, never evaluated
+    assert {CellRef("Data", 1, 1), CellRef("Data", 1, 2)} <= report.uncomputed
+    assert dict(report.unsupported) == {"CUBEVALUE": 2}
+
+
+def test_a_data_table_keeps_its_values_in_from_kept_with_what_reads_them() -> None:
+    rows = (
+        '<row r="1"><c r="A1"><v>1</v></c>'
+        '<c r="B1"><f t="dataTable" ref="B1:B2" dt2D="0" dtr="0" r1="A1"/><v>6</v></c>'
+        '<c r="C1"><f>B1+B2</f></c><c r="D1"><f>A1+1</f></c></row>'
+        '<row r="2"><c r="B2"><v>7</v></c></row>'
+    )
+    wb = xlrecalc.load(io.BytesIO(package(rows, workbook_extra='<calcPr fullCalcOnLoad="1"/>')))
+    assert wb.value("Data!C1") == 13.0
+    assert wb.value("Data!D1") == 2.0
+    kept = {CellRef("Data", 1, 2), CellRef("Data", 2, 2), CellRef("Data", 1, 3)}
+    assert wb.report.from_kept == kept
+    assert wb.status("Data!B2") == CellStatus("kept", ("data table",))
+    assert wb.status("Data!C1") == CellStatus("kept", inherited=True)
+    assert wb.status("Data!D1") == CellStatus("computed")
+
+
+def test_a_cell_counts_each_function_it_used_once() -> None:
+    rows = '<row r="1"><c r="A1"><f>CUBEVALUE("c")</f><v>5</v></c></row>'
+    wb = xlrecalc.load(io.BytesIO(package(rows, workbook_extra='<calcPr fullCalcOnLoad="1"/>')))
+    wb.value("Data!A1")
+    wb.set_formula("Data!A1", '=CUBEVALUE("d")')
+    wb.value("Data!A1")
+    wb.set_formula("Data!A1", '=CUBEMEMBER("c","m")')
+    wb.value("Data!A1")
+    assert dict(wb.report.unsupported) == {"CUBEMEMBER": 1, "CUBEVALUE": 1}

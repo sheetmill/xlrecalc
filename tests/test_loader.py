@@ -619,3 +619,28 @@ def test_a_sheet_read_after_a_cycle_closed_keeps_its_dependents_of_it() -> None:
         return wb.value("two!A1"), wb.value("one!A1"), wb.report.circular
 
     assert _lazy(data, cycle_first) == (7.0, 7.0, cells)
+
+
+def test_a_sheet_read_during_an_evaluation_that_closes_a_cycle_keeps_what_the_cycle_kept() -> None:
+    """``two`` is read while ``one``'s cycle is evaluated (its ``A1`` reads ``two!B1``); the cycle
+    keeps ``two!A2`` and the array ``two!D1:D2`` reading it, as a full load keeps them. Reading
+    the sheet was taken for an edit, and the array, kept, was made stale again and computed."""
+    data = _lazy_book(
+        '<row r="1"><c r="A1"><f>A2+two!B1*0</f><v>7</v></c></row>'
+        '<row r="2"><c r="A2"><f>A1+1</f><v>7</v></c></row>',
+        '<row r="1"><c r="A1"><f>CUBEVALUE("c")</f></c><c r="B1"><v>1</v></c>'
+        '<c r="D1"><f t="array" ref="D1:D2">A1:A2*2</f><v>5</v></c></row>'
+        '<row r="2"><c r="A2"><f>one!A1+1</f><v>7</v></c><c r="D2"><v>6</v></c></row>',
+    )
+
+    def read(wb: xlrecalc.Workbook) -> object:
+        cells = [wb.value(r) for r in ("one!A1", "two!D1", "two!D2")]
+        return cells, sorted(wb.report.circular), sorted(wb.report.uncomputed)
+
+    eager = read(xlrecalc.load(io.BytesIO(data)))
+    assert eager[0] == [7.0, 5.0, 6.0]
+    with xlio.open(io.BytesIO(data)) as book:
+        loader = xlrecalc.Loader(book)
+        for _ in loader.cells(book.sheets[0]):
+            pass
+        assert read(loader.workbook()) == eager
