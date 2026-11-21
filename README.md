@@ -54,7 +54,9 @@ as it was can be: the report also names cells that keep the file's value because
 function or feature xlrecalc does not implement (`from_kept`), cells on a circular reference
 with iteration off (`circular`), and formulas Excel itself refuses in a file (`refused`);
 `unsupported` counts what was missing, and `exceptions` names cells where an internal error was
-caught, each written as `#VALUE!`.
+caught, each written as `#VALUE!`. `workbook.status(cell)` gives one cell's entry (a
+`CellStatus`: its state, the cell's own reason, and whether the state comes from a precedent),
+reading only the sheets that cell needs, where `workbook.report` reads every sheet.
 
 Only the cached values and the request to recalculate change: every other part of the file is
 copied as it was, byte for byte. By default the file asks Excel to recalculate when it opens it,

@@ -1187,5 +1187,6 @@ def _keep(
     """A formula the engine cannot evaluate yet: its cached value stays, reported."""
     engine.sheets[sheet].set(row, col, BLANK if cached is None else cached)
     engine.report.unsupported[label] += 1
+    engine.stop(node(sheet, row, col), label)
     if cached is None:
         engine.report.uncomputed.add(where)

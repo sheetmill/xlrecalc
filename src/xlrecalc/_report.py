@@ -5,9 +5,9 @@ from __future__ import annotations
 import re
 from collections import Counter
 from dataclasses import dataclass, field
-from typing import NamedTuple
+from typing import Literal, NamedTuple
 
-__all__ = ["CellRef", "Report", "column_letters"]
+__all__ = ["CellRef", "CellState", "CellStatus", "Report", "column_letters"]
 
 # A sheet name needs no quotes when it is a word (letters, digits and underscores, not starting
 # with a digit) that cannot be read as a cell reference. Excel quotes some names this leaves
@@ -53,6 +53,41 @@ class CellRef(NamedTuple):
 
     def __str__(self) -> str:
         return f"{sheet_prefix(self.sheet)}{column_letters(self.col)}{self.row}"
+
+
+CellState = Literal["constant", "computed", "uncomputed", "kept", "circular", "refused"]
+
+
+@dataclass(frozen=True, slots=True)
+class CellStatus:
+    """What :attr:`Workbook.report` says of one cell, as :meth:`Workbook.status` gives it.
+
+    ``state`` is, in this order: ``"refused"``, the cell is in ``Report.refused``;
+    ``"uncomputed"``, in ``Report.uncomputed``; ``"circular"``, in ``Report.circular``;
+    ``"kept"``, in ``Report.from_kept`` (it holds the file's value of a function or feature
+    not implemented, or was computed from one); ``"computed"``, any other formula cell (its
+    value is the engine's: computed, or the file's value where the opening rule trusts it, as
+    Excel shows it); ``"constant"``, a cell without a formula, as Excel's Go To Special names
+    one.
+
+    Attributes:
+        state: The cell's state, as above.
+        labels: The functions or features not implemented, or the limits passed, by the
+            cell's own formula: keys of ``Report.unsupported``.
+        error: The internal error caught evaluating the cell (``Report.exceptions``).
+        refusal: Why Excel refuses the cell's formula in a file (``Report.refused``).
+        inherited: ``True`` when an ``"uncomputed"`` or ``"kept"`` state comes from a precedent
+            rather than from the cell's own formula (which then has no ``labels`` or ``error``).
+        anchor: For a cell an array formula fills, that formula's cell, whose status this is;
+            ``None`` otherwise.
+    """
+
+    state: CellState
+    labels: tuple[str, ...] = ()
+    error: str | None = None
+    refusal: str | None = None
+    inherited: bool = False
+    anchor: CellRef | None = None
 
 
 @dataclass

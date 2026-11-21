@@ -56,6 +56,8 @@ def test_public_names():
     assert sorted(xlrecalc.__all__) == sorted(
         [
             "CellRef",
+            "CellState",
+            "CellStatus",
             "CellValue",
             "ConditionalFormula",
             "ErrorValue",

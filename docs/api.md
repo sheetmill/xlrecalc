@@ -35,6 +35,10 @@
 
 .. autoclass:: xlrecalc.Report
 
+.. autoclass:: xlrecalc.CellStatus
+
+.. autodata:: xlrecalc.CellState
+
 .. autoclass:: xlrecalc.CellRef
    :members: sheet, row, col
 

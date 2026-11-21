@@ -747,6 +747,18 @@ and every cell depending on them, are **uncomputed**: the report lists them, and
 leaves their cached values as they were (§9.2). The report (`Report`) also lists circular
 references, formulas Excel refuses in a file, and unsupported features by name and count.
 
+`Workbook.report` covers every sheet, so it reads every sheet a lazy `Loader` left.
+`Workbook.status(cell)` gives one cell's entry in it (`CellStatus`: refused, uncomputed, circular,
+kept, computed or constant, in that order, with the cell's own labels, internal error or refusal,
+and whether an uncomputed or kept state comes from a precedent) from the sheets read so far: the
+cell's own and those its evaluation reaches, since evaluating a formula reads every sheet its
+references name, through defined names and in branches not taken, where a static precedent can
+lie. The report's passes run over those sheets, as they would over all of them, so the entry
+equals the whole report's for that cell; `tests/test_status.py` checks it against an eagerly
+loaded twin, and that no sheet is read that neither feeding nor the static references of the
+cells read reach. A cell an array formula fills answers with that formula's entry, as the report
+names it.
+
 ### 7.7 Arrays, spill and implicit intersection
 
 Capture `arrays` (`capture/array_probe.py`, `tests/test_arrays.py`) had Excel compute three
@@ -1410,6 +1422,7 @@ wb.set_formula("Sheet1!B8", "=B7*2")   # as typed in the formula bar; FormulaErr
 wb.recalculate()                       # everything stale; full=True for everything -> Report
 wb.save("out.xlsx")                    # surgical write (§9.2); in place by default
 wb.report                              # unsupported functions, uncomputed cells, cycles
+wb.status("Sheet1!B7")                 # CellStatus: the report's entry for one cell
 
 check = xlrecalc.RecalcCheck("model.xlsx")   # reads the workbook part only (§7.4)
 if check.result is None:                     # undecided by the file: feed the formula cells read

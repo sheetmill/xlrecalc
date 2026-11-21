@@ -45,7 +45,7 @@ from xlrecalc._limits import StepLimitError
 from xlrecalc._opening import Volatility
 from xlrecalc._ops import Ops
 from xlrecalc._quirks import Quirks
-from xlrecalc._report import CellRef, Report
+from xlrecalc._report import CellRef, CellStatus, Report
 from xlrecalc._store import COLS, MAX_COL, MAX_ROW, Sheet
 from xlrecalc._values import BLANK, ErrorValue, Lambda, Ref, Value
 
@@ -273,6 +273,9 @@ class Engine:
         self._held_back: set[int] = set()
         self._held_refs: set[CellRef] = set()
         self._reached: set[int] = set()
+        # The labels of cells whose own formula was stopped or kept (limits, features not
+        # implemented), for :meth:`status`.
+        self._stopped: dict[int, set[str]] = {}
         self._evaluated: set[int] = set()
         self._dynamic_reads: dict[int, list[tuple[int, int, int, int, int]]] = {}
         self.active = (0, 0, 0)
@@ -870,11 +873,15 @@ class Engine:
 
     def _finish_report(self) -> None:
         """The report's whole-workbook passes, each a function of the engine's state."""
+        self._report_passes()
+        self._order_report()
+
+    def _report_passes(self) -> None:
+        """What is uncomputed and what rests on a kept value, over the sheets read so far."""
         self._report_held_back()
         self._taint()
         self._report_from_kept()
         self._report_due = False
-        self._order_report()
 
     def settled_report(self) -> Report:
         """The report, with the passes deferred by the reads since the last one run."""
@@ -883,6 +890,59 @@ class Engine:
         else:
             self._order_report()
         return self.report
+
+    def stop(self, n: int, label: str) -> None:
+        """Note a cell whose own formula was stopped or kept, under ``label`` (:meth:`status`)."""
+        self._stopped.setdefault(n, set()).add(label)
+
+    def status(self, sheet: int, row: int, col: int) -> CellStatus:
+        """What the report says of one cell, from the sheets read so far.
+
+        The cell's sheet is read and compiled, and the cell evaluated as :meth:`get` evaluates
+        it, which reads every sheet the references of the formulas it evaluates name, through
+        defined names and in branches not taken too: the sheets a static precedent can lie on,
+        which the report's passes follow. (A "some" opening and iterative calculation read every
+        sheet first; under "none" nothing is evaluated, and an edit reads every sheet.) The
+        passes then run, if a read since the last run left them due, so that reading a range's
+        values first and then each cell's status runs them once. A cell an array formula fills
+        answers with that formula's status.
+        """
+        self.need_formulas(sheet)
+        n = node(sheet, row, col)
+        anchor = self.member_of(n)
+        target = n if anchor is None else anchor
+        self.get(sheet, row, col)
+        if self._report_due:
+            self._report_passes()
+        return self._classify(target, anchor is not None)
+
+    def _classify(self, n: int, filled: bool) -> CellStatus:
+        """A cell's status from the report as it stands, in :class:`CellStatus`'s order."""
+        sheet, row, col = unpack(n)
+        s = self.sheets[sheet]
+        where = CellRef(s.name, row + 1, col + 1)
+        anchor = where if filled else None
+        report = self.report
+        tid = s.templates.get(row * COLS + col)
+        labels = set(self._stopped.get(n, ()))
+        if tid is not None:
+            labels.update(self.templates[tid].unsupported)
+        own = tuple(sorted(labels))
+        refusal = report.refused.get(where)
+        if refusal is not None:
+            return CellStatus("refused", refusal=refusal, anchor=anchor)
+        error = report.exceptions.get(where)
+        if where in report.uncomputed:
+            inherited = not own and error is None
+            return CellStatus("uncomputed", own, error, inherited=inherited, anchor=anchor)
+        if tid is None:
+            return CellStatus("constant")
+        if where in report.circular:
+            return CellStatus("circular", anchor=anchor)
+        if where in report.from_kept:
+            kept = n in self._absent
+            return CellStatus("kept", own if kept else (), inherited=not kept, anchor=anchor)
+        return CellStatus("computed", anchor=anchor)
 
     def _order_report(self) -> None:
         """The report's cells in sheet, row and column order, and its labels in text order.
@@ -1218,6 +1278,7 @@ class Engine:
                 sheet, row, col = unpack(n)
                 self.report.unsupported[stopped] += 1
                 self.report.uncomputed.add(CellRef(self.sheets[sheet].name, row + 1, col + 1))
+                self.stop(n, stopped)
             else:
                 self._iterated.add(n)
             self._kept[n] = True  # what it holds now is its value until a change
@@ -1292,16 +1353,20 @@ class Engine:
         except _NotEvaluatedError:
             raise
         except ArrayLimitError as exc:  # keep the cached value, as for a function not supported
-            self.report.unsupported[f"an array of more than {exc.limit:,} cells"] += 1
+            label = f"an array of more than {exc.limit:,} cells"
+            self.report.unsupported[label] += 1
             self.report.uncomputed.add(where)
+            self.stop(n, label)
             return
         except StepLimitError:  # likewise
             self.report.unsupported[STEP_LIMIT] += 1
             self.report.uncomputed.add(where)
+            self.stop(n, STEP_LIMIT)
             return
         except NotImplementedFormError as exc:  # keep the cached value, likewise
             self.report.unsupported[exc.label] += 1
             self.report.uncomputed.add(where)
+            self.stop(n, exc.label)
             return
         except Exception as exc:  # a bug in a function must not stop the recalculation
             value = VALUE
@@ -1730,6 +1795,7 @@ class Engine:
         self.report.unsupported[label] += 1
         s = self.sheets[self.sheet]
         self.report.uncomputed.add(CellRef(s.name, self.row + 1, self.col + 1))
+        self.stop(node(self.sheet, self.row, self.col), label)
         return NAME
 
     def row_hidden(self, sheet: int, row: int) -> bool:

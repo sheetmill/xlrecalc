@@ -10,7 +10,7 @@ from xlrecalc._evaluate import Formula, Reference, UnsupportedError, evaluate
 from xlrecalc._limits import ReadLimits
 from xlrecalc._quirks import Quirks
 from xlrecalc._recalc import recalculate
-from xlrecalc._report import CellRef, Report
+from xlrecalc._report import CellRef, CellState, CellStatus, Report
 from xlrecalc._values import ErrorValue
 from xlrecalc._workbook import CellValue, FormulaError, Loader, Workbook, load
 
@@ -18,6 +18,8 @@ __version__ = "0.7.0"
 
 __all__ = [
     "CellRef",
+    "CellState",
+    "CellStatus",
     "CellValue",
     "ConditionalFormula",
     "ErrorValue",

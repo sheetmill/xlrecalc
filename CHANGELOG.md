@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `Workbook.status(cell)`: what `Workbook.report` says of one cell, as a `CellStatus` (`state`: `"refused"`,
+  `"uncomputed"`, `"circular"`, `"kept"`, `"computed"` or `"constant"`; the cell's own `labels`, `error` or
+  `refusal`; `inherited`, when an uncomputed or kept state comes from a precedent; `anchor`, for a cell an array
+  formula fills). It reads only the sheets that cell needs (its own, and those its evaluation reaches, through every
+  reference of the formulas evaluated, branches not taken included), where `report` reads every sheet a lazy `Loader`
+  left, and it equals the report's entry for the cell. Reading a range's values first and then each cell's status runs the report's passes once.
+
 ### Fixed
 - A cell depending on a circular reference keeps the value the file holds, as Excel keeps it (capture
   `circular_cached`), also where a `Loader` reads its sheet after the cycle was evaluated: such a cell was computed

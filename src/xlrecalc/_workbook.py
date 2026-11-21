@@ -40,7 +40,7 @@ from xlrecalc._load import RecalcOnLoad, _Loader, recalc_mode, refused_in_file
 from xlrecalc._load import load as _load_engine
 from xlrecalc._opening import Opening
 from xlrecalc._quirks import Quirks
-from xlrecalc._report import CellRef, Report
+from xlrecalc._report import CellRef, CellStatus, Report
 from xlrecalc._save import array_edits, file_value, lookups
 from xlrecalc._store import COLS, MAX_COL, MAX_ROW
 from xlrecalc._values import BLANK, ErrorValue, Value
@@ -195,9 +195,32 @@ class Workbook:
 
         An error is an :class:`ErrorValue`; it equals its text (``ErrorValue.NA == "#N/A"``),
         so check the type to tell the error from the text ``"#N/A"``.
+
+        Read cell by cell, values are those :meth:`recalculate` gives but for two things: the
+        draws of ``RAND`` and the other random functions follow the order cells are read in, and
+        ``ReadLimits.max_function_steps`` counts the steps of each read apart, so a cell near the
+        limit may be computed by one way and stopped by the other.
         """
         sheet, row, col = self._cell(ref)
         return _public(self._engine.get(sheet, row, col))
+
+    def status(self, ref: str | CellRef) -> CellStatus:
+        """What :attr:`report` says of the cell, reading only the sheets the cell needs.
+
+        The cell is evaluated as :meth:`value` evaluates it. Where :attr:`report` reads every
+        sheet a lazy :class:`Loader` left, this reads the cell's sheet and the sheets its
+        evaluation reaches: evaluating a formula reads every sheet its references name, through
+        defined names and in branches not taken too, which is where a precedent that makes the
+        cell uncomputed or kept can lie. The answer equals the report's entry for the cell read
+        at the same moment. The report's whole-workbook passes run when a read has left them
+        due: reading a range's values first (:meth:`values`) and then each cell's status runs
+        them once. Values read so differ from :meth:`recalculate`'s as :meth:`value` says.
+
+        Raises:
+            ValueError: Not a cell reference, or a sheet must be read and the book is closed.
+        """
+        sheet, row, col = self._cell(ref)
+        return self._engine.status(sheet, row, col)
 
     def values(self, ref: str) -> list[list[CellValue]]:
         """The values of a range, as a list of rows."""
