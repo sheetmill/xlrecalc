@@ -211,3 +211,27 @@ values computed independently from column A (plain left-to-right sums, as Excel 
 files without a repair, and its own recalculation of them agrees with every written value
 (`tests/test_excel_live.py`, up to 100,000 rows; the million-row file was opened by hand with
 `capture/open_read.applescript`).
+
+## Reading values, against the previous release
+
+`uv run python bench/values_bench.py gen 1000000`, then `uv run python bench/values_bench.py run
+--src 0.6.0=<checkout of v0.6.0>/src`, run from the repository root in the package's environment
+(Python 3.11.18, xlio 0.4.0, Apple M4 Pro): each case in a fresh process per version, the
+versions alternating, two rounds; peak memory as `bench/rss.py` measures it, the interpreter
+included. `excel_form_1000000.xlsx` is `bench_1000000.xlsx`'s table written in the form Excel
+saves (shared formulas, every cached value, `<fileVersion appName="xl">`, `calcId` 191029), by
+the script, not by Excel; xlrecalc's opening rule answers `"none"` for it and `"all"` for
+openpyxl's `bench_1000000.xlsx`. Every case reads every value of `A1:F1000000`; both versions
+read the same values.
+
+| case | xlrecalc 0.7.0 | 0.6.0 | templates compiled |
+|---|---|---|---|
+| `load`, `bench_1000000.xlsx` | 30.3, 30.9 s; 1,311 MB | 32.5, 32.9 s; 1,231, 1,235 MB | 16, 16 |
+| `Loader`, `bench_1000000.xlsx` | 31.1, 31.2 s; 1,263 MB | 33.1, 32.9 s; 1,235, 1,230 MB | 16, 16 |
+| `load`, `excel_form_1000000.xlsx` | 17.1, 17.2 s; 948, 945 MB | 17.0, 16.7 s; 1,155, 1,171 MB | 16, 16 |
+| `Loader`, `excel_form_1000000.xlsx` | 12.6, 12.7 s; 832, 824 MB | 16.8, 16.8 s; 1,287, 1,284 MB | 0, 16 |
+
+`whole_columns.xlsx` holds 1,000 rows and 22 array formulas over whole columns (the script's
+`COLUMN_FORMS`); reading one formula's value took 0 to 116 ms in 0.7.0, where 0.6.0 took 1.04 to
+3.73 s and 155 to 433 MB at peak (27 to 38 MB in 0.7.0). `engine_bench.py 1000000` changes A1
+and recomputes 1,000,005 cells in 5.11 and 5.16 s, where 0.6.0 took 5.23 and 5.25 s.

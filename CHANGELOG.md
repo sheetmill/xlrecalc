@@ -17,7 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A `Loader` whose opening rule answers "none" (every cached value stands: no formula without one, none marked
   `ca="1"`, no volatile function unmarked in a formula's own text) reads a sheet not fed only when a value needs it, and
   compiles a sheet's formulas only when they are needed (`Workbook.formula`, `FORMULATEXT`, the report, a
-  recalculation, an edit), fed sheets included: a file Excel saved, read for its values, compiles nothing.
+  recalculation, an edit), fed sheets included: a file Excel saved, read for its values, compiles nothing. Reading
+  every value of the 1M-row benchmark in the form Excel saves (`bench/values_bench.py`) through a `Loader` takes 12.6
+  to 12.7 s and 824 to 832 MB at peak, from 16.8 s and 1,284 to 1,287 MB.
 - `Loader.opening` and `Loader.workbook()` decide the opening rule from `xlio`'s formulas-only reading
   (`Sheet.formulas`) of the sheets not fed, before any of their values is read.
 - `Loader.opening`: what the load computes on opening, `"all"`, `"some"` or `"none"`, from the same rule and facts as
@@ -31,26 +33,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   reads formulas alone through `Sheet.formulas`.
 - Stale cells are evaluated in an order set by which cells are stale (store order past an eighth of the formulas, else
   sheet, row and column), not by the order they became stale, so step limits and `RAND`'s draws do not depend on it.
-  Re-evaluating 1,000,005 cells after an edit on the 1M-row benchmark takes 5.3 s, from 5.7 to 6.0 s.
+  Re-evaluating 1,000,005 cells after an edit on the 1M-row benchmark takes 5.1 to 5.2 s, from 5.2 to 5.3 s.
 - `Report.refused` and `Report.exceptions` list their cells in sheet, row and column order, and `Report.unsupported`
   its labels in text order, whatever order the cells were compiled and evaluated in; they followed that order.
 - Loading records a sheet's values as they are read and compiles its formulas afterwards, every sheet in the
-  workbook's order, whatever order the sheets were fed in.
+  workbook's order, whatever order the sheets were fed in. `xlrecalc.load` of the 1M-row benchmark, then reading every
+  value (`bench/values_bench.py`), takes 30.3 to 30.9 s, from 32.5 to 32.9 s, and 1,311 MB at peak, from 1,231 to
+  1,235 MB; of the same table in the form Excel saves, 17.1 to 17.2 s, from 16.7 to 17.0 s, and 945 to 948 MB, from
+  1,155 to 1,171 MB.
 - `SUMPRODUCT` over whole columns, alone or under operators (`SUMPRODUCT((A:A="x")*B:B)`), reads each column down to
-  its last value instead of a million cells: about 3 ms where it took about 3 s and 300 MiB on a sheet of 1,000 rows.
+  its last value instead of a million cells: 3 ms where it took 2.6 to 3.3 s on a sheet of 1,000 rows, and 27 MB at
+  peak where it took 366 to 368 MB (`bench/values_bench.py`, which times every form below).
   Results are the same; `SUMPRODUCT` over every column of a sheet is now computed, as Excel computes it (capture
   `array_size`), where it passed the array limit and kept the file's value.
 - `SUM`, `COUNT`, `COUNTA`, `MIN`, `MAX`, `AND` and `OR` over whole columns under operators in an array formula
-  (`{=SUM(--(A:A<>""))}`, a dynamic array) read each column the same way: 1 to 120 ms where they took 1 to 2.7 s on a
-  sheet of 1,000 rows, with the same results.
-- `INDEX`, `LOOKUP`, `XMATCH`, `ROWS`, `COLUMNS` and, in an array formula, `MATCH` over whole columns under operators (`LOOKUP(2,1/(A:A<>""),A:A)`
-  for the last value of a column, `MATCH(TRUE,A:A="",0)`) read each column the same way: 1 to 2 ms where they took 1.3
-  to 2.6 s on a sheet of 1,000 rows, with the same results.
+  (`{=SUM(--(A:A<>""))}`, a dynamic array) read each column the same way: 1 to 116 ms where they took 1.0 to 2.6 s on
+  a sheet of 1,000 rows, with the same results.
+- `INDEX`, `LOOKUP`, `XMATCH`, `ROWS`, `COLUMNS` and, in an array formula, `MATCH` over whole columns under operators
+  (`LOOKUP(2,1/(A:A<>""),A:A)` for the last value of a column, `MATCH(TRUE,A:A="",0)`) read each column the same way:
+  at most 2 ms where they took 1.2 to 2.4 s on a sheet of 1,000 rows, with the same results.
 - `ISBLANK`, `ISNUMBER`, `ISTEXT`, `ISERROR`, `ISNA`, `ISLOGICAL`, `LEN` and `ABS` over whole columns, read by one of
   these functions (`SUMPRODUCT(--ISBLANK(A:A))`, `MATCH(TRUE,ISBLANK(A:A),0)`), apply to each column's rows with data and
-  once to the rest: 2 to 120 ms where they took 1.9 to 3 s on a sheet of 1,000 rows, with the same results.
+  once to the rest: 2 to 115 ms where they took 1.7 to 2.9 s on a sheet of 1,000 rows, with the same results.
 - `IF` over whole columns in an array formula read by one of these functions (`{=SUM(IF(A:A="k",B:B))}`,
-  `{=MAX(IF(A:A<>"",B:B))}`) does the same: 4 to 120 ms where it took 3.2 to 4 s on a sheet of 1,000 rows.
+  `{=MAX(IF(A:A<>"",B:B))}`) does the same: 3 to 116 ms where it took 2.9 to 3.7 s on a sheet of 1,000 rows.
 
 ### Fixed
 - An edit leaves a volatile cell whose cached value a trusting load kept, until the cell is computed, as Excel leaves
