@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-11-21
+
 ### Added
 - `Loader.workbook()`: the workbook at any moment, also before every sheet is fed; a sheet not fed, or left part-way,
   is read from the book then or when a value needs it (below), so once the book is closed, a read of a sheet not read
@@ -668,7 +670,8 @@ First release.
   calculation settings; archive limits (`ReadLimits`, `LimitError`) and a refusal of DTDs
   protect against hostile files; `PackageError` for a file that is not a readable package.
 
-[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/sheetmill/xlrecalc/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/sheetmill/xlrecalc/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/sheetmill/xlrecalc/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/sheetmill/xlrecalc/compare/v0.3.0...v0.4.0
