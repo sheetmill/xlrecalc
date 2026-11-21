@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `fullCalcOnLoad`, `recalc_on_load="always"`; not with iterative calculation) reads a sheet not fed only when a value
   needs it: through a reference, a range, a defined name, `INDIRECT`, `OFFSET` or `CELL`'s active cell. A sheet no
   value reaches is never read. `Workbook.report` and `Workbook.recalculate` read every sheet first.
+- A `Loader` whose opening rule answers "none" (every cached value stands: no formula without one, none marked
+  `ca="1"`, no volatile function unmarked in a formula's own text) reads a sheet not fed only when a value needs it, and
+  compiles a sheet's formulas only when they are needed (`Workbook.formula`, `FORMULATEXT`, the report, a
+  recalculation, an edit), fed sheets included: a file Excel saved, read for its values, compiles nothing.
+- `Loader.opening` and `Loader.workbook()` decide the opening rule from `xlio`'s formulas-only reading
+  (`Sheet.formulas`) of the sheets not fed, before any of their values is read.
 - `Loader.opening`: what the load computes on opening, `"all"`, `"some"` or `"none"`, from the same rule and facts as
   `RecalcCheck` (`None` while cells not read yet decide it), so a caller using a `Loader` needs no `RecalcCheck`.
 
@@ -21,7 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Loader.cells` takes the sheets in any order and at any time, also after `workbook()` or `finish()`: a sheet the
   loader has read already passes its cells through unrecorded instead of raising, and a loop the caller is still
   running when the loader reads its sheet hands on the rest of its cells, unrecorded, where it stopped before.
-- Requires `xlio` 0.4 (`xlio==0.4.*`): the `Loader` asks `Workbook.closed` whether it can still read a sheet.
+- Requires `xlio` 0.4 (`xlio==0.4.*`): the `Loader` asks `Workbook.closed` whether it can still read a sheet, and
+  reads formulas alone through `Sheet.formulas`.
 - Stale cells are evaluated in an order set by which cells are stale (store order past an eighth of the formulas, else
   sheet, row and column), not by the order they became stale, so step limits and `RAND`'s draws do not depend on it.
   Re-evaluating 1,000,005 cells after an edit on the 1M-row benchmark takes 5.3 s, from 5.7 to 6.0 s.

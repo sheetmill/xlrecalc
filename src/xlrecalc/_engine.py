@@ -234,6 +234,8 @@ class Engine:
         self._raw_ids: dict[str, int] = {}
         self._unloaded: set[int] = set()  # sheets a lazy Loader has not loaded (need)
         self.load_sheet: Callable[[int], None] | None = None
+        self._uncompiled: set[int] = set()  # sheets loaded whose formulas wait (need_formulas)
+        self.compile_sheet: Callable[[int], None] | None = None
         self._wanted: list[int] = []
         self._loading = False
         self._loads = 0
@@ -357,10 +359,28 @@ class Engine:
         finally:
             self._loading = False
 
-    def load_all(self) -> None:
-        """Load every sheet not loaded yet, in the sheets' order: for whole-workbook work."""
+    def need_formulas(self, sheet: int) -> None:
+        """Load a sheet, and compile its formulas if its load left them.
+
+        A lazy ``Loader`` leaves them where every cached value stands (``opening`` is
+        ``"none"``).
+        """
+        self.need(sheet)
+        if sheet in self._uncompiled and self.compile_sheet is not None:
+            self._uncompiled.discard(sheet)
+            self._loads += 1
+            self.compile_sheet(sheet)
+
+    def read_all(self) -> None:
+        """Load every sheet not loaded yet, in the sheets' order."""
         while self._unloaded:
             self.need(min(self._unloaded))
+
+    def load_all(self) -> None:
+        """Load and compile every sheet not yet, in the sheets' order: for whole-workbook work."""
+        self.read_all()
+        while self._uncompiled:
+            self.need_formulas(min(self._uncompiled))
 
     def define_name(self, name: str, text: str, scope: int | None = None) -> None:
         self.names[(scope, name.casefold())] = text
@@ -454,6 +474,8 @@ class Engine:
 
     def formula_text(self, sheet: int, row: int, col: int) -> str | None:
         """The cell's formula in file form, or ``None`` for a cell without one."""
+        if self._uncompiled:
+            self.need_formulas(sheet)
         tid = self.sheets[sheet].templates.at(row, col)
         if tid is None:
             return None

@@ -161,7 +161,8 @@ def state(wb: xlrecalc.Workbook, refs: list[str]) -> tuple[object, ...]:
 
 
 class Reads:
-    """Counts ``xlio``'s ``Sheet.cells`` calls and the cells each gives, by sheet name."""
+    """Counts ``xlio``'s ``Sheet.cells`` calls and the cells each gives, and ``Sheet.formulas``
+    calls (``scans``), by sheet name."""
 
     def __init__(self, monkeypatch: pytest.MonkeyPatch) -> None:
         self.calls: Counter[str] = Counter()
@@ -175,6 +176,14 @@ class Reads:
                 yield cell
 
         monkeypatch.setattr(xlio.Sheet, "cells", counted)
+        self.scans: Counter[str] = Counter()
+        scan = xlio.Sheet.formulas
+
+        def scanned(sheet: xlio.Sheet) -> Iterator[xlio.FormulaCell]:
+            self.scans[sheet.name] += 1
+            yield from scan(sheet)
+
+        monkeypatch.setattr(xlio.Sheet, "formulas", scanned)
 
 
 def _edit(wb: xlrecalc.Workbook) -> xlrecalc.Workbook:
@@ -289,6 +298,7 @@ def _check(seed: int, calc: str, mode: str, monkeypatch: pytest.MonkeyPatch) -> 
     assert got_opening == opening
     for name in whole:  # fed in full before any value was asked: read once
         assert reads.calls[name] == 1, (name, reads.calls)
+    assert all(n == 1 for n in reads.scans.values()), reads.scans  # formulas scanned once at most
 
 
 @pytest.mark.parametrize("mode", MODES)

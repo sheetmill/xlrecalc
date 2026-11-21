@@ -335,25 +335,30 @@ def test_each_sheet_fed_in_full_is_read_once(monkeypatch: pytest.MonkeyPatch) ->
 
 
 @pytest.mark.parametrize(
-    ("calc", "early", "final"),
+    ("calc", "final"),
     [
-        ('<fileVersion appName="xl"/><calcPr calcId="152511"/>', "all", "all"),  # an older Excel
-        ('<fileVersion appName="xl"/><calcPr calcId="191029"/>', None, "some"),  # E1 is marked
+        ('<fileVersion appName="xl"/><calcPr calcId="152511"/>', "all"),  # an older Excel
+        ('<fileVersion appName="xl"/><calcPr calcId="191029"/>', "some"),  # E1 is marked
     ],
 )
-def test_opening_is_known_when_the_file_or_every_formula_settles_it(
-    calc: str, early: str | None, final: str
+def test_opening_is_known_before_any_sheet_is_read(
+    monkeypatch: pytest.MonkeyPatch, calc: str, final: str
 ) -> None:
+    """From the workbook part, or from a formulas-only scan of the sheets not fed
+    (``Sheet.formulas``): no cell is read for it, and feeding afterwards changes nothing."""
     data = two_sheets(calc)
+    reads = Reads(monkeypatch)
     with xlio.open(io.BytesIO(data)) as book:
         loader = xlrecalc.Loader(book)
-        assert loader.opening == early
+        assert loader.opening == final
+        assert dict(reads.calls) == {}
+        assert dict(reads.scans) == ({} if final == "all" else {"one": 1, "two": 1})
         list(loader.cells(book.sheets[0]))
-        assert loader.opening == early  # sheet "two" not read yet
         list(loader.cells(book.sheets[1]))
         assert loader.opening == final
         loader.finish()
         assert loader.opening == final
+    assert dict(reads.scans) == ({} if final == "all" else {"one": 1, "two": 1})
 
 
 def test_a_sheet_needed_after_the_file_is_closed_raises() -> None:
@@ -508,3 +513,89 @@ def test_with_iteration_every_sheet_is_read_first() -> None:
     )
     assert xlrecalc.load(io.BytesIO(data)).value("one!B1") == 2.0  # as long as the slower loop
     assert _lazy(data, lambda wb: wb.value("one!B1")) == 2.0
+
+
+NONE = '<fileVersion appName="xl"/><calcPr calcId="191029"/>'  # as Excel saves: trusted
+QUIET_ONE = '<row r="1"><c r="A1"><v>2</v></c><c r="B1"><f>A1*10</f><v>20</v></c></row>'
+QUIET_TWO = (
+    '<row r="1"><c r="A1"><f>one!B1+1</f><v>21</v></c><c r="B1"><f>SUM(A1:A1)</f><v>21</v></c>'
+    "</row>"
+)
+
+
+def test_where_every_cached_value_stands_nothing_is_compiled(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``opening`` "none": values are the cached ones, read from the sheets fed, and from a sheet
+    not fed only once a value needs it (its formulas scanned once, before, for the rule); no
+    formula is compiled until one is needed, and then only its sheet's."""
+    data = _lazy_book(QUIET_ONE, QUIET_TWO, NONE)
+    reads = Reads(monkeypatch)
+    with xlio.open(io.BytesIO(data)) as book:
+        loader = xlrecalc.Loader(book)
+        list(loader.cells(book.sheets[0]))
+        assert loader.opening == "none"
+        assert dict(reads.scans) == {"two": 1}
+        wb = loader.workbook()
+        engine = wb._engine
+        assert (wb.value("one!B1"), len(engine.templates)) == (20.0, 0)
+        assert dict(reads.calls) == {"one": 1}
+        assert (wb.value("two!A1"), len(engine.templates)) == (21.0, 0)
+        assert dict(reads.calls) == {"one": 1, "two": 1}
+        assert wb.formula("one!B1") == "=A1*10"
+        assert engine.formula_count() == 1  # sheet "one" alone
+        assert wb.report.refused == {}
+        assert engine.formula_count() == 3
+        loader.finish()
+    assert dict(reads.scans) == {"two": 1}
+
+
+def test_where_every_cached_value_stands_an_edit_reaches_every_sheet() -> None:
+    data = _lazy_book(QUIET_ONE, QUIET_TWO, NONE)
+
+    def edit(wb: xlrecalc.Workbook) -> object:
+        wb.set("one!A1", 5)
+        return wb.value("two!A1"), wb.value("two!B1")
+
+    assert _lazy(data, edit) == (51.0, 51.0)
+
+
+def test_a_shared_formula_s_dependent_counts_for_the_rule() -> None:
+    """A dependent cell of a shared formula holds no text: its missing value, or its mark, still
+    decides the rule, in recording and in the scan alike."""
+    for dependent, answer in (
+        ('<f t="shared" si="0"/>', "some"),
+        ('<f t="shared" si="0"/><v>3</v>', "none"),
+    ):
+        data = _lazy_book(
+            '<row r="1"><c r="A1"><v>1</v></c></row>',
+            '<row r="1"><c r="A1"><v>1</v></c><c r="B1"><f t="shared" ref="B1:B2" si="0">A1*2</f>'
+            f'<v>2</v></c></row><row r="2"><c r="A2"><v>3</v></c><c r="B2">{dependent}</c></row>',
+            NONE,
+        )
+        with xlio.open(io.BytesIO(data)) as book:
+            scanned = xlrecalc.Loader(book).opening
+            loader = xlrecalc.Loader(book)
+            for sheet in book.sheets:
+                list(loader.cells(sheet))
+            assert (scanned, loader.opening) == (answer, answer)
+            assert loader.finish().value("two!B2") == (6.0 if answer == "some" else 3.0)
+
+
+def test_formulas_compiled_late_keep_the_trusted_volatile_value() -> None:
+    """``opening`` "none" with a volatile cell trusted (volatile through a name, unmarked): sheets
+    compiled one after the other, as their formulas are asked for, keep its cached value."""
+    names = '<definedNames><definedName name="vn">OFFSET(one!$A$1,0,0)</definedName></definedNames>'
+    data = _lazy_book(
+        '<row r="1"><c r="A1"><v>0.1</v></c><c r="B1"><f>vn</f><v>7</v></c></row>',
+        '<row r="1"><c r="A1"><f>one!A1*2</f><v>0.2</v></c></row>',
+        NONE + names,
+    )
+    eager = xlrecalc.load(io.BytesIO(data))
+    expected = (eager.formula("two!A1"), eager.formula("one!B1"), eager.value("one!B1"))
+    assert expected == ("=one!A1*2", "=vn", 7.0)
+
+    def read(wb: xlrecalc.Workbook) -> object:
+        return wb.formula("two!A1"), wb.formula("one!B1"), wb.value("one!B1")
+
+    assert _lazy(data, read) == expected

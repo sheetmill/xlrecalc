@@ -351,8 +351,14 @@ Where the file alone makes every formula computed (`Rule.everything`) and iterat
 `Loader`'s workbook leaves the sheets not fed unread: every reference that names a sheet resolves
 it through `Engine.sheet_index`, which loads a sheet not loaded yet (`Engine.need`: read, recorded
 and compiled), and `CELL` without a reference loads the active sheet. No cell of a sheet read later
-changes how the others load, since every formula is stale. Elsewhere the opening rule depends on
-every formula, so every sheet is read first. The dependency index is built again if a sheet loaded
+changes how the others load, since every formula is stale. Where the rule answers `"none"` the
+same holds, since no formula is stale: no formula lacks a cached value, none is marked, and
+volatile ones keep their values; there a sheet is loaded without its formulas, read for its
+cached values, and compiled only when its formulas are needed (`Engine.need_formulas`: a cell's
+text, the D-functions' criteria, and the whole-workbook operations, which edits join). The
+answer comes from the cells fed, or else from `xlio`'s `Sheet.formulas` over the sheets not fed,
+through the same code as recording (`_formula_facts`). For `"some"` every sheet is read first, as
+the stale cells' dependents may be anywhere. The dependency index is built again if a sheet loaded
 while it was being built; the report and a full recalculation load every sheet first.
 
 A template records its canonical text, the compiled callable, its constants table, its reference
@@ -1478,10 +1484,9 @@ in a rule recalculates no cell on opening, so `RecalcCheck` reads no rule. Tests
 
 After 0.6.0, in this order: an order, not a promise or a date.
 
-1. A `Loader` that also reads sheets lazily where the file's cached values are trusted: the
-   opening rule decided from `xlio`'s formulas-only reading instead of every sheet's cells, and a
-   sheet's formulas compiled only when they are evaluated, so that a file whose cached values
-   stand (`opening` is `"none"`) compiles nothing.
+1. A `Loader` that also reads sheets lazily where the opening rule answers `"some"`: the static
+   dependents of the `ca="1"` cells found from the formulas-only reading, so that only the
+   sheets holding them or their precedents are read, if the corpus shows enough such files.
 2. Whole-column and whole-row references clipped to the used range: every value the engine
    computes stays the same on every capture and the corpus, only faster, and a formula whose
    reference now passes the array limit (keeping the file's value, §7.7) computes. The cases

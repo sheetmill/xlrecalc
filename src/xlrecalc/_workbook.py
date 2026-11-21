@@ -228,6 +228,7 @@ class Workbook:
                 not one Excel holds (a non-finite number, a text over 32,767 characters).
             TypeError: The value is not a number, text, logical, error or ``None``.
         """
+        self._engine.load_all()  # where cached values stand, dependents may be on any sheet
         sheet, row, col = self._cell(ref)
         self._check_editable(sheet, row, col)
         constant = _constant(value)
@@ -249,6 +250,7 @@ class Workbook:
                 ``#CALC!``).
             ValueError: The cell is part of an array formula or a data table.
         """
+        self._engine.load_all()  # where cached values stand, dependents may be on any sheet
         sheet, row, col = self._cell(ref)
         self._check_editable(sheet, row, col)
         legacy = _file_formula(formula)
@@ -317,6 +319,7 @@ class Workbook:
             ValueError: No ``path`` for a workbook loaded from a file object, or a workbook read
                 through a :class:`Loader`, which has no file to copy.
         """
+        self._engine.load_all()
         if self._source is None:
             raise ValueError(
                 "a workbook read through a Loader has no file to copy: load or recalculate the "
@@ -579,14 +582,17 @@ class Loader:
 
     Sheets are fed in any order, and any of them need not be fed: the loader reads a sheet not fed,
     or one whose loop the caller left part-way, again from its start, recording the cells not yet
-    recorded. Where the file makes every formula computed (an older Excel's file, one another
-    program wrote, ``fullCalcOnLoad``, ``recalc_on_load="always"``; not with iterative
-    calculation), it reads such a sheet only when a value needs it: a sheet no value reaches is
-    never read. Otherwise :meth:`workbook` reads them all, as the opening rule depends on every
-    formula. A sheet the loader has read for itself can still be fed: its cells are handed on from
-    ``xlio`` again, unrecorded, and a loop the caller is still running when the loader reads its
-    sheet hands on the rest of its cells unrecorded. The result is the same whatever the order; a
-    sheet read twice costs only the time of that second reading.
+    recorded. It reads such a sheet only when a value needs it, a sheet no value reaches never,
+    where no cell of a sheet read later can change how the others load: where every formula is
+    computed (an older Excel's file, one another program wrote, ``fullCalcOnLoad``,
+    ``recalc_on_load="always"``), and where none is (``opening`` is ``"none"``: every cached value
+    stands, and no formula is compiled until one is needed). Otherwise (``"some"``, or iterative
+    calculation) :meth:`workbook` reads them all. The answer comes from the cells fed, or else
+    from ``xlio``'s formulas-only reading of the sheets not fed (``Sheet.formulas``), which reads
+    no value. A sheet the loader has read for itself can still be fed: its cells are handed on
+    from ``xlio`` again, unrecorded, and a loop the caller is still running when the loader reads
+    its sheet hands on the rest of its cells unrecorded. The result is the same whatever the
+    order; a sheet read twice costs only the time of that second reading.
 
     Example::
 
@@ -643,19 +649,21 @@ class Loader:
         """What the load computes on opening, ``"all"``, ``"some"`` or ``"none"`` formulas.
 
         :class:`RecalcCheck`'s answer, from the same rule and the same facts about the formulas,
-        so a caller using a ``Loader`` needs no ``RecalcCheck``. ``None`` while the answer
-        depends on cells not recorded yet; ``"all"`` may come early, from the workbook's own
-        parts or from the first formula that settles it. A formula Excel refuses in a file is
-        left out (Excel refuses the file); ``RecalcCheck`` cannot tell one.
+        so a caller using a ``Loader`` needs no ``RecalcCheck``. Asked before every sheet is
+        fed, it reads the formulas of the sheets not fed (``Sheet.formulas``, no values) to
+        answer; ``None`` only once the book is closed with the answer still depending on a sheet
+        not read. A formula Excel refuses in a file is left out (Excel refuses the file);
+        ``RecalcCheck`` cannot tell one.
         """
         return self._loader.opening
 
     def workbook(self) -> Workbook:
         """The workbook, the same each call; a sheet not fed is read when a value needs it.
 
-        Where the opening rule depends on every formula, every sheet not fed, or left part-way, is
-        read now. :attr:`Workbook.report` and :meth:`Workbook.recalculate` read every sheet not
-        read yet, since they cover the whole workbook.
+        Where the opening rule answers ``"some"``, or with iterative calculation, every sheet not
+        fed, or left part-way, is read now. :attr:`Workbook.report`, :meth:`Workbook.recalculate`,
+        :meth:`Workbook.set` and :meth:`Workbook.set_formula` read and compile every sheet not yet,
+        since they cover the whole workbook.
 
         Raises:
             ValueError: A sheet must be read, and the book is closed (here, or from a

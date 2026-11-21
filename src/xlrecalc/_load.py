@@ -616,7 +616,9 @@ def load(
         for sheet in book.sheets:
             for _ in loader.cells(sheet):
                 pass
-        return loader.finish()
+        engine = loader.finish()
+        engine.load_all()  # load's engine is compiled, as every caller of it expects
+        return engine
 
 
 class _Loader:
@@ -672,6 +674,10 @@ class _Loader:
         self._sheets: dict[int, _SheetLoad] = {}
         self._fed: set[int] = set()  # the sheets the caller has fed
         self._settled = False
+        self._scanned: set[int] = set()  # sheets whose formulas were scanned (_decided)
+        self._late = "everything"  # how a sheet loads after settle: _load
+        self._full = False  # every formula stale, a late sheet's too (settle)
+        self._trust = False  # volatile cells keep their cached values (settle)
         self._finished = False
 
     def _index(self, sheet: xlio.Sheet) -> int:
@@ -686,7 +692,7 @@ class _Loader:
             self._book.sheets[index],
             self._dynamic,
             index,
-            self._rule.everything,
+            self._rule.everything or self._full,
             self._seen,
         )
         return state
@@ -714,17 +720,35 @@ class _Loader:
 
     @property
     def opening(self) -> Opening | None:
-        """``Rule.decide``'s answer; ``None`` while it depends on cells not recorded yet."""
+        """``Rule.decide``'s answer, from the cells recorded and a formulas-only scan of the rest.
+
+        The sheets not recorded are scanned (``_scan``) while the book is open; ``None`` once it
+        is closed with the answer still depending on a sheet not read.
+        """
+        return self._decided()
+
+    def _decided(self, *, some_is_enough: bool = False) -> Opening | None:
+        """The rule's answer, scanning sheets not recorded or scanned yet while it is open.
+
+        ``"all"`` is final as soon as it shows; with ``some_is_enough``, ``"some"`` stops the
+        scan (:meth:`settle` then reads every sheet).
+        """
         answer = self._seen.decide(self._rule)
         if answer == "all" or self._settled:
             return answer
-        sheets = self._book.sheets
-        for index, sheet in enumerate(sheets):
-            if sheet.kind == "worksheet":
-                state = self._sheets.get(index)
-                if state is None or not state.recorded:
-                    return None
-        return answer
+        for index, sheet in enumerate(self._book.sheets):
+            if sheet.kind != "worksheet" or index in self._scanned:
+                continue
+            state = self._sheets.get(index)
+            if state is not None and state.recorded:
+                continue
+            if self._book.closed:
+                return None
+            _scan(self._seen, sheet)
+            self._scanned.add(index)
+            if some_is_enough and self._seen.decide(self._rule) == "some":
+                return "some"
+        return self._seen.decide(self._rule)
 
     def _read(self, index: int) -> None:
         """Record the rest of a sheet not fed, or fed part-way, reading it again from its start.
@@ -749,16 +773,25 @@ class _Loader:
     def settle(self) -> Engine:
         """The engine, the opening rule applied; made once.
 
-        Where the rule computes every formula from the file alone (``Rule.everything``, without
-        iterative calculation), a sheet not recorded yet is left to load when an evaluation
-        names it (``Engine.need``): no cell of another sheet decides how its formulas load.
-        Otherwise every sheet is read first, as the rule may depend on any formula. The sheets
-        recorded are compiled in the sheets' order.
+        A sheet not recorded yet is left to load when an evaluation names it (``Engine.need``)
+        where no cell of it can change how the others load, which the rule's answer tells,
+        without iterative calculation (a run covers every loop):
+
+        - ``"all"``, from the file alone (``Rule.everything``) or from a volatile function a
+          formula calls in its own text without ``ca="1"``: every formula is stale, a late
+          sheet's too;
+        - ``"none"``: no formula is stale, a late sheet's neither; a sheet's formulas, fed or
+          not, are compiled only when they are needed (``Engine.need_formulas``), since every
+          value is the cached one.
+
+        For ``"some"`` every sheet is read and compiled first, as the stale cells' dependents may
+        be anywhere. Sheets compiled now are compiled in the sheets' order.
         """
         if self._settled:
             return self.engine
         engine, rule, seen = self.engine, self._rule, self._seen
-        lazy = rule.everything and not engine.iterate
+        answer = None if engine.iterate else self._decided(some_is_enough=True)
+        lazy = answer in ("all", "none")
         sheets = self._book.sheets
         later: set[int] = set()
         for index, sheet in enumerate(sheets):
@@ -768,36 +801,65 @@ class _Loader:
                     later.add(index)
                 else:
                     self._read(index)
+        full = rule.everything or answer == "all"
+        for state in self._sheets.values():
+            if not state.compiled:
+                state.full = full  # a late sheet's formulas are stale where every one is
+        self._full = full
+        uncompiled: set[int] = set()
         for index, sheet in enumerate(sheets):
             if sheet.kind == "worksheet" and index not in later:
-                _compile_sheet(self._sheets[index])
+                if answer == "none":
+                    uncompiled.add(index)
+                else:
+                    _compile_sheet(self._sheets[index])
         self._settled = True
-        if later:
-            engine._unloaded = later
-            engine.load_sheet = self._load
-        full = rule.everything
-        if not full and not rule.volatile:
+        self._late = "values" if answer == "none" else "everything"
+        if later or uncompiled:
+            engine._unloaded, engine._uncompiled = later, uncompiled
+            engine.load_sheet, engine.compile_sheet = self._load, self._compile
+        self._trust = not rule.everything and not rule.volatile
+        if self._trust:
             engine.trust_volatile()  # kept on opening unless marked ca="1" (or manual)
         engine.stale.update(seen.marked)  # what Excel recalculates on opening
-        if not full and seen.decide(rule) == "all":
+        if not rule.everything and seen.decide(rule) == "all":
             engine.make_all_stale()  # a volatile function without ca="1": every formula
         engine.loaded()
         return engine
 
     def finish(self) -> Engine:
-        """:meth:`settle`, once, with every sheet loaded."""
+        """:meth:`settle`, once, with every sheet read.
+
+        Every sheet is compiled too, unless no formula is computed (``opening`` is ``"none"``).
+        """
         if self._finished:
             raise ValueError("the loader has already finished")
         self._finished = True
         engine = self.settle()
-        engine.load_all()
+        engine.read_all()
         return engine
 
     def _load(self, index: int) -> None:
-        """A sheet an evaluation needs, after :meth:`settle`: read (the rest), then compiled."""
+        """A sheet an evaluation needs, after :meth:`settle`: read (the rest), then compiled.
+
+        Where the cached values stand, compiling waits for :meth:`_compile`.
+        """
         self._read(index)
-        if not self._sheets[index].compiled:
-            _compile_sheet(self._sheets[index])
+        if self._late == "values":
+            self.engine._uncompiled.add(index)
+        else:
+            self._compile(index)
+
+    def _compile(self, index: int) -> None:
+        """A loaded sheet's formulas, compiled as at :meth:`settle`."""
+        state = self._sheets[index]
+        if state.compiled:
+            return
+        changed = self.engine._changed
+        _compile_sheet(state)
+        self.engine._changed = changed  # a sheet loaded late is the load's, not a change
+        if self._trust and not self._full:
+            self.engine.trust_volatile()  # as at settle, for the cells compiled now
 
 
 def _passing(
@@ -902,7 +964,6 @@ def _load_sheet(state: _SheetLoad, cells: Iterable[xlio.Cell]) -> Generator[xlio
         state.keys,
         state.ranges,
     )
-    note = seen.note
     fed = state.fed
     try:
         for cell in cells:
@@ -919,44 +980,22 @@ def _load_sheet(state: _SheetLoad, cells: Iterable[xlio.Cell]) -> Generator[xlio
                     entries.append(None)
                 continue
             marked = f.attributes.get("ca") in ("1", "true")
+            raw, reason, box = _formula_facts(seen, refusals, f, row, col, cached is None, marked)
             if f.kind == "shared" and f.text is None:
                 state.dependents.append(row * COLS + col)
                 state.sis.append(f.si or 0)
                 if marked:
                     state.marked_dependents.add(row * COLS + col)
-                seen.uncached |= cached is None
-                seen.ca |= marked
                 continue
-            raw: str | None = None
-            reason: object = None
-            if f.kind == "dataTable" or f.text is None:
-                pass
-            elif f.kind == "array" and f.ref and (box := _box(f.ref)) is not None:
-                reason = refused_in_file(f.text)
-                if reason is None:
-                    note((f.text,), f.text, marked)
+            if box is not None:
                 ranges.append((*box, node(state.index, row, col)))
-            else:
-                # Whether Excel refuses a formula depends only on its text outside the
-                # references, so it is decided once per raw-text key (§5.3), like the template.
-                raw = raw_key(f.text, row, col)
-                reason = refusals.get(raw, _UNSEEN)
-                if reason is _UNSEEN:
-                    reason = refusals[raw] = refused_in_file(f.text)
-                if reason is None:
-                    note(raw, f.text, marked)
-                    if f.kind != "shared":
-                        if raw not in keys:  # the first: queued with its text, to compile
-                            keys[raw] = raw if _parses(f.text) else None
-                        elif (known := keys[raw]) is not None:  # a repeat of a key that compiles
-                            seen.uncached |= cached is None
-                            seen.ca |= marked
-                            queued.append(row * COLS + col)
-                            entries.append((known,) if marked else known)
-                            continue
-            if reason is None:  # a formula Excel refuses makes it refuse the file: no rule then
-                seen.uncached |= cached is None
-                seen.ca |= marked
+            elif raw is not None and reason is None and f.kind != "shared":
+                if raw not in keys:  # the first: queued with its text, to compile
+                    keys[raw] = raw if _parses(f.text) else None  # type: ignore[arg-type]
+                elif (known := keys[raw]) is not None:  # a repeat of a key that compiles
+                    queued.append(row * COLS + col)
+                    entries.append((known,) if marked else known)
+                    continue
             queued.append(row * COLS + col)
             entries.append((f, raw, f.kind == "array" and cell.cm in dynamic_cm, reason))
     finally:
@@ -966,6 +1005,59 @@ def _load_sheet(state: _SheetLoad, cells: Iterable[xlio.Cell]) -> Generator[xlio
     # nothing, and reading it costs xlio a second parse of the part's head
     s.filter_mode = bool(s.hidden_rows) and state.sheet.properties.filter_mode
     state.recorded = True
+
+
+def _scan(seen: _Formulas, sheet: xlio.Sheet) -> None:
+    """Note the opening rule's facts from a sheet's formulas alone (``xlio``'s ``Sheet.formulas``).
+
+    As recording notes them (``_formula_facts``).
+    """
+    refusals: dict[str, object] = {}
+    for cell in sheet.formulas():
+        f = cell.formula
+        marked = f.attributes.get("ca") in ("1", "true")
+        _formula_facts(seen, refusals, f, cell.row - 1, cell.column - 1, not cell.cached, marked)
+
+
+def _formula_facts(
+    seen: _Formulas,
+    refusals: dict[str, object],
+    f: xlio.Formula,
+    row: int,
+    col: int,
+    uncached: bool,
+    marked: bool,
+) -> tuple[str | None, object, tuple[int, int, int, int] | None]:
+    """Note what the opening rule needs from one formula cell.
+
+    Recording and the formulas-only scan both call it, so the two note the same facts.
+
+    Returns its raw-text key (a formula compiled by key), the reason Excel refuses it in a file
+    (``refusals`` holds one per key; such a formula is left out of the rule, since Excel refuses
+    the file), and an array formula's range (0-based).
+    """
+    raw: str | None = None
+    reason: object = None
+    box: tuple[int, int, int, int] | None = None
+    if f.kind == "dataTable" or f.text is None:  # a shared formula's dependent too
+        pass
+    elif f.kind == "array" and f.ref and (box := _box(f.ref)) is not None:
+        reason = refused_in_file(f.text)
+        if reason is None:
+            seen.note((f.text,), f.text, marked)
+    else:
+        # Whether Excel refuses a formula depends only on its text outside the references, so
+        # it is decided once per raw-text key (§5.3), like the template.
+        raw = raw_key(f.text, row, col)
+        reason = refusals.get(raw, _UNSEEN)
+        if reason is _UNSEEN:
+            reason = refusals[raw] = refused_in_file(f.text)
+        if reason is None:
+            seen.note(raw, f.text, marked)
+    if reason is None:
+        seen.uncached |= uncached
+        seen.ca |= marked
+    return raw, reason, box
 
 
 def _parses(text: str) -> bool:

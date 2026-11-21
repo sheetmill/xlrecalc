@@ -88,6 +88,7 @@ def _matching(db: Any, field: Any, crit: Any, ctx: Context) -> tuple[list[Any], 
     rows: list[list[tuple[int, Callable[[Any], bool]] | None]] = []
     if len(conditions) < crit.rows - 1:
         rows.append([])  # a blank criteria row matches every record
+    ctx.need_formulas(crit.sheet)  # type: ignore[attr-defined]  # a lazy load's formulas
     templates = ctx.sheets[crit.sheet].templates  # type: ignore[attr-defined]
     for r, crow in conditions.items():
         tests: list[tuple[int, Callable[[Any], bool]] | None] = []
