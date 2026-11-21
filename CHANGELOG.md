@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `Loader.workbook()`: the workbook at any moment, also before every sheet is fed; sheets not fed, or left part-way,
   are read then. `Loader.finish()` returns the same object.
+- A `Loader` whose file makes every formula computed (an older Excel's file, one another program wrote,
+  `fullCalcOnLoad`, `recalc_on_load="always"`; not with iterative calculation) reads a sheet not fed only when a value
+  needs it: through a reference, a range, a defined name, `INDIRECT`, `OFFSET` or `CELL`'s active cell. A sheet no
+  value reaches is never read. `Workbook.report` and `Workbook.recalculate` read every sheet first.
 - `Loader.opening`: what the load computes on opening, `"all"`, `"some"` or `"none"`, from the same rule and facts as
   `RecalcCheck` (`None` while cells not read yet decide it), so a caller using a `Loader` needs no `RecalcCheck`.
 

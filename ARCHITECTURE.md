@@ -347,6 +347,14 @@ then compiled sheet by sheet, in the workbook's order whatever order the sheets 
 with the same steps in the order read, so the templates, the report and its order are the same
 however a `Loader` was fed.
 
+Where the file alone makes every formula computed (`Rule.everything`) and iteration is off, a
+`Loader`'s workbook leaves the sheets not fed unread: every reference that names a sheet resolves
+it through `Engine.sheet_index`, which loads a sheet not loaded yet (`Engine.need`: read, recorded
+and compiled), and `CELL` without a reference loads the active sheet. No cell of a sheet read later
+changes how the others load, since every formula is stale. Elsewhere the opening rule depends on
+every formula, so every sheet is read first. The dependency index is built again if a sheet loaded
+while it was being built; the report and a full recalculation load every sheet first.
+
 A template records its canonical text, the compiled callable, its constants table, its reference
 list (offsets, anchors, sheets, cell or range), whether it is volatile (§6.3), whether it has
 dynamic references, whether it can spill, and which functions it uses (for the
@@ -1470,11 +1478,10 @@ in a rule recalculates no cell on opening, so `RecalcCheck` reads no rule. Tests
 
 After 0.6.0, in this order: an order, not a promise or a date.
 
-1. A `Loader` that reads a sheet only when an evaluation needs it (a reference, a range, a
-   defined name, `INDIRECT` or `OFFSET` reaching the sheet) and compiles a sheet's formulas only
-   when they are evaluated, so that a file whose cached values stand (`opening` is `"none"`)
-   compiles nothing; with `xlio`'s formulas-only reading, the opening rule decided without
-   reading values.
+1. A `Loader` that also reads sheets lazily where the file's cached values are trusted: the
+   opening rule decided from `xlio`'s formulas-only reading instead of every sheet's cells, and a
+   sheet's formulas compiled only when they are evaluated, so that a file whose cached values
+   stand (`opening` is `"none"`) compiles nothing.
 2. Whole-column and whole-row references clipped to the used range: every value the engine
    computes stays the same on every capture and the corpus, only faster, and a formula whose
    reference now passes the array limit (keeping the file's value, §7.7) computes. The cases

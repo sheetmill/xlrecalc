@@ -63,6 +63,7 @@ def _formula(rng: random.Random, sheets: int, row: int, tame: bool, quiet: bool)
         "RAND()*0+1",
         "NOW()*0+2",
         "nm+1",
+        'CELL("contents")',  # the active cell: s1!A1, reached by no name
         "vn*3",
     ]
     if quiet:
@@ -177,8 +178,9 @@ class Reads:
 
 
 def _edit(wb: xlrecalc.Workbook) -> xlrecalc.Workbook:
-    """A change to every sheet's last row, made as soon as the workbook is first given: a sheet
-    recorded again afterwards would undo it."""
+    """A change to every sheet's last row: a sheet recorded again afterwards would undo it. Made
+    as soon as the workbook is first given, or once values have been asked; an edit loads every
+    sheet, so only the second leaves sheets to load in the order values need them."""
     for name in wb.sheet_names:
         wb.set(f"{name}!A5", 99.0)
     return wb
@@ -186,17 +188,19 @@ def _edit(wb: xlrecalc.Workbook) -> xlrecalc.Workbook:
 
 def _feed(
     rng: random.Random, data: bytes, refs: list[str], mode: str, reads: Reads
-) -> tuple[tuple[object, ...], str | None, set[str], list[str]]:
+) -> tuple[tuple[object, ...], str | None, set[str], list[str | None]]:
     """A ``Loader`` fed at random; its state, its final ``opening``, the sheets the caller fed in
     full before values were asked, and the values asked while feeding, in order (asked of the
     eager workbook too, so that the comparison does not rest on the order of reads changing
     nothing, which ``tests/test_iteration_kept.py`` checks)."""
     edited: list[xlrecalc.Workbook] = []
+    edit_first = rng.random() < 0.5
 
     def workbook() -> xlrecalc.Workbook:
         wb = loader.workbook()
-        if not edited:
+        if edit_first and not edited:
             edited.append(_edit(wb))
+            asked.append(None)
         return wb
 
     with xlio.open(io.BytesIO(data)) as book:
@@ -210,11 +214,12 @@ def _feed(
         held: list[tuple[str, list[tuple[int, int, object]], Iterator[xlio.Cell]]] = []
         whole: set[str] = set()
         fed: set[str] = set()
-        asked: list[str] = []
+        asked: list[str | None] = []  # values asked, and None for the edit, in order
         for sheet in order:
             if rng.random() < 0.2:  # values asked between two sheets
-                asked.append(rng.choice(refs))
-                workbook().value(asked[-1])
+                ref = rng.choice(refs)
+                workbook().value(ref)
+                asked.append(ref)
             answer = loader.opening
             assert answer is None or early is None or answer == early
             early = answer if answer is not None else early
@@ -232,10 +237,14 @@ def _feed(
             first = [(c.row, c.column, c.value) for c in itertools.islice(cells, rng.randint(0, 4))]
             if how == "held":
                 held.append((sheet.name, first, cells))
+        for ref in rng.sample(refs, min(len(refs), rng.randint(0, 3))):  # sheets in any order
+            workbook().value(ref)
+            asked.append(ref)
         finished = rng.random() < 0.5
         wb = loader.finish() if finished else workbook()
         if not edited:
             edited.append(_edit(wb))
+            asked.append(None)
         for name, first, cells in held:  # the rest still comes, unrecorded
             assert first + [(c.row, c.column, c.value) for c in cells] == direct[name]
         for sheet in book.sheets:  # every sheet can still be fed: passed through
@@ -271,9 +280,11 @@ def _check(seed: int, calc: str, mode: str, monkeypatch: pytest.MonkeyPatch) -> 
     opening = _checked(data, mode)
     reads = Reads(monkeypatch)
     got, got_opening, whole, asked = _feed(rng, data, refs, mode, reads)
-    _edit(eager)
-    for ref in asked:  # the same cells evaluated first, in the same order
-        eager.value(ref)
+    for ref in asked:  # the same values asked, and the edit, in the same order
+        if ref is None:
+            _edit(eager)
+        else:
+            eager.value(ref)
     assert got == state(eager, refs)
     assert got_opening == opening
     for name in whole:  # fed in full before any value was asked: read once

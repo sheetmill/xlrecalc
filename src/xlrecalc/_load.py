@@ -747,18 +747,34 @@ class _Loader:
             pass
 
     def settle(self) -> Engine:
-        """The engine: every sheet read and compiled, the opening rule applied; made once."""
+        """The engine, the opening rule applied; made once.
+
+        Where the rule computes every formula from the file alone (``Rule.everything``, without
+        iterative calculation), a sheet not recorded yet is left to load when an evaluation
+        names it (``Engine.need``): no cell of another sheet decides how its formulas load.
+        Otherwise every sheet is read first, as the rule may depend on any formula. The sheets
+        recorded are compiled in the sheets' order.
+        """
         if self._settled:
             return self.engine
+        engine, rule, seen = self.engine, self._rule, self._seen
+        lazy = rule.everything and not engine.iterate
         sheets = self._book.sheets
+        later: set[int] = set()
         for index, sheet in enumerate(sheets):
             if sheet.kind == "worksheet":
-                self._read(index)
+                state = self._sheets.get(index)
+                if lazy and (state is None or not state.recorded):
+                    later.add(index)
+                else:
+                    self._read(index)
         for index, sheet in enumerate(sheets):
-            if sheet.kind == "worksheet":
+            if sheet.kind == "worksheet" and index not in later:
                 _compile_sheet(self._sheets[index])
         self._settled = True
-        engine, rule, seen = self.engine, self._rule, self._seen
+        if later:
+            engine._unloaded = later
+            engine.load_sheet = self._load
         full = rule.everything
         if not full and not rule.volatile:
             engine.trust_volatile()  # kept on opening unless marked ca="1" (or manual)
@@ -768,11 +784,19 @@ class _Loader:
         return engine
 
     def finish(self) -> Engine:
-        """:meth:`settle`, once."""
+        """:meth:`settle`, once, with every sheet loaded."""
         if self._finished:
             raise ValueError("the loader has already finished")
         self._finished = True
-        return self.settle()
+        engine = self.settle()
+        engine.load_all()
+        return engine
+
+    def _load(self, index: int) -> None:
+        """A sheet an evaluation needs, after :meth:`settle`: read (the rest), then compiled."""
+        self._read(index)
+        if not self._sheets[index].compiled:
+            _compile_sheet(self._sheets[index])
 
 
 def _passing(
@@ -781,7 +805,8 @@ def _passing(
     """The caller's loop over a sheet: recorded while ``recording`` runs, then passed through.
 
     The loader closes ``recording`` when it reads the sheet itself; the caller still receives every
-    cell, the rest straight from ``cells``.
+    cell, the rest straight from ``cells``. A sheet recorded after :meth:`_Loader.settle` is
+    compiled when an evaluation first needs it (``_Loader._load``).
     """
     yield from recording
     yield from cells

@@ -131,6 +131,7 @@ class Workbook:
     @property
     def report(self) -> Report:
         """What evaluation could not do so far (unsupported functions, uncomputed cells, ...)."""
+        self._engine.load_all()  # it covers every sheet's formulas
         return self._engine.settled_report()
 
     @property
@@ -169,8 +170,9 @@ class Workbook:
                     f"a reference without a sheet is ambiguous in a workbook of {len(sheets)} "
                     f"sheets; name one of {sheets}"
                 )
+            self._engine.need(0)
             return 0
-        index = self._engine.sheet_index(name)
+        index = self._engine.sheet_index(name)  # loads a lazy load's sheet
         if index is None:
             raise KeyError(f"no sheet named {name!r}")
         return index
@@ -291,6 +293,7 @@ class Workbook:
 
     def recalculate(self, full: bool = False) -> Report:
         """Evaluate every stale formula (every formula with ``full``); returns the report."""
+        self._engine.load_all()
         return self._engine.recalculate(full=full)
 
     def save(
@@ -574,12 +577,16 @@ class Loader:
     :meth:`workbook` then gives the :class:`Workbook` that :func:`load` would give, by the same
     code: ``load`` is a ``Loader`` with every sheet fed in order.
 
-    Sheets are fed in any order, and any of them need not be fed: :meth:`workbook` reads any sheet
-    not fed, and any sheet whose loop the caller left part-way, again from its start, recording the
-    cells not yet recorded. A sheet the loader has read for itself can still be fed: its cells are
-    handed on from ``xlio`` again, unrecorded, and a loop the caller is still running when the
-    loader reads its sheet hands on the rest of its cells unrecorded. The result is the same
-    whatever the order; a sheet read twice costs only the time of that second reading.
+    Sheets are fed in any order, and any of them need not be fed: the loader reads a sheet not fed,
+    or one whose loop the caller left part-way, again from its start, recording the cells not yet
+    recorded. Where the file makes every formula computed (an older Excel's file, one another
+    program wrote, ``fullCalcOnLoad``, ``recalc_on_load="always"``; not with iterative
+    calculation), it reads such a sheet only when a value needs it: a sheet no value reaches is
+    never read. Otherwise :meth:`workbook` reads them all, as the opening rule depends on every
+    formula. A sheet the loader has read for itself can still be fed: its cells are handed on from
+    ``xlio`` again, unrecorded, and a loop the caller is still running when the loader reads its
+    sheet hands on the rest of its cells unrecorded. The result is the same whatever the order; a
+    sheet read twice costs only the time of that second reading.
 
     Example::
 
@@ -644,10 +651,15 @@ class Loader:
         return self._loader.opening
 
     def workbook(self) -> Workbook:
-        """The workbook: every sheet not fed, or left part-way, is read now; the same each call.
+        """The workbook, the same each call; a sheet not fed is read when a value needs it.
+
+        Where the opening rule depends on every formula, every sheet not fed, or left part-way, is
+        read now. :attr:`Workbook.report` and :meth:`Workbook.recalculate` read every sheet not
+        read yet, since they cover the whole workbook.
 
         Raises:
-            ValueError: A sheet must be read, and the book is closed.
+            ValueError: A sheet must be read, and the book is closed (here, or from a
+                :class:`Workbook` method).
         """
         if self._workbook is None:
             self._workbook = Workbook(self._loader.settle(), None, self._limits)

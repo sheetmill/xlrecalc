@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import io
 import itertools
+from collections.abc import Callable
 
 import pytest
 import xlio
@@ -17,6 +18,7 @@ import xlrecalc
 from tests.test_loader_orders import Reads
 from tests.test_volatile_names import REFS, _answer, _rows, _shown, _workbook
 from tests.xlsx_files import DOC, MAIN, PKG, package
+from xlrecalc import Report
 
 FIRST = {  # sheet "one": constants, a shared formula, a legacy array formula, an absent function
     "A1": "<v>2</v>",
@@ -274,26 +276,49 @@ def test_a_formula_the_parser_cannot_read_counts_by_its_text(text: str, ca: bool
     assert check.finish() == ("some" if ca else "all")
 
 
-def test_the_workbook_before_any_feed_then_every_sheet_passed_through(
-    monkeypatch: pytest.MonkeyPatch,
+@pytest.mark.parametrize(
+    ("calc", "first", "total"),
+    [  # every formula computed: nothing read before it is needed; else the loader reads all
+        ('<calcPr fullCalcOnLoad="1"/>', {}, {"one": 1, "two": 1}),
+        ('<fileVersion appName="xl"/><calcPr calcId="191029"/>', {"one": 1, "two": 1}, None),
+    ],
+)
+def test_the_workbook_before_any_feed_then_every_sheet_fed(
+    monkeypatch: pytest.MonkeyPatch, calc: str, first: dict[str, int], total: object
 ) -> None:
-    """Values asked first: the loader reads each sheet once, and the caller's feeds after that
-    are each sheet's cells again, unrecorded."""
-    data = two_sheets()
+    """Values asked first. Where the file alone makes every formula computed, the loader reads
+    nothing until a value needs a sheet, and the caller's feeds after that are recorded; else it
+    reads every sheet, and the caller's feeds pass each sheet's cells through again."""
+    data = two_sheets(calc)
     reads = Reads(monkeypatch)
     with xlio.open(io.BytesIO(data)) as book:
         loader = xlrecalc.Loader(book)
         wb = loader.workbook()
-        assert dict(reads.calls) == {"one": 1, "two": 1}
+        assert dict(reads.calls) == first
         assert loader.workbook() is wb
-        wb.set("one!A1", 100)  # recording the sheet again would undo it
         passed = [[(c.row, c.column) for c in loader.cells(s)] for s in book.sheets]
+        wb.set("one!A1", 100)
         assert loader.finish() is wb
     assert [len(p) for p in passed] == [11, 3]
-    assert dict(reads.calls) == {"one": 2, "two": 2}
+    assert dict(reads.calls) == (total or {"one": 2, "two": 2})
     eager = xlrecalc.load(io.BytesIO(data))
     eager.set("one!A1", 100)
     assert state(wb) == state(eager)
+
+
+def test_a_value_reads_only_the_sheets_it_needs(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Every formula computed (``fullCalcOnLoad``): a value of sheet "one", whose formulas read
+    only their own sheet, reads "one" alone; one of "two", which reads "one", reads "two"."""
+    data = two_sheets()
+    eager = xlrecalc.load(io.BytesIO(data))
+    expected = [eager.value("one!D2"), eager.value("two!A2")]
+    reads = Reads(monkeypatch)
+    with xlio.open(io.BytesIO(data)) as book:
+        wb = xlrecalc.Loader(book).workbook()
+        assert wb.value("one!D2") == expected[0]
+        assert dict(reads.calls) == {"one": 1}
+        assert wb.value("two!A2") == expected[1]
+        assert dict(reads.calls) == {"one": 1, "two": 1}
 
 
 def test_each_sheet_fed_in_full_is_read_once(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -336,8 +361,17 @@ def test_a_sheet_needed_after_the_file_is_closed_raises() -> None:
     with xlio.open(io.BytesIO(data)) as book:
         loader = xlrecalc.Loader(book)
         list(loader.cells(book.sheets[0]))
+    wb = loader.workbook()  # every formula computed: no sheet is read until a value needs it
+    assert wb.value("one!B2") == 30.0
     with pytest.raises(ValueError, match="workbook is closed"):
-        loader.workbook()
+        wb.value("two!A1")
+    with xlio.open(
+        io.BytesIO(two_sheets('<fileVersion appName="xl"/><calcPr calcId="191029"/>'))
+    ) as book:
+        loader = xlrecalc.Loader(book)
+        list(loader.cells(book.sheets[0]))
+    with pytest.raises(ValueError, match="workbook is closed"):
+        loader.workbook()  # the opening rule needs every sheet's formulas
     with xlio.open(io.BytesIO(data)) as book:
         loader = xlrecalc.Loader(book)
         for sheet in book.sheets:
@@ -397,3 +431,80 @@ def test_the_report_is_in_sheet_row_and_column_order() -> None:
     assert [str(c) for c in report.refused] == ["Data!A1", "Data!B1", "Data!B3"]
     assert list(report.unsupported) == sorted(report.unsupported)
     assert len(report.unsupported) == 2
+
+
+def _lazy_book(first: str, second: str, calc: str = '<calcPr fullCalcOnLoad="1"/>') -> bytes:
+    """Two sheets, "one" and "two", from their sheet data; ``fullCalcOnLoad``: loaded lazily."""
+    rels = (
+        f'<Relationships xmlns="{PKG}">'
+        f'<Relationship Id="rId1" Type="{DOC}/worksheet" Target="worksheets/sheet1.xml"/>'
+        f'<Relationship Id="rId3" Type="{DOC}/worksheet" Target="worksheets/sheet2.xml"/>'
+        "</Relationships>"
+    )
+    sheets = (
+        '<sheet name="one" sheetId="1" r:id="rId1"/><sheet name="two" sheetId="2" r:id="rId3"/>'
+    )
+    two = f'<worksheet xmlns="{MAIN}"><sheetData>{second}</sheetData></worksheet>'
+    return package(
+        sheet_xml=f'<worksheet xmlns="{MAIN}"><sheetData>{first}</sheetData></worksheet>',
+        sheets=sheets,
+        workbook_extra=calc,
+        extra_parts={"xl/_rels/workbook.xml.rels": rels, "xl/worksheets/sheet2.xml": two},
+    )
+
+
+def _lazy(data: bytes, read: Callable[[xlrecalc.Workbook], object]) -> object:
+    """What ``read`` gives from a ``Loader``'s workbook with no sheet fed."""
+    with xlio.open(io.BytesIO(data)) as book:
+        return read(xlrecalc.Loader(book).workbook())
+
+
+def test_cell_without_a_reference_loads_the_active_sheet() -> None:
+    """``CELL("contents")`` reads the active cell (sheet "one", A1) by no name."""
+    data = _lazy_book(
+        '<row r="1"><c r="A1"><v>42</v></c></row>',
+        '<row r="1"><c r="A1"><f>CELL("contents")</f></c></row>',
+    )
+    assert _lazy(data, lambda wb: wb.value("two!A1")) == 42.0
+
+
+def _reported(report: Report) -> tuple[object, object]:
+    return dict(report.refused), dict(report.unsupported)
+
+
+def test_the_report_and_a_recalculation_s_cover_sheets_not_read_yet() -> None:
+    data = _lazy_book(
+        '<row r="1"><c r="A1"><v>1</v></c></row>',
+        '<row r="1"><c r="A1"><f>AREAS(1)</f><v>5</v></c>'
+        '<c r="B1"><f t="dataTable" ref="B1:B2" dt2D="0" dtr="0" r1="A1"/><v>6</v></c></row>',
+    )
+    expected = _reported(xlrecalc.load(io.BytesIO(data)).report)
+    assert expected == (
+        {xlrecalc.CellRef("two", 1, 1): "an argument of AREAS that is no reference"},
+        {"data table": 1},
+    )
+    assert _lazy(data, lambda wb: _reported(wb.report)) == expected
+    assert _lazy(data, lambda wb: _reported(wb.recalculate())) == expected
+
+
+def test_a_reference_without_a_sheet_loads_the_only_sheet() -> None:
+    data = package(
+        '<row r="1"><c r="A1"><v>2</v></c><c r="B1"><f>A1*3</f></c></row>',
+        workbook_extra='<calcPr fullCalcOnLoad="1"/>',
+    )
+    assert _lazy(data, lambda wb: wb.value("B1")) == 6.0
+
+
+def test_with_iteration_every_sheet_is_read_first() -> None:
+    """Loops on two sheets settle at different speeds; Excel runs them together, with one
+    stopping test (capture ``iterate_reads``, ``lengths``): read first, one sheet's loop has the
+    value it has when both are read."""
+    calc = '<calcPr fullCalcOnLoad="1" iterate="1" iterateCount="100"/>'
+    data = _lazy_book(
+        '<row r="1"><c r="B1"><f>B1/2+1</f><v>0</v></c></row>',
+        '<row r="1"><c r="C1"><f>E1*0.9+1</f><v>0</v></c><c r="D1"><f>C1</f><v>0</v></c>'
+        '<c r="E1"><f>D1</f><v>0</v></c></row>',
+        calc,
+    )
+    assert xlrecalc.load(io.BytesIO(data)).value("one!B1") == 2.0  # as long as the slower loop
+    assert _lazy(data, lambda wb: wb.value("one!B1")) == 2.0

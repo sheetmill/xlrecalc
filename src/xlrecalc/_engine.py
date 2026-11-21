@@ -15,7 +15,7 @@ import datetime as dt
 import math
 import traceback
 from collections import defaultdict
-from collections.abc import Iterable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass, replace
 from functools import cmp_to_key
 from typing import Any
@@ -232,6 +232,11 @@ class Engine:
         self.templates: list[Template] = []
         self._template_ids: dict[str, int] = {}
         self._raw_ids: dict[str, int] = {}
+        self._unloaded: set[int] = set()  # sheets a lazy Loader has not loaded (need)
+        self.load_sheet: Callable[[int], None] | None = None
+        self._wanted: list[int] = []
+        self._loading = False
+        self._loads = 0
         self._spellings: dict[int, str] = {}  # template id -> the raw-text key it shows
         self.names: dict[tuple[int | None, str], str] = {}  # (sheet scope, folded name) -> text
         self._name_templates: dict[tuple[int | None, str], Template | None] = {}
@@ -326,7 +331,37 @@ class Engine:
         return index
 
     def sheet_index(self, name: str) -> int | None:
-        return self._sheet_index.get(name.casefold())
+        index = self._sheet_index.get(name.casefold())
+        if self._unloaded and index in self._unloaded:
+            self.need(index)
+        return index
+
+    def need(self, sheet: int) -> None:
+        """Load a sheet not loaded yet (a lazy ``Loader``'s, ``_load.py``) before it is read.
+
+        Every reference that names a sheet resolves it through :meth:`sheet_index`, which calls
+        this; a load asked for during another (a compile resolving a sheet) waits for it to end.
+        """
+        if sheet not in self._unloaded or self.load_sheet is None:
+            return
+        self._wanted.append(sheet)
+        if self._loading:
+            return
+        self._loading = True
+        try:
+            while self._wanted:
+                wanted = self._wanted.pop()
+                if wanted in self._unloaded:
+                    self._unloaded.discard(wanted)
+                    self._loads += 1
+                    self.load_sheet(wanted)
+        finally:
+            self._loading = False
+
+    def load_all(self) -> None:
+        """Load every sheet not loaded yet, in the sheets' order: for whole-workbook work."""
+        while self._unloaded:
+            self.need(min(self._unloaded))
 
     def define_name(self, name: str, text: str, scope: int | None = None) -> None:
         self.names[(scope, name.casefold())] = text
@@ -1477,9 +1512,16 @@ class Engine:
                 clean.add((sheet, r1, c1, r2, c2))
 
     def index(self) -> DependencyIndex:
-        """The reverse-dependency index, rebuilt after formulas change."""
-        if self._index is None:
-            self._index = DependencyIndex(self)
+        """The reverse-dependency index, rebuilt after formulas change.
+
+        Building it resolves the sheets formulas name, which may load one (:meth:`need`): it is
+        built again until no sheet loaded while it was.
+        """
+        while self._index is None:
+            loads = self._loads
+            index = DependencyIndex(self)
+            if loads == self._loads:
+                self._index = index
         return self._index
 
     def dirty_runs(

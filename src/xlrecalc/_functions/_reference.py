@@ -208,6 +208,7 @@ def CELL(ctx: Any, info: str, ref: Any = MISSING) -> Any:
     kind = info.lower()
     if ref is MISSING or ref is None:  # the active sheet's active cell (capture cell_noref)
         sheet, row, col = ctx.active
+        ctx.need(sheet)  # read by no name: a lazy load's sheet is loaded here
         ref = Ref(ctx.cells, sheet, row, col, row, col)
     if isinstance(ref, ErrorValue):
         return ref
