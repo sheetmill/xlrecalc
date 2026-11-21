@@ -145,15 +145,21 @@ not). An empty argument is `#N/A`.
   holds and is reported (16 formulas of capture `array_refs`, listed in
   `tests/test_array_refs.py`). `OFFSET`, `INDIRECT` and `INDEX` given an array as the whole formula
   give Excel's value.
-- A cell volatile through a defined name, without the `ca="1"` mark, in a file whose cached values are trusted, which
-  Excel has not computed since opening: an edit recomputes it in Excel neither as volatile nor as a dependent through
-  the name's references, also where the name names the edited cell (in `OFFSET` or outside it); only a full
+- A cell volatile only through a defined name, whose formula lacks Excel's `ca="1"` mark (Excel writes it on every such
+  cell; another program may not), in a file whose cached values are trusted. Excel keeps its cached value on opening
+  and does not count it volatile until the formula is entered again, so a save keeps it too (capture `volatile_names`,
+  `offset_name_no_ca`). Until Excel computes the cell, an edit recomputes it neither as volatile nor as a dependent
+  through the name's references, also where the name names the edited cell (in `OFFSET` or outside it); only a full
   calculation does. A plain name's references are followed as any others. Once Excel has computed the cell (a full
-  calculation, or an opening that computes it, `fullCalcOnLoad`), every edit recomputes it. A marked cell, and one
-  calling a volatile function in its own text, are computed after an edit (capture `volatile_edit`). The engine keeps
-  such a cell through an edit, as Excel does, until it is computed; but it computes it as a dependent through the
-  name's references (3 cells, listed in `tests/test_volatile.py`). Excel's own files mark every volatile cell, so the
-  case arises in files another tool wrote.
+  calculation, or an opening that computes it, `fullCalcOnLoad`), every edit recomputes it (capture `volatile_edit`).
+  xlrecalc keeps the cached value on opening, through an edit and through `Workbook.recalculate()`, as Excel does,
+  until the cell is computed (`recalculate(full=True)`), and differs in two ways: a save computes it
+  (`Workbook.save`, `recalculate`), and an edit of a cell the name's references reach computes it as a dependent (3
+  cells, listed in `tests/test_volatile.py`). A marked cell, and one calling a volatile function in its own text, are
+  computed after an edit (`volatile_edit`). Excel's own files mark every volatile cell, so these cases arise in files
+  another tool wrote. A cell marked `ca="1"` without being volatile is recomputed on opening as in Excel, and its
+  dependents follow when its value changes, where Excel keeps an unmarked dependent's cached value (`plain_add_ca`); in
+  a file Excel saved the two agree.
 - A formula set through the API that reads a cycle in a workbook whose cached values are trusted, before
   any evaluation has reached the cycle, is computed from the cycle's cached value; Excel gives 0 (capture
   `circular_cached`). Once evaluation has met the cycle, the formula is 0, as in Excel.
@@ -247,12 +253,6 @@ not). An empty argument is `#N/A`.
   where the double below it is written `1i` (9 rows, 5 of them among the 63), another platform's last bit can round
   the text the other way: on Linux, `IMSEC("-2.5-1.5j")` gives `-0.364130793588459+...` where Excel gives
   `-0.36413079358846+...`. `tests/test_complex_boundary.py` derives the rows. They are listed on every platform.
-- A cell volatile only through a defined name, in a file whose formula lacks Excel's `ca="1"` mark (Excel writes it on
-  every such cell; another program may not): Excel keeps its cached value on opening and does not count it volatile
-  until the formula is entered again, so a save keeps it too; xlrecalc keeps it on opening and computes it at the next
-  calculation, a save included (capture `volatile_names`, `offset_name_no_ca`). A cell marked `ca="1"` without being
-  volatile is recomputed on opening as in Excel, and its dependents follow when its value changes, where Excel keeps
-  an unmarked dependent's cached value (`plain_add_ca`); in a file Excel saved the two agree.
 - `VDB` from a fractional start, or late in a schedule, differs in its last bits on 75 of the 317 rows of `finance` that
   sweep fractional periods (5 to 1,131 units in the last place, Excel's rule otherwise reproduced): the book value carried
   period by period rounds differently from Excel's, and a straight-line amount computed once or a closed-form book value
