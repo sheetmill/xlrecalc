@@ -1489,12 +1489,12 @@ After 0.6.0, in this order: an order, not a promise or a date.
 1. A `Loader` that also reads sheets lazily where the opening rule answers `"some"`: the static
    dependents of the `ca="1"` cells found from the formulas-only reading, so that only the
    sheets holding them or their precedents are read, if the corpus shows enough such files.
-2. Whole-column and whole-row references clipped to the used range: every value the engine
-   computes stays the same on every capture and the corpus, only faster, and a formula whose
-   reference now passes the array limit (keeping the file's value, §7.7) computes. The cases
-   where clipping is not neutral (`ROWS`, `COLUMNS`, `COUNTBLANK`, `INDEX` and `MATCH` past the
-   used range, `OFFSET` from a whole column, an empty sheet, an array spilling into a whole
-   column) are captured first.
+2. Padded arrays (§7.7) inside the dynamic-array functions: `SORT`, `SORTBY`, `UNIQUE`,
+   `FILTER`, `TAKE` and `DROP` reading a whole-column argument as a padded array and returning
+   the same dense result, faster, checked as `tests/test_padded.py` checks the others (padded
+   and dense, bit for bit). Then, if profiling shows the need, padded results (a `FILTER` whose
+   fill passes, `SORT` of a whole column), which the compiler's containment, the spill and the
+   writer would have to carry.
 3. Unions of ranges together with arrays of references, which QUIRKS.md lists as not
    computed.
 4. The functions still absent, by family, each family's captures first: bonds with odd periods, the regression arrays (`TREND`, `GROWTH`, `LOGEST`) and
