@@ -32,7 +32,7 @@ from capture.edition import edition_line
 from capture.excel_watch import preflight
 from capture.open_calc_probe import calc_attributes, edit_calc
 from capture.pipeline import CAPTURES
-from capture.volatile_edit_cases import VARIANTS
+from capture.volatile_edit_cases import EDITED, FULL_FIRST, FULL_ON_LOAD, VARIANTS
 from capture.volatile_name_probe import cell_xml
 from capture.writeback_probe import CONTAINER, osascript
 
@@ -51,6 +51,14 @@ PREDICTED = {
         "F1": (3, 3, 3),
     },
     "name_dependent_no_ca": {"B1": (7, 2, 2), "D1": (999, 20, 20), "E1": (999, 999, 0.3)},
+    # The third run, expected before it (after opening, [after a first full calculation,] after
+    # the edit, after the full calculation): a name's references followed as any others but
+    # OFFSET's reference argument, and a cell Excel computed tracked as volatile from then on.
+    "plain_name": {"B1": (7, 2, 2)},
+    "name_offset_plus": {"B1": (7, 2, 2)},
+    "name_static_dependent": {"B1": (7, 3, 3), "D1": (999, 999, 10), "E1": (999, 6, 6)},
+    "name_no_ca_full_first": {"B1": (7, 1, 2, 2), "D1": (999, 10, 20, 20)},
+    "name_no_ca_full_on_load": {"B1": (1, 2, 2), "D1": (10, 20, 20), "E1": (0.3, 0.3, 0.3)},
 }
 
 
@@ -87,6 +95,15 @@ def plant(xml: str, marked: bool) -> str:
     return xml
 
 
+def _same(text: str) -> str:
+    return text
+
+
+def _flag(text: str) -> str:
+    """``fullCalcOnLoad="1"`` in workbook.xml's ``<calcPr>``."""
+    return re.sub(r"<calcPr\b", '<calcPr fullCalcOnLoad="1"', text, count=1)
+
+
 def main() -> None:
     preflight()
     CONTAINER.mkdir(parents=True, exist_ok=True)
@@ -100,11 +117,14 @@ def main() -> None:
         try:
             build(src, formula, name, extra)
             osascript("save_copy.applescript", str(src), str(base))
-            edit_calc(base, path, lambda x, m=marked: plant(x, m), lambda text: text)
-            calc = calc_attributes(path)
+            full_on_load = variant in FULL_ON_LOAD
+            edit_calc(base, path, lambda x, m=marked: plant(x, m), _flag if full_on_load else _same)
+            if not full_on_load:
+                calc = calc_attributes(path)
             planted = {ref: cell_xml(path, ref) for ref in cells}
             refs = [f"probe!{ref}" for ref in cells]
-            fields = osascript("edit_full_calc.applescript", str(path), "probe!C1", "2", *refs)
+            target = ("first:" if variant in FULL_FIRST else "") + EDITED.get(variant, "probe!C1")
+            fields = osascript("edit_full_calc.applescript", str(path), target, "2", *refs)
         finally:
             for p in (src, base, path):
                 p.unlink(missing_ok=True)
@@ -112,11 +132,13 @@ def main() -> None:
         if fields_list[0] != "open":
             sys.exit(f"{variant} did not open: {fields_list}")
         k = len(cells)
-        opened = fields_list[1 : 1 + k]
-        edited = fields_list[2 + k : 2 + 2 * k]
-        full = fields_list[3 + 2 * k : 3 + 3 * k]
+        steps = [fields_list[1 : 1 + k]]
+        for at in range(1 + k, len(fields_list), 1 + k):  # each step: its label, then the cells
+            steps.append(fields_list[at + 1 : at + 1 + k])
+        if variant not in FULL_FIRST:
+            steps.insert(1, ["-"] * k)
         for i, ref in enumerate(cells):
-            row = [variant, f"probe!{ref}", planted[ref], opened[i], edited[i], full[i]]
+            row = [variant, f"probe!{ref}", planted[ref], *(step[i] for step in steps)]
             rows.append("\t".join(row))
             print("  ".join(row), flush=True)
     version = subprocess.run(
@@ -131,9 +153,12 @@ def main() -> None:
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/volatile_edit_probe.py",
         f"# workbook: {calc}",
-        "# method: Excel's saved copy, B1 marked or not, B1 D1 E1 F1 planted; shown after",
-        "#   opening, after C1 is set to 2, and after calculate full",
-        "# columns: variant cell planted_xml shown_after_opening shown_after_edit shown_after_full",
+        "# method: Excel's saved copy, B1 marked or not, B1 D1 E1 F1 planted, fullCalcOnLoad",
+        "#   written where the variant asks; shown after opening, after a calculate full where",
+        "#   the variant asks ('-' else), after C1 (A1 where the variant edits it) is set to 2,",
+        "#   and after calculate full; the workbook line is that of the files without the flag",
+        "# columns: variant cell planted_xml shown_after_opening shown_after_full_first",
+        "#   shown_after_edit shown_after_full",
     ]
     out = CAPTURES / "volatile_edit.tsv"
     out.write_text("\n".join([*header, *rows]) + "\n", encoding="utf-8")

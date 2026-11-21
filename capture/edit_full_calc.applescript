@@ -5,8 +5,11 @@
 -- Non-interactive: alerts are off while it runs and restored on every exit path. Opens only the
 -- workbook it is given and refuses to run if a workbook of that name is already open.
 --
+-- Argument 2 written "first:sheet!A1" asks for a full calculation, and a report, before the edit.
+--
 -- Output, fields separated by ASCII 31: "open" or "error"; for each cell its value after
--- opening; "edited"; each value after the edit; "full"; each value after the full calculation.
+-- opening; with "first:", "full first" and each value after that calculation; "edited"; each
+-- value after the edit; "full"; each value after the full calculation.
 on readCells(xlWb, refs, US)
 	set xlOut to ""
 	tell application "Microsoft Excel"
@@ -24,6 +27,8 @@ end readCells
 on run argv
 	set xlPath to item 1 of argv
 	set xlTarget to item 2 of argv
+	set xlFirst to (xlTarget starts with "first:")
+	if xlFirst then set xlTarget to text 7 thru -1 of xlTarget
 	set xlNumber to (item 3 of argv) as real
 	set refs to items 4 thru -1 of argv
 	set xlName to do shell script "basename " & quoted form of xlPath
@@ -40,6 +45,10 @@ on run argv
 		try
 			set xlWb to workbook xlName
 			set xlOut to "open" & my readCells(xlWb, refs, US)
+			if xlFirst then
+				calculate full
+				set xlOut to xlOut & US & "full first" & my readCells(xlWb, refs, US)
+			end if
 			set AppleScript's text item delimiters to "!"
 			set xlSheet to text item 1 of xlTarget
 			set xlAddr to text item 2 of xlTarget
