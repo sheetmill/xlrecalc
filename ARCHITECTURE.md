@@ -803,8 +803,9 @@ fills nothing, and clearing the cell lets it spill again (a blocked array a trus
 from a file is evaluated on loading, to the same `#SPILL!`, to learn the range it wants; a file
 this package wrote with `full_calc_on_load=False` holds a blocked spill as a plain `#VALUE!`,
 which a trusting load keeps, so clearing the cell in its way does not spill it until a full
-recalculation: §13, item 7). `A1#` (`_xlfn.ANCHORARRAY(A1)`) is the range the dynamic array at
-A1 spills into; `@x` (`_xlfn.SINGLE(x)`) is the implicit intersection of `x`. Excel caches
+recalculation: §13, the newer errors written in Excel's own form). `A1#`
+(`_xlfn.ANCHORARRAY(A1)`) is the range the dynamic array at A1 spills into; `@x`
+(`_xlfn.SINGLE(x)`) is the implicit intersection of `x`. Excel caches
 `#SPILL!` in a file as `#VALUE!` with a rich value behind it (`vm`, error type 8); the reader
 decodes it, and the writer writes `#VALUE!` without the rich value, as other readers see such a
 cell. A cell given a new value loses its `vm`, which Excel would show over the new `<v>`

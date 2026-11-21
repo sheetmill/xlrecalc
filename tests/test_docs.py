@@ -49,6 +49,19 @@ def test_section_references_resolve():
     assert dangling == []
 
 
+ROADMAP_ITEM = re.compile(r"(?:§13|[Rr]oadmap),?\s+items?\s+\d")
+
+
+def test_roadmap_items_are_cited_by_subject():
+    """The Roadmap's items are renumbered as they ship, so a reference names the item's subject."""
+    cited = [
+        f"{path.relative_to(ROOT)}: {match[0]!r}"
+        for path in tracked()
+        for match in ROADMAP_ITEM.finditer(path.read_text(encoding="utf-8"))
+    ]
+    assert cited == []
+
+
 def names(module: Path) -> set[str]:
     """Top-level names of a module, and ``Class.member`` for each class member."""
     tree = ast.parse(module.read_text(encoding="utf-8"))
