@@ -1,16 +1,21 @@
-"""Does an edit make Excel recompute a volatile cell it kept on opening?
+"""Which formulas an edit makes Excel recompute after it kept their values on opening.
 
     uv run python -m capture.volatile_edit_probe
 
-One workbook: openpyxl writes it (``probe!A1`` = 0.1, ``B1 = vn`` with the defined name ``vn`` =
-``OFFSET(probe!$A$1,0,0)``, ``C1`` = 1, ``E1 = A1*3``) and Excel saves a copy, so the file has
-Excel's own ``calcId``, ``<fileVersion>`` and cell forms. In that copy B1's ``ca="1"`` mark is
-removed and its cached value planted as 7, and E1's as 999 (only the ``<v>`` text): opening keeps
-both (capture ``volatile_names``, its ``_no_ca`` variants). Excel opens it with alerts off and
-shows the cells, C1 is set to 2, which neither formula reads, and the cells are shown again
-(``iterate_edit.applescript``); the workbook is closed without saving. Predicted before the run:
-B1 7 then 0.1 (a volatile formula is computed at every recalculation, an edit's too), E1 999
-both times (nothing it reads changed).
+One workbook a variant: openpyxl writes it (``probe!A1`` = 0.1, ``B1`` the formula under test,
+``C1`` = 1, ``D1 = C1*10``, ``E1 = A1*3``, and the variant's defined name and cells) and Excel
+saves a copy, so the file has Excel's own ``calcId``, ``<fileVersion>`` and cell forms. In that
+copy B1's ``ca="1"`` mark is removed or written, as the variant asks, and the cached values of
+B1, D1 and E1 (and F1) are planted (7, 999, 999, 999: only the ``<v>`` text). Excel opens it
+with alerts off and shows the cells, C1 is set to 2, the cells are shown again, Excel calculates
+in full (``calculate full``), and they are shown a third time (``edit_full_calc.applescript``);
+the workbook is closed without saving.
+
+B1 reads C1 only through ``INDIRECT``'s text, so it changes after the edit only if Excel computes
+it as volatile; ``name_dependent_no_ca`` names C1 (``OFFSET(probe!$C$1,0,0)``), so there B1 is a
+dependent of the edit too. D1 is a plain dependent of the edit; E1 is reached by nothing the edit
+changes. ``PREDICTED`` holds what was expected before the run, per cell: after opening, after the
+edit, after the full calculation.
 
 The workbooks live in Excel's container and are removed after; the capture is written to
 ``tests/captures/volatile_edit.tsv``.
@@ -21,6 +26,7 @@ from __future__ import annotations
 import datetime as dt
 import re
 import subprocess
+import sys
 
 import openpyxl
 from openpyxl.workbook.defined_name import DefinedName
@@ -33,54 +39,95 @@ from capture.volatile_name_probe import cell_xml
 from capture.writeback_probe import CONTAINER, osascript
 
 US = "\x1f"
-CELLS = ["probe!A1", "probe!B1", "probe!C1", "probe!E1"]
-PLANTED = {"B1": "7", "E1": "999"}
+READ = 'INDIRECT("probe!C1")'
+
+# name: (B1's formula, defined name text or None, B1 marked ca="1", extra cells {ref: formula})
+VARIANTS: dict[str, tuple[str, str | None, bool, dict[str, str]]] = {
+    "name_no_ca": ("=vn", READ, False, {}),
+    "name_ca": ("=vn", READ, True, {}),
+    "own_no_ca": ("=" + READ, None, False, {}),
+    "now_no_ca": ("=NOW()*0+A1", None, False, {"F1": "=NOW()*0+3"}),
+    "name_dependent_no_ca": ("=vn", "OFFSET(probe!$C$1,0,0)", False, {}),
+}
+PLANTED = {"B1": "7", "D1": "999", "E1": "999", "F1": "999"}
+
+# Expected before the run: (after opening, after the edit, after the full calculation).
+PREDICTED = {
+    "name_no_ca": {"B1": (7, 7, 2), "D1": (999, 20, 20), "E1": (999, 999, 0.3)},
+    "name_ca": {"B1": (1, 2, 2), "D1": (999, 20, 20), "E1": (999, 999, 0.3)},
+    "own_no_ca": {"B1": (1, 2, 2), "D1": (10, 20, 20), "E1": (0.3, 0.3, 0.3)},
+    "now_no_ca": {
+        "B1": (0.1, 0.1, 0.1),
+        "D1": (10, 20, 20),
+        "E1": (0.3, 0.3, 0.3),
+        "F1": (3, 3, 3),
+    },
+    "name_dependent_no_ca": {"B1": (7, 2, 2), "D1": (999, 20, 20), "E1": (999, 999, 0.3)},
+}
 
 
-def build(path: object) -> None:
+def build(path: object, formula: str, name: str | None, extra: dict[str, str]) -> None:
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "probe"
     ws["A1"] = 0.1
-    ws["B1"] = "=vn"
+    ws["B1"] = formula
     ws["C1"] = 1
+    ws["D1"] = "=C1*10"
     ws["E1"] = "=A1*3"
-    wb.defined_names["vn"] = DefinedName("vn", attr_text="OFFSET(probe!$A$1,0,0)")
+    for ref, text in extra.items():
+        ws[ref] = text
+    if name is not None:
+        wb.defined_names["vn"] = DefinedName("vn", attr_text=name)
     wb.save(path)
 
 
-def plant(xml: str) -> str:
-    """B1 without ``ca="1"``; B1's and E1's ``<v>`` text replaced, the rest as Excel wrote it."""
+def plant(xml: str, marked: bool) -> str:
+    """B1 marked or not; the planted cells' ``<v>`` text replaced, the rest as Excel wrote it.
+    F1 keeps the mark Excel wrote."""
     xml = re.sub(r'(<c r="B1"[^>]*><f)\s+ca="1"', r"\1", xml, count=1)
+    if marked:
+        xml, n = re.subn(r'(<c r="B1"[^>]*><f)>', r'\1 ca="1">', xml, count=1)
+        if n != 1:
+            raise RuntimeError("B1's formula has attributes: cannot mark it")
     for ref, value in PLANTED.items():
         cell = re.compile(rf'(<c r="{ref}"[^>]*>.*?<v>)(.*?)(</v>)', re.S)
-        xml, n = cell.subn(lambda m, v=value: m.group(1) + v + m.group(3), xml, count=1)
-        if n != 1:
-            raise RuntimeError(f"no cached value in {ref}: cannot plant")
+        xml = cell.sub(lambda m, v=value: m.group(1) + v + m.group(3), xml, count=1)
     return xml
 
 
 def main() -> None:
     preflight()
     CONTAINER.mkdir(parents=True, exist_ok=True)
-    src = CONTAINER / "xlrecalc_ve_src.xlsx"
-    base = CONTAINER / "xlrecalc_ve_base.xlsx"
-    path = CONTAINER / "xlrecalc_ve.xlsx"
-    try:
-        build(src)
-        print("base:", osascript("save_copy.applescript", str(src), str(base)), flush=True)
-        edit_calc(base, path, plant, lambda text: text)
-        planted = {ref: cell_xml(path, ref) for ref in ("B1", "E1")}
-        calc = calc_attributes(path)
-        print("planted:", planted, "calcPr", calc, flush=True)
-        fields = osascript("iterate_edit.applescript", str(path), "probe!C1", "2", *CELLS).split(US)
-        if fields[0] != "open":
-            raise SystemExit(f"did not open: {fields}")
-        k = len(CELLS)
-        opened, edited = fields[1 : 1 + k], fields[2 + k : 2 + 2 * k]
-    finally:
-        for p in (src, base, path):
-            p.unlink(missing_ok=True)
+    rows: list[str] = []
+    calc = "-"
+    for variant, (formula, name, marked, extra) in VARIANTS.items():
+        src = CONTAINER / f"xlrecalc_ve_{variant}_src.xlsx"
+        base = CONTAINER / f"xlrecalc_ve_{variant}_base.xlsx"
+        path = CONTAINER / f"xlrecalc_ve_{variant}.xlsx"
+        cells = ["A1", "B1", "C1", "D1", "E1", *extra]
+        try:
+            build(src, formula, name, extra)
+            osascript("save_copy.applescript", str(src), str(base))
+            edit_calc(base, path, lambda x, m=marked: plant(x, m), lambda text: text)
+            calc = calc_attributes(path)
+            planted = {ref: cell_xml(path, ref) for ref in cells}
+            refs = [f"probe!{ref}" for ref in cells]
+            fields = osascript("edit_full_calc.applescript", str(path), "probe!C1", "2", *refs)
+        finally:
+            for p in (src, base, path):
+                p.unlink(missing_ok=True)
+        fields_list = fields.split(US)
+        if fields_list[0] != "open":
+            sys.exit(f"{variant} did not open: {fields_list}")
+        k = len(cells)
+        opened = fields_list[1 : 1 + k]
+        edited = fields_list[2 + k : 2 + 2 * k]
+        full = fields_list[3 + 2 * k : 3 + 3 * k]
+        for i, ref in enumerate(cells):
+            row = [variant, f"probe!{ref}", planted[ref], opened[i], edited[i], full[i]]
+            rows.append("\t".join(row))
+            print("  ".join(row), flush=True)
     version = subprocess.run(
         ["osascript", "-e", 'tell application "Microsoft Excel" to version'],
         capture_output=True,
@@ -93,17 +140,13 @@ def main() -> None:
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/volatile_edit_probe.py",
         f"# workbook: {calc}",
-        "# method: Excel's saved copy, B1's ca removed, B1 and E1 planted; shown after opening,",
-        "#   then after C1 is set to 2",
-        "# columns: cell planted_xml shown_after_opening shown_after_edit",
-    ]
-    rows = [
-        "\t".join([ref, planted.get(ref.split("!")[1], "-"), opened[i], edited[i]])
-        for i, ref in enumerate(CELLS)
+        "# method: Excel's saved copy, B1 marked or not, B1 D1 E1 F1 planted; shown after",
+        "#   opening, after C1 is set to 2, and after calculate full",
+        "# columns: variant cell planted_xml shown_after_opening shown_after_edit shown_after_full",
     ]
     out = CAPTURES / "volatile_edit.tsv"
     out.write_text("\n".join([*header, *rows]) + "\n", encoding="utf-8")
-    print("\n".join(rows))
+    print(f"-> {out.name}, {len(rows)} rows")
 
 
 if __name__ == "__main__":
