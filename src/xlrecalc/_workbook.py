@@ -647,7 +647,7 @@ class Loader:
         """The workbook: every sheet not fed, or left part-way, is read now; the same each call.
 
         Raises:
-            ValueError: A sheet must be read, and the book's file is closed.
+            ValueError: A sheet must be read, and the book is closed.
         """
         if self._workbook is None:
             self._workbook = Workbook(self._loader.settle(), None, self._limits)
@@ -658,7 +658,7 @@ class Loader:
 
         Raises:
             ValueError: :meth:`finish` was called already, or a sheet must be read and the
-                book's file is closed.
+                book is closed.
         """
         self._loader.finish()
         return self.workbook()

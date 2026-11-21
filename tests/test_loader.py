@@ -336,7 +336,7 @@ def test_a_sheet_needed_after_the_file_is_closed_raises() -> None:
     with xlio.open(io.BytesIO(data)) as book:
         loader = xlrecalc.Loader(book)
         list(loader.cells(book.sheets[0]))
-    with pytest.raises(ValueError, match="file is closed"):
+    with pytest.raises(ValueError, match="workbook is closed"):
         loader.workbook()
     with xlio.open(io.BytesIO(data)) as book:
         loader = xlrecalc.Loader(book)

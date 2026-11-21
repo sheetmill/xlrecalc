@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Loader.cells` takes the sheets in any order and at any time, also after `workbook()` or `finish()`: a sheet the
   loader has read already passes its cells through unrecorded instead of raising, and a loop the caller is still
   running when the loader reads its sheet hands on the rest of its cells, unrecorded, where it stopped before.
+- Requires `xlio` 0.4 (`xlio==0.4.*`): the `Loader` asks `Workbook.closed` whether it can still read a sheet.
 - Loading records a sheet's values as they are read and compiles its formulas afterwards, every sheet in the
   workbook's order, whatever order the sheets were fed in.
 - `SUMPRODUCT` over whole columns, alone or under operators (`SUMPRODUCT((A:A="x")*B:B)`), reads each column down to

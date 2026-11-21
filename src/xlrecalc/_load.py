@@ -739,7 +739,11 @@ class _Loader:
             state.running.close()  # sets state.fed to the cells it recorded
             state.running = None
         sheet = self._book.sheets[index]
-        for _ in _load_sheet(state, itertools.islice(_opened(sheet), state.fed, None)):
+        if self._book.closed:
+            raise ValueError(
+                f"sheet {sheet.name!r} is needed but not read yet, and the workbook is closed"
+            )
+        for _ in _load_sheet(state, itertools.islice(sheet.cells(), state.fed, None)):
             pass
 
     def settle(self) -> Engine:
@@ -781,25 +785,6 @@ def _passing(
     """
     yield from recording
     yield from cells
-
-
-def _opened(sheet: xlio.Sheet) -> Iterator[xlio.Cell]:
-    """A sheet's cells, read by the loader for itself.
-
-    Raises:
-        ValueError: The workbook's file is closed. ``xlio`` 0.3 has no state that says so, and
-            fails on the first read (an assertion, or under ``-O`` a missing file object).
-    """
-    cells = iter(sheet.cells())
-    try:
-        first = next(cells)
-    except StopIteration:
-        return iter(())
-    except (AssertionError, AttributeError) as exc:
-        raise ValueError(
-            f"sheet {sheet.name!r} is needed but not read yet, and the workbook's file is closed"
-        ) from exc
-    return itertools.chain((first,), cells)
 
 
 def _active_cell(sheet: xlio.Sheet) -> tuple[int, int]:
