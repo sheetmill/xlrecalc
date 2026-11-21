@@ -318,7 +318,7 @@ def test_reads_in_any_order_give_excels_opening_run(tmp_path: Path, variant: str
     import itertools
 
     from capture._file import Book
-    from capture.iterate_reads_probe import FORMS
+    from capture.iterate_reads_cases import FORMS
 
     import xlrecalc
     from tests.xlsx_files import package

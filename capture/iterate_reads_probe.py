@@ -16,6 +16,7 @@ Needs Excel with no workbook open, and refuses to run otherwise.
 
 from __future__ import annotations
 
+from capture.iterate_reads_cases import FORMS
 from capture.iterate_uncached_probe import main
 from capture.iterate_uncached_probe import one as formulas
 
@@ -29,9 +30,6 @@ VARIANTS = [
     ),
     ("feeds", COUNT, formulas(("B1", "B1/2+1"), ("C1", "C1/2+B1"))),
 ]
-# every formula cached 0 (main's "cached_0"), with fullCalcOnLoad: Excel's opening run
-FORMS = {"cached_0": '<calcPr calcId="124519" iterate="1" {} fullCalcOnLoad="1"/>'}
-
 METHOD = [
     "# method: each variant as one file, every formula cached 0, with fullCalcOnLoad",
     "#   (cached_0); shown after opening, calculated after one calculate, saved the value",
