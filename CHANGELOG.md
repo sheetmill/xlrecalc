@@ -8,8 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- `Loader.workbook()`: the workbook at any moment, also before every sheet is fed; sheets not fed, or left part-way,
-  are read then. `Loader.finish()` returns the same object.
+- `Loader.workbook()`: the workbook at any moment, also before every sheet is fed; a sheet not fed, or left part-way,
+  is read from the book then or when a value needs it (below), so once the book is closed, a read of a sheet not read
+  yet raises `ValueError`. `Loader.finish()` returns the same object after reading every sheet not read yet, so the
+  book may be closed after it.
 - A `Loader` whose file makes every formula computed (an older Excel's file, one another program wrote,
   `fullCalcOnLoad`, `recalc_on_load="always"`; not with iterative calculation) reads a sheet not fed only when a value
   needs it: through a reference, a range, a defined name, `INDIRECT`, `OFFSET` or `CELL`'s active cell. A sheet no

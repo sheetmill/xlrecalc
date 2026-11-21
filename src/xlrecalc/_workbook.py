@@ -604,9 +604,11 @@ class Loader:
             workbook = loader.finish()
 
     Args:
-        book: An open ``xlio`` workbook. The caller opens and closes it; it stays open until the
-            loader has read what it needs, which :meth:`finish` guarantees. Its archive limits
-            are the ones it was opened with.
+        book: An open ``xlio`` workbook, which the caller opens and closes. After :meth:`finish`,
+            which reads every sheet not read yet, it may be closed. After :meth:`workbook`
+            alone, a sheet not read yet is read from it when a value needs it, and that read
+            raises ``ValueError`` once it is closed. Its archive limits are the ones it was
+            opened with.
         recalc_on_load: As for :func:`load`: ``"excel"``, Excel's rule on opening;
             ``"always"``; ``"never"``.
         limits: The computing limits (``max_array_cells``, ``max_iteration_evaluations``,
@@ -663,7 +665,8 @@ class Loader:
         Where the opening rule answers ``"some"``, or with iterative calculation, every sheet not
         fed, or left part-way, is read now. :attr:`Workbook.report`, :meth:`Workbook.recalculate`,
         :meth:`Workbook.set` and :meth:`Workbook.set_formula` read and compile every sheet not yet,
-        since they cover the whole workbook.
+        since they cover the whole workbook. The book stays open while a sheet not read yet may
+        be needed; :meth:`finish` reads every one.
 
         Raises:
             ValueError: A sheet must be read, and the book is closed (here, or from a
@@ -674,7 +677,12 @@ class Loader:
         return self._workbook
 
     def finish(self) -> Workbook:
-        """:meth:`workbook`, at the end of the caller's reading: the same object.
+        """:meth:`workbook`, at the end of the caller's reading, with every sheet not read yet read.
+
+        The same object as :meth:`workbook` returns. Every sheet not fed, or left part-way, is
+        read now, so the book may be closed afterwards: the workbook reads nothing more from it.
+        Where the opening rule answers ``"none"``, formulas are still compiled only when needed,
+        from what was read.
 
         Raises:
             ValueError: :meth:`finish` was called already, or a sheet must be read and the
