@@ -51,9 +51,11 @@ PREDICTED = {
         "F1": (3, 3, 3),
     },
     "name_dependent_no_ca": {"B1": (7, 2, 2), "D1": (999, 20, 20), "E1": (999, 999, 0.3)},
-    # The third run, expected before it (after opening, [after a first full calculation,] after
-    # the edit, after the full calculation): a name's references followed as any others but
-    # OFFSET's reference argument, and a cell Excel computed tracked as volatile from then on.
+    # plain_name, name_offset_plus, name_static_dependent, name_no_ca_full_first and
+    # name_no_ca_full_on_load, expected before they ran (after opening, [after a first full
+    # calculation,] after the edit, after the full calculation): a name's references followed as
+    # any others but OFFSET's reference argument, and a cell Excel computed tracked as volatile
+    # from then on.
     "plain_name": {"B1": (7, 2, 2)},
     "name_offset_plus": {"B1": (7, 2, 2)},
     "name_static_dependent": {"B1": (7, 3, 3), "D1": (999, 999, 10), "E1": (999, 6, 6)},
