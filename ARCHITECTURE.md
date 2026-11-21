@@ -518,8 +518,10 @@ this list and the glossary's to the registry). A formula is volatile when it cal
 text or refers to or calls a defined name that does, through other names too (`_opening.py`'s
 `Volatility`, the one detector `load` and `RecalcCheck` read; a function name in a string literal
 is not a call; capture `volatile_names`). After any change, and at every `recalculate()`, volatile
-formulas are evaluated again with their dependents, so a reference that moves follows. `INDEX` is
-not volatile; its references stay within its static range.
+formulas are evaluated again with their dependents, so a reference that moves follows; but a
+volatile cell whose cached value a trusting load kept is left by an edit until it is first
+computed, as Excel leaves one without the `ca="1"` mark (capture `volatile_edit`;
+`Engine._dormant`). `INDEX` is not volatile; its references stay within its static range.
 
 ### 6.4 Dirty sets as runs, and the acceptance test
 

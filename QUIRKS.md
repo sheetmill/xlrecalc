@@ -150,9 +150,10 @@ not). An empty argument is `#N/A`.
   the name's references, also where the name names the edited cell (in `OFFSET` or outside it); only a full
   calculation does. A plain name's references are followed as any others. Once Excel has computed the cell (a full
   calculation, or an opening that computes it, `fullCalcOnLoad`), every edit recomputes it. A marked cell, and one
-  calling a volatile function in its own text, are computed after an edit (capture `volatile_edit`). The engine
-  computes such a cell after an edit (4 cells, listed in `tests/test_volatile.py`). Excel's own files mark every
-  volatile cell, so the case arises in files another tool wrote.
+  calling a volatile function in its own text, are computed after an edit (capture `volatile_edit`). The engine keeps
+  such a cell through an edit, as Excel does, until it is computed; but it computes it as a dependent through the
+  name's references (3 cells, listed in `tests/test_volatile.py`). Excel's own files mark every volatile cell, so the
+  case arises in files another tool wrote.
 - A formula set through the API that reads a cycle in a workbook whose cached values are trusted, before
   any evaluation has reached the cycle, is computed from the cycle's cached value; Excel gives 0 (capture
   `circular_cached`). Once evaluation has met the cycle, the formula is 0, as in Excel.

@@ -232,6 +232,9 @@ class Engine:
         self.templates: list[Template] = []
         self._template_ids: dict[str, int] = {}
         self._raw_ids: dict[str, int] = {}
+        # Volatile cells whose cached value a trusting load kept, not computed since: an edit
+        # leaves them, as Excel does with an unmarked one (capture volatile_edit), until computed.
+        self._dormant: set[int] = set()
         self._unloaded: set[int] = set()  # sheets a lazy Loader has not loaded (need)
         self.load_sheet: Callable[[int], None] | None = None
         self._uncompiled: set[int] = set()  # sheets loaded whose formulas wait (need_formulas)
@@ -497,6 +500,7 @@ class Engine:
         self._touch_spill(sheet, row, col)
         s.set(row, col, value)
         self._volatile.discard(n)
+        self._dormant.discard(n)
         self._changed = True
         self.stale.discard(n)
         self.stale |= self.dependents([n])
@@ -534,6 +538,7 @@ class Engine:
         self._index = None
         self._changed = True
         compiled = self.templates[tid]
+        self._dormant.discard(n)
         if compiled.volatile:
             self._volatile.add(n)
         else:
@@ -802,6 +807,7 @@ class Engine:
         }
         self.stale -= trusted
         self._unclosed = [n for n in self._unclosed if n not in trusted]
+        self._dormant |= trusted
 
     def loaded(self) -> None:
         """The load is done: its own formulas are no change.
@@ -926,8 +932,9 @@ class Engine:
         are stale too, as Excel recalculates them on every recalculation.
         """
         if self._changed and self._volatile:
-            self.stale |= self._volatile
-            self._unclosed.extend(self._volatile)
+            woken = self._volatile - self._dormant if self._dormant else self._volatile
+            self.stale |= woken
+            self._unclosed.extend(woken)
         if self._changed:
             self._before_pass.clear()  # a recalculation starts from what the cells hold now
         if self._changed and self._kept:
@@ -1231,6 +1238,8 @@ class Engine:
                 yield self.sheets[sheet].name, row + 1, col + 1
 
     def _compute(self, n: int) -> None:
+        if self._dormant:
+            self._dormant.discard(n)  # computed: from now on recomputed at every change
         sheet, row, col = unpack(n)
         s = self.sheets[sheet]
         key = row * COLS + col
