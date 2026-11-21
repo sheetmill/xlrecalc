@@ -380,3 +380,20 @@ def test_a_repeated_formula_without_a_value_makes_the_opening_some() -> None:
         list(loader.cells(book.sheets[0]))
         assert loader.opening == "some"
         assert loader.finish().value("B2") == 6.0
+
+
+def test_the_report_is_in_sheet_row_and_column_order() -> None:
+    """Cells enter the report as they are compiled and evaluated; it shows them by position, and
+    its labels in text order, however the file or the reading ordered them."""
+    data = package(  # rows stored out of order, as a file may hold them
+        '<row r="3"><c r="B3"><f>AREAS(1)</f><v>0</v></c>'
+        '<c r="C3"><f t="dataTable" ref="C3:C4" dt2D="0" dtr="0" r1="A1"/><v>1</v></c></row>'
+        '<row r="1"><c r="B1"><f>RAND()+</f><v>0</v></c>'
+        '<c r="A1"><f>AREAS(2)</f><v>0</v></c>'
+        '<c r="D1"><f t="array" ref="D1:D2"/><v>0</v></c></row>',
+        workbook_extra='<calcPr fullCalcOnLoad="1"/>',
+    )
+    report = xlrecalc.load(io.BytesIO(data)).report
+    assert [str(c) for c in report.refused] == ["Data!A1", "Data!B1", "Data!B3"]
+    assert list(report.unsupported) == sorted(report.unsupported)
+    assert len(report.unsupported) == 2

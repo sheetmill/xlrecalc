@@ -60,7 +60,8 @@ class Report:
     """What a recalculation could not do: the cells it left as they were, and why.
 
     The report accumulates over the recalculations of one workbook. Cells are ``CellRef``
-    values.
+    values. ``refused`` and ``exceptions`` are in sheet, row and column order, and
+    ``unsupported`` in the order of its labels' text, however the workbook was read and computed.
 
     Attributes:
         unsupported: Unsupported function or feature, and the number of cells using it. A run

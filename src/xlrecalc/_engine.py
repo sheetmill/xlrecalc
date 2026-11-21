@@ -795,12 +795,39 @@ class Engine:
         self._taint()
         self._report_from_kept()
         self._report_due = False
+        self._order_report()
 
     def settled_report(self) -> Report:
         """The report, with the passes deferred by the reads since the last one run."""
         if self._report_due:
             self._finish_report()
+        else:
+            self._order_report()
         return self.report
+
+    def _order_report(self) -> None:
+        """The report's cells in sheet, row and column order, and its labels in text order.
+
+        Cells enter it in the order they are compiled and evaluated, which depends on the order
+        sheets were read and values asked; ordered, the report is the same however it was made.
+        """
+        report = self.report
+        index = {s.name: i for i, s in enumerate(self.sheets)}
+        last = len(self.sheets)
+
+        def position(item: tuple[CellRef, str]) -> tuple[int, str, int, int]:
+            ref = item[0]
+            return (index.get(ref.sheet, last), ref.sheet, ref.row, ref.col)
+
+        for cells in (report.refused, report.exceptions):
+            if len(cells) > 1:
+                ordered = sorted(cells.items(), key=position)
+                cells.clear()
+                cells.update(ordered)
+        if len(report.unsupported) > 1:
+            labels = sorted(report.unsupported.items())
+            report.unsupported.clear()
+            report.unsupported.update(dict(labels))
 
     def _stale_in_store_order(self) -> Iterator[int]:
         """Stale formula cells by sheet, column and row, read from the store as evaluated.
