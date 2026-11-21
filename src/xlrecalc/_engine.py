@@ -16,7 +16,7 @@ import math
 import traceback
 from collections import defaultdict
 from collections.abc import Iterable, Iterator
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from functools import cmp_to_key
 from typing import Any
 
@@ -232,6 +232,7 @@ class Engine:
         self.templates: list[Template] = []
         self._template_ids: dict[str, int] = {}
         self._raw_ids: dict[str, int] = {}
+        self._spellings: dict[int, str] = {}  # template id -> the raw-text key it shows
         self.names: dict[tuple[int | None, str], str] = {}  # (sheet scope, folded name) -> text
         self._name_templates: dict[tuple[int | None, str], Template | None] = {}
         self.stale: set[int] = set()
@@ -348,6 +349,13 @@ class Engine:
         tid = self._raw_ids.get(raw)
         if tid is None:
             tid = self._parsed_template(text, row, col, array_mode)
+            if self._spellings.setdefault(tid, raw) != raw:
+                # The same formula spelled otherwise (its spaces): computed alike, and shown as
+                # written (capture formula_bar) whatever cell was compiled first.
+                spelled = replace(self.templates[tid], origin=(text, row, col))
+                tid = len(self.templates)
+                self.templates.append(spelled)
+                self._spellings[tid] = raw
             self._raw_ids[raw] = tid
         return tid
 

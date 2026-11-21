@@ -37,6 +37,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `{=MAX(IF(A:A<>"",B:B))}`) does the same: 4 to 120 ms where it took 3.2 to 4 s on a sheet of 1,000 rows.
 
 ### Fixed
+- Two formulas that differ only in spacing (`A1+1` in one cell, `A2 + 1` below it) each show their own text in
+  `Workbook.formula` and `FORMULATEXT`, as Excel keeps spaces as written (capture `formula_bar`); both showed the spelling
+  of whichever was compiled first.
 - With iterative calculation, reading a value that needs a loop gives the run Excel makes on opening (capture
   `iterate_calc`): every stale cell is evaluated first, then every loop runs once, together. A read that met one loop ran
   it alone, and a later read meeting another loop ran the first again, so values depended on the order they were read

@@ -139,3 +139,27 @@ def test_display_form(written, shown):
     assert file_form("=" + shown) == written.replace("_xlfn.SINGLE(A1:A10)", "A1:A10").replace(
         "_xlfn.SINGLE(A1+1)", "(A1+1)"
     )
+
+
+@pytest.mark.parametrize("first", [True, False])
+def test_each_cell_shows_its_own_spelling_of_a_shared_formula(first: bool) -> None:
+    """Excel keeps a formula's spaces as written (capture ``formula_bar``: ``'= 1 + 2 '``). Two
+    cells whose formulas differ only in spacing compute alike, and each shows its own text
+    in ``Workbook.formula`` and ``FORMULATEXT``, whichever was compiled first."""
+    import io
+
+    import xlrecalc
+    from tests.xlsx_files import package
+
+    spelled = ["A1+1", "A2 + 1"] if first else ["A1 + 1", "A2+1"]
+    data = package(
+        f'<row r="1"><c r="A1"><v>1</v></c><c r="B1"><f>{spelled[0]}</f></c>'
+        '<c r="C1"><f>_xlfn.FORMULATEXT(B2)</f></c></row>'
+        f'<row r="2"><c r="A2"><v>2</v></c><c r="B2"><f>{spelled[1]}</f></c>'
+        '<c r="C2"><f>_xlfn.FORMULATEXT(B1)</f></c></row>',
+        workbook_extra='<calcPr fullCalcOnLoad="1"/>',
+    )
+    wb = xlrecalc.load(io.BytesIO(data))
+    assert [wb.formula("B1"), wb.formula("B2")] == [f"={spelled[0]}", f"={spelled[1]}"]
+    assert [wb.value("C2"), wb.value("C1")] == [f"={spelled[0]}", f"={spelled[1]}"]
+    assert [wb.value("B1"), wb.value("B2")] == [2.0, 3.0]

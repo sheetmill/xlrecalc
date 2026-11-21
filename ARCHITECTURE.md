@@ -317,7 +317,10 @@ Normalization rewrites each reference relative to the formula's own cell: a rela
 column becomes an offset, an absolute one stays absolute, sheet-qualified references keep the
 sheet. The canonical template text (R1C1-like) is the deduplication key. xlsx shared formulas
 (`<f t="shared" si="0" ref="B2:B100">`) map onto one template directly; array formulas
-(`t="array"`) carry their range.
+(`t="array"`) carry their range. Formulas that differ only in spacing share the canonical key and
+the compiled code, but each spelling has a template id of its own, whose origin is a cell spelled
+so: a cell's text (`Workbook.formula`, `FORMULATEXT`) is rebuilt from its template's origin, and
+Excel keeps spaces as written (capture `formula_bar`).
 
 **Load path.** Parsing costs about 9 µs per formula (5.6 µs of it tokenizing) and a template
 key 3.6 µs more, measured on the 300,003 formulas of the 100k-row benchmark. A file Excel saved
