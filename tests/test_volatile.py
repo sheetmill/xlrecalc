@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import re
 from pathlib import Path
 
@@ -51,26 +52,69 @@ def test_no_other_list_of_volatile_functions() -> None:
                 assert len(named) < 3, f"{path.name}: {sorted(named)} beside 'volatile'"
 
 
+def _volatile_edit() -> tuple[str, dict[str, list[list[str]]]]:
+    """Capture ``volatile_edit``: its workbook part and its rows by variant."""
+    text = (Path(__file__).parent / "captures" / "volatile_edit.tsv").read_text(encoding="utf-8")
+    lines = text.splitlines()
+    workbook = next(line for line in lines if line.startswith("# workbook: "))[
+        len("# workbook: ") :
+    ]
+    rows: dict[str, list[list[str]]] = {}
+    for line in lines:
+        if line and not line.startswith("#"):
+            fields = line.split("\t")
+            rows.setdefault(fields[0], []).append(fields)
+    return workbook, rows
+
+
+# An unmarked cell volatile through a defined name: Excel keeps its value through an edit (only a
+# full calculation computes it), also where the name's OFFSET names the edited cell; the engine
+# computes it (QUIRKS.md, known deviations).
+VOLATILE_EDIT_DEVIATIONS = {("name_no_ca", "probe!B1"), ("name_dependent_no_ca", "probe!B1")}
+
+
 @pytest.mark.parametrize("read_first", [False, True])
-def test_an_edit_makes_volatile_formulas_stale_whether_or_not_a_value_was_read(
-    read_first: bool,
-) -> None:
-    """After any change volatile formulas are stale (``Engine._close``): the first edit after a
-    trusting load too. B1 is volatile through a name, unmarked, so the load trusts its 7; the
-    edit of C1, which B1 does not read, makes it computed: A1's 0.1."""
+@pytest.mark.parametrize("variant", list(_volatile_edit()[1]))
+def test_an_edit_recomputes_what_excel_recomputes(variant: str, read_first: bool) -> None:
+    """Capture ``volatile_edit``: each file as Excel saved and the probe planted it, opened, C1
+    set to 2, then a full calculation; every cell as Excel showed it at each step, but the
+    deviations listed (strict: a listed cell that matches fails)."""
     import io
+
+    from capture.volatile_edit_cases import VARIANTS
 
     import xlrecalc
     from tests.xlsx_files import package
 
+    workbook, rows = _volatile_edit()
+    cells = rows[variant]
+    name = VARIANTS[variant][1]
+    names = (
+        ""
+        if name is None
+        else '<definedNames><definedName name="vn">'
+        + name.replace('"', "&quot;")
+        + "</definedName></definedNames>"
+    )
     data = package(
-        '<row r="1"><c r="A1"><v>0.1</v></c><c r="B1"><f>vn</f><v>7</v></c><c r="C1"><v>1</v></c>'
-        '<c r="D1"><f>C1*2</f><v>2</v></c></row>',
-        workbook_extra='<fileVersion appName="xl"/><calcPr calcId="191029"/><definedNames>'
-        '<definedName name="vn">OFFSET(Data!$A$1,0,0)</definedName></definedNames>',
+        f'<row r="1">{"".join(c[2] for c in cells)}</row>',
+        workbook_extra=workbook + names,
+        sheets='<sheet name="probe" sheetId="1" r:id="rId1"/>',
     )
     wb = xlrecalc.load(io.BytesIO(data))
-    if read_first:
-        assert wb.value("B1") == 7.0
-    wb.set("C1", 2)
-    assert wb.value("B1") == 0.1
+    refs = [c[1] for c in cells]
+    steps: list[list[object]] = [[wb.value(r) for r in refs] if read_first else [None] * len(refs)]
+    wb.set("probe!C1", 2)
+    steps.append([wb.value(r) for r in refs])
+    wb.recalculate(full=True)
+    steps.append([wb.value(r) for r in refs])
+    differ = set()
+    for i, c in enumerate(cells):
+        for step in range(3):
+            got = steps[step][i]
+            shown = float(c[3 + step])  # AppleScript's text of the value: 15 digits
+            if got is not None and not (
+                type(got) is float and math.isclose(got, shown, rel_tol=1e-11)
+            ):
+                differ.add((variant, c[1]))
+    assert differ == {d for d in VOLATILE_EDIT_DEVIATIONS if d[0] == variant}

@@ -53,9 +53,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `{=MAX(IF(A:A<>"",B:B))}`) does the same: 4 to 120 ms where it took 3.2 to 4 s on a sheet of 1,000 rows.
 
 ### Fixed
-- The first edit after a load makes the volatile formulas stale, as every later edit does: a volatile cell whose cached
-  value the load trusted (volatile through a name, without `ca="1"`) kept that value through an edit made before any
-  value was read, and was computed when the same edit came after a read.
+- The first edit after a load makes the volatile formulas stale, as every later edit does: whether an edit computed a
+  volatile cell whose cached value the load trusted depended on whether a value had been read before it. Excel keeps
+  such a cell's value through an edit when it is volatile through a defined name without `ca="1"` (capture
+  `volatile_edit`), which QUIRKS.md lists as a known deviation; a marked cell is computed, as in Excel.
 - Two formulas that differ only in spacing (`A1+1` in one cell, `A2 + 1` below it) each show their own text in
   `Workbook.formula` and `FORMULATEXT`, as Excel keeps spaces as written (capture `formula_bar`); both showed the spelling
   of whichever was compiled first.

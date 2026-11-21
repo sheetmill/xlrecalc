@@ -28,27 +28,15 @@ import re
 import subprocess
 import sys
 
-import openpyxl
-from openpyxl.workbook.defined_name import DefinedName
-
 from capture.edition import edition_line
 from capture.excel_watch import preflight
 from capture.open_calc_probe import calc_attributes, edit_calc
 from capture.pipeline import CAPTURES
+from capture.volatile_edit_cases import VARIANTS
 from capture.volatile_name_probe import cell_xml
 from capture.writeback_probe import CONTAINER, osascript
 
 US = "\x1f"
-READ = 'INDIRECT("probe!C1")'
-
-# name: (B1's formula, defined name text or None, B1 marked ca="1", extra cells {ref: formula})
-VARIANTS: dict[str, tuple[str, str | None, bool, dict[str, str]]] = {
-    "name_no_ca": ("=vn", READ, False, {}),
-    "name_ca": ("=vn", READ, True, {}),
-    "own_no_ca": ("=" + READ, None, False, {}),
-    "now_no_ca": ("=NOW()*0+A1", None, False, {"F1": "=NOW()*0+3"}),
-    "name_dependent_no_ca": ("=vn", "OFFSET(probe!$C$1,0,0)", False, {}),
-}
 PLANTED = {"B1": "7", "D1": "999", "E1": "999", "F1": "999"}
 
 # Expected before the run: (after opening, after the edit, after the full calculation).
@@ -67,6 +55,9 @@ PREDICTED = {
 
 
 def build(path: object, formula: str, name: str | None, extra: dict[str, str]) -> None:
+    import openpyxl  # imported here: the tests read VARIANTS without it
+    from openpyxl.workbook.defined_name import DefinedName
+
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "probe"

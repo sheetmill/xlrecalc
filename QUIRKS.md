@@ -145,6 +145,11 @@ not). An empty argument is `#N/A`.
   holds and is reported (16 formulas of capture `array_refs`, listed in
   `tests/test_array_refs.py`). `OFFSET`, `INDIRECT` and `INDEX` given an array as the whole formula
   give Excel's value.
+- A cell volatile through a defined name (`vn` = `INDIRECT("probe!C1")` or `OFFSET(probe!$C$1,0,0)`), without
+  the `ca="1"` mark, in a file whose cached values are trusted: an edit computes it, where Excel keeps its value until
+  a full calculation, also when the name's `OFFSET` names the edited cell (capture `volatile_edit`, 2 cells, listed in
+  `tests/test_volatile.py`). A marked cell, and one calling a volatile function in its own text, are computed after an
+  edit as in Excel. Excel's own files mark every volatile cell, so the case arises in files another tool wrote.
 - A formula set through the API that reads a cycle in a workbook whose cached values are trusted, before
   any evaluation has reached the cycle, is computed from the cycle's cached value; Excel gives 0 (capture
   `circular_cached`). Once evaluation has met the cycle, the formula is 0, as in Excel.
