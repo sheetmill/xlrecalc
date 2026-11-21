@@ -10,7 +10,7 @@ import pytest
 
 from tests.xlsx_files import package
 from xlrecalc import recalculate
-from xlrecalc._engine import Engine
+from xlrecalc._engine import Engine, node
 from xlrecalc._functions import REGISTRY, function
 from xlrecalc._load import load, refused_in_file
 from xlrecalc._values import BLANK, ErrorValue
@@ -474,3 +474,31 @@ def test_number_literals_as_excel_takes_them_in_a_file():
         kind, _, text = value.partition(":")
         want = float(text) if kind == "n" else ErrorValue(text)
         assert same(engine.get(0, 0, 0), want), (formula, engine.get(0, 0, 0), want)
+
+
+@pytest.mark.parametrize("others", [4, 40])  # a large stale set (store order), a small one
+@pytest.mark.parametrize("first", ["B1", "B2"])
+def test_stale_cells_are_evaluated_in_one_order_however_they_were_marked(
+    first: str, others: int
+) -> None:
+    """Stale cells are evaluated in an order that depends only on which are stale: which cells
+    pass a step limit, and the order of ``RAND``'s draws, do not depend on the order they became
+    stale. B1 and B2 share a slot of the set's table, where it keeps the order they were added."""
+    cells = {"A1": "1", "B1": "=A1+1", "B2": "=A1+2"}
+    cells.update({f"C{r}": f"={r}" for r in range(1, others + 1)})
+    engine = Engine.from_cells({"S": cells})
+    engine.recalculate()
+    computed: list[int] = []
+    compute = engine._compute
+
+    def spy(n: int) -> None:
+        computed.append(n)
+        compute(n)
+
+    engine._compute = spy  # type: ignore[method-assign]
+    nodes = {"B1": node(0, 0, 1), "B2": node(0, 1, 1)}
+    engine.stale.clear()
+    engine.stale.add(nodes[first])
+    engine.stale.add(nodes["B2" if first == "B1" else "B1"])
+    engine.recalculate()
+    assert computed == [nodes["B1"], nodes["B2"]]

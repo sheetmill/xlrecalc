@@ -703,7 +703,7 @@ class Engine:
                 (sheet, c, r1, r2) for sheet, r1, c1, r2, c2 in moved for c in range(c1, c2 + 1)
             ]
             self.stale |= self.dependents([], ranges)
-            self._evaluate(list(self.stale))
+            self._evaluate_stale()
 
     # Values -----------------------------------------------------------------------------------
 
@@ -773,9 +773,7 @@ class Engine:
         if targets is None:
             self._changed = True  # a recalculation evaluates volatile formulas again
             self._close()
-            if 2 * len(self.stale) >= self.formula_count():
-                self._evaluate(self._stale_in_store_order())
-            self._evaluate(list(self.stale))
+            self._evaluate_stale()
         else:
             self._evaluate(list(targets))
         self._settle()
@@ -828,6 +826,20 @@ class Engine:
             labels = sorted(report.unsupported.items())
             report.unsupported.clear()
             report.unsupported.update(dict(labels))
+
+    def _evaluate_stale(self) -> None:
+        """Evaluate every stale cell, in an order that depends only on which cells are stale.
+
+        Which cells pass a step limit, and the order of ``RAND``'s draws, follow the order cells
+        are evaluated in; a set's own order follows the order its cells were added. A large set
+        goes in store order (sheet, column, row: the store's own sorted columns, read as
+        evaluated, cheaper than sorting past an eighth of the formulas), the rest sorted (sheet,
+        row, column).
+        """
+        if 8 * len(self.stale) >= self.formula_count():
+            self._evaluate(self._stale_in_store_order())
+        if self.stale:
+            self._evaluate(sorted(self.stale))
 
     def _stale_in_store_order(self) -> Iterator[int]:
         """Stale formula cells by sheet, column and row, read from the store as evaluated.
@@ -952,9 +964,7 @@ class Engine:
             if self.stale:  # one run after every cell Excel computes with it (iterate_calc)
                 self._finishing = True
                 try:
-                    self._evaluate(self._stale_in_store_order())
-                    if self.stale:
-                        self._evaluate(list(self.stale))
+                    self._evaluate_stale()
                 finally:
                     self._finishing = False
             self._iterate()
