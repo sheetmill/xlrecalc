@@ -389,7 +389,8 @@ _EMPTY_ODD = "VDB with an empty factor is #DIV/0! in Excel, where it is 0 here"
 _DISCRETE_TERMS = (
     "BINOM.DIST, BINOM.DIST.RANGE, NEGBINOM.DIST, POISSON.DIST and POISSON past 8 units in the "
     "last place: Excel's terms are none of the exact count of ways times the powers, lgamma or "
-    "Loader's saddle point, most at 1,000 trials and more (capture distributions_family)"
+    "Catherine Loader's saddle-point algorithm, most at 1,000 trials and more (capture "
+    "distributions_family)"
 )
 _DISTRIBUTION_LIBRARY = (
     "GAMMA, GAMMALN, ERF, ERFC, WEIBULL.DIST and LOGNORM.DIST past 4 units in the last place, "

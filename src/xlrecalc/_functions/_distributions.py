@@ -21,8 +21,8 @@ E = "engineering"
 NUM, VALUE = ErrorValue.NUM, ErrorValue.VALUE
 _DISCRETE = (
     "Excel's terms of the discrete distributions match neither the exact count of ways times the "
-    "powers, nor lgamma, nor Loader's saddle point in the last bits; within 8 units in the last "
-    "place but listed rows, most at a thousand trials and more"
+    "powers, nor lgamma, nor Catherine Loader's saddle-point algorithm in the last bits; within 8 "
+    "units in the last place but listed rows, most at a thousand trials and more"
 )
 _LIBRARY = (
     "Excel's own exp, pow, erf and gamma differ from the platform's in the last bits; within 4 "
