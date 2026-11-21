@@ -5,6 +5,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+import pytest
+
 from xlrecalc._functions import SPECS
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -47,3 +49,28 @@ def test_no_other_list_of_volatile_functions() -> None:
             if "volatile" in sentence.lower():
                 named = _names(sentence) & volatile
                 assert len(named) < 3, f"{path.name}: {sorted(named)} beside 'volatile'"
+
+
+@pytest.mark.parametrize("read_first", [False, True])
+def test_an_edit_makes_volatile_formulas_stale_whether_or_not_a_value_was_read(
+    read_first: bool,
+) -> None:
+    """After any change volatile formulas are stale (``Engine._close``): the first edit after a
+    trusting load too. B1 is volatile through a name, unmarked, so the load trusts its 7; the
+    edit of C1, which B1 does not read, makes it computed: A1's 0.1."""
+    import io
+
+    import xlrecalc
+    from tests.xlsx_files import package
+
+    data = package(
+        '<row r="1"><c r="A1"><v>0.1</v></c><c r="B1"><f>vn</f><v>7</v></c><c r="C1"><v>1</v></c>'
+        '<c r="D1"><f>C1*2</f><v>2</v></c></row>',
+        workbook_extra='<fileVersion appName="xl"/><calcPr calcId="191029"/><definedNames>'
+        '<definedName name="vn">OFFSET(Data!$A$1,0,0)</definedName></definedNames>',
+    )
+    wb = xlrecalc.load(io.BytesIO(data))
+    if read_first:
+        assert wb.value("B1") == 7.0
+    wb.set("C1", 2)
+    assert wb.value("B1") == 0.1

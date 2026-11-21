@@ -781,6 +781,7 @@ class _Loader:
         engine.stale.update(seen.marked)  # what Excel recalculates on opening
         if not full and seen.decide(rule) == "all":
             engine.make_all_stale()  # a volatile function without ca="1": every formula
+        engine.loaded()
         return engine
 
     def finish(self) -> Engine:

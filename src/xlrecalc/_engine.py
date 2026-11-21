@@ -251,7 +251,6 @@ class Engine:
         self._strict = False  # every read checked (a formula on a static cycle, §6.3)
         self._volatile: set[int] = set()  # formula cells of volatile templates
         self._volatility: Volatility | None = None  # from the names, rebuilt when one changes
-        self._hold_volatile = False  # the load's own changes do not make them stale (manual)
         self._changed = False  # a cell changed since volatile cells were last made stale
         # Cells on a cycle or depending on one (§7.2), each with whether it holds a cached value,
         # and the runs of rows they make, so that many cycles walk each dependent once.
@@ -781,7 +780,14 @@ class Engine:
         }
         self.stale -= trusted
         self._unclosed = [n for n in self._unclosed if n not in trusted]
-        self._hold_volatile = True
+
+    def loaded(self) -> None:
+        """The load is done: its own formulas are no change.
+
+        So the first edit, like every later one, makes the volatile formulas stale
+        (:meth:`_close`).
+        """
+        self._changed = False
 
     def make_all_stale(self) -> None:
         """Every formula stale: evaluated when next read or recalculated."""
@@ -897,10 +903,9 @@ class Engine:
         After any change, volatile formulas (``NOW``, ``OFFSET``, ``INDIRECT``, ``CELL``...)
         are stale too, as Excel recalculates them on every recalculation.
         """
-        if self._changed and self._volatile and not self._hold_volatile:
+        if self._changed and self._volatile:
             self.stale |= self._volatile
             self._unclosed.extend(self._volatile)
-        self._hold_volatile = False
         if self._changed:
             self._before_pass.clear()  # a recalculation starts from what the cells hold now
         if self._changed and self._kept:
