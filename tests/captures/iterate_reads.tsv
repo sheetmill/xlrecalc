@@ -1,0 +1,18 @@
+# suite: iterate_reads
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-20
+# generator: capture/iterate_reads_probe.py
+# method: each variant as one file, every formula cached 0, with fullCalcOnLoad
+#   (cached_0); shown after opening, calculated after one calculate, saved the value
+#   in a copy saved after opening again
+# columns: variant form calcPr cell formula shown calculated saved_type saved
+counters	cached_0	iterateCount="100"	s!B1	B1+1	100.0	200.0	n	200
+counters	cached_0	iterateCount="100"	s!C1	C1+1	100.0	200.0	n	200
+counters	cached_0	iterateCount="100"	s!D1	B1+C1	200.0	400.0	n	400
+lengths	cached_0	iterateCount="100"	s!B1	B1/2+1	2.0	2.0	n	2
+lengths	cached_0	iterateCount="100"	s!C1	E1*0.9+1	9.991404955443	9.992264459899	n	9.9922644598985482
+lengths	cached_0	iterateCount="100"	s!D1	C1	9.991404955443	9.992264459899	n	9.9922644598985482
+lengths	cached_0	iterateCount="100"	s!E1	D1	9.991404955443	9.992264459899	n	9.9922644598985482
+feeds	cached_0	iterateCount="100"	s!B1	B1/2+1	1.999938964844	1.999969482422	n	1.999969482421875
+feeds	cached_0	iterateCount="100"	s!C1	C1/2+B1	3.998962402344	3.999450683594	n	3.99945068359375

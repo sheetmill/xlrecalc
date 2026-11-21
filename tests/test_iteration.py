@@ -295,3 +295,63 @@ def test_limitation_a_loop_without_excels_calculate_always_marking_does_not_run_
     assert (wb.value("S!A1"), wb.value("S!A2")) == (199.0, 200.0)
     wb.recalculate(full=True)
     assert (wb.value("S!A1"), wb.value("S!A2")) == (399.0, 400.0)
+
+
+def _reads() -> dict[str, list[list[str]]]:
+    """Capture ``iterate_reads``'s rows by variant."""
+    grouped: dict[str, list[list[str]]] = defaultdict(list)
+    for line in (CAPTURES / "iterate_reads.tsv").read_text(encoding="utf-8").splitlines():
+        if line and not line.startswith("#"):
+            fields = line.split("\t")
+            grouped[fields[0]].append(fields)
+    return dict(grouped)
+
+
+@pytest.mark.parametrize("variant", list(_reads()))
+def test_reads_in_any_order_give_excels_opening_run(tmp_path: Path, variant: str) -> None:
+    """Capture ``iterate_reads``: loops apart, of different lengths, and one read by another,
+    every formula cached 0, ``fullCalcOnLoad``. Read in every order, each value is what Excel shows
+    after opening (one run over every loop, one stopping test for all: ``lengths``' B1 runs as
+    long as the slower loop and reaches 2); then one ``calculate``; and the copy saved after
+    opening again, bit for bit."""
+    import io
+    import itertools
+
+    from capture._file import Book
+    from capture.iterate_reads_probe import FORMS
+
+    import xlrecalc
+    from tests.xlsx_files import package
+    from xlrecalc._report import column_letters
+
+    rows = _reads()[variant]
+    refs = [row[3].split("!")[1] for row in rows]
+    cells = "".join(
+        f'<c r="{ref}"><f>{row[4]}</f><v>0</v></c>' for ref, row in zip(refs, rows, strict=True)
+    )
+    data = package(
+        f'<row r="1">{cells}</row>',
+        workbook_extra=FORMS["cached_0"].format(rows[0][2]),
+        sheets='<sheet name="s" sheetId="1" r:id="rId1"/>',
+    )
+    for order in itertools.permutations(refs):
+        wb = xlrecalc.load(io.BytesIO(data))
+        got = {ref: wb.value(ref) for ref in order}
+        assert [
+            r for r, row in zip(refs, rows, strict=True) if not shown_matches(got[r], row[5])
+        ] == []
+    wb.recalculate()
+    assert [
+        r for r, row in zip(refs, rows, strict=True) if not shown_matches(wb.value(r), row[6])
+    ] == []
+    path = tmp_path / "book.xlsx"
+    path.write_bytes(data)
+    xlrecalc.recalculate(path)
+    with Book(path) as book:
+        written = {f"{column_letters(c.column)}{c.row}": c.value for c in book.cells("s")}
+    wrong = [
+        r
+        for r, row in zip(refs, rows, strict=True)
+        if not saved_matches(written[r], row[7], row[8])
+    ]
+    assert wrong == []

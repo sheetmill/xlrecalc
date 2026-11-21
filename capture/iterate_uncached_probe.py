@@ -71,11 +71,20 @@ CALC = {
 }
 
 
+METHOD = [
+    "# method: each variant as three files: no cached values with fullCalcOnLoad and",
+    "#   openpyxl's calcId (flag), no cached values without it (no_flag), every formula",
+    "#   cached 0 (cached_0); shown after opening, calculated after one calculate, saved",
+    "#   the value in a copy saved after opening again",
+]
+
+
 def main(
     variants: list[tuple[str, str, Sheets]] = VARIANTS,
     forms: dict[str, str] = CALC,
     suite: str = "iterate_uncached",
     generator: str = "capture/iterate_uncached_probe.py",
+    method: list[str] | None = None,
 ) -> None:
     count = osascript("-e", 'tell application "Microsoft Excel" to count of workbooks')
     if count != "0":
@@ -121,10 +130,7 @@ def main(
         edition_line(),
         f"# captured: {dt.date.today().isoformat()}",
         f"# generator: {generator}",
-        "# method: each variant as three files: no cached values with fullCalcOnLoad and",
-        "#   openpyxl's calcId (flag), no cached values without it (no_flag), every formula",
-        "#   cached 0 (cached_0); shown after opening, calculated after one calculate, saved",
-        "#   the value in a copy saved after opening again",
+        *(method or METHOD),
         "# columns: variant form calcPr cell formula shown calculated saved_type saved",
     ]
     out = CAPTURES / f"{suite}.tsv"
