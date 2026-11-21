@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- A cell depending on a circular reference keeps the value the file holds, as Excel keeps it (capture
+  `circular_cached`), also where a `Loader` reads its sheet after the cycle was evaluated: such a cell was computed
+  from the cycle's kept value (in 0.7.0, with sheets not fed: `one!A1 = two!A1+1` read after `two`'s cycle gave 8
+  where Excel keeps 7).
+
 ## [0.7.0] - 2026-11-21
 
 ### Added

@@ -599,3 +599,23 @@ def test_formulas_compiled_late_keep_the_trusted_volatile_value() -> None:
         return wb.formula("two!A1"), wb.formula("one!B1"), wb.value("one!B1")
 
     assert _lazy(data, read) == expected
+
+
+def test_a_sheet_read_after_a_cycle_closed_keeps_its_dependents_of_it() -> None:
+    """A cell depending on a cycle keeps its value, as Excel keeps it (capture ``circular_cached``),
+    also when its sheet is read after the cycle closed: ``one!A1`` read after ``two``'s cycle
+    was 8, computed from the cycle's kept value."""
+    data = _lazy_book(
+        '<row r="1"><c r="A1"><f>two!A1+1</f><v>7</v></c></row>',
+        '<row r="1"><c r="A1"><f>A2+1</f><v>7</v></c></row>'
+        '<row r="2"><c r="A2"><f>A1+1</f><v>7</v></c></row>',
+    )
+    eager = xlrecalc.load(io.BytesIO(data))
+    assert eager.value("one!A1") == 7.0
+    cells = {xlrecalc.CellRef(*c) for c in (("one", 1, 1), ("two", 1, 1), ("two", 2, 1))}
+    assert eager.report.circular == cells
+
+    def cycle_first(wb: xlrecalc.Workbook) -> object:
+        return wb.value("two!A1"), wb.value("one!A1"), wb.report.circular
+
+    assert _lazy(data, cycle_first) == (7.0, 7.0, cells)

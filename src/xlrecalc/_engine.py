@@ -361,6 +361,17 @@ class Engine:
                     self.load_sheet(wanted)
         finally:
             self._loading = False
+        self._keep_late()
+
+    def _keep_late(self) -> None:
+        """Formulas a lazy load adds that depend on a cycle kept before keep their values too.
+
+        A cycle keeps every cell depending on it (:meth:`_keep_cycle`) through the dependency
+        index of the sheets read when it closed; a sheet read later holds dependents that index
+        did not have. With iteration on, every sheet is read before anything is evaluated.
+        """
+        if self._kept and not self.iterate:
+            self._keep_cycle(set(self._kept))
 
     def need_formulas(self, sheet: int) -> None:
         """Load a sheet, and compile its formulas if its load left them.
@@ -373,6 +384,7 @@ class Engine:
             self._uncompiled.discard(sheet)
             self._loads += 1
             self.compile_sheet(sheet)
+            self._keep_late()
 
     def read_all(self) -> None:
         """Load every sheet not loaded yet, in the sheets' order."""
