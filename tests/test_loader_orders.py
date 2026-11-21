@@ -188,8 +188,9 @@ def _feed(
     rng: random.Random, data: bytes, refs: list[str], mode: str, reads: Reads
 ) -> tuple[tuple[object, ...], str | None, set[str], list[str]]:
     """A ``Loader`` fed at random; its state, its final ``opening``, the sheets the caller fed in
-    full before values were asked, and the values asked while feeding, in order (with cycles
-    under iterative calculation, the order cells are evaluated in changes their values)."""
+    full before values were asked, and the values asked while feeding, in order (asked of the
+    eager workbook too, so that the comparison does not rest on the order of reads changing
+    nothing, which ``tests/test_iteration_kept.py`` checks)."""
     edited: list[xlrecalc.Workbook] = []
 
     def workbook() -> xlrecalc.Workbook:

@@ -584,28 +584,29 @@ evaluation pass ends, as Excel does:
   text, the empty text) counts as 0, and a new value that is not a number is no change: so
   `IFERROR(A1,0)+3` from an error stops after one iteration at a delta of 10 and goes on at 0.001.
 - **When a run happens.** Excel runs a loop once on opening (it marks a loop's formulas "calculate
-  always", `<f ca="1">`), once for every edit, whether or not the loop reads the edited cell, once for
-  every `calculate`, and once on saving (captures `iterate_calc`, `iterate_cached`). The engine runs
-  where Excel does, with one departure: a trusting load runs nothing, so the file's values are the
-  ones Excel saved, though Excel would run once more on opening it. An evaluating load (a file Excel
-  recalculates on opening, `recalc_on_load="always"`, or a loop without cached values) runs once,
-  as an opening;
-  each edit runs once (the file's `ca="1"` formulas become stale, so a loop a trusting load never
-  met runs too); each recalculation runs once; and `Workbook.save` runs once more once a loop has
-  run, so saving changes the values in memory as well as the file's, as Excel's saving changes
-  what it shows. `recalculate(path)` is a load and a save: for a file it evaluates, two runs, which
-  is Excel's saved copy after opening the file, what pandas and openpyxl readers then see (checked
-  end to end in `tests/test_iteration.py`, from openpyxl files and from a file Excel saved).
-  A limitation: after a trusting load, an edit finds a loop only through the file's `ca="1"`
-  marking. A file with cached loop values but no marking, as another tool might write it, does not
-  run its loop on an edit unless the edit reaches a cell the loop reads, or until a full
-  recalculation (a test pins this, named for the limitation). openpyxl writes no cached values, so
-  its files are always evaluated and are not affected.
+  always", `<f ca="1">`), once for every edit, whether or not the loop reads the edited cell, once
+  for every `calculate`, and once on saving (captures `iterate_calc`, `iterate_cached`). The engine
+  runs where Excel does, with one departure: a trusting load runs nothing, so the file's values are
+  the ones Excel saved, though Excel would run once more on opening it. An evaluating load (a file
+  Excel recalculates on opening, `recalc_on_load="always"`, or a loop without cached values) runs
+  once, as an opening: the first read that meets a loop evaluates every stale cell first, then runs
+  every loop together, so the values read are that run's whatever is read first; each edit runs once
+  (the file's `ca="1"` formulas become stale, so a loop a trusting load never met runs too); each
+  recalculation runs once; and `Workbook.save` runs once more once a loop has run, so saving changes
+  the values in memory as well as the file's, as Excel's saving changes what it shows.
+  `recalculate(path)` is a load and a save: for a file it evaluates, two runs, which is Excel's
+  saved copy after opening the file, what pandas and openpyxl readers then see (checked end to end
+  in `tests/test_iteration.py`, from openpyxl files and from a file Excel saved). A limitation:
+  after a trusting load, an edit finds a loop only through the file's `ca="1"` marking. A file with
+  cached loop values but no marking, as another tool might write it, does not run its loop on an
+  edit unless the edit reaches a cell the loop reads, or until a full recalculation (a test pins
+  this, named for the limitation). openpyxl writes no cached values, so its files are always
+  evaluated and are not affected.
 - A run may make at most `ReadLimits.max_iteration_evaluations` cell evaluations (100,000,000 by
   default; the corpora's largest need is 8,256 cells at 1,000 iterations). Past it, the cells keep
-  the values they held and are reported as uncomputed under a label naming the limit. A run that
-  reaches, through `INDIRECT` or `OFFSET`, a formula its pass did not evaluate (a lazy read
-  evaluates only what it needs) is undone the same way, under a label saying so.
+  the values they held and are reported as uncomputed under a label naming the limit. A run starts
+  only after its pass has evaluated every stale cell; a run that still read a formula not
+  evaluated would be undone the same way, under a label saying so.
 
 What matches Excel exactly: each cell's arithmetic is the engine's, so a run gives Excel's doubles
 wherever every function on the loop does; where a function in it is within a declared tolerance,

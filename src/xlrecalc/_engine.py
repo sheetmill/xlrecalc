@@ -208,6 +208,8 @@ class Engine:
         """Cell evaluations one run may make (``ReadLimits.max_iteration_evaluations``)."""
         self._iterating = False  # within a run: kept cells are computed
         self._iteration_due = False
+        # finishing a pass before its run: the passes it starts leave the run to it
+        self._finishing = False
         self._iterated: set[int] = set()  # kept cells a run computed: the writer writes them
         self._last_stop: str | None = None  # why the last run ended: "delta", "count" or a label
         self._before_pass: dict[int, Value] = {}  # with iteration on: values before this pass
@@ -911,7 +913,15 @@ class Engine:
                         suspects.update(path[marked_to:last])
                     marked_to = last
 
-        if self._iteration_due and not self._iterating:
+        if self._iteration_due and not self._iterating and not self._finishing:
+            if self.stale:  # one run after every cell Excel computes with it (iterate_calc)
+                self._finishing = True
+                try:
+                    self._evaluate(self._stale_in_store_order())
+                    if self.stale:
+                        self._evaluate(list(self.stale))
+                finally:
+                    self._finishing = False
             self._iterate()
 
     def spend_steps(self, steps: int) -> None:

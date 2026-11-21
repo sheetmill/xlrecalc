@@ -37,6 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `{=MAX(IF(A:A<>"",B:B))}`) does the same: 4 to 120 ms where it took 3.2 to 4 s on a sheet of 1,000 rows.
 
 ### Fixed
+- With iterative calculation, reading a value that needs a loop gives the run Excel makes on opening (capture
+  `iterate_calc`): every stale cell is evaluated first, then every loop runs once, together. A read that met one loop ran
+  it alone, and a later read meeting another loop ran the first again, so values depended on the order they were read
+  (`B1=B1+1` and `C1=C1+1` from 0 at 100 iterations: 100 and 100 read together, `B1` 200 after reading `C1`).
 - A volatile function in a cell's own text without `ca="1"` makes a load compute every formula (capture `volatile_names`)
   also where xlrecalc's parser cannot read the rest of the formula (`RAND()+`): such a formula was left out, so the
   load kept cached values that `RecalcCheck` answered would be computed. Both now decide from the text alone.

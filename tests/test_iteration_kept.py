@@ -9,6 +9,7 @@ file's values evaluates nothing, changes nothing and reports nothing.
 
 from __future__ import annotations
 
+import io
 import re
 import shutil
 import zipfile
@@ -363,8 +364,9 @@ def test_excel_leaves_a_loop_without_cached_values_at_value_error() -> None:
     assert seen["flag", "6"] == ("missing value", "#VALUE!")
 
 
-def test_a_run_reading_a_cell_its_pass_did_not_evaluate_is_undone_and_says_why() -> None:
-    """A lazy read evaluates only what it needs; ``INDIRECT`` may then reach further in a run."""
+def test_a_run_reads_cells_a_lazy_read_did_not_need() -> None:
+    """A read that meets a loop evaluates every stale cell before the run, as Excel's run follows
+    what it recalculates: ``INDIRECT`` reaching ``C2`` in the run finds it computed."""
     from xlrecalc._engine import ITERATION_UNREAD, Engine
 
     engine = Engine.from_cells(
@@ -373,7 +375,29 @@ def test_a_run_reading_a_cell_its_pass_did_not_evaluate_is_undone_and_says_why()
         iterate_count=3,
     )
     engine.sheets[0].values[0] = engine.sheets[0].values[16384] = 0.0  # cached A1 and A2
-    assert engine.get(0, 0, 0) == 0.0
-    assert engine.report.unsupported[ITERATION_UNREAD] == 2
+    assert engine.get(0, 0, 0) == 5.0  # 0+1, then 1+2, then 3+2
+    assert ITERATION_UNREAD not in engine.report.unsupported
     assert ITERATION_LIMIT not in engine.report.unsupported
-    assert {str(c) for c in engine.report.uncomputed} == {"S!A1", "S!A2"}
+    assert not engine.report.uncomputed
+
+
+# Two loops that do not read each other: one never settles, one settles slowly.
+TWO_LOOPS = (
+    '<row r="1"><c r="B1"><f>B1+1</f><v>0</v></c><c r="C1"><f>C1*0.999+1</f><v>0</v></c>'
+    '<c r="D1"><f>B1+C1</f><v>0</v></c></row>'
+)
+
+
+@pytest.mark.parametrize("order", [["B1", "C1", "D1"], ["C1", "B1", "D1"], ["D1", "C1", "B1"]])
+def test_values_read_in_any_order_are_one_run_s(order: list[str]) -> None:
+    """Reading a value that needs a loop makes the run Excel makes on opening: every cell it
+    recalculates first, then every loop in one run (capture ``iterate_calc``). The values read
+    are that run's in any order, and a later read changes none of them."""
+    data = package(TWO_LOOPS, workbook_extra=FLAG)
+    run = xlrecalc.load(io.BytesIO(data))
+    run.recalculate()
+    expected = {ref: run.value(ref) for ref in ("B1", "C1", "D1")}
+    wb = xlrecalc.load(io.BytesIO(data))
+    first = {ref: wb.value(ref) for ref in order}
+    assert first == expected
+    assert {ref: wb.value(ref) for ref in ("B1", "C1", "D1")} == expected
