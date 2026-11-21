@@ -243,13 +243,14 @@ xlrecalc is part of the [sheetmill](https://github.com/sheetmill) project, with
 
 ## Development
 
-`uv sync --group docs` then `uv run pytest`; `CONTRIBUTING.md` has the pip route, the full set of
-checks and the commit conventions. `ARCHITECTURE.md` describes the design and the measurements
-behind it, `CAPTURING.md` how results are captured from Excel, `bench/` reruns the
-measurements.
+`uv sync --group docs` then `uv run pytest`; [`CONTRIBUTING.md`](https://github.com/sheetmill/xlrecalc/blob/main/CONTRIBUTING.md) has the pip
+route, the full set of checks and the commit conventions.
+[`ARCHITECTURE.md`](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) describes the design and the measurements behind it,
+[`CAPTURING.md`](https://github.com/sheetmill/xlrecalc/blob/main/CAPTURING.md) how results are captured from Excel,
+[`bench/`](https://github.com/sheetmill/xlrecalc/tree/main/bench) reruns the measurements.
 
 Most of the code is written with Claude Code, reviewed before each commit and tested against
-results captured from Excel; see `CONTRIBUTING.md`.
+results captured from Excel; see [`CONTRIBUTING.md`](https://github.com/sheetmill/xlrecalc/blob/main/CONTRIBUTING.md).
 
 ## License
 
