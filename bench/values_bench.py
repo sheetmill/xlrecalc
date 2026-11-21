@@ -3,7 +3,7 @@
     uv run python bench/values_bench.py gen N
     uv run python bench/values_bench.py run [--rounds R] [--src LABEL=DIR ...] [CASE ...]
 
-Runs in the package's own environment from the repository root. ``gen`` writes two files to
+Runs in the package's own environment from the repository root. ``gen`` writes three files to
 ``bench/data/``, without openpyxl or Excel, so anyone can regenerate them:
 
 - ``excel_form_N.xlsx``: the table of ``bench/gen.py`` (the same seed, so the same numbers as
@@ -11,6 +11,8 @@ Runs in the package's own environment from the repository root. ``gen`` writes t
   formula with its cached value, ``<fileVersion appName="xl">`` and Excel 16.115's own
   ``calcId`` (191029). It imitates Excel's saved form; Excel never wrote it. Opening it, Excel
   trusts every cached value (xlrecalc's opening rule answers ``"none"``).
+- ``unshared_form_N.xlsx``: the same, every formula with its own text and none shared, as a
+  program that writes no shared formulas saves it.
 - ``whole_columns.xlsx``: 1,000 rows (``k1``... in column A, 1... in column B) and, in column F,
   one array formula over whole columns per row (``COLUMN_FORMS``). No cached values: every
   formula is computed.
@@ -24,6 +26,9 @@ Cases:
   through ``Workbook.values``;
 - ``loader:FILE``: the same through a ``Loader`` fed the sheet (``Loader.workbook()``, or
   ``finish()`` where a version has no ``workbook()``);
+- ``xlio:FILE``, ``feed:FILE``: every cell of every worksheet with its runs
+  (``rich=True``), read through ``xlio`` alone or fed through a ``Loader``, which then answers
+  ``opening``: what a reader that streams the cells for its own use pays to have them recorded;
 - ``column:I``: ``whole_columns.xlsx`` loaded, then ``F<I+1>``'s value read (the time of the
   read alone).
 
@@ -165,7 +170,7 @@ def _package(path: Path, rows: object, dimension: str, excel_form: bool) -> None
             f.write(("".join(chunk) + "</sheetData></worksheet>").encode())
 
 
-def _excel_form_rows(n: int, seed: int = 1) -> object:
+def _excel_form_rows(n: int, seed: int = 1, shared: bool = True) -> object:
     """``bench/gen.py``'s table, as Excel writes it: shared formulas and cached values."""
     random.seed(seed)  # gen.py's own draws: one per row, rounded to 3 places
     a = [round(random.random() * 100, 3) for _ in range(n)]
@@ -203,6 +208,14 @@ def _excel_form_rows(n: int, seed: int = 1) -> object:
             f'<c r="A{x}"><v>{a[r]!r}</v></c><c r="B{x}">{fb}<v>{b[r]!r}</v></c>'
             f'<c r="C{x}">{fc}<v>{c[r]!r}</v></c><c r="D{x}">{fd}<v>{d[r]!r}</v></c>'
         )
+        if not shared:  # every formula's own text, as a program writing no shared formulas does
+            fb = f"<f>A{x}*2</f>"
+            fc = "<f>B1</f>" if r == 0 else f"<f>C{x - 1}+B{x}</f>"
+            fd = f"<f>SUM(A{x}:A{min(x + 9, n)})</f>"
+            cells = (
+                f'<c r="A{x}"><v>{a[r]!r}</v></c><c r="B{x}">{fb}<v>{b[r]!r}</v></c>'
+                f'<c r="C{x}">{fc}<v>{c[r]!r}</v></c><c r="D{x}">{fd}<v>{d[r]!r}</v></c>'
+            )
         if r in summary:
             text, value = summary[r]
             cells += f'<c r="F{x}"><f>{text}</f><v>{value!r}</v></c>'
@@ -225,11 +238,13 @@ def _escape(text: str) -> str:
 
 
 def gen(n: int) -> None:
-    """Write ``excel_form_N.xlsx`` and ``whole_columns.xlsx``."""
+    """Write ``excel_form_N.xlsx``, ``unshared_form_N.xlsx`` and ``whole_columns.xlsx``."""
     DATA.mkdir(exist_ok=True)
     _package(DATA / f"excel_form_{n}.xlsx", _excel_form_rows(n), f"A1:F{n}", excel_form=True)
+    unshared = _excel_form_rows(n, shared=False)
+    _package(DATA / f"unshared_form_{n}.xlsx", unshared, f"A1:F{n}", excel_form=True)
     _package(DATA / "whole_columns.xlsx", _column_rows(), f"A1:F{COLUMN_ROWS}", excel_form=False)
-    print(f"wrote excel_form_{n}.xlsx and whole_columns.xlsx")
+    print(f"wrote excel_form_{n}.xlsx, unshared_form_{n}.xlsx and whole_columns.xlsx")
 
 
 def _rows_of(name: str) -> int:
@@ -252,6 +267,16 @@ def child(case: str) -> None:
         wb = xlrecalc.load(DATA / "whole_columns.xlsx")
         t = time.perf_counter()
         out["value"] = repr(wb.value(f"Sheet1!F{int(arg) + 1}"))
+    elif kind in ("xlio", "feed"):  # every cell with its runs, alone or through a Loader
+        import xlio
+
+        with xlio.open(DATA / arg) as book:
+            loader = xlrecalc.Loader(book) if kind == "feed" else None
+            for sheet in (s for s in book.sheets if s.kind == "worksheet"):
+                for _ in loader.cells(sheet, rich=True) if loader else sheet.cells(rich=True):
+                    pass
+            out["opening"] = loader.opening if loader else None
+        wb = None
     elif kind in ("load", "loader"):
         path = DATA / arg
         if kind == "load":
@@ -298,7 +323,7 @@ def run(cases: list[str], sources: dict[str, str], rounds: int) -> None:
                 print(
                     f"{case:<36} {label:<6} round {k + 1}: {r['seconds']:8.3f} s "
                     f"{r['peak_mb']:7.0f} MB  templates {r['templates']}  "
-                    f"{r.get('values') or r.get('value')}",
+                    f"{r.get('values') or r.get('value') or r.get('opening')}",
                     flush=True,
                 )
 

@@ -15,6 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   reference of the formulas evaluated, branches not taken included), where `report` reads every sheet a lazy `Loader`
   left, and it equals the report's entry for the cell. Reading a range's values first and then each cell's status runs the report's passes once.
 
+### Changed
+- Reading formulas filled down a column without being shared (each cell holding its own text, as some programs
+  write them) computes their template keys about twice as fast: a formula whose text differs from one met before
+  in the same column only by rows moved with it takes that formula's key without scanning its text. A `Loader` fed
+  every cell of a 100,000-row sheet of 300,000 such formulas (`bench/values_bench.py`, `unshared_form_100000.xlsx`)
+  takes 1.31 to 1.33 s, from 1.47 to 1.50 s; reading the cells through `xlio` alone takes 0.83 s.
+
 ### Fixed
 - A cell depending on a circular reference keeps the value the file holds, as Excel keeps it (capture
   `circular_cached`), also where a `Loader` reads its sheet after the cycle was evaluated: such a cell was computed

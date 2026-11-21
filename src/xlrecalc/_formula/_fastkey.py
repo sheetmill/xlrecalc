@@ -34,8 +34,71 @@ _SCAN = re.compile(
 )
 
 
+_DIGITS = re.compile(r"\d+")
+_SPLIT = re.compile(r"(\d+)")
+_SHAPE_LIMIT = 4096
+# (the text's parts between its runs of digits, the column) -> (the row, each run of digits:
+# whether it is a relative row the key rewrites, its text and its value, and the key)
+_SHAPES: dict[tuple[tuple[str, ...], int], tuple[int, tuple[tuple[bool, str, int], ...], str]] = {}
+
+
 def raw_key(text: str, row: int, col: int) -> str:
-    """The raw-text template key of a formula (file form) in the 0-based cell (row, col)."""
+    """The raw-text template key of a formula (file form) in the 0-based cell (row, col).
+
+    Formulas filled down a column without being shared differ only in their digits. Two texts
+    with the same digits-free shape match the scan alike (a run of digits is a word character
+    on both sides of it, whatever its value), so where each relative row moved by the rows
+    between the two cells and stays on the sheet, and every other run of digits is the same, in
+    the same column, their keys are the same: the key of the first of a shape is kept and given
+    to the others without the scan. A bounded cache, emptied when full.
+    """
+    parts = _SPLIT.split(text)
+    shape = (tuple(parts[0::2]), col)
+    known = _SHAPES.get(shape)
+    if known is not None:
+        row0, runs, key = known
+        moved = row - row0
+        for digits, (relative, digits0, value0) in zip(parts[1::2], runs, strict=True):
+            if relative:
+                value = int(digits)
+                if value - value0 != moved or not 1 <= value <= _MAX_ROW:
+                    break
+            elif digits != digits0:
+                break
+        else:
+            return key
+    key = _raw_key(text, row, col)
+    if known is None:
+        if len(_SHAPES) >= _SHAPE_LIMIT:
+            _SHAPES.clear()
+        rows = _relative_rows(text)
+        _SHAPES[shape] = (
+            row,
+            tuple((m.start() in rows, m[0], int(m[0])) for m in _DIGITS.finditer(text)),
+            key,
+        )
+    return key
+
+
+def _relative_rows(text: str) -> set[int]:
+    """Where the runs of digits that the key rewrites as relative rows start in the text."""
+    starts: set[int] = set()
+    for m in _SCAN.finditer(text):
+        if m["cell"] is not None:
+            in_range = column_number(m["col"]) <= _MAX_COL and 1 <= int(m["row"]) <= _MAX_ROW
+            if in_range and not m["ra"]:
+                starts.add(m.start("row"))
+        elif m["rows"] is not None:
+            if 1 <= int(m["r1"]) <= _MAX_ROW and 1 <= int(m["r2"]) <= _MAX_ROW:
+                if not m["r1a"]:
+                    starts.add(m.start("r1"))
+                if not m["r2a"]:
+                    starts.add(m.start("r2"))
+    return starts
+
+
+def _raw_key(text: str, row: int, col: int) -> str:
+    """:func:`raw_key` by the scan alone."""
     r1, c1 = row + 1, col + 1
 
     def rewrite(m: re.Match[str]) -> str:

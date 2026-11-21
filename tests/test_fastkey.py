@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import random
 import re
 
 import pytest
@@ -86,3 +87,79 @@ def test_references_the_tokenizer_reads_as_names_stay_text():
     assert raw_key("A1", 0, 0) != raw_key("A1", 1, 0)
     assert raw_key("A1", 0, 0) == raw_key("A2", 1, 0)
     assert raw_key("$A$1", 0, 0) == raw_key("$A$1", 7, 3)
+
+
+def _fills(seed: int) -> list[tuple[str, int, int]]:
+    """Corpus formulas filled to random cells (most in their own column), and the edge cases."""
+    from xlrecalc._formula._fastkey import translate
+
+    rng = random.Random(seed)
+    out: list[tuple[str, int, int]] = []
+    texts = [t.removeprefix("=") for t in CORPUS] + list(EDGES)
+    for text in texts:
+        r0, c0 = rng.randint(0, 2000), rng.randint(0, 60)
+        for _ in range(12):
+            r = rng.choice([rng.randint(0, 1048575), r0 + rng.randint(-3, 3)])
+            c = c0 if rng.random() < 0.7 else rng.randint(0, 16383)
+            r = min(max(r, 0), 1048575)
+            out.append((translate(text, r0, c0, r, c) if rng.random() < 0.8 else text, r, c))
+    return out
+
+
+EDGES = (
+    "A1048576+1",  # moved down a row, past the sheet: the text stays text
+    "A1048577+1",
+    "A1#+1",  # a "#" between runs of digits
+    "A#1+1",
+    "A$5+B5",  # an absolute row stays
+    "3:5+$3:$5",
+    "LOG10(A5)",  # digits in a name
+    'A5&"A5"',
+    "'Sheet 2'!A5",
+    "A05+1",
+)
+
+
+@pytest.mark.parametrize("seed", range(3))
+def test_the_shape_cache_gives_the_scan_s_key(seed: int) -> None:
+    """A formula's raw key is the scan's, whether its shape was met before or not."""
+    from xlrecalc._formula import _fastkey
+
+    _fastkey._SHAPES.clear()
+    for text, row, col in _fills(seed):
+        assert raw_key(text, row, col) == _fastkey._raw_key(text, row, col), (text, row, col)
+
+
+def test_a_relative_row_moved_off_the_sheet_is_not_its_shape_s_key() -> None:
+    from xlrecalc._formula import _fastkey
+
+    _fastkey._SHAPES.clear()
+    assert raw_key("A1048575+1", 1048573, 1) == _fastkey._raw_key("A1048575+1", 1048573, 1)
+    assert raw_key("A1048576+1", 1048574, 1) == "\x1eR[1]C[-1]\x1e+1"
+    assert raw_key("A1048577+1", 1048575, 1) == "A1048577+1"  # past the sheet: a name
+    assert raw_key("A1#+1", 0, 0) != raw_key("A#1+1", 0, 0)
+
+
+def test_the_shape_cache_is_bounded() -> None:
+    from xlrecalc._formula import _fastkey
+
+    _fastkey._SHAPES.clear()
+    for i in range(_fastkey._SHAPE_LIMIT + 10):
+        raw_key("A1+" + "x" * (i % 50) + str(i) + "y" * (i // 50), 0, 0)
+        assert len(_fastkey._SHAPES) <= _fastkey._SHAPE_LIMIT
+
+
+@pytest.mark.parametrize(
+    ("first", "second"),
+    [("A5+5", "A6+6"), ("A$5+B5", "A$6+B6"), ("$3:$5+A3", "$4:$6+A4")],
+)
+def test_a_number_that_moves_with_the_row_but_is_not_a_relative_row(
+    first: str, second: str
+) -> None:
+    """A constant or an absolute row that happens to change by the rows moved is another key."""
+    from xlrecalc._formula import _fastkey
+
+    _fastkey._SHAPES.clear()
+    assert raw_key(first, 4, 1) == _fastkey._raw_key(first, 4, 1)
+    assert raw_key(second, 5, 1) == _fastkey._raw_key(second, 5, 1)
+    assert raw_key(first, 4, 1) != raw_key(second, 5, 1)
