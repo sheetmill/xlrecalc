@@ -4675,6 +4675,35 @@ def iteration_steps() -> list[Case]:
     return cases
 
 
+_RATE_TILES = ((60, 7), (70, 5), (138, 1.5), (58, 8), (62, 7), (72, 5), (94, 3), (60, 8), (68, 6),
+               (64, 7), (122, 2), (84, 4), (62, 8), (66, 7), (86, 4), (78, 5), (64, 8), (68, 7),
+               (74, 6), (66, 8), (70, 7), (82, 5), (76, 6), (92, 4))  # fmt: skip
+"""(n, guess) of RATE(n,-200,120*n): Newton's paths of 128 to 152 steps, none overshooting."""
+
+
+def rate_method() -> list[Case]:
+    """``RATE`` where its limits decide the outcome: ``RATE(n,-1,n/2)`` for n from 100 to 2000;
+    loans from far guesses whose Newton paths take 128 to 152 steps; and two families of
+    negative guesses whose steps multiply the equation's value by from about 20 to about 60,000
+    before converging (``RATE(4,0,-1000,1100)`` from -0.47 to -0.75, ``RATE(12,0,-1000,2000)``
+    from -0.05 to -0.30, each by 0.01)."""
+    cases = [
+        Case("n", "RATE({1},-1,{2})", (n, n / 2))
+        for n in (100.0, 200.0, 300.0, 500.0, 700.0, 1000.0, 1200.0, 1500.0, 2000.0)
+    ]
+    form = "RATE({1},{2},{3},{4},0,{5})"
+    cases += [
+        Case("limit", form, (float(n), -200.0, 120.0 * n, 0.0, float(g))) for n, g in _RATE_TILES
+    ]
+    cases += [
+        Case("growth", form, (4.0, 0.0, -1000.0, 1100.0, round(-k / 100, 2))) for k in range(47, 76)
+    ]
+    cases += [
+        Case("growth", form, (12.0, 0.0, -1000.0, 2000.0, round(-k / 100, 2))) for k in range(5, 31)
+    ]
+    return cases
+
+
 # Whole columns and rows ----------------------------------------------------------------------
 #
 # References to whole columns and rows, where the cells past the data count: sizes, blanks counted,
@@ -4829,4 +4858,5 @@ SUITES = {
     "whole_columns": Suite(whole_columns, fixed=_WHOLE_TABLE),
     "convert_odd": Suite(convert_odd),
     "iteration_steps": Suite(iteration_steps),
+    "rate_method": Suite(rate_method),
 }
