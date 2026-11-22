@@ -431,12 +431,13 @@ _IRR_STEPS = 29
 guesses without the root Excel reaches, and from 37 on a root is reached where Excel gives
 ``#NUM!`` (``IRR`` of -1 and 1E10)."""
 _RATE_STEPS = 140
-"""RATE's steps: from 139 to at least 160 give every captured outcome of ``iterative`` and
-``iteration_steps``; 138 and fewer leave three far guesses at ``#NUM!``, 200 solves five rows
-Excel gives ``#NUM!``."""
-_RATE_GROWTH = 1000.0
+"""RATE's steps: capture ``rate_method``'s loans solve where Newton's path takes 140 steps or
+fewer and give ``#NUM!`` from 141; ``iterative`` and ``iteration_steps`` agree."""
+_RATE_GROWTH = 45000.0
 """How much one step of ``RATE`` may multiply the equation's value before ``#NUM!``: a declared
-choice; no captured row tells apart the values from 5 to 1E9."""
+fit. In capture ``rate_method``, ``RATE(4,0,-1000,1100)`` is solved by Excel up to a growth of
+36,869 and is ``#NUM!`` from 57,488, which brackets it; ``RATE(12,0,-1000,2000)`` from -0.19 is
+``#NUM!`` at 22,620, which no single bound explains (QUIRKS.md). Excel's safeguard is open."""
 
 
 def _newton(fn: Any, guess: float, steps: int, tol: float = 1e-7) -> float | ErrorValue:

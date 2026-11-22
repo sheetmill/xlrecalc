@@ -48,6 +48,14 @@ _ITER_OUTCOME = (
     "IRR, RATE: from this guess Excel's iteration reaches a different result (another root, a "
     "rate where this iteration gives #NUM!, or the reverse; a double root left near 1E-7)"
 )
+_RATE_SAFEGUARD = (
+    "RATE: Excel gives #NUM! after a step that multiplies the equation's value by 22,620, which "
+    "the growth bound fitted to the other rows (45,000) allows; Excel's safeguard is open"
+)
+_RATE_LAST_DIGITS = (
+    "RATE: Excel stops at a step below 1E-7 on an iterate a little short of the root; its last "
+    "digits differ from this iteration's by about 1.07E-9 relative, just past the tolerance"
+)
 _XIRR = (
     "XIRR: Excel stops about 1E-8 (relative) from the root, sometimes after a bracketing "
     "search (results that are short binary fractions), and gives #NUM! for some flows a few "
@@ -833,6 +841,8 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("iterative", case): _ITER_NEAR_ZERO for case in _ITER_NEAR_ZERO_CASES},
     **{("iterative", case): _ITER_OUTCOME for case in _ITER_OUTCOME_CASES},
     **{("iterative", case): _XIRR for case in _XIRR_CASES},
+    ("rate_method", 77): _RATE_SAFEGUARD,
+    **{("rate_method", case): _RATE_LAST_DIGITS for case in (5, 22)},
     ("bonds", 2299): _YIELD_ZERO_COUPON,
     **{("bonds", case): _FEB29_MATURITY for case in (1999, 2004, 2006, 2007)},
     ("bonds", 2295): _PRICE_EXTREME,
@@ -935,6 +945,7 @@ SUITES = [
     "convert_pairs",
     "convert_odd",
     "iteration_steps",
+    "rate_method",
 ]
 
 

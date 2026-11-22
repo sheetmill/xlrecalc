@@ -311,8 +311,14 @@ not). An empty argument is `#N/A`.
   `iteration_steps` settles `IRR`'s limit of 29 steps (`IRR` of -1 and X is X - 1 up to 9E6 and
   `#NUM!` from 1E7, where this method needs 29 and 30 steps); its 22 `RATE` rows match, `RATE`
   being Newton's method on the equation's future-value form with its own limits (its docstring).
-  `RATE`'s last digits differ from Excel's within about 1E-13 relative. Iteration methods compared
-  with the capture, each in at most five variants of its parameters: Newton on the rate, on 1 +
-  rate and on 1 / (1 + rate), analytic and numerical derivatives, stops on the step or on the NPV,
-  20 to 100 iterations, damping. Excel's iteration is on the Roadmap (ARCHITECTURE.md §13). Each
-  row is listed in `tests/test_captures.py`.
+  Capture `rate_method` (88 rows) settles `RATE`'s limit of 140 steps and the stop at a rate of
+  -100%; its bound on how much one step may multiply the equation's value (45,000) is a declared
+  fit: it gives every outcome of `RATE(4,0,-1000,1100)`, which Excel solves up to a growth of
+  36,869 and refuses from 57,488, but `RATE(12,0,-1000,2000)` from -0.19 is `#NUM!` in Excel at a
+  growth of 22,620, which no single bound explains, and is listed. Excel's actual safeguard is
+  open. Two more rows are listed for their last digits, about 1.07E-9 relative from Excel's, just
+  past the tolerance; `RATE`'s other rows agree within it. Iteration methods compared with the
+  capture, each in at most five variants of its parameters: Newton on the rate, on 1 + rate and on
+  1 / (1 + rate), analytic and numerical derivatives, stops on the step or on the NPV, 20 to 100
+  iterations, damping. Excel's iteration is on the Roadmap (ARCHITECTURE.md §13). Each row is
+  listed in `tests/test_captures.py`.

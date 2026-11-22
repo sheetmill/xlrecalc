@@ -47,10 +47,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   gone.
 - `IRR` takes up to 29 Newton steps, where it took 20: from five more of the captured guesses (`iterative`) it reaches
   the root Excel gives, where it gave `#NUM!` or another root.
-- `RATE` gives Excel's outcome on every captured row (`iterative`, `iteration_steps`): Newton's method on the
-  future-value form of the equation, with `#NUM!` where a step reaches a rate of -100% or below or multiplies the
-  equation's value by more than 1000, and up to 140 steps, where it halved toward -100% on the present-value form in 20
-  steps. Its last digits differ from Excel's within about 1E-13 relative.
+- `RATE` is Newton's method on the future-value form of the equation, with `#NUM!` where a step reaches a rate of -100%
+  or below or multiplies the equation's value by more than 45,000, and up to 140 steps, where it halved toward -100% on
+  the present-value form in 20 steps. It gives Excel's outcome on every captured row of `iterative` and
+  `iteration_steps`, and on 87 of the 88 rows of the new capture `rate_method`; the growth bound is a declared fit, and
+  the row it leaves (`RATE(12,0,-1000,2000)` from -0.19) is listed. Two rows are listed for last digits about 1.07E-9
+  relative from Excel's.
 
 ## [0.8.1] - 2026-11-21
 
