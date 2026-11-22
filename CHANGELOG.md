@@ -20,8 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reading formulas filled down a column without being shared (each cell holding its own text, as some programs
   write them) computes their template keys about twice as fast: a formula whose text differs from one met before
   in the same column only by rows moved with it takes that formula's key without scanning its text. A `Loader` fed
-  every cell of a 100,000-row sheet of 300,000 such formulas (`bench/values_bench.py`, `unshared_form_100000.xlsx`)
-  takes 1.31 to 1.33 s, from 1.47 to 1.50 s; reading the cells through `xlio` alone takes 0.83 s.
+  every cell of a sheet of such formulas (`bench/values_bench.py`, `unshared_form_N.xlsx`, three formulas a row) takes
+  1.32 to 1.33 s for 100,000 rows, from 1.48 to 1.49 s, and 13.4 to 13.5 s for 1,000,000, from 15.2 to 15.3 s; reading
+  the same cells through `xlio` alone takes 0.83 s and 8.2 s. Shared formulas were already read once a formula.
 
 ### Fixed
 - A cell depending on a circular reference keeps the value the file holds, as Excel keeps it (capture

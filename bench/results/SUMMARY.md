@@ -235,3 +235,13 @@ read the same values.
 `COLUMN_FORMS`); reading one formula's value took 0 to 116 ms in 0.7.0, where 0.6.0 took 1.04 to
 3.73 s and 155 to 433 MB at peak (27 to 38 MB in 0.7.0). `engine_bench.py 1000000` changes A1
 and recomputes 1,000,005 cells in 5.11 and 5.16 s, where 0.6.0 took 5.23 and 5.25 s.
+
+Recording what a reader streams (cases `xlio:` and `feed:`, every cell with its runs, the `Loader` answering
+`opening`, `"none"` for both files), two rounds against 0.7.0, the same machine:
+
+| file | `xlio` alone | `Loader` fed, 0.8.0 | 0.7.0 |
+|---|---|---|---|
+| `unshared_form_100000.xlsx` | 0.83 s | 1.32, 1.33 s | 1.48, 1.49 s |
+| `excel_form_100000.xlsx` (shared) | 0.87 s | 1.092, 1.103 s | 1.105, 1.115 s |
+| `unshared_form_1000000.xlsx` | 8.20, 8.23 s | 13.43, 13.48 s (746, 753 MB) | 15.21, 15.30 s |
+| `excel_form_1000000.xlsx` (shared) | 8.57, 8.73 s | 11.10, 11.16 s (696 MB) | 11.17, 11.17 s |
