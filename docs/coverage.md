@@ -270,7 +270,7 @@ platform.
 | `INTERCEPT` | statistical | implemented | 24 | 24 | 0 | 4 ulps |  |
 | `INTRATE` | financial | implemented | 380 | 380 | 0 | 4 ulps |  |
 | `IPMT` | financial | implemented | 91 | 83 | 8 | 4 ulps |  |
-| `IRR` | financial | implemented | 182 | 149 | 33 | 1e-09 relative |  |
+| `IRR` | financial | implemented | 182 | 154 | 28 | 1e-09 relative |  |
 | `ISBLANK` | information | implemented | 35 | 35 | 0 |  |  |
 | `ISERR` | information | implemented | 18 | 18 | 0 |  |  |
 | `ISERROR` | information | implemented | 23 | 23 | 0 |  |  |

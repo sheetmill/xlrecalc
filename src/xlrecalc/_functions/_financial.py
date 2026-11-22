@@ -426,6 +426,11 @@ def VDB(
 # on 1 + rate, halving instead of stepping to 1 + rate <= 0, stopping when a step is below 1E-7,
 # #NUM! when it does not settle in time.
 
+_IRR_STEPS = 29
+"""IRR's steps: from 29 to 36 give every captured outcome of ``iterative``; 28 leave two far
+guesses without the root Excel reaches, and from 37 on a root is reached where Excel gives
+``#NUM!`` (``IRR`` of -1 and 1E10)."""
+
 
 def _newton(fn: Any, guess: float, steps: int, tol: float = 1e-7) -> float | ErrorValue:
     """A root of ``fn(t) -> (f, f')`` near ``1 + guess``, as a rate (``t - 1``)."""
@@ -476,7 +481,7 @@ def IRR(ctx: Context, values: Any, guess: Any = 0.1) -> Any:
         flows.append(v)
     if g <= -1:
         return VALUE
-    return _newton(_irr_npv(flows), g, 20)
+    return _newton(_irr_npv(flows), g, _IRR_STEPS)
 
 
 def _guess(guess: Any, ctx: Context) -> float | ErrorValue:
