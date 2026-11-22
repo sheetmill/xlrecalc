@@ -302,8 +302,8 @@ not). An empty argument is `#N/A`.
   ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1,
   §8.2): a relative tolerance of 1E-9, declared per function, since Excel's Newton iterates
   rest on its own NPV, whose last bits are not reproduced, and Excel guarantees its result only
-  to its documented stopping tolerance. Of the 402 rows of `iterative`, 328 match, exactly or
-  within the relative tolerance, and 74 are listed, all among its 352 rows of `IRR`, `XIRR` and
+  to its documented stopping tolerance. Of the 402 rows of `iterative`, 331 match, exactly or
+  within the relative tolerance, and 71 are listed, all among its 352 rows of `IRR`, `XIRR` and
   `RATE` (the other 50 are `NPV` and `MIRR`): from some guesses Excel's `IRR` and `RATE` reach
   another root, a rate where the package gives `#NUM!`, or the reverse; `XIRR` stops about 1E-8
   from the root (sometimes after what looks like a bracketing search); and three `IRR` results

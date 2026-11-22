@@ -22,8 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   through it, the prefixes applied last as one power of ten (captures `convert_pairs`, now compared, and
   `convert_family`). Fahrenheit to Réaumur multiplies by 0.8 before dividing by 1.8, as Excel does. The declared
   tolerance of 2 units in the last place is gone.
-- `IRR` takes up to 29 Newton steps, where it took 20: from five more of the captured guesses (`iterative`) it reaches
-  the root Excel gives, where it gave `#NUM!` or another root.
+- `IRR` and `RATE` take up to 29 Newton steps, where they took 20: from eight more of the captured guesses
+  (`iterative`) they reach the root Excel gives, where they gave `#NUM!` or another root.
 
 ## [0.8.1] - 2026-11-21
 

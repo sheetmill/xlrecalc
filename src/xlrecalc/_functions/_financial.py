@@ -430,6 +430,10 @@ _IRR_STEPS = 29
 """IRR's steps: from 29 to 36 give every captured outcome of ``iterative``; 28 leave two far
 guesses without the root Excel reaches, and from 37 on a root is reached where Excel gives
 ``#NUM!`` (``IRR`` of -1 and 1E10)."""
+_RATE_STEPS = 29
+"""RATE's steps: from 28 to 35 give every captured outcome of ``iterative``; from 36 on, a guess
+of -0.5 reaches a root where Excel gives ``#NUM!``. The present-value form of the equation keeps
+more of them than the future-value form at every limit tried (20 to 1000)."""
 
 
 def _newton(fn: Any, guess: float, steps: int, tol: float = 1e-7) -> float | ErrorValue:
@@ -584,7 +588,7 @@ def RATE(
         da = (-du * r - (1 - u)) / (r * r)
         return pv + pmt * (1 + r * k) * a + fv * u, pmt * (k * a + (1 + r * k) * da) + fv * du
 
-    return _newton(fn, g, 20)
+    return _newton(fn, g, _RATE_STEPS)
 
 
 # Closed forms (capture finance_family) ------------------------------------------------------
