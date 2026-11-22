@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import itertools
 import math
 import re
 from pathlib import Path
@@ -53,7 +54,10 @@ def test_no_other_list_of_volatile_functions() -> None:
 
 
 def _volatile_edit() -> tuple[str, dict[str, list[list[str]]]]:
-    """Capture ``volatile_edit``: its workbook part and its rows by variant."""
+    """Capture ``volatile_edit``: its workbook part and its rows by variant, each row as long as
+    the variant's steps make it."""
+    from capture.volatile_edit_cases import columns
+
     text = (Path(__file__).parent / "captures" / "volatile_edit.tsv").read_text(encoding="utf-8")
     lines = text.splitlines()
     workbook = next(line for line in lines if line.startswith("# workbook: "))[
@@ -63,6 +67,7 @@ def _volatile_edit() -> tuple[str, dict[str, list[list[str]]]]:
     for line in lines:
         if line and not line.startswith("#"):
             fields = line.split("\t")
+            assert len(fields) == 3 + columns(fields[0]), f"a row of {fields[0]}: {len(fields)}"
             rows.setdefault(fields[0], []).append(fields)
     return workbook, rows
 
@@ -77,16 +82,42 @@ VOLATILE_EDIT_DEVIATIONS = {
 }
 
 
+def _differ(shown: list[str], got: list[object], random: bool) -> bool:
+    """Whether the engine's values differ from those Excel showed at the steps both have ('-' and
+    ``None`` are steps without a reading). A random cell agrees when each value lies in [2, 3)
+    where Excel's does and changes where Excel's changes."""
+    pairs = [(s, g) for s, g in zip(shown, got, strict=True) if s != "-" and g is not None]
+    if not random:
+        return not all(
+            type(g) is float and math.isclose(g, float(s), rel_tol=1e-11)  # 15 digits shown
+            for s, g in pairs
+        )
+    if any(type(g) is not float for _, g in pairs):
+        return True
+    inside = [(2 <= float(s) < 3, 2 <= g < 3) for s, g in pairs]  # type: ignore[operator]
+    changed = [(a[0] != b[0], a[1] != b[1]) for a, b in itertools.pairwise(pairs)]
+    return any(x != y for x, y in inside + changed)
+
+
 @pytest.mark.parametrize("read_first", [False, True])
 @pytest.mark.parametrize("variant", list(_volatile_edit()[1]))
 def test_an_edit_recomputes_what_excel_recomputes(variant: str, read_first: bool) -> None:
-    """Capture ``volatile_edit``: each file as Excel saved and the probe planted it, opened, fully
-    calculated first where the variant asks, edited (C1, or A1, set to 2), then calculated in
-    full; every cell as Excel showed it at each step, but the deviations listed (strict: a
-    listed cell that matches fails)."""
+    """Capture ``volatile_edit``: each file as Excel saved and the probe planted it, opened, then
+    taken through the variant's steps (edits, ``recalculate()``, ``recalculate(full=True)``);
+    every cell as Excel showed it after each step, but the deviations listed (strict: a listed
+    cell that matches fails). In manual calculation a read evaluates what is stale, where Excel
+    shows the cached values until it calculates, so the reading after an edit there is skipped."""
     import io
 
-    from capture.volatile_edit_cases import EDITED, FULL_FIRST, FULL_ON_LOAD, VARIANTS
+    from capture.volatile_edit_cases import (
+        FULL_ON_LOAD,
+        MANUAL,
+        NAMES,
+        RANDOM,
+        VARIANTS,
+        edit,
+        steps,
+    )
 
     import xlrecalc
     from tests.xlsx_files import package
@@ -94,40 +125,41 @@ def test_an_edit_recomputes_what_excel_recomputes(variant: str, read_first: bool
     workbook, rows = _volatile_edit()
     if variant in FULL_ON_LOAD:
         workbook = workbook.replace("<calcPr ", '<calcPr fullCalcOnLoad="1" ', 1)
+    if variant in MANUAL:
+        workbook = workbook.replace("<calcPr ", '<calcPr calcMode="manual" ', 1)
     cells = rows[variant]
     name = VARIANTS[variant][1]
-    names = (
-        ""
-        if name is None
-        else '<definedNames><definedName name="vn">'
-        + name.replace('"', "&quot;")
-        + "</definedName></definedNames>"
+    defined = {**({} if name is None else {"vn": name}), **NAMES.get(variant, {})}
+    names = "".join(
+        f'<definedName name="{key}">' + text.replace('"', "&quot;") + "</definedName>"
+        for key, text in defined.items()
     )
     data = package(
         f'<row r="1">{"".join(c[2] for c in cells)}</row>',
-        workbook_extra=workbook + names,
+        workbook_extra=workbook + (f"<definedNames>{names}</definedNames>" if names else ""),
         sheets='<sheet name="probe" sheetId="1" r:id="rId1"/>',
     )
     wb = xlrecalc.load(io.BytesIO(data))
     refs = [c[1] for c in cells]
-    unread = [None] * len(refs)
-    steps: list[list[object]] = [[wb.value(r) for r in refs] if read_first else unread]
-    if variant in FULL_FIRST:
-        wb.recalculate(full=True)
-        steps.append([wb.value(r) for r in refs])
-    else:
-        steps.append(unread)
-    wb.set(EDITED.get(variant, "probe!C1"), 2)
-    steps.append([wb.value(r) for r in refs])
-    wb.recalculate(full=True)
-    steps.append([wb.value(r) for r in refs])
-    differ = set()
-    for i, c in enumerate(cells):
-        for step in range(4):
-            got = steps[step][i]
-            if got is None or c[3 + step] == "-":
+    unread: list[object] = [None] * len(refs)
+    got: list[list[object]] = [[wb.value(r) for r in refs] if read_first else unread]
+    after = steps(variant)
+    if after[0] != "full":
+        got.append(unread)
+    for step in after:
+        if step == "full":
+            wb.recalculate(full=True)
+        elif step == "calc":
+            wb.recalculate()
+        else:
+            wb.set(*edit(step))
+            if variant in MANUAL:
+                got.append(unread)
                 continue
-            shown = float(c[3 + step])  # AppleScript's text of the value: 15 digits
-            if not (type(got) is float and math.isclose(got, shown, rel_tol=1e-11)):
-                differ.add((variant, c[1]))
+        got.append([wb.value(r) for r in refs])
+    differ = {
+        (variant, c[1])
+        for i, c in enumerate(cells)
+        if _differ(c[3:], [g[i] for g in got], (variant, c[1]) in RANDOM)
+    }
     assert differ == {d for d in VOLATILE_EDIT_DEVIATIONS if d[0] == variant}
