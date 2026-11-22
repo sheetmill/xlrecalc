@@ -10,7 +10,7 @@ import math
 from functools import cmp_to_key
 from typing import Any
 
-from xlrecalc._arrays import ArrayLimitError, broadcast, to_array
+from xlrecalc._arrays import ArrayLimitError, Padded, broadcast, to_array
 from xlrecalc._coerce import scalar, to_bool, to_number
 from xlrecalc._compare import compare
 from xlrecalc._formula import MISSING
@@ -38,6 +38,54 @@ def _grid(a: Any) -> Grid:
     if isinstance(a, tuple):
         return a
     return ((a,),)
+
+
+def _rows(a: Any, ctx: Any) -> Grid | Padded:
+    """An array argument as rows; a tall range whose data stops early, padded.
+
+    A :class:`Padded` holds its rows with data, then one fill for the rest (ARCHITECTURE.md §7.7).
+    """
+    if type(a) is Padded:
+        return a
+    pad = getattr(ctx, "arr_padded", None)
+    if isinstance(a, Ref) and pad is not None and not a.is_cell():
+        a = pad(a)
+        if type(a) is Padded:
+            return a
+    return _grid(a)
+
+
+def _dense(a: Any, ctx: Any) -> Any:
+    """A padded array in full, for code that reads every cell; anything else as it is."""
+    return a.dense(getattr(ctx, "max_array_cells", None)) if type(a) is Padded else a
+
+
+def _shape(g: Grid | Padded) -> tuple[int, int]:
+    return (g.rows, g.cols) if isinstance(g, Padded) else (len(g), len(g[0]))
+
+
+def _row(g: Grid | Padded, i: int) -> tuple[Any, ...]:
+    """Row ``i`` of rows or of a padded array."""
+    if isinstance(g, Padded):
+        return g.head[i] if i < len(g.head) else (g.fill,) * g.cols
+    return g[i]
+
+
+def _height(grids: list[Grid | Padded]) -> int:
+    """The rows that may differ from the fill: the tallest head, or every row of a dense one."""
+    return max(len(g.head) if isinstance(g, Padded) else len(g) for g in grids)
+
+
+def _expand(ctx: Any, order: list[int], fill_at: int, copies: int, width: int) -> list[int]:
+    """``order`` with the index ``fill_at`` standing for ``copies`` fill rows.
+
+    The result is a dense array of that many rows, so the limit on an array's cells applies.
+    """
+    _limit(ctx, len(order) - 1 + copies, width)
+    out: list[int] = []
+    for i in order:
+        out.extend([i] * copies if i == fill_at else [i])
+    return out
 
 
 def _shown(v: Any) -> Any:
@@ -389,7 +437,9 @@ def _flag(v: Any, ctx: Any) -> bool | ErrorValue:
 # UNIQUE ----------------------------------------------------------------------------------------
 
 
-@function("_XLFN.UNIQUE", "array", "raw", "raw", min_args=1, category=C, makes_array=True)
+@function(
+    "_XLFN.UNIQUE", "array", "raw", "raw", min_args=1, category=C, makes_array=True, padded=True
+)
 def UNIQUE(ctx: Any, array: Any, by_col: Any = MISSING, exactly_once: Any = MISSING) -> Any:
     """Distinct rows (or columns) in the order they first appear; text compares without case."""
     cols, once = _flag(by_col, ctx), _flag(exactly_once, ctx)
@@ -397,13 +447,19 @@ def UNIQUE(ctx: Any, array: Any, by_col: Any = MISSING, exactly_once: Any = MISS
         return cols
     if isinstance(once, ErrorValue):
         return once
-    grid = _grid(array)
-    lines = list(zip(*grid, strict=True)) if cols else list(grid)
+    grid = _rows(array, ctx)
+    fill: list[tuple[tuple[Any, ...], int]] = []  # the fill row and how many rows hold it
+    if type(grid) is Padded and not cols:
+        lines = list(grid.head)
+        fill.append(((grid.fill,) * grid.cols, grid.rows - len(grid.head)))
+    else:
+        grid = _dense(grid, ctx)
+        lines = list(zip(*grid, strict=True)) if cols else list(grid)
     counts: dict[tuple[Any, ...], int] = {}
     first: dict[tuple[Any, ...], tuple[Any, ...]] = {}
-    for line in lines:
+    for line, times in [(line, 1) for line in lines] + fill:
         key = tuple(_same_key(v) for v in line)
-        counts[key] = counts.get(key, 0) + 1
+        counts[key] = counts.get(key, 0) + times
         first.setdefault(key, line)
     kept = [first[k] for k in first if not once or counts[k] == 1]
     if not kept:
@@ -427,7 +483,15 @@ def _index_list(v: Any, ctx: Any, default: float) -> list[float] | ErrorValue:
 
 
 @function(
-    "_XLFN._XLWS.SORT", "array", "raw", "raw", "raw", min_args=1, category=C, makes_array=True
+    "_XLFN._XLWS.SORT",
+    "array",
+    "raw",
+    "raw",
+    "raw",
+    min_args=1,
+    category=C,
+    makes_array=True,
+    padded=True,
 )
 def SORT(
     ctx: Any,
@@ -440,10 +504,16 @@ def SORT(
     cols = _flag(by_col, ctx)
     if isinstance(cols, ErrorValue):
         return cols
-    grid = _grid(array)
-    lines = list(zip(*grid, strict=True)) if cols else list(grid)
-    indexes = _index_list(sort_index, ctx, 1.0)
-    orders = _index_list(sort_order, ctx, 1.0)
+    grid = _rows(array, ctx)
+    copies = 0  # a padded array: its fill rows sort as one line, the last, put back after
+    if type(grid) is Padded and not cols:
+        lines = [*grid.head, (grid.fill,) * grid.cols]
+        copies = grid.rows - len(grid.head)
+    else:
+        grid = _dense(grid, ctx)
+        lines = list(zip(*grid, strict=True)) if cols else list(grid)
+    indexes = _index_list(_dense(sort_index, ctx), ctx, 1.0)
+    orders = _index_list(_dense(sort_order, ctx), ctx, 1.0)
     if isinstance(indexes, ErrorValue):
         return indexes
     if isinstance(orders, ErrorValue):
@@ -458,7 +528,10 @@ def SORT(
         if not 1 <= index <= width or order not in (1.0, -1.0):
             return VALUE
         keys.append(([line[int(index) - 1] for line in lines], int(order)))
-    out = tuple(tuple(_shown(v) for v in line) for line in _sorted(lines, keys, ctx))
+    ranked = _sorted(list(range(len(lines))), keys, ctx)
+    if copies:
+        ranked = _expand(ctx, ranked, len(lines) - 1, copies, width)
+    out = tuple(tuple(_shown(v) for v in lines[i]) for i in ranked)
     return tuple(zip(*out, strict=True)) if cols else out
 
 
@@ -472,47 +545,79 @@ def SORT(
     cycle=2,
     category=C,
     makes_array=True,
+    padded=True,
 )
 def SORTBY(ctx: Any, array: Any, *rest: Any) -> Any:
     """Rows (or columns) of ``array`` in order of other arrays, each with its own direction."""
-    grid = _grid(array)
-    keys: list[tuple[list[Any], int]] = []
+    grid = _rows(array, ctx)
+    rows, width = _shape(grid)
+    keys: list[tuple[Grid | Padded, int]] = []
     by_col: bool | None = None
     for k in range(0, len(rest), 2):
-        by = _grid(rest[k])
+        by = _rows(rest[k], ctx)
         order = _count(rest[k + 1], ctx, 1.0) if k + 1 < len(rest) else 1.0
         if isinstance(order, ErrorValue):
             return order
         if math.trunc(order) not in (1, -1):
             return VALUE
-        if len(by) == 1 and len(by[0]) == len(grid[0]) and len(grid[0]) > 1:
-            cols, values = True, list(by[0])
-        elif len(by[0]) == 1 and len(by) == len(grid):
-            cols, values = False, [row[0] for row in by]
+        by_rows, by_cols = _shape(by)
+        if by_rows == 1 and by_cols == width and width > 1:
+            cols = True
+        elif by_cols == 1 and by_rows == rows:
+            cols = False
         else:
             return VALUE
         if by_col is not None and cols != by_col:
             return VALUE
         by_col = cols
-        keys.append((values, math.trunc(order)))
-    lines = list(zip(*grid, strict=True)) if by_col else list(grid)
-    out = tuple(tuple(_shown(v) for v in line) for line in _sorted(lines, keys, ctx))
+        keys.append((by, math.trunc(order)))
+    grids = [grid, *(by for by, _ in keys)]
+    height = rows if by_col else _height(grids)
+    if height == rows:  # every row read: no fill line
+        grid = _dense(grid, ctx)
+        lines = list(zip(*grid, strict=True)) if by_col else list(grid)
+        values = [_dense(by, ctx) for by, _ in keys]
+        columns = [list(v[0]) if by_col else [row[0] for row in v] for v in values]
+    else:  # the rows past every head hold each array's fill: one line, the last
+        lines = [_row(grid, i) for i in range(height + 1)]
+        columns = [[_row(by, i)[0] for i in range(height + 1)] for by, _ in keys]
+    ranked = _sorted(
+        list(range(len(lines))),
+        [(c, direction) for c, (_, direction) in zip(columns, keys, strict=True)],
+        ctx,
+    )
+    if height < rows:
+        ranked = _expand(ctx, ranked, height, rows - height, width)
+    out = tuple(tuple(_shown(v) for v in lines[i]) for i in ranked)
     return tuple(zip(*out, strict=True)) if by_col else out
 
 
 # FILTER ----------------------------------------------------------------------------------------
 
 
-@function("_XLFN._XLWS.FILTER", "array", "array", "array", min_args=2, category=C, makes_array=True)
+@function(
+    "_XLFN._XLWS.FILTER",
+    "array",
+    "array",
+    "array",
+    min_args=2,
+    category=C,
+    makes_array=True,
+    padded=True,
+)
 def FILTER(ctx: Any, array: Any, include: Any, if_empty: Any = MISSING) -> Any:
     """The rows (or columns) whose ``include`` is TRUE or a number other than 0."""
     if include is MISSING:
         return VALUE
-    grid, test = _grid(array), _grid(include)
-    if len(test[0]) == 1 and len(test) == len(grid):
-        flags, cols = [row[0] for row in test], False
-    elif len(test) == 1 and len(test[0]) == len(grid[0]):
-        flags, cols = list(test[0]), True
+    grid, test = _rows(array, ctx), _rows(include, ctx)
+    (rows, width), (test_rows, test_cols) = _shape(grid), _shape(test)
+    if test_cols == 1 and test_rows == rows:
+        cols = False
+        height = _height([grid, test])
+        flags = [_row(test, i)[0] for i in range(min(height + 1, rows))]
+    elif test_rows == 1 and test_cols == width:
+        cols, height = True, rows
+        flags = list(_dense(test, ctx)[0])
     else:
         return VALUE
     keep = []
@@ -522,11 +627,18 @@ def FILTER(ctx: Any, array: Any, include: Any, if_empty: Any = MISSING) -> Any:
         if isinstance(v, str):
             return VALUE
         keep.append(v is not BLANK and v is not MISSING and bool(v))
-    lines = list(zip(*grid, strict=True)) if cols else list(grid)
-    kept = [line for line, k in zip(lines, keep, strict=True) if k]
+    if cols:
+        lines = list(zip(*_dense(grid, ctx), strict=True))
+        kept = [line for line, k in zip(lines, keep, strict=True) if k]
+    else:  # past ``height`` every row is the fill row, kept or not as the fill flag says
+        kept = [_row(grid, i) for i, k in enumerate(keep[:height]) if k]
+        if height < rows and keep[height]:
+            _limit(ctx, len(kept) + rows - height, width)
+            kept += [_row(grid, height)] * (rows - height)
     if not kept:
         if if_empty is MISSING:
             return CALC
+        if_empty = _dense(if_empty, ctx)
         return if_empty if not isinstance(if_empty, Ref) else to_array(if_empty)
     out = tuple(tuple(_shown(v) for v in line) for line in kept)
     return tuple(zip(*out, strict=True)) if cols else out

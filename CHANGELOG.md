@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- `SORT`, `SORTBY`, `UNIQUE`, `FILTER`, `TAKE` and `DROP` read a whole-column argument as its rows with data and one
+  fill value for the rows below, as `SUMPRODUCT` does, and give the same result as before: `UNIQUE` and a `FILTER` whose
+  fill fails no longer make a million-row array, and `SORT` sorts one line for the fill rows. The whole-column capture
+  of the dynamic-array functions is compared in 4.4 s, where it took 10.8 s.
+
 ### Fixed
 - A cell volatile only through a defined name, whose cached value a trusting load kept (unmarked `ca="1"`, not computed
   since), depends on what its own text and the plain names in it refer to, not on a volatile name's references, as in

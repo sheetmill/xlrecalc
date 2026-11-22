@@ -867,8 +867,9 @@ computes `SUMPRODUCT` over whole columns without making the array (capture `arra
 **Padded arrays.** A range taller than 4,096 rows whose data stops in its upper half, made into an
 array where only operators, element-wise functions (`ISBLANK`, `ISNUMBER`, `ISTEXT`, `ISERROR`,
 `ISNA`, `ISLOGICAL`, `LEN`, `ABS`) and `IF` lie between it and a function that reads padded arrays
-(`SUMPRODUCT`, `INDEX`, `LOOKUP`, `XMATCH`, `ROWS` and `COLUMNS`, and `SUM`, `COUNT`, `COUNTA`,
-`MIN`, `MAX`, `AND`, `OR` and `MATCH` in an array context), is a `Padded` array: the rows down to
+(`SUMPRODUCT`, `INDEX`, `LOOKUP`, `XMATCH`, `ROWS` and `COLUMNS`, the dynamic-array functions
+`SORT`, `SORTBY`, `UNIQUE`, `FILTER`, `TAKE` and `DROP`, and `SUM`, `COUNT`, `COUNTA`, `MIN`,
+`MAX`, `AND`, `OR` and `MATCH` in an array context), is a `Padded` array: the rows down to
 the last one holding anything, and one fill value for every cell below. An operator, an
 element-wise function or `IF` applies to each element of the rows and once to the fill (over
 several padded arrays of one size, to the tallest of their rows), so `D!A:A="x"` is the comparison
@@ -879,7 +880,13 @@ times as there are fill cells, or once where repetition cannot change the result
 exact search tests the fill once, at its first position (`XMATCH` searching back, at its last; a
 blank key or a bisection makes `XMATCH`'s array dense); a bisection (`MATCH` with match type 1 or
 -1, `LOOKUP`) indexes into the fill's run as if it were there; `INDEX` reads one element where it
-is, and makes the array dense when it returns a whole row or column. The limit counts the rows it
+is, and makes the array dense when it returns a whole row or column. The dynamic-array functions
+take the fill rows as one line: `UNIQUE` counts it as many times as there are fill rows, `SORT` and
+`SORTBY` sort it among the rows with data and put the fill rows back in its place, `FILTER` keeps
+all or none of them as the fill's flag says, and `TAKE` and `DROP` slice the rows and the fill;
+their result is dense, as a spill writes each cell, and stops at the limit on an array's cells
+where the dense computation would, and an array read as a list or a result (an index, a count,
+`if_empty`) is dense too. The limit counts the rows it
 makes, not the range's height. The compiler decides where a padded array may appear: it marks the
 `array` and `raw` arguments of a function that reads them and keeps the mark only through operators
 and the calls of element-wise functions, so no other function, nor `IF`, `LET` or a spill, ever
@@ -1514,12 +1521,9 @@ After 0.8.1, in this order: an order, not a promise or a date.
 1. A `Loader` that also reads sheets lazily where the opening rule answers `"some"`: the static
    dependents of the `ca="1"` cells found from the formulas-only reading, so that only the
    sheets holding them or their precedents are read, if the corpus shows enough such files.
-2. Padded arrays (§7.7) inside the dynamic-array functions: `SORT`, `SORTBY`, `UNIQUE`,
-   `FILTER`, `TAKE` and `DROP` reading a whole-column argument as a padded array and returning
-   the same dense result, faster, checked as `tests/test_padded.py` checks the others (padded
-   and dense, bit for bit). Then, if profiling shows the need, padded results (a `FILTER` whose
-   fill passes, `SORT` of a whole column), which the compiler's containment, the spill and the
-   writer would have to carry.
+2. Padded results of the dynamic-array functions (§7.7), if profiling shows the need: a
+   `FILTER` whose fill passes, `SORT` of a whole column, which the compiler's containment, the
+   spill and the writer would have to carry.
 3. Unions of ranges together with arrays of references, which QUIRKS.md lists as not
    computed.
 4. The functions still absent, by family, each family's captures first: bonds with odd periods, the regression arrays (`TREND`, `GROWTH`, `LOGEST`) and

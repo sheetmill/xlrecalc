@@ -19,7 +19,7 @@ import math
 from collections.abc import Callable, Sequence
 from typing import Any
 
-from xlrecalc._arrays import broadcast, to_array
+from xlrecalc._arrays import Padded, broadcast, to_array
 from xlrecalc._coerce import scalar
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._dynamic import (
@@ -29,6 +29,7 @@ from xlrecalc._functions._dynamic import (
     VALUE,
     Grid,
     _count,
+    _dense,
     _flag,
     _grid,
     _limit,
@@ -181,6 +182,7 @@ def _span(n: int, size: int, take: bool) -> tuple[int, int]:
 
 def _take_drop(ctx: Any, given: tuple[Any, ...], ranges: bool, take: bool) -> Any:
     core = _take if take else _drop
+    given = (given[0], *(_dense(a, ctx) for a in given[1:]))  # the counts in full
     lifted = _spread(ctx, core, given, (1, 2), ranges)
     if lifted is not None:
         return lifted
@@ -196,8 +198,8 @@ def _take_drop(ctx: Any, given: tuple[Any, ...], ranges: bool, take: bool) -> An
             return n
         counts.append(n)
     counts += [None] * (2 - len(counts))
-    if isinstance(array, Ref):
-        size = (array.rows, array.columns)
+    if isinstance(array, Ref | Padded):  # a padded array: its rows with data, then one fill
+        size = (array.rows, array.columns) if isinstance(array, Ref) else (array.rows, array.cols)
     else:
         array = _grid(array)
         size = (len(array), len(array[0]))
@@ -213,6 +215,11 @@ def _take_drop(ctx: Any, given: tuple[Any, ...], ranges: bool, take: bool) -> An
             array.source, array.sheet, array.r1 + r1, array.c1 + c1,
             array.r1 + r2 - 1, array.c1 + c2 - 1,
         )  # fmt: skip
+    if isinstance(array, Padded):
+        _limit(ctx, r2 - r1, c2 - c1)  # the dense result
+        head = [row[c1:c2] for row in array.head[r1:r2]]
+        fill_rows = max(0, r2 - max(r1, len(array.head)))
+        return _shown_grid(head + [(array.fill,) * (c2 - c1)] * fill_rows)
     return _shown_grid([row[c1:c2] for row in array[r1:r2]])
 
 
@@ -226,8 +233,8 @@ def _drop(ctx: Any, given: tuple[Any, ...], ranges: bool) -> Any:
     return _take_drop(ctx, given, ranges, take=False)
 
 
-_register("_XLFN.TAKE", _take, "array", "raw", "raw", min_args=2)
-_register("_XLFN.DROP", _drop, "array", "raw", "raw", min_args=2)
+_register("_XLFN.TAKE", _take, "array", "raw", "raw", min_args=2, padded=True)
+_register("_XLFN.DROP", _drop, "array", "raw", "raw", min_args=2, padded=True)
 
 
 # EXPAND ---------------------------------------------------------------------------------------

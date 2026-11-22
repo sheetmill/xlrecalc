@@ -240,3 +240,169 @@ def test_searches_that_reach_the_fill(formula: str, monkeypatch: pytest.MonkeyPa
     padded = _values(cells, [formula])
     monkeypatch.setattr(Engine, "arr_padded", Engine.arr)
     assert same(padded[0], _values(cells, [formula])[0])
+
+
+COUNTS = ["5", "60", "61", "70", "150", "199", "200", "250", "-5", "-61", "-150", "-199", "0"]
+"""Row counts for ``TAKE`` and ``DROP``: inside the data, at its end, into the fill, past it."""
+
+
+def _dynamic(rng: random.Random) -> str:
+    """``UNIQUE``, ``SORT``, ``SORTBY``, ``FILTER``, ``TAKE`` or ``DROP`` over operands, bare
+    ranges included; their keys and flags often equal the fill (``x=""``, ``--(x="")``)."""
+    width = rng.choice((1, 1, 2))
+    array = _operand(rng, width, rng.randrange(3))
+    form = rng.randrange(6)
+    if form == 0:
+        extra = rng.choice(["", ",,TRUE", ",TRUE", ",FALSE,FALSE"])
+        return f"_xlfn.UNIQUE({array}{extra})"
+    if form == 1:
+        index, order = rng.randint(1, width), rng.choice(["1", "-1"])
+        extra = rng.choice(["", f",{index}", f",{index},{order}", f",{index},{order},FALSE"])
+        return f"_xlfn._xlws.SORT({array}{extra})"
+    if form == 2:
+        keys = [f"{_operand(rng, 1, rng.randrange(3))},{rng.choice(['1', '-1'])}"]
+        if rng.random() < 0.4:
+            keys.append(f"{_operand(rng, 1, rng.randrange(3))},{rng.choice(['1', '-1'])}")
+        return f"_xlfn.SORTBY({array},{','.join(keys)})"
+    if form == 3:
+        test = _operand(rng, 1, 1 + rng.randrange(2))
+        extra = rng.choice(["", ',"none"', ",0"])
+        return f"_xlfn._xlws.FILTER({array},{test}{extra})"
+    name = rng.choice(["_xlfn.TAKE", "_xlfn.DROP"])
+    columns = rng.choice(["", f",{rng.choice(['1', '-1', str(width)])}"])
+    return f"{name}({array},{rng.choice(COUNTS)}{columns})"
+
+
+def _results(
+    cells: list[tuple[int, int, object]],
+    formulas: list[str],
+    limit: int | None = None,
+    rows: int = 201,
+) -> list[object]:
+    """Every cell of each formula's result: each a legacy array formula over ``rows`` by 2."""
+    e = Engine(Quirks.EXCEL, max_array_cells=limit)
+    s = e.add_sheet("d")
+    for r, c, v in cells:
+        e.sheets[s].set(r, c, v)  # type: ignore[arg-type]
+    for i, f in enumerate(formulas):
+        col = 10 + 2 * i
+        e.set_formula(s, 0, col, f, array=(False, (0, col, rows - 1, col + 1)))
+    e.recalculate(full=True)
+    return [
+        e.get(s, r, 10 + 2 * i + c)
+        for i in range(len(formulas))
+        for r in range(rows)
+        for c in (0, 1)
+    ]
+
+
+@pytest.mark.parametrize("seed", range(24))
+def test_dynamic_functions_padded_and_dense_agree(
+    seed: int, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """``UNIQUE``, ``SORT``, ``SORTBY``, ``FILTER``, ``TAKE`` and ``DROP`` read a padded array
+    and give, cell for cell, what they give over the dense one: the blank counted once, blanks
+    and errors in their order, a fill that sorts among the data or passes the filter."""
+    rng = random.Random(1000 + seed)
+    cells = _sheet(rng, full=seed % 2 == 1)
+    formulas = [_dynamic(rng) for _ in range(30)]
+    monkeypatch.setattr(engine_module, "_PAD_ROWS", 64)
+    padded = _results(cells, formulas)
+    monkeypatch.setattr(Engine, "arr_padded", Engine.arr)
+    dense = _results(cells, formulas)
+    per = 201 * 2
+    wrong = [
+        formulas[k // per]
+        for k, (p, d) in enumerate(zip(padded, dense, strict=True))
+        if not same(p, d)
+    ]
+    assert sorted(set(wrong)) == []
+
+
+@pytest.mark.parametrize(
+    "formula",
+    [
+        "_xlfn.UNIQUE(A1:A200)",
+        '_xlfn.UNIQUE(A1:A200&"",,TRUE)',
+        "_xlfn._xlws.SORT(A1:A200)",
+        "_xlfn._xlws.SORT(-A1:B200,2,-1)",
+        '_xlfn.SORTBY(A1:A200,B1:B200="",-1)',
+        '_xlfn._xlws.FILTER(A1:A200,B1:B200="")',
+        "_xlfn._xlws.FILTER(A1:B200,ISNUMBER(A1:A200))",
+        "_xlfn.TAKE(A1:A200*1,150)",
+        '_xlfn.DROP(A1:A200&"",-61)',
+    ],
+)
+def test_each_dynamic_function_reads_a_padded_array(
+    formula: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The comparison above is not vacuous: each function is given a padded array."""
+    made: list[Padded] = []
+    original = Engine.arr_padded
+
+    def spy(self: Engine, v: object) -> object:
+        out = original(self, v)
+        if type(out) is Padded:
+            made.append(out)
+        return out
+
+    monkeypatch.setattr(engine_module, "_PAD_ROWS", 64)
+    monkeypatch.setattr(Engine, "arr_padded", spy)
+    _results([(r, c, float(r % 7)) for r in range(10) for c in (0, 1)], [formula])
+    assert made
+
+
+OTHER_ARGUMENTS = [
+    '_xlfn.TAKE(A1:A200,--(B1:B200=""))',
+    '_xlfn.DROP(A1:B200,1,--(B1:B200=""))',
+    '_xlfn.UNIQUE(A1:A200,B1:B200="")',
+    '_xlfn.UNIQUE(A1:A200,,B1:B200="")',
+    '_xlfn._xlws.SORT(A1:A200,--(B1:B200=""))',
+    '_xlfn._xlws.SORT(A1:A200,1,--(B1:B200=""))',
+    '_xlfn._xlws.SORT(A1:A200,1,1,B1:B200="")',
+    '_xlfn.SORTBY(A1:A200,B1:B200,--(B1:B200=""))',
+    '_xlfn._xlws.FILTER(A1:A200,ISNUMBER(A1:A200)*0,B1:B200&"")',
+]
+"""Padded arrays where the functions read one value (an array there is ``#VALUE!``, padded or
+not), a list (made dense), or the result when nothing passes (made dense)."""
+
+
+def test_other_arguments_padded_and_dense_agree(monkeypatch: pytest.MonkeyPatch) -> None:
+    rng = random.Random(7)
+    cells = _sheet(rng, full=False)
+    monkeypatch.setattr(engine_module, "_PAD_ROWS", 64)
+    padded = _results(cells, OTHER_ARGUMENTS)
+    monkeypatch.setattr(Engine, "arr_padded", Engine.arr)
+    dense = _results(cells, OTHER_ARGUMENTS)
+    per = 201 * 2
+    wrong = {
+        OTHER_ARGUMENTS[k // per]
+        for k, (p, d) in enumerate(zip(padded, dense, strict=True))
+        if not same(p, d)
+    }
+    assert wrong == set()
+
+
+LIMITED = [
+    "_xlfn._xlws.SORT(A1:A200)",
+    "_xlfn.SORTBY(A1:A200,B1:B200)",
+    "_xlfn._xlws.FILTER(A1:A200,ISBLANK(A1:A200)=ISBLANK(A1:A200))",
+    "_xlfn.TAKE(A1:A200*1,180)",
+    "_xlfn.DROP(A1:A200*1,10)",
+    "_xlfn.UNIQUE(A1:A200)",
+    "_xlfn.TAKE(A1:A200*1,50)",
+]
+"""Results over the limit of 150 cells (the first five) and under it (the last two)."""
+
+
+def test_a_result_past_the_limit_stops_as_a_dense_one_does(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A padded array is within the limit where its dense form is not; a result made dense from
+    it must stop where the dense computation stops, at the limit on an array's cells."""
+    cells = [(r, c, float(r % 7)) for r in range(10) for c in (0, 1)]
+    monkeypatch.setattr(engine_module, "_PAD_ROWS", 64)
+    padded = _results(cells, LIMITED, limit=150, rows=1)[::2]
+    monkeypatch.setattr(Engine, "arr_padded", Engine.arr)
+    dense = _results(cells, LIMITED, limit=150, rows=1)[::2]
+    first = padded
+    assert [same(p, d) for p, d in zip(padded[:5], dense[:5], strict=True)] == [True] * 5
+    assert first[5:] == [0.0, 0.0]  # padded, these compute where the dense ones stop
