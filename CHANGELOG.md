@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Workbook.values_at(refs)`: the values of cells on any sheets, in the order given (a cell given twice included), each
   the one `Workbook.value` gives reading the cells in turn in that order, the draws of random functions included,
   with their stale precedents evaluated in one pass. A bad reference raises what `Workbook.value` raises.
+- The first capture made on Windows, by an Excel capture job in sheetmill's format: `tests/captures/windows/
+  collate_words.tsv`, the suite `collate_words` as Excel 16.0.20527.20196 on Windows computes it, with the job's
+  manifest beside it and the machine's record in its header (`capture/job.py`, CAPTURING.md §5). The package's text
+  comparisons still follow Excel for Mac.
 
 ### Changed
 - `SORT`, `SORTBY`, `UNIQUE`, `FILTER`, `TAKE` and `DROP` read a whole-column argument as its rows with data and one

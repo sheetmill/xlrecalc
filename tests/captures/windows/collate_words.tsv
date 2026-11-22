@@ -1,0 +1,2649 @@
+# suite: collate_words
+# generator: capture/suites.py:collate_words, capture/job.py
+# method: the job beside this file (collate_words.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "collate_words.xlsx": {
+#      "bytes": 52942,
+#      "sha256": "c712a522e2ff61fbab3575fb400085307101da4eb6297cd4543a480149d1c617"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261122-124502-collate-words",
+#    "manifest_sha256": "a491a66ea9900ed2fbe0e923a0ced7c591868146fac8825b79d955bdbe83e7e3",
+#    "runner_version": "0.1.20"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+collate_words	lt	1	{1}<{2}	('co-op', 'coop')	b	False
+collate_words	lt	2	{1}<{2}	('co-op', 'co--op')	b	True
+collate_words	lt	3	{1}<{2}	('co-op', '-coop')	b	True
+collate_words	lt	4	{1}<{2}	('co-op', 'coop-')	b	False
+collate_words	lt	5	{1}<{2}	('co-op', "co'op")	b	False
+collate_words	lt	6	{1}<{2}	('co-op', 'coops')	b	True
+collate_words	lt	7	{1}<{2}	('co-op', 'a-b')	b	False
+collate_words	lt	8	{1}<{2}	('co-op', 'ab')	b	False
+collate_words	lt	9	{1}<{2}	('co-op', 'aa')	b	False
+collate_words	lt	10	{1}<{2}	('co-op', "a'b")	b	False
+collate_words	lt	11	{1}<{2}	('co-op', 'a b')	b	False
+collate_words	lt	12	{1}<{2}	('co-op', '-a')	b	False
+collate_words	lt	13	{1}<{2}	('co-op', 'a')	b	False
+collate_words	lt	14	{1}<{2}	('co-op', 'A')	b	False
+collate_words	lt	15	{1}<{2}	('co-op', 'aB')	b	False
+collate_words	lt	16	{1}<{2}	('co-op', 'Ab')	b	False
+collate_words	lt	17	{1}<{2}	('co-op', 'AB')	b	False
+collate_words	lt	18	{1}<{2}	('co-op', 'ae')	b	False
+collate_words	lt	19	{1}<{2}	('co-op', 'æ')	b	False
+collate_words	lt	20	{1}<{2}	('co-op', 'Æ')	b	False
+collate_words	lt	21	{1}<{2}	('co-op', 'AE')	b	False
+collate_words	lt	22	{1}<{2}	('co-op', 'ss')	b	True
+collate_words	lt	23	{1}<{2}	('co-op', 'ß')	b	True
+collate_words	lt	24	{1}<{2}	('co-op', 'SS')	b	True
+collate_words	lt	25	{1}<{2}	('co-op', 'oe')	b	True
+collate_words	lt	26	{1}<{2}	('co-op', 'œ')	b	True
+collate_words	lt	27	{1}<{2}	('co-op', 'Œ')	b	True
+collate_words	lt	28	{1}<{2}	('co-op', 'a9')	b	False
+collate_words	lt	29	{1}<{2}	('co-op', 'a10')	b	False
+collate_words	lt	30	{1}<{2}	('co-op', 'a1')	b	False
+collate_words	lt	31	{1}<{2}	('co-op', 'a01')	b	False
+collate_words	lt	32	{1}<{2}	('co-op', 'résumé')	b	True
+collate_words	lt	33	{1}<{2}	('co-op', 'resume')	b	True
+collate_words	lt	34	{1}<{2}	('co-op', 'Resume')	b	True
+collate_words	lt	35	{1}<{2}	('co-op', 'naïve')	b	True
+collate_words	lt	36	{1}<{2}	('co-op', 'naive')	b	True
+collate_words	lt	37	{1}<{2}	('co-op', 'a_b')	b	False
+collate_words	lt	38	{1}<{2}	('co-op', 'a.b')	b	False
+collate_words	lt	39	{1}<{2}	('co-op', 'a/b')	b	False
+collate_words	lt	40	{1}<{2}	('coop', 'co-op')	b	True
+collate_words	lt	41	{1}<{2}	('coop', 'co--op')	b	True
+collate_words	lt	42	{1}<{2}	('coop', '-coop')	b	True
+collate_words	lt	43	{1}<{2}	('coop', 'coop-')	b	True
+collate_words	lt	44	{1}<{2}	('coop', "co'op")	b	True
+collate_words	lt	45	{1}<{2}	('coop', 'coops')	b	True
+collate_words	lt	46	{1}<{2}	('coop', 'a-b')	b	False
+collate_words	lt	47	{1}<{2}	('coop', 'ab')	b	False
+collate_words	lt	48	{1}<{2}	('coop', 'aa')	b	False
+collate_words	lt	49	{1}<{2}	('coop', "a'b")	b	False
+collate_words	lt	50	{1}<{2}	('coop', 'a b')	b	False
+collate_words	lt	51	{1}<{2}	('coop', '-a')	b	False
+collate_words	lt	52	{1}<{2}	('coop', 'a')	b	False
+collate_words	lt	53	{1}<{2}	('coop', 'A')	b	False
+collate_words	lt	54	{1}<{2}	('coop', 'aB')	b	False
+collate_words	lt	55	{1}<{2}	('coop', 'Ab')	b	False
+collate_words	lt	56	{1}<{2}	('coop', 'AB')	b	False
+collate_words	lt	57	{1}<{2}	('coop', 'ae')	b	False
+collate_words	lt	58	{1}<{2}	('coop', 'æ')	b	False
+collate_words	lt	59	{1}<{2}	('coop', 'Æ')	b	False
+collate_words	lt	60	{1}<{2}	('coop', 'AE')	b	False
+collate_words	lt	61	{1}<{2}	('coop', 'ss')	b	True
+collate_words	lt	62	{1}<{2}	('coop', 'ß')	b	True
+collate_words	lt	63	{1}<{2}	('coop', 'SS')	b	True
+collate_words	lt	64	{1}<{2}	('coop', 'oe')	b	True
+collate_words	lt	65	{1}<{2}	('coop', 'œ')	b	True
+collate_words	lt	66	{1}<{2}	('coop', 'Œ')	b	True
+collate_words	lt	67	{1}<{2}	('coop', 'a9')	b	False
+collate_words	lt	68	{1}<{2}	('coop', 'a10')	b	False
+collate_words	lt	69	{1}<{2}	('coop', 'a1')	b	False
+collate_words	lt	70	{1}<{2}	('coop', 'a01')	b	False
+collate_words	lt	71	{1}<{2}	('coop', 'résumé')	b	True
+collate_words	lt	72	{1}<{2}	('coop', 'resume')	b	True
+collate_words	lt	73	{1}<{2}	('coop', 'Resume')	b	True
+collate_words	lt	74	{1}<{2}	('coop', 'naïve')	b	True
+collate_words	lt	75	{1}<{2}	('coop', 'naive')	b	True
+collate_words	lt	76	{1}<{2}	('coop', 'a_b')	b	False
+collate_words	lt	77	{1}<{2}	('coop', 'a.b')	b	False
+collate_words	lt	78	{1}<{2}	('coop', 'a/b')	b	False
+collate_words	lt	79	{1}<{2}	('co--op', 'co-op')	b	False
+collate_words	lt	80	{1}<{2}	('co--op', 'coop')	b	False
+collate_words	lt	81	{1}<{2}	('co--op', '-coop')	b	True
+collate_words	lt	82	{1}<{2}	('co--op', 'coop-')	b	False
+collate_words	lt	83	{1}<{2}	('co--op', "co'op")	b	False
+collate_words	lt	84	{1}<{2}	('co--op', 'coops')	b	True
+collate_words	lt	85	{1}<{2}	('co--op', 'a-b')	b	False
+collate_words	lt	86	{1}<{2}	('co--op', 'ab')	b	False
+collate_words	lt	87	{1}<{2}	('co--op', 'aa')	b	False
+collate_words	lt	88	{1}<{2}	('co--op', "a'b")	b	False
+collate_words	lt	89	{1}<{2}	('co--op', 'a b')	b	False
+collate_words	lt	90	{1}<{2}	('co--op', '-a')	b	False
+collate_words	lt	91	{1}<{2}	('co--op', 'a')	b	False
+collate_words	lt	92	{1}<{2}	('co--op', 'A')	b	False
+collate_words	lt	93	{1}<{2}	('co--op', 'aB')	b	False
+collate_words	lt	94	{1}<{2}	('co--op', 'Ab')	b	False
+collate_words	lt	95	{1}<{2}	('co--op', 'AB')	b	False
+collate_words	lt	96	{1}<{2}	('co--op', 'ae')	b	False
+collate_words	lt	97	{1}<{2}	('co--op', 'æ')	b	False
+collate_words	lt	98	{1}<{2}	('co--op', 'Æ')	b	False
+collate_words	lt	99	{1}<{2}	('co--op', 'AE')	b	False
+collate_words	lt	100	{1}<{2}	('co--op', 'ss')	b	True
+collate_words	lt	101	{1}<{2}	('co--op', 'ß')	b	True
+collate_words	lt	102	{1}<{2}	('co--op', 'SS')	b	True
+collate_words	lt	103	{1}<{2}	('co--op', 'oe')	b	True
+collate_words	lt	104	{1}<{2}	('co--op', 'œ')	b	True
+collate_words	lt	105	{1}<{2}	('co--op', 'Œ')	b	True
+collate_words	lt	106	{1}<{2}	('co--op', 'a9')	b	False
+collate_words	lt	107	{1}<{2}	('co--op', 'a10')	b	False
+collate_words	lt	108	{1}<{2}	('co--op', 'a1')	b	False
+collate_words	lt	109	{1}<{2}	('co--op', 'a01')	b	False
+collate_words	lt	110	{1}<{2}	('co--op', 'résumé')	b	True
+collate_words	lt	111	{1}<{2}	('co--op', 'resume')	b	True
+collate_words	lt	112	{1}<{2}	('co--op', 'Resume')	b	True
+collate_words	lt	113	{1}<{2}	('co--op', 'naïve')	b	True
+collate_words	lt	114	{1}<{2}	('co--op', 'naive')	b	True
+collate_words	lt	115	{1}<{2}	('co--op', 'a_b')	b	False
+collate_words	lt	116	{1}<{2}	('co--op', 'a.b')	b	False
+collate_words	lt	117	{1}<{2}	('co--op', 'a/b')	b	False
+collate_words	lt	118	{1}<{2}	('-coop', 'co-op')	b	False
+collate_words	lt	119	{1}<{2}	('-coop', 'coop')	b	False
+collate_words	lt	120	{1}<{2}	('-coop', 'co--op')	b	False
+collate_words	lt	121	{1}<{2}	('-coop', 'coop-')	b	False
+collate_words	lt	122	{1}<{2}	('-coop', "co'op")	b	False
+collate_words	lt	123	{1}<{2}	('-coop', 'coops')	b	True
+collate_words	lt	124	{1}<{2}	('-coop', 'a-b')	b	False
+collate_words	lt	125	{1}<{2}	('-coop', 'ab')	b	False
+collate_words	lt	126	{1}<{2}	('-coop', 'aa')	b	False
+collate_words	lt	127	{1}<{2}	('-coop', "a'b")	b	False
+collate_words	lt	128	{1}<{2}	('-coop', 'a b')	b	False
+collate_words	lt	129	{1}<{2}	('-coop', '-a')	b	False
+collate_words	lt	130	{1}<{2}	('-coop', 'a')	b	False
+collate_words	lt	131	{1}<{2}	('-coop', 'A')	b	False
+collate_words	lt	132	{1}<{2}	('-coop', 'aB')	b	False
+collate_words	lt	133	{1}<{2}	('-coop', 'Ab')	b	False
+collate_words	lt	134	{1}<{2}	('-coop', 'AB')	b	False
+collate_words	lt	135	{1}<{2}	('-coop', 'ae')	b	False
+collate_words	lt	136	{1}<{2}	('-coop', 'æ')	b	False
+collate_words	lt	137	{1}<{2}	('-coop', 'Æ')	b	False
+collate_words	lt	138	{1}<{2}	('-coop', 'AE')	b	False
+collate_words	lt	139	{1}<{2}	('-coop', 'ss')	b	True
+collate_words	lt	140	{1}<{2}	('-coop', 'ß')	b	True
+collate_words	lt	141	{1}<{2}	('-coop', 'SS')	b	True
+collate_words	lt	142	{1}<{2}	('-coop', 'oe')	b	True
+collate_words	lt	143	{1}<{2}	('-coop', 'œ')	b	True
+collate_words	lt	144	{1}<{2}	('-coop', 'Œ')	b	True
+collate_words	lt	145	{1}<{2}	('-coop', 'a9')	b	False
+collate_words	lt	146	{1}<{2}	('-coop', 'a10')	b	False
+collate_words	lt	147	{1}<{2}	('-coop', 'a1')	b	False
+collate_words	lt	148	{1}<{2}	('-coop', 'a01')	b	False
+collate_words	lt	149	{1}<{2}	('-coop', 'résumé')	b	True
+collate_words	lt	150	{1}<{2}	('-coop', 'resume')	b	True
+collate_words	lt	151	{1}<{2}	('-coop', 'Resume')	b	True
+collate_words	lt	152	{1}<{2}	('-coop', 'naïve')	b	True
+collate_words	lt	153	{1}<{2}	('-coop', 'naive')	b	True
+collate_words	lt	154	{1}<{2}	('-coop', 'a_b')	b	False
+collate_words	lt	155	{1}<{2}	('-coop', 'a.b')	b	False
+collate_words	lt	156	{1}<{2}	('-coop', 'a/b')	b	False
+collate_words	lt	157	{1}<{2}	('coop-', 'co-op')	b	True
+collate_words	lt	158	{1}<{2}	('coop-', 'coop')	b	False
+collate_words	lt	159	{1}<{2}	('coop-', 'co--op')	b	True
+collate_words	lt	160	{1}<{2}	('coop-', '-coop')	b	True
+collate_words	lt	161	{1}<{2}	('coop-', "co'op")	b	True
+collate_words	lt	162	{1}<{2}	('coop-', 'coops')	b	True
+collate_words	lt	163	{1}<{2}	('coop-', 'a-b')	b	False
+collate_words	lt	164	{1}<{2}	('coop-', 'ab')	b	False
+collate_words	lt	165	{1}<{2}	('coop-', 'aa')	b	False
+collate_words	lt	166	{1}<{2}	('coop-', "a'b")	b	False
+collate_words	lt	167	{1}<{2}	('coop-', 'a b')	b	False
+collate_words	lt	168	{1}<{2}	('coop-', '-a')	b	False
+collate_words	lt	169	{1}<{2}	('coop-', 'a')	b	False
+collate_words	lt	170	{1}<{2}	('coop-', 'A')	b	False
+collate_words	lt	171	{1}<{2}	('coop-', 'aB')	b	False
+collate_words	lt	172	{1}<{2}	('coop-', 'Ab')	b	False
+collate_words	lt	173	{1}<{2}	('coop-', 'AB')	b	False
+collate_words	lt	174	{1}<{2}	('coop-', 'ae')	b	False
+collate_words	lt	175	{1}<{2}	('coop-', 'æ')	b	False
+collate_words	lt	176	{1}<{2}	('coop-', 'Æ')	b	False
+collate_words	lt	177	{1}<{2}	('coop-', 'AE')	b	False
+collate_words	lt	178	{1}<{2}	('coop-', 'ss')	b	True
+collate_words	lt	179	{1}<{2}	('coop-', 'ß')	b	True
+collate_words	lt	180	{1}<{2}	('coop-', 'SS')	b	True
+collate_words	lt	181	{1}<{2}	('coop-', 'oe')	b	True
+collate_words	lt	182	{1}<{2}	('coop-', 'œ')	b	True
+collate_words	lt	183	{1}<{2}	('coop-', 'Œ')	b	True
+collate_words	lt	184	{1}<{2}	('coop-', 'a9')	b	False
+collate_words	lt	185	{1}<{2}	('coop-', 'a10')	b	False
+collate_words	lt	186	{1}<{2}	('coop-', 'a1')	b	False
+collate_words	lt	187	{1}<{2}	('coop-', 'a01')	b	False
+collate_words	lt	188	{1}<{2}	('coop-', 'résumé')	b	True
+collate_words	lt	189	{1}<{2}	('coop-', 'resume')	b	True
+collate_words	lt	190	{1}<{2}	('coop-', 'Resume')	b	True
+collate_words	lt	191	{1}<{2}	('coop-', 'naïve')	b	True
+collate_words	lt	192	{1}<{2}	('coop-', 'naive')	b	True
+collate_words	lt	193	{1}<{2}	('coop-', 'a_b')	b	False
+collate_words	lt	194	{1}<{2}	('coop-', 'a.b')	b	False
+collate_words	lt	195	{1}<{2}	('coop-', 'a/b')	b	False
+collate_words	lt	196	{1}<{2}	("co'op", 'co-op')	b	True
+collate_words	lt	197	{1}<{2}	("co'op", 'coop')	b	False
+collate_words	lt	198	{1}<{2}	("co'op", 'co--op')	b	True
+collate_words	lt	199	{1}<{2}	("co'op", '-coop')	b	True
+collate_words	lt	200	{1}<{2}	("co'op", 'coop-')	b	False
+collate_words	lt	201	{1}<{2}	("co'op", 'coops')	b	True
+collate_words	lt	202	{1}<{2}	("co'op", 'a-b')	b	False
+collate_words	lt	203	{1}<{2}	("co'op", 'ab')	b	False
+collate_words	lt	204	{1}<{2}	("co'op", 'aa')	b	False
+collate_words	lt	205	{1}<{2}	("co'op", "a'b")	b	False
+collate_words	lt	206	{1}<{2}	("co'op", 'a b')	b	False
+collate_words	lt	207	{1}<{2}	("co'op", '-a')	b	False
+collate_words	lt	208	{1}<{2}	("co'op", 'a')	b	False
+collate_words	lt	209	{1}<{2}	("co'op", 'A')	b	False
+collate_words	lt	210	{1}<{2}	("co'op", 'aB')	b	False
+collate_words	lt	211	{1}<{2}	("co'op", 'Ab')	b	False
+collate_words	lt	212	{1}<{2}	("co'op", 'AB')	b	False
+collate_words	lt	213	{1}<{2}	("co'op", 'ae')	b	False
+collate_words	lt	214	{1}<{2}	("co'op", 'æ')	b	False
+collate_words	lt	215	{1}<{2}	("co'op", 'Æ')	b	False
+collate_words	lt	216	{1}<{2}	("co'op", 'AE')	b	False
+collate_words	lt	217	{1}<{2}	("co'op", 'ss')	b	True
+collate_words	lt	218	{1}<{2}	("co'op", 'ß')	b	True
+collate_words	lt	219	{1}<{2}	("co'op", 'SS')	b	True
+collate_words	lt	220	{1}<{2}	("co'op", 'oe')	b	True
+collate_words	lt	221	{1}<{2}	("co'op", 'œ')	b	True
+collate_words	lt	222	{1}<{2}	("co'op", 'Œ')	b	True
+collate_words	lt	223	{1}<{2}	("co'op", 'a9')	b	False
+collate_words	lt	224	{1}<{2}	("co'op", 'a10')	b	False
+collate_words	lt	225	{1}<{2}	("co'op", 'a1')	b	False
+collate_words	lt	226	{1}<{2}	("co'op", 'a01')	b	False
+collate_words	lt	227	{1}<{2}	("co'op", 'résumé')	b	True
+collate_words	lt	228	{1}<{2}	("co'op", 'resume')	b	True
+collate_words	lt	229	{1}<{2}	("co'op", 'Resume')	b	True
+collate_words	lt	230	{1}<{2}	("co'op", 'naïve')	b	True
+collate_words	lt	231	{1}<{2}	("co'op", 'naive')	b	True
+collate_words	lt	232	{1}<{2}	("co'op", 'a_b')	b	False
+collate_words	lt	233	{1}<{2}	("co'op", 'a.b')	b	False
+collate_words	lt	234	{1}<{2}	("co'op", 'a/b')	b	False
+collate_words	lt	235	{1}<{2}	('coops', 'co-op')	b	False
+collate_words	lt	236	{1}<{2}	('coops', 'coop')	b	False
+collate_words	lt	237	{1}<{2}	('coops', 'co--op')	b	False
+collate_words	lt	238	{1}<{2}	('coops', '-coop')	b	False
+collate_words	lt	239	{1}<{2}	('coops', 'coop-')	b	False
+collate_words	lt	240	{1}<{2}	('coops', "co'op")	b	False
+collate_words	lt	241	{1}<{2}	('coops', 'a-b')	b	False
+collate_words	lt	242	{1}<{2}	('coops', 'ab')	b	False
+collate_words	lt	243	{1}<{2}	('coops', 'aa')	b	False
+collate_words	lt	244	{1}<{2}	('coops', "a'b")	b	False
+collate_words	lt	245	{1}<{2}	('coops', 'a b')	b	False
+collate_words	lt	246	{1}<{2}	('coops', '-a')	b	False
+collate_words	lt	247	{1}<{2}	('coops', 'a')	b	False
+collate_words	lt	248	{1}<{2}	('coops', 'A')	b	False
+collate_words	lt	249	{1}<{2}	('coops', 'aB')	b	False
+collate_words	lt	250	{1}<{2}	('coops', 'Ab')	b	False
+collate_words	lt	251	{1}<{2}	('coops', 'AB')	b	False
+collate_words	lt	252	{1}<{2}	('coops', 'ae')	b	False
+collate_words	lt	253	{1}<{2}	('coops', 'æ')	b	False
+collate_words	lt	254	{1}<{2}	('coops', 'Æ')	b	False
+collate_words	lt	255	{1}<{2}	('coops', 'AE')	b	False
+collate_words	lt	256	{1}<{2}	('coops', 'ss')	b	True
+collate_words	lt	257	{1}<{2}	('coops', 'ß')	b	True
+collate_words	lt	258	{1}<{2}	('coops', 'SS')	b	True
+collate_words	lt	259	{1}<{2}	('coops', 'oe')	b	True
+collate_words	lt	260	{1}<{2}	('coops', 'œ')	b	True
+collate_words	lt	261	{1}<{2}	('coops', 'Œ')	b	True
+collate_words	lt	262	{1}<{2}	('coops', 'a9')	b	False
+collate_words	lt	263	{1}<{2}	('coops', 'a10')	b	False
+collate_words	lt	264	{1}<{2}	('coops', 'a1')	b	False
+collate_words	lt	265	{1}<{2}	('coops', 'a01')	b	False
+collate_words	lt	266	{1}<{2}	('coops', 'résumé')	b	True
+collate_words	lt	267	{1}<{2}	('coops', 'resume')	b	True
+collate_words	lt	268	{1}<{2}	('coops', 'Resume')	b	True
+collate_words	lt	269	{1}<{2}	('coops', 'naïve')	b	True
+collate_words	lt	270	{1}<{2}	('coops', 'naive')	b	True
+collate_words	lt	271	{1}<{2}	('coops', 'a_b')	b	False
+collate_words	lt	272	{1}<{2}	('coops', 'a.b')	b	False
+collate_words	lt	273	{1}<{2}	('coops', 'a/b')	b	False
+collate_words	lt	274	{1}<{2}	('a-b', 'co-op')	b	True
+collate_words	lt	275	{1}<{2}	('a-b', 'coop')	b	True
+collate_words	lt	276	{1}<{2}	('a-b', 'co--op')	b	True
+collate_words	lt	277	{1}<{2}	('a-b', '-coop')	b	True
+collate_words	lt	278	{1}<{2}	('a-b', 'coop-')	b	True
+collate_words	lt	279	{1}<{2}	('a-b', "co'op")	b	True
+collate_words	lt	280	{1}<{2}	('a-b', 'coops')	b	True
+collate_words	lt	281	{1}<{2}	('a-b', 'ab')	b	False
+collate_words	lt	282	{1}<{2}	('a-b', 'aa')	b	False
+collate_words	lt	283	{1}<{2}	('a-b', "a'b")	b	False
+collate_words	lt	284	{1}<{2}	('a-b', 'a b')	b	False
+collate_words	lt	285	{1}<{2}	('a-b', '-a')	b	False
+collate_words	lt	286	{1}<{2}	('a-b', 'a')	b	False
+collate_words	lt	287	{1}<{2}	('a-b', 'A')	b	False
+collate_words	lt	288	{1}<{2}	('a-b', 'aB')	b	False
+collate_words	lt	289	{1}<{2}	('a-b', 'Ab')	b	False
+collate_words	lt	290	{1}<{2}	('a-b', 'AB')	b	False
+collate_words	lt	291	{1}<{2}	('a-b', 'ae')	b	True
+collate_words	lt	292	{1}<{2}	('a-b', 'æ')	b	True
+collate_words	lt	293	{1}<{2}	('a-b', 'Æ')	b	True
+collate_words	lt	294	{1}<{2}	('a-b', 'AE')	b	True
+collate_words	lt	295	{1}<{2}	('a-b', 'ss')	b	True
+collate_words	lt	296	{1}<{2}	('a-b', 'ß')	b	True
+collate_words	lt	297	{1}<{2}	('a-b', 'SS')	b	True
+collate_words	lt	298	{1}<{2}	('a-b', 'oe')	b	True
+collate_words	lt	299	{1}<{2}	('a-b', 'œ')	b	True
+collate_words	lt	300	{1}<{2}	('a-b', 'Œ')	b	True
+collate_words	lt	301	{1}<{2}	('a-b', 'a9')	b	False
+collate_words	lt	302	{1}<{2}	('a-b', 'a10')	b	False
+collate_words	lt	303	{1}<{2}	('a-b', 'a1')	b	False
+collate_words	lt	304	{1}<{2}	('a-b', 'a01')	b	False
+collate_words	lt	305	{1}<{2}	('a-b', 'résumé')	b	True
+collate_words	lt	306	{1}<{2}	('a-b', 'resume')	b	True
+collate_words	lt	307	{1}<{2}	('a-b', 'Resume')	b	True
+collate_words	lt	308	{1}<{2}	('a-b', 'naïve')	b	True
+collate_words	lt	309	{1}<{2}	('a-b', 'naive')	b	True
+collate_words	lt	310	{1}<{2}	('a-b', 'a_b')	b	False
+collate_words	lt	311	{1}<{2}	('a-b', 'a.b')	b	False
+collate_words	lt	312	{1}<{2}	('a-b', 'a/b')	b	False
+collate_words	lt	313	{1}<{2}	('ab', 'co-op')	b	True
+collate_words	lt	314	{1}<{2}	('ab', 'coop')	b	True
+collate_words	lt	315	{1}<{2}	('ab', 'co--op')	b	True
+collate_words	lt	316	{1}<{2}	('ab', '-coop')	b	True
+collate_words	lt	317	{1}<{2}	('ab', 'coop-')	b	True
+collate_words	lt	318	{1}<{2}	('ab', "co'op")	b	True
+collate_words	lt	319	{1}<{2}	('ab', 'coops')	b	True
+collate_words	lt	320	{1}<{2}	('ab', 'a-b')	b	True
+collate_words	lt	321	{1}<{2}	('ab', 'aa')	b	False
+collate_words	lt	322	{1}<{2}	('ab', "a'b")	b	True
+collate_words	lt	323	{1}<{2}	('ab', 'a b')	b	False
+collate_words	lt	324	{1}<{2}	('ab', '-a')	b	False
+collate_words	lt	325	{1}<{2}	('ab', 'a')	b	False
+collate_words	lt	326	{1}<{2}	('ab', 'A')	b	False
+collate_words	lt	327	{1}<{2}	('ab', 'aB')	b	False
+collate_words	lt	328	{1}<{2}	('ab', 'Ab')	b	False
+collate_words	lt	329	{1}<{2}	('ab', 'AB')	b	False
+collate_words	lt	330	{1}<{2}	('ab', 'ae')	b	True
+collate_words	lt	331	{1}<{2}	('ab', 'æ')	b	True
+collate_words	lt	332	{1}<{2}	('ab', 'Æ')	b	True
+collate_words	lt	333	{1}<{2}	('ab', 'AE')	b	True
+collate_words	lt	334	{1}<{2}	('ab', 'ss')	b	True
+collate_words	lt	335	{1}<{2}	('ab', 'ß')	b	True
+collate_words	lt	336	{1}<{2}	('ab', 'SS')	b	True
+collate_words	lt	337	{1}<{2}	('ab', 'oe')	b	True
+collate_words	lt	338	{1}<{2}	('ab', 'œ')	b	True
+collate_words	lt	339	{1}<{2}	('ab', 'Œ')	b	True
+collate_words	lt	340	{1}<{2}	('ab', 'a9')	b	False
+collate_words	lt	341	{1}<{2}	('ab', 'a10')	b	False
+collate_words	lt	342	{1}<{2}	('ab', 'a1')	b	False
+collate_words	lt	343	{1}<{2}	('ab', 'a01')	b	False
+collate_words	lt	344	{1}<{2}	('ab', 'résumé')	b	True
+collate_words	lt	345	{1}<{2}	('ab', 'resume')	b	True
+collate_words	lt	346	{1}<{2}	('ab', 'Resume')	b	True
+collate_words	lt	347	{1}<{2}	('ab', 'naïve')	b	True
+collate_words	lt	348	{1}<{2}	('ab', 'naive')	b	True
+collate_words	lt	349	{1}<{2}	('ab', 'a_b')	b	False
+collate_words	lt	350	{1}<{2}	('ab', 'a.b')	b	False
+collate_words	lt	351	{1}<{2}	('ab', 'a/b')	b	False
+collate_words	lt	352	{1}<{2}	('aa', 'co-op')	b	True
+collate_words	lt	353	{1}<{2}	('aa', 'coop')	b	True
+collate_words	lt	354	{1}<{2}	('aa', 'co--op')	b	True
+collate_words	lt	355	{1}<{2}	('aa', '-coop')	b	True
+collate_words	lt	356	{1}<{2}	('aa', 'coop-')	b	True
+collate_words	lt	357	{1}<{2}	('aa', "co'op")	b	True
+collate_words	lt	358	{1}<{2}	('aa', 'coops')	b	True
+collate_words	lt	359	{1}<{2}	('aa', 'a-b')	b	True
+collate_words	lt	360	{1}<{2}	('aa', 'ab')	b	True
+collate_words	lt	361	{1}<{2}	('aa', "a'b")	b	True
+collate_words	lt	362	{1}<{2}	('aa', 'a b')	b	False
+collate_words	lt	363	{1}<{2}	('aa', '-a')	b	False
+collate_words	lt	364	{1}<{2}	('aa', 'a')	b	False
+collate_words	lt	365	{1}<{2}	('aa', 'A')	b	False
+collate_words	lt	366	{1}<{2}	('aa', 'aB')	b	True
+collate_words	lt	367	{1}<{2}	('aa', 'Ab')	b	True
+collate_words	lt	368	{1}<{2}	('aa', 'AB')	b	True
+collate_words	lt	369	{1}<{2}	('aa', 'ae')	b	True
+collate_words	lt	370	{1}<{2}	('aa', 'æ')	b	True
+collate_words	lt	371	{1}<{2}	('aa', 'Æ')	b	True
+collate_words	lt	372	{1}<{2}	('aa', 'AE')	b	True
+collate_words	lt	373	{1}<{2}	('aa', 'ss')	b	True
+collate_words	lt	374	{1}<{2}	('aa', 'ß')	b	True
+collate_words	lt	375	{1}<{2}	('aa', 'SS')	b	True
+collate_words	lt	376	{1}<{2}	('aa', 'oe')	b	True
+collate_words	lt	377	{1}<{2}	('aa', 'œ')	b	True
+collate_words	lt	378	{1}<{2}	('aa', 'Œ')	b	True
+collate_words	lt	379	{1}<{2}	('aa', 'a9')	b	False
+collate_words	lt	380	{1}<{2}	('aa', 'a10')	b	False
+collate_words	lt	381	{1}<{2}	('aa', 'a1')	b	False
+collate_words	lt	382	{1}<{2}	('aa', 'a01')	b	False
+collate_words	lt	383	{1}<{2}	('aa', 'résumé')	b	True
+collate_words	lt	384	{1}<{2}	('aa', 'resume')	b	True
+collate_words	lt	385	{1}<{2}	('aa', 'Resume')	b	True
+collate_words	lt	386	{1}<{2}	('aa', 'naïve')	b	True
+collate_words	lt	387	{1}<{2}	('aa', 'naive')	b	True
+collate_words	lt	388	{1}<{2}	('aa', 'a_b')	b	False
+collate_words	lt	389	{1}<{2}	('aa', 'a.b')	b	False
+collate_words	lt	390	{1}<{2}	('aa', 'a/b')	b	False
+collate_words	lt	391	{1}<{2}	("a'b", 'co-op')	b	True
+collate_words	lt	392	{1}<{2}	("a'b", 'coop')	b	True
+collate_words	lt	393	{1}<{2}	("a'b", 'co--op')	b	True
+collate_words	lt	394	{1}<{2}	("a'b", '-coop')	b	True
+collate_words	lt	395	{1}<{2}	("a'b", 'coop-')	b	True
+collate_words	lt	396	{1}<{2}	("a'b", "co'op")	b	True
+collate_words	lt	397	{1}<{2}	("a'b", 'coops')	b	True
+collate_words	lt	398	{1}<{2}	("a'b", 'a-b')	b	True
+collate_words	lt	399	{1}<{2}	("a'b", 'ab')	b	False
+collate_words	lt	400	{1}<{2}	("a'b", 'aa')	b	False
+collate_words	lt	401	{1}<{2}	("a'b", 'a b')	b	False
+collate_words	lt	402	{1}<{2}	("a'b", '-a')	b	False
+collate_words	lt	403	{1}<{2}	("a'b", 'a')	b	False
+collate_words	lt	404	{1}<{2}	("a'b", 'A')	b	False
+collate_words	lt	405	{1}<{2}	("a'b", 'aB')	b	False
+collate_words	lt	406	{1}<{2}	("a'b", 'Ab')	b	False
+collate_words	lt	407	{1}<{2}	("a'b", 'AB')	b	False
+collate_words	lt	408	{1}<{2}	("a'b", 'ae')	b	True
+collate_words	lt	409	{1}<{2}	("a'b", 'æ')	b	True
+collate_words	lt	410	{1}<{2}	("a'b", 'Æ')	b	True
+collate_words	lt	411	{1}<{2}	("a'b", 'AE')	b	True
+collate_words	lt	412	{1}<{2}	("a'b", 'ss')	b	True
+collate_words	lt	413	{1}<{2}	("a'b", 'ß')	b	True
+collate_words	lt	414	{1}<{2}	("a'b", 'SS')	b	True
+collate_words	lt	415	{1}<{2}	("a'b", 'oe')	b	True
+collate_words	lt	416	{1}<{2}	("a'b", 'œ')	b	True
+collate_words	lt	417	{1}<{2}	("a'b", 'Œ')	b	True
+collate_words	lt	418	{1}<{2}	("a'b", 'a9')	b	False
+collate_words	lt	419	{1}<{2}	("a'b", 'a10')	b	False
+collate_words	lt	420	{1}<{2}	("a'b", 'a1')	b	False
+collate_words	lt	421	{1}<{2}	("a'b", 'a01')	b	False
+collate_words	lt	422	{1}<{2}	("a'b", 'résumé')	b	True
+collate_words	lt	423	{1}<{2}	("a'b", 'resume')	b	True
+collate_words	lt	424	{1}<{2}	("a'b", 'Resume')	b	True
+collate_words	lt	425	{1}<{2}	("a'b", 'naïve')	b	True
+collate_words	lt	426	{1}<{2}	("a'b", 'naive')	b	True
+collate_words	lt	427	{1}<{2}	("a'b", 'a_b')	b	False
+collate_words	lt	428	{1}<{2}	("a'b", 'a.b')	b	False
+collate_words	lt	429	{1}<{2}	("a'b", 'a/b')	b	False
+collate_words	lt	430	{1}<{2}	('a b', 'co-op')	b	True
+collate_words	lt	431	{1}<{2}	('a b', 'coop')	b	True
+collate_words	lt	432	{1}<{2}	('a b', 'co--op')	b	True
+collate_words	lt	433	{1}<{2}	('a b', '-coop')	b	True
+collate_words	lt	434	{1}<{2}	('a b', 'coop-')	b	True
+collate_words	lt	435	{1}<{2}	('a b', "co'op")	b	True
+collate_words	lt	436	{1}<{2}	('a b', 'coops')	b	True
+collate_words	lt	437	{1}<{2}	('a b', 'a-b')	b	True
+collate_words	lt	438	{1}<{2}	('a b', 'ab')	b	True
+collate_words	lt	439	{1}<{2}	('a b', 'aa')	b	True
+collate_words	lt	440	{1}<{2}	('a b', "a'b")	b	True
+collate_words	lt	441	{1}<{2}	('a b', '-a')	b	False
+collate_words	lt	442	{1}<{2}	('a b', 'a')	b	False
+collate_words	lt	443	{1}<{2}	('a b', 'A')	b	False
+collate_words	lt	444	{1}<{2}	('a b', 'aB')	b	True
+collate_words	lt	445	{1}<{2}	('a b', 'Ab')	b	True
+collate_words	lt	446	{1}<{2}	('a b', 'AB')	b	True
+collate_words	lt	447	{1}<{2}	('a b', 'ae')	b	True
+collate_words	lt	448	{1}<{2}	('a b', 'æ')	b	True
+collate_words	lt	449	{1}<{2}	('a b', 'Æ')	b	True
+collate_words	lt	450	{1}<{2}	('a b', 'AE')	b	True
+collate_words	lt	451	{1}<{2}	('a b', 'ss')	b	True
+collate_words	lt	452	{1}<{2}	('a b', 'ß')	b	True
+collate_words	lt	453	{1}<{2}	('a b', 'SS')	b	True
+collate_words	lt	454	{1}<{2}	('a b', 'oe')	b	True
+collate_words	lt	455	{1}<{2}	('a b', 'œ')	b	True
+collate_words	lt	456	{1}<{2}	('a b', 'Œ')	b	True
+collate_words	lt	457	{1}<{2}	('a b', 'a9')	b	True
+collate_words	lt	458	{1}<{2}	('a b', 'a10')	b	True
+collate_words	lt	459	{1}<{2}	('a b', 'a1')	b	True
+collate_words	lt	460	{1}<{2}	('a b', 'a01')	b	True
+collate_words	lt	461	{1}<{2}	('a b', 'résumé')	b	True
+collate_words	lt	462	{1}<{2}	('a b', 'resume')	b	True
+collate_words	lt	463	{1}<{2}	('a b', 'Resume')	b	True
+collate_words	lt	464	{1}<{2}	('a b', 'naïve')	b	True
+collate_words	lt	465	{1}<{2}	('a b', 'naive')	b	True
+collate_words	lt	466	{1}<{2}	('a b', 'a_b')	b	True
+collate_words	lt	467	{1}<{2}	('a b', 'a.b')	b	True
+collate_words	lt	468	{1}<{2}	('a b', 'a/b')	b	True
+collate_words	lt	469	{1}<{2}	('-a', 'co-op')	b	True
+collate_words	lt	470	{1}<{2}	('-a', 'coop')	b	True
+collate_words	lt	471	{1}<{2}	('-a', 'co--op')	b	True
+collate_words	lt	472	{1}<{2}	('-a', '-coop')	b	True
+collate_words	lt	473	{1}<{2}	('-a', 'coop-')	b	True
+collate_words	lt	474	{1}<{2}	('-a', "co'op")	b	True
+collate_words	lt	475	{1}<{2}	('-a', 'coops')	b	True
+collate_words	lt	476	{1}<{2}	('-a', 'a-b')	b	True
+collate_words	lt	477	{1}<{2}	('-a', 'ab')	b	True
+collate_words	lt	478	{1}<{2}	('-a', 'aa')	b	True
+collate_words	lt	479	{1}<{2}	('-a', "a'b")	b	True
+collate_words	lt	480	{1}<{2}	('-a', 'a b')	b	True
+collate_words	lt	481	{1}<{2}	('-a', 'a')	b	False
+collate_words	lt	482	{1}<{2}	('-a', 'A')	b	False
+collate_words	lt	483	{1}<{2}	('-a', 'aB')	b	True
+collate_words	lt	484	{1}<{2}	('-a', 'Ab')	b	True
+collate_words	lt	485	{1}<{2}	('-a', 'AB')	b	True
+collate_words	lt	486	{1}<{2}	('-a', 'ae')	b	True
+collate_words	lt	487	{1}<{2}	('-a', 'æ')	b	True
+collate_words	lt	488	{1}<{2}	('-a', 'Æ')	b	True
+collate_words	lt	489	{1}<{2}	('-a', 'AE')	b	True
+collate_words	lt	490	{1}<{2}	('-a', 'ss')	b	True
+collate_words	lt	491	{1}<{2}	('-a', 'ß')	b	True
+collate_words	lt	492	{1}<{2}	('-a', 'SS')	b	True
+collate_words	lt	493	{1}<{2}	('-a', 'oe')	b	True
+collate_words	lt	494	{1}<{2}	('-a', 'œ')	b	True
+collate_words	lt	495	{1}<{2}	('-a', 'Œ')	b	True
+collate_words	lt	496	{1}<{2}	('-a', 'a9')	b	True
+collate_words	lt	497	{1}<{2}	('-a', 'a10')	b	True
+collate_words	lt	498	{1}<{2}	('-a', 'a1')	b	True
+collate_words	lt	499	{1}<{2}	('-a', 'a01')	b	True
+collate_words	lt	500	{1}<{2}	('-a', 'résumé')	b	True
+collate_words	lt	501	{1}<{2}	('-a', 'resume')	b	True
+collate_words	lt	502	{1}<{2}	('-a', 'Resume')	b	True
+collate_words	lt	503	{1}<{2}	('-a', 'naïve')	b	True
+collate_words	lt	504	{1}<{2}	('-a', 'naive')	b	True
+collate_words	lt	505	{1}<{2}	('-a', 'a_b')	b	True
+collate_words	lt	506	{1}<{2}	('-a', 'a.b')	b	True
+collate_words	lt	507	{1}<{2}	('-a', 'a/b')	b	True
+collate_words	lt	508	{1}<{2}	('a', 'co-op')	b	True
+collate_words	lt	509	{1}<{2}	('a', 'coop')	b	True
+collate_words	lt	510	{1}<{2}	('a', 'co--op')	b	True
+collate_words	lt	511	{1}<{2}	('a', '-coop')	b	True
+collate_words	lt	512	{1}<{2}	('a', 'coop-')	b	True
+collate_words	lt	513	{1}<{2}	('a', "co'op")	b	True
+collate_words	lt	514	{1}<{2}	('a', 'coops')	b	True
+collate_words	lt	515	{1}<{2}	('a', 'a-b')	b	True
+collate_words	lt	516	{1}<{2}	('a', 'ab')	b	True
+collate_words	lt	517	{1}<{2}	('a', 'aa')	b	True
+collate_words	lt	518	{1}<{2}	('a', "a'b")	b	True
+collate_words	lt	519	{1}<{2}	('a', 'a b')	b	True
+collate_words	lt	520	{1}<{2}	('a', '-a')	b	True
+collate_words	lt	521	{1}<{2}	('a', 'A')	b	False
+collate_words	lt	522	{1}<{2}	('a', 'aB')	b	True
+collate_words	lt	523	{1}<{2}	('a', 'Ab')	b	True
+collate_words	lt	524	{1}<{2}	('a', 'AB')	b	True
+collate_words	lt	525	{1}<{2}	('a', 'ae')	b	True
+collate_words	lt	526	{1}<{2}	('a', 'æ')	b	True
+collate_words	lt	527	{1}<{2}	('a', 'Æ')	b	True
+collate_words	lt	528	{1}<{2}	('a', 'AE')	b	True
+collate_words	lt	529	{1}<{2}	('a', 'ss')	b	True
+collate_words	lt	530	{1}<{2}	('a', 'ß')	b	True
+collate_words	lt	531	{1}<{2}	('a', 'SS')	b	True
+collate_words	lt	532	{1}<{2}	('a', 'oe')	b	True
+collate_words	lt	533	{1}<{2}	('a', 'œ')	b	True
+collate_words	lt	534	{1}<{2}	('a', 'Œ')	b	True
+collate_words	lt	535	{1}<{2}	('a', 'a9')	b	True
+collate_words	lt	536	{1}<{2}	('a', 'a10')	b	True
+collate_words	lt	537	{1}<{2}	('a', 'a1')	b	True
+collate_words	lt	538	{1}<{2}	('a', 'a01')	b	True
+collate_words	lt	539	{1}<{2}	('a', 'résumé')	b	True
+collate_words	lt	540	{1}<{2}	('a', 'resume')	b	True
+collate_words	lt	541	{1}<{2}	('a', 'Resume')	b	True
+collate_words	lt	542	{1}<{2}	('a', 'naïve')	b	True
+collate_words	lt	543	{1}<{2}	('a', 'naive')	b	True
+collate_words	lt	544	{1}<{2}	('a', 'a_b')	b	True
+collate_words	lt	545	{1}<{2}	('a', 'a.b')	b	True
+collate_words	lt	546	{1}<{2}	('a', 'a/b')	b	True
+collate_words	lt	547	{1}<{2}	('A', 'co-op')	b	True
+collate_words	lt	548	{1}<{2}	('A', 'coop')	b	True
+collate_words	lt	549	{1}<{2}	('A', 'co--op')	b	True
+collate_words	lt	550	{1}<{2}	('A', '-coop')	b	True
+collate_words	lt	551	{1}<{2}	('A', 'coop-')	b	True
+collate_words	lt	552	{1}<{2}	('A', "co'op")	b	True
+collate_words	lt	553	{1}<{2}	('A', 'coops')	b	True
+collate_words	lt	554	{1}<{2}	('A', 'a-b')	b	True
+collate_words	lt	555	{1}<{2}	('A', 'ab')	b	True
+collate_words	lt	556	{1}<{2}	('A', 'aa')	b	True
+collate_words	lt	557	{1}<{2}	('A', "a'b")	b	True
+collate_words	lt	558	{1}<{2}	('A', 'a b')	b	True
+collate_words	lt	559	{1}<{2}	('A', '-a')	b	True
+collate_words	lt	560	{1}<{2}	('A', 'a')	b	False
+collate_words	lt	561	{1}<{2}	('A', 'aB')	b	True
+collate_words	lt	562	{1}<{2}	('A', 'Ab')	b	True
+collate_words	lt	563	{1}<{2}	('A', 'AB')	b	True
+collate_words	lt	564	{1}<{2}	('A', 'ae')	b	True
+collate_words	lt	565	{1}<{2}	('A', 'æ')	b	True
+collate_words	lt	566	{1}<{2}	('A', 'Æ')	b	True
+collate_words	lt	567	{1}<{2}	('A', 'AE')	b	True
+collate_words	lt	568	{1}<{2}	('A', 'ss')	b	True
+collate_words	lt	569	{1}<{2}	('A', 'ß')	b	True
+collate_words	lt	570	{1}<{2}	('A', 'SS')	b	True
+collate_words	lt	571	{1}<{2}	('A', 'oe')	b	True
+collate_words	lt	572	{1}<{2}	('A', 'œ')	b	True
+collate_words	lt	573	{1}<{2}	('A', 'Œ')	b	True
+collate_words	lt	574	{1}<{2}	('A', 'a9')	b	True
+collate_words	lt	575	{1}<{2}	('A', 'a10')	b	True
+collate_words	lt	576	{1}<{2}	('A', 'a1')	b	True
+collate_words	lt	577	{1}<{2}	('A', 'a01')	b	True
+collate_words	lt	578	{1}<{2}	('A', 'résumé')	b	True
+collate_words	lt	579	{1}<{2}	('A', 'resume')	b	True
+collate_words	lt	580	{1}<{2}	('A', 'Resume')	b	True
+collate_words	lt	581	{1}<{2}	('A', 'naïve')	b	True
+collate_words	lt	582	{1}<{2}	('A', 'naive')	b	True
+collate_words	lt	583	{1}<{2}	('A', 'a_b')	b	True
+collate_words	lt	584	{1}<{2}	('A', 'a.b')	b	True
+collate_words	lt	585	{1}<{2}	('A', 'a/b')	b	True
+collate_words	lt	586	{1}<{2}	('aB', 'co-op')	b	True
+collate_words	lt	587	{1}<{2}	('aB', 'coop')	b	True
+collate_words	lt	588	{1}<{2}	('aB', 'co--op')	b	True
+collate_words	lt	589	{1}<{2}	('aB', '-coop')	b	True
+collate_words	lt	590	{1}<{2}	('aB', 'coop-')	b	True
+collate_words	lt	591	{1}<{2}	('aB', "co'op")	b	True
+collate_words	lt	592	{1}<{2}	('aB', 'coops')	b	True
+collate_words	lt	593	{1}<{2}	('aB', 'a-b')	b	True
+collate_words	lt	594	{1}<{2}	('aB', 'ab')	b	False
+collate_words	lt	595	{1}<{2}	('aB', 'aa')	b	False
+collate_words	lt	596	{1}<{2}	('aB', "a'b")	b	True
+collate_words	lt	597	{1}<{2}	('aB', 'a b')	b	False
+collate_words	lt	598	{1}<{2}	('aB', '-a')	b	False
+collate_words	lt	599	{1}<{2}	('aB', 'a')	b	False
+collate_words	lt	600	{1}<{2}	('aB', 'A')	b	False
+collate_words	lt	601	{1}<{2}	('aB', 'Ab')	b	False
+collate_words	lt	602	{1}<{2}	('aB', 'AB')	b	False
+collate_words	lt	603	{1}<{2}	('aB', 'ae')	b	True
+collate_words	lt	604	{1}<{2}	('aB', 'æ')	b	True
+collate_words	lt	605	{1}<{2}	('aB', 'Æ')	b	True
+collate_words	lt	606	{1}<{2}	('aB', 'AE')	b	True
+collate_words	lt	607	{1}<{2}	('aB', 'ss')	b	True
+collate_words	lt	608	{1}<{2}	('aB', 'ß')	b	True
+collate_words	lt	609	{1}<{2}	('aB', 'SS')	b	True
+collate_words	lt	610	{1}<{2}	('aB', 'oe')	b	True
+collate_words	lt	611	{1}<{2}	('aB', 'œ')	b	True
+collate_words	lt	612	{1}<{2}	('aB', 'Œ')	b	True
+collate_words	lt	613	{1}<{2}	('aB', 'a9')	b	False
+collate_words	lt	614	{1}<{2}	('aB', 'a10')	b	False
+collate_words	lt	615	{1}<{2}	('aB', 'a1')	b	False
+collate_words	lt	616	{1}<{2}	('aB', 'a01')	b	False
+collate_words	lt	617	{1}<{2}	('aB', 'résumé')	b	True
+collate_words	lt	618	{1}<{2}	('aB', 'resume')	b	True
+collate_words	lt	619	{1}<{2}	('aB', 'Resume')	b	True
+collate_words	lt	620	{1}<{2}	('aB', 'naïve')	b	True
+collate_words	lt	621	{1}<{2}	('aB', 'naive')	b	True
+collate_words	lt	622	{1}<{2}	('aB', 'a_b')	b	False
+collate_words	lt	623	{1}<{2}	('aB', 'a.b')	b	False
+collate_words	lt	624	{1}<{2}	('aB', 'a/b')	b	False
+collate_words	lt	625	{1}<{2}	('Ab', 'co-op')	b	True
+collate_words	lt	626	{1}<{2}	('Ab', 'coop')	b	True
+collate_words	lt	627	{1}<{2}	('Ab', 'co--op')	b	True
+collate_words	lt	628	{1}<{2}	('Ab', '-coop')	b	True
+collate_words	lt	629	{1}<{2}	('Ab', 'coop-')	b	True
+collate_words	lt	630	{1}<{2}	('Ab', "co'op")	b	True
+collate_words	lt	631	{1}<{2}	('Ab', 'coops')	b	True
+collate_words	lt	632	{1}<{2}	('Ab', 'a-b')	b	True
+collate_words	lt	633	{1}<{2}	('Ab', 'ab')	b	False
+collate_words	lt	634	{1}<{2}	('Ab', 'aa')	b	False
+collate_words	lt	635	{1}<{2}	('Ab', "a'b")	b	True
+collate_words	lt	636	{1}<{2}	('Ab', 'a b')	b	False
+collate_words	lt	637	{1}<{2}	('Ab', '-a')	b	False
+collate_words	lt	638	{1}<{2}	('Ab', 'a')	b	False
+collate_words	lt	639	{1}<{2}	('Ab', 'A')	b	False
+collate_words	lt	640	{1}<{2}	('Ab', 'aB')	b	False
+collate_words	lt	641	{1}<{2}	('Ab', 'AB')	b	False
+collate_words	lt	642	{1}<{2}	('Ab', 'ae')	b	True
+collate_words	lt	643	{1}<{2}	('Ab', 'æ')	b	True
+collate_words	lt	644	{1}<{2}	('Ab', 'Æ')	b	True
+collate_words	lt	645	{1}<{2}	('Ab', 'AE')	b	True
+collate_words	lt	646	{1}<{2}	('Ab', 'ss')	b	True
+collate_words	lt	647	{1}<{2}	('Ab', 'ß')	b	True
+collate_words	lt	648	{1}<{2}	('Ab', 'SS')	b	True
+collate_words	lt	649	{1}<{2}	('Ab', 'oe')	b	True
+collate_words	lt	650	{1}<{2}	('Ab', 'œ')	b	True
+collate_words	lt	651	{1}<{2}	('Ab', 'Œ')	b	True
+collate_words	lt	652	{1}<{2}	('Ab', 'a9')	b	False
+collate_words	lt	653	{1}<{2}	('Ab', 'a10')	b	False
+collate_words	lt	654	{1}<{2}	('Ab', 'a1')	b	False
+collate_words	lt	655	{1}<{2}	('Ab', 'a01')	b	False
+collate_words	lt	656	{1}<{2}	('Ab', 'résumé')	b	True
+collate_words	lt	657	{1}<{2}	('Ab', 'resume')	b	True
+collate_words	lt	658	{1}<{2}	('Ab', 'Resume')	b	True
+collate_words	lt	659	{1}<{2}	('Ab', 'naïve')	b	True
+collate_words	lt	660	{1}<{2}	('Ab', 'naive')	b	True
+collate_words	lt	661	{1}<{2}	('Ab', 'a_b')	b	False
+collate_words	lt	662	{1}<{2}	('Ab', 'a.b')	b	False
+collate_words	lt	663	{1}<{2}	('Ab', 'a/b')	b	False
+collate_words	lt	664	{1}<{2}	('AB', 'co-op')	b	True
+collate_words	lt	665	{1}<{2}	('AB', 'coop')	b	True
+collate_words	lt	666	{1}<{2}	('AB', 'co--op')	b	True
+collate_words	lt	667	{1}<{2}	('AB', '-coop')	b	True
+collate_words	lt	668	{1}<{2}	('AB', 'coop-')	b	True
+collate_words	lt	669	{1}<{2}	('AB', "co'op")	b	True
+collate_words	lt	670	{1}<{2}	('AB', 'coops')	b	True
+collate_words	lt	671	{1}<{2}	('AB', 'a-b')	b	True
+collate_words	lt	672	{1}<{2}	('AB', 'ab')	b	False
+collate_words	lt	673	{1}<{2}	('AB', 'aa')	b	False
+collate_words	lt	674	{1}<{2}	('AB', "a'b")	b	True
+collate_words	lt	675	{1}<{2}	('AB', 'a b')	b	False
+collate_words	lt	676	{1}<{2}	('AB', '-a')	b	False
+collate_words	lt	677	{1}<{2}	('AB', 'a')	b	False
+collate_words	lt	678	{1}<{2}	('AB', 'A')	b	False
+collate_words	lt	679	{1}<{2}	('AB', 'aB')	b	False
+collate_words	lt	680	{1}<{2}	('AB', 'Ab')	b	False
+collate_words	lt	681	{1}<{2}	('AB', 'ae')	b	True
+collate_words	lt	682	{1}<{2}	('AB', 'æ')	b	True
+collate_words	lt	683	{1}<{2}	('AB', 'Æ')	b	True
+collate_words	lt	684	{1}<{2}	('AB', 'AE')	b	True
+collate_words	lt	685	{1}<{2}	('AB', 'ss')	b	True
+collate_words	lt	686	{1}<{2}	('AB', 'ß')	b	True
+collate_words	lt	687	{1}<{2}	('AB', 'SS')	b	True
+collate_words	lt	688	{1}<{2}	('AB', 'oe')	b	True
+collate_words	lt	689	{1}<{2}	('AB', 'œ')	b	True
+collate_words	lt	690	{1}<{2}	('AB', 'Œ')	b	True
+collate_words	lt	691	{1}<{2}	('AB', 'a9')	b	False
+collate_words	lt	692	{1}<{2}	('AB', 'a10')	b	False
+collate_words	lt	693	{1}<{2}	('AB', 'a1')	b	False
+collate_words	lt	694	{1}<{2}	('AB', 'a01')	b	False
+collate_words	lt	695	{1}<{2}	('AB', 'résumé')	b	True
+collate_words	lt	696	{1}<{2}	('AB', 'resume')	b	True
+collate_words	lt	697	{1}<{2}	('AB', 'Resume')	b	True
+collate_words	lt	698	{1}<{2}	('AB', 'naïve')	b	True
+collate_words	lt	699	{1}<{2}	('AB', 'naive')	b	True
+collate_words	lt	700	{1}<{2}	('AB', 'a_b')	b	False
+collate_words	lt	701	{1}<{2}	('AB', 'a.b')	b	False
+collate_words	lt	702	{1}<{2}	('AB', 'a/b')	b	False
+collate_words	lt	703	{1}<{2}	('ae', 'co-op')	b	True
+collate_words	lt	704	{1}<{2}	('ae', 'coop')	b	True
+collate_words	lt	705	{1}<{2}	('ae', 'co--op')	b	True
+collate_words	lt	706	{1}<{2}	('ae', '-coop')	b	True
+collate_words	lt	707	{1}<{2}	('ae', 'coop-')	b	True
+collate_words	lt	708	{1}<{2}	('ae', "co'op")	b	True
+collate_words	lt	709	{1}<{2}	('ae', 'coops')	b	True
+collate_words	lt	710	{1}<{2}	('ae', 'a-b')	b	False
+collate_words	lt	711	{1}<{2}	('ae', 'ab')	b	False
+collate_words	lt	712	{1}<{2}	('ae', 'aa')	b	False
+collate_words	lt	713	{1}<{2}	('ae', "a'b")	b	False
+collate_words	lt	714	{1}<{2}	('ae', 'a b')	b	False
+collate_words	lt	715	{1}<{2}	('ae', '-a')	b	False
+collate_words	lt	716	{1}<{2}	('ae', 'a')	b	False
+collate_words	lt	717	{1}<{2}	('ae', 'A')	b	False
+collate_words	lt	718	{1}<{2}	('ae', 'aB')	b	False
+collate_words	lt	719	{1}<{2}	('ae', 'Ab')	b	False
+collate_words	lt	720	{1}<{2}	('ae', 'AB')	b	False
+collate_words	lt	721	{1}<{2}	('ae', 'æ')	b	False
+collate_words	lt	722	{1}<{2}	('ae', 'Æ')	b	False
+collate_words	lt	723	{1}<{2}	('ae', 'AE')	b	False
+collate_words	lt	724	{1}<{2}	('ae', 'ss')	b	True
+collate_words	lt	725	{1}<{2}	('ae', 'ß')	b	True
+collate_words	lt	726	{1}<{2}	('ae', 'SS')	b	True
+collate_words	lt	727	{1}<{2}	('ae', 'oe')	b	True
+collate_words	lt	728	{1}<{2}	('ae', 'œ')	b	True
+collate_words	lt	729	{1}<{2}	('ae', 'Œ')	b	True
+collate_words	lt	730	{1}<{2}	('ae', 'a9')	b	False
+collate_words	lt	731	{1}<{2}	('ae', 'a10')	b	False
+collate_words	lt	732	{1}<{2}	('ae', 'a1')	b	False
+collate_words	lt	733	{1}<{2}	('ae', 'a01')	b	False
+collate_words	lt	734	{1}<{2}	('ae', 'résumé')	b	True
+collate_words	lt	735	{1}<{2}	('ae', 'resume')	b	True
+collate_words	lt	736	{1}<{2}	('ae', 'Resume')	b	True
+collate_words	lt	737	{1}<{2}	('ae', 'naïve')	b	True
+collate_words	lt	738	{1}<{2}	('ae', 'naive')	b	True
+collate_words	lt	739	{1}<{2}	('ae', 'a_b')	b	False
+collate_words	lt	740	{1}<{2}	('ae', 'a.b')	b	False
+collate_words	lt	741	{1}<{2}	('ae', 'a/b')	b	False
+collate_words	lt	742	{1}<{2}	('æ', 'co-op')	b	True
+collate_words	lt	743	{1}<{2}	('æ', 'coop')	b	True
+collate_words	lt	744	{1}<{2}	('æ', 'co--op')	b	True
+collate_words	lt	745	{1}<{2}	('æ', '-coop')	b	True
+collate_words	lt	746	{1}<{2}	('æ', 'coop-')	b	True
+collate_words	lt	747	{1}<{2}	('æ', "co'op")	b	True
+collate_words	lt	748	{1}<{2}	('æ', 'coops')	b	True
+collate_words	lt	749	{1}<{2}	('æ', 'a-b')	b	False
+collate_words	lt	750	{1}<{2}	('æ', 'ab')	b	False
+collate_words	lt	751	{1}<{2}	('æ', 'aa')	b	False
+collate_words	lt	752	{1}<{2}	('æ', "a'b")	b	False
+collate_words	lt	753	{1}<{2}	('æ', 'a b')	b	False
+collate_words	lt	754	{1}<{2}	('æ', '-a')	b	False
+collate_words	lt	755	{1}<{2}	('æ', 'a')	b	False
+collate_words	lt	756	{1}<{2}	('æ', 'A')	b	False
+collate_words	lt	757	{1}<{2}	('æ', 'aB')	b	False
+collate_words	lt	758	{1}<{2}	('æ', 'Ab')	b	False
+collate_words	lt	759	{1}<{2}	('æ', 'AB')	b	False
+collate_words	lt	760	{1}<{2}	('æ', 'ae')	b	False
+collate_words	lt	761	{1}<{2}	('æ', 'Æ')	b	False
+collate_words	lt	762	{1}<{2}	('æ', 'AE')	b	False
+collate_words	lt	763	{1}<{2}	('æ', 'ss')	b	True
+collate_words	lt	764	{1}<{2}	('æ', 'ß')	b	True
+collate_words	lt	765	{1}<{2}	('æ', 'SS')	b	True
+collate_words	lt	766	{1}<{2}	('æ', 'oe')	b	True
+collate_words	lt	767	{1}<{2}	('æ', 'œ')	b	True
+collate_words	lt	768	{1}<{2}	('æ', 'Œ')	b	True
+collate_words	lt	769	{1}<{2}	('æ', 'a9')	b	False
+collate_words	lt	770	{1}<{2}	('æ', 'a10')	b	False
+collate_words	lt	771	{1}<{2}	('æ', 'a1')	b	False
+collate_words	lt	772	{1}<{2}	('æ', 'a01')	b	False
+collate_words	lt	773	{1}<{2}	('æ', 'résumé')	b	True
+collate_words	lt	774	{1}<{2}	('æ', 'resume')	b	True
+collate_words	lt	775	{1}<{2}	('æ', 'Resume')	b	True
+collate_words	lt	776	{1}<{2}	('æ', 'naïve')	b	True
+collate_words	lt	777	{1}<{2}	('æ', 'naive')	b	True
+collate_words	lt	778	{1}<{2}	('æ', 'a_b')	b	False
+collate_words	lt	779	{1}<{2}	('æ', 'a.b')	b	False
+collate_words	lt	780	{1}<{2}	('æ', 'a/b')	b	False
+collate_words	lt	781	{1}<{2}	('Æ', 'co-op')	b	True
+collate_words	lt	782	{1}<{2}	('Æ', 'coop')	b	True
+collate_words	lt	783	{1}<{2}	('Æ', 'co--op')	b	True
+collate_words	lt	784	{1}<{2}	('Æ', '-coop')	b	True
+collate_words	lt	785	{1}<{2}	('Æ', 'coop-')	b	True
+collate_words	lt	786	{1}<{2}	('Æ', "co'op")	b	True
+collate_words	lt	787	{1}<{2}	('Æ', 'coops')	b	True
+collate_words	lt	788	{1}<{2}	('Æ', 'a-b')	b	False
+collate_words	lt	789	{1}<{2}	('Æ', 'ab')	b	False
+collate_words	lt	790	{1}<{2}	('Æ', 'aa')	b	False
+collate_words	lt	791	{1}<{2}	('Æ', "a'b")	b	False
+collate_words	lt	792	{1}<{2}	('Æ', 'a b')	b	False
+collate_words	lt	793	{1}<{2}	('Æ', '-a')	b	False
+collate_words	lt	794	{1}<{2}	('Æ', 'a')	b	False
+collate_words	lt	795	{1}<{2}	('Æ', 'A')	b	False
+collate_words	lt	796	{1}<{2}	('Æ', 'aB')	b	False
+collate_words	lt	797	{1}<{2}	('Æ', 'Ab')	b	False
+collate_words	lt	798	{1}<{2}	('Æ', 'AB')	b	False
+collate_words	lt	799	{1}<{2}	('Æ', 'ae')	b	False
+collate_words	lt	800	{1}<{2}	('Æ', 'æ')	b	False
+collate_words	lt	801	{1}<{2}	('Æ', 'AE')	b	False
+collate_words	lt	802	{1}<{2}	('Æ', 'ss')	b	True
+collate_words	lt	803	{1}<{2}	('Æ', 'ß')	b	True
+collate_words	lt	804	{1}<{2}	('Æ', 'SS')	b	True
+collate_words	lt	805	{1}<{2}	('Æ', 'oe')	b	True
+collate_words	lt	806	{1}<{2}	('Æ', 'œ')	b	True
+collate_words	lt	807	{1}<{2}	('Æ', 'Œ')	b	True
+collate_words	lt	808	{1}<{2}	('Æ', 'a9')	b	False
+collate_words	lt	809	{1}<{2}	('Æ', 'a10')	b	False
+collate_words	lt	810	{1}<{2}	('Æ', 'a1')	b	False
+collate_words	lt	811	{1}<{2}	('Æ', 'a01')	b	False
+collate_words	lt	812	{1}<{2}	('Æ', 'résumé')	b	True
+collate_words	lt	813	{1}<{2}	('Æ', 'resume')	b	True
+collate_words	lt	814	{1}<{2}	('Æ', 'Resume')	b	True
+collate_words	lt	815	{1}<{2}	('Æ', 'naïve')	b	True
+collate_words	lt	816	{1}<{2}	('Æ', 'naive')	b	True
+collate_words	lt	817	{1}<{2}	('Æ', 'a_b')	b	False
+collate_words	lt	818	{1}<{2}	('Æ', 'a.b')	b	False
+collate_words	lt	819	{1}<{2}	('Æ', 'a/b')	b	False
+collate_words	lt	820	{1}<{2}	('AE', 'co-op')	b	True
+collate_words	lt	821	{1}<{2}	('AE', 'coop')	b	True
+collate_words	lt	822	{1}<{2}	('AE', 'co--op')	b	True
+collate_words	lt	823	{1}<{2}	('AE', '-coop')	b	True
+collate_words	lt	824	{1}<{2}	('AE', 'coop-')	b	True
+collate_words	lt	825	{1}<{2}	('AE', "co'op")	b	True
+collate_words	lt	826	{1}<{2}	('AE', 'coops')	b	True
+collate_words	lt	827	{1}<{2}	('AE', 'a-b')	b	False
+collate_words	lt	828	{1}<{2}	('AE', 'ab')	b	False
+collate_words	lt	829	{1}<{2}	('AE', 'aa')	b	False
+collate_words	lt	830	{1}<{2}	('AE', "a'b")	b	False
+collate_words	lt	831	{1}<{2}	('AE', 'a b')	b	False
+collate_words	lt	832	{1}<{2}	('AE', '-a')	b	False
+collate_words	lt	833	{1}<{2}	('AE', 'a')	b	False
+collate_words	lt	834	{1}<{2}	('AE', 'A')	b	False
+collate_words	lt	835	{1}<{2}	('AE', 'aB')	b	False
+collate_words	lt	836	{1}<{2}	('AE', 'Ab')	b	False
+collate_words	lt	837	{1}<{2}	('AE', 'AB')	b	False
+collate_words	lt	838	{1}<{2}	('AE', 'ae')	b	False
+collate_words	lt	839	{1}<{2}	('AE', 'æ')	b	False
+collate_words	lt	840	{1}<{2}	('AE', 'Æ')	b	False
+collate_words	lt	841	{1}<{2}	('AE', 'ss')	b	True
+collate_words	lt	842	{1}<{2}	('AE', 'ß')	b	True
+collate_words	lt	843	{1}<{2}	('AE', 'SS')	b	True
+collate_words	lt	844	{1}<{2}	('AE', 'oe')	b	True
+collate_words	lt	845	{1}<{2}	('AE', 'œ')	b	True
+collate_words	lt	846	{1}<{2}	('AE', 'Œ')	b	True
+collate_words	lt	847	{1}<{2}	('AE', 'a9')	b	False
+collate_words	lt	848	{1}<{2}	('AE', 'a10')	b	False
+collate_words	lt	849	{1}<{2}	('AE', 'a1')	b	False
+collate_words	lt	850	{1}<{2}	('AE', 'a01')	b	False
+collate_words	lt	851	{1}<{2}	('AE', 'résumé')	b	True
+collate_words	lt	852	{1}<{2}	('AE', 'resume')	b	True
+collate_words	lt	853	{1}<{2}	('AE', 'Resume')	b	True
+collate_words	lt	854	{1}<{2}	('AE', 'naïve')	b	True
+collate_words	lt	855	{1}<{2}	('AE', 'naive')	b	True
+collate_words	lt	856	{1}<{2}	('AE', 'a_b')	b	False
+collate_words	lt	857	{1}<{2}	('AE', 'a.b')	b	False
+collate_words	lt	858	{1}<{2}	('AE', 'a/b')	b	False
+collate_words	lt	859	{1}<{2}	('ss', 'co-op')	b	False
+collate_words	lt	860	{1}<{2}	('ss', 'coop')	b	False
+collate_words	lt	861	{1}<{2}	('ss', 'co--op')	b	False
+collate_words	lt	862	{1}<{2}	('ss', '-coop')	b	False
+collate_words	lt	863	{1}<{2}	('ss', 'coop-')	b	False
+collate_words	lt	864	{1}<{2}	('ss', "co'op")	b	False
+collate_words	lt	865	{1}<{2}	('ss', 'coops')	b	False
+collate_words	lt	866	{1}<{2}	('ss', 'a-b')	b	False
+collate_words	lt	867	{1}<{2}	('ss', 'ab')	b	False
+collate_words	lt	868	{1}<{2}	('ss', 'aa')	b	False
+collate_words	lt	869	{1}<{2}	('ss', "a'b")	b	False
+collate_words	lt	870	{1}<{2}	('ss', 'a b')	b	False
+collate_words	lt	871	{1}<{2}	('ss', '-a')	b	False
+collate_words	lt	872	{1}<{2}	('ss', 'a')	b	False
+collate_words	lt	873	{1}<{2}	('ss', 'A')	b	False
+collate_words	lt	874	{1}<{2}	('ss', 'aB')	b	False
+collate_words	lt	875	{1}<{2}	('ss', 'Ab')	b	False
+collate_words	lt	876	{1}<{2}	('ss', 'AB')	b	False
+collate_words	lt	877	{1}<{2}	('ss', 'ae')	b	False
+collate_words	lt	878	{1}<{2}	('ss', 'æ')	b	False
+collate_words	lt	879	{1}<{2}	('ss', 'Æ')	b	False
+collate_words	lt	880	{1}<{2}	('ss', 'AE')	b	False
+collate_words	lt	881	{1}<{2}	('ss', 'ß')	b	False
+collate_words	lt	882	{1}<{2}	('ss', 'SS')	b	False
+collate_words	lt	883	{1}<{2}	('ss', 'oe')	b	False
+collate_words	lt	884	{1}<{2}	('ss', 'œ')	b	False
+collate_words	lt	885	{1}<{2}	('ss', 'Œ')	b	False
+collate_words	lt	886	{1}<{2}	('ss', 'a9')	b	False
+collate_words	lt	887	{1}<{2}	('ss', 'a10')	b	False
+collate_words	lt	888	{1}<{2}	('ss', 'a1')	b	False
+collate_words	lt	889	{1}<{2}	('ss', 'a01')	b	False
+collate_words	lt	890	{1}<{2}	('ss', 'résumé')	b	False
+collate_words	lt	891	{1}<{2}	('ss', 'resume')	b	False
+collate_words	lt	892	{1}<{2}	('ss', 'Resume')	b	False
+collate_words	lt	893	{1}<{2}	('ss', 'naïve')	b	False
+collate_words	lt	894	{1}<{2}	('ss', 'naive')	b	False
+collate_words	lt	895	{1}<{2}	('ss', 'a_b')	b	False
+collate_words	lt	896	{1}<{2}	('ss', 'a.b')	b	False
+collate_words	lt	897	{1}<{2}	('ss', 'a/b')	b	False
+collate_words	lt	898	{1}<{2}	('ß', 'co-op')	b	False
+collate_words	lt	899	{1}<{2}	('ß', 'coop')	b	False
+collate_words	lt	900	{1}<{2}	('ß', 'co--op')	b	False
+collate_words	lt	901	{1}<{2}	('ß', '-coop')	b	False
+collate_words	lt	902	{1}<{2}	('ß', 'coop-')	b	False
+collate_words	lt	903	{1}<{2}	('ß', "co'op")	b	False
+collate_words	lt	904	{1}<{2}	('ß', 'coops')	b	False
+collate_words	lt	905	{1}<{2}	('ß', 'a-b')	b	False
+collate_words	lt	906	{1}<{2}	('ß', 'ab')	b	False
+collate_words	lt	907	{1}<{2}	('ß', 'aa')	b	False
+collate_words	lt	908	{1}<{2}	('ß', "a'b")	b	False
+collate_words	lt	909	{1}<{2}	('ß', 'a b')	b	False
+collate_words	lt	910	{1}<{2}	('ß', '-a')	b	False
+collate_words	lt	911	{1}<{2}	('ß', 'a')	b	False
+collate_words	lt	912	{1}<{2}	('ß', 'A')	b	False
+collate_words	lt	913	{1}<{2}	('ß', 'aB')	b	False
+collate_words	lt	914	{1}<{2}	('ß', 'Ab')	b	False
+collate_words	lt	915	{1}<{2}	('ß', 'AB')	b	False
+collate_words	lt	916	{1}<{2}	('ß', 'ae')	b	False
+collate_words	lt	917	{1}<{2}	('ß', 'æ')	b	False
+collate_words	lt	918	{1}<{2}	('ß', 'Æ')	b	False
+collate_words	lt	919	{1}<{2}	('ß', 'AE')	b	False
+collate_words	lt	920	{1}<{2}	('ß', 'ss')	b	False
+collate_words	lt	921	{1}<{2}	('ß', 'SS')	b	False
+collate_words	lt	922	{1}<{2}	('ß', 'oe')	b	False
+collate_words	lt	923	{1}<{2}	('ß', 'œ')	b	False
+collate_words	lt	924	{1}<{2}	('ß', 'Œ')	b	False
+collate_words	lt	925	{1}<{2}	('ß', 'a9')	b	False
+collate_words	lt	926	{1}<{2}	('ß', 'a10')	b	False
+collate_words	lt	927	{1}<{2}	('ß', 'a1')	b	False
+collate_words	lt	928	{1}<{2}	('ß', 'a01')	b	False
+collate_words	lt	929	{1}<{2}	('ß', 'résumé')	b	False
+collate_words	lt	930	{1}<{2}	('ß', 'resume')	b	False
+collate_words	lt	931	{1}<{2}	('ß', 'Resume')	b	False
+collate_words	lt	932	{1}<{2}	('ß', 'naïve')	b	False
+collate_words	lt	933	{1}<{2}	('ß', 'naive')	b	False
+collate_words	lt	934	{1}<{2}	('ß', 'a_b')	b	False
+collate_words	lt	935	{1}<{2}	('ß', 'a.b')	b	False
+collate_words	lt	936	{1}<{2}	('ß', 'a/b')	b	False
+collate_words	lt	937	{1}<{2}	('SS', 'co-op')	b	False
+collate_words	lt	938	{1}<{2}	('SS', 'coop')	b	False
+collate_words	lt	939	{1}<{2}	('SS', 'co--op')	b	False
+collate_words	lt	940	{1}<{2}	('SS', '-coop')	b	False
+collate_words	lt	941	{1}<{2}	('SS', 'coop-')	b	False
+collate_words	lt	942	{1}<{2}	('SS', "co'op")	b	False
+collate_words	lt	943	{1}<{2}	('SS', 'coops')	b	False
+collate_words	lt	944	{1}<{2}	('SS', 'a-b')	b	False
+collate_words	lt	945	{1}<{2}	('SS', 'ab')	b	False
+collate_words	lt	946	{1}<{2}	('SS', 'aa')	b	False
+collate_words	lt	947	{1}<{2}	('SS', "a'b")	b	False
+collate_words	lt	948	{1}<{2}	('SS', 'a b')	b	False
+collate_words	lt	949	{1}<{2}	('SS', '-a')	b	False
+collate_words	lt	950	{1}<{2}	('SS', 'a')	b	False
+collate_words	lt	951	{1}<{2}	('SS', 'A')	b	False
+collate_words	lt	952	{1}<{2}	('SS', 'aB')	b	False
+collate_words	lt	953	{1}<{2}	('SS', 'Ab')	b	False
+collate_words	lt	954	{1}<{2}	('SS', 'AB')	b	False
+collate_words	lt	955	{1}<{2}	('SS', 'ae')	b	False
+collate_words	lt	956	{1}<{2}	('SS', 'æ')	b	False
+collate_words	lt	957	{1}<{2}	('SS', 'Æ')	b	False
+collate_words	lt	958	{1}<{2}	('SS', 'AE')	b	False
+collate_words	lt	959	{1}<{2}	('SS', 'ss')	b	False
+collate_words	lt	960	{1}<{2}	('SS', 'ß')	b	False
+collate_words	lt	961	{1}<{2}	('SS', 'oe')	b	False
+collate_words	lt	962	{1}<{2}	('SS', 'œ')	b	False
+collate_words	lt	963	{1}<{2}	('SS', 'Œ')	b	False
+collate_words	lt	964	{1}<{2}	('SS', 'a9')	b	False
+collate_words	lt	965	{1}<{2}	('SS', 'a10')	b	False
+collate_words	lt	966	{1}<{2}	('SS', 'a1')	b	False
+collate_words	lt	967	{1}<{2}	('SS', 'a01')	b	False
+collate_words	lt	968	{1}<{2}	('SS', 'résumé')	b	False
+collate_words	lt	969	{1}<{2}	('SS', 'resume')	b	False
+collate_words	lt	970	{1}<{2}	('SS', 'Resume')	b	False
+collate_words	lt	971	{1}<{2}	('SS', 'naïve')	b	False
+collate_words	lt	972	{1}<{2}	('SS', 'naive')	b	False
+collate_words	lt	973	{1}<{2}	('SS', 'a_b')	b	False
+collate_words	lt	974	{1}<{2}	('SS', 'a.b')	b	False
+collate_words	lt	975	{1}<{2}	('SS', 'a/b')	b	False
+collate_words	lt	976	{1}<{2}	('oe', 'co-op')	b	False
+collate_words	lt	977	{1}<{2}	('oe', 'coop')	b	False
+collate_words	lt	978	{1}<{2}	('oe', 'co--op')	b	False
+collate_words	lt	979	{1}<{2}	('oe', '-coop')	b	False
+collate_words	lt	980	{1}<{2}	('oe', 'coop-')	b	False
+collate_words	lt	981	{1}<{2}	('oe', "co'op")	b	False
+collate_words	lt	982	{1}<{2}	('oe', 'coops')	b	False
+collate_words	lt	983	{1}<{2}	('oe', 'a-b')	b	False
+collate_words	lt	984	{1}<{2}	('oe', 'ab')	b	False
+collate_words	lt	985	{1}<{2}	('oe', 'aa')	b	False
+collate_words	lt	986	{1}<{2}	('oe', "a'b")	b	False
+collate_words	lt	987	{1}<{2}	('oe', 'a b')	b	False
+collate_words	lt	988	{1}<{2}	('oe', '-a')	b	False
+collate_words	lt	989	{1}<{2}	('oe', 'a')	b	False
+collate_words	lt	990	{1}<{2}	('oe', 'A')	b	False
+collate_words	lt	991	{1}<{2}	('oe', 'aB')	b	False
+collate_words	lt	992	{1}<{2}	('oe', 'Ab')	b	False
+collate_words	lt	993	{1}<{2}	('oe', 'AB')	b	False
+collate_words	lt	994	{1}<{2}	('oe', 'ae')	b	False
+collate_words	lt	995	{1}<{2}	('oe', 'æ')	b	False
+collate_words	lt	996	{1}<{2}	('oe', 'Æ')	b	False
+collate_words	lt	997	{1}<{2}	('oe', 'AE')	b	False
+collate_words	lt	998	{1}<{2}	('oe', 'ss')	b	True
+collate_words	lt	999	{1}<{2}	('oe', 'ß')	b	True
+collate_words	lt	1000	{1}<{2}	('oe', 'SS')	b	True
+collate_words	lt	1001	{1}<{2}	('oe', 'œ')	b	False
+collate_words	lt	1002	{1}<{2}	('oe', 'Œ')	b	False
+collate_words	lt	1003	{1}<{2}	('oe', 'a9')	b	False
+collate_words	lt	1004	{1}<{2}	('oe', 'a10')	b	False
+collate_words	lt	1005	{1}<{2}	('oe', 'a1')	b	False
+collate_words	lt	1006	{1}<{2}	('oe', 'a01')	b	False
+collate_words	lt	1007	{1}<{2}	('oe', 'résumé')	b	True
+collate_words	lt	1008	{1}<{2}	('oe', 'resume')	b	True
+collate_words	lt	1009	{1}<{2}	('oe', 'Resume')	b	True
+collate_words	lt	1010	{1}<{2}	('oe', 'naïve')	b	False
+collate_words	lt	1011	{1}<{2}	('oe', 'naive')	b	False
+collate_words	lt	1012	{1}<{2}	('oe', 'a_b')	b	False
+collate_words	lt	1013	{1}<{2}	('oe', 'a.b')	b	False
+collate_words	lt	1014	{1}<{2}	('oe', 'a/b')	b	False
+collate_words	lt	1015	{1}<{2}	('œ', 'co-op')	b	False
+collate_words	lt	1016	{1}<{2}	('œ', 'coop')	b	False
+collate_words	lt	1017	{1}<{2}	('œ', 'co--op')	b	False
+collate_words	lt	1018	{1}<{2}	('œ', '-coop')	b	False
+collate_words	lt	1019	{1}<{2}	('œ', 'coop-')	b	False
+collate_words	lt	1020	{1}<{2}	('œ', "co'op")	b	False
+collate_words	lt	1021	{1}<{2}	('œ', 'coops')	b	False
+collate_words	lt	1022	{1}<{2}	('œ', 'a-b')	b	False
+collate_words	lt	1023	{1}<{2}	('œ', 'ab')	b	False
+collate_words	lt	1024	{1}<{2}	('œ', 'aa')	b	False
+collate_words	lt	1025	{1}<{2}	('œ', "a'b")	b	False
+collate_words	lt	1026	{1}<{2}	('œ', 'a b')	b	False
+collate_words	lt	1027	{1}<{2}	('œ', '-a')	b	False
+collate_words	lt	1028	{1}<{2}	('œ', 'a')	b	False
+collate_words	lt	1029	{1}<{2}	('œ', 'A')	b	False
+collate_words	lt	1030	{1}<{2}	('œ', 'aB')	b	False
+collate_words	lt	1031	{1}<{2}	('œ', 'Ab')	b	False
+collate_words	lt	1032	{1}<{2}	('œ', 'AB')	b	False
+collate_words	lt	1033	{1}<{2}	('œ', 'ae')	b	False
+collate_words	lt	1034	{1}<{2}	('œ', 'æ')	b	False
+collate_words	lt	1035	{1}<{2}	('œ', 'Æ')	b	False
+collate_words	lt	1036	{1}<{2}	('œ', 'AE')	b	False
+collate_words	lt	1037	{1}<{2}	('œ', 'ss')	b	True
+collate_words	lt	1038	{1}<{2}	('œ', 'ß')	b	True
+collate_words	lt	1039	{1}<{2}	('œ', 'SS')	b	True
+collate_words	lt	1040	{1}<{2}	('œ', 'oe')	b	False
+collate_words	lt	1041	{1}<{2}	('œ', 'Œ')	b	False
+collate_words	lt	1042	{1}<{2}	('œ', 'a9')	b	False
+collate_words	lt	1043	{1}<{2}	('œ', 'a10')	b	False
+collate_words	lt	1044	{1}<{2}	('œ', 'a1')	b	False
+collate_words	lt	1045	{1}<{2}	('œ', 'a01')	b	False
+collate_words	lt	1046	{1}<{2}	('œ', 'résumé')	b	True
+collate_words	lt	1047	{1}<{2}	('œ', 'resume')	b	True
+collate_words	lt	1048	{1}<{2}	('œ', 'Resume')	b	True
+collate_words	lt	1049	{1}<{2}	('œ', 'naïve')	b	False
+collate_words	lt	1050	{1}<{2}	('œ', 'naive')	b	False
+collate_words	lt	1051	{1}<{2}	('œ', 'a_b')	b	False
+collate_words	lt	1052	{1}<{2}	('œ', 'a.b')	b	False
+collate_words	lt	1053	{1}<{2}	('œ', 'a/b')	b	False
+collate_words	lt	1054	{1}<{2}	('Œ', 'co-op')	b	False
+collate_words	lt	1055	{1}<{2}	('Œ', 'coop')	b	False
+collate_words	lt	1056	{1}<{2}	('Œ', 'co--op')	b	False
+collate_words	lt	1057	{1}<{2}	('Œ', '-coop')	b	False
+collate_words	lt	1058	{1}<{2}	('Œ', 'coop-')	b	False
+collate_words	lt	1059	{1}<{2}	('Œ', "co'op")	b	False
+collate_words	lt	1060	{1}<{2}	('Œ', 'coops')	b	False
+collate_words	lt	1061	{1}<{2}	('Œ', 'a-b')	b	False
+collate_words	lt	1062	{1}<{2}	('Œ', 'ab')	b	False
+collate_words	lt	1063	{1}<{2}	('Œ', 'aa')	b	False
+collate_words	lt	1064	{1}<{2}	('Œ', "a'b")	b	False
+collate_words	lt	1065	{1}<{2}	('Œ', 'a b')	b	False
+collate_words	lt	1066	{1}<{2}	('Œ', '-a')	b	False
+collate_words	lt	1067	{1}<{2}	('Œ', 'a')	b	False
+collate_words	lt	1068	{1}<{2}	('Œ', 'A')	b	False
+collate_words	lt	1069	{1}<{2}	('Œ', 'aB')	b	False
+collate_words	lt	1070	{1}<{2}	('Œ', 'Ab')	b	False
+collate_words	lt	1071	{1}<{2}	('Œ', 'AB')	b	False
+collate_words	lt	1072	{1}<{2}	('Œ', 'ae')	b	False
+collate_words	lt	1073	{1}<{2}	('Œ', 'æ')	b	False
+collate_words	lt	1074	{1}<{2}	('Œ', 'Æ')	b	False
+collate_words	lt	1075	{1}<{2}	('Œ', 'AE')	b	False
+collate_words	lt	1076	{1}<{2}	('Œ', 'ss')	b	True
+collate_words	lt	1077	{1}<{2}	('Œ', 'ß')	b	True
+collate_words	lt	1078	{1}<{2}	('Œ', 'SS')	b	True
+collate_words	lt	1079	{1}<{2}	('Œ', 'oe')	b	False
+collate_words	lt	1080	{1}<{2}	('Œ', 'œ')	b	False
+collate_words	lt	1081	{1}<{2}	('Œ', 'a9')	b	False
+collate_words	lt	1082	{1}<{2}	('Œ', 'a10')	b	False
+collate_words	lt	1083	{1}<{2}	('Œ', 'a1')	b	False
+collate_words	lt	1084	{1}<{2}	('Œ', 'a01')	b	False
+collate_words	lt	1085	{1}<{2}	('Œ', 'résumé')	b	True
+collate_words	lt	1086	{1}<{2}	('Œ', 'resume')	b	True
+collate_words	lt	1087	{1}<{2}	('Œ', 'Resume')	b	True
+collate_words	lt	1088	{1}<{2}	('Œ', 'naïve')	b	False
+collate_words	lt	1089	{1}<{2}	('Œ', 'naive')	b	False
+collate_words	lt	1090	{1}<{2}	('Œ', 'a_b')	b	False
+collate_words	lt	1091	{1}<{2}	('Œ', 'a.b')	b	False
+collate_words	lt	1092	{1}<{2}	('Œ', 'a/b')	b	False
+collate_words	lt	1093	{1}<{2}	('a9', 'co-op')	b	True
+collate_words	lt	1094	{1}<{2}	('a9', 'coop')	b	True
+collate_words	lt	1095	{1}<{2}	('a9', 'co--op')	b	True
+collate_words	lt	1096	{1}<{2}	('a9', '-coop')	b	True
+collate_words	lt	1097	{1}<{2}	('a9', 'coop-')	b	True
+collate_words	lt	1098	{1}<{2}	('a9', "co'op")	b	True
+collate_words	lt	1099	{1}<{2}	('a9', 'coops')	b	True
+collate_words	lt	1100	{1}<{2}	('a9', 'a-b')	b	True
+collate_words	lt	1101	{1}<{2}	('a9', 'ab')	b	True
+collate_words	lt	1102	{1}<{2}	('a9', 'aa')	b	True
+collate_words	lt	1103	{1}<{2}	('a9', "a'b")	b	True
+collate_words	lt	1104	{1}<{2}	('a9', 'a b')	b	False
+collate_words	lt	1105	{1}<{2}	('a9', '-a')	b	False
+collate_words	lt	1106	{1}<{2}	('a9', 'a')	b	False
+collate_words	lt	1107	{1}<{2}	('a9', 'A')	b	False
+collate_words	lt	1108	{1}<{2}	('a9', 'aB')	b	True
+collate_words	lt	1109	{1}<{2}	('a9', 'Ab')	b	True
+collate_words	lt	1110	{1}<{2}	('a9', 'AB')	b	True
+collate_words	lt	1111	{1}<{2}	('a9', 'ae')	b	True
+collate_words	lt	1112	{1}<{2}	('a9', 'æ')	b	True
+collate_words	lt	1113	{1}<{2}	('a9', 'Æ')	b	True
+collate_words	lt	1114	{1}<{2}	('a9', 'AE')	b	True
+collate_words	lt	1115	{1}<{2}	('a9', 'ss')	b	True
+collate_words	lt	1116	{1}<{2}	('a9', 'ß')	b	True
+collate_words	lt	1117	{1}<{2}	('a9', 'SS')	b	True
+collate_words	lt	1118	{1}<{2}	('a9', 'oe')	b	True
+collate_words	lt	1119	{1}<{2}	('a9', 'œ')	b	True
+collate_words	lt	1120	{1}<{2}	('a9', 'Œ')	b	True
+collate_words	lt	1121	{1}<{2}	('a9', 'a10')	b	False
+collate_words	lt	1122	{1}<{2}	('a9', 'a1')	b	False
+collate_words	lt	1123	{1}<{2}	('a9', 'a01')	b	False
+collate_words	lt	1124	{1}<{2}	('a9', 'résumé')	b	True
+collate_words	lt	1125	{1}<{2}	('a9', 'resume')	b	True
+collate_words	lt	1126	{1}<{2}	('a9', 'Resume')	b	True
+collate_words	lt	1127	{1}<{2}	('a9', 'naïve')	b	True
+collate_words	lt	1128	{1}<{2}	('a9', 'naive')	b	True
+collate_words	lt	1129	{1}<{2}	('a9', 'a_b')	b	False
+collate_words	lt	1130	{1}<{2}	('a9', 'a.b')	b	False
+collate_words	lt	1131	{1}<{2}	('a9', 'a/b')	b	False
+collate_words	lt	1132	{1}<{2}	('a10', 'co-op')	b	True
+collate_words	lt	1133	{1}<{2}	('a10', 'coop')	b	True
+collate_words	lt	1134	{1}<{2}	('a10', 'co--op')	b	True
+collate_words	lt	1135	{1}<{2}	('a10', '-coop')	b	True
+collate_words	lt	1136	{1}<{2}	('a10', 'coop-')	b	True
+collate_words	lt	1137	{1}<{2}	('a10', "co'op")	b	True
+collate_words	lt	1138	{1}<{2}	('a10', 'coops')	b	True
+collate_words	lt	1139	{1}<{2}	('a10', 'a-b')	b	True
+collate_words	lt	1140	{1}<{2}	('a10', 'ab')	b	True
+collate_words	lt	1141	{1}<{2}	('a10', 'aa')	b	True
+collate_words	lt	1142	{1}<{2}	('a10', "a'b")	b	True
+collate_words	lt	1143	{1}<{2}	('a10', 'a b')	b	False
+collate_words	lt	1144	{1}<{2}	('a10', '-a')	b	False
+collate_words	lt	1145	{1}<{2}	('a10', 'a')	b	False
+collate_words	lt	1146	{1}<{2}	('a10', 'A')	b	False
+collate_words	lt	1147	{1}<{2}	('a10', 'aB')	b	True
+collate_words	lt	1148	{1}<{2}	('a10', 'Ab')	b	True
+collate_words	lt	1149	{1}<{2}	('a10', 'AB')	b	True
+collate_words	lt	1150	{1}<{2}	('a10', 'ae')	b	True
+collate_words	lt	1151	{1}<{2}	('a10', 'æ')	b	True
+collate_words	lt	1152	{1}<{2}	('a10', 'Æ')	b	True
+collate_words	lt	1153	{1}<{2}	('a10', 'AE')	b	True
+collate_words	lt	1154	{1}<{2}	('a10', 'ss')	b	True
+collate_words	lt	1155	{1}<{2}	('a10', 'ß')	b	True
+collate_words	lt	1156	{1}<{2}	('a10', 'SS')	b	True
+collate_words	lt	1157	{1}<{2}	('a10', 'oe')	b	True
+collate_words	lt	1158	{1}<{2}	('a10', 'œ')	b	True
+collate_words	lt	1159	{1}<{2}	('a10', 'Œ')	b	True
+collate_words	lt	1160	{1}<{2}	('a10', 'a9')	b	True
+collate_words	lt	1161	{1}<{2}	('a10', 'a1')	b	False
+collate_words	lt	1162	{1}<{2}	('a10', 'a01')	b	False
+collate_words	lt	1163	{1}<{2}	('a10', 'résumé')	b	True
+collate_words	lt	1164	{1}<{2}	('a10', 'resume')	b	True
+collate_words	lt	1165	{1}<{2}	('a10', 'Resume')	b	True
+collate_words	lt	1166	{1}<{2}	('a10', 'naïve')	b	True
+collate_words	lt	1167	{1}<{2}	('a10', 'naive')	b	True
+collate_words	lt	1168	{1}<{2}	('a10', 'a_b')	b	False
+collate_words	lt	1169	{1}<{2}	('a10', 'a.b')	b	False
+collate_words	lt	1170	{1}<{2}	('a10', 'a/b')	b	False
+collate_words	lt	1171	{1}<{2}	('a1', 'co-op')	b	True
+collate_words	lt	1172	{1}<{2}	('a1', 'coop')	b	True
+collate_words	lt	1173	{1}<{2}	('a1', 'co--op')	b	True
+collate_words	lt	1174	{1}<{2}	('a1', '-coop')	b	True
+collate_words	lt	1175	{1}<{2}	('a1', 'coop-')	b	True
+collate_words	lt	1176	{1}<{2}	('a1', "co'op")	b	True
+collate_words	lt	1177	{1}<{2}	('a1', 'coops')	b	True
+collate_words	lt	1178	{1}<{2}	('a1', 'a-b')	b	True
+collate_words	lt	1179	{1}<{2}	('a1', 'ab')	b	True
+collate_words	lt	1180	{1}<{2}	('a1', 'aa')	b	True
+collate_words	lt	1181	{1}<{2}	('a1', "a'b")	b	True
+collate_words	lt	1182	{1}<{2}	('a1', 'a b')	b	False
+collate_words	lt	1183	{1}<{2}	('a1', '-a')	b	False
+collate_words	lt	1184	{1}<{2}	('a1', 'a')	b	False
+collate_words	lt	1185	{1}<{2}	('a1', 'A')	b	False
+collate_words	lt	1186	{1}<{2}	('a1', 'aB')	b	True
+collate_words	lt	1187	{1}<{2}	('a1', 'Ab')	b	True
+collate_words	lt	1188	{1}<{2}	('a1', 'AB')	b	True
+collate_words	lt	1189	{1}<{2}	('a1', 'ae')	b	True
+collate_words	lt	1190	{1}<{2}	('a1', 'æ')	b	True
+collate_words	lt	1191	{1}<{2}	('a1', 'Æ')	b	True
+collate_words	lt	1192	{1}<{2}	('a1', 'AE')	b	True
+collate_words	lt	1193	{1}<{2}	('a1', 'ss')	b	True
+collate_words	lt	1194	{1}<{2}	('a1', 'ß')	b	True
+collate_words	lt	1195	{1}<{2}	('a1', 'SS')	b	True
+collate_words	lt	1196	{1}<{2}	('a1', 'oe')	b	True
+collate_words	lt	1197	{1}<{2}	('a1', 'œ')	b	True
+collate_words	lt	1198	{1}<{2}	('a1', 'Œ')	b	True
+collate_words	lt	1199	{1}<{2}	('a1', 'a9')	b	True
+collate_words	lt	1200	{1}<{2}	('a1', 'a10')	b	True
+collate_words	lt	1201	{1}<{2}	('a1', 'a01')	b	False
+collate_words	lt	1202	{1}<{2}	('a1', 'résumé')	b	True
+collate_words	lt	1203	{1}<{2}	('a1', 'resume')	b	True
+collate_words	lt	1204	{1}<{2}	('a1', 'Resume')	b	True
+collate_words	lt	1205	{1}<{2}	('a1', 'naïve')	b	True
+collate_words	lt	1206	{1}<{2}	('a1', 'naive')	b	True
+collate_words	lt	1207	{1}<{2}	('a1', 'a_b')	b	False
+collate_words	lt	1208	{1}<{2}	('a1', 'a.b')	b	False
+collate_words	lt	1209	{1}<{2}	('a1', 'a/b')	b	False
+collate_words	lt	1210	{1}<{2}	('a01', 'co-op')	b	True
+collate_words	lt	1211	{1}<{2}	('a01', 'coop')	b	True
+collate_words	lt	1212	{1}<{2}	('a01', 'co--op')	b	True
+collate_words	lt	1213	{1}<{2}	('a01', '-coop')	b	True
+collate_words	lt	1214	{1}<{2}	('a01', 'coop-')	b	True
+collate_words	lt	1215	{1}<{2}	('a01', "co'op")	b	True
+collate_words	lt	1216	{1}<{2}	('a01', 'coops')	b	True
+collate_words	lt	1217	{1}<{2}	('a01', 'a-b')	b	True
+collate_words	lt	1218	{1}<{2}	('a01', 'ab')	b	True
+collate_words	lt	1219	{1}<{2}	('a01', 'aa')	b	True
+collate_words	lt	1220	{1}<{2}	('a01', "a'b")	b	True
+collate_words	lt	1221	{1}<{2}	('a01', 'a b')	b	False
+collate_words	lt	1222	{1}<{2}	('a01', '-a')	b	False
+collate_words	lt	1223	{1}<{2}	('a01', 'a')	b	False
+collate_words	lt	1224	{1}<{2}	('a01', 'A')	b	False
+collate_words	lt	1225	{1}<{2}	('a01', 'aB')	b	True
+collate_words	lt	1226	{1}<{2}	('a01', 'Ab')	b	True
+collate_words	lt	1227	{1}<{2}	('a01', 'AB')	b	True
+collate_words	lt	1228	{1}<{2}	('a01', 'ae')	b	True
+collate_words	lt	1229	{1}<{2}	('a01', 'æ')	b	True
+collate_words	lt	1230	{1}<{2}	('a01', 'Æ')	b	True
+collate_words	lt	1231	{1}<{2}	('a01', 'AE')	b	True
+collate_words	lt	1232	{1}<{2}	('a01', 'ss')	b	True
+collate_words	lt	1233	{1}<{2}	('a01', 'ß')	b	True
+collate_words	lt	1234	{1}<{2}	('a01', 'SS')	b	True
+collate_words	lt	1235	{1}<{2}	('a01', 'oe')	b	True
+collate_words	lt	1236	{1}<{2}	('a01', 'œ')	b	True
+collate_words	lt	1237	{1}<{2}	('a01', 'Œ')	b	True
+collate_words	lt	1238	{1}<{2}	('a01', 'a9')	b	True
+collate_words	lt	1239	{1}<{2}	('a01', 'a10')	b	True
+collate_words	lt	1240	{1}<{2}	('a01', 'a1')	b	True
+collate_words	lt	1241	{1}<{2}	('a01', 'résumé')	b	True
+collate_words	lt	1242	{1}<{2}	('a01', 'resume')	b	True
+collate_words	lt	1243	{1}<{2}	('a01', 'Resume')	b	True
+collate_words	lt	1244	{1}<{2}	('a01', 'naïve')	b	True
+collate_words	lt	1245	{1}<{2}	('a01', 'naive')	b	True
+collate_words	lt	1246	{1}<{2}	('a01', 'a_b')	b	False
+collate_words	lt	1247	{1}<{2}	('a01', 'a.b')	b	False
+collate_words	lt	1248	{1}<{2}	('a01', 'a/b')	b	False
+collate_words	lt	1249	{1}<{2}	('résumé', 'co-op')	b	False
+collate_words	lt	1250	{1}<{2}	('résumé', 'coop')	b	False
+collate_words	lt	1251	{1}<{2}	('résumé', 'co--op')	b	False
+collate_words	lt	1252	{1}<{2}	('résumé', '-coop')	b	False
+collate_words	lt	1253	{1}<{2}	('résumé', 'coop-')	b	False
+collate_words	lt	1254	{1}<{2}	('résumé', "co'op")	b	False
+collate_words	lt	1255	{1}<{2}	('résumé', 'coops')	b	False
+collate_words	lt	1256	{1}<{2}	('résumé', 'a-b')	b	False
+collate_words	lt	1257	{1}<{2}	('résumé', 'ab')	b	False
+collate_words	lt	1258	{1}<{2}	('résumé', 'aa')	b	False
+collate_words	lt	1259	{1}<{2}	('résumé', "a'b")	b	False
+collate_words	lt	1260	{1}<{2}	('résumé', 'a b')	b	False
+collate_words	lt	1261	{1}<{2}	('résumé', '-a')	b	False
+collate_words	lt	1262	{1}<{2}	('résumé', 'a')	b	False
+collate_words	lt	1263	{1}<{2}	('résumé', 'A')	b	False
+collate_words	lt	1264	{1}<{2}	('résumé', 'aB')	b	False
+collate_words	lt	1265	{1}<{2}	('résumé', 'Ab')	b	False
+collate_words	lt	1266	{1}<{2}	('résumé', 'AB')	b	False
+collate_words	lt	1267	{1}<{2}	('résumé', 'ae')	b	False
+collate_words	lt	1268	{1}<{2}	('résumé', 'æ')	b	False
+collate_words	lt	1269	{1}<{2}	('résumé', 'Æ')	b	False
+collate_words	lt	1270	{1}<{2}	('résumé', 'AE')	b	False
+collate_words	lt	1271	{1}<{2}	('résumé', 'ss')	b	True
+collate_words	lt	1272	{1}<{2}	('résumé', 'ß')	b	True
+collate_words	lt	1273	{1}<{2}	('résumé', 'SS')	b	True
+collate_words	lt	1274	{1}<{2}	('résumé', 'oe')	b	False
+collate_words	lt	1275	{1}<{2}	('résumé', 'œ')	b	False
+collate_words	lt	1276	{1}<{2}	('résumé', 'Œ')	b	False
+collate_words	lt	1277	{1}<{2}	('résumé', 'a9')	b	False
+collate_words	lt	1278	{1}<{2}	('résumé', 'a10')	b	False
+collate_words	lt	1279	{1}<{2}	('résumé', 'a1')	b	False
+collate_words	lt	1280	{1}<{2}	('résumé', 'a01')	b	False
+collate_words	lt	1281	{1}<{2}	('résumé', 'resume')	b	False
+collate_words	lt	1282	{1}<{2}	('résumé', 'Resume')	b	False
+collate_words	lt	1283	{1}<{2}	('résumé', 'naïve')	b	False
+collate_words	lt	1284	{1}<{2}	('résumé', 'naive')	b	False
+collate_words	lt	1285	{1}<{2}	('résumé', 'a_b')	b	False
+collate_words	lt	1286	{1}<{2}	('résumé', 'a.b')	b	False
+collate_words	lt	1287	{1}<{2}	('résumé', 'a/b')	b	False
+collate_words	lt	1288	{1}<{2}	('resume', 'co-op')	b	False
+collate_words	lt	1289	{1}<{2}	('resume', 'coop')	b	False
+collate_words	lt	1290	{1}<{2}	('resume', 'co--op')	b	False
+collate_words	lt	1291	{1}<{2}	('resume', '-coop')	b	False
+collate_words	lt	1292	{1}<{2}	('resume', 'coop-')	b	False
+collate_words	lt	1293	{1}<{2}	('resume', "co'op")	b	False
+collate_words	lt	1294	{1}<{2}	('resume', 'coops')	b	False
+collate_words	lt	1295	{1}<{2}	('resume', 'a-b')	b	False
+collate_words	lt	1296	{1}<{2}	('resume', 'ab')	b	False
+collate_words	lt	1297	{1}<{2}	('resume', 'aa')	b	False
+collate_words	lt	1298	{1}<{2}	('resume', "a'b")	b	False
+collate_words	lt	1299	{1}<{2}	('resume', 'a b')	b	False
+collate_words	lt	1300	{1}<{2}	('resume', '-a')	b	False
+collate_words	lt	1301	{1}<{2}	('resume', 'a')	b	False
+collate_words	lt	1302	{1}<{2}	('resume', 'A')	b	False
+collate_words	lt	1303	{1}<{2}	('resume', 'aB')	b	False
+collate_words	lt	1304	{1}<{2}	('resume', 'Ab')	b	False
+collate_words	lt	1305	{1}<{2}	('resume', 'AB')	b	False
+collate_words	lt	1306	{1}<{2}	('resume', 'ae')	b	False
+collate_words	lt	1307	{1}<{2}	('resume', 'æ')	b	False
+collate_words	lt	1308	{1}<{2}	('resume', 'Æ')	b	False
+collate_words	lt	1309	{1}<{2}	('resume', 'AE')	b	False
+collate_words	lt	1310	{1}<{2}	('resume', 'ss')	b	True
+collate_words	lt	1311	{1}<{2}	('resume', 'ß')	b	True
+collate_words	lt	1312	{1}<{2}	('resume', 'SS')	b	True
+collate_words	lt	1313	{1}<{2}	('resume', 'oe')	b	False
+collate_words	lt	1314	{1}<{2}	('resume', 'œ')	b	False
+collate_words	lt	1315	{1}<{2}	('resume', 'Œ')	b	False
+collate_words	lt	1316	{1}<{2}	('resume', 'a9')	b	False
+collate_words	lt	1317	{1}<{2}	('resume', 'a10')	b	False
+collate_words	lt	1318	{1}<{2}	('resume', 'a1')	b	False
+collate_words	lt	1319	{1}<{2}	('resume', 'a01')	b	False
+collate_words	lt	1320	{1}<{2}	('resume', 'résumé')	b	True
+collate_words	lt	1321	{1}<{2}	('resume', 'Resume')	b	False
+collate_words	lt	1322	{1}<{2}	('resume', 'naïve')	b	False
+collate_words	lt	1323	{1}<{2}	('resume', 'naive')	b	False
+collate_words	lt	1324	{1}<{2}	('resume', 'a_b')	b	False
+collate_words	lt	1325	{1}<{2}	('resume', 'a.b')	b	False
+collate_words	lt	1326	{1}<{2}	('resume', 'a/b')	b	False
+collate_words	lt	1327	{1}<{2}	('Resume', 'co-op')	b	False
+collate_words	lt	1328	{1}<{2}	('Resume', 'coop')	b	False
+collate_words	lt	1329	{1}<{2}	('Resume', 'co--op')	b	False
+collate_words	lt	1330	{1}<{2}	('Resume', '-coop')	b	False
+collate_words	lt	1331	{1}<{2}	('Resume', 'coop-')	b	False
+collate_words	lt	1332	{1}<{2}	('Resume', "co'op")	b	False
+collate_words	lt	1333	{1}<{2}	('Resume', 'coops')	b	False
+collate_words	lt	1334	{1}<{2}	('Resume', 'a-b')	b	False
+collate_words	lt	1335	{1}<{2}	('Resume', 'ab')	b	False
+collate_words	lt	1336	{1}<{2}	('Resume', 'aa')	b	False
+collate_words	lt	1337	{1}<{2}	('Resume', "a'b")	b	False
+collate_words	lt	1338	{1}<{2}	('Resume', 'a b')	b	False
+collate_words	lt	1339	{1}<{2}	('Resume', '-a')	b	False
+collate_words	lt	1340	{1}<{2}	('Resume', 'a')	b	False
+collate_words	lt	1341	{1}<{2}	('Resume', 'A')	b	False
+collate_words	lt	1342	{1}<{2}	('Resume', 'aB')	b	False
+collate_words	lt	1343	{1}<{2}	('Resume', 'Ab')	b	False
+collate_words	lt	1344	{1}<{2}	('Resume', 'AB')	b	False
+collate_words	lt	1345	{1}<{2}	('Resume', 'ae')	b	False
+collate_words	lt	1346	{1}<{2}	('Resume', 'æ')	b	False
+collate_words	lt	1347	{1}<{2}	('Resume', 'Æ')	b	False
+collate_words	lt	1348	{1}<{2}	('Resume', 'AE')	b	False
+collate_words	lt	1349	{1}<{2}	('Resume', 'ss')	b	True
+collate_words	lt	1350	{1}<{2}	('Resume', 'ß')	b	True
+collate_words	lt	1351	{1}<{2}	('Resume', 'SS')	b	True
+collate_words	lt	1352	{1}<{2}	('Resume', 'oe')	b	False
+collate_words	lt	1353	{1}<{2}	('Resume', 'œ')	b	False
+collate_words	lt	1354	{1}<{2}	('Resume', 'Œ')	b	False
+collate_words	lt	1355	{1}<{2}	('Resume', 'a9')	b	False
+collate_words	lt	1356	{1}<{2}	('Resume', 'a10')	b	False
+collate_words	lt	1357	{1}<{2}	('Resume', 'a1')	b	False
+collate_words	lt	1358	{1}<{2}	('Resume', 'a01')	b	False
+collate_words	lt	1359	{1}<{2}	('Resume', 'résumé')	b	True
+collate_words	lt	1360	{1}<{2}	('Resume', 'resume')	b	False
+collate_words	lt	1361	{1}<{2}	('Resume', 'naïve')	b	False
+collate_words	lt	1362	{1}<{2}	('Resume', 'naive')	b	False
+collate_words	lt	1363	{1}<{2}	('Resume', 'a_b')	b	False
+collate_words	lt	1364	{1}<{2}	('Resume', 'a.b')	b	False
+collate_words	lt	1365	{1}<{2}	('Resume', 'a/b')	b	False
+collate_words	lt	1366	{1}<{2}	('naïve', 'co-op')	b	False
+collate_words	lt	1367	{1}<{2}	('naïve', 'coop')	b	False
+collate_words	lt	1368	{1}<{2}	('naïve', 'co--op')	b	False
+collate_words	lt	1369	{1}<{2}	('naïve', '-coop')	b	False
+collate_words	lt	1370	{1}<{2}	('naïve', 'coop-')	b	False
+collate_words	lt	1371	{1}<{2}	('naïve', "co'op")	b	False
+collate_words	lt	1372	{1}<{2}	('naïve', 'coops')	b	False
+collate_words	lt	1373	{1}<{2}	('naïve', 'a-b')	b	False
+collate_words	lt	1374	{1}<{2}	('naïve', 'ab')	b	False
+collate_words	lt	1375	{1}<{2}	('naïve', 'aa')	b	False
+collate_words	lt	1376	{1}<{2}	('naïve', "a'b")	b	False
+collate_words	lt	1377	{1}<{2}	('naïve', 'a b')	b	False
+collate_words	lt	1378	{1}<{2}	('naïve', '-a')	b	False
+collate_words	lt	1379	{1}<{2}	('naïve', 'a')	b	False
+collate_words	lt	1380	{1}<{2}	('naïve', 'A')	b	False
+collate_words	lt	1381	{1}<{2}	('naïve', 'aB')	b	False
+collate_words	lt	1382	{1}<{2}	('naïve', 'Ab')	b	False
+collate_words	lt	1383	{1}<{2}	('naïve', 'AB')	b	False
+collate_words	lt	1384	{1}<{2}	('naïve', 'ae')	b	False
+collate_words	lt	1385	{1}<{2}	('naïve', 'æ')	b	False
+collate_words	lt	1386	{1}<{2}	('naïve', 'Æ')	b	False
+collate_words	lt	1387	{1}<{2}	('naïve', 'AE')	b	False
+collate_words	lt	1388	{1}<{2}	('naïve', 'ss')	b	True
+collate_words	lt	1389	{1}<{2}	('naïve', 'ß')	b	True
+collate_words	lt	1390	{1}<{2}	('naïve', 'SS')	b	True
+collate_words	lt	1391	{1}<{2}	('naïve', 'oe')	b	True
+collate_words	lt	1392	{1}<{2}	('naïve', 'œ')	b	True
+collate_words	lt	1393	{1}<{2}	('naïve', 'Œ')	b	True
+collate_words	lt	1394	{1}<{2}	('naïve', 'a9')	b	False
+collate_words	lt	1395	{1}<{2}	('naïve', 'a10')	b	False
+collate_words	lt	1396	{1}<{2}	('naïve', 'a1')	b	False
+collate_words	lt	1397	{1}<{2}	('naïve', 'a01')	b	False
+collate_words	lt	1398	{1}<{2}	('naïve', 'résumé')	b	True
+collate_words	lt	1399	{1}<{2}	('naïve', 'resume')	b	True
+collate_words	lt	1400	{1}<{2}	('naïve', 'Resume')	b	True
+collate_words	lt	1401	{1}<{2}	('naïve', 'naive')	b	False
+collate_words	lt	1402	{1}<{2}	('naïve', 'a_b')	b	False
+collate_words	lt	1403	{1}<{2}	('naïve', 'a.b')	b	False
+collate_words	lt	1404	{1}<{2}	('naïve', 'a/b')	b	False
+collate_words	lt	1405	{1}<{2}	('naive', 'co-op')	b	False
+collate_words	lt	1406	{1}<{2}	('naive', 'coop')	b	False
+collate_words	lt	1407	{1}<{2}	('naive', 'co--op')	b	False
+collate_words	lt	1408	{1}<{2}	('naive', '-coop')	b	False
+collate_words	lt	1409	{1}<{2}	('naive', 'coop-')	b	False
+collate_words	lt	1410	{1}<{2}	('naive', "co'op")	b	False
+collate_words	lt	1411	{1}<{2}	('naive', 'coops')	b	False
+collate_words	lt	1412	{1}<{2}	('naive', 'a-b')	b	False
+collate_words	lt	1413	{1}<{2}	('naive', 'ab')	b	False
+collate_words	lt	1414	{1}<{2}	('naive', 'aa')	b	False
+collate_words	lt	1415	{1}<{2}	('naive', "a'b")	b	False
+collate_words	lt	1416	{1}<{2}	('naive', 'a b')	b	False
+collate_words	lt	1417	{1}<{2}	('naive', '-a')	b	False
+collate_words	lt	1418	{1}<{2}	('naive', 'a')	b	False
+collate_words	lt	1419	{1}<{2}	('naive', 'A')	b	False
+collate_words	lt	1420	{1}<{2}	('naive', 'aB')	b	False
+collate_words	lt	1421	{1}<{2}	('naive', 'Ab')	b	False
+collate_words	lt	1422	{1}<{2}	('naive', 'AB')	b	False
+collate_words	lt	1423	{1}<{2}	('naive', 'ae')	b	False
+collate_words	lt	1424	{1}<{2}	('naive', 'æ')	b	False
+collate_words	lt	1425	{1}<{2}	('naive', 'Æ')	b	False
+collate_words	lt	1426	{1}<{2}	('naive', 'AE')	b	False
+collate_words	lt	1427	{1}<{2}	('naive', 'ss')	b	True
+collate_words	lt	1428	{1}<{2}	('naive', 'ß')	b	True
+collate_words	lt	1429	{1}<{2}	('naive', 'SS')	b	True
+collate_words	lt	1430	{1}<{2}	('naive', 'oe')	b	True
+collate_words	lt	1431	{1}<{2}	('naive', 'œ')	b	True
+collate_words	lt	1432	{1}<{2}	('naive', 'Œ')	b	True
+collate_words	lt	1433	{1}<{2}	('naive', 'a9')	b	False
+collate_words	lt	1434	{1}<{2}	('naive', 'a10')	b	False
+collate_words	lt	1435	{1}<{2}	('naive', 'a1')	b	False
+collate_words	lt	1436	{1}<{2}	('naive', 'a01')	b	False
+collate_words	lt	1437	{1}<{2}	('naive', 'résumé')	b	True
+collate_words	lt	1438	{1}<{2}	('naive', 'resume')	b	True
+collate_words	lt	1439	{1}<{2}	('naive', 'Resume')	b	True
+collate_words	lt	1440	{1}<{2}	('naive', 'naïve')	b	True
+collate_words	lt	1441	{1}<{2}	('naive', 'a_b')	b	False
+collate_words	lt	1442	{1}<{2}	('naive', 'a.b')	b	False
+collate_words	lt	1443	{1}<{2}	('naive', 'a/b')	b	False
+collate_words	lt	1444	{1}<{2}	('a_b', 'co-op')	b	True
+collate_words	lt	1445	{1}<{2}	('a_b', 'coop')	b	True
+collate_words	lt	1446	{1}<{2}	('a_b', 'co--op')	b	True
+collate_words	lt	1447	{1}<{2}	('a_b', '-coop')	b	True
+collate_words	lt	1448	{1}<{2}	('a_b', 'coop-')	b	True
+collate_words	lt	1449	{1}<{2}	('a_b', "co'op")	b	True
+collate_words	lt	1450	{1}<{2}	('a_b', 'coops')	b	True
+collate_words	lt	1451	{1}<{2}	('a_b', 'a-b')	b	True
+collate_words	lt	1452	{1}<{2}	('a_b', 'ab')	b	True
+collate_words	lt	1453	{1}<{2}	('a_b', 'aa')	b	True
+collate_words	lt	1454	{1}<{2}	('a_b', "a'b")	b	True
+collate_words	lt	1455	{1}<{2}	('a_b', 'a b')	b	False
+collate_words	lt	1456	{1}<{2}	('a_b', '-a')	b	False
+collate_words	lt	1457	{1}<{2}	('a_b', 'a')	b	False
+collate_words	lt	1458	{1}<{2}	('a_b', 'A')	b	False
+collate_words	lt	1459	{1}<{2}	('a_b', 'aB')	b	True
+collate_words	lt	1460	{1}<{2}	('a_b', 'Ab')	b	True
+collate_words	lt	1461	{1}<{2}	('a_b', 'AB')	b	True
+collate_words	lt	1462	{1}<{2}	('a_b', 'ae')	b	True
+collate_words	lt	1463	{1}<{2}	('a_b', 'æ')	b	True
+collate_words	lt	1464	{1}<{2}	('a_b', 'Æ')	b	True
+collate_words	lt	1465	{1}<{2}	('a_b', 'AE')	b	True
+collate_words	lt	1466	{1}<{2}	('a_b', 'ss')	b	True
+collate_words	lt	1467	{1}<{2}	('a_b', 'ß')	b	True
+collate_words	lt	1468	{1}<{2}	('a_b', 'SS')	b	True
+collate_words	lt	1469	{1}<{2}	('a_b', 'oe')	b	True
+collate_words	lt	1470	{1}<{2}	('a_b', 'œ')	b	True
+collate_words	lt	1471	{1}<{2}	('a_b', 'Œ')	b	True
+collate_words	lt	1472	{1}<{2}	('a_b', 'a9')	b	True
+collate_words	lt	1473	{1}<{2}	('a_b', 'a10')	b	True
+collate_words	lt	1474	{1}<{2}	('a_b', 'a1')	b	True
+collate_words	lt	1475	{1}<{2}	('a_b', 'a01')	b	True
+collate_words	lt	1476	{1}<{2}	('a_b', 'résumé')	b	True
+collate_words	lt	1477	{1}<{2}	('a_b', 'resume')	b	True
+collate_words	lt	1478	{1}<{2}	('a_b', 'Resume')	b	True
+collate_words	lt	1479	{1}<{2}	('a_b', 'naïve')	b	True
+collate_words	lt	1480	{1}<{2}	('a_b', 'naive')	b	True
+collate_words	lt	1481	{1}<{2}	('a_b', 'a.b')	b	False
+collate_words	lt	1482	{1}<{2}	('a_b', 'a/b')	b	False
+collate_words	lt	1483	{1}<{2}	('a.b', 'co-op')	b	True
+collate_words	lt	1484	{1}<{2}	('a.b', 'coop')	b	True
+collate_words	lt	1485	{1}<{2}	('a.b', 'co--op')	b	True
+collate_words	lt	1486	{1}<{2}	('a.b', '-coop')	b	True
+collate_words	lt	1487	{1}<{2}	('a.b', 'coop-')	b	True
+collate_words	lt	1488	{1}<{2}	('a.b', "co'op")	b	True
+collate_words	lt	1489	{1}<{2}	('a.b', 'coops')	b	True
+collate_words	lt	1490	{1}<{2}	('a.b', 'a-b')	b	True
+collate_words	lt	1491	{1}<{2}	('a.b', 'ab')	b	True
+collate_words	lt	1492	{1}<{2}	('a.b', 'aa')	b	True
+collate_words	lt	1493	{1}<{2}	('a.b', "a'b")	b	True
+collate_words	lt	1494	{1}<{2}	('a.b', 'a b')	b	False
+collate_words	lt	1495	{1}<{2}	('a.b', '-a')	b	False
+collate_words	lt	1496	{1}<{2}	('a.b', 'a')	b	False
+collate_words	lt	1497	{1}<{2}	('a.b', 'A')	b	False
+collate_words	lt	1498	{1}<{2}	('a.b', 'aB')	b	True
+collate_words	lt	1499	{1}<{2}	('a.b', 'Ab')	b	True
+collate_words	lt	1500	{1}<{2}	('a.b', 'AB')	b	True
+collate_words	lt	1501	{1}<{2}	('a.b', 'ae')	b	True
+collate_words	lt	1502	{1}<{2}	('a.b', 'æ')	b	True
+collate_words	lt	1503	{1}<{2}	('a.b', 'Æ')	b	True
+collate_words	lt	1504	{1}<{2}	('a.b', 'AE')	b	True
+collate_words	lt	1505	{1}<{2}	('a.b', 'ss')	b	True
+collate_words	lt	1506	{1}<{2}	('a.b', 'ß')	b	True
+collate_words	lt	1507	{1}<{2}	('a.b', 'SS')	b	True
+collate_words	lt	1508	{1}<{2}	('a.b', 'oe')	b	True
+collate_words	lt	1509	{1}<{2}	('a.b', 'œ')	b	True
+collate_words	lt	1510	{1}<{2}	('a.b', 'Œ')	b	True
+collate_words	lt	1511	{1}<{2}	('a.b', 'a9')	b	True
+collate_words	lt	1512	{1}<{2}	('a.b', 'a10')	b	True
+collate_words	lt	1513	{1}<{2}	('a.b', 'a1')	b	True
+collate_words	lt	1514	{1}<{2}	('a.b', 'a01')	b	True
+collate_words	lt	1515	{1}<{2}	('a.b', 'résumé')	b	True
+collate_words	lt	1516	{1}<{2}	('a.b', 'resume')	b	True
+collate_words	lt	1517	{1}<{2}	('a.b', 'Resume')	b	True
+collate_words	lt	1518	{1}<{2}	('a.b', 'naïve')	b	True
+collate_words	lt	1519	{1}<{2}	('a.b', 'naive')	b	True
+collate_words	lt	1520	{1}<{2}	('a.b', 'a_b')	b	True
+collate_words	lt	1521	{1}<{2}	('a.b', 'a/b')	b	True
+collate_words	lt	1522	{1}<{2}	('a/b', 'co-op')	b	True
+collate_words	lt	1523	{1}<{2}	('a/b', 'coop')	b	True
+collate_words	lt	1524	{1}<{2}	('a/b', 'co--op')	b	True
+collate_words	lt	1525	{1}<{2}	('a/b', '-coop')	b	True
+collate_words	lt	1526	{1}<{2}	('a/b', 'coop-')	b	True
+collate_words	lt	1527	{1}<{2}	('a/b', "co'op")	b	True
+collate_words	lt	1528	{1}<{2}	('a/b', 'coops')	b	True
+collate_words	lt	1529	{1}<{2}	('a/b', 'a-b')	b	True
+collate_words	lt	1530	{1}<{2}	('a/b', 'ab')	b	True
+collate_words	lt	1531	{1}<{2}	('a/b', 'aa')	b	True
+collate_words	lt	1532	{1}<{2}	('a/b', "a'b")	b	True
+collate_words	lt	1533	{1}<{2}	('a/b', 'a b')	b	False
+collate_words	lt	1534	{1}<{2}	('a/b', '-a')	b	False
+collate_words	lt	1535	{1}<{2}	('a/b', 'a')	b	False
+collate_words	lt	1536	{1}<{2}	('a/b', 'A')	b	False
+collate_words	lt	1537	{1}<{2}	('a/b', 'aB')	b	True
+collate_words	lt	1538	{1}<{2}	('a/b', 'Ab')	b	True
+collate_words	lt	1539	{1}<{2}	('a/b', 'AB')	b	True
+collate_words	lt	1540	{1}<{2}	('a/b', 'ae')	b	True
+collate_words	lt	1541	{1}<{2}	('a/b', 'æ')	b	True
+collate_words	lt	1542	{1}<{2}	('a/b', 'Æ')	b	True
+collate_words	lt	1543	{1}<{2}	('a/b', 'AE')	b	True
+collate_words	lt	1544	{1}<{2}	('a/b', 'ss')	b	True
+collate_words	lt	1545	{1}<{2}	('a/b', 'ß')	b	True
+collate_words	lt	1546	{1}<{2}	('a/b', 'SS')	b	True
+collate_words	lt	1547	{1}<{2}	('a/b', 'oe')	b	True
+collate_words	lt	1548	{1}<{2}	('a/b', 'œ')	b	True
+collate_words	lt	1549	{1}<{2}	('a/b', 'Œ')	b	True
+collate_words	lt	1550	{1}<{2}	('a/b', 'a9')	b	True
+collate_words	lt	1551	{1}<{2}	('a/b', 'a10')	b	True
+collate_words	lt	1552	{1}<{2}	('a/b', 'a1')	b	True
+collate_words	lt	1553	{1}<{2}	('a/b', 'a01')	b	True
+collate_words	lt	1554	{1}<{2}	('a/b', 'résumé')	b	True
+collate_words	lt	1555	{1}<{2}	('a/b', 'resume')	b	True
+collate_words	lt	1556	{1}<{2}	('a/b', 'Resume')	b	True
+collate_words	lt	1557	{1}<{2}	('a/b', 'naïve')	b	True
+collate_words	lt	1558	{1}<{2}	('a/b', 'naive')	b	True
+collate_words	lt	1559	{1}<{2}	('a/b', 'a_b')	b	True
+collate_words	lt	1560	{1}<{2}	('a/b', 'a.b')	b	False
+collate_words	eq	1561	{1}={2}	('co-op', 'co-op')	b	True
+collate_words	eq	1562	{1}={2}	('co-op', 'coop')	b	False
+collate_words	eq	1563	{1}={2}	('co-op', 'co--op')	b	False
+collate_words	eq	1564	{1}={2}	('co-op', '-coop')	b	False
+collate_words	eq	1565	{1}={2}	('co-op', 'coop-')	b	False
+collate_words	eq	1566	{1}={2}	('co-op', "co'op")	b	False
+collate_words	eq	1567	{1}={2}	('co-op', 'coops')	b	False
+collate_words	eq	1568	{1}={2}	('co-op', 'a-b')	b	False
+collate_words	eq	1569	{1}={2}	('co-op', 'ab')	b	False
+collate_words	eq	1570	{1}={2}	('co-op', 'aa')	b	False
+collate_words	eq	1571	{1}={2}	('co-op', "a'b")	b	False
+collate_words	eq	1572	{1}={2}	('co-op', 'a b')	b	False
+collate_words	eq	1573	{1}={2}	('co-op', '-a')	b	False
+collate_words	eq	1574	{1}={2}	('co-op', 'a')	b	False
+collate_words	eq	1575	{1}={2}	('co-op', 'A')	b	False
+collate_words	eq	1576	{1}={2}	('co-op', 'aB')	b	False
+collate_words	eq	1577	{1}={2}	('co-op', 'Ab')	b	False
+collate_words	eq	1578	{1}={2}	('co-op', 'AB')	b	False
+collate_words	eq	1579	{1}={2}	('co-op', 'ae')	b	False
+collate_words	eq	1580	{1}={2}	('co-op', 'æ')	b	False
+collate_words	eq	1581	{1}={2}	('co-op', 'Æ')	b	False
+collate_words	eq	1582	{1}={2}	('co-op', 'AE')	b	False
+collate_words	eq	1583	{1}={2}	('co-op', 'ss')	b	False
+collate_words	eq	1584	{1}={2}	('co-op', 'ß')	b	False
+collate_words	eq	1585	{1}={2}	('co-op', 'SS')	b	False
+collate_words	eq	1586	{1}={2}	('co-op', 'oe')	b	False
+collate_words	eq	1587	{1}={2}	('co-op', 'œ')	b	False
+collate_words	eq	1588	{1}={2}	('co-op', 'Œ')	b	False
+collate_words	eq	1589	{1}={2}	('co-op', 'a9')	b	False
+collate_words	eq	1590	{1}={2}	('co-op', 'a10')	b	False
+collate_words	eq	1591	{1}={2}	('co-op', 'a1')	b	False
+collate_words	eq	1592	{1}={2}	('co-op', 'a01')	b	False
+collate_words	eq	1593	{1}={2}	('co-op', 'résumé')	b	False
+collate_words	eq	1594	{1}={2}	('co-op', 'resume')	b	False
+collate_words	eq	1595	{1}={2}	('co-op', 'Resume')	b	False
+collate_words	eq	1596	{1}={2}	('co-op', 'naïve')	b	False
+collate_words	eq	1597	{1}={2}	('co-op', 'naive')	b	False
+collate_words	eq	1598	{1}={2}	('co-op', 'a_b')	b	False
+collate_words	eq	1599	{1}={2}	('co-op', 'a.b')	b	False
+collate_words	eq	1600	{1}={2}	('co-op', 'a/b')	b	False
+collate_words	eq	1601	{1}={2}	('coop', 'coop')	b	True
+collate_words	eq	1602	{1}={2}	('coop', 'co--op')	b	False
+collate_words	eq	1603	{1}={2}	('coop', '-coop')	b	False
+collate_words	eq	1604	{1}={2}	('coop', 'coop-')	b	False
+collate_words	eq	1605	{1}={2}	('coop', "co'op")	b	False
+collate_words	eq	1606	{1}={2}	('coop', 'coops')	b	False
+collate_words	eq	1607	{1}={2}	('coop', 'a-b')	b	False
+collate_words	eq	1608	{1}={2}	('coop', 'ab')	b	False
+collate_words	eq	1609	{1}={2}	('coop', 'aa')	b	False
+collate_words	eq	1610	{1}={2}	('coop', "a'b")	b	False
+collate_words	eq	1611	{1}={2}	('coop', 'a b')	b	False
+collate_words	eq	1612	{1}={2}	('coop', '-a')	b	False
+collate_words	eq	1613	{1}={2}	('coop', 'a')	b	False
+collate_words	eq	1614	{1}={2}	('coop', 'A')	b	False
+collate_words	eq	1615	{1}={2}	('coop', 'aB')	b	False
+collate_words	eq	1616	{1}={2}	('coop', 'Ab')	b	False
+collate_words	eq	1617	{1}={2}	('coop', 'AB')	b	False
+collate_words	eq	1618	{1}={2}	('coop', 'ae')	b	False
+collate_words	eq	1619	{1}={2}	('coop', 'æ')	b	False
+collate_words	eq	1620	{1}={2}	('coop', 'Æ')	b	False
+collate_words	eq	1621	{1}={2}	('coop', 'AE')	b	False
+collate_words	eq	1622	{1}={2}	('coop', 'ss')	b	False
+collate_words	eq	1623	{1}={2}	('coop', 'ß')	b	False
+collate_words	eq	1624	{1}={2}	('coop', 'SS')	b	False
+collate_words	eq	1625	{1}={2}	('coop', 'oe')	b	False
+collate_words	eq	1626	{1}={2}	('coop', 'œ')	b	False
+collate_words	eq	1627	{1}={2}	('coop', 'Œ')	b	False
+collate_words	eq	1628	{1}={2}	('coop', 'a9')	b	False
+collate_words	eq	1629	{1}={2}	('coop', 'a10')	b	False
+collate_words	eq	1630	{1}={2}	('coop', 'a1')	b	False
+collate_words	eq	1631	{1}={2}	('coop', 'a01')	b	False
+collate_words	eq	1632	{1}={2}	('coop', 'résumé')	b	False
+collate_words	eq	1633	{1}={2}	('coop', 'resume')	b	False
+collate_words	eq	1634	{1}={2}	('coop', 'Resume')	b	False
+collate_words	eq	1635	{1}={2}	('coop', 'naïve')	b	False
+collate_words	eq	1636	{1}={2}	('coop', 'naive')	b	False
+collate_words	eq	1637	{1}={2}	('coop', 'a_b')	b	False
+collate_words	eq	1638	{1}={2}	('coop', 'a.b')	b	False
+collate_words	eq	1639	{1}={2}	('coop', 'a/b')	b	False
+collate_words	eq	1640	{1}={2}	('co--op', 'co--op')	b	True
+collate_words	eq	1641	{1}={2}	('co--op', '-coop')	b	False
+collate_words	eq	1642	{1}={2}	('co--op', 'coop-')	b	False
+collate_words	eq	1643	{1}={2}	('co--op', "co'op")	b	False
+collate_words	eq	1644	{1}={2}	('co--op', 'coops')	b	False
+collate_words	eq	1645	{1}={2}	('co--op', 'a-b')	b	False
+collate_words	eq	1646	{1}={2}	('co--op', 'ab')	b	False
+collate_words	eq	1647	{1}={2}	('co--op', 'aa')	b	False
+collate_words	eq	1648	{1}={2}	('co--op', "a'b")	b	False
+collate_words	eq	1649	{1}={2}	('co--op', 'a b')	b	False
+collate_words	eq	1650	{1}={2}	('co--op', '-a')	b	False
+collate_words	eq	1651	{1}={2}	('co--op', 'a')	b	False
+collate_words	eq	1652	{1}={2}	('co--op', 'A')	b	False
+collate_words	eq	1653	{1}={2}	('co--op', 'aB')	b	False
+collate_words	eq	1654	{1}={2}	('co--op', 'Ab')	b	False
+collate_words	eq	1655	{1}={2}	('co--op', 'AB')	b	False
+collate_words	eq	1656	{1}={2}	('co--op', 'ae')	b	False
+collate_words	eq	1657	{1}={2}	('co--op', 'æ')	b	False
+collate_words	eq	1658	{1}={2}	('co--op', 'Æ')	b	False
+collate_words	eq	1659	{1}={2}	('co--op', 'AE')	b	False
+collate_words	eq	1660	{1}={2}	('co--op', 'ss')	b	False
+collate_words	eq	1661	{1}={2}	('co--op', 'ß')	b	False
+collate_words	eq	1662	{1}={2}	('co--op', 'SS')	b	False
+collate_words	eq	1663	{1}={2}	('co--op', 'oe')	b	False
+collate_words	eq	1664	{1}={2}	('co--op', 'œ')	b	False
+collate_words	eq	1665	{1}={2}	('co--op', 'Œ')	b	False
+collate_words	eq	1666	{1}={2}	('co--op', 'a9')	b	False
+collate_words	eq	1667	{1}={2}	('co--op', 'a10')	b	False
+collate_words	eq	1668	{1}={2}	('co--op', 'a1')	b	False
+collate_words	eq	1669	{1}={2}	('co--op', 'a01')	b	False
+collate_words	eq	1670	{1}={2}	('co--op', 'résumé')	b	False
+collate_words	eq	1671	{1}={2}	('co--op', 'resume')	b	False
+collate_words	eq	1672	{1}={2}	('co--op', 'Resume')	b	False
+collate_words	eq	1673	{1}={2}	('co--op', 'naïve')	b	False
+collate_words	eq	1674	{1}={2}	('co--op', 'naive')	b	False
+collate_words	eq	1675	{1}={2}	('co--op', 'a_b')	b	False
+collate_words	eq	1676	{1}={2}	('co--op', 'a.b')	b	False
+collate_words	eq	1677	{1}={2}	('co--op', 'a/b')	b	False
+collate_words	eq	1678	{1}={2}	('-coop', '-coop')	b	True
+collate_words	eq	1679	{1}={2}	('-coop', 'coop-')	b	False
+collate_words	eq	1680	{1}={2}	('-coop', "co'op")	b	False
+collate_words	eq	1681	{1}={2}	('-coop', 'coops')	b	False
+collate_words	eq	1682	{1}={2}	('-coop', 'a-b')	b	False
+collate_words	eq	1683	{1}={2}	('-coop', 'ab')	b	False
+collate_words	eq	1684	{1}={2}	('-coop', 'aa')	b	False
+collate_words	eq	1685	{1}={2}	('-coop', "a'b")	b	False
+collate_words	eq	1686	{1}={2}	('-coop', 'a b')	b	False
+collate_words	eq	1687	{1}={2}	('-coop', '-a')	b	False
+collate_words	eq	1688	{1}={2}	('-coop', 'a')	b	False
+collate_words	eq	1689	{1}={2}	('-coop', 'A')	b	False
+collate_words	eq	1690	{1}={2}	('-coop', 'aB')	b	False
+collate_words	eq	1691	{1}={2}	('-coop', 'Ab')	b	False
+collate_words	eq	1692	{1}={2}	('-coop', 'AB')	b	False
+collate_words	eq	1693	{1}={2}	('-coop', 'ae')	b	False
+collate_words	eq	1694	{1}={2}	('-coop', 'æ')	b	False
+collate_words	eq	1695	{1}={2}	('-coop', 'Æ')	b	False
+collate_words	eq	1696	{1}={2}	('-coop', 'AE')	b	False
+collate_words	eq	1697	{1}={2}	('-coop', 'ss')	b	False
+collate_words	eq	1698	{1}={2}	('-coop', 'ß')	b	False
+collate_words	eq	1699	{1}={2}	('-coop', 'SS')	b	False
+collate_words	eq	1700	{1}={2}	('-coop', 'oe')	b	False
+collate_words	eq	1701	{1}={2}	('-coop', 'œ')	b	False
+collate_words	eq	1702	{1}={2}	('-coop', 'Œ')	b	False
+collate_words	eq	1703	{1}={2}	('-coop', 'a9')	b	False
+collate_words	eq	1704	{1}={2}	('-coop', 'a10')	b	False
+collate_words	eq	1705	{1}={2}	('-coop', 'a1')	b	False
+collate_words	eq	1706	{1}={2}	('-coop', 'a01')	b	False
+collate_words	eq	1707	{1}={2}	('-coop', 'résumé')	b	False
+collate_words	eq	1708	{1}={2}	('-coop', 'resume')	b	False
+collate_words	eq	1709	{1}={2}	('-coop', 'Resume')	b	False
+collate_words	eq	1710	{1}={2}	('-coop', 'naïve')	b	False
+collate_words	eq	1711	{1}={2}	('-coop', 'naive')	b	False
+collate_words	eq	1712	{1}={2}	('-coop', 'a_b')	b	False
+collate_words	eq	1713	{1}={2}	('-coop', 'a.b')	b	False
+collate_words	eq	1714	{1}={2}	('-coop', 'a/b')	b	False
+collate_words	eq	1715	{1}={2}	('coop-', 'coop-')	b	True
+collate_words	eq	1716	{1}={2}	('coop-', "co'op")	b	False
+collate_words	eq	1717	{1}={2}	('coop-', 'coops')	b	False
+collate_words	eq	1718	{1}={2}	('coop-', 'a-b')	b	False
+collate_words	eq	1719	{1}={2}	('coop-', 'ab')	b	False
+collate_words	eq	1720	{1}={2}	('coop-', 'aa')	b	False
+collate_words	eq	1721	{1}={2}	('coop-', "a'b")	b	False
+collate_words	eq	1722	{1}={2}	('coop-', 'a b')	b	False
+collate_words	eq	1723	{1}={2}	('coop-', '-a')	b	False
+collate_words	eq	1724	{1}={2}	('coop-', 'a')	b	False
+collate_words	eq	1725	{1}={2}	('coop-', 'A')	b	False
+collate_words	eq	1726	{1}={2}	('coop-', 'aB')	b	False
+collate_words	eq	1727	{1}={2}	('coop-', 'Ab')	b	False
+collate_words	eq	1728	{1}={2}	('coop-', 'AB')	b	False
+collate_words	eq	1729	{1}={2}	('coop-', 'ae')	b	False
+collate_words	eq	1730	{1}={2}	('coop-', 'æ')	b	False
+collate_words	eq	1731	{1}={2}	('coop-', 'Æ')	b	False
+collate_words	eq	1732	{1}={2}	('coop-', 'AE')	b	False
+collate_words	eq	1733	{1}={2}	('coop-', 'ss')	b	False
+collate_words	eq	1734	{1}={2}	('coop-', 'ß')	b	False
+collate_words	eq	1735	{1}={2}	('coop-', 'SS')	b	False
+collate_words	eq	1736	{1}={2}	('coop-', 'oe')	b	False
+collate_words	eq	1737	{1}={2}	('coop-', 'œ')	b	False
+collate_words	eq	1738	{1}={2}	('coop-', 'Œ')	b	False
+collate_words	eq	1739	{1}={2}	('coop-', 'a9')	b	False
+collate_words	eq	1740	{1}={2}	('coop-', 'a10')	b	False
+collate_words	eq	1741	{1}={2}	('coop-', 'a1')	b	False
+collate_words	eq	1742	{1}={2}	('coop-', 'a01')	b	False
+collate_words	eq	1743	{1}={2}	('coop-', 'résumé')	b	False
+collate_words	eq	1744	{1}={2}	('coop-', 'resume')	b	False
+collate_words	eq	1745	{1}={2}	('coop-', 'Resume')	b	False
+collate_words	eq	1746	{1}={2}	('coop-', 'naïve')	b	False
+collate_words	eq	1747	{1}={2}	('coop-', 'naive')	b	False
+collate_words	eq	1748	{1}={2}	('coop-', 'a_b')	b	False
+collate_words	eq	1749	{1}={2}	('coop-', 'a.b')	b	False
+collate_words	eq	1750	{1}={2}	('coop-', 'a/b')	b	False
+collate_words	eq	1751	{1}={2}	("co'op", "co'op")	b	True
+collate_words	eq	1752	{1}={2}	("co'op", 'coops')	b	False
+collate_words	eq	1753	{1}={2}	("co'op", 'a-b')	b	False
+collate_words	eq	1754	{1}={2}	("co'op", 'ab')	b	False
+collate_words	eq	1755	{1}={2}	("co'op", 'aa')	b	False
+collate_words	eq	1756	{1}={2}	("co'op", "a'b")	b	False
+collate_words	eq	1757	{1}={2}	("co'op", 'a b')	b	False
+collate_words	eq	1758	{1}={2}	("co'op", '-a')	b	False
+collate_words	eq	1759	{1}={2}	("co'op", 'a')	b	False
+collate_words	eq	1760	{1}={2}	("co'op", 'A')	b	False
+collate_words	eq	1761	{1}={2}	("co'op", 'aB')	b	False
+collate_words	eq	1762	{1}={2}	("co'op", 'Ab')	b	False
+collate_words	eq	1763	{1}={2}	("co'op", 'AB')	b	False
+collate_words	eq	1764	{1}={2}	("co'op", 'ae')	b	False
+collate_words	eq	1765	{1}={2}	("co'op", 'æ')	b	False
+collate_words	eq	1766	{1}={2}	("co'op", 'Æ')	b	False
+collate_words	eq	1767	{1}={2}	("co'op", 'AE')	b	False
+collate_words	eq	1768	{1}={2}	("co'op", 'ss')	b	False
+collate_words	eq	1769	{1}={2}	("co'op", 'ß')	b	False
+collate_words	eq	1770	{1}={2}	("co'op", 'SS')	b	False
+collate_words	eq	1771	{1}={2}	("co'op", 'oe')	b	False
+collate_words	eq	1772	{1}={2}	("co'op", 'œ')	b	False
+collate_words	eq	1773	{1}={2}	("co'op", 'Œ')	b	False
+collate_words	eq	1774	{1}={2}	("co'op", 'a9')	b	False
+collate_words	eq	1775	{1}={2}	("co'op", 'a10')	b	False
+collate_words	eq	1776	{1}={2}	("co'op", 'a1')	b	False
+collate_words	eq	1777	{1}={2}	("co'op", 'a01')	b	False
+collate_words	eq	1778	{1}={2}	("co'op", 'résumé')	b	False
+collate_words	eq	1779	{1}={2}	("co'op", 'resume')	b	False
+collate_words	eq	1780	{1}={2}	("co'op", 'Resume')	b	False
+collate_words	eq	1781	{1}={2}	("co'op", 'naïve')	b	False
+collate_words	eq	1782	{1}={2}	("co'op", 'naive')	b	False
+collate_words	eq	1783	{1}={2}	("co'op", 'a_b')	b	False
+collate_words	eq	1784	{1}={2}	("co'op", 'a.b')	b	False
+collate_words	eq	1785	{1}={2}	("co'op", 'a/b')	b	False
+collate_words	eq	1786	{1}={2}	('coops', 'coops')	b	True
+collate_words	eq	1787	{1}={2}	('coops', 'a-b')	b	False
+collate_words	eq	1788	{1}={2}	('coops', 'ab')	b	False
+collate_words	eq	1789	{1}={2}	('coops', 'aa')	b	False
+collate_words	eq	1790	{1}={2}	('coops', "a'b")	b	False
+collate_words	eq	1791	{1}={2}	('coops', 'a b')	b	False
+collate_words	eq	1792	{1}={2}	('coops', '-a')	b	False
+collate_words	eq	1793	{1}={2}	('coops', 'a')	b	False
+collate_words	eq	1794	{1}={2}	('coops', 'A')	b	False
+collate_words	eq	1795	{1}={2}	('coops', 'aB')	b	False
+collate_words	eq	1796	{1}={2}	('coops', 'Ab')	b	False
+collate_words	eq	1797	{1}={2}	('coops', 'AB')	b	False
+collate_words	eq	1798	{1}={2}	('coops', 'ae')	b	False
+collate_words	eq	1799	{1}={2}	('coops', 'æ')	b	False
+collate_words	eq	1800	{1}={2}	('coops', 'Æ')	b	False
+collate_words	eq	1801	{1}={2}	('coops', 'AE')	b	False
+collate_words	eq	1802	{1}={2}	('coops', 'ss')	b	False
+collate_words	eq	1803	{1}={2}	('coops', 'ß')	b	False
+collate_words	eq	1804	{1}={2}	('coops', 'SS')	b	False
+collate_words	eq	1805	{1}={2}	('coops', 'oe')	b	False
+collate_words	eq	1806	{1}={2}	('coops', 'œ')	b	False
+collate_words	eq	1807	{1}={2}	('coops', 'Œ')	b	False
+collate_words	eq	1808	{1}={2}	('coops', 'a9')	b	False
+collate_words	eq	1809	{1}={2}	('coops', 'a10')	b	False
+collate_words	eq	1810	{1}={2}	('coops', 'a1')	b	False
+collate_words	eq	1811	{1}={2}	('coops', 'a01')	b	False
+collate_words	eq	1812	{1}={2}	('coops', 'résumé')	b	False
+collate_words	eq	1813	{1}={2}	('coops', 'resume')	b	False
+collate_words	eq	1814	{1}={2}	('coops', 'Resume')	b	False
+collate_words	eq	1815	{1}={2}	('coops', 'naïve')	b	False
+collate_words	eq	1816	{1}={2}	('coops', 'naive')	b	False
+collate_words	eq	1817	{1}={2}	('coops', 'a_b')	b	False
+collate_words	eq	1818	{1}={2}	('coops', 'a.b')	b	False
+collate_words	eq	1819	{1}={2}	('coops', 'a/b')	b	False
+collate_words	eq	1820	{1}={2}	('a-b', 'a-b')	b	True
+collate_words	eq	1821	{1}={2}	('a-b', 'ab')	b	False
+collate_words	eq	1822	{1}={2}	('a-b', 'aa')	b	False
+collate_words	eq	1823	{1}={2}	('a-b', "a'b")	b	False
+collate_words	eq	1824	{1}={2}	('a-b', 'a b')	b	False
+collate_words	eq	1825	{1}={2}	('a-b', '-a')	b	False
+collate_words	eq	1826	{1}={2}	('a-b', 'a')	b	False
+collate_words	eq	1827	{1}={2}	('a-b', 'A')	b	False
+collate_words	eq	1828	{1}={2}	('a-b', 'aB')	b	False
+collate_words	eq	1829	{1}={2}	('a-b', 'Ab')	b	False
+collate_words	eq	1830	{1}={2}	('a-b', 'AB')	b	False
+collate_words	eq	1831	{1}={2}	('a-b', 'ae')	b	False
+collate_words	eq	1832	{1}={2}	('a-b', 'æ')	b	False
+collate_words	eq	1833	{1}={2}	('a-b', 'Æ')	b	False
+collate_words	eq	1834	{1}={2}	('a-b', 'AE')	b	False
+collate_words	eq	1835	{1}={2}	('a-b', 'ss')	b	False
+collate_words	eq	1836	{1}={2}	('a-b', 'ß')	b	False
+collate_words	eq	1837	{1}={2}	('a-b', 'SS')	b	False
+collate_words	eq	1838	{1}={2}	('a-b', 'oe')	b	False
+collate_words	eq	1839	{1}={2}	('a-b', 'œ')	b	False
+collate_words	eq	1840	{1}={2}	('a-b', 'Œ')	b	False
+collate_words	eq	1841	{1}={2}	('a-b', 'a9')	b	False
+collate_words	eq	1842	{1}={2}	('a-b', 'a10')	b	False
+collate_words	eq	1843	{1}={2}	('a-b', 'a1')	b	False
+collate_words	eq	1844	{1}={2}	('a-b', 'a01')	b	False
+collate_words	eq	1845	{1}={2}	('a-b', 'résumé')	b	False
+collate_words	eq	1846	{1}={2}	('a-b', 'resume')	b	False
+collate_words	eq	1847	{1}={2}	('a-b', 'Resume')	b	False
+collate_words	eq	1848	{1}={2}	('a-b', 'naïve')	b	False
+collate_words	eq	1849	{1}={2}	('a-b', 'naive')	b	False
+collate_words	eq	1850	{1}={2}	('a-b', 'a_b')	b	False
+collate_words	eq	1851	{1}={2}	('a-b', 'a.b')	b	False
+collate_words	eq	1852	{1}={2}	('a-b', 'a/b')	b	False
+collate_words	eq	1853	{1}={2}	('ab', 'ab')	b	True
+collate_words	eq	1854	{1}={2}	('ab', 'aa')	b	False
+collate_words	eq	1855	{1}={2}	('ab', "a'b")	b	False
+collate_words	eq	1856	{1}={2}	('ab', 'a b')	b	False
+collate_words	eq	1857	{1}={2}	('ab', '-a')	b	False
+collate_words	eq	1858	{1}={2}	('ab', 'a')	b	False
+collate_words	eq	1859	{1}={2}	('ab', 'A')	b	False
+collate_words	eq	1860	{1}={2}	('ab', 'aB')	b	True
+collate_words	eq	1861	{1}={2}	('ab', 'Ab')	b	True
+collate_words	eq	1862	{1}={2}	('ab', 'AB')	b	True
+collate_words	eq	1863	{1}={2}	('ab', 'ae')	b	False
+collate_words	eq	1864	{1}={2}	('ab', 'æ')	b	False
+collate_words	eq	1865	{1}={2}	('ab', 'Æ')	b	False
+collate_words	eq	1866	{1}={2}	('ab', 'AE')	b	False
+collate_words	eq	1867	{1}={2}	('ab', 'ss')	b	False
+collate_words	eq	1868	{1}={2}	('ab', 'ß')	b	False
+collate_words	eq	1869	{1}={2}	('ab', 'SS')	b	False
+collate_words	eq	1870	{1}={2}	('ab', 'oe')	b	False
+collate_words	eq	1871	{1}={2}	('ab', 'œ')	b	False
+collate_words	eq	1872	{1}={2}	('ab', 'Œ')	b	False
+collate_words	eq	1873	{1}={2}	('ab', 'a9')	b	False
+collate_words	eq	1874	{1}={2}	('ab', 'a10')	b	False
+collate_words	eq	1875	{1}={2}	('ab', 'a1')	b	False
+collate_words	eq	1876	{1}={2}	('ab', 'a01')	b	False
+collate_words	eq	1877	{1}={2}	('ab', 'résumé')	b	False
+collate_words	eq	1878	{1}={2}	('ab', 'resume')	b	False
+collate_words	eq	1879	{1}={2}	('ab', 'Resume')	b	False
+collate_words	eq	1880	{1}={2}	('ab', 'naïve')	b	False
+collate_words	eq	1881	{1}={2}	('ab', 'naive')	b	False
+collate_words	eq	1882	{1}={2}	('ab', 'a_b')	b	False
+collate_words	eq	1883	{1}={2}	('ab', 'a.b')	b	False
+collate_words	eq	1884	{1}={2}	('ab', 'a/b')	b	False
+collate_words	eq	1885	{1}={2}	('aa', 'aa')	b	True
+collate_words	eq	1886	{1}={2}	('aa', "a'b")	b	False
+collate_words	eq	1887	{1}={2}	('aa', 'a b')	b	False
+collate_words	eq	1888	{1}={2}	('aa', '-a')	b	False
+collate_words	eq	1889	{1}={2}	('aa', 'a')	b	False
+collate_words	eq	1890	{1}={2}	('aa', 'A')	b	False
+collate_words	eq	1891	{1}={2}	('aa', 'aB')	b	False
+collate_words	eq	1892	{1}={2}	('aa', 'Ab')	b	False
+collate_words	eq	1893	{1}={2}	('aa', 'AB')	b	False
+collate_words	eq	1894	{1}={2}	('aa', 'ae')	b	False
+collate_words	eq	1895	{1}={2}	('aa', 'æ')	b	False
+collate_words	eq	1896	{1}={2}	('aa', 'Æ')	b	False
+collate_words	eq	1897	{1}={2}	('aa', 'AE')	b	False
+collate_words	eq	1898	{1}={2}	('aa', 'ss')	b	False
+collate_words	eq	1899	{1}={2}	('aa', 'ß')	b	False
+collate_words	eq	1900	{1}={2}	('aa', 'SS')	b	False
+collate_words	eq	1901	{1}={2}	('aa', 'oe')	b	False
+collate_words	eq	1902	{1}={2}	('aa', 'œ')	b	False
+collate_words	eq	1903	{1}={2}	('aa', 'Œ')	b	False
+collate_words	eq	1904	{1}={2}	('aa', 'a9')	b	False
+collate_words	eq	1905	{1}={2}	('aa', 'a10')	b	False
+collate_words	eq	1906	{1}={2}	('aa', 'a1')	b	False
+collate_words	eq	1907	{1}={2}	('aa', 'a01')	b	False
+collate_words	eq	1908	{1}={2}	('aa', 'résumé')	b	False
+collate_words	eq	1909	{1}={2}	('aa', 'resume')	b	False
+collate_words	eq	1910	{1}={2}	('aa', 'Resume')	b	False
+collate_words	eq	1911	{1}={2}	('aa', 'naïve')	b	False
+collate_words	eq	1912	{1}={2}	('aa', 'naive')	b	False
+collate_words	eq	1913	{1}={2}	('aa', 'a_b')	b	False
+collate_words	eq	1914	{1}={2}	('aa', 'a.b')	b	False
+collate_words	eq	1915	{1}={2}	('aa', 'a/b')	b	False
+collate_words	eq	1916	{1}={2}	("a'b", "a'b")	b	True
+collate_words	eq	1917	{1}={2}	("a'b", 'a b')	b	False
+collate_words	eq	1918	{1}={2}	("a'b", '-a')	b	False
+collate_words	eq	1919	{1}={2}	("a'b", 'a')	b	False
+collate_words	eq	1920	{1}={2}	("a'b", 'A')	b	False
+collate_words	eq	1921	{1}={2}	("a'b", 'aB')	b	False
+collate_words	eq	1922	{1}={2}	("a'b", 'Ab')	b	False
+collate_words	eq	1923	{1}={2}	("a'b", 'AB')	b	False
+collate_words	eq	1924	{1}={2}	("a'b", 'ae')	b	False
+collate_words	eq	1925	{1}={2}	("a'b", 'æ')	b	False
+collate_words	eq	1926	{1}={2}	("a'b", 'Æ')	b	False
+collate_words	eq	1927	{1}={2}	("a'b", 'AE')	b	False
+collate_words	eq	1928	{1}={2}	("a'b", 'ss')	b	False
+collate_words	eq	1929	{1}={2}	("a'b", 'ß')	b	False
+collate_words	eq	1930	{1}={2}	("a'b", 'SS')	b	False
+collate_words	eq	1931	{1}={2}	("a'b", 'oe')	b	False
+collate_words	eq	1932	{1}={2}	("a'b", 'œ')	b	False
+collate_words	eq	1933	{1}={2}	("a'b", 'Œ')	b	False
+collate_words	eq	1934	{1}={2}	("a'b", 'a9')	b	False
+collate_words	eq	1935	{1}={2}	("a'b", 'a10')	b	False
+collate_words	eq	1936	{1}={2}	("a'b", 'a1')	b	False
+collate_words	eq	1937	{1}={2}	("a'b", 'a01')	b	False
+collate_words	eq	1938	{1}={2}	("a'b", 'résumé')	b	False
+collate_words	eq	1939	{1}={2}	("a'b", 'resume')	b	False
+collate_words	eq	1940	{1}={2}	("a'b", 'Resume')	b	False
+collate_words	eq	1941	{1}={2}	("a'b", 'naïve')	b	False
+collate_words	eq	1942	{1}={2}	("a'b", 'naive')	b	False
+collate_words	eq	1943	{1}={2}	("a'b", 'a_b')	b	False
+collate_words	eq	1944	{1}={2}	("a'b", 'a.b')	b	False
+collate_words	eq	1945	{1}={2}	("a'b", 'a/b')	b	False
+collate_words	eq	1946	{1}={2}	('a b', 'a b')	b	True
+collate_words	eq	1947	{1}={2}	('a b', '-a')	b	False
+collate_words	eq	1948	{1}={2}	('a b', 'a')	b	False
+collate_words	eq	1949	{1}={2}	('a b', 'A')	b	False
+collate_words	eq	1950	{1}={2}	('a b', 'aB')	b	False
+collate_words	eq	1951	{1}={2}	('a b', 'Ab')	b	False
+collate_words	eq	1952	{1}={2}	('a b', 'AB')	b	False
+collate_words	eq	1953	{1}={2}	('a b', 'ae')	b	False
+collate_words	eq	1954	{1}={2}	('a b', 'æ')	b	False
+collate_words	eq	1955	{1}={2}	('a b', 'Æ')	b	False
+collate_words	eq	1956	{1}={2}	('a b', 'AE')	b	False
+collate_words	eq	1957	{1}={2}	('a b', 'ss')	b	False
+collate_words	eq	1958	{1}={2}	('a b', 'ß')	b	False
+collate_words	eq	1959	{1}={2}	('a b', 'SS')	b	False
+collate_words	eq	1960	{1}={2}	('a b', 'oe')	b	False
+collate_words	eq	1961	{1}={2}	('a b', 'œ')	b	False
+collate_words	eq	1962	{1}={2}	('a b', 'Œ')	b	False
+collate_words	eq	1963	{1}={2}	('a b', 'a9')	b	False
+collate_words	eq	1964	{1}={2}	('a b', 'a10')	b	False
+collate_words	eq	1965	{1}={2}	('a b', 'a1')	b	False
+collate_words	eq	1966	{1}={2}	('a b', 'a01')	b	False
+collate_words	eq	1967	{1}={2}	('a b', 'résumé')	b	False
+collate_words	eq	1968	{1}={2}	('a b', 'resume')	b	False
+collate_words	eq	1969	{1}={2}	('a b', 'Resume')	b	False
+collate_words	eq	1970	{1}={2}	('a b', 'naïve')	b	False
+collate_words	eq	1971	{1}={2}	('a b', 'naive')	b	False
+collate_words	eq	1972	{1}={2}	('a b', 'a_b')	b	False
+collate_words	eq	1973	{1}={2}	('a b', 'a.b')	b	False
+collate_words	eq	1974	{1}={2}	('a b', 'a/b')	b	False
+collate_words	eq	1975	{1}={2}	('-a', '-a')	b	True
+collate_words	eq	1976	{1}={2}	('-a', 'a')	b	False
+collate_words	eq	1977	{1}={2}	('-a', 'A')	b	False
+collate_words	eq	1978	{1}={2}	('-a', 'aB')	b	False
+collate_words	eq	1979	{1}={2}	('-a', 'Ab')	b	False
+collate_words	eq	1980	{1}={2}	('-a', 'AB')	b	False
+collate_words	eq	1981	{1}={2}	('-a', 'ae')	b	False
+collate_words	eq	1982	{1}={2}	('-a', 'æ')	b	False
+collate_words	eq	1983	{1}={2}	('-a', 'Æ')	b	False
+collate_words	eq	1984	{1}={2}	('-a', 'AE')	b	False
+collate_words	eq	1985	{1}={2}	('-a', 'ss')	b	False
+collate_words	eq	1986	{1}={2}	('-a', 'ß')	b	False
+collate_words	eq	1987	{1}={2}	('-a', 'SS')	b	False
+collate_words	eq	1988	{1}={2}	('-a', 'oe')	b	False
+collate_words	eq	1989	{1}={2}	('-a', 'œ')	b	False
+collate_words	eq	1990	{1}={2}	('-a', 'Œ')	b	False
+collate_words	eq	1991	{1}={2}	('-a', 'a9')	b	False
+collate_words	eq	1992	{1}={2}	('-a', 'a10')	b	False
+collate_words	eq	1993	{1}={2}	('-a', 'a1')	b	False
+collate_words	eq	1994	{1}={2}	('-a', 'a01')	b	False
+collate_words	eq	1995	{1}={2}	('-a', 'résumé')	b	False
+collate_words	eq	1996	{1}={2}	('-a', 'resume')	b	False
+collate_words	eq	1997	{1}={2}	('-a', 'Resume')	b	False
+collate_words	eq	1998	{1}={2}	('-a', 'naïve')	b	False
+collate_words	eq	1999	{1}={2}	('-a', 'naive')	b	False
+collate_words	eq	2000	{1}={2}	('-a', 'a_b')	b	False
+collate_words	eq	2001	{1}={2}	('-a', 'a.b')	b	False
+collate_words	eq	2002	{1}={2}	('-a', 'a/b')	b	False
+collate_words	eq	2003	{1}={2}	('a', 'a')	b	True
+collate_words	eq	2004	{1}={2}	('a', 'A')	b	True
+collate_words	eq	2005	{1}={2}	('a', 'aB')	b	False
+collate_words	eq	2006	{1}={2}	('a', 'Ab')	b	False
+collate_words	eq	2007	{1}={2}	('a', 'AB')	b	False
+collate_words	eq	2008	{1}={2}	('a', 'ae')	b	False
+collate_words	eq	2009	{1}={2}	('a', 'æ')	b	False
+collate_words	eq	2010	{1}={2}	('a', 'Æ')	b	False
+collate_words	eq	2011	{1}={2}	('a', 'AE')	b	False
+collate_words	eq	2012	{1}={2}	('a', 'ss')	b	False
+collate_words	eq	2013	{1}={2}	('a', 'ß')	b	False
+collate_words	eq	2014	{1}={2}	('a', 'SS')	b	False
+collate_words	eq	2015	{1}={2}	('a', 'oe')	b	False
+collate_words	eq	2016	{1}={2}	('a', 'œ')	b	False
+collate_words	eq	2017	{1}={2}	('a', 'Œ')	b	False
+collate_words	eq	2018	{1}={2}	('a', 'a9')	b	False
+collate_words	eq	2019	{1}={2}	('a', 'a10')	b	False
+collate_words	eq	2020	{1}={2}	('a', 'a1')	b	False
+collate_words	eq	2021	{1}={2}	('a', 'a01')	b	False
+collate_words	eq	2022	{1}={2}	('a', 'résumé')	b	False
+collate_words	eq	2023	{1}={2}	('a', 'resume')	b	False
+collate_words	eq	2024	{1}={2}	('a', 'Resume')	b	False
+collate_words	eq	2025	{1}={2}	('a', 'naïve')	b	False
+collate_words	eq	2026	{1}={2}	('a', 'naive')	b	False
+collate_words	eq	2027	{1}={2}	('a', 'a_b')	b	False
+collate_words	eq	2028	{1}={2}	('a', 'a.b')	b	False
+collate_words	eq	2029	{1}={2}	('a', 'a/b')	b	False
+collate_words	eq	2030	{1}={2}	('A', 'A')	b	True
+collate_words	eq	2031	{1}={2}	('A', 'aB')	b	False
+collate_words	eq	2032	{1}={2}	('A', 'Ab')	b	False
+collate_words	eq	2033	{1}={2}	('A', 'AB')	b	False
+collate_words	eq	2034	{1}={2}	('A', 'ae')	b	False
+collate_words	eq	2035	{1}={2}	('A', 'æ')	b	False
+collate_words	eq	2036	{1}={2}	('A', 'Æ')	b	False
+collate_words	eq	2037	{1}={2}	('A', 'AE')	b	False
+collate_words	eq	2038	{1}={2}	('A', 'ss')	b	False
+collate_words	eq	2039	{1}={2}	('A', 'ß')	b	False
+collate_words	eq	2040	{1}={2}	('A', 'SS')	b	False
+collate_words	eq	2041	{1}={2}	('A', 'oe')	b	False
+collate_words	eq	2042	{1}={2}	('A', 'œ')	b	False
+collate_words	eq	2043	{1}={2}	('A', 'Œ')	b	False
+collate_words	eq	2044	{1}={2}	('A', 'a9')	b	False
+collate_words	eq	2045	{1}={2}	('A', 'a10')	b	False
+collate_words	eq	2046	{1}={2}	('A', 'a1')	b	False
+collate_words	eq	2047	{1}={2}	('A', 'a01')	b	False
+collate_words	eq	2048	{1}={2}	('A', 'résumé')	b	False
+collate_words	eq	2049	{1}={2}	('A', 'resume')	b	False
+collate_words	eq	2050	{1}={2}	('A', 'Resume')	b	False
+collate_words	eq	2051	{1}={2}	('A', 'naïve')	b	False
+collate_words	eq	2052	{1}={2}	('A', 'naive')	b	False
+collate_words	eq	2053	{1}={2}	('A', 'a_b')	b	False
+collate_words	eq	2054	{1}={2}	('A', 'a.b')	b	False
+collate_words	eq	2055	{1}={2}	('A', 'a/b')	b	False
+collate_words	eq	2056	{1}={2}	('aB', 'aB')	b	True
+collate_words	eq	2057	{1}={2}	('aB', 'Ab')	b	True
+collate_words	eq	2058	{1}={2}	('aB', 'AB')	b	True
+collate_words	eq	2059	{1}={2}	('aB', 'ae')	b	False
+collate_words	eq	2060	{1}={2}	('aB', 'æ')	b	False
+collate_words	eq	2061	{1}={2}	('aB', 'Æ')	b	False
+collate_words	eq	2062	{1}={2}	('aB', 'AE')	b	False
+collate_words	eq	2063	{1}={2}	('aB', 'ss')	b	False
+collate_words	eq	2064	{1}={2}	('aB', 'ß')	b	False
+collate_words	eq	2065	{1}={2}	('aB', 'SS')	b	False
+collate_words	eq	2066	{1}={2}	('aB', 'oe')	b	False
+collate_words	eq	2067	{1}={2}	('aB', 'œ')	b	False
+collate_words	eq	2068	{1}={2}	('aB', 'Œ')	b	False
+collate_words	eq	2069	{1}={2}	('aB', 'a9')	b	False
+collate_words	eq	2070	{1}={2}	('aB', 'a10')	b	False
+collate_words	eq	2071	{1}={2}	('aB', 'a1')	b	False
+collate_words	eq	2072	{1}={2}	('aB', 'a01')	b	False
+collate_words	eq	2073	{1}={2}	('aB', 'résumé')	b	False
+collate_words	eq	2074	{1}={2}	('aB', 'resume')	b	False
+collate_words	eq	2075	{1}={2}	('aB', 'Resume')	b	False
+collate_words	eq	2076	{1}={2}	('aB', 'naïve')	b	False
+collate_words	eq	2077	{1}={2}	('aB', 'naive')	b	False
+collate_words	eq	2078	{1}={2}	('aB', 'a_b')	b	False
+collate_words	eq	2079	{1}={2}	('aB', 'a.b')	b	False
+collate_words	eq	2080	{1}={2}	('aB', 'a/b')	b	False
+collate_words	eq	2081	{1}={2}	('Ab', 'Ab')	b	True
+collate_words	eq	2082	{1}={2}	('Ab', 'AB')	b	True
+collate_words	eq	2083	{1}={2}	('Ab', 'ae')	b	False
+collate_words	eq	2084	{1}={2}	('Ab', 'æ')	b	False
+collate_words	eq	2085	{1}={2}	('Ab', 'Æ')	b	False
+collate_words	eq	2086	{1}={2}	('Ab', 'AE')	b	False
+collate_words	eq	2087	{1}={2}	('Ab', 'ss')	b	False
+collate_words	eq	2088	{1}={2}	('Ab', 'ß')	b	False
+collate_words	eq	2089	{1}={2}	('Ab', 'SS')	b	False
+collate_words	eq	2090	{1}={2}	('Ab', 'oe')	b	False
+collate_words	eq	2091	{1}={2}	('Ab', 'œ')	b	False
+collate_words	eq	2092	{1}={2}	('Ab', 'Œ')	b	False
+collate_words	eq	2093	{1}={2}	('Ab', 'a9')	b	False
+collate_words	eq	2094	{1}={2}	('Ab', 'a10')	b	False
+collate_words	eq	2095	{1}={2}	('Ab', 'a1')	b	False
+collate_words	eq	2096	{1}={2}	('Ab', 'a01')	b	False
+collate_words	eq	2097	{1}={2}	('Ab', 'résumé')	b	False
+collate_words	eq	2098	{1}={2}	('Ab', 'resume')	b	False
+collate_words	eq	2099	{1}={2}	('Ab', 'Resume')	b	False
+collate_words	eq	2100	{1}={2}	('Ab', 'naïve')	b	False
+collate_words	eq	2101	{1}={2}	('Ab', 'naive')	b	False
+collate_words	eq	2102	{1}={2}	('Ab', 'a_b')	b	False
+collate_words	eq	2103	{1}={2}	('Ab', 'a.b')	b	False
+collate_words	eq	2104	{1}={2}	('Ab', 'a/b')	b	False
+collate_words	eq	2105	{1}={2}	('AB', 'AB')	b	True
+collate_words	eq	2106	{1}={2}	('AB', 'ae')	b	False
+collate_words	eq	2107	{1}={2}	('AB', 'æ')	b	False
+collate_words	eq	2108	{1}={2}	('AB', 'Æ')	b	False
+collate_words	eq	2109	{1}={2}	('AB', 'AE')	b	False
+collate_words	eq	2110	{1}={2}	('AB', 'ss')	b	False
+collate_words	eq	2111	{1}={2}	('AB', 'ß')	b	False
+collate_words	eq	2112	{1}={2}	('AB', 'SS')	b	False
+collate_words	eq	2113	{1}={2}	('AB', 'oe')	b	False
+collate_words	eq	2114	{1}={2}	('AB', 'œ')	b	False
+collate_words	eq	2115	{1}={2}	('AB', 'Œ')	b	False
+collate_words	eq	2116	{1}={2}	('AB', 'a9')	b	False
+collate_words	eq	2117	{1}={2}	('AB', 'a10')	b	False
+collate_words	eq	2118	{1}={2}	('AB', 'a1')	b	False
+collate_words	eq	2119	{1}={2}	('AB', 'a01')	b	False
+collate_words	eq	2120	{1}={2}	('AB', 'résumé')	b	False
+collate_words	eq	2121	{1}={2}	('AB', 'resume')	b	False
+collate_words	eq	2122	{1}={2}	('AB', 'Resume')	b	False
+collate_words	eq	2123	{1}={2}	('AB', 'naïve')	b	False
+collate_words	eq	2124	{1}={2}	('AB', 'naive')	b	False
+collate_words	eq	2125	{1}={2}	('AB', 'a_b')	b	False
+collate_words	eq	2126	{1}={2}	('AB', 'a.b')	b	False
+collate_words	eq	2127	{1}={2}	('AB', 'a/b')	b	False
+collate_words	eq	2128	{1}={2}	('ae', 'ae')	b	True
+collate_words	eq	2129	{1}={2}	('ae', 'æ')	b	True
+collate_words	eq	2130	{1}={2}	('ae', 'Æ')	b	True
+collate_words	eq	2131	{1}={2}	('ae', 'AE')	b	True
+collate_words	eq	2132	{1}={2}	('ae', 'ss')	b	False
+collate_words	eq	2133	{1}={2}	('ae', 'ß')	b	False
+collate_words	eq	2134	{1}={2}	('ae', 'SS')	b	False
+collate_words	eq	2135	{1}={2}	('ae', 'oe')	b	False
+collate_words	eq	2136	{1}={2}	('ae', 'œ')	b	False
+collate_words	eq	2137	{1}={2}	('ae', 'Œ')	b	False
+collate_words	eq	2138	{1}={2}	('ae', 'a9')	b	False
+collate_words	eq	2139	{1}={2}	('ae', 'a10')	b	False
+collate_words	eq	2140	{1}={2}	('ae', 'a1')	b	False
+collate_words	eq	2141	{1}={2}	('ae', 'a01')	b	False
+collate_words	eq	2142	{1}={2}	('ae', 'résumé')	b	False
+collate_words	eq	2143	{1}={2}	('ae', 'resume')	b	False
+collate_words	eq	2144	{1}={2}	('ae', 'Resume')	b	False
+collate_words	eq	2145	{1}={2}	('ae', 'naïve')	b	False
+collate_words	eq	2146	{1}={2}	('ae', 'naive')	b	False
+collate_words	eq	2147	{1}={2}	('ae', 'a_b')	b	False
+collate_words	eq	2148	{1}={2}	('ae', 'a.b')	b	False
+collate_words	eq	2149	{1}={2}	('ae', 'a/b')	b	False
+collate_words	eq	2150	{1}={2}	('æ', 'æ')	b	True
+collate_words	eq	2151	{1}={2}	('æ', 'Æ')	b	True
+collate_words	eq	2152	{1}={2}	('æ', 'AE')	b	True
+collate_words	eq	2153	{1}={2}	('æ', 'ss')	b	False
+collate_words	eq	2154	{1}={2}	('æ', 'ß')	b	False
+collate_words	eq	2155	{1}={2}	('æ', 'SS')	b	False
+collate_words	eq	2156	{1}={2}	('æ', 'oe')	b	False
+collate_words	eq	2157	{1}={2}	('æ', 'œ')	b	False
+collate_words	eq	2158	{1}={2}	('æ', 'Œ')	b	False
+collate_words	eq	2159	{1}={2}	('æ', 'a9')	b	False
+collate_words	eq	2160	{1}={2}	('æ', 'a10')	b	False
+collate_words	eq	2161	{1}={2}	('æ', 'a1')	b	False
+collate_words	eq	2162	{1}={2}	('æ', 'a01')	b	False
+collate_words	eq	2163	{1}={2}	('æ', 'résumé')	b	False
+collate_words	eq	2164	{1}={2}	('æ', 'resume')	b	False
+collate_words	eq	2165	{1}={2}	('æ', 'Resume')	b	False
+collate_words	eq	2166	{1}={2}	('æ', 'naïve')	b	False
+collate_words	eq	2167	{1}={2}	('æ', 'naive')	b	False
+collate_words	eq	2168	{1}={2}	('æ', 'a_b')	b	False
+collate_words	eq	2169	{1}={2}	('æ', 'a.b')	b	False
+collate_words	eq	2170	{1}={2}	('æ', 'a/b')	b	False
+collate_words	eq	2171	{1}={2}	('Æ', 'Æ')	b	True
+collate_words	eq	2172	{1}={2}	('Æ', 'AE')	b	True
+collate_words	eq	2173	{1}={2}	('Æ', 'ss')	b	False
+collate_words	eq	2174	{1}={2}	('Æ', 'ß')	b	False
+collate_words	eq	2175	{1}={2}	('Æ', 'SS')	b	False
+collate_words	eq	2176	{1}={2}	('Æ', 'oe')	b	False
+collate_words	eq	2177	{1}={2}	('Æ', 'œ')	b	False
+collate_words	eq	2178	{1}={2}	('Æ', 'Œ')	b	False
+collate_words	eq	2179	{1}={2}	('Æ', 'a9')	b	False
+collate_words	eq	2180	{1}={2}	('Æ', 'a10')	b	False
+collate_words	eq	2181	{1}={2}	('Æ', 'a1')	b	False
+collate_words	eq	2182	{1}={2}	('Æ', 'a01')	b	False
+collate_words	eq	2183	{1}={2}	('Æ', 'résumé')	b	False
+collate_words	eq	2184	{1}={2}	('Æ', 'resume')	b	False
+collate_words	eq	2185	{1}={2}	('Æ', 'Resume')	b	False
+collate_words	eq	2186	{1}={2}	('Æ', 'naïve')	b	False
+collate_words	eq	2187	{1}={2}	('Æ', 'naive')	b	False
+collate_words	eq	2188	{1}={2}	('Æ', 'a_b')	b	False
+collate_words	eq	2189	{1}={2}	('Æ', 'a.b')	b	False
+collate_words	eq	2190	{1}={2}	('Æ', 'a/b')	b	False
+collate_words	eq	2191	{1}={2}	('AE', 'AE')	b	True
+collate_words	eq	2192	{1}={2}	('AE', 'ss')	b	False
+collate_words	eq	2193	{1}={2}	('AE', 'ß')	b	False
+collate_words	eq	2194	{1}={2}	('AE', 'SS')	b	False
+collate_words	eq	2195	{1}={2}	('AE', 'oe')	b	False
+collate_words	eq	2196	{1}={2}	('AE', 'œ')	b	False
+collate_words	eq	2197	{1}={2}	('AE', 'Œ')	b	False
+collate_words	eq	2198	{1}={2}	('AE', 'a9')	b	False
+collate_words	eq	2199	{1}={2}	('AE', 'a10')	b	False
+collate_words	eq	2200	{1}={2}	('AE', 'a1')	b	False
+collate_words	eq	2201	{1}={2}	('AE', 'a01')	b	False
+collate_words	eq	2202	{1}={2}	('AE', 'résumé')	b	False
+collate_words	eq	2203	{1}={2}	('AE', 'resume')	b	False
+collate_words	eq	2204	{1}={2}	('AE', 'Resume')	b	False
+collate_words	eq	2205	{1}={2}	('AE', 'naïve')	b	False
+collate_words	eq	2206	{1}={2}	('AE', 'naive')	b	False
+collate_words	eq	2207	{1}={2}	('AE', 'a_b')	b	False
+collate_words	eq	2208	{1}={2}	('AE', 'a.b')	b	False
+collate_words	eq	2209	{1}={2}	('AE', 'a/b')	b	False
+collate_words	eq	2210	{1}={2}	('ss', 'ss')	b	True
+collate_words	eq	2211	{1}={2}	('ss', 'ß')	b	True
+collate_words	eq	2212	{1}={2}	('ss', 'SS')	b	True
+collate_words	eq	2213	{1}={2}	('ss', 'oe')	b	False
+collate_words	eq	2214	{1}={2}	('ss', 'œ')	b	False
+collate_words	eq	2215	{1}={2}	('ss', 'Œ')	b	False
+collate_words	eq	2216	{1}={2}	('ss', 'a9')	b	False
+collate_words	eq	2217	{1}={2}	('ss', 'a10')	b	False
+collate_words	eq	2218	{1}={2}	('ss', 'a1')	b	False
+collate_words	eq	2219	{1}={2}	('ss', 'a01')	b	False
+collate_words	eq	2220	{1}={2}	('ss', 'résumé')	b	False
+collate_words	eq	2221	{1}={2}	('ss', 'resume')	b	False
+collate_words	eq	2222	{1}={2}	('ss', 'Resume')	b	False
+collate_words	eq	2223	{1}={2}	('ss', 'naïve')	b	False
+collate_words	eq	2224	{1}={2}	('ss', 'naive')	b	False
+collate_words	eq	2225	{1}={2}	('ss', 'a_b')	b	False
+collate_words	eq	2226	{1}={2}	('ss', 'a.b')	b	False
+collate_words	eq	2227	{1}={2}	('ss', 'a/b')	b	False
+collate_words	eq	2228	{1}={2}	('ß', 'ß')	b	True
+collate_words	eq	2229	{1}={2}	('ß', 'SS')	b	True
+collate_words	eq	2230	{1}={2}	('ß', 'oe')	b	False
+collate_words	eq	2231	{1}={2}	('ß', 'œ')	b	False
+collate_words	eq	2232	{1}={2}	('ß', 'Œ')	b	False
+collate_words	eq	2233	{1}={2}	('ß', 'a9')	b	False
+collate_words	eq	2234	{1}={2}	('ß', 'a10')	b	False
+collate_words	eq	2235	{1}={2}	('ß', 'a1')	b	False
+collate_words	eq	2236	{1}={2}	('ß', 'a01')	b	False
+collate_words	eq	2237	{1}={2}	('ß', 'résumé')	b	False
+collate_words	eq	2238	{1}={2}	('ß', 'resume')	b	False
+collate_words	eq	2239	{1}={2}	('ß', 'Resume')	b	False
+collate_words	eq	2240	{1}={2}	('ß', 'naïve')	b	False
+collate_words	eq	2241	{1}={2}	('ß', 'naive')	b	False
+collate_words	eq	2242	{1}={2}	('ß', 'a_b')	b	False
+collate_words	eq	2243	{1}={2}	('ß', 'a.b')	b	False
+collate_words	eq	2244	{1}={2}	('ß', 'a/b')	b	False
+collate_words	eq	2245	{1}={2}	('SS', 'SS')	b	True
+collate_words	eq	2246	{1}={2}	('SS', 'oe')	b	False
+collate_words	eq	2247	{1}={2}	('SS', 'œ')	b	False
+collate_words	eq	2248	{1}={2}	('SS', 'Œ')	b	False
+collate_words	eq	2249	{1}={2}	('SS', 'a9')	b	False
+collate_words	eq	2250	{1}={2}	('SS', 'a10')	b	False
+collate_words	eq	2251	{1}={2}	('SS', 'a1')	b	False
+collate_words	eq	2252	{1}={2}	('SS', 'a01')	b	False
+collate_words	eq	2253	{1}={2}	('SS', 'résumé')	b	False
+collate_words	eq	2254	{1}={2}	('SS', 'resume')	b	False
+collate_words	eq	2255	{1}={2}	('SS', 'Resume')	b	False
+collate_words	eq	2256	{1}={2}	('SS', 'naïve')	b	False
+collate_words	eq	2257	{1}={2}	('SS', 'naive')	b	False
+collate_words	eq	2258	{1}={2}	('SS', 'a_b')	b	False
+collate_words	eq	2259	{1}={2}	('SS', 'a.b')	b	False
+collate_words	eq	2260	{1}={2}	('SS', 'a/b')	b	False
+collate_words	eq	2261	{1}={2}	('oe', 'oe')	b	True
+collate_words	eq	2262	{1}={2}	('oe', 'œ')	b	True
+collate_words	eq	2263	{1}={2}	('oe', 'Œ')	b	True
+collate_words	eq	2264	{1}={2}	('oe', 'a9')	b	False
+collate_words	eq	2265	{1}={2}	('oe', 'a10')	b	False
+collate_words	eq	2266	{1}={2}	('oe', 'a1')	b	False
+collate_words	eq	2267	{1}={2}	('oe', 'a01')	b	False
+collate_words	eq	2268	{1}={2}	('oe', 'résumé')	b	False
+collate_words	eq	2269	{1}={2}	('oe', 'resume')	b	False
+collate_words	eq	2270	{1}={2}	('oe', 'Resume')	b	False
+collate_words	eq	2271	{1}={2}	('oe', 'naïve')	b	False
+collate_words	eq	2272	{1}={2}	('oe', 'naive')	b	False
+collate_words	eq	2273	{1}={2}	('oe', 'a_b')	b	False
+collate_words	eq	2274	{1}={2}	('oe', 'a.b')	b	False
+collate_words	eq	2275	{1}={2}	('oe', 'a/b')	b	False
+collate_words	eq	2276	{1}={2}	('œ', 'œ')	b	True
+collate_words	eq	2277	{1}={2}	('œ', 'Œ')	b	True
+collate_words	eq	2278	{1}={2}	('œ', 'a9')	b	False
+collate_words	eq	2279	{1}={2}	('œ', 'a10')	b	False
+collate_words	eq	2280	{1}={2}	('œ', 'a1')	b	False
+collate_words	eq	2281	{1}={2}	('œ', 'a01')	b	False
+collate_words	eq	2282	{1}={2}	('œ', 'résumé')	b	False
+collate_words	eq	2283	{1}={2}	('œ', 'resume')	b	False
+collate_words	eq	2284	{1}={2}	('œ', 'Resume')	b	False
+collate_words	eq	2285	{1}={2}	('œ', 'naïve')	b	False
+collate_words	eq	2286	{1}={2}	('œ', 'naive')	b	False
+collate_words	eq	2287	{1}={2}	('œ', 'a_b')	b	False
+collate_words	eq	2288	{1}={2}	('œ', 'a.b')	b	False
+collate_words	eq	2289	{1}={2}	('œ', 'a/b')	b	False
+collate_words	eq	2290	{1}={2}	('Œ', 'Œ')	b	True
+collate_words	eq	2291	{1}={2}	('Œ', 'a9')	b	False
+collate_words	eq	2292	{1}={2}	('Œ', 'a10')	b	False
+collate_words	eq	2293	{1}={2}	('Œ', 'a1')	b	False
+collate_words	eq	2294	{1}={2}	('Œ', 'a01')	b	False
+collate_words	eq	2295	{1}={2}	('Œ', 'résumé')	b	False
+collate_words	eq	2296	{1}={2}	('Œ', 'resume')	b	False
+collate_words	eq	2297	{1}={2}	('Œ', 'Resume')	b	False
+collate_words	eq	2298	{1}={2}	('Œ', 'naïve')	b	False
+collate_words	eq	2299	{1}={2}	('Œ', 'naive')	b	False
+collate_words	eq	2300	{1}={2}	('Œ', 'a_b')	b	False
+collate_words	eq	2301	{1}={2}	('Œ', 'a.b')	b	False
+collate_words	eq	2302	{1}={2}	('Œ', 'a/b')	b	False
+collate_words	eq	2303	{1}={2}	('a9', 'a9')	b	True
+collate_words	eq	2304	{1}={2}	('a9', 'a10')	b	False
+collate_words	eq	2305	{1}={2}	('a9', 'a1')	b	False
+collate_words	eq	2306	{1}={2}	('a9', 'a01')	b	False
+collate_words	eq	2307	{1}={2}	('a9', 'résumé')	b	False
+collate_words	eq	2308	{1}={2}	('a9', 'resume')	b	False
+collate_words	eq	2309	{1}={2}	('a9', 'Resume')	b	False
+collate_words	eq	2310	{1}={2}	('a9', 'naïve')	b	False
+collate_words	eq	2311	{1}={2}	('a9', 'naive')	b	False
+collate_words	eq	2312	{1}={2}	('a9', 'a_b')	b	False
+collate_words	eq	2313	{1}={2}	('a9', 'a.b')	b	False
+collate_words	eq	2314	{1}={2}	('a9', 'a/b')	b	False
+collate_words	eq	2315	{1}={2}	('a10', 'a10')	b	True
+collate_words	eq	2316	{1}={2}	('a10', 'a1')	b	False
+collate_words	eq	2317	{1}={2}	('a10', 'a01')	b	False
+collate_words	eq	2318	{1}={2}	('a10', 'résumé')	b	False
+collate_words	eq	2319	{1}={2}	('a10', 'resume')	b	False
+collate_words	eq	2320	{1}={2}	('a10', 'Resume')	b	False
+collate_words	eq	2321	{1}={2}	('a10', 'naïve')	b	False
+collate_words	eq	2322	{1}={2}	('a10', 'naive')	b	False
+collate_words	eq	2323	{1}={2}	('a10', 'a_b')	b	False
+collate_words	eq	2324	{1}={2}	('a10', 'a.b')	b	False
+collate_words	eq	2325	{1}={2}	('a10', 'a/b')	b	False
+collate_words	eq	2326	{1}={2}	('a1', 'a1')	b	True
+collate_words	eq	2327	{1}={2}	('a1', 'a01')	b	False
+collate_words	eq	2328	{1}={2}	('a1', 'résumé')	b	False
+collate_words	eq	2329	{1}={2}	('a1', 'resume')	b	False
+collate_words	eq	2330	{1}={2}	('a1', 'Resume')	b	False
+collate_words	eq	2331	{1}={2}	('a1', 'naïve')	b	False
+collate_words	eq	2332	{1}={2}	('a1', 'naive')	b	False
+collate_words	eq	2333	{1}={2}	('a1', 'a_b')	b	False
+collate_words	eq	2334	{1}={2}	('a1', 'a.b')	b	False
+collate_words	eq	2335	{1}={2}	('a1', 'a/b')	b	False
+collate_words	eq	2336	{1}={2}	('a01', 'a01')	b	True
+collate_words	eq	2337	{1}={2}	('a01', 'résumé')	b	False
+collate_words	eq	2338	{1}={2}	('a01', 'resume')	b	False
+collate_words	eq	2339	{1}={2}	('a01', 'Resume')	b	False
+collate_words	eq	2340	{1}={2}	('a01', 'naïve')	b	False
+collate_words	eq	2341	{1}={2}	('a01', 'naive')	b	False
+collate_words	eq	2342	{1}={2}	('a01', 'a_b')	b	False
+collate_words	eq	2343	{1}={2}	('a01', 'a.b')	b	False
+collate_words	eq	2344	{1}={2}	('a01', 'a/b')	b	False
+collate_words	eq	2345	{1}={2}	('résumé', 'résumé')	b	True
+collate_words	eq	2346	{1}={2}	('résumé', 'resume')	b	False
+collate_words	eq	2347	{1}={2}	('résumé', 'Resume')	b	False
+collate_words	eq	2348	{1}={2}	('résumé', 'naïve')	b	False
+collate_words	eq	2349	{1}={2}	('résumé', 'naive')	b	False
+collate_words	eq	2350	{1}={2}	('résumé', 'a_b')	b	False
+collate_words	eq	2351	{1}={2}	('résumé', 'a.b')	b	False
+collate_words	eq	2352	{1}={2}	('résumé', 'a/b')	b	False
+collate_words	eq	2353	{1}={2}	('resume', 'resume')	b	True
+collate_words	eq	2354	{1}={2}	('resume', 'Resume')	b	True
+collate_words	eq	2355	{1}={2}	('resume', 'naïve')	b	False
+collate_words	eq	2356	{1}={2}	('resume', 'naive')	b	False
+collate_words	eq	2357	{1}={2}	('resume', 'a_b')	b	False
+collate_words	eq	2358	{1}={2}	('resume', 'a.b')	b	False
+collate_words	eq	2359	{1}={2}	('resume', 'a/b')	b	False
+collate_words	eq	2360	{1}={2}	('Resume', 'Resume')	b	True
+collate_words	eq	2361	{1}={2}	('Resume', 'naïve')	b	False
+collate_words	eq	2362	{1}={2}	('Resume', 'naive')	b	False
+collate_words	eq	2363	{1}={2}	('Resume', 'a_b')	b	False
+collate_words	eq	2364	{1}={2}	('Resume', 'a.b')	b	False
+collate_words	eq	2365	{1}={2}	('Resume', 'a/b')	b	False
+collate_words	eq	2366	{1}={2}	('naïve', 'naïve')	b	True
+collate_words	eq	2367	{1}={2}	('naïve', 'naive')	b	False
+collate_words	eq	2368	{1}={2}	('naïve', 'a_b')	b	False
+collate_words	eq	2369	{1}={2}	('naïve', 'a.b')	b	False
+collate_words	eq	2370	{1}={2}	('naïve', 'a/b')	b	False
+collate_words	eq	2371	{1}={2}	('naive', 'naive')	b	True
+collate_words	eq	2372	{1}={2}	('naive', 'a_b')	b	False
+collate_words	eq	2373	{1}={2}	('naive', 'a.b')	b	False
+collate_words	eq	2374	{1}={2}	('naive', 'a/b')	b	False
+collate_words	eq	2375	{1}={2}	('a_b', 'a_b')	b	True
+collate_words	eq	2376	{1}={2}	('a_b', 'a.b')	b	False
+collate_words	eq	2377	{1}={2}	('a_b', 'a/b')	b	False
+collate_words	eq	2378	{1}={2}	('a.b', 'a.b')	b	True
+collate_words	eq	2379	{1}={2}	('a.b', 'a/b')	b	False
+collate_words	eq	2380	{1}={2}	('a/b', 'a/b')	b	True
