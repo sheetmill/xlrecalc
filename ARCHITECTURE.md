@@ -1030,8 +1030,8 @@ Behavior that is not the obvious reading, each from its capture:
   constant only `AVERAGEA` counts them.
 - `TRANSPOSE` (registry kind `matrix`): a range in a legacy formula is intersected first, even
   inside `INDEX` or `SUMPRODUCT`, as in Excel.
-- `CHAR` and `CODE` use the Mac OS Roman set, as Excel for Mac numbers characters (Excel for
-  Windows uses Windows-1252; there is no setting for it yet). `RAND` and `RANDBETWEEN` are
+- `CHAR` and `CODE` use the Mac OS Roman set, as Excel for Mac numbers characters (no capture
+  records Excel for Windows' set, and there is no setting for another). `RAND` and `RANDBETWEEN` are
   volatile, and `RANDBETWEEN` rounds both bounds up.
 - The database functions (captures `misc`, `database_family`): a text condition matches by prefix;
   a computed criterion is not supported, and the cell is reported.
@@ -1520,7 +1520,7 @@ in a rule recalculates no cell on opening, so `RecalcCheck` reads no rule. Tests
 
 ## 13. Roadmap
 
-After 0.8.1, in this order: an order, not a promise or a date.
+After 0.9.0, in this order: an order, not a promise or a date.
 
 1. A `Loader` that also reads sheets lazily where the opening rule answers `"some"`: the static
    dependents of the `ca="1"` cells found from the formulas-only reading, so that only the
@@ -1555,8 +1555,7 @@ After 0.8.1, in this order: an order, not a promise or a date.
 9. A strict option for `recalculate` and `Workbook.save` that raises where a cell cannot be
    computed (`Report.uncomputed`), rather than writing it with the file's value or none; and
    streams as well as paths for `save` and `recalculate`, as `load` takes one.
-10. Then: a setting or capture for Excel for Windows' text order, the array-backed store and
-   vectorized templates (numpy as an optional extra), a setting for
-   Excel for Windows' character set in `CHAR` and `CODE` (Windows-1252), the SQLite backend,
-   parallel evaluation of independent template columns on free-threaded Python, and a compiled
-   core only if profiling demands it.
+10. Then: settings for Excel for Windows' text order and its character set in `CHAR` and
+   `CODE`, each once captures record it; the array-backed store and vectorized templates (numpy
+   as an optional extra), the SQLite backend, parallel evaluation of independent template
+   columns on free-threaded Python, and a compiled core only if profiling demands it.

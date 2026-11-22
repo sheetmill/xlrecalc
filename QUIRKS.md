@@ -79,8 +79,8 @@ the smaller operand, the snapped and kept cases overlap.
 ## Excel semantics, not quirks
 
 `CHAR` and `CODE` number characters in the Mac OS Roman set, as Excel for Mac does, and
-`CODE` of a character outside the set is 95. Excel for Windows uses Windows-1252 instead;
-there is no setting for it yet.
+`CODE` of a character outside the set is 95. No capture records Excel for Windows' set, and
+there is no setting for another.
 
 On opening a file whose calculation properties let it keep the cached values, Excel recalculates
 the cells whose formula carries `ca="1"`, the mark it writes on every volatile cell and every cell
