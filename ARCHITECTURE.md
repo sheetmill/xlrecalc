@@ -742,6 +742,10 @@ answer. A change upstream of the formula puts its kept value out of date: it and
 are not evaluated, keep the values they hold, and move to `uncomputed`. A function not implemented whose
 formula reads through `OFFSET` or `INDIRECT` is never evaluated, so what it reads is not known, and any
 change counts as upstream of it. A dependent that reads through them is evaluated, and its reads are recorded.
+The report describes what evaluation has found so far: `from_kept` names the cells evaluated from a kept value, and
+the reads through `OFFSET` and `INDIRECT` are known only once their formulas are evaluated, so a report read before
+the cells are evaluated is partial. `Workbook.status` evaluates the cell it is asked about, and a report read after the
+statuses of the cells that matter, or after `recalculate()`, is the complete one.
 A change that removes the reliance (the formula replaced) takes the cells out of both. A read through
 `OFFSET` or `INDIRECT` of such a cell has no static edge, so each evaluation records its boxes, in a
 workbook holding such a formula only. A run that trusts cached values and evaluates nothing names

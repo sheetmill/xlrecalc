@@ -98,6 +98,14 @@ class Report:
     values. ``refused`` and ``exceptions`` are in sheet, row and column order, and
     ``unsupported`` in the order of its labels' text, however the workbook was read and computed.
 
+    The report describes what evaluation has found so far. Read before the cells are evaluated
+    (values read one by one, or none yet), it names only what the evaluated cells and the
+    formulas' own text show: a cell computed from a kept value is in ``from_kept`` once it has
+    been evaluated, and what a formula reads through ``OFFSET`` or ``INDIRECT`` is known once it
+    has. :meth:`Workbook.status` evaluates the cell it is asked about first. A report read after
+    the statuses of the cells that matter, or after :meth:`Workbook.recalculate`, which evaluates
+    every stale cell, is the complete one.
+
     Attributes:
         unsupported: Unsupported function or feature, and the number of cells using it. A run
             of iterative calculation that would pass ``ReadLimits.max_iteration_evaluations``

@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   comparisons still follow Excel for Mac.
 
 ### Changed
+- `Report`, `Workbook.report`, the README and ARCHITECTURE.md say plainly that the report describes what evaluation has
+  found so far: `Workbook.status` evaluates the cell it is asked about, and a report read after the statuses, or after
+  `Workbook.recalculate()`, is the complete one.
 - `SORT`, `SORTBY`, `UNIQUE`, `FILTER`, `TAKE` and `DROP` read a whole-column argument as its rows with data and one
   fill value for the rows below, as `SUMPRODUCT` does, and give the same result as before: `UNIQUE` and a `FILTER` whose
   fill fails no longer make a million-row array, and `SORT` sorts one line for the fill rows. The whole-column capture

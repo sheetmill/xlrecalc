@@ -56,7 +56,9 @@ with iteration off (`circular`), and formulas Excel itself refuses in a file (`r
 `unsupported` counts what was missing, and `exceptions` names cells where an internal error was
 caught, each written as `#VALUE!`. `workbook.status(cell)` gives one cell's entry (a
 `CellStatus`: its state, the cell's own reason, and whether the state comes from a precedent),
-reading only the sheets that cell needs, where `workbook.report` reads every sheet.
+reading only the sheets that cell needs, where `workbook.report` reads every sheet. The report
+describes what evaluation has found so far: `status` evaluates the cell it is asked about, and a
+report read after the statuses, or after `recalculate()`, is the complete one.
 
 Only the cached values and the request to recalculate change: every other part of the file is
 copied as it was, byte for byte. By default the file asks Excel to recalculate when it opens it,

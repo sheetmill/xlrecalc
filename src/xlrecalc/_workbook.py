@@ -130,7 +130,12 @@ class Workbook:
 
     @property
     def report(self) -> Report:
-        """What evaluation could not do so far (unsupported functions, uncomputed cells, ...)."""
+        """What evaluation could not do so far (unsupported functions, uncomputed cells, ...).
+
+        It describes what evaluation has found so far (:class:`Report`): read after
+        :meth:`recalculate`, or after the statuses of the cells that matter, it is the complete
+        one.
+        """
         self._engine.load_all()  # it covers every sheet's formulas
         return self._engine.settled_report()
 
