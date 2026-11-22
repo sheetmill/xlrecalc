@@ -191,17 +191,6 @@ not). An empty argument is `#N/A`.
   `EFFECT`, `NOMINAL`, `ISPMT`, `PDURATION`, `RRI`, the discounted securities and Treasury bills within 4. 84 rows of `CUMIPMT`
   and `CUMPRINC` are further, at tiny rates and in tiny principals, where Excel's result carries noise that neither a sum
   of periods nor a difference of balances reproduces (with one more in `empty_args`, 85 rows in all); one row of `TBILLEQ` too.
-- Declared tolerance, `convert_family` (2,558 rows): `CONVERT` within 2 units in the last place. Each unit holds
-  Excel's own two factors, what it is in its category's base unit and what the base unit is in it (`CONVERT(1,u,base)`
-  and `CONVERT(1,base,u)`, which for 27 units are not each other's reciprocal in doubles); a conversion to or from the
-  base uses them, and one between two other units is the number times the first's factor divided by the second's.
-  Excel likely defines units through other units (a foot as 12 inches, a pica as a sixth of an inch), rounding at each
-  step, which that does not reproduce: of the 1,056 conversions between two units, 839 match bit for bit, 213 differ
-  by 1 unit in the last place and 4 by 2, and one of 23 numbers converted (1E100 m to ft) by 1. Every conversion to or
-  from a base unit, every prefix and every temperature matches. An equal comparison does not show the difference
-  (`comparison_rounding`), nor does `ROUND`; a function that cuts at a boundary can, on a conversion that lands
-  exactly on an integer: `INT(CONVERT(2.5,"in","pica"))` is 15 in Excel, whose result is exactly 15, and 14 here,
-  where it is 14.999999999999998.
 - Declared tolerances, `distributions_family`: the discrete distributions (`BINOM.DIST`, `BINOMDIST`,
   `BINOM.DIST.RANGE`, `NEGBINOM.DIST`, `NEGBINOMDIST`, `POISSON.DIST`, `POISSON`, `HYPGEOM.DIST`, `HYPGEOMDIST`)
   within 8 units in the last place; `GAMMA`, `GAMMALN`, `ERF`, `ERFC` and their `.PRECISE` forms, `EXPON.DIST`,

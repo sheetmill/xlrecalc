@@ -1,13 +1,14 @@
-"""CONVERT (capture ``convert_family``): a number from one unit of measure to another.
+"""CONVERT (captures ``convert_pairs``, ``convert_family``): a number from one unit to another.
 
 Each unit is in one category (mass, distance, time, pressure, force, energy, power, magnetism,
-volume, area, information, speed; temperature apart) and holds two of Excel's own doubles: what
-one unit is in the category's base unit, and what one base unit is in it (``CONVERT(1,u,base)``
-and ``CONVERT(1,base,u)`` as captured; for 27 units they are not each other's reciprocal in
-doubles). A conversion to or from the base uses that factor; between two other units it is
-``number * to_base(from) / to_base(to)``, which differs from Excel's result in the last bit or
-two for about a fifth of such conversions (QUIRKS.md): Excel likely defines units through other
-units, rounding at each step.
+volume, area, information, speed; temperature apart), and each category has an internal unit,
+often not the visible base: the ångström for distance, its square for area, the litre for
+volume, the dyne for force, the erg for energy, the base unit elsewhere. Each unit holds one
+double, how many internal units it is (the gauss alone a divisor: 10000 per tesla). A conversion
+always goes through the internal unit, the same unit and synonyms included, ``(number * c_from) /
+c_to``, so ``CONVERT(7.3,"BTU","BTU")`` is 7.300000000000001; the prefixes come last, as one
+multiplication by the net power of ten written as a decimal (``1e6`` for ``km`` to ``mm``), or
+by the exact power of two for a binary prefix. This gives every captured row bit for bit.
 
 A decimal prefix (``k``, ``m``, ``da``, ``e`` for 10...) multiplies the 52 units that take one,
 once per power for an area or volume (``km2`` is 1E6 m2); a binary prefix (``ki`` to ``Yi``)
@@ -30,166 +31,168 @@ from xlrecalc._values import ErrorValue
 
 NA, NUM = ErrorValue.NA, ErrorValue.NUM
 
-# name: (category, the unit in the base unit, the base unit in the unit), as Excel computes them
-_UNITS: dict[str, tuple[str, float, float]] = {
-    # g
-    "g": ("g", 1.0, 1.0),
-    "sg": ("g", 14593.902937206363, 6.852176585679177e-05),
-    "lbm": ("g", 453.59237, 0.002204622621848776),
-    "u": ("g", 1.660538782e-24, 6.022141794216764e+23),
-    "ozm": ("g", 28.349523125, 0.035273961949580414),
-    "grain": ("g", 0.06479891, 15.43235835294143),
-    "cwt": ("g", 45359.237, 2.2046226218487758e-05),
-    "shweight": ("g", 45359.237, 2.2046226218487758e-05),
-    "uk_cwt": ("g", 50802.34544, 1.9684130552221215e-05),
-    "lcwt": ("g", 50802.34544, 1.9684130552221215e-05),
-    "stone": ("g", 6350.29318, 0.00015747304441776972),
-    "ton": ("g", 907184.74, 1.102311310924388e-06),
-    "uk_ton": ("g", 1016046.9088, 9.842065276110607e-07),
-    "LTON": ("g", 1016046.9088, 9.842065276110607e-07),
-    "brton": ("g", 1016046.9088, 9.842065276110607e-07),
-    # m
-    "m": ("m", 1.0, 1.0),
-    "mi": ("m", 1609.344, 0.0006213711922373339),
-    "Nmi": ("m", 1852.0, 0.0005399568034557236),
-    "in": ("m", 0.0254, 39.37007874015748),
-    "ft": ("m", 0.3048, 3.2808398950131235),
-    "yd": ("m", 0.9144, 1.0936132983377078),
-    "ang": ("m", 1e-10, 10000000000.0),
-    "ell": ("m", 1.143, 0.8748906386701663),
-    "ly": ("m", 9460730472580800.0, 1.0570008340246154e-16),
-    "parsec": ("m", 3.0856775812815532e+16, 3.240779289664725e-17),
-    "pc": ("m", 3.0856775812815532e+16, 3.240779289664725e-17),
-    "Picapt": ("m", 0.0003527777777777778, 2834.6456692913384),
-    "Pica": ("m", 0.0003527777777777778, 2834.6456692913384),
-    "pica": ("m", 0.004233333333333334, 236.22047244094486),
-    "survey_mi": ("m", 1609.3472186944373, 0.0006213699494949495),
-    # sec
-    "sec": ("sec", 1.0, 1.0),
-    "s": ("sec", 1.0, 1.0),
-    "yr": ("sec", 31557600.0, 3.168808781402895e-08),
-    "day": ("sec", 86400.0, 1.1574074074074073e-05),
-    "d": ("sec", 86400.0, 1.1574074074074073e-05),
-    "hr": ("sec", 3600.0, 0.0002777777777777778),
-    "mn": ("sec", 60.0, 0.016666666666666666),
-    "min": ("sec", 60.0, 0.016666666666666666),
-    # Pa
-    "Pa": ("Pa", 1.0, 1.0),
-    "p": ("Pa", 1.0, 1.0),
-    "atm": ("Pa", 101325.0, 9.869232667160129e-06),
-    "at": ("Pa", 101325.0, 9.869232667160129e-06),
-    "mmHg": ("Pa", 133.322, 0.007500637554192106),
-    "psi": ("Pa", 6894.757293168362, 0.0001450377377302092),
-    "Torr": ("Pa", 133.32236842105263, 0.007500616827041697),
-    # N
-    "N": ("N", 1.0, 1.0),
-    "dyn": ("N", 1e-05, 100000.0),
-    "dy": ("N", 1e-05, 100000.0),
-    "lbf": ("N", 4.4482216152605005, 0.22480894309971047),
-    "pond": ("N", 0.00980665, 101.97162129779282),
-    # J
-    "J": ("J", 1.0, 1.0),
-    "e": ("J", 1e-07, 10000000.0),
-    "c": ("J", 4.184, 0.2390057361376673),
-    "cal": ("J", 4.1868, 0.23884589662749595),
-    "eV": ("J", 1.602176487e-19, 6.241509647120418e+18),
-    "ev": ("J", 1.602176487e-19, 6.241509647120418e+18),
-    "HPh": ("J", 2684519.537696173, 3.725061359986188e-07),
-    "hh": ("J", 2684519.537696173, 3.725061359986188e-07),
-    "Wh": ("J", 3600.0, 0.0002777777777777778),
-    "wh": ("J", 3600.0, 0.0002777777777777778),
-    "flb": ("J", 1.3558179483314003, 0.7375621492772654),
-    "BTU": ("J", 1055.05585262, 0.0009478171203133171),
-    "btu": ("J", 1055.05585262, 0.0009478171203133171),
-    # W
-    "W": ("W", 1.0, 1.0),
-    "w": ("W", 1.0, 1.0),
-    "HP": ("W", 745.6998715822702, 0.0013410220895950279),
-    "h": ("W", 745.6998715822702, 0.0013410220895950279),
-    "PS": ("W", 735.49875, 0.0013596216173039043),
-    # T
-    "T": ("T", 1.0, 1.0),
-    "ga": ("T", 0.0001, 10000.0),
-    # m3
-    "m3": ("m3", 1.0, 1.0),
-    "m^3": ("m3", 1.0, 1.0),
-    "tsp": ("m3", 4.92892159375e-06, 202884.13621105798),
-    "tspm": ("m3", 5e-06, 200000.0),
-    "tbs": ("m3", 1.4786764781249999e-05, 67628.045403686),
-    "oz": ("m3", 2.9573529562499998e-05, 33814.022701843),
-    "cup": ("m3", 0.00023658823649999998, 4226.752837730375),
-    "pt": ("m3", 0.00047317647299999996, 2113.3764188651876),
-    "us_pt": ("m3", 0.00047317647299999996, 2113.3764188651876),
-    "uk_pt": ("m3", 0.00056826125, 1759.7539863927022),
-    "qt": ("m3", 0.0009463529459999999, 1056.6882094325938),
-    "uk_qt": ("m3", 0.0011365225, 879.8769931963511),
-    "gal": ("m3", 0.0037854117839999997, 264.17205235814845),
-    "uk_gal": ("m3", 0.00454609, 219.96924829908778),
-    "l": ("m3", 0.001, 1000.0),
-    "L": ("m3", 0.001, 1000.0),
-    "lt": ("m3", 0.001, 1000.0),
-    "ang3": ("m3", 1e-30, 1e+30),
-    "ang^3": ("m3", 1e-30, 1e+30),
-    "barrel": ("m3", 0.158987294928, 6.289810770432105),
-    "bushel": ("m3", 0.03523907016688, 28.37759325840175),
-    "ft3": ("m3", 0.028316846592, 35.31466672148859),
-    "ft^3": ("m3", 0.028316846592, 35.31466672148859),
-    "in3": ("m3", 1.6387064e-05, 61023.74409473228),
-    "in^3": ("m3", 1.6387064e-05, 61023.74409473228),
-    "ly3": ("m3", 8.467866646237152e+47, 1.1809349884417084e-48),
-    "ly^3": ("m3", 8.467866646237152e+47, 1.1809349884417084e-48),
-    "mi3": ("m3", 4168181825.4405794, 2.3991275857892774e-10),
-    "mi^3": ("m3", 4168181825.4405794, 2.3991275857892774e-10),
-    "yd3": ("m3", 0.764554857984, 1.3079506193143922),
-    "yd^3": ("m3", 0.764554857984, 1.3079506193143922),
-    "Nmi3": ("m3", 6352182208.0, 1.5742621468581148e-10),
-    "Nmi^3": ("m3", 6352182208.0, 1.5742621468581148e-10),
-    "Pica3": ("m3", 4.3903956618655696e-11, 22776990435.870632),
-    "Pica^3": ("m3", 4.3903956618655696e-11, 22776990435.870632),
-    "Picapt3": ("m3", 4.3903956618655696e-11, 22776990435.870632),
-    "Picapt^3": ("m3", 4.3903956618655696e-11, 22776990435.870632),
-    "GRT": ("m3", 2.8316846592, 0.35314666721488586),
-    "regton": ("m3", 2.8316846592, 0.35314666721488586),
-    "MTON": ("m3", 1.13267386368, 0.8828666680372147),
-    # m2
-    "m2": ("m2", 1.0, 1.0),
-    "m^2": ("m2", 1.0, 1.0),
-    "uk_acre": ("m2", 4046.8564224, 0.0002471053814671653),
-    "us_acre": ("m2", 4046.8726098742522, 0.0002471043930466279),
-    "ang2": ("m2", 1e-20, 1e+20),
-    "ang^2": ("m2", 1e-20, 1e+20),
-    "ar": ("m2", 100.0, 0.01),
-    "ft2": ("m2", 0.09290304, 10.763910416709722),
-    "ft^2": ("m2", 0.09290304, 10.763910416709722),
-    "ha": ("m2", 10000.0, 0.0001),
-    "in2": ("m2", 0.00064516, 1550.0031000062),
-    "in^2": ("m2", 0.00064516, 1550.0031000062),
-    "ly2": ("m2", 8.95054210748189e+31, 1.117250763128733e-32),
-    "ly^2": ("m2", 8.95054210748189e+31, 1.117250763128733e-32),
-    "mi2": ("m2", 2589988.110336, 3.861021585424458e-07),
-    "mi^2": ("m2", 2589988.110336, 3.861021585424458e-07),
-    "Nmi2": ("m2", 3429904.0, 2.9155334959812285e-07),
-    "Nmi^2": ("m2", 3429904.0, 2.9155334959812285e-07),
-    "Pica2": ("m2", 1.2445216049382715e-07, 8035216.070432141),
-    "Pica^2": ("m2", 1.2445216049382715e-07, 8035216.070432141),
-    "Picapt2": ("m2", 1.2445216049382715e-07, 8035216.070432141),
-    "Picapt^2": ("m2", 1.2445216049382715e-07, 8035216.070432141),
-    "yd2": ("m2", 0.83612736, 1.1959900463010802),
-    "yd^2": ("m2", 0.83612736, 1.1959900463010802),
-    "Morgen": ("m2", 2500.0, 0.0004),
-    # bit
-    "bit": ("bit", 1.0, 1.0),
-    "byte": ("bit", 8.0, 0.125),
-    # m/s
-    "m/s": ("m/s", 1.0, 1.0),
-    "m/sec": ("m/s", 1.0, 1.0),
-    "m/h": ("m/s", 0.0002777777777777778, 3600.0),
-    "m/hr": ("m/s", 0.0002777777777777778, 3600.0),
-    "mph": ("m/s", 0.44704, 2.2369362920544025),
-    "kn": ("m/s", 0.5144444444444445, 1.9438444924406046),
-    "admkn": ("m/s", 0.5147733333333333, 1.9426025694156652),
+# name: (category, how many of the category's internal unit one unit is, whether that number
+# divides instead): Excel's constants (captures convert_pairs and convert_family), written as the
+# decimal or the expression in doubles whose value they are; psi and Pica^2 as their doubles
+_UNITS: dict[str, tuple[str, float, bool]] = {
+    # g: in g
+    "u": ("g", 1.660538782e-24, False),
+    "grain": ("g", 0.06479891, False),
+    "g": ("g", 1.0, False),
+    "ozm": ("g", 28.349523125, False),
+    "lbm": ("g", 453.59237, False),
+    "stone": ("g", 6350.29318, False),
+    "sg": ("g", 453.59237 * 9.80665 / 0.3048, False),
+    "cwt": ("g", 45359.237, False),
+    "shweight": ("g", 45359.237, False),
+    "lcwt": ("g", 50802.34544, False),
+    "uk_cwt": ("g", 50802.34544, False),
+    "ton": ("g", 907184.74, False),
+    "LTON": ("g", 1016046.9088, False),
+    "brton": ("g", 1016046.9088, False),
+    "uk_ton": ("g", 1016046.9088, False),
+    # m: in 1E-10 m (ångström)
+    "ang": ("m", 1.0, False),
+    "Pica": ("m", 254000000.0 / 72, False),
+    "Picapt": ("m", 254000000.0 / 72, False),
+    "pica": ("m", 254000000.0 / 6, False),
+    "in": ("m", 254000000.0, False),
+    "ft": ("m", 3048000000.0, False),
+    "yd": ("m", 9144000000.0, False),
+    "m": ("m", 10000000000.0, False),
+    "ell": ("m", 11430000000.0, False),
+    "mi": ("m", 16093440000000.0, False),
+    "survey_mi": ("m", 6336 / 3937 * 1e13, False),
+    "Nmi": ("m", 18520000000000.0, False),
+    "ly": ("m", 9.4607304725808e+25, False),
+    "parsec": ("m", 3.0856775812815533e+26, False),
+    "pc": ("m", 3.0856775812815533e+26, False),
+    # sec: in s
+    "s": ("sec", 1.0, False),
+    "sec": ("sec", 1.0, False),
+    "min": ("sec", 60.0, False),
+    "mn": ("sec", 60.0, False),
+    "hr": ("sec", 3600.0, False),
+    "d": ("sec", 86400.0, False),
+    "day": ("sec", 86400.0, False),
+    "yr": ("sec", 31557600.0, False),
+    # Pa: in Pa
+    "Pa": ("Pa", 1.0, False),
+    "p": ("Pa", 1.0, False),
+    "mmHg": ("Pa", 133.322, False),
+    "Torr": ("Pa", 101325 / 760, False),
+    "psi": ("Pa", 6894.757293168362, False),
+    "at": ("Pa", 101325.0, False),
+    "atm": ("Pa", 101325.0, False),
+    # N: in 1E-5 N (dyne)
+    "dy": ("N", 1.0, False),
+    "dyn": ("N", 1.0, False),
+    "pond": ("N", 980.665, False),
+    "N": ("N", 100000.0, False),
+    "lbf": ("N", 444822.16152605, False),
+    # J: in 1E-7 J (erg)
+    "eV": ("J", 1.602176487e-12, False),
+    "ev": ("J", 1.602176487e-12, False),
+    "e": ("J", 1.0, False),
+    "J": ("J", 10000000.0, False),
+    "flb": ("J", 444822.16152605 * 30.48, False),
+    "c": ("J", 41840000.0, False),
+    "cal": ("J", 41868000.0, False),
+    "BTU": ("J", 10550558526.2, False),
+    "btu": ("J", 10550558526.2, False),
+    "Wh": ("J", 36000000000.0, False),
+    "wh": ("J", 36000000000.0, False),
+    "HPh": ("J", 745.6998715822702 * 3600 * 1e7, False),
+    "hh": ("J", 745.6998715822702 * 3600 * 1e7, False),
+    # W: in W
+    "W": ("W", 1.0, False),
+    "w": ("W", 1.0, False),
+    "PS": ("W", 735.49875, False),
+    "HP": ("W", 550 * 4.4482216152605 * 0.3048, False),
+    "h": ("W", 550 * 4.4482216152605 * 0.3048, False),
+    # T: in T
+    "T": ("T", 1.0, False),
+    "ga": ("T", 10000.0, True),
+    # bit: in bit
+    "bit": ("bit", 1.0, False),
+    "byte": ("bit", 8.0, False),
+    # m/s: in m/s
+    "m/h": ("m/s", 1 / 3600, False),
+    "m/hr": ("m/s", 1 / 3600, False),
+    "mph": ("m/s", 0.44704, False),
+    "kn": ("m/s", 1852 / 3600, False),
+    "admkn": ("m/s", 1853.184 / 3600, False),
+    "m/s": ("m/s", 1.0, False),
+    "m/sec": ("m/s", 1.0, False),
+    # m2: in 1E-20 m2 (ångström²)
+    "ang2": ("m2", 1.0, False),
+    "ang^2": ("m2", 1.0, False),
+    "Pica2": ("m2", 12445216049382.715, False),
+    "Pica^2": ("m2", 12445216049382.715, False),
+    "Picapt2": ("m2", 12445216049382.715, False),
+    "Picapt^2": ("m2", 12445216049382.715, False),
+    "in2": ("m2", 6.4516e+16, False),
+    "in^2": ("m2", 6.4516e+16, False),
+    "ft2": ("m2", 9.290304e+18, False),
+    "ft^2": ("m2", 9.290304e+18, False),
+    "yd2": ("m2", 8.3612736e+19, False),
+    "yd^2": ("m2", 8.3612736e+19, False),
+    "m2": ("m2", 1e+20, False),
+    "m^2": ("m2", 1e+20, False),
+    "ar": ("m2", 1e+22, False),
+    "Morgen": ("m2", 2.5e+23, False),
+    "uk_acre": ("m2", 4.0468564224e+23, False),
+    "us_acre": ("m2", (6336 / 3937 * 1e3) ** 2 / 640 * 1e20, False),
+    "ha": ("m2", 1e+24, False),
+    "mi2": ("m2", 2.589988110336e+26, False),
+    "mi^2": ("m2", 2.589988110336e+26, False),
+    "Nmi2": ("m2", 3.429904e+26, False),
+    "Nmi^2": ("m2", 3.429904e+26, False),
+    "ly2": ("m2", 8.95054210748189e+51, False),
+    "ly^2": ("m2", 8.95054210748189e+51, False),
+    # m3: in 1E-3 m3 (litre)
+    "ang3": ("m3", 1e-27, False),
+    "ang^3": ("m3", 1e-27, False),
+    "Pica3": ("m3", 4.39039566186557e-08, False),
+    "Pica^3": ("m3", 4.39039566186557e-08, False),
+    "Picapt3": ("m3", 4.39039566186557e-08, False),
+    "Picapt^3": ("m3", 4.39039566186557e-08, False),
+    "tsp": ("m3", 0.00492892159375, False),
+    "tspm": ("m3", 0.005, False),
+    "tbs": ("m3", 0.01478676478125, False),
+    "in3": ("m3", 0.016387064, False),
+    "in^3": ("m3", 0.016387064, False),
+    "oz": ("m3", 0.0295735295625, False),
+    "cup": ("m3", 0.2365882365, False),
+    "pt": ("m3", 0.473176473, False),
+    "us_pt": ("m3", 0.473176473, False),
+    "uk_pt": ("m3", 0.56826125, False),
+    "qt": ("m3", 0.946352946, False),
+    "L": ("m3", 1.0, False),
+    "l": ("m3", 1.0, False),
+    "lt": ("m3", 1.0, False),
+    "uk_qt": ("m3", 1.1365225, False),
+    "gal": ("m3", 3.785411784, False),
+    "uk_gal": ("m3", 4.54609, False),
+    "ft3": ("m3", 28.316846592, False),
+    "ft^3": ("m3", 28.316846592, False),
+    "bushel": ("m3", 35.23907016688, False),
+    "barrel": ("m3", 158.987294928, False),
+    "yd3": ("m3", 764.554857984, False),
+    "yd^3": ("m3", 764.554857984, False),
+    "m3": ("m3", 1000.0, False),
+    "m^3": ("m3", 1000.0, False),
+    "MTON": ("m3", 1132.67386368, False),
+    "GRT": ("m3", 2831.6846592, False),
+    "regton": ("m3", 2831.6846592, False),
+    "mi3": ("m3", 4168181825.4405794 * 1000, False),
+    "mi^3": ("m3", 4168181825.4405794 * 1000, False),
+    "Nmi3": ("m3", 6352182208000.0, False),
+    "Nmi^3": ("m3", 6352182208000.0, False),
+    "ly3": ("m3", 9460730472580800.0 ** 3 * 1000, False),
+    "ly^3": ("m3", 9460730472580800.0 ** 3 * 1000, False),
 }  # fmt: skip
-"""Units by name, keyed to their category's base unit (temperature apart, in ``_SCALES``)."""
+"""Units by name, with their category and constant (temperature apart, in ``_SCALES``)."""
 
 _PREFIXED = frozenset(
     {
@@ -267,7 +270,7 @@ _TEMPERATURE: dict[tuple[str, str], Callable[[float], float]] = {
     ("F", "C"): lambda v: (v - 32.0) / 1.8,
     ("F", "K"): lambda v: (v - 32.0) / 1.8 + 273.15,
     ("F", "Rank"): lambda v: v + 459.67,
-    ("F", "Reau"): lambda v: (v - 32.0) / 1.8 * 0.8,
+    ("F", "Reau"): lambda v: (v - 32.0) * 0.8 / 1.8,
     ("K", "C"): lambda v: v - 273.15,
     ("K", "F"): lambda v: (v - 273.15) * 1.8 + 32.0,
     ("K", "Rank"): lambda v: v * 1.8,
@@ -316,26 +319,20 @@ def _convert(v: float, a: str, ma: float, b: str, mb: float) -> float | ErrorVal
         if a not in _SCALES or b not in _SCALES:
             return NA
         return _temperature(v, a, ma, b, mb)
-    (ca, ta, _), (cb, tb, fb) = _UNITS[a], _UNITS[b]
-    if ca != cb:
+    (ka, ca, da), (kb, cb, db) = _UNITS[a], _UNITS[b]
+    if ka != kb:
         return NA
-    x = v * ma if ma != 1.0 else v
-    if a == b:
-        y = x
-    elif a == ca:
-        y = x * fb
-    elif b == cb:
-        y = x * ta
-    else:
-        y = x * ta / tb
-    return y / mb if mb != 1.0 else y
+    x = v / ca if da else v * ca  # into the internal unit, also for the same unit
+    x = x * cb if db else x / cb
+    if ma == mb:
+        return x
+    ea, eb = round(math.log10(ma)), round(math.log10(mb))
+    if float(f"1e{ea}") == ma and float(f"1e{eb}") == mb:
+        return x * float(f"1e{ea - eb}")  # the prefixes last, as one decimal power of ten
+    return x * (ma / mb)  # a binary prefix: an exact power of two
 
 
-@function("CONVERT", "value", "value", "value", category="engineering", ulps=2,
-          ulps_reason=(
-              "Excel likely defines units through other units, rounding at each step; between two "
-              "units neither of which is the base, its result can differ in the last bit or two"
-          ))  # fmt: skip
+@function("CONVERT", "value", "value", "value", category="engineering")
 def CONVERT(ctx: Context, number: Any, from_unit: Any, to_unit: Any) -> float | ErrorValue:
     """A number from one unit of measure to another."""
     v = _strict(number, ctx)

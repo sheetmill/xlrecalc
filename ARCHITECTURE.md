@@ -1543,10 +1543,7 @@ After 0.8.1, in this order: an order, not a promise or a date.
 8. Before 1.0: the newer errors written in Excel's own form, `#VALUE!` with a rich-value record
    behind `vm` (§7.7), so that a file Excel opens without recalculating shows `#SPILL!` or
    `#CALC!` and a later load reads a blocked spill as one; the rich-value parts are `xlio`'s, the
-   reader and writer. A candidate too: `CONVERT` bit for bit, from an analysis of capture
-   `convert_pairs` (`CONVERT` at 1, 2.5 and 3 over every pair of units in a category) that
-   recovers the units Excel defines through others (QUIRKS.md lists the conversions that differ
-   in the last bit or two).
+   reader and writer.
 9. A strict option for `recalculate` and `Workbook.save` that raises where a cell cannot be
    computed (`Report.uncomputed`), rather than writing it with the file's value or none; and
    streams as well as paths for `save` and `recalculate`, as `load` takes one.

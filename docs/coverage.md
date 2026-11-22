@@ -96,7 +96,7 @@ platform.
 | `CONFIDENCE` | statistical | implemented | 804 | 804 | 0 | 4 ulps |  |
 | `CONFIDENCE.NORM` | statistical | implemented | 804 | 804 | 0 | 4 ulps |  |
 | `CONFIDENCE.T` | statistical | implemented | 97 | 92 | 5 | 1e-14 relative |  |
-| `CONVERT` | engineering | implemented | 2562 | 2562 | 0 | 2 ulps |  |
+| `CONVERT` | engineering | implemented | 11490 | 11490 | 0 |  |  |
 | `CORREL` | statistical | implemented | 15 | 15 | 0 | 4 ulps |  |
 | `COS` | math | implemented | 30 | 30 | 0 | 4 ulps |  |
 | `COSH` | math | implemented | 30 | 30 | 0 | 4 ulps |  |
