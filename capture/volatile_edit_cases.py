@@ -49,15 +49,15 @@ VARIANTS: dict[str, tuple[str, str | None, bool, dict[str, str]]] = {
     "awake_unrelated": ("=vn+C1", "RAND()", False, {}),
     # A plain name beside the volatile one, its cell edited.
     "plain_and_volatile": ("=vn+pn", READ, False, {}),
-    # A name volatile through another name.
-    "nested_name": ("=vn2", OFFSET_C1, False, {}),
+    # A name volatile through another name (a name that is no cell address, as VN2 is).
+    "nested_name": ("=vnest", OFFSET_C1, False, {}),
     # Manual calculation (calcMode="manual"): an edit, then calculate, then calculate full.
     "manual_name": ("=vn", READ, False, {}),
 }
 # More defined names, beside vn.
 NAMES: dict[str, dict[str, str]] = {
     "plain_and_volatile": {"pn": "probe!$A$1"},
-    "nested_name": {"vn2": "vn*1"},
+    "nested_name": {"vnest": "vn*1"},
 }
 # Formula cells whose ca="1" mark, written by Excel on saving, the probe removes.
 UNMARKED: dict[str, tuple[str, ...]] = {
