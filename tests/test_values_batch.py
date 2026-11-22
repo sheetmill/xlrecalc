@@ -82,6 +82,58 @@ def test_values_in_one_pass_are_the_values_read_one_by_one(
     assert batch == one
 
 
+def _read_at(wb: xlrecalc.Workbook, refs: list[str], batch: bool) -> tuple[object, ...]:
+    values = wb.values_at(refs) if batch else [wb.value(r) for r in refs]
+    names = wb.sheet_names
+    statuses = [wb.status(f"{n}!{c}{r}") for n in names for r in range(1, 6) for c in COLUMNS]
+    report = wb.report
+    reported = (
+        list(report.unsupported.items()),
+        list(report.exceptions.items()),
+        sorted(report.uncomputed),
+        sorted(report.from_kept),
+        sorted(report.circular),
+    )
+    return [_key(v) for v in values], statuses, reported
+
+
+@pytest.mark.parametrize("way", WAYS)
+@pytest.mark.parametrize("mode", MODES)
+@pytest.mark.parametrize("calc", list(CALCS))
+@pytest.mark.parametrize("seed", range(8))
+def test_values_at_are_the_values_read_one_by_one(
+    seed: int, calc: str, mode: str, way: str
+) -> None:
+    """Cells on any sheets, in any order, some twice: the values, statuses and report that
+    reading them one by one in that order gives, volatile draws included."""
+    rng = random.Random(seed)
+    data, every = _book(rng, CALCS[calc])
+    refs = rng.choices(every, k=len(every))  # any order, repeats
+    got = []
+    for batch in (True, False):
+        random.seed(0)
+        with xlio.open(io.BytesIO(data)) as book:
+            got.append(_read_at(_workbook(data, mode, way, book), refs, batch))
+    assert got[0] == got[1]
+
+
+@pytest.mark.parametrize(
+    ("ref", "error"),
+    [("s1!A1:A2", ValueError), ("nowhere!A1", KeyError), ("A1", ValueError), ("A0", ValueError)],
+)
+def test_values_at_raises_what_value_raises(ref: str, error: type[Exception]) -> None:
+    data, _ = _book(random.Random(3), CALCS["current"])
+    data2, _ = _book(random.Random(5), CALCS["current"])
+    for d in (data, data2):
+        wb = xlrecalc.load(io.BytesIO(d))
+        if len(wb.sheet_names) == 1 and ref == "A1":
+            continue  # one sheet: a reference without a sheet is that sheet's
+        with pytest.raises(error):
+            wb.value(ref)
+        with pytest.raises(error):
+            wb.values_at(["s1!A1", ref])
+
+
 FULL = '<calcPr fullCalcOnLoad="1"/>'
 BESSEL = "BESSELJ(2.5,100)"
 """A cell that charges about 160 steps to the allowance (``ReadLimits.max_function_steps``)."""

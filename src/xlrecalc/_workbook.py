@@ -8,7 +8,7 @@ import io
 import math
 import os
 import re
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from typing import BinaryIO, TypeAlias
 
 import xlio
@@ -232,6 +232,22 @@ class Workbook:
         cells = [(sheet, r, c) for r in range(r1 - 1, r2) for c in range(c1 - 1, c2)]
         got = iter(self._engine.get_many(cells))
         return [[_public(next(got)) for _ in range(c1, c2 + 1)] for _ in range(r1, r2 + 1)]
+
+    def values_at(self, refs: Iterable[str | CellRef]) -> list[CellValue]:
+        """The values of cells on any sheets, in the order given, evaluated in one pass.
+
+        Each value is the one :meth:`value` gives reading the cells in turn in that order, a cell
+        given twice included: the order decides the draws of ``RAND`` and the other random
+        functions, as it does for :meth:`value`. Faster than reading the cells one by one, since
+        their stale precedents are evaluated in one pass.
+
+        Raises:
+            ValueError: A reference is not a single cell, or names no sheet in a workbook of
+                several.
+            KeyError: A reference names a sheet the workbook does not have.
+        """
+        cells = [self._cell(ref) for ref in refs]
+        return [_public(v) for v in self._engine.get_many(cells)]
 
     def formula(self, ref: str | CellRef) -> str | None:
         """The cell's formula as the formula bar shows it (``"=B7*2"``), or ``None``."""

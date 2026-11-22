@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `Workbook.values_at(refs)`: the values of cells on any sheets, in the order given (a cell given twice included), each
+  the one `Workbook.value` gives reading the cells in turn in that order, the draws of random functions included,
+  with their stale precedents evaluated in one pass. A bad reference raises what `Workbook.value` raises.
+
 ### Changed
 - `SORT`, `SORTBY`, `UNIQUE`, `FILTER`, `TAKE` and `DROP` read a whole-column argument as its rows with data and one
   fill value for the rows below, as `SUMPRODUCT` does, and give the same result as before: `UNIQUE` and a `FILTER` whose
