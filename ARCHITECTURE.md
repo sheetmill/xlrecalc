@@ -337,7 +337,7 @@ always mean equal parsed keys. Whether Excel refuses a formula in a file (§9.5)
 its text outside the references, so it is decided once per raw key too. When the raw key
 was measured, loading openpyxl's 1M-row benchmark file (3M formulas, 4M cells) took 23.6 s with
 it and 58.8 s parsing every formula, and 8.5 s from the prototypes' pickled table, which skips the
-xlsx reader; the current load times are in `bench/results/SUMMARY.md` (17.2 s from the file).
+xlsx reader; the current load times are in `bench/results/SUMMARY.md`.
 
 A sheet is loaded in two stages. As its cells are read, every value goes into the store, a
 formula's cached value too, and each formula cell is queued with what the opening rule needs
@@ -519,8 +519,9 @@ text or refers to or calls a defined name that does, through other names too (`_
 `Volatility`, the one detector `load` and `RecalcCheck` read; a function name in a string literal
 is not a call; capture `volatile_names`). After any change, and at every `recalculate()`, volatile
 formulas are evaluated again with their dependents, so a reference that moves follows; but a
-volatile cell whose cached value a trusting load kept is left by an edit until it is first
-computed, as Excel leaves one without the `ca="1"` mark (capture `volatile_edit`;
+volatile cell whose cached value a trusting load kept is left by an edit and by
+`Workbook.recalculate()` until it is first computed (`Workbook.recalculate(full=True)`, a save,
+`xlrecalc.recalculate`), as Excel leaves one without the `ca="1"` mark (capture `volatile_edit`;
 `Engine._dormant`). `INDEX` is not volatile; its references stay within its static range.
 
 ### 6.4 Dirty sets as runs, and the acceptance test
@@ -1435,8 +1436,8 @@ check.finish()                               # "all" | "some" | "none": what loa
 with xlio.open("model.xlsx") as book:        # a caller reading the cells itself, read once
     loader = xlrecalc.Loader(book)
     for cell in loader.cells(book.sheets[1]): ...  # any sheet, in any order, recorded as passed
-    loader.opening                           # RecalcCheck's answer; None while cells decide it
-    wb = loader.workbook()                   # reads what was not fed; later feeds pass through
+    loader.opening                           # RecalcCheck's answer; None if closed undecided
+    wb = loader.workbook()                   # sheets not fed read on need; fed later: recorded
 
 xlrecalc.evaluate("=SUM(A1:A3)", {"A1:A3": [[1], [2], [3]]})          # 6.0, no workbook
 f = xlrecalc.Formula.parse("=A1>5", origin="A1")  # compiled once; also sheet=, legacy=

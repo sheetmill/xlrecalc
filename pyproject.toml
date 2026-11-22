@@ -57,7 +57,8 @@ packages = ["src/xlrecalc"]
 
 [tool.hatch.build.targets.sdist]
 # Source, tests, the capture tooling, the documentation sources and the project documents.
-# Never capture workbooks, benchmark data or build output.
+# Never the workbooks the capture tooling builds, benchmark data or build output; the committed
+# test fixtures ship with the tests.
 include = [
   "src/xlrecalc",
   "tests",
