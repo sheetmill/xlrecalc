@@ -232,8 +232,9 @@ class Engine:
         self.templates: list[Template] = []
         self._template_ids: dict[str, int] = {}
         self._raw_ids: dict[str, int] = {}
-        # Volatile cells whose cached value a trusting load kept, not computed since: an edit
-        # leaves them, as Excel does with an unmarked one (capture volatile_edit), until computed.
+        # Volatile cells whose cached value a trusting load kept, not computed since: a change
+        # does not wake them, nor reach them through a volatile name's references, as Excel does
+        # with an unmarked one (capture volatile_edit), until computed.
         self._dormant: set[int] = set()
         self._unloaded: set[int] = set()  # sheets a lazy Loader has not loaded (need)
         self.load_sheet: Callable[[int], None] | None = None
@@ -807,6 +808,14 @@ class Engine:
         """Saving runs a live loop once more, as Excel's saving does (§7.2)."""
         if self.loop_live():
             self.recalculate()
+
+    @property
+    def dormant(self) -> set[int]:
+        """Volatile cells a trusting load kept, not computed since (:meth:`trust_volatile`).
+
+        The dependency index leaves out a volatile name's references for them (§6.3).
+        """
+        return self._dormant
 
     def has_volatile(self) -> bool:
         """Whether a formula cell's template is volatile (``RAND``, ``NOW``, ``OFFSET``...)."""

@@ -54,6 +54,7 @@ class _Edge:
     c1_abs: bool
     c2: int
     c2_abs: bool
+    volatile_name: bool = False  # from a volatile defined name: none for a dormant cell (§6.3)
 
 
 def _axis(
@@ -139,11 +140,12 @@ class DependencyIndex:
     def _edges(self, tid: int, spec: RefSpec) -> Iterator[_Edge]:
         engine = self.engine
         if spec.kind == "name":
+            volatile = (spec.name or "").casefold() in engine.volatility.names
             for s in self.sheets_of[tid]:
                 for inner in engine.name_boxes(spec.name or "", s):
                     target = s if inner.sheet is None else engine.sheet_index(inner.sheet)
                     if target is not None:
-                        yield _make(tid, target, inner, absolute=True)
+                        yield _make(tid, target, inner, absolute=True, volatile_name=volatile)
             return
         target = None if spec.sheet is None else engine.sheet_index(spec.sheet)
         if spec.sheet is not None and target is None:
@@ -199,8 +201,14 @@ class DependencyIndex:
             if col_span is None:
                 continue
             formula_sheets = [sheet] if e.target is None else sorted(self.sheets_of[e.template])
+            dormant = self.engine.dormant if e.volatile_name else None
             for s in formula_sheets:
-                yield from self._template_runs(e.template, s, row_span, col_span)
+                runs = self._template_runs(e.template, s, row_span, col_span)
+                if dormant:
+                    for run in runs:
+                        yield from _without(run, dormant)
+                else:
+                    yield from runs
 
     def dirty(self, cells: Iterable[int], ranges: Iterable[tuple[int, int, int, int]] = ()) -> Runs:
         """Every formula cell depending, directly or not, on the cells, as runs.
@@ -238,7 +246,34 @@ class DependencyIndex:
         return new
 
 
-def _make(tid: int, target: int | None, spec: RefSpec, absolute: bool) -> _Edge:
+def _without(
+    run: tuple[int, int, int, int], dormant: set[int]
+) -> Iterator[tuple[int, int, int, int]]:
+    """The run (sheet, col, first, last) without its dormant cells, as runs."""
+    sheet, col, first, last = run
+    base = (sheet << SHEET_SHIFT) | col
+    if last - first < len(dormant):
+        rows = [row for row in range(first, last + 1) if base | (row * COLS) in dormant]
+    else:
+        rows = []
+        for n in dormant:
+            if n >> SHEET_SHIFT == sheet:
+                row, c = divmod(n & ((1 << SHEET_SHIFT) - 1), COLS)
+                if c == col and first <= row <= last:
+                    rows.append(row)
+        rows.sort()
+    start = first
+    for row in rows:
+        if start < row:
+            yield sheet, col, start, row - 1
+        start = row + 1
+    if start <= last:
+        yield sheet, col, start, last
+
+
+def _make(
+    tid: int, target: int | None, spec: RefSpec, absolute: bool, volatile_name: bool = False
+) -> _Edge:
     r1, c1, r2, c2 = spec.r1, spec.c1, spec.r2, spec.c2
     assert r1 is not None
     assert c1 is not None
@@ -255,6 +290,7 @@ def _make(tid: int, target: int | None, spec: RefSpec, absolute: bool) -> _Edge:
         c1.absolute or absolute,
         c2.value,
         c2.absolute or absolute,
+        volatile_name,
     )
 
 

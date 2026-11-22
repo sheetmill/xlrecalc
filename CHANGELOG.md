@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- A cell volatile only through a defined name, whose cached value a trusting load kept (unmarked `ca="1"`, not computed
+  since), depends on what its own text and the plain names in it refer to, not on a volatile name's references, as in
+  Excel (capture `volatile_edit`, now 30 files). An edit of a cell only such a name reads no longer computes it, nor its
+  dependents through it, and a dependent computed for another reason reads its cached value; an edit of a cell its own
+  text names computes it, and from then on every change does. Every volatile function in a name (`NOW`, `TODAY`,
+  `RAND`, `RANDBETWEEN`, `RANDARRAY`, `CELL`, `OFFSET`, `INDIRECT`) and a name volatile through another name behave
+  alike. The report's dependencies are the same ones.
+
 ## [0.8.1] - 2026-11-21
 
 ### Fixed

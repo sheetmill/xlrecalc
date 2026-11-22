@@ -518,11 +518,19 @@ this list and the glossary's to the registry). A formula is volatile when it cal
 text or refers to or calls a defined name that does, through other names too (`_opening.py`'s
 `Volatility`, the one detector `load` and `RecalcCheck` read; a function name in a string literal
 is not a call; capture `volatile_names`). After any change, and at every `recalculate()`, volatile
-formulas are evaluated again with their dependents, so a reference that moves follows; but a
-volatile cell whose cached value a trusting load kept is left by an edit and by
-`Workbook.recalculate()` until it is first computed (`Workbook.recalculate(full=True)`, a save,
-`xlrecalc.recalculate`), as Excel leaves one without the `ca="1"` mark (capture `volatile_edit`;
-`Engine._dormant`). `INDEX` is not volatile; its references stay within its static range.
+formulas are evaluated again with their dependents, so a reference that moves follows. A volatile
+cell whose cached value a trusting load kept is dormant (`Engine.dormant`) until it is first
+computed, as Excel leaves one without the `ca="1"` mark (capture `volatile_edit`): a change does
+not make it stale as volatile, and its dependency edges are those of its own text and the plain
+names in it, never a volatile name's references, plain ones included. An edit of a cell those
+edges reach computes it, the name evaluated as usual; an edit of a cell only the name reads
+leaves it, and reaches none of its dependents through it; a dependent computed for another reason
+reads its cached value. Once computed (that edit, `Workbook.recalculate(full=True)`, a save,
+`xlrecalc.recalculate`), it is volatile as any other, toward a change of a cell it does not read
+too. The index keeps a volatile name's edges, flagged, and leaves the dormant cells out of what
+they reach when queried, so a cell that stops being dormant needs no rebuild, and dirtying and
+the report see the same dependencies. `INDEX` is not volatile; its references stay within its
+static range.
 
 ### 6.4 Dirty sets as runs, and the acceptance test
 
