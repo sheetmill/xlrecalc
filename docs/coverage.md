@@ -402,7 +402,7 @@ platform.
 | `RANK` | statistical | implemented | 20 | 20 | 0 |  |  |
 | `RANK.AVG` | statistical | implemented | 20 | 20 | 0 |  |  |
 | `RANK.EQ` | statistical | implemented | 20 | 20 | 0 |  |  |
-| `RATE` | financial | implemented | 119 | 98 | 21 | 1e-09 relative |  |
+| `RATE` | financial | implemented | 119 | 116 | 3 | 1e-09 relative |  |
 | `RECEIVED` | financial | implemented | 380 | 380 | 0 | 4 ulps |  |
 | `REDUCE` | logical | implemented | 8 | 8 | 0 |  |  |
 | `REGEXEXTRACT` | | absent | | | | | |

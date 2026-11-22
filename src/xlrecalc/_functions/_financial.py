@@ -424,16 +424,19 @@ def VDB(
 # not reproduced bit for bit (they rest on its own NPV, whose last bits differ; ARCHITECTURE.md
 # §8.1), so the method below is the one that agrees best with the captured outcomes: Newton's method
 # on 1 + rate, halving instead of stepping to 1 + rate <= 0, stopping when a step is below 1E-7,
-# #NUM! when it does not settle in time.
+# #NUM! when it does not settle in time. RATE has its own (RATE's docstring).
 
 _IRR_STEPS = 29
 """IRR's steps: from 29 to 36 give every captured outcome of ``iterative``; 28 leave two far
 guesses without the root Excel reaches, and from 37 on a root is reached where Excel gives
 ``#NUM!`` (``IRR`` of -1 and 1E10)."""
-_RATE_STEPS = 29
-"""RATE's steps: from 28 to 35 give every captured outcome of ``iterative``; from 36 on, a guess
-of -0.5 reaches a root where Excel gives ``#NUM!``. The present-value form of the equation keeps
-more of them than the future-value form at every limit tried (20 to 1000)."""
+_RATE_STEPS = 140
+"""RATE's steps: from 139 to at least 160 give every captured outcome of ``iterative`` and
+``iteration_steps``; 138 and fewer leave three far guesses at ``#NUM!``, 200 solves five rows
+Excel gives ``#NUM!``."""
+_RATE_GROWTH = 1000.0
+"""How much one step of ``RATE`` may multiply the equation's value before ``#NUM!``: a declared
+choice; no captured row tells apart the values from 5 to 1E9."""
 
 
 def _newton(fn: Any, guess: float, steps: int, tol: float = 1e-7) -> float | ErrorValue:
@@ -567,7 +570,14 @@ def RATE(
     due: float = 0.0,
     guess: Any = 0.1,
 ) -> Any:
-    """Interest rate per period of an annuity."""
+    """Interest rate per period of an annuity.
+
+    Newton's method on the future-value form of the equation, ``pv*(1+r)**n +
+    pmt*(1+r*type)*((1+r)**n-1)/r + fv = 0``, with its derivative, from the guess: a step that
+    lands at a rate of -100% or below, or that multiplies the equation's value by more than
+    ``_RATE_GROWTH``, gives ``#NUM!``, and so does not settling within ``_RATE_STEPS`` steps; the
+    result is the first iterate less than 1E-7 from the one before.
+    """
     g = _guess(guess, ctx)
     if isinstance(g, ErrorValue):
         return g
@@ -577,18 +587,40 @@ def RATE(
         return NUM
     k = 1.0 if due != 0 else 0.0
 
-    def fn(t: float) -> tuple[float, float]:
-        # the present-value form, flat for large rates: pv + pmt*(1+r*k)*(1-t**-n)/r + fv*t**-n
-        r = t - 1.0
-        u = t**-n
-        du = -n * u / t
-        if r == 0:
-            return pv + pmt * n + fv, -pmt * n * (n + 1) / 2 + pmt * k * n - fv * n
-        a = (1 - u) / r
-        da = (-du * r - (1 - u)) / (r * r)
-        return pv + pmt * (1 + r * k) * a + fv * u, pmt * (k * a + (1 + r * k) * da) + fv * du
+    def f(
+        r: float,
+    ) -> float:  # the future-value form: pv*(1+r)**n + pmt*(1+r*k)*((1+r)**n-1)/r + fv
+        if abs(r) < 1e-300:
+            return pv + pmt * n + fv
+        q: float = (1 + r) ** n  # r > -1 here: a positive base
+        return pv * q + pmt * (1 + r * k) * (q - 1) / r + fv
 
-    return _newton(fn, g, _RATE_STEPS)
+    def df(r: float) -> float:
+        if abs(r) < 1e-300:
+            return pv * n + pmt * (n * (n - 1) / 2 + k * n)
+        q: float = (1 + r) ** n
+        dq: float = n * (1 + r) ** (n - 1)
+        return pv * dq + pmt * k * (q - 1) / r + pmt * (1 + r * k) * (dq * r - (q - 1)) / (r * r)
+
+    r = g
+    try:
+        fr = f(r)
+        for _ in range(_RATE_STEPS):
+            d = df(r)
+            if d == 0 or not math.isfinite(d) or not math.isfinite(fr):
+                return NUM
+            nr = r - fr / d
+            if nr <= -1:  # past -100%: no halving back
+                return NUM
+            nf = f(nr)
+            if abs(nf) > _RATE_GROWTH * abs(fr):  # a step that overshoots far
+                return NUM
+            if abs(nr - r) < 1e-7:
+                return _result(nr)
+            r, fr = nr, nf
+    except (OverflowError, ZeroDivisionError, ValueError):
+        return NUM
+    return NUM
 
 
 # Closed forms (capture finance_family) ------------------------------------------------------

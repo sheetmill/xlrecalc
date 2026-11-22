@@ -299,20 +299,20 @@ not). An empty argument is `#N/A`.
   function (279.99999999999966 for 280); 12 rows of `math_integers` listed in `tests/test_captures.py`, with one of
   `statistics_family` and one of `empty_args`, 14 in all.
 - `IRR`, `XIRR`, `RATE`, `YIELD`
-  ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1,
-  §8.2): a relative tolerance of 1E-9, declared per function, since Excel's Newton iterates
-  rest on its own NPV, whose last bits are not reproduced, and Excel guarantees its result only
-  to its documented stopping tolerance. Of the 402 rows of `iterative`, 331 match, exactly or
-  within the relative tolerance, and 71 are listed, all among its 352 rows of `IRR`, `XIRR` and
-  `RATE` (the other 50 are `NPV` and `MIRR`): from some guesses Excel's `IRR` and `RATE` reach
+  ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1, §8.2):
+  a relative tolerance of 1E-9, declared per function, since Excel's Newton iterates rest on its
+  own NPV, whose last bits are not reproduced, and Excel guarantees its result only to its
+  documented stopping tolerance. Of the 402 rows of `iterative`, 338 match, exactly or within the
+  relative tolerance, and 64 are listed, all among its 352 rows of `IRR`, `XIRR` and `RATE` (the
+  other 50 are `NPV` and `MIRR`), none of them `RATE`'s: from some guesses Excel's `IRR` reaches
   another root, a rate where the package gives `#NUM!`, or the reverse; `XIRR` stops about 1E-8
-  from the root (sometimes after what looks like a bracketing search); and three `IRR` results
-  at a rate of 0 differ by less than 1E-14, where a relative tolerance cannot apply. Capture
+  from the root (sometimes after what looks like a bracketing search); and three `IRR` results at
+  a rate of 0 differ by less than 1E-14, where a relative tolerance cannot apply. Capture
   `iteration_steps` settles `IRR`'s limit of 29 steps (`IRR` of -1 and X is X - 1 up to 9E6 and
-  `#NUM!` from 1E7, where this method needs 29 and 30 steps) and lists 11 of its 22 `RATE` rows:
-  Excel solves `RATE(n,-1,n/2)` up to n = 1000 and reaches, from far guesses, a rate where the
-  package gives `#NUM!` or the reverse, so its `RATE` is not this method with another limit. Iteration
-  methods compared with the capture, each in at most five variants of its parameters: Newton on
-  the rate, on 1 + rate and on 1 / (1 + rate), analytic and numerical derivatives, stops on the
-  step or on the NPV, 20 to 100 iterations, damping. Excel's iteration is on the Roadmap
-  (ARCHITECTURE.md §13). Each row is listed in `tests/test_captures.py`.
+  `#NUM!` from 1E7, where this method needs 29 and 30 steps); its 22 `RATE` rows match, `RATE`
+  being Newton's method on the equation's future-value form with its own limits (its docstring).
+  `RATE`'s last digits differ from Excel's within about 1E-13 relative. Iteration methods compared
+  with the capture, each in at most five variants of its parameters: Newton on the rate, on 1 +
+  rate and on 1 / (1 + rate), analytic and numerical derivatives, stops on the step or on the NPV,
+  20 to 100 iterations, damping. Excel's iteration is on the Roadmap (ARCHITECTURE.md §13). Each
+  row is listed in `tests/test_captures.py`.

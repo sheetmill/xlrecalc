@@ -45,8 +45,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   compared, `convert_family` and `convert_odd`). Fahrenheit to Réaumur multiplies by 0.8 before dividing by 1.8, and
   Réaumur to the other scales divides by 0.8, as Excel does. The declared tolerance of 2 units in the last place is
   gone.
-- `IRR` and `RATE` take up to 29 Newton steps, where they took 20: from eight more of the captured guesses
-  (`iterative`) they reach the root Excel gives, where they gave `#NUM!` or another root.
+- `IRR` takes up to 29 Newton steps, where it took 20: from five more of the captured guesses (`iterative`) it reaches
+  the root Excel gives, where it gave `#NUM!` or another root.
+- `RATE` gives Excel's outcome on every captured row (`iterative`, `iteration_steps`): Newton's method on the
+  future-value form of the equation, with `#NUM!` where a step reaches a rate of -100% or below or multiplies the
+  equation's value by more than 1000, and up to 140 steps, where it halved toward -100% on the present-value form in 20
+  steps. Its last digits differ from Excel's within about 1E-13 relative.
 
 ## [0.8.1] - 2026-11-21
 
