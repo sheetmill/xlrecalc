@@ -57,6 +57,7 @@ def _formula(rng: random.Random, sheets: int, row: int) -> tuple[str, set[str]]:
         (f"B{r}+1", set()),  # a chain, or a cycle within the sheet
         (f"{other}!B{r}+C{row}", {other}),  # a chain, or a cycle across sheets
         ("nm+1", {"s1"}),
+        (f"{other}!D2+1", {other}),  # a cell an array may fill
         (f'CUBEVALUE("c",{other}!A{r})', {other}),  # not implemented: the cached value is kept
         (f"_TESTBOOM({other}!A{r})", {other}),  # an internal error
         ("AREAS(1)", set()),  # Excel refuses it in a file
@@ -96,7 +97,8 @@ def _sheet(rng: random.Random, sheets: int, excel: bool) -> tuple[str, set[str],
         named |= names
         body = text.replace('"', "&quot;")
         rows[1].append(f'<c r="D1"><f t="array" ref="D1:D2">{body}</f><v>5</v></c>')
-        rows[2].append('<c r="D2"><v>6</v></c>')
+        member = "<f/><v>6</v>" if rng.random() < 0.5 else "<v>6</v>"  # with an empty <f/>, or none
+        rows[2].append(f'<c r="D2">{member}</c>')
         members.append("D2")
     data = "".join(f'<row r="{r}">{"".join(cells)}</row>' for r, cells in rows.items())
     return f'<worksheet xmlns="{_MAIN}"><sheetData>{data}</sheetData></worksheet>', named, members
@@ -165,6 +167,10 @@ def _check_status(
     where = _ref(owner)
     formula = wb.formula(owner) is not None or where in report.refused
     assert status.state == expected(report, where, formula), (ref, status)
+    if owner != ref:  # the report names an array formula by its first cell, never a cell it fills
+        member = _ref(ref)
+        assert member not in report.from_kept, (ref, status)
+        assert member not in report.uncomputed, (ref, status)
     assert status.anchor == (where if owner != ref else None), (ref, status)
     assert status.error == report.exceptions.get(where), (ref, status)
     assert status.refusal == report.refused.get(where), (ref, status)
@@ -217,6 +223,10 @@ def _check(seed: int, monkeypatch: pytest.MonkeyPatch) -> None:
                 wb.set(ref, value)
                 twin.set(ref, value)
                 edited = True
+                continue
+            if roll < 0.15:  # the report read first, in both: it reads every sheet
+                assert sorted(wb.report.from_kept) == sorted(twin.report.from_kept)
+                edited = True  # sheets read from here on are the report's
                 continue
             touched.add(ref.split("!")[0])
             if roll < 0.3:  # a value read, in both
@@ -450,3 +460,25 @@ def test_a_cell_counts_each_function_it_used_once() -> None:
     wb.set_formula("Data!A1", '=CUBEMEMBER("c","m")')
     wb.value("Data!A1")
     assert dict(wb.report.unsupported) == {"CUBEMEMBER": 1, "CUBEVALUE": 1}
+
+
+def test_an_empty_formula_in_an_array_s_range_is_that_array_s_cell() -> None:
+    """A cell an array formula fills that holds an empty ``<f/>`` is the array's, computed with it,
+    and not a formula kept with the file's value."""
+    rows = (
+        '<row r="1"><c r="A1"><v>2</v></c><c r="B1"><f t="array" ref="B1:B3">A1:A3*10</f>'
+        '<v>0</v></c><c r="C1"><f>B2+1</f></c></row>'
+        '<row r="2"><c r="A2"><v>3</v></c><c r="B2"><f/><v>0</v></c></row>'
+        '<row r="3"><c r="A3"><v>4</v></c><c r="B3"><f/><v>0</v></c></row>'
+    )
+    for order in ("report first", "status first"):
+        wb = xlrecalc.load(io.BytesIO(package(rows, workbook_extra='<calcPr fullCalcOnLoad="1"/>')))
+        if order == "report first":
+            assert wb.report.from_kept == set()
+        assert [wb.value(f"Data!B{r}") for r in (1, 2, 3)] == [20.0, 30.0, 40.0]
+        assert wb.status("Data!B2") == CellStatus("computed", anchor=CellRef("Data", 1, 2))
+        assert wb.status("Data!C1") == CellStatus("computed")
+        assert wb.value("Data!C1") == 31.0
+        report = wb.report
+        assert report.from_kept == set()
+        assert dict(report.unsupported) == {}

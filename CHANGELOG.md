@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- A cell an array formula fills that holds an empty `<f/>` of its own is that array's cell. Its value was the array's
+  in 0.8.0 too (or the file's, where the load trusts cached values, as for any array), but 0.8.0's `Report.from_kept`
+  named it as a kept origin, under the label "data table", and every cell computed from it as kept, and
+  `Workbook.status` gave those cells as kept, although they depend on no data table, while it gave the filled cell
+  itself the array formula's state.
+
 ## [0.8.0] - 2026-11-21
 
 ### Added

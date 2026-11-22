@@ -1105,6 +1105,11 @@ def _compile_sheet(state: _SheetLoad) -> None:
                 engine.set_member(index, row, col, anchor, cached)
             continue
         f, raw, dynamic, reason = entry
+        if f.text is None and f.kind not in ("array", "dataTable"):
+            anchor = _filled_by(boxes, row, col)
+            if anchor is not None:  # an empty <f/> in a cell an array formula fills: its member
+                engine.set_member(index, row, col, anchor, cached)
+                continue
         where = CellRef(s.name, row + 1, col + 1)
         box = _box(f.ref) if f.kind in ("array", "dataTable") and f.ref else None
         if box is not None and not dynamic:  # cells Excel does not let one change one by one
