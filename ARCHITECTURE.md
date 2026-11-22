@@ -1437,7 +1437,7 @@ with xlio.open("model.xlsx") as book:        # a caller reading the cells itself
     loader = xlrecalc.Loader(book)
     for cell in loader.cells(book.sheets[1]): ...  # any sheet, in any order, recorded as passed
     loader.opening                           # RecalcCheck's answer; None if closed undecided
-    wb = loader.workbook()                   # sheets not fed read on need; fed later: recorded
+    wb = loader.workbook()                   # not fed: read on need; fed later: recorded if unread
 
 xlrecalc.evaluate("=SUM(A1:A3)", {"A1:A3": [[1], [2], [3]]})          # 6.0, no workbook
 f = xlrecalc.Formula.parse("=A1>5", origin="A1")  # compiled once; also sheet=, legacy=

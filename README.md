@@ -153,8 +153,8 @@ runs and phonetic guides. Sheets are fed in any order. `loader.finish()` reads e
 or left part-way, so the book may be closed after it. `loader.workbook()` gives the workbook at any
 moment and may leave such sheets to be read when a value needs them: the book must then stay open
 while the workbook is used, and once it is closed, a read of a sheet not read yet raises
-`ValueError`. A sheet fed afterwards is recorded as it passes, unless the loader has read it
-already: then its cells pass through unrecorded.
+`ValueError`. A sheet fed after `workbook()` or `finish()` is recorded as it passes, unless the
+loader has read it already: then its cells pass through unrecorded.
 `loader.opening` is what the load computes on opening (`"all"`, `"some"` or `"none"`), as
 `RecalcCheck` answers it. A workbook made this way computes and changes as any other, but has no
 file to save over.

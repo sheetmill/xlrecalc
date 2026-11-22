@@ -626,9 +626,10 @@ class _Loader:
 
     The workbook's own parts (names, calculation properties, views) are read at once. Each sheet's
     cells pass through :meth:`cells`, in any order, while they are recorded (``_load_sheet``);
-    :meth:`settle` reads every sheet not fed or fed part-way, compiles every sheet's formulas
-    (``_compile_sheet``) in the sheets' order, and applies the opening rule. A sheet fed after
-    that is passed through unrecorded. ``load`` is this with every sheet fed in order.
+    :meth:`settle` applies the opening rule and reads and compiles (``_compile_sheet``) what it
+    needs now, leaving the other sheets to be read when a value needs one. A sheet fed after it is
+    recorded as it passes, unless the loader has read it already: then it passes through
+    unrecorded. ``load`` is this with every sheet fed in order.
     """
 
     def __init__(

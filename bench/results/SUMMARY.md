@@ -191,11 +191,10 @@ values, which patches nothing. One run each, xlio 0.3.0 (the README states the 1
 | 100,000 | 300,003 | 1.54 s | 1.09 s | 1.98 s | 4.62 s | 1.35 s | 3.3 / 5.1 MB | 137 MB |
 | 1,000,000 | 3,000,003 | 17.71 s | 12.09 s | 20.68 s | 50.49 s | 14.05 s | 33.7 / 50.7 MB | 887 MB |
 
-Measured with xlrecalc 0.2.0, whose reader and writer were then its own (raw output in
-`current_py311.jsonl`). Its write took about 7% longer than
-when the writer was first measured (18.9 s at 1M rows in alternating runs on the same machine;
-the writer's first measurement is in `recalc.jsonl`), the cost of the edits it applies while
-streaming.
+The same runs with xlrecalc 0.2.0, whose reader and writer were then its own (raw output in
+`current_py311.jsonl`), below. Its write took about 7% longer than when the writer was first
+measured (18.9 s at 1M rows in alternating runs on the same machine; the writer's first
+measurement is in `recalc.jsonl`), the cost of the edits it applies while streaming.
 
 | rows | formulas | load | evaluate | write | total | write, nothing changed | file before / after | peak |
 |---|---|---|---|---|---|---|---|---|
