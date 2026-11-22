@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-11-21
+
 ### Added
 - `Workbook.status(cell)`: what `Workbook.report` says of one cell, as a `CellStatus` (`state`: `"refused"`,
   `"uncomputed"`, `"circular"`, `"kept"`, `"computed"` or `"constant"`; the cell's own `labels`, `error` or
@@ -703,7 +705,8 @@ First release.
   calculation settings; archive limits (`ReadLimits`, `LimitError`) and a refusal of DTDs
   protect against hostile files; `PackageError` for a file that is not a readable package.
 
-[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/sheetmill/xlrecalc/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/sheetmill/xlrecalc/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/sheetmill/xlrecalc/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/sheetmill/xlrecalc/compare/v0.4.0...v0.5.0
