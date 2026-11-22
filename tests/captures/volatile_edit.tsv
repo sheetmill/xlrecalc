@@ -1,15 +1,17 @@
 # suite: volatile_edit
 # excel: 16.115 for Mac, locale en_US
 # edition: Microsoft 365 Subscription, update channel Current
-# captured: 2026-11-21
+# captured: 2026-11-22
 # generator: capture/volatile_edit_probe.py
 # workbook: <fileVersion appName="xl" lastEdited="7" lowestEdited="7" rupBuild="11108"/><calcPr calcId="191029"/>
-# method: Excel's saved copy, B1 marked or not, B1 D1 E1 F1 planted, fullCalcOnLoad
-#   written where the variant asks; shown after opening, after a calculate full where
-#   the variant asks ('-' else), after C1 (A1 where the variant edits it) is set to 2,
-#   and after calculate full; the workbook line is that of the files without the flag
-# columns: variant cell planted_xml shown_after_opening shown_after_full_first
-#   shown_after_edit shown_after_full
+# method: Excel's saved copy, B1 marked or not, the marks of listed dependents
+#   removed, B1 D1 E1 F1 G1 H1 planted, fullCalcOnLoad or calcMode=manual written where
+#   the variant asks; shown after opening, then after each of the variant's steps
+#   (STEPS in capture/volatile_edit_cases.py: an edit, calculate, calculate full); the
+#   workbook line is that of the files without the flag or the mode
+# columns: variant cell planted_xml shown_after_opening shown_after_full_first ('-'
+#   where the steps do not start with calculate full) then one column per further step;
+#   the last is always after calculate full
 name_no_ca	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
 name_no_ca	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	2.0
 name_no_ca	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
@@ -61,3 +63,108 @@ name_no_ca_full_on_load	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	1.0	-	2.0	2.0
 name_no_ca_full_on_load	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
 name_no_ca_full_on_load	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	10.0	-	20.0	20.0
 name_no_ca_full_on_load	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	0.3	-	0.3	0.3
+own_plus_offset	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+own_plus_offset	probe!B1	<c r="B1"><f>vn+C1</f><v>7</v></c>	7.0	-	4.0	4.0
+own_plus_offset	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+own_plus_offset	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+own_plus_offset	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+own_plus_indirect	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+own_plus_indirect	probe!B1	<c r="B1"><f>vn+C1</f><v>7</v></c>	7.0	-	2.1	2.1
+own_plus_indirect	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+own_plus_indirect	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+own_plus_indirect	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+own_name_ref_edit	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	2.0	2.0
+own_name_ref_edit	probe!B1	<c r="B1"><f>vn+C1</f><v>7</v></c>	7.0	-	7.0	3.0
+own_name_ref_edit	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	1.0	1.0
+own_name_ref_edit	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	999.0	10.0
+own_name_ref_edit	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	6.0	6.0
+dep_unmarked	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+dep_unmarked	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	2.0
+dep_unmarked	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+dep_unmarked	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+dep_unmarked	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+dep_unmarked	probe!G1	<c r="G1"><f>B1*1</f><v>999</v></c>	999.0	-	999.0	2.0
+dep_unmarked	probe!H1	<c r="H1"><f>G1*1</f><v>999</v></c>	999.0	-	999.0	2.0
+dep_unmarked_plus	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+dep_unmarked_plus	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	2.0
+dep_unmarked_plus	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+dep_unmarked_plus	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+dep_unmarked_plus	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+dep_unmarked_plus	probe!G1	<c r="G1"><f>B1+C1</f><v>999</v></c>	999.0	-	9.0	4.0
+dep_of_own_unmarked	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+dep_of_own_unmarked	probe!B1	<c r="B1"><f>vn+C1</f><v>7</v></c>	7.0	-	4.0	4.0
+dep_of_own_unmarked	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+dep_of_own_unmarked	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+dep_of_own_unmarked	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+dep_of_own_unmarked	probe!G1	<c r="G1"><f>B1*1</f><v>999</v></c>	999.0	-	4.0	4.0
+dep_marked	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+dep_marked	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	2.0
+dep_marked	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+dep_marked	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+dep_marked	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+dep_marked	probe!G1	<c r="G1"><f ca="1">B1*1</f><v>999</v></c>	7.0	-	7.0	2.0
+second_indirect	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	3.0	3.0
+second_indirect	probe!B1	<c r="B1"><f>vn+C1</f><v>7</v></c>	7.0	-	2.1	5.0	5.0
+second_indirect	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0	2.0
+second_indirect	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0	20.0
+second_indirect	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	9.0	9.0
+second_offset	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	3.0	3.0
+second_offset	probe!B1	<c r="B1"><f>vn+C1</f><v>7</v></c>	7.0	-	2.1	5.0	5.0
+second_offset	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0	2.0
+second_offset	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0	20.0
+second_offset	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	9.0	9.0
+second_dormant	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	3.0	3.0
+second_dormant	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	7.0	3.0
+second_dormant	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0	2.0
+second_dormant	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0	20.0
+second_dormant	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	9.0	9.0
+now_name	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+now_name	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	2.0
+now_name	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+now_name	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+now_name	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+today_name	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+today_name	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	2.0
+today_name	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+today_name	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+today_name	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+rand_name	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+rand_name	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	2.0
+rand_name	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+rand_name	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+rand_name	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+randbetween_name	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+randbetween_name	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	2.0
+randbetween_name	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+randbetween_name	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+randbetween_name	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+randarray_name	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+randarray_name	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	2.0
+randarray_name	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+randarray_name	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+randarray_name	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+cell_name	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+cell_name	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	2.0
+cell_name	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+cell_name	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+cell_name	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+awake_unrelated	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1	0.1
+awake_unrelated	probe!B1	<c r="B1"><f>vn+C1</f><v>7</v></c>	7.0	-	2.028180104829	2.878970058386	2.261775944887
+awake_unrelated	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0	2.0
+awake_unrelated	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0	20.0
+awake_unrelated	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	999.0	0.3
+plain_and_volatile	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	2.0	2.0
+plain_and_volatile	probe!B1	<c r="B1"><f>vn+pn</f><v>7</v></c>	7.0	-	3.0	3.0
+plain_and_volatile	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	1.0	1.0
+plain_and_volatile	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	999.0	10.0
+plain_and_volatile	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	6.0	6.0
+nested_name	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1
+nested_name	probe!B1	<c r="B1"><f>vnest</f><v>7</v></c>	7.0	-	7.0	2.0
+nested_name	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0
+nested_name	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	20.0	20.0
+nested_name	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	0.3
+manual_name	probe!A1	<c r="A1"><v>0.1</v></c>	0.1	-	0.1	0.1	0.1
+manual_name	probe!B1	<c r="B1"><f>vn</f><v>7</v></c>	7.0	-	7.0	7.0	2.0
+manual_name	probe!C1	<c r="C1"><v>1</v></c>	1.0	-	2.0	2.0	2.0
+manual_name	probe!D1	<c r="D1"><f>C1*10</f><v>999</v></c>	999.0	-	999.0	20.0	20.0
+manual_name	probe!E1	<c r="E1"><f>A1*3</f><v>999</v></c>	999.0	-	999.0	999.0	0.3

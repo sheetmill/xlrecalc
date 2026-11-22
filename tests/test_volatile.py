@@ -74,11 +74,27 @@ def _volatile_edit() -> tuple[str, dict[str, list[list[str]]]]:
 
 # An unmarked cell volatile through a defined name, which Excel has not computed since opening, is
 # recomputed by an edit neither as volatile (as the engine keeps it too) nor as a dependent
-# through the name's references, which the engine follows (QUIRKS.md).
+# through the name's references, which the engine follows (QUIRKS.md); nor does an edit reach the
+# cell's dependents through it.
 VOLATILE_EDIT_DEVIATIONS = {
     ("name_dependent_no_ca", "probe!B1"),
     ("name_offset_plus", "probe!B1"),
     ("name_static_dependent", "probe!B1"),
+    ("own_name_ref_edit", "probe!B1"),
+    ("dep_unmarked", "probe!B1"),
+    ("dep_unmarked", "probe!G1"),
+    ("dep_unmarked", "probe!H1"),
+    ("dep_unmarked_plus", "probe!B1"),
+    ("dep_unmarked_plus", "probe!G1"),
+    ("dep_marked", "probe!B1"),
+    ("dep_marked", "probe!G1"),
+    ("now_name", "probe!B1"),
+    ("today_name", "probe!B1"),
+    ("rand_name", "probe!B1"),
+    ("randbetween_name", "probe!B1"),
+    ("randarray_name", "probe!B1"),
+    ("cell_name", "probe!B1"),
+    ("nested_name", "probe!B1"),
 }
 
 

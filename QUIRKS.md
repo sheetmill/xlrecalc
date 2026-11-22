@@ -155,7 +155,7 @@ not). An empty argument is `#N/A`.
   xlrecalc keeps the cached value on opening, through an edit and through `Workbook.recalculate()`, as Excel does, until
   the cell is computed (`Workbook.recalculate(full=True)`), and differs in two ways: a save computes it
   (`Workbook.save`, and the module's `xlrecalc.recalculate`), and an edit of a cell the name's references reach computes
-  it as a dependent (3 cells, listed in `tests/test_volatile.py`). A marked cell, and one calling a volatile function in
+  it as a dependent, and its dependents after it (18 cells, listed in `tests/test_volatile.py`). A marked cell, and one calling a volatile function in
   its own text, are computed after an edit (`volatile_edit`). Excel's own files mark every volatile cell, so these cases
   arise in files another tool wrote. A cell marked `ca="1"` without being volatile is recomputed on opening as in Excel,
   and its dependents follow when its value changes, where Excel keeps an unmarked dependent's cached value
