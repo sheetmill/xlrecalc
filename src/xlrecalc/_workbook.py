@@ -223,13 +223,15 @@ class Workbook:
         return self._engine.status(sheet, row, col)
 
     def values(self, ref: str) -> list[list[CellValue]]:
-        """The values of a range, as a list of rows."""
+        """The values of a range, as a list of rows.
+
+        Each value is the one :meth:`value` gives reading the cells in turn, row by row; the
+        range's stale cells are evaluated in one pass, in that order.
+        """
         sheet, r1, c1, r2, c2 = self._box(ref)
-        get = self._engine.get
-        return [
-            [_public(get(sheet, r - 1, c - 1)) for c in range(c1, c2 + 1)]
-            for r in range(r1, r2 + 1)
-        ]
+        cells = [(sheet, r, c) for r in range(r1 - 1, r2) for c in range(c1 - 1, c2)]
+        got = iter(self._engine.get_many(cells))
+        return [[_public(next(got)) for _ in range(c1, c2 + 1)] for _ in range(r1, r2 + 1)]
 
     def formula(self, ref: str | CellRef) -> str | None:
         """The cell's formula as the formula bar shows it (``"=B7*2"``), or ``None``."""

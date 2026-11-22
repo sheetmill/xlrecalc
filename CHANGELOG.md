@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   fill value for the rows below, as `SUMPRODUCT` does, and give the same result as before: `UNIQUE` and a `FILTER` whose
   fill fails no longer make a million-row array, and `SORT` sorts one line for the fill rows. The whole-column capture
   of the dynamic-array functions is compared in 4.4 s, where it took 10.8 s.
+- `Workbook.values` evaluates a range's stale cells in one pass, giving every value and status that reading each cell
+  with `Workbook.value` in turn gives: the same order of evaluation, each read's own allowance of function steps, a
+  moved spill settled where that read would settle it. On a sheet of 400,001 formulas, values take 1.9 s where reading
+  them one by one takes 2.5 s.
 
 ### Fixed
 - A cell volatile only through a defined name, whose cached value a trusting load kept (unmarked `ca="1"`, not computed

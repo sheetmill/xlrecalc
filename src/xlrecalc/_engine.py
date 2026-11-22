@@ -15,7 +15,7 @@ import datetime as dt
 import math
 import traceback
 from collections import defaultdict
-from collections.abc import Callable, Iterable, Iterator
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from dataclasses import dataclass, replace
 from functools import cmp_to_key
 from typing import Any
@@ -799,6 +799,57 @@ class Engine:
         if n in self.stale:
             self.recalculate(targets=[n], defer_report=True)
         return self.sheets[sheet].values.get(row * COLS + col, BLANK)
+
+    def get_many(self, cells: Sequence[tuple[int, int, int]]) -> list[Value]:
+        """The cells' values, as reading each in turn with :meth:`get` gives them.
+
+        One evaluation takes every read's stale cells, in the order and with the allowance of
+        function steps each read would give them (an array's anchor first, then the cell), and
+        each value is taken when its read would return it. Where a spill moved, the evaluation
+        stops, settles it as the read would before returning, and goes on. A sheet a lazy load
+        reads during the pass leaves nothing to close: a load is lazy only where every formula is
+        stale or none is (ARCHITECTURE.md §5.2). With iteration on, each cell is read
+        with :meth:`get`.
+        """
+        if self.iterate:
+            return [self.get(*cell) for cell in cells]
+        if self._unclosed or self._changed:
+            self._close()
+        values: list[Value] = [BLANK] * len(cells)
+        at, phase, due = 0, 0, False  # phase: 0 not begun, 1 the anchor's turn done, 2 the cell's
+
+        def feed() -> Iterator[int]:
+            nonlocal at, phase, due
+            fed = False
+            while at < len(cells):
+                if fed and self._moved:
+                    return  # settle before the next read, as a read does before returning
+                sheet, row, col = cells[at]
+                n = node(sheet, row, col)
+                if phase == 0:
+                    phase = 1
+                    anchor = self.member_of(n)
+                    if anchor is not None and anchor in self.stale:
+                        self._steps_left, due, fed = self.max_function_steps, True, True
+                        yield anchor
+                        continue
+                if phase == 1:
+                    phase = 2
+                    if n in self.stale:
+                        self._steps_left, due, fed = self.max_function_steps, True, True
+                        yield n
+                        continue
+                values[at] = self.sheets[sheet].values.get(row * COLS + col, BLANK)
+                at, phase = at + 1, 0
+
+        while at < len(cells):
+            self._evaluate(feed())
+            self._settle()
+        if due:
+            self._report_due = True
+            if not self.stale:
+                self.stale.clear()  # a set keeps its table when emptied; clearing frees it
+        return values
 
     def loop_live(self) -> bool:
         """With iteration on, a loop has run: every later recalculation runs it again (§7.2)."""
