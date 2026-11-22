@@ -4613,6 +4613,68 @@ def convert_pairs() -> list[Case]:
     ]
 
 
+_ODD_NUMBERS = (0.1, 7.3, 1 / 3, 123456.789, 1e-7, math.e, 0.7, 19.99)
+
+
+def convert_odd() -> list[Case]:
+    """``CONVERT`` at odd numbers: each unit to the next in its category and the reverse, each
+    unit to itself, prefixes on both sides (decimal, binary, and the two mixed), prefixed units
+    to other units, and every pair of temperature scales."""
+    form = "CONVERT({1},{2},{3})"
+    cases: list[Case] = []
+    i = 0
+    for units in _UNITS.values():
+        for k, unit in enumerate(units):
+            other = units[(k + 1) % len(units)]
+            cases.append(Case("odd", form, (_ODD_NUMBERS[i % 8], unit, other)))
+            cases.append(Case("odd", form, (_ODD_NUMBERS[(i + 3) % 8], other, unit)))
+            cases.append(Case("same", form, (_ODD_NUMBERS[(i + 5) % 8], unit, unit)))
+            i += 1
+    pairs = (("k", "m"), ("m", "k"), ("M", "u"), ("u", "M"), ("G", "n"), ("da", "d"), ("h", "c"),
+             ("k", "M"), ("c", "k"), ("E", "a"))  # fmt: skip
+    for unit in ("m", "g", "J", "Pa", "l", "sec", "W", "m2", "m3"):
+        for a, b in pairs:
+            cases += [Case("prefixes", form, (v, a + unit, b + unit)) for v in (7.3, 1 / 3)]
+    prefixed = (("km", "mi"), ("mi", "km"), ("kJ", "BTU"), ("mg", "ozm"), ("kPa", "psi"),
+                ("ml", "tsp"), ("km2", "ha"), ("ha", "km2"), ("cm3", "in3"),
+                ("kW", "HP"))  # fmt: skip
+    for a, b in prefixed:
+        cases += [Case("prefixed_unit", form, (v, a, b)) for v in (0.1, 7.3, 123456.789)]
+    for a, b in (("kibyte", "kbyte"), ("Mibit", "kbit"), ("kbyte", "Mibit"), ("Gibyte", "Mbyte"),
+                 ("Mibyte", "kibyte"), ("kbit", "kibit")):  # fmt: skip
+        cases += [Case("binary", form, (v, a, b)) for v in (7.3, 1 / 3)]
+    scales = ("C", "F", "K", "Rank", "Reau")
+    for a in scales:
+        for b in scales:
+            if a != b:
+                cases += [Case("temperature", form, (v, a, b)) for v in (7.3, 1 / 3, 98.6)]
+    cases += [Case("temperature", form, (v, "fah", "Reau")) for v in (-0.1, 123456.789, 212.0)]
+    return cases
+
+
+def iteration_steps() -> list[Case]:
+    """``IRR`` and ``RATE`` where the number of Newton steps decides the outcome: ``IRR`` of -1
+    and X from 3E6 to 1E9 (from 0.1, 27 to 38 of xlrecalc's steps), ``RATE(n,-1,n/2)``, and
+    ``RATE`` from far guesses that take 26 to 40 of xlrecalc's steps."""
+    cases = [
+        Case("irr_x", f"IRR({{-1,{x}}})")
+        for x in (3000000, 4000000, 5000000, 6000000, 7000000, 8000000, 9000000, 10000000,
+                  15000000, 20000000, 40000000, 100000000, 300000000, 1000000000)
+    ]  # fmt: skip
+    cases += [
+        Case("rate_n", "RATE({1},-1,{2})", (n, n / 2))
+        for n in (100.0, 200.0, 300.0, 500.0, 1000.0, 1500.0)
+    ]
+    for loan, guesses in (
+        ((48.0, -200.0, 8000.0), (8.0, 20.0, 40.0, 80.0)),
+        ((60.0, -50.0, 2000.0), (8.0, 10.0, 20.0, 40.0, 80.0, 200.0)),
+        ((120.0, -100.0, 8000.0), (5.0, 12.0, 25.0, 100.0, 200.0)),
+        ((360.0, -1000.0, 200000.0), (60.0,)),
+    ):
+        cases += [Case("rate_guess", "RATE({1},{2},{3},0,0,{4})", (*loan, g)) for g in guesses]
+    return cases
+
+
 # Whole columns and rows ----------------------------------------------------------------------
 #
 # References to whole columns and rows, where the cells past the data count: sizes, blanks counted,
@@ -4765,4 +4827,6 @@ SUITES = {
     "convert_family": Suite(convert_family),
     "convert_pairs": Suite(convert_pairs),
     "whole_columns": Suite(whole_columns, fixed=_WHOLE_TABLE),
+    "convert_odd": Suite(convert_odd),
+    "iteration_steps": Suite(iteration_steps),
 }
