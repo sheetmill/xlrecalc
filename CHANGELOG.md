@@ -18,10 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `CONVERT` gives Excel's result bit for bit, where it differed in the last bit or two for about a fifth of the
   conversions between two units neither of which is its category's base, and for some of a unit to itself: each
   category has an internal unit (the ångström for distance, its square for area, the litre for volume, the dyne for
-  force, the erg for energy, the base unit elsewhere), each unit one constant in it, and a conversion always goes
-  through it, the prefixes applied last as one power of ten (captures `convert_pairs`, now compared, and
-  `convert_family`). Fahrenheit to Réaumur multiplies by 0.8 before dividing by 1.8, as Excel does. The declared
-  tolerance of 2 units in the last place is gone.
+  force, the erg for energy, the gauss for magnetism, the base unit elsewhere), each unit one constant in it, and a
+  conversion always goes through it, the prefixes applied last as one power of ten (captures `convert_pairs`, now
+  compared, `convert_family` and `convert_odd`). Fahrenheit to Réaumur multiplies by 0.8 before dividing by 1.8, and
+  Réaumur to the other scales divides by 0.8, as Excel does. The declared tolerance of 2 units in the last place is
+  gone.
 - `IRR` and `RATE` take up to 29 Newton steps, where they took 20: from eight more of the captured guesses
   (`iterative`) they reach the root Excel gives, where they gave `#NUM!` or another root.
 

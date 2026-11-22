@@ -839,6 +839,10 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("finance", case): _IPMT_TAIL for case in (359, 367, 368, 371, 373, 397)},
     **{("iterative", case): _ITER_NEAR_ZERO for case in _ITER_NEAR_ZERO_CASES},
     **{("iterative", case): _ITER_OUTCOME for case in _ITER_OUTCOME_CASES},
+    **{
+        ("iteration_steps", case): _ITER_OUTCOME
+        for case in (15, 16, 17, 18, 19, 21, 22, 25, 26, 30, 36)
+    },
     **{("iterative", case): _XIRR for case in _XIRR_CASES},
     ("bonds", 2299): _YIELD_ZERO_COUPON,
     **{("bonds", case): _FEB29_MATURITY for case in (1999, 2004, 2006, 2007)},
@@ -940,6 +944,8 @@ SUITES = [
     "bessel_family",
     "convert_family",
     "convert_pairs",
+    "convert_odd",
+    "iteration_steps",
 ]
 
 

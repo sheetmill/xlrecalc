@@ -96,7 +96,7 @@ platform.
 | `CONFIDENCE` | statistical | implemented | 804 | 804 | 0 | 4 ulps |  |
 | `CONFIDENCE.NORM` | statistical | implemented | 804 | 804 | 0 | 4 ulps |  |
 | `CONFIDENCE.T` | statistical | implemented | 97 | 92 | 5 | 1e-14 relative |  |
-| `CONVERT` | engineering | implemented | 11490 | 11490 | 0 |  |  |
+| `CONVERT` | engineering | implemented | 12231 | 12231 | 0 |  |  |
 | `CORREL` | statistical | implemented | 15 | 15 | 0 | 4 ulps |  |
 | `COS` | math | implemented | 30 | 30 | 0 | 4 ulps |  |
 | `COSH` | math | implemented | 30 | 30 | 0 | 4 ulps |  |
@@ -270,7 +270,7 @@ platform.
 | `INTERCEPT` | statistical | implemented | 24 | 24 | 0 | 4 ulps |  |
 | `INTRATE` | financial | implemented | 380 | 380 | 0 | 4 ulps |  |
 | `IPMT` | financial | implemented | 91 | 83 | 8 | 4 ulps |  |
-| `IRR` | financial | implemented | 182 | 154 | 28 | 1e-09 relative |  |
+| `IRR` | financial | implemented | 196 | 168 | 28 | 1e-09 relative |  |
 | `ISBLANK` | information | implemented | 35 | 35 | 0 |  |  |
 | `ISERR` | information | implemented | 18 | 18 | 0 |  |  |
 | `ISERROR` | information | implemented | 23 | 23 | 0 |  |  |
@@ -402,7 +402,7 @@ platform.
 | `RANK` | statistical | implemented | 20 | 20 | 0 |  |  |
 | `RANK.AVG` | statistical | implemented | 20 | 20 | 0 |  |  |
 | `RANK.EQ` | statistical | implemented | 20 | 20 | 0 |  |  |
-| `RATE` | financial | implemented | 97 | 87 | 10 | 1e-09 relative |  |
+| `RATE` | financial | implemented | 119 | 98 | 21 | 1e-09 relative |  |
 | `RECEIVED` | financial | implemented | 380 | 380 | 0 | 4 ulps |  |
 | `REDUCE` | logical | implemented | 8 | 8 | 0 |  |  |
 | `REGEXEXTRACT` | | absent | | | | | |

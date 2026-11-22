@@ -1,0 +1,48 @@
+# suite: iteration_steps
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# date_system: 1900
+# captured: 2026-11-22
+# generator: capture/suites.py:iteration_steps
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# columns: suite tag case formula inputs expected_type expected_repr
+iteration_steps	irr_x	1	IRR({-1,3000000})	()	n	2999998.999580666
+iteration_steps	irr_x	2	IRR({-1,4000000})	()	n	3999998.999440888
+iteration_steps	irr_x	3	IRR({-1,5000000})	()	n	4999998.9998562215
+iteration_steps	irr_x	4	IRR({-1,6000000})	()	n	5999998.999161332
+iteration_steps	irr_x	5	IRR({-1,7000000})	()	n	6999998.998244398
+iteration_steps	irr_x	6	IRR({-1,8000000})	()	n	7999998.998881776
+iteration_steps	irr_x	7	IRR({-1,9000000})	()	n	8999999.0017396
+iteration_steps	irr_x	8	IRR({-1,10000000})	()	e	#NUM!
+iteration_steps	irr_x	9	IRR({-1,15000000})	()	e	#NUM!
+iteration_steps	irr_x	10	IRR({-1,20000000})	()	e	#NUM!
+iteration_steps	irr_x	11	IRR({-1,40000000})	()	e	#NUM!
+iteration_steps	irr_x	12	IRR({-1,100000000})	()	e	#NUM!
+iteration_steps	irr_x	13	IRR({-1,300000000})	()	e	#NUM!
+iteration_steps	irr_x	14	IRR({-1,1000000000})	()	e	#NUM!
+iteration_steps	rate_n	15	RATE({1},-1,{2})	(100.0, 50.0)	n	0.015849621839607305
+iteration_steps	rate_n	16	RATE({1},-1,{2})	(200.0, 100.0)	n	0.007946427671534494
+iteration_steps	rate_n	17	RATE({1},-1,{2})	(300.0, 150.0)	n	0.005302433574224673
+iteration_steps	rate_n	18	RATE({1},-1,{2})	(500.0, 250.0)	n	0.003183773861095054
+iteration_steps	rate_n	19	RATE({1},-1,{2})	(1000.0, 500.0)	n	0.0015927552892097876
+iteration_steps	rate_n	20	RATE({1},-1,{2})	(1500.0, 750.0)	e	#NUM!
+iteration_steps	rate_guess	21	RATE({1},{2},{3},0,0,{4})	(48.0, -200.0, 8000.0, 8.0)	n	0.007701472488250733
+iteration_steps	rate_guess	22	RATE({1},{2},{3},0,0,{4})	(48.0, -200.0, 8000.0, 20.0)	e	#NUM!
+iteration_steps	rate_guess	23	RATE({1},{2},{3},0,0,{4})	(48.0, -200.0, 8000.0, 40.0)	e	#NUM!
+iteration_steps	rate_guess	24	RATE({1},{2},{3},0,0,{4})	(48.0, -200.0, 8000.0, 80.0)	e	#NUM!
+iteration_steps	rate_guess	25	RATE({1},{2},{3},0,0,{4})	(60.0, -50.0, 2000.0, 8.0)	n	0.014394781000913877
+iteration_steps	rate_guess	26	RATE({1},{2},{3},0,0,{4})	(60.0, -50.0, 2000.0, 10.0)	e	#NUM!
+iteration_steps	rate_guess	27	RATE({1},{2},{3},0,0,{4})	(60.0, -50.0, 2000.0, 20.0)	e	#NUM!
+iteration_steps	rate_guess	28	RATE({1},{2},{3},0,0,{4})	(60.0, -50.0, 2000.0, 40.0)	e	#NUM!
+iteration_steps	rate_guess	29	RATE({1},{2},{3},0,0,{4})	(60.0, -50.0, 2000.0, 80.0)	e	#NUM!
+iteration_steps	rate_guess	30	RATE({1},{2},{3},0,0,{4})	(60.0, -50.0, 2000.0, 200.0)	e	#NUM!
+iteration_steps	rate_guess	31	RATE({1},{2},{3},0,0,{4})	(120.0, -100.0, 8000.0, 5.0)	e	#NUM!
+iteration_steps	rate_guess	32	RATE({1},{2},{3},0,0,{4})	(120.0, -100.0, 8000.0, 12.0)	e	#NUM!
+iteration_steps	rate_guess	33	RATE({1},{2},{3},0,0,{4})	(120.0, -100.0, 8000.0, 25.0)	e	#NUM!
+iteration_steps	rate_guess	34	RATE({1},{2},{3},0,0,{4})	(120.0, -100.0, 8000.0, 100.0)	e	#NUM!
+iteration_steps	rate_guess	35	RATE({1},{2},{3},0,0,{4})	(120.0, -100.0, 8000.0, 200.0)	e	#NUM!
+iteration_steps	rate_guess	36	RATE({1},{2},{3},0,0,{4})	(360.0, -1000.0, 200000.0, 60.0)	e	#NUM!
