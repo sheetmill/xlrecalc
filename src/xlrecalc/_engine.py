@@ -845,6 +845,8 @@ class Engine:
                 at, phase = at + 1, 0
 
         while at < len(cells):
+            # feed() stops at a read with something to close and reads nothing until it is
+            # closed: this close is what lets the loop advance (without it the loop never ends).
             if self._unclosed or self._changed:
                 self._close()
             self._evaluate(feed())

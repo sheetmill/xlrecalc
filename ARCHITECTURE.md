@@ -1524,7 +1524,7 @@ in a rule recalculates no cell on opening, so `RecalcCheck` reads no rule. Tests
 
 ## 13. Roadmap
 
-After 0.9.0, in this order: an order, not a promise or a date.
+After 0.10.0, in this order: an order, not a promise or a date.
 
 1. A `Loader` that also reads sheets lazily where the opening rule answers `"some"`: the static
    dependents of the `ca="1"` cells found from the formulas-only reading, so that only the
@@ -1546,9 +1546,10 @@ After 0.9.0, in this order: an order, not a promise or a date.
    It would answer code, not persist values: saving with values stays `recalculate`. openpyxl
    would be an optional extra, imported when the adapter is used.
 6. Excel's iteration for `IRR`, `RATE` and `YIELD` (its starting step, update rule, safeguards
-   and stopping test), and for `XIRR` which of several sign changes it bisects and its negative
-   brackets, studied apart from this list from the capture sweeps and adopted when it reproduces
-   each captured outcome without losing a row that matches.
+   and stopping test), and for `XIRR` the brackets of the roots QUIRKS.md lists (a root at 0,
+   some negative roots, a guess halved down to the tolerance), studied apart from this list from
+   the capture sweeps and adopted when it reproduces each captured outcome without losing a row
+   that matches.
 7. For one formula outside a workbook: the other conditional-format rule types (top 10, above
    average, duplicates, text rules) where Excel's semantics would otherwise be restated by a
    caller, structured references given table definitions (Excel refuses them in a rule, but
@@ -1561,7 +1562,7 @@ After 0.9.0, in this order: an order, not a promise or a date.
    computed (`Report.uncomputed`), rather than writing it with the file's value or none; and
    streams as well as paths for `save` and `recalculate`, as `load` takes one.
 10. Then: settings for Excel for Windows' text order and its character set in `CHAR` and
-   `CODE`, each once captures record it (CAPTURING.md §5 holds one of the text order,
-   `collate_words`, from one build and locale); the array-backed store and vectorized templates (numpy
-   as an optional extra), the SQLite backend, parallel evaluation of independent template
+   `CODE`, each once captures record it (so far one capture of the text order, CAPTURING.md §5's
+   `collate_words`, from one build and locale); the array-backed store and vectorized templates
+   (numpy as an optional extra), the SQLite backend, parallel evaluation of independent template
    columns on free-threaded Python, and a compiled core only if profiling demands it.
