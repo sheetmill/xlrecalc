@@ -4705,6 +4705,90 @@ def rate_method() -> list[Case]:
     return cases
 
 
+_XM_D0 = 44000.0
+"""The first date of every ``xirr_method`` flow (2020-06-19); a year later is 365 days on."""
+_XM_TWO = "XIRR({1}:{2},{3}:{4},{5})"
+_XM_THREE = "XIRR({1}:{3},{4}:{6},{7})"
+
+
+def _xm_two_roots(r1: float, r2: float, k: float) -> tuple[float, float, float]:
+    """Yearly flows (a, b, c) whose XNPV has the roots r1 and r2: k(u - u1)(u - u2), u = 1/(1+r)."""
+    u1, u2 = 1 / (1 + r1), 1 / (1 + r2)
+    return k * u1 * u2, -k * (u1 + u2), k
+
+
+def xirr_method() -> list[Case]:
+    """``XIRR``'s scan and bisection where they decide the outcome.
+
+    The top of the upward scan: roots 1.5 * 2^j for j from 46 to 218 by 4 (about 1E14 to 7E65)
+    of two flows a day apart, from the guesses 0, 0.1, 1000 and 1E10, and six roots from 1E18 to
+    1E60 over five years. Negative guesses from -0.01 to -0.999999 against roots from -0.9 to
+    0.1, a pair of negative roots and a root at 0, and guesses of -1 and below. A root of -0.5
+    from guesses of 0.5 to 10. Single roots of random flows on random dates, six on fractional
+    dates. Flows with two and three roots, mirrored, from guesses below, between and above them;
+    a root at 0 and its twin moved 1E-7 away; roots 0.13 and 23 from the guess 0.02.
+    """
+    cases: list[Case] = []
+    add = cases.append
+    for g in (0.0, 0.1, 1000.0, 1e10):
+        for j in range(46, 219, 4):
+            v = 100.0 * (1.0 + 1.5 * 2.0**j) ** (1 / 365)
+            add(Case("top", _XM_TWO, (-100.0, v, _XM_D0, _XM_D0 + 1, g)))
+    for e in (18, 24, 30, 40, 50, 60):
+        v = 100.0 * (1.0 + 10.0**e) ** (1826 / 365)  # 2020-06-19 to 2025-06-19
+        add(Case("top", _XM_TWO, (-100.0, v, _XM_D0, _XM_D0 + 1826, 0.1)))
+    for v in (97.0, 70.0, 38.0, 10.0, 110.0):
+        for g in (-0.01, -0.1, -0.5, -0.9, -0.999999):
+            add(Case("negative guess", _XM_TWO, (-100.0, v, _XM_D0, _XM_D0 + 365, g)))
+    for g in (-1.0, -1.000001, -1.5):
+        add(Case("negative guess", _XM_TWO, (-100.0, 70.0, _XM_D0, _XM_D0 + 365, g)))
+    pair = _xm_two_roots(-0.2, -0.5, -100.0)
+    for g in (-0.1, -0.3, -0.6, -0.9, 0.1):
+        add(Case("negative guess", _XM_THREE, (*pair, _XM_D0, _XM_D0 + 365, _XM_D0 + 730, g)))
+    for g in (-0.1, -0.5):
+        add(Case("negative guess", _XM_TWO, (-100.0, 100.0, _XM_D0, _XM_D0 + 365, g)))
+    for g in (0.5, 0.9, 0.99, 1.0, 1.5, 2.0, 10.0):
+        add(Case("guess one or more", _XM_TWO, (-100.0, 50.0, _XM_D0, _XM_D0 + 365, g)))
+    rng = random.Random(20261123)
+    for k in range(26):
+        n = rng.randint(3, 6)
+        flows = [-round(rng.uniform(500, 5000), 2)]
+        flows += [round(rng.uniform(50, 3000), 2) for _ in range(n - 1)]
+        days = sorted(rng.sample(range(1, 3000), n - 1))
+        if k < 20:
+            dates = [_XM_D0, *(_XM_D0 + d for d in days)]
+            tag = "single"
+        else:
+            dates = [_XM_D0 + 0.75, *(_XM_D0 + d + round(rng.uniform(0.01, 0.99), 2) for d in days)]
+            tag = "fractional dates"
+        g = rng.choice((0.1, 0.0, 0.05, 0.5, 3.0))
+        form = f"XIRR({{1}}:{{{n}}},{{{n + 1}}}:{{{2 * n}}},{{{2 * n + 1}}})"
+        add(Case(tag, form, (*flows, *dates, g)))
+    yearly = (_XM_D0, _XM_D0 + 365, _XM_D0 + 730)
+    two = (-100.0, 230.0, -132.0)  # roots 0.1 and 0.2
+    for flows in (two, tuple(-v for v in two)):
+        for g in (0.01, 0.05, 0.15, 0.3, 1.0):
+            add(Case("several roots", _XM_THREE, (*flows, *yearly, g)))
+    u = [1 / 1.1, 1 / 1.3, 1 / 1.6]  # roots 0.1, 0.3 and 0.6: -100(u-u1)(u-u2)(u-u3)
+    three = (
+        100.0 * u[0] * u[1] * u[2],
+        -100.0 * (u[0] * u[1] + u[0] * u[2] + u[1] * u[2]),
+        100.0 * (u[0] + u[1] + u[2]),
+        -100.0,
+    )
+    four = "XIRR({1}:{4},{5}:{8},{9})"
+    for flows in (three, tuple(-v for v in three)):
+        for g in (0.05, 0.2, 0.4, 1.0):
+            add(Case("several roots", four, (*flows, *yearly, _XM_D0 + 1095, g)))
+    for flows in ((-1.0, 2.5, -1.5), (1.0, -2.5, 1.5), (-1.0, 2.5, -1.5 + 1e-7)):
+        for g in (0.1, 1.0):
+            add(Case("several roots", _XM_THREE, (*flows, *yearly, g)))
+    far = _xm_two_roots(0.13, 23.0, -1000.0)
+    for g in (0.02, 0.1):
+        add(Case("several roots", _XM_THREE, (*far, *yearly, g)))
+    return cases
+
+
 # Whole columns and rows ----------------------------------------------------------------------
 #
 # References to whole columns and rows, where the cells past the data count: sizes, blanks counted,
@@ -4860,4 +4944,5 @@ SUITES = {
     "convert_odd": Suite(convert_odd),
     "iteration_steps": Suite(iteration_steps),
     "rate_method": Suite(rate_method),
+    "xirr_method": Suite(xirr_method),
 }
