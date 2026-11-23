@@ -1,10 +1,10 @@
 """Counts QUIRKS.md states, derived from the captures and the deviation lists and checked.
 
-Six groups: the sizes of suites given as ``suite`` (N rows), the CUMIPMT and CUMPRINC rows with
-the group's total (the README's largest group, ``tests/test_readme.py``) and the TBILLEQ row,
-VDB's listed share of its sweeps, the MULTINOMIAL rows, the iterative rows, and the
-empty-argument rows. Other figures there (character pairs, units in the last place, dates) are
-not checked here.
+Seven groups: the sizes of suites given as ``suite`` (N rows), the CUMIPMT and CUMPRINC rows with
+the group's total (the README's largest group, ``tests/test_readme.py``) and the TBILLEQ row, VDB's
+listed share of its sweeps, the MULTINOMIAL rows, the iterative rows, the empty-argument rows, and
+XIRR's listed rows. Other figures there (character pairs, units in the last place, dates) are not
+checked here.
 """
 
 from __future__ import annotations
@@ -104,6 +104,15 @@ def test_empty_args_rows():
     noise = (tc._MULTINOMIAL, tc._CUMULATIVE_NOISE)
     assert _n(found[1]) == _listed(tc._EMPTY_ODD, "empty_args")
     assert _n(found[2]) == sum(_listed(r, "empty_args") for r in noise)
+
+
+def test_xirr_listed_rows():
+    """XIRR's listed rows: the total, and the negative roots whose bracket is not known."""
+    found = _one(r"Listed, ([\d,]+) rows\. Flows with roots 0 and 0\.5")
+    xirr = [r for r in tc.KNOWN_DEVIATIONS.values() if r.startswith("XIRR:")]
+    assert _n(found[1]) == len(xirr)
+    found = _one(r"negative roots the bracket Excel bisects is not known \(([\d,]+) rows\)")
+    assert _n(found[1]) == _listed(tc._XIRR_NEGATIVE) + _listed(tc._XIRR_NEGATIVE_POWER)
 
 
 def _continuous_spread() -> dict[str, float]:

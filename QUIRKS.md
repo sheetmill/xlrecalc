@@ -341,13 +341,12 @@ not). An empty argument is `#N/A`.
     h × 2^70 is the one taken.
   - Listed, 40 rows. Flows with roots 0 and 0.5: Excel bisects 0.5 where the change met at the scan point 0 gives
     `#NUM!` or another bracket (14 rows of `iteration`, 4 of `xirr_method`). For some negative roots the bracket Excel
-    bisects is not known (16 rows): one of `iterative` (a root near -0.9993 from the guess 0.1), four of
-    `xirr_method` (the root -0.9 from negative guesses; from -0.5 it matches), 11 of `xirr_nan` (from the guess 0.5,
-    the root -0.9, and a root on the scan point -0.5, where a sign read rests on powers at a rounding midpoint and
-    may differ by platform), each a rate within about 1E-8 of Excel's, and one of
-    `xirr_sign_rules` (two negative roots between the scan points -1 and -0.1, where Excel gives -0.3 and the package
-    `#NUM!`). For flows with roots 0.13 and 23, Excel returns the guess halved down to the width tolerance
-    (0.02/2^22, 0.1/2^25), not a root, where the package gives `#NUM!` (two rows of `xirr_method`). Three rows match
-    here but are listed for other platforms (one of `iteration`, two of `xirr_method`): a sign the bisection reads
-    rests on a power within 0.05 units in the last place of a rounding midpoint, which another platform's `pow` may
-    round the other way.
+    bisects is not known (17 rows): one of `iterative` (a root near -0.9993 from the guess 0.1), four of `xirr_method`
+    (the root -0.9 from negative guesses; from -0.5 it matches), 11 of `xirr_nan` (from the guess 0.5, the root -0.9,
+    and a root on the scan point -0.5, where a sign read rests on powers at a rounding midpoint and may differ by
+    platform), each a rate within about 1E-8 of Excel's, and one of `xirr_sign_rules` (two negative roots between the
+    scan points -1 and -0.1, where Excel gives -0.3 and the package `#NUM!`). For flows with roots 0.13 and 23, Excel
+    returns the guess halved down to the width tolerance (0.02/2^22, 0.1/2^25), not a root, where the package gives
+    `#NUM!` (two rows of `xirr_method`). Three rows match here but are listed for other platforms (one of `iteration`,
+    two of `xirr_method`): a sign the bisection reads rests on a power within 0.05 units in the last place of a
+    rounding midpoint, which another platform's `pow` may round the other way.
