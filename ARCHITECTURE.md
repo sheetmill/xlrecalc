@@ -1005,10 +1005,10 @@ Behavior that is not the obvious reading, each from its capture:
   below or multiplies the equation's value by more than 45,000, 140 iterations. Excel's iterates
   rest on its own NPV and are not reproduced bit for bit: these functions and `YIELD` declare a
   relative tolerance of 1E-9 (§8.1), and the rows beyond it are listed with their reasons.
-- `XIRR` (captures `iterative`, `iteration`): not Newton's method but bisection, reproduced bit for
-  bit with no tolerance. XNPV over dates truncated to whole days is evaluated in increasing order
-  at -1 and -h (when -h > -1), 0, h, 2h, 4h, ... up to 1E30, where h is the guess's size (1E-5 for
-  0) and a negative guess stops at 0. The first sign change is bisected when it runs toward the
+- `XIRR` (captures `iterative`, `iteration`, `xirr_method`): not Newton's method but bisection,
+  reproduced bit for bit with no tolerance. XNPV over dates truncated to whole days is evaluated in
+  increasing order at -1 and -h (when -h > -1), 0, h, 2h, 4h, ... to h × 2^70, where h is the
+  guess's size (1E-5 for 0) and a negative guess stops at 0. The first sign change is bisected when it runs toward the
   first flow's sign, `#NUM!` otherwise; bisection returns the midpoint once the bracket is narrower
   than 1E-8 × (1 + |a| + |b|). Which of several changes Excel takes, and the negative brackets of
   some roots, are not known (`QUIRKS.md`). `XIRR` reads text dates and dates in any order after the

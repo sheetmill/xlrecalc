@@ -195,10 +195,10 @@ text shows before evaluating.
   unit conversion.
   The [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 120,291 formulas computed by Excel and compared with xlrecalc's results: 119,539
+- **Evidence**: 120,567 formulas computed by Excel and compared with xlrecalc's results: 119,801
   match, bit for bit or within a small tolerance declared per function (a few units in the last
   place, or a relative one: 1E-9 for `IRR`, `RATE` and `YIELD`, 1E-15 to 1E-12 for the beta,
-  gamma, chi-squared, F and t distributions), 752 known deviations, each listed with its reason
+  gamma, chi-squared, F and t distributions), 766 known deviations, each listed with its reason
   in [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md). Each listed
   deviation is still computed and compared with Excel on every test run, and one that starts to
   match fails the run, except a few that can match by chance (a random result, a result Excel

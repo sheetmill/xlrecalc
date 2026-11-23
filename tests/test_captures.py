@@ -58,10 +58,18 @@ _RATE_LAST_DIGITS = (
 )
 _XIRR_ROOTS = (
     "XIRR: which of several sign changes Excel bisects is not known; the first from -1 upward is "
-    "taken here, and #NUM! when it runs away from the first flow's sign, as a root exactly at "
-    "the scan point 0 does"
+    "taken here, and #NUM! when it runs away from the first flow's sign, where Excel bisects the "
+    "root 0.5 of flows whose other root is at or just below 0"
 )
 _XIRR_NEGATIVE = "XIRR: the negative bracket Excel bisects for this root is not known"
+_XIRR_POWER = (
+    "XIRR: a sign the bisection reads rests on a power within 0.05 units in the last place of a "
+    "rounding midpoint, which another platform's pow may round the other way"
+)
+_XIRR_HALVING = (
+    "XIRR: Excel returns the guess halved down to the width tolerance (0.02/2^22, 0.1/2^25), "
+    "not a root, for flows with roots 0.13 and 23; #NUM! here"
+)
 _ITER_NEAR_ZERO_CASES = (77, 82, 84)
 _ITER_OUTCOME_CASES = (
     5,
@@ -807,6 +815,11 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("iterative", case): _ITER_OUTCOME for case in _ITER_OUTCOME_CASES},
     ("iterative", 184): _XIRR_NEGATIVE,
     **{("iteration", case): _XIRR_ROOTS for case in range(647, 661)},
+    **{("xirr_method", case): _XIRR_NEGATIVE for case in (198, 199, 201, 202)},
+    **{("xirr_method", case): _XIRR_ROOTS for case in range(269, 274)},
+    **{("xirr_method", case): _XIRR_HALVING for case in (275, 276)},
+    **{("xirr_method", case): _XIRR_POWER for case in (263, 267)},
+    ("iteration", 835): _XIRR_POWER,
     ("rate_method", 77): _RATE_SAFEGUARD,
     **{("rate_method", case): _RATE_LAST_DIGITS for case in (5, 22)},
     ("bonds", 2299): _YIELD_ZERO_COUPON,
@@ -839,7 +852,7 @@ MATH_LIBRARY = frozenset(
     {_IPMT_TAIL, _ITER_NEAR_ZERO, _ITER_OUTCOME, _YIELD_ZERO_COUPON, _PRICE_EXTREME,
      _NORMAL_TAIL, _DISCRETE_TERMS, _DISTRIBUTION_LIBRARY}
 )  # fmt: skip
-OTHER_PLATFORMS = frozenset({_LIBM_CANCELLATION, _COMPLEX_TEXT_BOUNDARY})
+OTHER_PLATFORMS = frozenset({_LIBM_CANCELLATION, _COMPLEX_TEXT_BOUNDARY, _XIRR_POWER})
 
 
 # Where the strict rules above for math-library rows hold. The last bits come with the operating
@@ -913,6 +926,7 @@ SUITES = [
     "iteration_steps",
     "rate_method",
     "iteration",
+    "xirr_method",
 ]
 # Suites compared in part: only the rows whose tag is named. Of ``iteration``, the XIRR rows; its
 # IRR, RATE and YIELD rows are evidence for their methods, not matched.

@@ -11,9 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `XIRR` brackets a root on points built from the guess and bisects it, as Excel does, in place of Newton's method,
   and matches Excel's results bit for bit with no tolerance: of the `XIRR` rows of capture `iterative`, the 33
   listed before match, and capture `iteration`'s 294 `XIRR` rows are now compared (280 match). The first sign change
-  met from -1 upward is bisected when it runs toward the first flow's sign; a root above 1E30, which no capture
-  settles yet, is `#NUM!`. QUIRKS.md lists the rest: 14 rows with a root exactly at the scan point 0, where Excel
-  bisects another root, and one negative root whose bracket is not known.
+  met from -1 upward is bisected when it runs toward the first flow's sign. The upward scan doubles the guess's size
+  70 times, a declared choice: capture `xirr_method` (276 rows, 265 matching) places its last point at 2^70 or 2^71
+  times the guess's size. QUIRKS.md lists the rest, 29 rows: which of several sign changes Excel takes, the brackets
+  of some negative roots, a guess halved down to Excel's tolerance in place of a root, and three rows that match
+  here but whose result rests on a power within 0.05 units in the last place of a rounding midpoint.
 
 ### Fixed
 - `XIRR` with a negative guess finds a negative root (capture `iteration`: -0.5 from guesses -0.01 to -0.99), where it

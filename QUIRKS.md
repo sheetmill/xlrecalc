@@ -323,18 +323,25 @@ not). An empty argument is `#N/A`.
   rate and on 1 / (1 + rate), analytic and numerical derivatives, stops on the step or on the NPV,
   20 to 100 iterations, damping. Excel's iteration is on the Roadmap (ARCHITECTURE.md §13). Each
   row is listed in `tests/test_captures.py`.
-- `XIRR` (captures `iterative`, `iteration`, `empty_args`): no tolerance. Excel brackets a root on
-  points built from the guess and bisects it, and the package does the same: with h the guess's
-  size (1E-5 for a guess of 0), the points are -1 and -h (when -h > -1), 0, then h, 2h, 4h, ... up
-  to 1E30, and a negative guess stops at 0, so a positive root is `#NUM!` from it. The first sign
-  change met from -1 upward (a zero counting as negative, a point where the sum is not a number
-  skipped) is bisected if it runs toward the first flow's sign, and is `#NUM!` otherwise, as no
-  change is; bisection returns the midpoint once the bracket is narrower than 1E-8 × (1 + |a| +
-  |b|), so a result stops up to about 1E-8 short of the root. Dates are truncated to whole days.
-  A guess of -1 or below is `#NUM!`; an empty guess argument is the default 0.1 and a blank cell
-  0. Of the 294 `XIRR` rows of `iteration`, 280 match bit for bit and 14 are listed: flows with a
-  root exactly at the scan point 0 and another at 0.5, where Excel bisects the upper root and the
-  package, meeting the change at 0 first, gives `#NUM!`. Which of several sign changes Excel
-  takes is not known; the first change toward the first flow's sign is a fitted rule. One row of
-  `iterative`, a root near -0.9993 from the guess 0.1, is listed because the negative bracket
-  Excel bisects for it is not known. The top of the scan, 1E30, is not yet settled by a capture.
+- `XIRR` (captures `iterative`, `iteration`, `xirr_method`, `empty_args`): no tolerance. Excel brackets a root on
+  points built from the guess and bisects it, and the package does the same: with h the guess's size (1E-5 for a
+  guess of 0), the points are -1 and -h (when -h > -1), 0, then h, 2h, 4h, ... to h × 2^70, and a negative guess stops
+  at 0, so a positive root is `#NUM!` from it, as a negative root is from a guess of 1 or more. The first sign change
+  met from -1 upward (a zero counting as negative, a point where the sum is not a number skipped) is bisected if it
+  runs toward the first flow's sign, and is `#NUM!` otherwise, as no change is; bisection returns the midpoint once
+  the bracket is narrower than 1E-8 × (1 + |a| + |b|), so a result stops up to about 1E-8 short of the root. Dates
+  are truncated to whole days. A guess of -1 or below is `#NUM!`; an empty guess argument is the default 0.1 and a
+  blank cell 0.
+  - The top of the scan is a declared choice: capture `xirr_method` finds roots up to 1.7E15 from the guess 0, 1.1E20
+    from 0.1, 4.5E23 from 1000 and 7.6E30 from 1E10, and `#NUM!` from 2.7E16, 1.8E21, 7.3E24 and 1.2E32. A last
+    point of h × 2^70 or h × 2^71 gives every one of its 182 rows, and no fixed top rate gives all four guesses;
+    h × 2^70 is the one taken.
+  - Listed, 29 rows. Which of several sign changes Excel takes is not known, and the first change toward the first
+    flow's sign is a fitted rule: 14 rows of `iteration` and 5 of `xirr_method` have a root at or just below 0 and
+    another at 0.5, which Excel bisects where the package gives `#NUM!` or bisects another bracket. For some negative
+    roots the bracket Excel bisects is not known: one row of `iterative` (a root near -0.9993 from the guess 0.1) and
+    four of `xirr_method` (the root -0.9 from negative guesses; from -0.5 it matches). For flows with roots 0.13 and
+    23, Excel returns the guess halved down to the width tolerance (0.02/2^22, 0.1/2^25), not a root, where the
+    package gives `#NUM!` (two rows of `xirr_method`). Three rows match here but are listed for other platforms
+    (one of `iteration`, two of `xirr_method`): a sign the bisection reads rests on a power within 0.05 units in the
+    last place of a rounding midpoint, which another platform's `pow` may round the other way.

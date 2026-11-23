@@ -8,7 +8,7 @@ import pytest
 
 from xlrecalc._engine import Engine
 from xlrecalc._functions._financial import (
-    _XIRR_TOP,
+    _XIRR_DOUBLINGS,
     _xirr_points,
     _xirr_solve,
     _xirr_value,
@@ -26,7 +26,7 @@ def _first(g: float, n: int) -> list[float]:
 def test_points_from_a_positive_guess():
     assert _first(0.1, 6) == [-1.0, -0.1, 0.0, 0.1, 0.2, 0.4]
     assert _first(0.0, 4) == [-1.0, -1e-5, 0.0, 1e-5]
-    assert max(_xirr_points(0.1)) <= _XIRR_TOP < 2 * max(_xirr_points(0.1))
+    assert max(_xirr_points(0.1)) == 0.1 * 2.0**_XIRR_DOUBLINGS
 
 
 def test_points_from_a_guess_of_one_or_more_have_no_negatives():
@@ -98,7 +98,8 @@ def test_a_guess_of_one_or_more_misses_a_negative_root():
 
 
 def test_the_top_of_the_scan():
-    below, above = _XIRR_TOP / 4, _XIRR_TOP * 4
+    top = 0.1 * 2.0**_XIRR_DOUBLINGS
+    below, above = top * 0.75, top * 1.5
     got = _xirr_solve([-1.0, 1.0 + below], [0.0, 1.0], 0.1)
     assert isinstance(got, float)
     assert got == pytest.approx(below, rel=1e-7)

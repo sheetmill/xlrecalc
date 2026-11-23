@@ -553,8 +553,10 @@ def XIRR(ctx: Context, values: Any, dates: Any, guess: Any = MISSING) -> Any:
     return _xirr_solve(nums, [(d - days[0]) / 365 for d in days], g)
 
 
-_XIRR_TOP = 1e30
-"""The highest point of XIRR's upward scan: a root above it is ``#NUM!``."""
+_XIRR_DOUBLINGS = 70
+"""How many times XIRR's upward scan doubles the guess's size h, a declared choice: capture
+``xirr_method`` places the last point at h * 2**70 or h * 2**71 (roots of 1.7E15 found and
+2.7E16 refused from the guess 0, 1.1E20 and 1.8E21 from 0.1, 4.5E23 and 7.3E24 from 1000)."""
 _XIRR_WIDTH = 1e-8
 """XIRR's bisection stops when ``|b - a| < _XIRR_WIDTH * (1 + |a| + |b|)``."""
 _XIRR_HALVINGS = 200
@@ -580,8 +582,8 @@ def _xirr_value(flows: list[float], years: list[float], r: float) -> float:
 def _xirr_points(g: float) -> Iterator[float]:
     """XIRR's scan points, in increasing order.
 
-    -1 and -h (when -h > -1), 0, then h, 2h, 4h, ... up to ``_XIRR_TOP``, with h the guess's
-    size (1E-5 for a guess of 0); a negative guess stops at 0.
+    -1 and -h (when -h > -1), 0, then h, 2h, 4h, ... to h * 2**``_XIRR_DOUBLINGS``, with h the
+    guess's size (1E-5 for a guess of 0); a negative guess stops at 0.
     """
     h = abs(g) if g != 0 else 1e-5
     if -h > -1:
@@ -591,7 +593,7 @@ def _xirr_points(g: float) -> Iterator[float]:
     if g < 0:
         return
     x = h
-    while x <= _XIRR_TOP:
+    for _ in range(_XIRR_DOUBLINGS + 1):
         yield x
         x *= 2
 
