@@ -13,8 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   listed before match, and capture `iteration`'s 294 `XIRR` rows are now compared (280 match). The first sign change
   met from -1 upward is bisected when it runs toward the first flow's sign. The upward scan doubles the guess's size
   70 times, a declared choice: capture `xirr_method` (276 rows, 265 matching) places its last point at 2^70 or 2^71
-  times the guess's size. QUIRKS.md lists the rest, 29 rows: which of several sign changes Excel takes, the brackets
-  of some negative roots, a guess halved down to Excel's tolerance in place of a root, and three rows that match
+  times the guess's size. QUIRKS.md lists the rest, 51 rows: which of several sign changes Excel takes, the brackets
+  of some negative roots, a negative root that XNPV's value at -1 (-inf + inf) hides from the scan while Excel finds
+  it (capture `xirr_nan`), a guess halved down to Excel's tolerance in place of a root, and three rows that match
   here but whose result rests on a power within 0.05 units in the last place of a rounding midpoint.
 
 ### Fixed

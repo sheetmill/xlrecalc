@@ -62,6 +62,10 @@ _XIRR_ROOTS = (
     "root 0.5 of flows whose other root is at or just below 0"
 )
 _XIRR_NEGATIVE = "XIRR: the negative bracket Excel bisects for this root is not known"
+_XIRR_NAN_END = (
+    "XIRR: XNPV is not a number at -1 (later flows of both signs over 0); Excel finds the "
+    "negative root, as if -1 had the sign of the latest flow, where the scan here skips -1"
+)
 _XIRR_POWER = (
     "XIRR: a sign the bisection reads rests on a power within 0.05 units in the last place of a "
     "rounding midpoint, which another platform's pow may round the other way"
@@ -820,6 +824,8 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("xirr_method", case): _XIRR_HALVING for case in (275, 276)},
     **{("xirr_method", case): _XIRR_POWER for case in (263, 267)},
     ("iteration", 835): _XIRR_POWER,
+    **{("xirr_nan", case): _XIRR_NAN_END for case in (*range(1, 3), 4, *range(6, 22), 23, 24)},
+    ("xirr_nan", 22): _XIRR_NEGATIVE,
     ("rate_method", 77): _RATE_SAFEGUARD,
     **{("rate_method", case): _RATE_LAST_DIGITS for case in (5, 22)},
     ("bonds", 2299): _YIELD_ZERO_COUPON,
@@ -927,6 +933,7 @@ SUITES = [
     "rate_method",
     "iteration",
     "xirr_method",
+    "xirr_nan",
 ]
 # Suites compared in part: only the rows whose tag is named. Of ``iteration``, the XIRR rows; its
 # IRR, RATE and YIELD rows are evidence for their methods, not matched.

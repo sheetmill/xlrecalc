@@ -527,7 +527,7 @@ platform.
 | `WORKDAY.INTL` | date and time | implemented | 76 | 76 | 0 |  |  |
 | `WRAPCOLS` | lookup and reference | implemented | 18 | 18 | 0 |  |  |
 | `WRAPROWS` | lookup and reference | implemented | 33 | 33 | 0 |  |  |
-| `XIRR` | financial | implemented | 660 | 631 | 29 |  |  |
+| `XIRR` | financial | implemented | 684 | 633 | 51 |  |  |
 | `XLOOKUP` | lookup and reference | partial | 325 | 324 | 1 |  | the regular-expression match mode is not implemented |
 | `XMATCH` | lookup and reference | partial | 487 | 486 | 1 |  | the regular-expression match mode is not implemented |
 | `XNPV` | financial | implemented | 31 | 31 | 0 |  |  |
