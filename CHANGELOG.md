@@ -39,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   alike. The report's dependencies are the same ones.
 - `CONVERT` gives Excel's result bit for bit, where it differed in the last bit or two for about a fifth of the
   conversions between two units neither of which is its category's base, and for some of a unit to itself: each
-  category has an internal unit (the ångström for distance, its square for area, the litre for volume, the dyne for
+  category has an internal unit (the ångström for distance, its square for area, the liter for volume, the dyne for
   force, the erg for energy, the gauss for magnetism, the base unit elsewhere), each unit one constant in it, and a
   conversion always goes through it, the prefixes applied last as one power of ten (captures `convert_pairs`, now
   compared, `convert_family` and `convert_odd`). Fahrenheit to Réaumur multiplies by 0.8 before dividing by 1.8, and
@@ -480,7 +480,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `T.TEST`, `TTEST`, `F.TEST`, `FTEST`, `CHISQ.TEST`, `CHITEST`, `Z.TEST`, `ZTEST`, `CONFIDENCE.T`. Degrees of freedom
   are truncated, from 1 to 1E10; each tail is computed directly where it is the smaller, and each inverse is the
   root to the last bit, so that far tails and probabilities near 1 keep their digits; at large shapes, where logarithms of
-  the gamma function cancel, Loader's saddle point, DiDonato and Morris's expansion and Temme's uniform expansion
+  the gamma function cancel, Catherine Loader's saddle-point algorithm, DiDonato and Morris's expansion and Temme's uniform expansion
   take over. As in Excel, `CHISQ.INV.RT` and `CHIINV` at one degree of freedom invert the left tail at 1 - p (a p
   of at most 2^-54, about 5.55E-17, is `#NUM!`), an empty sample in a test is `#VALUE!` (`#DIV/0!` in `Z.TEST`), and an empty bound of
   the beta functions takes its default. The tests take ranges or arrays alike; `CHISQ.TEST` and a paired `T.TEST` pair

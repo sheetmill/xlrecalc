@@ -1,6 +1,6 @@
 """Probe how Excel treats a workbook whose cached formula values were patched into the XML.
 
-    cd bench && uv run python ../capture/writeback_probe.py
+    uv run python -m capture.writeback_probe
 
 Questions: does Excel open a file whose ``<v>`` and ``t`` were patched without a repair prompt;
 does it show the patched values or recalculate; what removing ``calcChain.xml`` or setting

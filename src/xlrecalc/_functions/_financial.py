@@ -437,7 +437,7 @@ _RATE_GROWTH = 45000.0
 """How much one step of ``RATE`` may multiply the equation's value before ``#NUM!``: a declared
 fit. In capture ``rate_method``, ``RATE(4,0,-1000,1100)`` is solved by Excel up to a growth of
 36,869 and is ``#NUM!`` from 57,488, which brackets it; ``RATE(12,0,-1000,2000)`` from -0.19 is
-``#NUM!`` at 22,620, which no single bound explains (QUIRKS.md). Excel's safeguard is open."""
+``#NUM!`` at 22,620, which no single bound explains (QUIRKS.md). Excel's safeguard is not known."""
 
 
 def _newton(fn: Any, guess: float, steps: int, tol: float = 1e-7) -> float | ErrorValue:

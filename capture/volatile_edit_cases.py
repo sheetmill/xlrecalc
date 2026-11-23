@@ -66,7 +66,7 @@ UNMARKED: dict[str, tuple[str, ...]] = {
     "dep_of_own_unmarked": ("G1",),
 }
 FULL_ON_LOAD = {"name_no_ca_full_on_load"}  # <calcPr fullCalcOnLoad="1"> written in the file
-MANUAL = {"manual_name"}  # <calcPr calcMode="manual"> written in the file; the probe's last
+MANUAL = {"manual_name"}  # <calcPr calcMode="manual"> written in the file; the probe runs them last
 RANDOM = {("awake_unrelated", "probe!B1")}  # in [2, 3) after an edit; compared as changed or not
 
 # The steps after opening, each followed by a reading of the cells: "full" (calculate full),

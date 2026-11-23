@@ -1,8 +1,9 @@
 # Release: `gh release create vX.Y.Z --target main` creates the tag on GitHub and starts this
 # workflow; the tag must match `__version__`. The workflow first requires a successful run of
-# the CI workflow on the tagged commit, pushed to main (it does not run CI again), checks the tag
-# against the package version, builds once, publishes to TestPyPI, installs that release from TestPyPI and
-# recalculates a small workbook with it, then publishes the same files to PyPI.
+# the CI workflow on the tagged commit, pushed to main (it does not run CI again), checks the
+# tag against the package version, builds once, publishes to TestPyPI, installs that release
+# from TestPyPI and recalculates a small workbook with it, then publishes the same files to
+# PyPI.
 #
 # Publishing uses trusted publishing (OpenID Connect), so no token is stored. Configure on
 # test.pypi.org and pypi.org a trusted publisher for owner `sheetmill`, repository

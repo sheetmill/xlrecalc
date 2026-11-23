@@ -1,6 +1,6 @@
 """Probe precision and coercion semantics, reading Excel's results from the file it saves.
 
-    cd bench && uv run python ../capture/semantics_probe.py
+    uv run python -m capture.semantics_probe
 
 openpyxl writes one formula per row in column A; Excel opens the workbook, calculates and saves
 a copy (``save_copy.applescript``); the cached values and types are read from the copy's sheet

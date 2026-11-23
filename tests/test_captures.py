@@ -50,7 +50,7 @@ _ITER_OUTCOME = (
 )
 _RATE_SAFEGUARD = (
     "RATE: Excel gives #NUM! after a step that multiplies the equation's value by 22,620, which "
-    "the growth bound fitted to the other rows (45,000) allows; Excel's safeguard is open"
+    "the growth bound fitted to the other rows (45,000) allows; Excel's safeguard is not known"
 )
 _RATE_LAST_DIGITS = (
     "RATE: Excel stops at a step below 1E-7 on an iterate a little short of the root; its last "

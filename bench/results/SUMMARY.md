@@ -211,7 +211,7 @@ files without a repair, and its own recalculation of them agrees with every writ
 (`tests/test_excel_live.py`, up to 100,000 rows; the million-row file was opened by hand with
 `capture/open_read.applescript`).
 
-## Reading values, against the previous release
+## Reading values: 0.7.0 against 0.6.0
 
 `uv run python bench/values_bench.py gen 1000000`, then `uv run python bench/values_bench.py run
 --src 0.6.0=<checkout of v0.6.0>/src`, run from the repository root in the package's environment

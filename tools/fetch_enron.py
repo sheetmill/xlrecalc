@@ -5,7 +5,8 @@
 The corpus (F. Hermans and E. Murphy-Hill, MSR 2015; figshare,
 doi:10.6084/m9.figshare.1221767, CC BY 4.0) is about 1 GB compressed and holds real business
 workbooks with personal data, so it is never committed: it lives outside the repository, is
-read only with xlio (as xlrecalc reads it), and is never opened in Excel (``CAPTURING.md`` §4).
+read by this repository's tools only (xlio, openpyxl or the standard library's ``zipfile``), and
+is never opened in Excel (``CAPTURING.md`` §4).
 The script downloads ``spreadsheets.7z``, checks its size, MD5 (as figshare publishes it) and
 SHA-256, refuses an archive that names absolute paths or ``..``, and extracts only the
 ``.xlsx`` files into ``DESTINATION/spreadsheets``. It needs a 7-Zip command (``7zz`` or ``7z``,

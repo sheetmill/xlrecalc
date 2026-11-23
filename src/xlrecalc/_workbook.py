@@ -710,9 +710,9 @@ class Loader:
 
         Where the opening rule answers ``"some"``, or with iterative calculation, every sheet not
         fed, or left part-way, is read now. :attr:`Workbook.report`, :meth:`Workbook.recalculate`,
-        :meth:`Workbook.set` and :meth:`Workbook.set_formula` read and compile every sheet not yet,
-        since they cover the whole workbook. The book stays open while a sheet not read yet may
-        be needed; :meth:`finish` reads every one.
+        :meth:`Workbook.set` and :meth:`Workbook.set_formula` read and compile every sheet not
+        yet read, since they cover the whole workbook. The book stays open while a sheet not read
+        yet may be needed; :meth:`finish` reads every one.
 
         Raises:
             ValueError: A sheet must be read, and the book is closed (here, or from a

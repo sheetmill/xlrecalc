@@ -400,7 +400,7 @@ class Engine:
             self.need(min(self._unloaded))
 
     def load_all(self) -> None:
-        """Load and compile every sheet not yet, in the sheets' order: for whole-workbook work."""
+        """Load and compile every sheet not yet loaded, in order: for whole-workbook work."""
         self.read_all()
         while self._uncompiled:
             self.need_formulas(min(self._uncompiled))
@@ -808,7 +808,7 @@ class Engine:
         each value is taken when its read would return it. Where a spill moved, the evaluation
         stops, settles it as the read would before returning, and goes on. A sheet a lazy load
         reads during the pass leaves nothing to close: a load is lazy only where every formula is
-        stale or none is (ARCHITECTURE.md §5.2). With iteration on, each cell is read
+        stale or none is (ARCHITECTURE.md §5.3). With iteration on, each cell is read
         with :meth:`get`.
         """
         if self.iterate:

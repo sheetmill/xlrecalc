@@ -2,7 +2,7 @@
 
 Each unit is in one category (mass, distance, time, pressure, force, energy, power, magnetism,
 volume, area, information, speed; temperature apart), and each category has an internal unit,
-often not the visible base: the ångström for distance, its square for area, the litre for
+often not the visible base: the ångström for distance, its square for area, the liter for
 volume, the dyne for force, the erg for energy, the gauss for magnetism, the base unit
 elsewhere. Each unit holds one double, how many internal units it is. A conversion
 always goes through the internal unit, the same unit and synonyms included, ``(number * c_from) /
@@ -150,7 +150,7 @@ _UNITS: dict[str, tuple[str, float]] = {
     "Nmi^2": ("m2", 3.429904e+26),
     "ly2": ("m2", 8.95054210748189e+51),
     "ly^2": ("m2", 8.95054210748189e+51),
-    # m3: in 1E-3 m3 (litre)
+    # m3: in 1E-3 m3 (liter)
     "ang3": ("m3", 1e-27),
     "ang^3": ("m3", 1e-27),
     "Pica3": ("m3", 4.39039566186557e-08),
