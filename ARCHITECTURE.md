@@ -1005,14 +1005,16 @@ Behavior that is not the obvious reading, each from its capture:
   below or multiplies the equation's value by more than 45,000, 140 iterations. Excel's iterates
   rest on its own NPV and are not reproduced bit for bit: these functions and `YIELD` declare a
   relative tolerance of 1E-9 (§8.1), and the rows beyond it are listed with their reasons.
-- `XIRR` (captures `iterative`, `iteration`, `xirr_method`): not Newton's method but bisection,
-  reproduced bit for bit with no tolerance. XNPV over dates truncated to whole days is evaluated in
-  increasing order at -1 and -h (when -h > -1), 0, h, 2h, 4h, ... to h × 2^70, where h is the
-  guess's size (1E-5 for 0) and a negative guess stops at 0. The first sign change is bisected when it runs toward the
-  first flow's sign, `#NUM!` otherwise; bisection returns the midpoint once the bracket is narrower
-  than 1E-8 × (1 + |a| + |b|). Which of several changes Excel takes, and the negative brackets of
-  some roots, are not known (`QUIRKS.md`). `XIRR` reads text dates and dates in any order after the
-  first, unlike `XNPV`.
+- `XIRR` (captures `iterative`, `iteration`, `xirr_method`, `xirr_nan`, `xirr_sign_rules`): not
+  Newton's method but bisection, reproduced bit for bit with no tolerance. XNPV over dates truncated
+  to whole days is evaluated in increasing order at -1 and -h (when -h > -1), 0, h, 2h, 4h, ... to h
+  × 2^70, where h is the guess's size (1E-5 for 0) and a negative guess stops at 0; at -1, where
+  XNPV is -inf + inf, the point takes the sign of the latest flows (the limit). The first sign
+  change toward the first flow's sign is bisected; one the other way is passed over at or below 0
+  and gives `#NUM!` above it; bisection returns the midpoint once the bracket is narrower than 1E-8
+  × (1 + |a| + |b|). Flows with a root at 0, and the negative brackets of some roots, are not
+  reproduced (`QUIRKS.md`). `XIRR` reads text dates and dates in any order after the first, unlike
+  `XNPV`.
 - Day counts and coupons (capture `bonds`): `DAYS360`'s US method and `YEARFRAC` basis 0 differ at
   the end of February; actual/actual takes year lengths from the calendar (1900 has 365 days
   there); coupon dates step back from maturity keeping its day (the month's last day when maturity

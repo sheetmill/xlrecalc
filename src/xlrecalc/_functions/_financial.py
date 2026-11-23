@@ -599,11 +599,14 @@ def _xirr_points(g: float) -> Iterator[float]:
 
 
 def _xirr_solve(flows: list[float], years: list[float], g: float) -> float | ErrorValue:
-    """XIRR's root: the first sign change of the scan (``_xirr_points``), bisected.
+    """XIRR's root: the first change of the scan (``_xirr_points``) toward the first flow's sign.
 
-    Points where XNPV is NaN are skipped. The first change, with a zero counted among the
-    negatives, must end on the first flow's sign (XNPV crossing toward it as the rate rises),
-    otherwise ``#NUM!``, as it is with no change. Bisection takes the midpoint m of [a, b] and
+    At -1, where later flows of both signs make XNPV -inf + inf, the point takes the sign of
+    the latest flows' sum, XNPV's limit there (capture ``xirr_nan``); other points where XNPV is
+    NaN are skipped. A zero counts as negative. A change that ends on the first flow's sign
+    (XNPV crossing toward it as the rate rises) is bisected. One that runs the other way is
+    passed over when it ends at or below 0 and gives ``#NUM!`` above 0 (capture
+    ``xirr_sign_rules``), as no change does. Bisection takes the midpoint m of [a, b] and
     returns it once ``|b - a| < 1E-8 * (1 + |a| + |b|)``; otherwise m replaces a where XNPV has
     a's sign there (and is not 0), b otherwise. The result is a midpoint, short of the root.
     """
@@ -611,15 +614,25 @@ def _xirr_solve(flows: list[float], years: list[float], g: float) -> float | Err
     prev: tuple[float, bool] | None = None
     for x in _xirr_points(g):
         fx = _xirr_value(flows, years, x)
+        if math.isnan(fx) and x == -1.0:
+            fx = _xirr_limit(flows, years)
         if math.isnan(fx):
             continue
         sx = fx > 0
         if prev is not None and prev[1] != sx:
-            if sx != first:
+            if sx == first:
+                return _xirr_bisect(flows, years, prev[0], x, prev[1])
+            if x > 0:
                 return NUM
-            return _xirr_bisect(flows, years, prev[0], x, prev[1])
         prev = (x, sx)
     return NUM
+
+
+def _xirr_limit(flows: list[float], years: list[float]) -> float:
+    """XNPV's limit as the rate falls to -1: the latest flows' sum as an infinity, NaN for 0."""
+    last = max(years)
+    total = math.fsum(v for v, y in zip(flows, years, strict=True) if y == last)
+    return math.copysign(math.inf, total) if total else math.nan
 
 
 def _xirr_bisect(

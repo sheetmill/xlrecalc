@@ -323,29 +323,31 @@ not). An empty argument is `#N/A`.
   rate and on 1 / (1 + rate), analytic and numerical derivatives, stops on the step or on the NPV,
   20 to 100 iterations, damping. Excel's iteration is on the Roadmap (ARCHITECTURE.md §13). Each
   row is listed in `tests/test_captures.py`.
-- `XIRR` (captures `iterative`, `iteration`, `xirr_method`, `xirr_nan`, `empty_args`): no tolerance. Excel brackets a root on
-  points built from the guess and bisects it, and the package does the same: with h the guess's size (1E-5 for a
-  guess of 0), the points are -1 and -h (when -h > -1), 0, then h, 2h, 4h, ... to h × 2^70, and a negative guess stops
-  at 0, so a positive root is `#NUM!` from it, as a negative root is from a guess of 1 or more. The first sign change
-  met from -1 upward (a zero counting as negative, a point where the sum is not a number skipped) is bisected if it
-  runs toward the first flow's sign, and is `#NUM!` otherwise, as no change is; bisection returns the midpoint once
-  the bracket is narrower than 1E-8 × (1 + |a| + |b|), so a result stops up to about 1E-8 short of the root. Dates
-  are truncated to whole days. A guess of -1 or below is `#NUM!`; an empty guess argument is the default 0.1 and a
-  blank cell 0.
+- `XIRR` (captures `iterative`, `iteration`, `xirr_method`, `xirr_nan`, `xirr_sign_rules`, `empty_args`): no
+  tolerance. Excel brackets a root on points built from the guess and bisects it, and the package does the same: with
+  h the guess's size (1E-5 for a guess of 0), the points are -1 and -h (when -h > -1), 0, then h, 2h, 4h, ... to
+  h × 2^70, and a negative guess stops at 0, so a positive root is `#NUM!` from it, as a negative root is from a guess
+  of 1 or more. A zero counts as negative. At -1, where later flows of both signs make the sum -inf + inf, the point
+  takes the sign of the latest flows' sum, the limit there (capture `xirr_nan`: Excel finds these roots from every
+  guess); other points where the sum is not a number are skipped. Going up from -1, the first sign change that runs
+  toward the first flow's sign is bisected; one that runs the other way is passed over when it ends at or below 0,
+  and is `#NUM!` above 0, as no change is (capture `xirr_sign_rules`: of its 22 rows, written to separate these rules
+  before Excel computed them, 21 match bit for bit). Bisection returns the midpoint once the bracket is narrower than
+  1E-8 × (1 + |a| + |b|), so a result stops up to about 1E-8 short of the root. Dates are truncated to whole days. A
+  guess of -1 or below is `#NUM!`; an empty guess argument is the default 0.1 and a blank cell 0.
   - The top of the scan is a declared choice: capture `xirr_method` finds roots up to 1.7E15 from the guess 0, 1.1E20
     from 0.1, 4.5E23 from 1000 and 7.6E30 from 1E10, and `#NUM!` from 2.7E16, 1.8E21, 7.3E24 and 1.2E32. A last
     point of h × 2^70 or h × 2^71 gives every one of its 182 rows, and no fixed top rate gives all four guesses;
     h × 2^70 is the one taken.
-  - Listed, 51 rows. Which of several sign changes Excel takes is not known, and the first change toward the first
-    flow's sign is a fitted rule: 14 rows of `iteration` and 5 of `xirr_method` have a root at or just below 0 and
-    another at 0.5, which Excel bisects where the package gives `#NUM!` or bisects another bracket. For some negative
-    roots the bracket Excel bisects is not known: one row of `iterative` (a root near -0.9993 from the guess 0.1),
-    four of `xirr_method` (the root -0.9 from negative guesses; from -0.5 it matches) and one of `xirr_nan`. Where
-    later flows of both signs make XNPV at -1 -inf + inf, not a number, the package skips the point -1 and so misses a
-    root below -h, giving `#NUM!`; Excel finds it, on capture `xirr_nan`'s flows (-1000, -100, c) and their mirror
-    image from every guess, bisecting [-1, -h] from the guesses 0.1, -0.1 and 0 as if -1 had the sign of the latest
-    flow (21 rows listed; two match, where a scan point lies below the root). For flows with roots 0.13 and
-    23, Excel returns the guess halved down to the width tolerance (0.02/2^22, 0.1/2^25), not a root, where the
-    package gives `#NUM!` (two rows of `xirr_method`). Three rows match here but are listed for other platforms
-    (one of `iteration`, two of `xirr_method`): a sign the bisection reads rests on a power within 0.05 units in the
-    last place of a rounding midpoint, which another platform's `pow` may round the other way.
+  - Listed, 40 rows. Flows with roots 0 and 0.5: Excel bisects 0.5 where the change met at the scan point 0 gives
+    `#NUM!` or another bracket (14 rows of `iteration`, 4 of `xirr_method`). For some negative roots the bracket Excel
+    bisects is not known (16 rows): one of `iterative` (a root near -0.9993 from the guess 0.1), four of
+    `xirr_method` (the root -0.9 from negative guesses; from -0.5 it matches), 11 of `xirr_nan` (from the guess 0.5,
+    the root -0.9, and a root on the scan point -0.5, where a sign read rests on powers at a rounding midpoint and
+    may differ by platform), each a rate within about 1E-8 of Excel's, and one of
+    `xirr_sign_rules` (two negative roots between the scan points -1 and -0.1, where Excel gives -0.3 and the package
+    `#NUM!`). For flows with roots 0.13 and 23, Excel returns the guess halved down to the width tolerance
+    (0.02/2^22, 0.1/2^25), not a root, where the package gives `#NUM!` (two rows of `xirr_method`). Three rows match
+    here but are listed for other platforms (one of `iteration`, two of `xirr_method`): a sign the bisection reads
+    rests on a power within 0.05 units in the last place of a rounding midpoint, which another platform's `pow` may
+    round the other way.

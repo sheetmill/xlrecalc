@@ -57,14 +57,13 @@ _RATE_LAST_DIGITS = (
     "digits differ from this iteration's by about 1.07E-9 relative, just past the tolerance"
 )
 _XIRR_ROOTS = (
-    "XIRR: which of several sign changes Excel bisects is not known; the first from -1 upward is "
-    "taken here, and #NUM! when it runs away from the first flow's sign, where Excel bisects the "
-    "root 0.5 of flows whose other root is at or just below 0"
+    "XIRR: flows with roots 0 and 0.5, where Excel bisects 0.5 and the change met here at the "
+    "scan point 0 gives #NUM! or another bracket"
 )
 _XIRR_NEGATIVE = "XIRR: the negative bracket Excel bisects for this root is not known"
-_XIRR_NAN_END = (
-    "XIRR: XNPV is not a number at -1 (later flows of both signs over 0); Excel finds the "
-    "negative root, as if -1 had the sign of the latest flow, where the scan here skips -1"
+_XIRR_NEGATIVE_POWER = (
+    "XIRR: the negative bracket Excel bisects for this root is not known, and a sign read here, at "
+    "the root -0.5 on the scan point -0.5, rests on powers at a rounding midpoint"
 )
 _XIRR_POWER = (
     "XIRR: a sign the bisection reads rests on a power within 0.05 units in the last place of a "
@@ -820,12 +819,13 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     ("iterative", 184): _XIRR_NEGATIVE,
     **{("iteration", case): _XIRR_ROOTS for case in range(647, 661)},
     **{("xirr_method", case): _XIRR_NEGATIVE for case in (198, 199, 201, 202)},
-    **{("xirr_method", case): _XIRR_ROOTS for case in range(269, 274)},
+    **{("xirr_method", case): _XIRR_ROOTS for case in range(269, 273)},
     **{("xirr_method", case): _XIRR_HALVING for case in (275, 276)},
     **{("xirr_method", case): _XIRR_POWER for case in (263, 267)},
     ("iteration", 835): _XIRR_POWER,
-    **{("xirr_nan", case): _XIRR_NAN_END for case in (*range(1, 3), 4, *range(6, 22), 23, 24)},
-    ("xirr_nan", 22): _XIRR_NEGATIVE,
+    **{("xirr_nan", case): _XIRR_NEGATIVE for case in (13, 15, 16, *range(18, 21), 23, 24)},
+    **{("xirr_nan", case): _XIRR_NEGATIVE_POWER for case in (8, 10, 22)},
+    ("xirr_sign_rules", 13): _XIRR_NEGATIVE,
     ("rate_method", 77): _RATE_SAFEGUARD,
     **{("rate_method", case): _RATE_LAST_DIGITS for case in (5, 22)},
     ("bonds", 2299): _YIELD_ZERO_COUPON,
@@ -855,8 +855,8 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
 # everywhere.
 EXEMPT = frozenset({_RANDOM, _WEEKNUM_ODD_TYPE})
 MATH_LIBRARY = frozenset(
-    {_IPMT_TAIL, _ITER_NEAR_ZERO, _ITER_OUTCOME, _YIELD_ZERO_COUPON, _PRICE_EXTREME,
-     _NORMAL_TAIL, _DISCRETE_TERMS, _DISTRIBUTION_LIBRARY}
+    {_IPMT_TAIL, _ITER_NEAR_ZERO, _ITER_OUTCOME, _XIRR_NEGATIVE_POWER, _YIELD_ZERO_COUPON,
+     _PRICE_EXTREME, _NORMAL_TAIL, _DISCRETE_TERMS, _DISTRIBUTION_LIBRARY}
 )  # fmt: skip
 OTHER_PLATFORMS = frozenset({_LIBM_CANCELLATION, _COMPLEX_TEXT_BOUNDARY, _XIRR_POWER})
 
@@ -934,6 +934,7 @@ SUITES = [
     "iteration",
     "xirr_method",
     "xirr_nan",
+    "xirr_sign_rules",
 ]
 # Suites compared in part: only the rows whose tag is named. Of ``iteration``, the XIRR rows; its
 # IRR, RATE and YIELD rows are evidence for their methods, not matched.
