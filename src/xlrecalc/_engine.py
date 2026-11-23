@@ -223,6 +223,7 @@ class Engine:
         """Steps functions may take in one recalculation (``ReadLimits.max_function_steps``)."""
         self._steps_left = max_function_steps
         self._report_due = False  # reads deferred the report's passes (``settled_report``)
+        self._spill_due = False  # a dynamic array may be stale: evaluated before a read
         self.reference_array: Any = None
         """An array of references made while the current cell is evaluated."""
         self.date1904 = date1904
@@ -571,6 +572,7 @@ class Engine:
             self._outdated.discard(n)
         if array is not None:
             self.anchors[n] = Anchor(array[0], array[1])
+            self._spill_due = True
             self._index_anchors(sheet)
         if cached is None or stale:
             s.set(row, col, BLANK if cached is None else cached)
@@ -793,12 +795,27 @@ class Engine:
         n = node(sheet, row, col)
         if self._unclosed or self._changed:
             self._close()
+        if self._spill_due:
+            self._settle_spills()
         anchor = self.member_of(n)
         if anchor is not None and anchor in self.stale:
             self.recalculate(targets=[anchor], defer_report=True)
         if n in self.stale:
             self.recalculate(targets=[n], defer_report=True)
         return self.sheets[sheet].values.get(row * COLS + col, BLANK)
+
+    def _settle_spills(self) -> None:
+        """Evaluate the stale dynamic arrays, as a read does before anything else.
+
+        A dynamic array an edit makes stale may spill into cells outside the range it fills now:
+        a blank cell there, or a formula reading one, has no edge to it until it is evaluated
+        and its range grows (§7.7). Excel recalculates every dynamic array an edit reaches before
+        anything is read, so a read does too.
+        """
+        self._spill_due = False
+        stale = [a for a, x in self.anchors.items() if x.dynamic and a in self.stale]
+        if stale:
+            self.recalculate(targets=stale, defer_report=True)
 
     def get_many(self, cells: Sequence[tuple[int, int, int]]) -> list[Value]:
         """The cells' values, as reading each in turn with :meth:`get` gives them.
@@ -824,7 +841,7 @@ class Engine:
             while at < len(cells):
                 if fed and self._moved:
                     return  # settle before the next read, as a read does before returning
-                if phase == 0 and (self._unclosed or self._changed):
+                if phase == 0 and (self._unclosed or self._changed or self._spill_due):
                     return  # close before the next read, as a read does before evaluating
                 sheet, row, col = cells[at]
                 n = node(sheet, row, col)
@@ -845,10 +862,13 @@ class Engine:
                 at, phase = at + 1, 0
 
         while at < len(cells):
-            # feed() stops at a read with something to close and reads nothing until it is
-            # closed: this close is what lets the loop advance (without it the loop never ends).
+            # feed() stops at a read with something to close or a dynamic array due, and reads
+            # nothing until both are done: this close and this settling are what let the loop
+            # advance (without either the loop never ends).
             if self._unclosed or self._changed:
                 self._close()
+            if self._spill_due:
+                self._settle_spills()
             self._evaluate(feed())
             self._settle()
         if due:
@@ -907,6 +927,7 @@ class Engine:
         for s, sheet in enumerate(self.sheets):
             self.stale.update((s << SHEET_SHIFT) | k for k in sheet.templates)
         self._unclosed.clear()
+        self._spill_due = True
 
     def recalculate(
         self,
@@ -1109,6 +1130,7 @@ class Engine:
                 reached -= self._kept.keys()
             self.stale |= reached
         self._unclosed.clear()
+        self._spill_due = True
 
     def formula_count(self) -> int:
         return sum(len(s.templates) for s in self.sheets)

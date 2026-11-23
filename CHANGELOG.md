@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- After an edit that makes a dynamic array spill further, a cell it now spills into, and a formula reading one, read
+  the spilled value whichever is read first; they read empty, or the formula's earlier value, until the array's own
+  cell had been read. The same holds for `Workbook.values`, `Workbook.values_at`, a lazy `Loader` and
+  `Workbook.status`.
+
 ## [0.10.0] - 2026-11-23
 
 ### Changed

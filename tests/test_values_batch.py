@@ -328,9 +328,9 @@ def test_a_cell_an_array_fills_is_read_after_its_anchor() -> None:
 
 
 def test_a_spill_that_moves_is_settled_before_the_next_read() -> None:
-    """A dynamic array grows when it is evaluated: the cells reading where it now spills are
-    evaluated again before the next read (C5), and a cell read before it keeps the value it had
-    then (C1)."""
+    """A dynamic array grows when it is evaluated: the cells reading where it now spills see the
+    spilled value, one read before the array's own cell (C1) as much as one read after (C5),
+    since a read evaluates the stale dynamic arrays first, as Excel recalculates them."""
 
     def read(batch: bool) -> object:
         wb = xlrecalc.load(io.BytesIO(package("", workbook_extra=FULL)))
@@ -345,7 +345,8 @@ def test_a_spill_that_moves_is_settled_before_the_next_read() -> None:
 
     one = read(False)
     assert read(True) == one
-    assert one[0][2] == 0.0 and one[4][2] == 20.0  # noqa: PT018 - the two reads' moments
+    assert one[0][2] == 2.0
+    assert one[4][2] == 20.0
 
 
 def test_a_pass_leaves_the_report_due() -> None:
