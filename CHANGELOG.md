@@ -24,6 +24,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `XIRR` with a negative guess finds a negative root (capture `iteration`: -0.5 from guesses -0.01 to -0.99), where it
   gave `#NUM!` for every negative guess; a guess of -1 or below stays `#NUM!`, and so does a positive root from a
   negative guess, as in Excel.
+- `Workbook.values_at` and `Workbook.values` through a lazy `Loader` no longer make the statuses read after them slow.
+  A sheet the pass loaded left its cells to be closed by the next read, the first `status`, which made cells the pass
+  had computed stale again; each `status` that met one evaluated it and ran the report's whole-workbook passes again
+  (three runs in the first 123 statuses of one 27,151-formula sheet, seconds each). The pass now closes before each
+  read, as reading the cells one by one does: the statuses after it run those passes as many times as after
+  one-by-one reads, with the same values and statuses (`tests/test_values_batch.py` counts the runs).
 - `XIRR` takes an empty guess argument (`XIRR(values,dates,)`) as the default 0.1, as Excel does (capture
   `empty_args`), where it took 0.
 

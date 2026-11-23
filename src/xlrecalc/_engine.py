@@ -806,15 +806,15 @@ class Engine:
         One evaluation takes every read's stale cells, in the order and with the allowance of
         function steps each read would give them (an array's anchor first, then the cell), and
         each value is taken when its read would return it. Where a spill moved, the evaluation
-        stops, settles it as the read would before returning, and goes on. A sheet a lazy load
-        reads during the pass leaves nothing to close: a load is lazy only where every formula is
-        stale or none is (ARCHITECTURE.md §5.3). With iteration on, each cell is read
+        stops, settles it as the read would before returning, and goes on. Where something is
+        left to close before a read (the cells of a sheet a lazy load read during the pass), the
+        evaluation stops and closes it, as that read would before evaluating: closed only at the
+        end, it would make cells already read stale, and each status read after would evaluate
+        them and run the report's passes again. With iteration on, each cell is read
         with :meth:`get`.
         """
         if self.iterate:
             return [self.get(*cell) for cell in cells]
-        if self._unclosed or self._changed:
-            self._close()
         values: list[Value] = [BLANK] * len(cells)
         at, phase, due = 0, 0, False  # phase: 0 not begun, 1 the anchor's turn done, 2 the cell's
 
@@ -824,6 +824,8 @@ class Engine:
             while at < len(cells):
                 if fed and self._moved:
                     return  # settle before the next read, as a read does before returning
+                if phase == 0 and (self._unclosed or self._changed):
+                    return  # close before the next read, as a read does before evaluating
                 sheet, row, col = cells[at]
                 n = node(sheet, row, col)
                 if phase == 0:
@@ -843,6 +845,8 @@ class Engine:
                 at, phase = at + 1, 0
 
         while at < len(cells):
+            if self._unclosed or self._changed:
+                self._close()
             self._evaluate(feed())
             self._settle()
         if due:

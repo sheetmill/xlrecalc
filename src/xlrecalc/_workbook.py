@@ -244,7 +244,8 @@ class Workbook:
         Each value is the one :meth:`value` gives reading the cells in turn in that order, a cell
         given twice included: the order decides the draws of ``RAND`` and the other random
         functions, as it does for :meth:`value`. Faster than reading the cells one by one, since
-        their stale precedents are evaluated in one pass.
+        their stale precedents are evaluated in one pass; reading each cell's :meth:`status`
+        after it costs what it does after reading the cells one by one.
 
         Raises:
             ValueError: A reference is not a single cell, or names no sheet in a workbook of

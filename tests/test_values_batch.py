@@ -6,13 +6,16 @@ functions) are read twice under every calculation case and ``recalc_on_load``: b
 ``Workbook.values`` over each sheet's range, and cell by cell with ``Workbook.value`` in the same
 order. Each workbook is also read after an edit, through a lazy ``Loader``, and with a step
 allowance so small that some cells stop. Every value, every cell's status, the report and the
-values after a recalculation must be the same, bit for bit and in order.
+values after a recalculation must be the same, bit for bit and in order, and reading the
+statuses after the values must run the report's passes as many times either way.
 """
 
 from __future__ import annotations
 
+import contextlib
 import io
 import random
+from collections.abc import Iterator
 
 import pytest
 import xlio
@@ -20,6 +23,7 @@ import xlio
 import xlrecalc
 from tests.test_loader_orders import CALCS, MODES, _book, _key
 from tests.xlsx_files import DOC, MAIN, PKG, package
+from xlrecalc._engine import Engine
 
 COLUMNS = "ABCDEFG"
 WAYS = ["load", "edited", "loader", "steps"]
@@ -36,6 +40,23 @@ def _workbook(data: bytes, mode: str, way: str, book: xlio.Workbook | None) -> x
     return wb
 
 
+@contextlib.contextmanager
+def _passes() -> Iterator[list[int]]:
+    """Count the report's whole-workbook passes run inside the block (their cost, not a time)."""
+    count = [0]
+    run = Engine._report_passes
+
+    def counted(self: Engine) -> None:
+        count[0] += 1
+        run(self)
+
+    Engine._report_passes = counted  # type: ignore[method-assign]
+    try:
+        yield count
+    finally:
+        Engine._report_passes = run  # type: ignore[method-assign]
+
+
 def _read(wb: xlrecalc.Workbook, batch: bool) -> tuple[object, ...]:
     names = wb.sheet_names
     values: list[object] = []
@@ -45,7 +66,8 @@ def _read(wb: xlrecalc.Workbook, batch: bool) -> tuple[object, ...]:
             values += [_key(v) for row in rows for v in row]
         else:
             values += [_key(wb.value(f"{name}!{c}{r}")) for r in range(1, 6) for c in COLUMNS]
-    statuses = [wb.status(f"{n}!{c}{r}") for n in names for r in range(1, 6) for c in COLUMNS]
+    with _passes() as passes:
+        statuses = [wb.status(f"{n}!{c}{r}") for n in names for r in range(1, 6) for c in COLUMNS]
     report = wb.report
     reported = (
         list(report.unsupported.items()),
@@ -57,7 +79,7 @@ def _read(wb: xlrecalc.Workbook, batch: bool) -> tuple[object, ...]:
     )
     wb.recalculate()
     after = [_key(wb.value(f"{n}!{c}{r}")) for n in names for r in range(1, 6) for c in COLUMNS]
-    return values, statuses, reported, after
+    return values, statuses, passes[0], reported, after
 
 
 def _both(data: bytes, mode: str, way: str) -> tuple[tuple[object, ...], tuple[object, ...]]:
@@ -85,7 +107,9 @@ def test_values_in_one_pass_are_the_values_read_one_by_one(
 def _read_at(wb: xlrecalc.Workbook, refs: list[str], batch: bool) -> tuple[object, ...]:
     values = wb.values_at(refs) if batch else [wb.value(r) for r in refs]
     names = wb.sheet_names
-    statuses = [wb.status(f"{n}!{c}{r}") for n in names for r in range(1, 6) for c in COLUMNS]
+    with _passes() as passes:
+        statuses = [wb.status(r) for r in refs]
+        statuses += [wb.status(f"{n}!{c}{r}") for n in names for r in range(1, 6) for c in COLUMNS]
     report = wb.report
     reported = (
         list(report.unsupported.items()),
@@ -94,7 +118,7 @@ def _read_at(wb: xlrecalc.Workbook, refs: list[str], batch: bool) -> tuple[objec
         sorted(report.from_kept),
         sorted(report.circular),
     )
-    return [_key(v) for v in values], statuses, reported
+    return [_key(v) for v in values], statuses, passes[0], reported
 
 
 @pytest.mark.parametrize("way", WAYS)
@@ -246,7 +270,10 @@ def test_a_sheet_loaded_during_the_pass() -> None:
     for batch in (True, False):
         with xlio.open(io.BytesIO(data)) as book:
             wb = xlrecalc.Loader(book).workbook()
-            got.append(
-                wb.values("s1!A1:A2") if batch else [[wb.value("s1!A1")], [wb.value("s1!A2")]]
-            )
-    assert got[0] == got[1] == [[10.0], [24.0]]
+            refs = ["s1!A1", "s1!A2"]
+            values = wb.values_at(refs) if batch else [wb.value(r) for r in refs]
+            with _passes() as passes:
+                statuses = [wb.status(r).state for r in refs]
+            got.append((values, statuses, passes[0]))
+    assert got[0] == got[1]
+    assert got[0][0] == [10.0, 24.0]
