@@ -962,31 +962,24 @@ which contains only its own logic. One module per Excel category. The first func
 from `tools/function_frequency.tsv` (§10), whose counts come from workbooks of about 2001: it says
 nothing about how much functions newer than that are used.
 
-Results are compared with Excel's bit for bit. A function that stays a few units in the last
-place from Excel after a fixed time spent fitting its last bits declares a tolerance
-(`ulps=4, ulps_reason=...`): the capture tests accept a row within it, count it apart from
-the exact matches, and use the largest tolerance among the functions a formula calls, except
-in a formula that also rounds, compares or formats (`ROUND`, a comparison, `&`, `TEXT`, a
-lookup or criterion), where a few units can change a visible digit and the row must match
-exactly or be a listed deviation. A tolerance is a test concept only; the engine computes one
-value. `QUIRKS.md` lists each one as a known deviation. Today `PRICE` declares 8 units and
-`PMT`, `IPMT`, `PPMT`, `NPV`, `VDB`, `DURATION`, `MDURATION`, the variances and standard deviations,
-`CORREL`, `LINEST` and the normal-distribution functions 4, for Excel's `exp`, `log1p`,
-`expm1` and `erfc` and its summations; trigonometry, hyperbolics, logarithms and `SERIESSUM` declare 4 for
-Excel's math library, `FACT` and `FACTDOUBLE` 8 and `COMBIN`, `COMBINA` and `PERMUT` 4 for the order it
-multiplies in; the discrete distributions 8 and `GAMMA`, `GAMMALN`, `ERF`, `ERFC`,
-`EXPON.DIST`, `WEIBULL.DIST` and `LOGNORM.DIST` 4, for terms and a math library that are not Excel's in the
-last bits. The iterative functions (`IRR`, `XIRR`, `RATE`,
-`YIELD`) declare a relative tolerance instead (`rel=1e-9`), since Excel itself guarantees
-their results only to its documented stopping tolerance; rows within it are counted apart
-from exact and ulp matches, under the same guard. So do the beta, gamma, chi-squared, F and t
-distributions, their inverses and tests, from 1E-15 to 1E-12, each its largest difference from
-Excel on the capture rounded up to a power of ten: they rest on the incomplete beta and gamma
-functions, continued fractions, series and asymptotic expansions whose results differ from
-Excel's by more than a few units in the last place where a tail is small or an inverse is a
-search, which neither side computes to the last bit. Where either side is exactly 0 no relative
-tolerance applies, and a row past a function's tolerance is a listed deviation, never a
-reason to raise it.
+Results are compared with Excel's bit for bit. A function that stays a few units in the last place
+from Excel after a fixed time spent fitting its last bits declares a tolerance (`ulps=4,
+ulps_reason=...`): the capture tests accept a row within it, count it apart from the exact matches,
+and use the largest tolerance among the functions a formula calls, except in a formula that also
+rounds, compares or formats (`ROUND`, a comparison, `&`, `TEXT`, a lookup or criterion), where a few
+units can change a visible digit and the row must match exactly or be a listed deviation. A
+tolerance is a test concept only; the engine computes one value. `QUIRKS.md` lists each one as a
+known deviation, and the coverage page (`docs/coverage.md`) gives each function's declared
+tolerance, from the registry. The iterative functions (`IRR`, `XIRR`, `RATE`, `YIELD`) declare a
+relative tolerance instead (`rel=1e-9`), since Excel itself guarantees their results only to its
+documented stopping tolerance; rows within it are counted apart from exact and ulp matches, under
+the same guard. So do the beta, gamma, chi-squared, F and t distributions, their inverses and tests,
+from 1E-15 to 1E-12, each its largest difference from Excel on the capture rounded up to a power of
+ten: they rest on the incomplete beta and gamma functions, continued fractions, series and
+asymptotic expansions whose results differ from Excel's by more than a few units in the last place
+where a tail is small or an inverse is a search, which neither side computes to the last bit. Where
+either side is exactly 0 no relative tolerance applies, and a row past a function's tolerance is a
+listed deviation, never a reason to raise it.
 
 ### 8.2 Status and behavior
 
@@ -1004,13 +997,15 @@ Behavior that is not the obvious reading, each from its capture:
   `PPMT` from the closed form `-rate*(pv+fv)*(1+rate)^(per-1)/((1+rate)^nper-1)` rather than as
   `PMT` minus `IPMT`, so late periods at high rates keep their precision. `VDB` depreciates the
   asset left at the start period by period from there.
-- `IRR`, `XIRR` and `RATE` (capture `iterative`): Newton's method from the guess (0.1 by default)
-  on `1+rate`, halving rather than stepping to `1+rate <= 0`, until a step is below 1E-7 (20
-  iterations, 100 for `XIRR`), `#NUM!` otherwise; `RATE` iterates on the present-value form of
-  the annuity equation. Excel's iterates rest on its own NPV and are not reproduced bit for bit:
-  these functions and `YIELD` declare a relative tolerance of 1E-9 (§8.1), and the rows beyond it
-  are listed with their reasons. `XIRR` reads text dates and dates in any order after the first,
-  unlike `XNPV`.
+- `IRR` and `XIRR` (captures `iterative`, `iteration_steps`): Newton's method from the guess (0.1 by
+  default) on `1+rate`, halving rather than stepping to `1+rate <= 0`, until a step is below 1E-7
+  (29 iterations for `IRR`, 100 for `XIRR`), `#NUM!` otherwise. `RATE` (captures `iterative`,
+  `iteration_steps`, `rate_method`) has its own method, given in its docstring: Newton's method on
+  the future-value form of the annuity equation, `#NUM!` where a step reaches a rate of -100% or
+  below or multiplies the equation's value by more than 45,000, 140 iterations. Excel's iterates
+  rest on its own NPV and are not reproduced bit for bit: these functions and `YIELD` declare a
+  relative tolerance of 1E-9 (§8.1), and the rows beyond it are listed with their reasons. `XIRR`
+  reads text dates and dates in any order after the first, unlike `XNPV`.
 - Day counts and coupons (capture `bonds`): `DAYS360`'s US method and `YEARFRAC` basis 0 differ at
   the end of February; actual/actual takes year lengths from the calendar (1900 has 365 days
   there); coupon dates step back from maturity keeping its day (the month's last day when maturity
@@ -1556,6 +1551,7 @@ After 0.9.0, in this order: an order, not a promise or a date.
    computed (`Report.uncomputed`), rather than writing it with the file's value or none; and
    streams as well as paths for `save` and `recalculate`, as `load` takes one.
 10. Then: settings for Excel for Windows' text order and its character set in `CHAR` and
-   `CODE`, each once captures record it; the array-backed store and vectorized templates (numpy
+   `CODE`, each once captures record it (CAPTURING.md §5 holds one of the text order,
+   `collate_words`, from one build and locale); the array-backed store and vectorized templates (numpy
    as an optional extra), the SQLite backend, parallel evaluation of independent template
    columns on free-threaded Python, and a compiled core only if profiling demands it.

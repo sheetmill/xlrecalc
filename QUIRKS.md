@@ -246,15 +246,17 @@ not). An empty argument is `#N/A`.
   period by period rounds differently from Excel's, and a straight-line amount computed once or a closed-form book value
   fit no more rows. Listed in `tests/test_captures.py`.
 - An empty argument: `VDB` with an empty `factor` is `#DIV/0!` in Excel and 0 here (two rows of `empty_args`). Four others there carry the known noise of `MULTINOMIAL`, `CUMIPMT` and `XIRR`.
-- How text orders is captured for printable ASCII, 28 Latin-1 letters and signs, and `œ`, `Œ` (every
-  pair of 125 characters, capture `collate_chars`), 40 words (`collate_words`) and the pairs of
-  `modern`, on Excel 16.115 for Mac: one consistent order, followed exactly. Other characters (another
-  script, a symbol outside this set) sort after the letters by code point and controls first, our
-  choice, so they may not sort as Excel sorts them. Sorting, ordered criteria and approximate
-  lookups follow the same order; a criterion's equality (`COUNTIF(r,"ß")` counts `ss`) and
-  `XMATCH`'s binary search follow `=`, while an exact `MATCH`, `VLOOKUP` or `XLOOKUP` scan ignores
-  case only (`MATCH("ß",r,0)` passes over `ss`; capture `collate_functions`). Excel for Windows'
-  order may differ.
+- How text orders is captured for printable ASCII, 28 Latin-1 letters and signs, and `œ`, `Œ`
+  (every pair of 125 characters, capture `collate_chars`), 40 words (`collate_words`) and the
+  pairs of `modern`, on Excel 16.115 for Mac: one consistent order, followed exactly. Other
+  characters (another script, a symbol outside this set) sort after the letters by code point and
+  controls first, our choice, so they may not sort as Excel sorts them. Sorting, ordered criteria
+  and approximate lookups follow the same order; a criterion's equality (`COUNTIF(r,"ß")` counts
+  `ss`) and `XMATCH`'s binary search follow `=`, while an exact `MATCH`, `VLOOKUP` or `XLOOKUP`
+  scan ignores case only (`MATCH("ß",r,0)` passes over `ss`; capture `collate_functions`). Of
+  Excel for Windows' order, one capture is recorded (CAPTURING.md §5: Excel 16.0.20527.20196,
+  Microsoft 365, locale and sort locale en-US): 134 of the 2,380 rows of `collate_words` differ
+  from the Mac capture.
 - A row off Excel's grid in a file (`r="99999999999"`): Excel opens the file and drops the cell
   (capture `value_forms`), though it refuses rows 0 and 1048577; the reader refuses every row
   off the grid with a `PackageError`.
@@ -315,10 +317,10 @@ not). An empty argument is `#N/A`.
   -100%; its bound on how much one step may multiply the equation's value (45,000) is a declared
   fit: it gives every outcome of `RATE(4,0,-1000,1100)`, which Excel solves up to a growth of
   36,869 and refuses from 57,488, but `RATE(12,0,-1000,2000)` from -0.19 is `#NUM!` in Excel at a
-  growth of 22,620, which no single bound explains, and is listed. Excel's actual safeguard is
-  open. Two more rows are listed for their last digits, about 1.07E-9 relative from Excel's, just
+  growth of 22,620, which no single bound explains, and is listed. Excel's actual safeguard is not
+  known. Two more rows are listed for their last digits, about 1.07E-9 relative from Excel's, just
   past the tolerance; `RATE`'s other rows agree within it. Iteration methods compared with the
-  capture, each in at most five variants of its parameters: Newton on the rate, on 1 + rate and on
-  1 / (1 + rate), analytic and numerical derivatives, stops on the step or on the NPV, 20 to 100
-  iterations, damping. Excel's iteration is on the Roadmap (ARCHITECTURE.md §13). Each row is
-  listed in `tests/test_captures.py`.
+  capture for `IRR` and `XIRR`, each in at most five variants of its parameters: Newton on the
+  rate, on 1 + rate and on 1 / (1 + rate), analytic and numerical derivatives, stops on the step
+  or on the NPV, 20 to 100 iterations, damping. Excel's iteration is on the Roadmap
+  (ARCHITECTURE.md §13). Each row is listed in `tests/test_captures.py`.

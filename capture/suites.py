@@ -4655,7 +4655,8 @@ def convert_odd() -> list[Case]:
 def iteration_steps() -> list[Case]:
     """``IRR`` and ``RATE`` where the number of Newton steps decides the outcome: ``IRR`` of -1
     and X from 3E6 to 1E9 (from 0.1, 27 to 38 of xlrecalc's steps), ``RATE(n,-1,n/2)``, and
-    ``RATE`` from far guesses that take 26 to 40 of xlrecalc's steps."""
+    ``RATE`` from far guesses chosen to take 26 to 40 steps of Newton's method on the
+    present-value form, halving at -100% (``RATE``'s method takes other counts)."""
     cases = [
         Case("irr_x", f"IRR({{-1,{x}}})")
         for x in (3000000, 4000000, 5000000, 6000000, 7000000, 8000000, 9000000, 10000000,

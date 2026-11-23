@@ -207,9 +207,9 @@ text shows before evaluating.
   1,000 trials and more, where Excel's terms match none of the methods tried (121 rows). Among the
   others, `CUMIPMT` and `CUMPRINC` at tiny rates and in tiny principals carry Excel's noise, and
   from some starting guesses
-  Excel's `IRR` and `RATE` reach another root
+  Excel's `IRR` reaches another root
   than xlrecalc, or a rate where xlrecalc gives `#NUM!`, and `XIRR` stops about 1E-8 from the
-  root; 64 of the 352 captured rows of `IRR`, `XIRR` and `RATE` differ that way.
+  root; 64 of the 352 captured rows of `IRR`, `XIRR` and `RATE` differ that way, none of them `RATE`'s.
 - **Excel's behavior**: coercion between kinds, error values, the 15-digit rules, the 1900
   leap-year bug and the 1904 date system, arrays, dynamic arrays and spill, implicit
   intersection, circular references and iterative calculation, as Excel computes them
