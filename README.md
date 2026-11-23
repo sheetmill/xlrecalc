@@ -195,10 +195,10 @@ text shows before evaluating.
   unit conversion.
   The [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 119,997 formulas computed by Excel and compared with xlrecalc's results: 119,225
+- **Evidence**: 120,291 formulas computed by Excel and compared with xlrecalc's results: 119,539
   match, bit for bit or within a small tolerance declared per function (a few units in the last
-  place, or a relative one: 1E-9 for the iterative functions, 1E-15 to 1E-12 for the beta,
-  gamma, chi-squared, F and t distributions), 772 known deviations, each listed with its reason
+  place, or a relative one: 1E-9 for `IRR`, `RATE` and `YIELD`, 1E-15 to 1E-12 for the beta,
+  gamma, chi-squared, F and t distributions), 752 known deviations, each listed with its reason
   in [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md). Each listed
   deviation is still computed and compared with Excel on every test run, and one that starts to
   match fails the run, except a few that can match by chance (a random result, a result Excel
@@ -208,8 +208,8 @@ text shows before evaluating.
   others, `CUMIPMT` and `CUMPRINC` at tiny rates and in tiny principals carry Excel's noise, and
   from some starting guesses
   Excel's `IRR` reaches another root
-  than xlrecalc, or a rate where xlrecalc gives `#NUM!`, and `XIRR` stops about 1E-8 from the
-  root; 64 of the 352 captured rows of `IRR`, `XIRR` and `RATE` differ that way, none of them `RATE`'s.
+  than xlrecalc, or a rate where xlrecalc gives `#NUM!`; 32 of the 352 captured rows of `IRR`,
+  `XIRR` and `RATE` in `iterative` are listed, 31 of them `IRR`'s and one `XIRR`'s.
 - **Excel's behavior**: coercion between kinds, error values, the 15-digit rules, the 1900
   leap-year bug and the 1904 date system, arrays, dynamic arrays and spill, implicit
   intersection, circular references and iterative calculation, as Excel computes them

@@ -12,6 +12,7 @@ rates (``PMT(1E-10,10,1000)`` is -100.000000055).
 from __future__ import annotations
 
 import math
+from collections.abc import Iterator
 from typing import Any, cast
 
 from xlrecalc._arith import flush
@@ -420,11 +421,12 @@ def VDB(
 
 # Iterative functions -------------------------------------------------------------------------
 #
-# Excel finds IRR, XIRR and RATE by Newton's method from a guess (0.1 by default). Its iterates are
-# not reproduced bit for bit (they rest on its own NPV, whose last bits differ; ARCHITECTURE.md
-# §8.1), so the method below is the one that agrees best with the captured outcomes: Newton's method
-# on 1 + rate, halving instead of stepping to 1 + rate <= 0, stopping when a step is below 1E-7,
-# #NUM! when it does not settle in time. RATE has its own (RATE's docstring).
+# Excel finds IRR and RATE by Newton's method from a guess (0.1 by default). Its iterates are not
+# reproduced bit for bit (they rest on its own NPV, whose last bits differ; ARCHITECTURE.md §8.1),
+# so the method below is the one that agrees best with the captured outcomes: Newton's method on 1 +
+# rate, halving instead of stepping to 1 + rate <= 0, stopping when a step is below 1E-7, #NUM! when
+# it does not settle in time. RATE has its own (RATE's docstring). XIRR is not Newton's method: it
+# brackets a root on points built from the guess and bisects (``_xirr_solve``).
 
 _IRR_STEPS = 29
 """IRR's steps: from 29 to 36 give every captured outcome of ``iterative``; 28 leave two far
@@ -498,13 +500,16 @@ def _guess(guess: Any, ctx: Context) -> float | ErrorValue:
     return to_number(guess, ctx)
 
 
-@function("XIRR", "raw", "raw", "value", min_args=2, category=C, rel=1e-9, rel_reason=_ITERATION)
+@function("XIRR", "raw", "raw", "value", min_args=2, category=C)
 def XIRR(ctx: Context, values: Any, dates: Any, guess: Any = MISSING) -> Any:
     """Internal rate of return of flows on dates, over 365-day years.
 
-    Unlike XNPV, dates after the first may come in any order and text dates are read; a
-    blank guess is 0 and a logical one ``#VALUE!``. Among the values, a blank is 0 and a
-    number as text is that number; other text and a logical are ``#VALUE!``.
+    Unlike XNPV, dates after the first may come in any order and text dates are read, and
+    dates are truncated to whole days. A blank cell as the guess is 0, an empty argument the
+    default 0.1, a logical ``#VALUE!``, and a guess of -1 or below ``#NUM!``. Among the values,
+    a blank is 0 and a number as text is that number; other text and a logical are
+    ``#VALUE!``. The rate is found by bisection from brackets built on the guess
+    (``_xirr_solve``), not by Newton's method.
     """
     if isinstance(guess, bool):
         return VALUE
@@ -543,19 +548,91 @@ def XIRR(ctx: Context, values: Any, dates: Any, guess: Any = MISSING) -> Any:
         if not isinstance(n, float) or isinstance(n, bool) or n < 0:
             return NUM
         days.append(float(math.trunc(n)))
-    if g < 0:
+    if g <= -1:
         return NUM
-    years = [(d - days[0]) / 365 for d in days]
+    return _xirr_solve(nums, [(d - days[0]) / 365 for d in days], g)
 
-    def fn(t: float) -> tuple[float, float]:
-        f = dd = 0.0
-        for v, y in zip(nums, years, strict=True):
+
+_XIRR_TOP = 1e30
+"""The highest point of XIRR's upward scan: a root above it is ``#NUM!``."""
+_XIRR_WIDTH = 1e-8
+"""XIRR's bisection stops when ``|b - a| < _XIRR_WIDTH * (1 + |a| + |b|)``."""
+_XIRR_HALVINGS = 200
+"""A guard only: every bracket the scan makes meets the width rule within about 30 halvings."""
+
+
+def _xirr_value(flows: list[float], years: list[float], r: float) -> float:
+    """XNPV at ``r`` in doubles: ``v / (1 + r) ** y`` summed, a flow over 0 giving ±inf, 0/0 NaN."""
+    t = 1.0 + r
+    s = 0.0
+    for v, y in zip(flows, years, strict=True):
+        try:
             q = t**y
-            f += v / q
-            dd -= y * v / (q * t)
-        return f, dd
+        except (OverflowError, ZeroDivisionError):
+            q = math.inf if (t > 1) == (y > 0) else 0.0
+        if q == 0.0:
+            s += math.copysign(math.inf, v) if v != 0 else math.nan
+        else:
+            s += v / q
+    return s
 
-    return _newton(fn, g, 100)
+
+def _xirr_points(g: float) -> Iterator[float]:
+    """XIRR's scan points, in increasing order.
+
+    -1 and -h (when -h > -1), 0, then h, 2h, 4h, ... up to ``_XIRR_TOP``, with h the guess's
+    size (1E-5 for a guess of 0); a negative guess stops at 0.
+    """
+    h = abs(g) if g != 0 else 1e-5
+    if -h > -1:
+        yield -1.0
+        yield -h
+    yield 0.0
+    if g < 0:
+        return
+    x = h
+    while x <= _XIRR_TOP:
+        yield x
+        x *= 2
+
+
+def _xirr_solve(flows: list[float], years: list[float], g: float) -> float | ErrorValue:
+    """XIRR's root: the first sign change of the scan (``_xirr_points``), bisected.
+
+    Points where XNPV is NaN are skipped. The first change, with a zero counted among the
+    negatives, must end on the first flow's sign (XNPV crossing toward it as the rate rises),
+    otherwise ``#NUM!``, as it is with no change. Bisection takes the midpoint m of [a, b] and
+    returns it once ``|b - a| < 1E-8 * (1 + |a| + |b|)``; otherwise m replaces a where XNPV has
+    a's sign there (and is not 0), b otherwise. The result is a midpoint, short of the root.
+    """
+    first = flows[0] > 0 if flows else False
+    prev: tuple[float, bool] | None = None
+    for x in _xirr_points(g):
+        fx = _xirr_value(flows, years, x)
+        if math.isnan(fx):
+            continue
+        sx = fx > 0
+        if prev is not None and prev[1] != sx:
+            if sx != first:
+                return NUM
+            return _xirr_bisect(flows, years, prev[0], x, prev[1])
+        prev = (x, sx)
+    return NUM
+
+
+def _xirr_bisect(
+    flows: list[float], years: list[float], a: float, b: float, sa: bool
+) -> float | ErrorValue:
+    for _ in range(_XIRR_HALVINGS):
+        m = (a + b) / 2
+        if abs(b - a) < _XIRR_WIDTH * (1 + abs(a) + abs(b)):
+            return _result(m)
+        fm = _xirr_value(flows, years, m)
+        if fm != 0 and (fm > 0) == sa:
+            a = m
+        else:
+            b = m
+    return NUM
 
 
 @function(

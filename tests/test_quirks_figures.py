@@ -101,7 +101,7 @@ def test_empty_args_rows():
         r"`VDB` with an empty `factor` is `#DIV/0!` in Excel and 0 here \((\w+) rows of "
         r"`empty_args`\)\. (\w+) others there carry the known noise"
     )
-    noise = (tc._MULTINOMIAL, tc._CUMULATIVE_NOISE, tc._XIRR)
+    noise = (tc._MULTINOMIAL, tc._CUMULATIVE_NOISE)
     assert _n(found[1]) == _listed(tc._EMPTY_ODD, "empty_args")
     assert _n(found[2]) == sum(_listed(r, "empty_args") for r in noise)
 

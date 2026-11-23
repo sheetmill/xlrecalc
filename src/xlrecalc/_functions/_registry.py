@@ -200,6 +200,7 @@ _EMPTY_OPTIONAL_IS_DEFAULT = frozenset(
         "PERCENTRANK",
         "WEEKNUM",
         "WORKDAY.INTL",
+        "XIRR",
         "_XLFN.CEILING.MATH",
         "_XLFN.CEILING.PRECISE",
         "_XLFN.FLOOR.MATH",

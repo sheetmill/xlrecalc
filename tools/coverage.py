@@ -32,6 +32,7 @@ from tests.test_captures import (  # noqa: E402
     _CALL,
     KNOWN_DEVIATIONS,
     SUITES,
+    compared,
     computed,
     relative,
     same,
@@ -69,6 +70,8 @@ def evidence() -> dict[str, Evidence]:
     for name in SUITES:
         suite = load(name)
         for row, (_, got) in zip(suite.rows, computed(name), strict=True):
+            if not compared(name, row):
+                continue
             called = {display(n) for n in _CALL.findall(row.formula)} & registered
             if not called:
                 continue

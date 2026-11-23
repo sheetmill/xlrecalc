@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- `XIRR` brackets a root on points built from the guess and bisects it, as Excel does, in place of Newton's method,
+  and matches Excel's results bit for bit with no tolerance: of the `XIRR` rows of capture `iterative`, the 33
+  listed before match, and capture `iteration`'s 294 `XIRR` rows are now compared (280 match). The first sign change
+  met from -1 upward is bisected when it runs toward the first flow's sign; a root above 1E30, which no capture
+  settles yet, is `#NUM!`. QUIRKS.md lists the rest: 14 rows with a root exactly at the scan point 0, where Excel
+  bisects another root, and one negative root whose bracket is not known.
+
+### Fixed
+- `XIRR` with a negative guess finds a negative root (capture `iteration`: -0.5 from guesses -0.01 to -0.99), where it
+  gave `#NUM!` for every negative guess; a guess of -1 or below stays `#NUM!`, and so does a positive root from a
+  negative guess, as in Excel.
+- `XIRR` takes an empty guess argument (`XIRR(values,dates,)`) as the default 0.1, as Excel does (capture
+  `empty_args`), where it took 0.
+
 ## [0.9.0] - 2026-11-22
 
 ### Added

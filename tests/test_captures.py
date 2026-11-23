@@ -34,11 +34,11 @@ _IPMT_TAIL = (
     "IPMT at a fractional period or late in a long term: Excel's balance computation is not "
     "reproduced in the last bits (13 to 109 units in the last place); other rows within 4"
 )
-# IRR, XIRR and RATE: Excel's Newton iterates rest on its own NPV, whose last bits are not
-# reproduced (see NPV's tolerance), so where its iteration stops differs. Methods compared
-# with the capture, each in at most five variants of its parameters: Newton on the rate, on
-# 1 + rate and on 1 / (1 + rate), analytic and numerical derivatives, stopping on the step
-# (absolute, relative, returning either iterate) or on the NPV, 20 to 100 iterations, damping.
+# IRR and RATE: Excel's Newton iterates rest on its own NPV, whose last bits are not reproduced (see
+# NPV's tolerance), so where its iteration stops differs. Methods compared with the capture, each in
+# at most five variants of its parameters: Newton on the rate, on 1 + rate and on 1 / (1 + rate),
+# analytic and numerical derivatives, stopping on the step (absolute, relative, returning either
+# iterate) or on the NPV, 20 to 100 iterations, damping.
 # Kept: Newton on 1 + rate, halving instead of stepping to 1 + rate <= 0, a step below 1E-7.
 _ITER_NEAR_ZERO = (
     "IRR where the rate is 0: Excel's last iterate is within 1E-15 of 0 (-6.7E-16, 1.1E-14) "
@@ -56,11 +56,12 @@ _RATE_LAST_DIGITS = (
     "RATE: Excel stops at a step below 1E-7 on an iterate a little short of the root; its last "
     "digits differ from this iteration's by about 1.07E-9 relative, just past the tolerance"
 )
-_XIRR = (
-    "XIRR: Excel stops about 1E-8 (relative) from the root, sometimes after a bracketing "
-    "search (results that are short binary fractions), and gives #NUM! for some flows a few "
-    "days apart; not reproduced"
+_XIRR_ROOTS = (
+    "XIRR: which of several sign changes Excel bisects is not known; the first from -1 upward is "
+    "taken here, and #NUM! when it runs away from the first flow's sign, as a root exactly at "
+    "the scan point 0 does"
 )
+_XIRR_NEGATIVE = "XIRR: the negative bracket Excel bisects for this root is not known"
 _ITER_NEAR_ZERO_CASES = (77, 82, 84)
 _ITER_OUTCOME_CASES = (
     5,
@@ -91,41 +92,6 @@ _ITER_OUTCOME_CASES = (
     186,
     192,
     200,
-)
-_XIRR_CASES = (
-    130,
-    131,
-    132,
-    133,
-    134,
-    135,
-    136,
-    137,
-    138,
-    140,
-    141,
-    142,
-    143,
-    148,
-    155,
-    157,
-    161,
-    163,
-    165,
-    166,
-    170,
-    176,
-    178,
-    179,
-    180,
-    181,
-    182,
-    301,  # values holding a number as text, or a blank, which XIRR reads as 0
-    306,
-    341,
-    371,
-    376,
-    396,
 )
 _YIELD_ZERO_COUPON = (
     "YIELD of a zero-coupon bond over 20 periods: Excel's iteration stops 1.3E-9 (relative) "
@@ -642,7 +608,6 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("cum_large", case): _TINY_PRINCIPAL for case in (8, 18)},
     ("empty_args", 463): _MULTINOMIAL,
     ("empty_args", 124): _CUMULATIVE_NOISE,
-    **{("empty_args", case): _XIRR for case in (817, 820)},
     **{("empty_args", case): _EMPTY_ODD for case in (793, 794)},
     **{("finance_family", case): _CUMULATIVE_NOISE for case in _CUMULATIVE_CASES},
     **{("distributions_family", case): _DISCRETE_TERMS for case in _DISCRETE_CASES},
@@ -840,7 +805,8 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("finance", case): _IPMT_TAIL for case in (359, 367, 368, 371, 373, 397)},
     **{("iterative", case): _ITER_NEAR_ZERO for case in _ITER_NEAR_ZERO_CASES},
     **{("iterative", case): _ITER_OUTCOME for case in _ITER_OUTCOME_CASES},
-    **{("iterative", case): _XIRR for case in _XIRR_CASES},
+    ("iterative", 184): _XIRR_NEGATIVE,
+    **{("iteration", case): _XIRR_ROOTS for case in range(647, 661)},
     ("rate_method", 77): _RATE_SAFEGUARD,
     **{("rate_method", case): _RATE_LAST_DIGITS for case in (5, 22)},
     ("bonds", 2299): _YIELD_ZERO_COUPON,
@@ -870,7 +836,7 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
 # everywhere.
 EXEMPT = frozenset({_RANDOM, _WEEKNUM_ODD_TYPE})
 MATH_LIBRARY = frozenset(
-    {_IPMT_TAIL, _ITER_NEAR_ZERO, _ITER_OUTCOME, _XIRR, _YIELD_ZERO_COUPON, _PRICE_EXTREME,
+    {_IPMT_TAIL, _ITER_NEAR_ZERO, _ITER_OUTCOME, _YIELD_ZERO_COUPON, _PRICE_EXTREME,
      _NORMAL_TAIL, _DISCRETE_TERMS, _DISTRIBUTION_LIBRARY}
 )  # fmt: skip
 OTHER_PLATFORMS = frozenset({_LIBM_CANCELLATION, _COMPLEX_TEXT_BOUNDARY})
@@ -946,7 +912,16 @@ SUITES = [
     "convert_odd",
     "iteration_steps",
     "rate_method",
+    "iteration",
 ]
+# Suites compared in part: only the rows whose tag is named. Of ``iteration``, the XIRR rows; its
+# IRR, RATE and YIELD rows are evidence for their methods, not matched.
+PARTIAL: dict[str, frozenset[str]] = {"iteration": frozenset({"xirr", "xirr double root"})}
+
+
+def compared(name: str, row: Row) -> bool:
+    """Whether a row of suite ``name`` is compared with Excel's value (``PARTIAL``)."""
+    return name not in PARTIAL or row.tag in PARTIAL[name]
 
 
 def column_letters(n: int) -> str:
@@ -1091,6 +1066,8 @@ def outcomes(name: str) -> tuple[dict[str, int], dict[str, int], tuple[str, ...]
     failures = []
     reference = _reference_platform()
     for k, (row, (unsupported, got)) in enumerate(zip(suite.rows, results, strict=True), 1):
+        if not compared(name, row):
+            continue
         if unsupported:
             counts["not evaluated"] += 1
             why = "not implemented: " + ", ".join(sorted(unsupported))

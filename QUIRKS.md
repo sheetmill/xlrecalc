@@ -245,7 +245,7 @@ not). An empty argument is `#N/A`.
   sweep fractional periods (5 to 1,131 units in the last place, Excel's rule otherwise reproduced): the book value carried
   period by period rounds differently from Excel's, and a straight-line amount computed once or a closed-form book value
   fit no more rows. Listed in `tests/test_captures.py`.
-- An empty argument: `VDB` with an empty `factor` is `#DIV/0!` in Excel and 0 here (two rows of `empty_args`). Four others there carry the known noise of `MULTINOMIAL`, `CUMIPMT` and `XIRR`.
+- An empty argument: `VDB` with an empty `factor` is `#DIV/0!` in Excel and 0 here (two rows of `empty_args`). Two others there carry the known noise of `MULTINOMIAL` and `CUMIPMT`.
 - How text orders is captured for printable ASCII, 28 Latin-1 letters and signs, and `œ`, `Œ`
   (every pair of 125 characters, capture `collate_chars`), 40 words (`collate_words`) and the
   pairs of `modern`, on Excel 16.115 for Mac: one consistent order, followed exactly. Other
@@ -300,16 +300,15 @@ not). An empty argument is `#N/A`.
   did not reproduce. `MULTINOMIAL` is exact, where Excel's result carries noise from its logarithm of the gamma
   function (279.99999999999966 for 280); 12 rows of `math_integers` listed in `tests/test_captures.py`, with one of
   `statistics_family` and one of `empty_args`, 14 in all.
-- `IRR`, `XIRR`, `RATE`, `YIELD`
+- `IRR`, `RATE`, `YIELD`
   ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1, §8.2):
   a relative tolerance of 1E-9, declared per function, since Excel's Newton iterates rest on its
   own NPV, whose last bits are not reproduced, and Excel guarantees its result only to its
-  documented stopping tolerance. Of the 402 rows of `iterative`, 338 match, exactly or within the
-  relative tolerance, and 64 are listed, all among its 352 rows of `IRR`, `XIRR` and `RATE` (the
-  other 50 are `NPV` and `MIRR`), none of them `RATE`'s: from some guesses Excel's `IRR` reaches
-  another root, a rate where the package gives `#NUM!`, or the reverse; `XIRR` stops about 1E-8
-  from the root (sometimes after what looks like a bracketing search); and three `IRR` results at
-  a rate of 0 differ by less than 1E-14, where a relative tolerance cannot apply. Capture
+  documented stopping tolerance. Of the 402 rows of `iterative`, 370 match, exactly or within a
+  tolerance, and 32 are listed, all among its 352 rows of `IRR`, `XIRR` and `RATE` (the other 50
+  are `NPV` and `MIRR`), none of them `RATE`'s: from some guesses Excel's `IRR` reaches another
+  root, a rate where the package gives `#NUM!`, or the reverse; three `IRR` results at a rate of 0
+  differ by less than 1E-14, where a relative tolerance cannot apply; and one is `XIRR`'s (below). Capture
   `iteration_steps` settles `IRR`'s limit of 29 steps (`IRR` of -1 and X is X - 1 up to 9E6 and
   `#NUM!` from 1E7, where this method needs 29 and 30 steps); its 22 `RATE` rows match, `RATE`
   being Newton's method on the equation's future-value form with its own limits (its docstring).
@@ -320,7 +319,22 @@ not). An empty argument is `#N/A`.
   growth of 22,620, which no single bound explains, and is listed. Excel's actual safeguard is not
   known. Two more rows are listed for their last digits, about 1.07E-9 relative from Excel's, just
   past the tolerance; `RATE`'s other rows agree within it. Iteration methods compared with the
-  capture for `IRR` and `XIRR`, each in at most five variants of its parameters: Newton on the
-  rate, on 1 + rate and on 1 / (1 + rate), analytic and numerical derivatives, stops on the step
-  or on the NPV, 20 to 100 iterations, damping. Excel's iteration is on the Roadmap
-  (ARCHITECTURE.md §13). Each row is listed in `tests/test_captures.py`.
+  capture for `IRR`, each in at most five variants of its parameters: Newton on the rate, on 1 +
+  rate and on 1 / (1 + rate), analytic and numerical derivatives, stops on the step or on the NPV,
+  20 to 100 iterations, damping. Excel's iteration is on the Roadmap (ARCHITECTURE.md §13). Each
+  row is listed in `tests/test_captures.py`.
+- `XIRR` (captures `iterative`, `iteration`, `empty_args`): no tolerance. Excel brackets a root on
+  points built from the guess and bisects it, and the package does the same: with h the guess's
+  size (1E-5 for a guess of 0), the points are -1 and -h (when -h > -1), 0, then h, 2h, 4h, ... up
+  to 1E30, and a negative guess stops at 0, so a positive root is `#NUM!` from it. The first sign
+  change met from -1 upward (a zero counting as negative, a point where the sum is not a number
+  skipped) is bisected if it runs toward the first flow's sign, and is `#NUM!` otherwise, as no
+  change is; bisection returns the midpoint once the bracket is narrower than 1E-8 × (1 + |a| +
+  |b|), so a result stops up to about 1E-8 short of the root. Dates are truncated to whole days.
+  A guess of -1 or below is `#NUM!`; an empty guess argument is the default 0.1 and a blank cell
+  0. Of the 294 `XIRR` rows of `iteration`, 280 match bit for bit and 14 are listed: flows with a
+  root exactly at the scan point 0 and another at 0.5, where Excel bisects the upper root and the
+  package, meeting the change at 0 first, gives `#NUM!`. Which of several sign changes Excel
+  takes is not known; the first change toward the first flow's sign is a fitted rule. One row of
+  `iterative`, a root near -0.9993 from the guess 0.1, is listed because the negative bracket
+  Excel bisects for it is not known. The top of the scan, 1E30, is not yet settled by a capture.

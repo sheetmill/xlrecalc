@@ -970,7 +970,7 @@ rounds, compares or formats (`ROUND`, a comparison, `&`, `TEXT`, a lookup or cri
 units can change a visible digit and the row must match exactly or be a listed deviation. A
 tolerance is a test concept only; the engine computes one value. `QUIRKS.md` lists each one as a
 known deviation, and the coverage page (`docs/coverage.md`) gives each function's declared
-tolerance, from the registry. The iterative functions (`IRR`, `XIRR`, `RATE`, `YIELD`) declare a
+tolerance, from the registry. The iterative functions `IRR`, `RATE` and `YIELD` declare a
 relative tolerance instead (`rel=1e-9`), since Excel itself guarantees their results only to its
 documented stopping tolerance; rows within it are counted apart from exact and ulp matches, under
 the same guard. So do the beta, gamma, chi-squared, F and t distributions, their inverses and tests,
@@ -997,15 +997,22 @@ Behavior that is not the obvious reading, each from its capture:
   `PPMT` from the closed form `-rate*(pv+fv)*(1+rate)^(per-1)/((1+rate)^nper-1)` rather than as
   `PMT` minus `IPMT`, so late periods at high rates keep their precision. `VDB` depreciates the
   asset left at the start period by period from there.
-- `IRR` and `XIRR` (captures `iterative`, `iteration_steps`): Newton's method from the guess (0.1 by
-  default) on `1+rate`, halving rather than stepping to `1+rate <= 0`, until a step is below 1E-7
-  (29 iterations for `IRR`, 100 for `XIRR`), `#NUM!` otherwise. `RATE` (captures `iterative`,
+- `IRR` (captures `iterative`, `iteration_steps`): Newton's method from the guess (0.1 by default)
+  on `1+rate`, halving rather than stepping to `1+rate <= 0`, until a step is below 1E-7 (29
+  iterations), `#NUM!` otherwise. `RATE` (captures `iterative`,
   `iteration_steps`, `rate_method`) has its own method, given in its docstring: Newton's method on
   the future-value form of the annuity equation, `#NUM!` where a step reaches a rate of -100% or
   below or multiplies the equation's value by more than 45,000, 140 iterations. Excel's iterates
   rest on its own NPV and are not reproduced bit for bit: these functions and `YIELD` declare a
-  relative tolerance of 1E-9 (§8.1), and the rows beyond it are listed with their reasons. `XIRR`
-  reads text dates and dates in any order after the first, unlike `XNPV`.
+  relative tolerance of 1E-9 (§8.1), and the rows beyond it are listed with their reasons.
+- `XIRR` (captures `iterative`, `iteration`): not Newton's method but bisection, reproduced bit for
+  bit with no tolerance. XNPV over dates truncated to whole days is evaluated in increasing order
+  at -1 and -h (when -h > -1), 0, h, 2h, 4h, ... up to 1E30, where h is the guess's size (1E-5 for
+  0) and a negative guess stops at 0. The first sign change is bisected when it runs toward the
+  first flow's sign, `#NUM!` otherwise; bisection returns the midpoint once the bracket is narrower
+  than 1E-8 × (1 + |a| + |b|). Which of several changes Excel takes, and the negative brackets of
+  some roots, are not known (`QUIRKS.md`). `XIRR` reads text dates and dates in any order after the
+  first, unlike `XNPV`.
 - Day counts and coupons (capture `bonds`): `DAYS360`'s US method and `YEARFRAC` basis 0 differ at
   the end of February; actual/actual takes year lengths from the calendar (1900 has 365 days
   there); coupon dates step back from maturity keeping its day (the month's last day when maturity
@@ -1536,9 +1543,10 @@ After 0.9.0, in this order: an order, not a promise or a date.
    or formula changed (`engine.refresh()`, or `engine.changed("Sheet1!A1", ...)` naming them).
    It would answer code, not persist values: saving with values stays `recalculate`. openpyxl
    would be an optional extra, imported when the adapter is used.
-6. Excel's iteration for `IRR`, `XIRR`, `RATE` and `YIELD` (its starting step, update rule,
-   safeguards and stopping test), studied apart from this list from the capture sweeps and
-   adopted when it reproduces each captured outcome without losing a row that matches.
+6. Excel's iteration for `IRR`, `RATE` and `YIELD` (its starting step, update rule, safeguards
+   and stopping test), and for `XIRR` which of several sign changes it bisects and its negative
+   brackets, studied apart from this list from the capture sweeps and adopted when it reproduces
+   each captured outcome without losing a row that matches.
 7. For one formula outside a workbook: the other conditional-format rule types (top 10, above
    average, duplicates, text rules) where Excel's semantics would otherwise be restated by a
    caller, structured references given table definitions (Excel refuses them in a rule, but

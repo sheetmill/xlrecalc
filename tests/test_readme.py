@@ -59,17 +59,18 @@ def test_iterative_share_is_the_iterative_capture():
 
 
 def test_relative_tolerances_are_the_registry():
-    """The relative tolerances stated: the iterative functions', the continuous family's range."""
+    """The relative tolerances stated: the iterative functions' and the continuous family's."""
     from xlrecalc._functions import SPECS, _continuous
 
     family = (_continuous._REL_TAILS, _continuous._REL_SEARCH, _continuous._REL_TEST)
     rels = [s.rel for s in SPECS.values() if s.rel_reason in family]
-    others = {s.rel for s in SPECS.values() if s.rel and s.rel_reason not in family}
+    others = {k: s.rel for k, s in SPECS.items() if s.rel and s.rel_reason not in family}
     stated = re.search(
-        r"a relative one: ([\dE.-]+) for the iterative functions, ([\dE.-]+) to ([\dE.-]+) for "
-        r"the beta, gamma, chi-squared, F and t distributions",
-        _readme(),
+        r"a relative one: ([\dE.-]+) for ((?:`[A-Z]+`(?:, | and )?)+), ([\dE.-]+) to ([\dE.-]+) "
+        r"for the beta, gamma, chi-squared, F and t distributions",
+        " ".join(_readme().split()),
     )
     assert stated, "README.md: the relative tolerances are missing"
-    assert {float(stated[1])} == others
-    assert (float(stated[2]), float(stated[3])) == (min(rels), max(rels))
+    assert set(others.values()) == {float(stated[1])}
+    assert set(others) == set(re.findall(r"`([A-Z]+)`", stated[2]))
+    assert (float(stated[3]), float(stated[4])) == (min(rels), max(rels))
