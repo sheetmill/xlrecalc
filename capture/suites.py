@@ -4821,6 +4821,36 @@ def xirr_nan() -> list[Case]:
     return cases
 
 
+def xirr_sign_rules() -> list[Case]:
+    """``XIRR`` where a sign change below 0 runs away from the first flow's sign, or -1 is NaN.
+
+    Two roots either side of 0 (-0.05 and 0.08, -0.2 and 0.12) from the guesses 0.1, 0.02 and
+    0.5, and the first pair mirrored; two positive roots (0.03 and 0.4) from 0.01 and 0.1; two
+    negative roots (-0.3 and -0.6, -0.15 and -0.45) from three guesses each; and four yearly
+    flows whose latest has the first flow's sign, so that XNPV at -1 is -inf + inf and its limit
+    there has the first flow's sign, from 0.1, 0.5 and -0.2.
+    """
+    cases: list[Case] = []
+    yearly = (_XM_D0, _XM_D0 + 365, _XM_D0 + 730)
+    for roots, k, guesses in (
+        ((-0.05, 0.08), -100.0, (0.1, 0.02, 0.5)),
+        ((-0.2, 0.12), -100.0, (0.1, 0.02, 0.5)),
+        ((-0.05, 0.08), 100.0, (0.1, 0.02)),
+        ((0.03, 0.4), -100.0, (0.01, 0.1)),
+        ((-0.3, -0.6), -100.0, (-0.4, -0.2, 0.1)),
+        ((-0.15, -0.45), -100.0, (-0.3, -0.05, 0.1)),
+    ):
+        flows = _xm_two_roots(*roots, k)
+        for g in guesses:
+            cases.append(Case("two roots", _XM_THREE, (*flows, *yearly, g)))
+    four = "XIRR({1}:{4},{5}:{8},{9})"
+    dates = (*yearly, _XM_D0 + 1095)
+    for flows in ((-1000.0, 600.0, 700.0, -50.0), (-500.0, 900.0, -300.0, -20.0)):
+        for g in (0.1, 0.5, -0.2):
+            cases.append(Case("latest like first", four, (*flows, *dates, g)))
+    return cases
+
+
 # Whole columns and rows ----------------------------------------------------------------------
 #
 # References to whole columns and rows, where the cells past the data count: sizes, blanks counted,
@@ -4978,4 +5008,5 @@ SUITES = {
     "rate_method": Suite(rate_method),
     "xirr_method": Suite(xirr_method),
     "xirr_nan": Suite(xirr_nan),
+    "xirr_sign_rules": Suite(xirr_sign_rules),
 }
