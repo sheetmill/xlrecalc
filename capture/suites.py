@@ -4789,6 +4789,38 @@ def xirr_method() -> list[Case]:
     return cases
 
 
+_XN_DATES = (_XM_D0, _XM_D0 + 213, _XM_D0 + 578)
+"""Three dates of the flows of ``xirr_nan``: a first outflow, a second one 213 days on, a return."""
+
+
+def _xn_flows(root: float, sign: float) -> tuple[float, float, float]:
+    """(-1000, -100, c) times ``sign``, with c making ``root`` XNPV's one root."""
+    t = 1.0 + root
+    y1, y2 = 213 / 365, 578 / 365
+    c = (1000.0 + 100.0 / t**y1) * t**y2
+    return -1000.0 * sign, -100.0 * sign, c * sign
+
+
+def xirr_nan() -> list[Case]:
+    """``XIRR`` of flows (-, -, +) with one negative root, where XNPV at -1 is -inf + inf.
+
+    Roots -0.2, -0.5, -0.7 and -0.9, each with no guess and with the guesses 0, 0.5, -0.1 and
+    -0.5; then the flows' mirror image (+, +, -) for the roots -0.5 and -0.9, with no guess and
+    from -0.5.
+    """
+    cases: list[Case] = []
+    for root in (-0.2, -0.5, -0.7, -0.9):
+        flows = _xn_flows(root, 1.0)
+        cases.append(Case("nan", "XIRR({1}:{3},{4}:{6})", (*flows, *_XN_DATES)))
+        for g in (0.0, 0.5, -0.1, -0.5):
+            cases.append(Case("nan", _XM_THREE, (*flows, *_XN_DATES, g)))
+    for root in (-0.5, -0.9):
+        flows = _xn_flows(root, -1.0)
+        cases.append(Case("nan mirrored", "XIRR({1}:{3},{4}:{6})", (*flows, *_XN_DATES)))
+        cases.append(Case("nan mirrored", _XM_THREE, (*flows, *_XN_DATES, -0.5)))
+    return cases
+
+
 # Whole columns and rows ----------------------------------------------------------------------
 #
 # References to whole columns and rows, where the cells past the data count: sizes, blanks counted,
@@ -4945,4 +4977,5 @@ SUITES = {
     "iteration_steps": Suite(iteration_steps),
     "rate_method": Suite(rate_method),
     "xirr_method": Suite(xirr_method),
+    "xirr_nan": Suite(xirr_nan),
 }
