@@ -98,7 +98,7 @@ people's workbooks are used.
 | `static_cycle` | 37 | loops of references through a branch not taken, and real loops as controls: which Excel calls circular |
 | `array_refs` | 8,602 cells | `ROW`, `COLUMN`, `CELL`, ranges and arrays as a criterion or a lookup key, and arrays of references, each as a legacy formula, a legacy array formula and a dynamic array |
 | `array_functions` | 41 | the `SUMIF` family, `DSUM`, `CORREL` and `ROW` times `COLUMN` over one column, ten and every column of another sheet, with Excel's memory: Excel's value, or the file's value kept |
-| `circular`, `circular_alerts` | 16 each | circular references with iteration off: what Excel saves and shows, alerts off, and opened as a double-click opens it, with the warning a person dismisses (the second interactive; [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §7.2) |
+| `circular`, `circular_alerts` | 16 each | circular references with iteration off: what Excel saves and shows, alerts off, and opened as a double-click opens it, with the warning dismissed by hand (the second interactive; [ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §7.2) |
 | `codepage` | 912 | `CHAR`, `UNICODE(CHAR(n))` and `CODE(CHAR(n))` for 0 to 256, and `CODE(UNICHAR(n))` for 127 to 255 and twelve characters outside an 8-bit code page: Mac Roman throughout, and `CODE` of U+0080 to U+009F gives the code itself. Not captured, so the package's choice: `CODE` of any other character outside Mac Roman is 95, as for the twelve captured |
 | `clean_controls` | 510 | `CLEAN` over `UNICHAR(n)`, alone and between two letters, for 1 to 255: it removes 1 to 31 and U+0080 to U+009F, and keeps 127. Not captured, so the package's choice: it keeps every character past U+00FF (U+200B, U+FEFF and other format characters included) |
 | `collate_chars` | 23,375 | `<` over every ordered pair of 125 single characters (printable ASCII, 28 Latin-1 letters and signs, and `œ`, `Œ`) and `=` over every unordered pair: one order after folding case, marks before digits before letters, `æ ð ø œ þ µ` letters of their own, `ª` and `º` equal to `a` and `o`, an accent counting only on a tie (`_compare.py`, `MAC_ORDER`). Not captured, so the package's choice: any other character sorts after all of these by code point, a control character before them |
@@ -134,15 +134,15 @@ file Excel saved, not AppleScript's values, gives the exact double (Excel writes
 digits) and the real error code (AppleScript returns `missing value` for an error). New cases
 go at the end of their suite so earlier case numbers stay stable; a recapture that changes any expected result is reviewed as a change of evidence.
 
-**Crafted and extreme input.** A test or script that feeds the package crafted or extreme input
-(hostile packages, huge ranges, extreme numbers) runs in a child process under the memory watchdog
+**Crafted and extreme input.** Run a test or script that feeds the package crafted or extreme
+input (hostile packages, huge ranges, extreme numbers) in a child process under the memory watchdog
 of `tests/watchdog.py`, which kills it at 4 GB: `bounded` for a test, `uv run python -m
-tests.watchdog -- COMMAND` for anything else. A time limit alone does not bound memory, and
-`ulimit -v` is no limit on macOS; a sweep without the watchdog can use several times the machine's memory,
-and macOS then pauses every application, Excel included. A killed run (return code 137, or a missing
-result) means the input went past the limit: the cause is found before the run is repeated. No such
-sweep runs while Excel captures, and a capture starts only once Excel answers (for example
-`osascript -e 'tell application "Microsoft Excel" to get version'`).
+tests.watchdog -- COMMAND` for anything else. A time limit alone does not bound memory, `ulimit -v`
+is no limit on macOS, and when memory runs out macOS pauses every application, Excel included.
+Treat a killed run (return code 137, or a missing result) as input past the limit, and find the
+cause before repeating the run. Run no such sweep while Excel captures, and start a capture only
+once Excel answers (for example `osascript -e 'tell application "Microsoft Excel" to get
+version'`).
 
 **Adding a function or a family of functions.** Write its cases at the end of a suite in
 `capture/suites.py`, or as a suite of its own (each case a formula with `{1}`, `{2}`... for its
@@ -168,22 +168,21 @@ refuse to run when a workbook of the same name is open. One script uses the clip
 `paste_formulas.applescript` (below), which saves the clipboard's text first and restores it after
 (anything on the clipboard that is not text is lost). With alerts off, a file Excel would offer to
 repair fails to open with error -50 ("Parameter error"), which is how probes detect a repair prompt
-without a person at the keyboard. `capture/repair_probe.py` and `capture/circular_probe.py
+unattended. `capture/repair_probe.py` and `capture/circular_probe.py
 --interactive` are the interactive captures, and whether a dialog appears depends on how the file is
 opened, dialog by dialog. Excel shows its repair dialogs for a file AppleScript opens with alerts
-on, so `repair_probe` opens it that way and waits for a person to accept them. It does not show its
+on, so `repair_probe` opens it that way and waits for you to accept them. It does not show its
 circular-reference warning for a file AppleScript opens, with alerts on or off; it does for one
 opened by Launch Services, as a double-click in the Finder opens it (Excel 16.115: a small loop with
 `fullCalcOnLoad` showed the warning when double-clicked and none under AppleScript). So
 `circular_probe --interactive` opens the file with `open -a "Microsoft Excel"` and, since the
-warning does not block requests about the workbook, asks the person in a dialog of its own to say
-when it is answered (the header records the reply); then it reads and saves the workbook through
-AppleScript (`read_save.applescript`). Earlier captures of `circular_alerts` opened the file through
-AppleScript and saw no warning. `capture/marker_probe.py --typed` reads a workbook a person typed
-formulas into and saved (AppleScript can only enter legacy formulas); that workbook is kept as
-`tests/captures/marker_typed.xlsx`.
+warning does not block requests about the workbook, asks you in a dialog of its own to say when
+it is answered (the header records the reply); then it reads and saves the workbook through
+AppleScript (`read_save.applescript`). `capture/marker_probe.py --typed` reads a workbook whose
+formulas were typed by hand and saved (AppleScript can only enter legacy formulas); that workbook is
+kept as `tests/captures/marker_typed.xlsx`.
 
-**Formulas as typed, without a person.** Pasting a column of formulas as text enters them as typing
+**Formulas as typed, unattended.** Pasting a column of formulas as text enters them as typing
 them does: `capture/paste_probe.py` (`paste_formulas.applescript`: the text on the clipboard,
 Excel's `paste worksheet` into A1) built a copy of the typed workbook of `marker_typed` (75
 formulas) and of that of `lambda_probe --typed` (6 `LET`, 23 `LAMBDA` formulas and two named
@@ -193,11 +192,11 @@ Excel 16.115: the formula's text with its prefixes (`_xlfn.`, `_xlpm.`, `_xlop.`
 The `lambda_*` captures are made this way (`lambda_probe --paste`); a macro setting `Range.Formula2`
 and keystrokes were not needed (and not tried).
 
-**A fresh Excel after LAMBDA captures.** After pasting `lambda_probe`'s recursion cases (deep recursion, recursion
-through `MAP` past its limit), the same Excel session computed `#NUM!` for ten unrelated rows of `empty_args`
-(`ADDRESS` with a sheet's text, `INDIRECT`, `FLOOR.PRECISE`, `FORMULATEXT`), reproducibly, and a fresh session gave the
-captured values. So a capture that follows a LAMBDA capture starts with Excel quit (`quit_excel.applescript`, which
-quits only when no workbook is open).
+**A fresh Excel after LAMBDA captures.** Quit Excel before a capture that follows a LAMBDA capture
+(`quit_excel.applescript`, which quits only when no workbook is open): after `lambda_probe`'s recursion cases (deep
+recursion, recursion through `MAP` past its limit), the same Excel session computes `#NUM!` for ten unrelated rows of
+`empty_args` (`ADDRESS` with a sheet's text, `INDIRECT`, `FLOOR.PRECISE`, `FORMULATEXT`), reproducibly, where a fresh
+session gives the captured values.
 
 **Opens.** Excel refuses a whole file for one formula it does not take, so a probe that must name refused formulas
 opens them in batches of 60 and halves a refused batch until each refusal is opened alone (`capture/refusals.py`).
@@ -226,8 +225,8 @@ active sheet), `array_size_probe` (Excel's memory per file), and `value_probe`, 
 Office Home & Business 2021 for Mac at 16.114.4 lacks `LAMBDA` and its helpers, which Microsoft 365
 and Excel 2024 at the same build have. Every capture header records the edition and the update
 channel beside the build (`# edition: Office Home & Business 2021, update channel Current`;
-`capture/edition.py`). No file on the Mac states the license plainly, so the person capturing
-states the edition, as shown in Excel > About Excel, in `capture/build/excel_edition.txt` or the
+`capture/edition.py`). No file on the Mac states the license plainly, so you state the edition
+when capturing, as shown in Excel > About Excel, in `capture/build/excel_edition.txt` or the
 variable `XLRECALC_EXCEL_EDITION`, and a capture refuses to run without it; the channel is
 Microsoft AutoUpdate's.
 
@@ -276,10 +275,8 @@ its event loop, so the request was never dispatched. A Quit clears it, and the s
 passes; it can also clear by itself within minutes. A question about workbooks therefore tells
 whether Excel is alive (`tests/excel_steps.py`). Some such hangs have no known cause, and each came
 with the display off; a locked screen, a display that is off and system sleep, each tried
-deliberately, did not cause one. A display that the tools wake does not always stay on under
-`caffeinate -d`: in one such hang it went off again 11 seconds after the wake while `caffeinate`
-held its power assertion. A known cause looks the same: a window of Excel's own (the About window,
-Preferences, any dialog) blocks every request about workbooks.
+deliberately, did not cause one. A known cause looks the same: a window of Excel's own (the About
+window, Preferences, any dialog) blocks every request about workbooks.
 
 The tools guard against it. A process that drives Excel keeps the display awake (`caffeinate -d`,
 from its first request until it ends, after declaring user activity once to wake a display that is

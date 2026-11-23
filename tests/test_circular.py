@@ -1,8 +1,8 @@
 """Circular references with iteration off, as Excel leaves them (ARCHITECTURE.md §7.2).
 
-Captures ``circular`` (alerts off) and ``circular_alerts`` (alerts on, the warning dismissed by a
-person), from ``capture/circular_probe.py``: Excel calculates no cell on a cycle or depending on
-one, and saves each without a cached value as the empty text. Capture ``circular_cached``, from
+Captures ``circular`` (alerts off) and ``circular_alerts`` (alerts on, the warning dismissed by
+hand), from ``capture/circular_probe.py``: Excel calculates no cell on a cycle or depending on one,
+and saves each without a cached value as the empty text. Capture ``circular_cached``, from
 ``capture/circular_cached_probe.py``: one with a cached value keeps it, on opening, with
 ``fullCalcOnLoad``, after a full recalculation and after saving.
 """

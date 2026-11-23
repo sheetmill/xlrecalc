@@ -6,7 +6,7 @@
 
 AppleScript enters only legacy formulas and does not know ``LAMBDA`` calls (capture
 ``formula_bar``), and openpyxl's plain formulas holding ``LAMBDA`` show ``#NAME?`` in Excel
-(capture ``prefixes``), so a person types each formula of ``TYPED`` into cell ``A<5k+1>`` of the
+(capture ``prefixes``), so you type each formula of ``TYPED`` by hand into cell ``A<5k+1>`` of the
 workbook ``--typed-workbook`` builds (data 1, 2, 3 in Z1:Z3 and 10, 20, 30 in AA1:AA3), after
 defining the names of ``NAMES`` in Excel's Name Manager, and saves it. ``--typed`` reads every cell
 of each formula's block (rows ``5k+1`` to ``5k+4``, columns A to D) with its value, the formula's
@@ -18,7 +18,7 @@ The ``LET`` formulas (``LET_COUNT``) are written to ``tests/captures/let_typed.t
 ``LAMBDA`` and its helpers, the defined names and the workbook are kept in ``capture/build/`` (not
 committed): the ``lambda_*`` captures hold their typed forms and values.
 
-``--paste`` makes those captures without a person: it builds each suite's workbook (``PASTED``),
+``--paste`` makes those captures unattended: it builds each suite's workbook (``PASTED``),
 has Excel paste its formulas as text, which enters them as typing them does (CAPTURING.md §2),
 and writes ``tests/captures/<suite>.tsv``. ``--depths`` first replaces ``lambda_depth``'s
 formulas with countdowns to the given depths through the given names (``CD`` by default), to
@@ -48,7 +48,7 @@ NAMES = {
     "ADDONE": "=LAMBDA(x,x+1)",
     "FACTR": "=LAMBDA(n,IF(n<=1,1,n*FACTR(n-1)))",
 }
-"""Names the person defines in Name Manager before typing, with what they refer to."""
+"""Names you define in Name Manager before typing, with what they refer to."""
 
 TYPED = [
     # LET
@@ -89,7 +89,7 @@ TYPED = [
 
 
 def typed_workbook(path: Path) -> None:
-    """The workbook a person types into: the data, and each formula's text beside its cell."""
+    """The workbook to type into by hand: the data, and each formula's text beside its cell."""
     import openpyxl
 
     wb = openpyxl.Workbook()
@@ -154,7 +154,7 @@ def read_typed(path: Path) -> None:
             f"# excel: {excel_version()} for Mac, locale en_US",
             edition_line(),
             f"# captured: {dt.date.today().isoformat()}",
-            "# generator: capture/lambda_probe.py --typed (a person typed each formula into the",
+            "# generator: capture/lambda_probe.py --typed (each formula typed by hand into the",
             "#   formula bar of Excel and saved; data 1, 2, 3 in Z1:Z3 and 10, 20, 30 in AA1:AA3;",
             "#   formula k in A<5k+1>)",
             *(["# name rows: name, name, text, sheet scope (Python repr)"] if names else []),

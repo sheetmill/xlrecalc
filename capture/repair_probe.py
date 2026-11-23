@@ -3,7 +3,7 @@
     uv run python -m capture.repair_probe [--uncached]
 
 An interactive capture: Excel refuses to open a file holding such a formula unless
-a person accepts its repair dialog, so this opens the workbook with alerts on and waits for
+its repair dialog is accepted by hand, so this opens the workbook with alerts on and waits for
 that. The workbook holds every formula ``capture/formula_forms.py`` found refused, one per row
 of column A, between control formulas. Every formula cell is given a deliberately wrong cached
 value (``100 + row``) and the workbook's calculation settings are those of a file Excel saved
@@ -163,7 +163,7 @@ def main() -> None:
             else []
         ),
         '#   calcPr calcId="191029" (Excel trusts cached values); Excel opens it with alerts',
-        "#   on and a person accepts the repair; formula, value and text are read from the",
+        "#   on and the repair is accepted by hand; formula, value and text are read from the",
         f"#   repaired workbook ({repaired_name}); saved is the cell as its saved copy holds it",
         "# columns: row tag written formula_after value_after text_after saved"
         + (" saved_c" if uncached else "")

@@ -2,7 +2,7 @@
 
 The build number alone does not say which functions Excel has: Office Home & Business 2021 for
 Mac at 16.114.4 lacks ``LAMBDA`` and its helpers, which Microsoft 365 and Excel 2024 at the same
-build have. No file on the Mac states the license plainly, so the edition is given by the person
+build have. No file on the Mac states the license plainly, so you give the edition when
 capturing, in the environment variable ``XLRECALC_EXCEL_EDITION`` or in the local file
 ``capture/build/excel_edition.txt`` (not committed), and a capture refuses to run without it.
 The update channel is Microsoft AutoUpdate's setting. Standard library only, so that any probe
@@ -20,7 +20,7 @@ EDITION_FILE = Path(__file__).resolve().parent / "build" / "excel_edition.txt"
 
 
 def excel_edition() -> str:
-    """The edition, as the person capturing states it; exits when it is not stated."""
+    """The edition, as you state it when capturing; exits when it is not stated."""
     edition = os.environ.get("XLRECALC_EXCEL_EDITION", "").strip()
     if not edition and EDITION_FILE.exists():
         edition = EDITION_FILE.read_text(encoding="utf-8").strip()

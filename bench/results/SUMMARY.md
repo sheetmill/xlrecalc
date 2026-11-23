@@ -92,7 +92,7 @@ system):
 
 Traced in all: 397 MB after load (both sources, the table dropped), 448 MB after the full
 recalculation, 682 MB at the recalculation's peak. The cell values are a dict of float
-objects; typed value blocks are planned for a later minor release (ARCHITECTURE.md §7.5).
+objects; typed value blocks are on the Roadmap (ARCHITECTURE.md §13; the store, §7.5).
 
 ## Memory and speed of the store
 

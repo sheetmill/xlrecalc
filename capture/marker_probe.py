@@ -13,8 +13,8 @@ intersection), so AppleScript cannot enter a formula as Excel 365's formula bar 
 
 ``--typed PATH`` reads instead the workbook in which ``TYPED[k]`` was entered into cell
 ``A<4k+1>`` as typed in Excel's formula bar and saved, keeps it as
-``tests/captures/marker_typed.xlsx`` and writes ``tests/captures/marker_typed.tsv``. A person
-typed the kept workbook's formulas into Excel's formula bar; ``capture/paste_probe.py`` pastes
+``tests/captures/marker_typed.xlsx`` and writes ``tests/captures/marker_typed.tsv``. The kept
+workbook's formulas were typed by hand into Excel's formula bar; ``capture/paste_probe.py`` pastes
 them as text into a copy and finds every one entered as the typed one (CAPTURING.md §2), but
 writes nothing here. ``typed_workbook`` builds the workbook to type into. One typed workbook is
 kept today (``KEPT``); a later batch (``NEXT_BATCH``) would be typed into a workbook of its own
@@ -156,7 +156,7 @@ NAMES = {"one_seq": "_xlfn.SEQUENCE(1)"}
 
 
 def typed_workbook(path: Path, start: int = 0) -> None:
-    """The workbook a person types into: data in Z1:Z3, each formula's text beside its cell.
+    """The workbook to type into by hand: data in Z1:Z3, each formula's text beside its cell.
 
     Only formulas from ``start`` on are listed, each still at ``A<4k+1>``, so that a later batch
     goes into a workbook of its own and the one typed before is left as Excel saved it.

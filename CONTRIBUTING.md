@@ -38,8 +38,11 @@ pip and other tools ignore it and resolve the latest versions the dependency gro
 
 ## Checks to run before proposing a change
 
-All of these must pass. CI runs the same set on Python 3.11 to 3.14, plus a run without
-openpyxl, a development dependency. Prefix each with `uv run` on the uv route.
+All of these must pass. CI runs the tests, slow tier included, on Linux with Python 3.11 to
+3.14 and on macOS with Python 3.11, and once more without openpyxl, a development dependency; lint,
+types and the docs once each; and a build job that checks the wheel and the sdist, installs each in
+a clean environment, and runs the sdist's tests with only `pytest` installed. Prefix each with
+`uv run` on the uv route.
 
 ```bash
 pytest                                   # unit tests and the doc examples

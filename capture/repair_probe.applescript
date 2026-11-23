@@ -1,7 +1,7 @@
 -- Open a workbook Excel will want to repair (argument 1) WITH alerts on, so Excel shows its
--- repair dialogs and a person answers them; then read column A of the first sheet for rows 1 to
+-- repair dialogs and you answer them; then read column A of the first sheet for rows 1 to
 -- argument 2, save a copy of the repaired workbook (argument 3) and close it without saving.
--- capture/repair_probe.py runs it with a person at the keyboard. Interactive by design: alerts
+-- capture/repair_probe.py runs it with you at the keyboard. Interactive by design: alerts
 -- stay on (as they were) on every path. Opens only the workbook it is given.
 --
 -- Output: the repaired workbook's name, then one line per row, fields separated by ASCII 31:

@@ -2,8 +2,8 @@
 
 A step past its limit is stopped and the evidence saved (``capture/excel_watch.py``). If Excel then
 does not answer, the run ends here with a message naming the test, because every later test would
-wait out its own limit in turn. Excel is left running: it may hold what the person using it needs,
-so ending it is theirs to decide.
+wait out its own limit in turn. Excel is left running: you may have work open in it, so ending it
+is yours to decide.
 """
 
 from __future__ import annotations

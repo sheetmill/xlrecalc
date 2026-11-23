@@ -1,4 +1,4 @@
--- Enter formulas as pasted text, as a person pasting a column into Excel enters them.
+-- Enter formulas as pasted text, as pasting a column into Excel by hand enters them.
 -- Argument 1: a workbook (Excel's container) to open; argument 2: a UTF-8 file of lines, one cell
 -- each from A1 down (blank lines leave cells empty); argument 3: the copy to save.
 -- The text goes on the clipboard and Excel pastes it into A1 of the first sheet; then the

@@ -1,10 +1,10 @@
-"""Whether formulas pasted as text enter as a person typing them does (CAPTURING.md §2).
+"""Whether formulas pasted as text enter as typing them by hand does (CAPTURING.md §2).
 
     uv run python -m capture.paste_probe
 
 AppleScript's ``formula`` enters only legacy formulas, so the captures of what Excel writes for a
 typed formula (``marker_typed``, ``let_typed`` and the LAMBDA rows ``lambda_probe --typed`` holds)
-were typed by a person. This builds each of those workbooks again, has Excel paste the formulas
+were typed by hand. This builds each of those workbooks again, has Excel paste the formulas
 as one column of text from the clipboard (``paste_formulas.applescript``; the clipboard's text is
 restored after), saves a copy, and compares every formula's anchor cell with the typed one: the
 formula's text as the file holds it (prefixes included), its ``t`` and ``ref``, the dynamic-array

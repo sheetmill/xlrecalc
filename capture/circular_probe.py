@@ -12,7 +12,7 @@ a cycle or recalculates them. Writes ``tests/captures/circular.tsv``.
 
 With ``--interactive`` the openpyxl file is opened by Launch Services instead (``open -a``), as a
 double-click in the Finder opens it, so Excel shows its circular-reference warning, which it does
-not show for a file AppleScript opens; a person dismisses it, and column A is read and a copy
+not show for a file AppleScript opens; you dismiss it, and column A is read and a copy
 saved through ``read_save.applescript``. Writes ``tests/captures/circular_alerts.tsv``.
 """
 
@@ -137,8 +137,8 @@ def interactive() -> None:
         if time.monotonic() - start > 900:
             sys.exit(f"{src.name}: not open in Excel after 15 minutes")
         time.sleep(1)
-    # The warning does not block requests about the workbook, so the person says when it is
-    # answered, in a dialog of osascript's own; nothing is read before.
+    # The warning does not block requests about the workbook, so you say when it is answered,
+    # in a dialog of osascript's own; nothing is read before.
     answered = osascript(
         "-e",
         "display dialog \"Answer Excel's circular-reference warning first (or note that none "
@@ -147,7 +147,7 @@ def interactive() -> None:
         "-e",
         "button returned of result",
     )
-    print(f"the person answered: {answered}")
+    print(f"answered: {answered}")
     out = osascript(read_save, src.name, str(len(CASES)), str(copy)).split("\n")
     out.insert(0, "")
     seen = {int(f[0]): f[1:] for f in (line.split(US) for line in out[1:])}
@@ -159,8 +159,9 @@ def interactive() -> None:
         f"# captured: {dt.date.today().isoformat()}",
         "# generator: capture/circular_probe.py --interactive",
         "# method: openpyxl writes the formulas into column A (constants in B, no cached values,",
-        "#   fullCalcOnLoad); Excel opens it by Launch Services, as a double-click does, and a",
-        f"#   person answers the circular-reference warning, then says so (reported: {answered});",
+        "#   fullCalcOnLoad); Excel opens it by Launch Services, as a double-click does, its",
+        "#   circular-reference warning is answered by hand and the answer reported",
+        f"#   (reported: {answered});",
         "#   formula, value and text are then read from the open workbook through AppleScript,",
         "#   saved is the cell as Excel's saved copy holds it",
         f"# saved_calcPr: {calc_pr(copy)}",

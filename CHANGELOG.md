@@ -8,30 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- `XIRR` brackets a root on points built from the guess and bisects it, as Excel does, in place of Newton's method,
-  and matches Excel's results bit for bit with no tolerance: of the `XIRR` rows of capture `iterative`, the 33
-  listed before match, and capture `iteration`'s 294 `XIRR` rows are now compared (280 match). Going up from -1, the
-  first sign change toward the first flow's sign is bisected; a change the other way is passed over at or below 0
-  and is `#NUM!` above it. Where later flows of both signs make XNPV -inf + inf at -1, that point takes the sign of
-  the latest flows, its limit, and Excel's negative roots there are found (captures `xirr_nan`, `xirr_sign_rules`:
-  the second written to separate these rules, 21 of 22 matching). The upward scan doubles the guess's size 70 times,
-  a declared choice: capture `xirr_method` (276 rows, 266 matching) places its last point at 2^70 or 2^71 times the
-  guess's size. QUIRKS.md lists the rest, 40 rows: flows with roots 0 and 0.5, the brackets of some negative roots, a
-  guess halved down to Excel's tolerance in place of a root, and three rows that match here but whose result rests
-  on a power within 0.05 units in the last place of a rounding midpoint.
+- `XIRR` finds its rate as Excel does, by bisection on brackets built from the guess, in place of Newton's method, and
+  is compared with Excel bit for bit, with no tolerance. A caller sees Excel's own digits where the rate differed in
+  the last places before, and Excel's result where it gave `#NUM!` or another root: the 33 `XIRR` rows of capture
+  `iterative` listed before now match, as do 280 of the 294 `XIRR` rows of capture `iteration`, now compared, and
+  negative roots behind flows of both signs, which gave `#NUM!`, are found. One captured row moves away from Excel:
+  a root near -0.9993 from the guess 0.1 is now 4E-10 from Excel's value, where it was within the old tolerance.
+  QUIRKS.md gives the rules and lists the 40 `XIRR` rows not reproduced.
 
 ### Fixed
-- `XIRR` with a negative guess finds a negative root (capture `iteration`: -0.5 from guesses -0.01 to -0.99), where it
-  gave `#NUM!` for every negative guess; a guess of -1 or below stays `#NUM!`, and so does a positive root from a
-  negative guess, as in Excel.
-- `Workbook.values_at` and `Workbook.values` through a lazy `Loader` no longer make the statuses read after them slow.
-  A sheet the pass loaded left its cells to be closed by the next read, the first `status`, which made cells the pass
-  had computed stale again; each `status` that met one evaluated it and ran the report's whole-workbook passes again
-  (three runs in the first 123 statuses of one 27,151-formula sheet, seconds each). The pass now closes before each
-  read, as reading the cells one by one does: the statuses after it run those passes as many times as after
-  one-by-one reads, with the same values and statuses (`tests/test_values_batch.py` counts the runs).
-- `XIRR` takes an empty guess argument (`XIRR(values,dates,)`) as the default 0.1, as Excel does (capture
-  `empty_args`), where it took 0.
+- `Workbook.status` read after `Workbook.values_at` or `Workbook.values` over cells read through a lazy `Loader` ran
+  the report's whole-workbook passes again and again: on one sheet of 27,151 formulas, the first 1,750 statuses took
+  10 minutes. They now cost what they cost after reading the cells one by one (10 s for all 27,151 there), with the
+  same values and statuses.
+- `XIRR` with a negative guess finds a negative root, where it gave `#NUM!` for every negative guess; a guess of -1 or
+  below stays `#NUM!`, and so does a positive root from a negative guess, as in Excel.
+- `XIRR` takes an empty guess argument (`XIRR(values,dates,)`) as the default 0.1, as Excel does, where it took 0.
 
 ## [0.9.0] - 2026-11-22
 

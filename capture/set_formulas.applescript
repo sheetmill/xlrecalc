@@ -1,4 +1,4 @@
--- Set formulas into one open workbook as a person's formula bar would take them, and read each back.
+-- Set formulas into one open workbook as the formula bar would take them, and read each back.
 -- Argument 1: the workbook (Excel's container); argument 2: a UTF-8 file, one formula a line, each in
 -- the formula bar's form with its "=", set as AppleScript's legacy formula. Formula k goes into A<k>
 -- of the first sheet. A formula Excel refuses leaves the cell unchanged without an error, so the

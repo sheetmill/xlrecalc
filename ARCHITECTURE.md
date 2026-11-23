@@ -724,8 +724,8 @@ whose formulas are sparse); and per column the sorted rows holding anything and 
 holding a formula, as 32-bit typed arrays, so a box yields its non-blank cells and its formula
 cells by bisection. A cell of the workbook is one integer,
 `sheet << 34 | key`, in the scheduler's sets. Array-backed column blocks (typed arrays for
-numbers and template ids, side dicts for text and errors) are planned for a later minor release
-(§13), and an SQLite backend for workbooks larger than memory after that.
+numbers and template ids, side dicts for text and errors) are on the Roadmap (§13), and an SQLite
+backend for workbooks larger than memory after that.
 
 ### 7.6 Errors and the report
 
@@ -917,7 +917,7 @@ An exact search reads only as far as its match, so it is circular only if it rea
 sheet of two cells under the memory watchdog, so one that walks a range by position fails there.
 
 **Formulas set through the API** are dynamic arrays, as Excel 365 takes a typed formula:
-`=A1:A5*2` spills. Capture `marker_typed` (75 formulas a person typed into Excel's formula bar
+`=A1:A5*2` spills. Capture `marker_typed` (75 formulas typed by hand into Excel's formula bar
 and saved; `capture/marker_probe.py --typed`) shows when Excel marks one in the file: when it
 spills, or when its legacy reading would take an implicit intersection (`=SUM(Z1:Z3*2)`, a
 single value, is marked), or when its text may give an array, whatever the size of its result;

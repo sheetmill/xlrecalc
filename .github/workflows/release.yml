@@ -8,7 +8,7 @@
 # Publishing uses trusted publishing (OpenID Connect), so no token is stored. Configure on
 # test.pypi.org and pypi.org a trusted publisher for owner `sheetmill`, repository
 # `xlrecalc`, workflow `release.yml`, environments `testpypi` and `pypi`. Give the GitHub
-# environment `pypi` a required reviewer, so the PyPI step waits for a person to approve it.
+# environment `pypi` a required reviewer, so the PyPI step waits for manual approval.
 name: Release
 
 on:

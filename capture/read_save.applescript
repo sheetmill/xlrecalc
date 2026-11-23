@@ -1,4 +1,4 @@
--- For a workbook a person opened (by Launch Services, as a double-click does), named by argument
+-- For a workbook opened by hand (by Launch Services, as a double-click does), named by argument
 -- 1. With "ready": whether it is open and Excel answers a question about it within 5 seconds
 -- ("yes", "no", or "blocked" and the error number). Otherwise:
 -- read column A of its first sheet for rows 1 to argument 2, save a copy (argument 3) and close
