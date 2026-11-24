@@ -34,8 +34,8 @@ compute is computed.
 one worksheet at a time, cells with their runs; after each sheet is fed, every formula cell's
 value, then every formula cell's status. One fresh process per version and round, the versions
 alternating; ``HEAD=src`` is always measured, others with ``--src LABEL=DIR``. Each child prints
-each sheet's seconds, the total, the peak memory (``bench/rss.py``) and the statuses counted by
-state, which must agree across versions.
+each sheet's seconds and the peak memory after it (``bench/rss.py``), the total, and the statuses
+counted by state, which must agree across versions.
 """
 
 from __future__ import annotations
@@ -309,7 +309,7 @@ def child(path: Path) -> None:
 
     import xlrecalc
 
-    out: dict[str, object] = {"xlrecalc": xlrecalc.__version__, "sheets": {}}
+    out: dict[str, object] = {"xlrecalc": xlrecalc.__version__, "sheets": {}, "peaks": {}}
     states: Counter[str] = Counter()
     start = time.perf_counter()
     with xlio.open(path) as book:
@@ -330,6 +330,7 @@ def child(path: Path) -> None:
             for ref in refs:
                 states[workbook.status(ref).state] += 1
             out["sheets"][sheet.name] = time.perf_counter() - t  # type: ignore[index]
+            out["peaks"][sheet.name] = peak_mb()  # type: ignore[index]
     out["seconds"] = time.perf_counter() - start
     out["peak_mb"] = peak_mb()
     out["states"] = dict(sorted(states.items()))
