@@ -33,6 +33,7 @@ def test_there_is_a_windows_capture() -> None:
         "clean_controls.tsv",
         "codepage.tsv",
         "collate_chars.tsv",
+        "collate_functions.tsv",
         "collate_words.tsv",
     ]
 
