@@ -135,13 +135,8 @@ file Excel saved, not AppleScript's values, gives the exact double (Excel writes
 digits) and the real error code (AppleScript returns `missing value` for an error). New cases
 go at the end of their suite so earlier case numbers stay stable; a recapture that changes any expected result is reviewed as a change of evidence.
 
-**Crafted and extreme input.** Run a test or script that feeds the package crafted or extreme
-input (hostile packages, huge ranges, extreme numbers) in a child process under the memory watchdog
-of `tests/watchdog.py`, which kills it at 4 GB: `bounded` for a test, `uv run python -m
-tests.watchdog -- COMMAND` for anything else. A time limit alone does not bound memory, `ulimit -v`
-is no limit on macOS, and when memory runs out macOS pauses every application, Excel included.
-Treat a killed run (return code 137, or a missing result) as input past the limit, and find the
-cause before repeating the run. Run no such sweep while Excel captures, and start a capture only
+**Crafted and extreme input** runs under a memory watchdog (CONTRIBUTING.md), never while Excel
+captures: when memory runs out, macOS pauses every application, Excel included. A capture starts
 once Excel answers (for example `osascript -e 'tell application "Microsoft Excel" to get
 version'`).
 

@@ -59,6 +59,16 @@ there too.
 the files the writer produces, which must open without a repair and hold Excel's values
 (`tests/test_excel_live.py`, `CAPTURING.md`). The default run never starts Excel.
 
+## Crafted and extreme input
+
+A test or script that feeds the package crafted or extreme input (hostile packages, huge ranges,
+extreme numbers) runs in a child process under the memory watchdog of `tests/watchdog.py`, which
+kills it at 4 GB: `bounded` for a test, `uv run python -m tests.watchdog -- COMMAND` for anything
+else. A time limit alone does not bound memory, `ulimit -v` is no limit on macOS, and when memory
+runs out macOS pauses every application. A killed run (return code 137, or a missing result) is
+input past the limit: its cause is found before the run is repeated. No such run goes on while
+Excel captures (`CAPTURING.md`).
+
 ## Benchmarks
 
 `bench/` is a separate uv project, so that the packages it compares against and their
