@@ -936,6 +936,7 @@ SUITES = [
     "xirr_method",
     "xirr_nan",
     "xirr_sign_rules",
+    "function_names",
 ]
 # Suites compared in part: only the rows whose tag is named. Of ``iteration``, the XIRR rows; its
 # IRR, RATE and YIELD rows are evidence for their methods, not matched.
