@@ -17,7 +17,7 @@ FILES = sorted(
     p
     for folder in ("src", "capture", "tools", "tests", "bench")
     for p in (ROOT / folder).rglob("*.py")
-    if ".venv" not in p.parts and "build" not in p.parts
+    if not {".venv", "build"} & set(p.relative_to(ROOT).parts)  # inside the tree only
 )
 PUBLIC = set(xlio.__all__)
 
