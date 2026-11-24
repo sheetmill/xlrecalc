@@ -244,3 +244,27 @@ Recording what a reader streams (cases `xlio:` and `feed:`, every cell with its 
 | `excel_form_100000.xlsx` (shared) | 0.87 s | 1.092, 1.103 s | 1.105, 1.115 s |
 | `unshared_form_1000000.xlsx` | 8.20, 8.23 s | 13.43, 13.48 s (746, 753 MB) | 15.21, 15.30 s |
 | `excel_form_1000000.xlsx` (shared) | 8.57, 8.73 s | 11.10, 11.16 s (696 MB) | 11.17, 11.17 s |
+
+## Reading sheet by sheet when most formulas keep their value: 0.10.1 against 0.10.0
+
+`uv run python bench/kept_bench.py gen`, then `uv run python bench/kept_bench.py run --rounds 3
+--src 0.10.0=<checkout of v0.10.0>/src`, from the repository root in the package's environment
+(Python 3.11.18, xlio 0.4.0, Apple M4 Pro): each round a fresh process per version, the
+versions alternating. `kept_sheets_1000_26.xlsx` holds six sheets, 78,000 formulas reading a
+linked workbook (they keep the file's value) and 35,341 others; it is read as a reader showing one
+sheet at a time reads it: a `Loader` fed each worksheet, then every formula's value, then every
+formula's status. Both versions give the same statuses (1,207 computed, 112,134 kept). Best of
+three; peak memory as `bench/rss.py` measures it, the interpreter included.
+
+| sheet | 0.10.1 | 0.10.0 |
+|---|---|---|
+| `Linked1` (reaches every sheet) | 1.22 s | 38.82 s |
+| `Linked2` | 0.48 s | 14.14 s |
+| `Numbers` | 0.33 s | 14.10 s |
+| `Linked3` | 0.39 s | 14.04 s |
+| `Total` | 0.60 s | 14.42 s |
+| the whole read | 3.04 s, 120 MB | 95.53 s, 111 MB |
+
+Python's own allocations at their peak (`tracemalloc`) are 72.1 MB against 71.3 MB. In the same
+slot, `engine_bench.py`, `recalc_bench.py` and `memory_breakdown.py` at 100,000 rows are within 2%
+of 0.10.0 in time and peak.

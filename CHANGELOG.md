@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.1] - 2026-11-23
+
 ### Fixed
 - Reading a workbook of many legacy array formulas took time growing with the square of their number: every formula
   read went through every array formula read before it. It now takes time in proportion to them.
@@ -19,7 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Finding what depends on many cells at once looks the dependents up about once per column of those cells, where it
   looked them up once per cell: the report's passes over a workbook whose formulas mostly keep the file's value, and a
   read through a lazy `Loader` that loads sheets whose formulas are all to be computed, spent most of their time there.
-  Values, statuses and the report are unchanged.
+  Values, statuses and the report are unchanged. With the two changes below, `bench/kept_bench.py`'s workbook (six
+  sheets, 78,000 formulas keeping their value), read sheet by sheet, each sheet's values and then its statuses, takes
+  3.0 s where 0.10.0 took 95.5 s: the first sheet 1.2 s against 38.8 s, each other sheet 0.3 to 0.6 s against 14.0
+  to 14.4 s (best of three). Its peak footprint is 120 MB against 111 MB; the memory Python holds at its peak, 72 MB
+  against 71 MB. The package's own benchmarks on 100,000 rows (load, full evaluation, a change, `recalculate` with
+  its write) are within 2% of 0.10.0 in time and peak.
 - Reading cells one by one costs about what reading them in one pass costs: each read's evaluation no longer works out
   again which of a formula's references can reach another formula; that is kept from one read to the next until a
   formula or a defined name changes.
@@ -802,7 +809,8 @@ First release.
   calculation settings; archive limits (`ReadLimits`, `LimitError`) and a refusal of DTDs
   protect against hostile files; `PackageError` for a file that is not a readable package.
 
-[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.10.1...HEAD
+[0.10.1]: https://github.com/sheetmill/xlrecalc/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/sheetmill/xlrecalc/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/sheetmill/xlrecalc/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/sheetmill/xlrecalc/compare/v0.8.0...v0.8.1

@@ -1533,7 +1533,7 @@ in a rule recalculates no cell on opening, so `RecalcCheck` reads no rule. Tests
 
 ## 13. Roadmap
 
-After 0.10.0, in this order: an order, not a promise or a date.
+After 0.10.1, in this order: an order, not a promise or a date.
 
 1. A `Loader` that also reads sheets lazily where the opening rule answers `"some"`: the static
    dependents of the `ca="1"` cells found from the formulas-only reading, so that only the
