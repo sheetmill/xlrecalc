@@ -65,6 +65,9 @@ def _formula(rng: random.Random, sheets: int, row: int, tame: bool, quiet: bool)
         "nm+1",
         'CELL("contents")',  # the active cell: s1!A1, reached by no name
         "vn*3",
+        f'CUBEVALUE("c")*0+{other}!A{r}',  # a function not computed: the cell keeps its value
+        f'INDIRECT("{other}!B{r}")+1',  # a reference made in evaluation to a formula cell
+        f"OFFSET({other}!C1,{r - 1},0)*2",
     ]
     if quiet:
         pool = [f for f in pool if not any(word in f for word in VOLATILE)]
@@ -90,7 +93,10 @@ def _sheet_xml(rng: random.Random, sheets: int, tame: bool, quiet: bool) -> str:
     rows: dict[int, list[str]] = {r: [] for r in range(1, ROWS + 1)}
     for r in range(1, ROWS + 1):
         if rng.random() < 0.8:
-            rows[r].append(_cell(f"A{r}", f"<v>{rng.choice([1, 2.5, -4, 10, 0.1])}</v>"))
+            value = f"<v>{rng.choice([1, 2.5, -4, 10, 0.1])}</v>"
+            if rng.random() < 0.2:  # a function not computed, read by many: it keeps its value
+                value = '<f>CUBEVALUE("c")</f>' + value
+            rows[r].append(_cell(f"A{r}", value))
         for col in "BC":
             if rng.random() < 0.7:
                 text = (

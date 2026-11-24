@@ -16,6 +16,7 @@ import contextlib
 import io
 import random
 from collections.abc import Iterator
+from pathlib import Path
 
 import pytest
 import xlio
@@ -139,6 +140,131 @@ def test_values_at_are_the_values_read_one_by_one(
         with xlio.open(io.BytesIO(data)) as book:
             got.append(_read_at(_workbook(data, mode, way, book), refs, batch))
     assert got[0] == got[1]
+
+
+def _kept_book(rows: str, extra: str = "", names: str = "") -> xlrecalc.Workbook:
+    """A one-sheet workbook, with the metadata Excel saves for a dynamic array (``cm="1"``)."""
+    metadata = (Path(__file__).parent / "captures" / "arrays_metadata.xml").read_text("utf-8")
+    rels = (
+        f'<Relationships xmlns="{PKG}">'
+        f'<Relationship Id="rId1" Type="{DOC}/worksheet" Target="worksheets/sheet1.xml"/>'
+        f'<Relationship Id="rId8" Type="{DOC}/sheetMetadata" Target="metadata.xml"/>'
+        "</Relationships>"
+    )
+    parts = {"xl/metadata.xml": metadata, "xl/_rels/workbook.xml.rels": rels}
+    return xlrecalc.load(io.BytesIO(package(rows, workbook_extra=extra + names, extra_parts=parts)))
+
+
+def test_what_rests_on_a_kept_value_follows_a_reference_made_later() -> None:
+    """A reference made in evaluation after the passes ran: the cell reading the kept value
+    through it is kept too (the report follows the reads recorded since)."""
+    rows = (
+        '<row r="1"><c r="A1"><f>CUBEVALUE("c")</f><v>4</v></c>'
+        '<c r="B1"><f>INDIRECT("A1")+1</f><v>0</v></c><c r="C1"><f>A1*2</f><v>0</v></c></row>'
+    )
+    wb = _kept_book(rows, FULL)
+    assert wb.status("C1").state == "kept"
+    wb.value("B1")
+    assert wb.status("B1").state == "kept"
+
+
+def test_what_rests_on_a_kept_value_follows_the_kept_cells() -> None:
+    """An edit puts a kept value out of date: the kept cells change, the formulas do not."""
+    rows = (
+        '<row r="1"><c r="A1"><f>CUBEVALUE("c")+D1</f><v>4</v></c>'
+        '<c r="B1"><f>CUBEVALUE("d")</f><v>3</v></c>'
+        '<c r="C1"><f>A1*2</f><v>0</v></c><c r="D1"><v>1</v></c>'
+        '<c r="E1"><f>B1*2</f><v>0</v></c></row>'
+    )
+    wb = _kept_book(rows, FULL)
+    assert wb.status("C1").state == "kept"
+    wb.set("D1", 2.0)
+    assert wb.status("C1").state == "uncomputed"
+    assert wb.status("E1").state == "kept"
+
+
+def test_what_rests_on_a_kept_value_follows_a_spill() -> None:
+    """A spill grows over a cell another formula reads: that formula now rests on the kept
+    value the spill is computed from."""
+    rows = (
+        '<row r="1"><c r="A1"><f>CUBEVALUE("c")</f><v>4</v></c>'
+        '<c r="D1" cm="1"><f t="array" ref="D1:D2">_xlfn.SEQUENCE(E1)*A1</f></c>'
+        '<c r="E1"><v>2</v></c><c r="F1"><f>D3+1</f><v>0</v></c></row>'
+    )
+    wb = _kept_book(rows, FULL)
+    assert wb.status("F1").state == "computed"
+    wb.set("E1", 3.0)
+    assert wb.value("D1") == 4.0  # the anchor, evaluated again: it now fills D1:D3
+    assert wb.value("D3") == 12.0
+    assert wb.status("F1").state == "kept"
+
+
+def test_what_rests_on_a_kept_value_follows_a_volatile_name_woken() -> None:
+    """A cell volatile only through a name keeps its cached value on opening (dormant, its
+    name's edges left out); computed by a full recalculation, it rests on the kept value."""
+    rows = (
+        '<row r="1"><c r="A1"><f>CUBEVALUE("c")</f><v>4</v></c>'
+        '<c r="B1"><f>vk*2</f><v>8</v></c></row>'
+    )
+    names = '<definedNames><definedName name="vk">Data!$A$1+NOW()*0</definedName></definedNames>'
+    wb = _kept_book(rows, '<fileVersion appName="xl"/><calcPr calcId="191029"/>', names)
+    assert wb._engine.dormant
+    assert wb.status("B1").state == "computed"  # its edge from the name left out
+    wb.recalculate(full=True)
+    assert not wb._engine.dormant
+    assert wb.status("B1").state == "kept"
+
+
+def test_what_rests_on_a_kept_value_follows_a_formula_set() -> None:
+    """A formula set after the passes ran, reading a kept value: it is kept too."""
+    rows = (
+        '<row r="1"><c r="A1"><f>CUBEVALUE("c")</f><v>4</v></c>'
+        '<c r="B1"><f>A1+1</f><v>0</v></c></row>'
+    )
+    wb = _kept_book(rows, FULL)
+    assert wb.status("B1").state == "kept"
+    wb.set_formula("C1", "=A1*2")
+    assert wb.status("C1").state == "kept"
+
+
+def test_what_rests_on_a_kept_value_follows_a_sheet_loaded_later() -> None:
+    """A lazy ``Loader`` reads a second sheet after the passes ran: its formula reading the
+    kept value is kept too."""
+    sheet1 = (
+        '<row r="1"><c r="A1"><f>CUBEVALUE("c")</f><v>4</v></c>'
+        '<c r="B1"><f>A1+1</f><v>0</v></c></row>'
+    )
+    sheet2 = '<row r="1"><c r="A1"><f>s1!A1*2</f><v>0</v></c></row>'
+    rels = (
+        f'<Relationship Id="rId1" Type="{DOC}/worksheet" Target="worksheets/sheet1.xml"/>'
+        f'<Relationship Id="rId2" Type="{DOC}/worksheet" Target="worksheets/sheet2.xml"/>'
+    )
+    data = package(
+        sheets=SHEETS,
+        workbook_extra=FULL,
+        extra_parts={
+            "xl/_rels/workbook.xml.rels": f'<Relationships xmlns="{PKG}">{rels}</Relationships>',
+            "xl/worksheets/sheet1.xml": _sheet(sheet1),
+            "xl/worksheets/sheet2.xml": _sheet(sheet2),
+        },
+    )
+    with xlio.open(io.BytesIO(data)) as book:
+        wb = xlrecalc.Loader(book).workbook()
+        assert wb.status("s1!B1").state == "kept"
+        assert wb.status("s2!A1").state == "kept"
+
+
+def test_what_rests_on_a_kept_value_drops_a_reference_no_longer_made() -> None:
+    """A formula that read a kept value through ``INDIRECT`` and, after an edit, no longer
+    does: it is computed, no longer kept."""
+    rows = (
+        '<row r="1"><c r="A1"><f>CUBEVALUE("c")</f><v>4</v></c>'
+        '<c r="B1"><f>IF(D1=1,INDIRECT("A1"),5)</f><v>0</v></c><c r="D1"><v>1</v></c></row>'
+    )
+    wb = _kept_book(rows, FULL)
+    assert wb.status("B1").state == "kept"
+    wb.set("D1", 0.0)
+    assert wb.status("B1").state == "computed"
 
 
 @pytest.mark.parametrize(
