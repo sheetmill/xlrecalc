@@ -137,6 +137,7 @@ class _Cells:
 _PAD_ROWS = 4096
 """A range taller than this whose data fills less than half of it is padded, not made dense."""
 _LARGE_BOX = 256  # cells: smaller boxes are listed again rather than remembered
+_WIDE = 64  # columns: a dynamic array's range wider than this is listed once, not per column
 _COMPUTED = CellStatus("computed")  # frozen: one instance serves every such cell
 _CONSTANT = CellStatus("constant")
 
@@ -303,6 +304,15 @@ class Engine:
         self._dynamic: dict[int, None] = {}
         """The anchors that are dynamic arrays, in the anchors' order: the only ones a cell set
         by hand or an edit can make spill elsewhere."""
+        # The ranges the dynamic arrays fill or want, kept up to date as they move, so that a cell
+        # set finds the arrays whose range holds it without going through every one: per sheet
+        # and column, (first row, last row, anchor) sorted, with the tallest range a column has
+        # held; ranges wider than _WIDE columns in a list of their own per sheet; and per anchor
+        # the ranges as entered, to take them out.
+        self._spill_columns: dict[int, dict[int, list[tuple[int, int, int]]]] = {}
+        self._spill_height: dict[tuple[int, int], int] = {}
+        self._spill_wide: dict[int, list[tuple[int, int, int, int, int]]] = {}
+        self._spill_entered: dict[int, tuple[tuple[int, int, int, int], ...]] = {}
         # Per sheet, rebuilt when first needed after anchors change: the ranges anchors fill or
         # want, (r1, c1, r2, c2, anchor); and per column the row spans they fill, sorted, for
         # member_of. A cell an anchor fills is found from its range, not stored per cell.
@@ -582,6 +592,7 @@ class Engine:
             self.anchors[n] = Anchor(array[0], array[1])
             if array[0]:
                 self._dynamic[n] = None
+                self._enter_spill(n)
             self._spill_due = True
             self._index_anchors(sheet)
         if cached is None or stale:
@@ -674,7 +685,9 @@ class Engine:
 
     def _drop_anchor(self, n: int) -> None:
         anchor = self.anchors.pop(n)
-        self._dynamic.pop(n, None)
+        if n in self._dynamic:
+            del self._dynamic[n]
+            self._leave_spill(n)
         sheet, row, col = unpack(n)
         changed = self._release(sheet, anchor.box, (row, col, row, col))
         self._index_anchors(sheet)
@@ -689,13 +702,56 @@ class Engine:
         if not self._dynamic:
             return
         n = node(sheet, row, col)
-        for a in [a for a in self._dynamic if a >> SHEET_SHIFT == sheet and a != n]:
-            x = self.anchors[a]
-            for box in (x.box, x.wanted):
-                if box is not None and box[0] <= row <= box[2] and box[1] <= col <= box[3]:
-                    self.stale.add(a)
-                    self._unclosed.append(a)
-                    break
+        hits: set[int] = set()
+        entries = self._spill_columns.get(sheet, {}).get(col)
+        if entries:
+            lowest = row - self._spill_height[(sheet, col)]
+            i = bisect.bisect_right(entries, (row, MAX_ROW + 1, 0)) - 1
+            while i >= 0 and entries[i][0] >= lowest:
+                r1, r2, a = entries[i]
+                if r2 >= row and a != n:
+                    hits.add(a)
+                i -= 1
+        for r1, c1, r2, c2, a in self._spill_wide.get(sheet, ()):
+            if r1 <= row <= r2 and c1 <= col <= c2 and a != n:
+                hits.add(a)
+        for a in sorted(hits):
+            self.stale.add(a)
+            self._unclosed.append(a)
+
+    def _spill_ranges(self, n: int) -> tuple[tuple[int, int, int, int], ...]:
+        """A dynamic array's range and the range it wants, if blocked, within the grid."""
+        x = self.anchors[n]
+        return tuple(
+            (b[0], b[1], min(b[2], MAX_ROW), min(b[3], MAX_COL))
+            for b in (x.box, x.wanted)
+            if b is not None
+        )
+
+    def _enter_spill(self, n: int) -> None:
+        sheet = n >> SHEET_SHIFT
+        ranges = self._spill_ranges(n)
+        self._spill_entered[n] = ranges
+        for r1, c1, r2, c2 in ranges:
+            if c2 - c1 >= _WIDE:
+                self._spill_wide.setdefault(sheet, []).append((r1, c1, r2, c2, n))
+                continue
+            columns = self._spill_columns.setdefault(sheet, {})
+            for c in range(c1, c2 + 1):
+                bisect.insort(columns.setdefault(c, []), (r1, r2, n))
+                key = (sheet, c)
+                self._spill_height[key] = max(self._spill_height.get(key, 0), r2 - r1)
+
+    def _leave_spill(self, n: int) -> None:
+        sheet = n >> SHEET_SHIFT
+        for r1, c1, r2, c2 in self._spill_entered.pop(n, ()):
+            if c2 - c1 >= _WIDE:
+                self._spill_wide[sheet].remove((r1, c1, r2, c2, n))
+                continue
+            columns = self._spill_columns[sheet]
+            for c in range(c1, c2 + 1):
+                entries = columns[c]
+                del entries[bisect.bisect_left(entries, (r1, r2, n))]
 
     def _blocked(self, sheet: int, box: tuple[int, int, int, int], anchor: int) -> bool:
         s = self.sheets[sheet]
@@ -749,6 +805,9 @@ class Engine:
         if box != old or anchor.wanted is not None:
             anchor.box = box
             self._index_anchors(sheet)
+        if anchor.dynamic and self._spill_entered.get(n) != self._spill_ranges(n):
+            self._leave_spill(n)
+            self._enter_spill(n)
         if box != old:
             self._moved.append(
                 (

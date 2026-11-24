@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Reading a workbook of many dynamic arrays took time growing with the square of their number: every formula read
+  went through every dynamic array read before it. It now takes time in proportion to them.
+
 ## [0.10.1] - 2026-11-23
 
 ### Fixed

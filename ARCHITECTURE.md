@@ -833,7 +833,10 @@ cells cannot be changed one by one.
 **Dynamic arrays** are evaluated as arrays and spill: a result of `r` by `c` fills the `r` by
 `c` range from the formula's cell, and the file records it as the formula's `ref`. A non-empty
 cell in that range (a constant or a formula) blocks the spill: the formula is `#SPILL!` and
-fills nothing, and clearing the cell lets it spill again (a blocked array a trusting load reads
+fills nothing, and clearing the cell lets it spill again. A cell set by hand or read from a file
+makes the dynamic arrays whose range, or wanted range, holds it stale; they are found through an
+index of those ranges per column, kept up to date as the arrays move, so a file of many dynamic
+arrays is read in time in proportion to them (a blocked array a trusting load reads
 from a file is evaluated on loading, to the same `#SPILL!`, to learn the range it wants; a file
 this package wrote with `full_calc_on_load=False` holds a blocked spill as a plain `#VALUE!`,
 which a trusting load keeps, so clearing the cell in its way does not spill it until a full
