@@ -9,6 +9,7 @@ silently; known deviations need a reason.
 
 from __future__ import annotations
 
+import dataclasses
 import functools
 import math
 import platform
@@ -21,7 +22,7 @@ import pytest
 import xlformat
 
 from tests.capture_report import REPORT
-from tests.captures import Formula, Row, Suite, load
+from tests.captures import Formula, Row, Suite, _expected, load
 from xlrecalc._engine import Engine
 from xlrecalc._formula._template import cell_axes
 from xlrecalc._functions import SPECS
@@ -854,10 +855,19 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
 # platform. And the reverse: a row that matches on the reference platform, but differs on another
 # whose library differs in the bits a cancellation exposes, must match there and counts as listed
 # everywhere.
+_WINDOWS_MATH_LIBRARY = (
+    "Excel for Windows' math library rounds the last bit otherwise than Excel for Mac's, which the "
+    "package's results follow on the reference platform: IMCOSH's 15th digit, a value within one "
+    "unit in the last place of a rounding midpoint (capture windows/complex_family)"
+)
+# Rows where Excel for Windows' own last bits put its value past the package's (capture
+# windows/<suite>), listed under "windows" only, in place of the Mac's reason for them.
+WINDOWS_DEVIATIONS: dict[tuple[str, int], str] = {("complex_family", 582): _WINDOWS_MATH_LIBRARY}
+
 EXEMPT = frozenset({_RANDOM, _WEEKNUM_ODD_TYPE})
 MATH_LIBRARY = frozenset(
     {_IPMT_TAIL, _ITER_NEAR_ZERO, _ITER_OUTCOME, _XIRR_NEGATIVE_POWER, _YIELD_ZERO_COUPON,
-     _PRICE_EXTREME, _NORMAL_TAIL, _DISCRETE_TERMS, _DISTRIBUTION_LIBRARY}
+     _PRICE_EXTREME, _NORMAL_TAIL, _DISCRETE_TERMS, _DISTRIBUTION_LIBRARY, _WINDOWS_MATH_LIBRARY}
 )  # fmt: skip
 OTHER_PLATFORMS = frozenset({_LIBM_CANCELLATION, _COMPLEX_TEXT_BOUNDARY, _XIRR_POWER})
 
@@ -1062,15 +1072,47 @@ def run(suite: Suite, platform: PlatformName = "mac") -> tuple[Engine, int]:
     return engine, s
 
 
+WINDOWS = Path(__file__).parent / "captures" / "windows"
+"""Excel for Windows' captures of the same suites (CAPTURING.md §5), compared under Windows."""
+
+
 @functools.cache
-def computed(name: str) -> tuple[tuple[frozenset[str], Value], ...]:
+def load_on(name: str, platform: PlatformName = "mac") -> Suite:
+    """A suite with the values Excel computed on the platform: the Mac's, or Windows' capture."""
+    suite = load(name)
+    if platform == "mac":
+        return suite
+    lines = (WINDOWS / f"{name}.tsv").read_text(encoding="utf-8").splitlines()
+    fields = [line.split("\t") for line in lines if line and not line.startswith("#")]
+    assert [f[3] for f in fields] == [r.formula for r in suite.rows], name
+    rows = [
+        dataclasses.replace(r, expected=_expected(f[5], f[6]))
+        for r, f in zip(suite.rows, fields, strict=True)
+    ]
+    return dataclasses.replace(suite, rows=rows)
+
+
+def deviation(name: str, row: Row, on_mac: Row, platform: PlatformName) -> str | None:
+    """Why a row is listed as a known deviation on the platform, or None.
+
+    Under Windows a row keeps the Mac's reason (the package's deviation, a random draw, an
+    undocumented WEEKNUM type), and it must still differ where the Mac's must;
+    ``WINDOWS_DEVIATIONS`` replaces it for the rows Windows' own last bits decide.
+    """
+    if platform == "windows" and (name, row.case) in WINDOWS_DEVIATIONS:
+        return WINDOWS_DEVIATIONS[(name, row.case)]
+    return KNOWN_DEVIATIONS.get((name, row.case))
+
+
+@functools.cache
+def computed(name: str, platform: PlatformName = "mac") -> tuple[tuple[frozenset[str], Value], ...]:
     """Per row of a suite, the functions its formula calls that are not implemented, and its value.
 
     A suite is computed once a session; ``outcomes``, ``tools/coverage.py`` and the figures in
     ``QUIRKS.md`` all read this one result.
     """
     suite = load(name)
-    engine, s = run(suite)
+    engine, s = run(suite, platform)
     sheet = engine.sheets[s]
     return tuple(
         (
@@ -1082,15 +1124,21 @@ def computed(name: str) -> tuple[tuple[frozenset[str], Value], ...]:
 
 
 @functools.cache
-def outcomes(name: str) -> tuple[dict[str, int], dict[str, int], tuple[str, ...]]:
-    """A suite's rows by outcome, why rows were not evaluated, and the rows that differ."""
-    suite = load(name)
-    results = computed(name)
+def outcomes(
+    name: str, platform: PlatformName = "mac"
+) -> tuple[dict[str, int], dict[str, int], tuple[str, ...]]:
+    """A suite's rows by outcome, why rows were not evaluated, and the rows that differ, against
+    the values Excel computed on the platform."""
+    suite = load_on(name, platform)
+    mac = load(name)
+    results = computed(name, platform)
     counts = dict.fromkeys(("match", "ulps", "rel", "listed", "not evaluated"), 0)
     reasons: dict[str, int] = {}
     failures = []
     reference = _reference_platform()
-    for k, (row, (unsupported, got)) in enumerate(zip(suite.rows, results, strict=True), 1):
+    for k, (row, on_mac, (unsupported, got)) in enumerate(
+        zip(suite.rows, mac.rows, results, strict=True), 1
+    ):
         if not compared(name, row):
             continue
         if unsupported:
@@ -1106,7 +1154,7 @@ def outcomes(name: str) -> tuple[dict[str, int], dict[str, int], tuple[str, ...]
             outcome = "rel"
         else:
             outcome = "differs"
-        reason = KNOWN_DEVIATIONS.get((name, row.case))
+        reason = deviation(name, row, on_mac, platform)
         if reason in OTHER_PLATFORMS:
             if reference and outcome == "differs":
                 failures.append(
@@ -1260,7 +1308,8 @@ def test_every_listed_deviation_is_a_captured_row():
 
 
 def test_exemptions_are_listed_reasons():
-    assert (EXEMPT | MATH_LIBRARY | OTHER_PLATFORMS).issubset(KNOWN_DEVIATIONS.values())
+    listed = {*KNOWN_DEVIATIONS.values(), *WINDOWS_DEVIATIONS.values()}
+    assert (EXEMPT | MATH_LIBRARY | OTHER_PLATFORMS).issubset(listed)
 
 
 def test_every_suite_generates_its_captured_formulas():

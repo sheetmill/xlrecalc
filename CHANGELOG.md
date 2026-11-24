@@ -15,7 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   platform's en-US preset. `TEXT` passes both on to xlformat.
 - Excel for Windows (`platform="windows"`): `CHAR` and `CODE` in Windows-1252, text ordered and compared as Excel for
   Windows orders it (operators, criteria, sorting, lookups, `UNIQUE`), the names it knows (`ENCODEURL` and `FILTERXML`
-  without `_xlfn.` are `#NAME?`), and `ENCODEURL`, each from captures of Excel for Windows (CAPTURING.md §5).
+  without `_xlfn.` are `#NAME?`), and `ENCODEURL`, each from captures of Excel for Windows (CAPTURING.md §5). Every
+  capture suite is captured on Excel for Windows too and compared with the package under `"windows"` on every test
+  run; the one row past a tolerance there, a digit of `IMCOSH`'s text that the math library decides, is listed in
+  QUIRKS.md.
 
 ### Changed
 - Requires xlformat 0.8 or later (`platform` and `regional_settings` in `xlformat.text_function`).

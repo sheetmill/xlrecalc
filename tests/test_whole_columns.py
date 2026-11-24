@@ -5,8 +5,9 @@ of their cases make arrays of a million cells however they are computed, and tho
 each formula more than once. Every row is compared here instead, on the row it was captured on
 (several read their own row of a column through implicit intersection):
 
-- ``whole_columns`` in the default run, but for four rows over column AB, whose only value is in
-  its last row, so the array they make is the whole column (``slow``);
+- ``whole_columns`` in the default run, against Excel for Mac's capture and Excel for Windows'
+  (``windows/whole_columns``), but for four rows over column AB, whose only value is in its last
+  row, so the array they make is the whole column (``slow``);
 - ``dyn_whole_columns`` in the slow tier: ``SORT``, ``UNIQUE``, ``FILTER`` and ``TAKE`` of whole
   columns make or keep arrays of a million rows.
 """
@@ -16,7 +17,7 @@ from __future__ import annotations
 import pytest
 
 from tests.captures import Row, load
-from tests.test_captures import _input, formula_text, same
+from tests.test_captures import _input, formula_text, load_on, same
 from xlrecalc._engine import Engine
 from xlrecalc._formula._template import cell_axes
 from xlrecalc._quirks import Quirks
@@ -30,10 +31,10 @@ WHOLE_COLUMN_AB = (
 """The rows whose array is the whole of column AB: about 10 s together."""
 
 
-def _wrong(rows: dict[int, Row]) -> list[tuple[str, object, object]]:
+def _wrong(rows: dict[int, Row], platform: str = "mac") -> list[tuple[str, object, object]]:
     """Each row computed on its own captured row beside the suite's data; those Excel differs on."""
     suite = load("whole_columns")
-    engine = Engine(Quirks.EXCEL, today=suite.captured)
+    engine = Engine(Quirks.EXCEL, today=suite.captured, platform=platform)  # type: ignore[arg-type]
     s = engine.add_sheet("cases")
     for ref, value in suite.fixed.items():
         r, c = cell_axes(ref, 0, 0)
@@ -48,22 +49,24 @@ def _wrong(rows: dict[int, Row]) -> list[tuple[str, object, object]]:
     ]
 
 
-def _rows(column_ab: bool) -> dict[int, Row]:
-    rows = dict(enumerate(load("whole_columns").rows, 1))
+def _rows(column_ab: bool, platform: str = "mac") -> dict[int, Row]:
+    rows = dict(enumerate(load_on("whole_columns", platform).rows, 1))  # type: ignore[arg-type]
     return {k: r for k, r in rows.items() if (r.formula in WHOLE_COLUMN_AB) == column_ab}
 
 
-def test_every_row_but_column_ab_matches_excel() -> None:
-    rows = _rows(column_ab=False)
+@pytest.mark.parametrize("platform", ["mac", "windows"])
+def test_every_row_but_column_ab_matches_excel(platform: str) -> None:
+    rows = _rows(column_ab=False, platform=platform)
     assert len(rows) == 82
-    assert _wrong(rows) == []
+    assert _wrong(rows, platform) == []
 
 
 @pytest.mark.slow
-def test_the_rows_over_column_ab_match_excel() -> None:
-    rows = _rows(column_ab=True)
+@pytest.mark.parametrize("platform", ["mac", "windows"])
+def test_the_rows_over_column_ab_match_excel(platform: str) -> None:
+    rows = _rows(column_ab=True, platform=platform)
     assert len(rows) == len(WHOLE_COLUMN_AB)
-    assert _wrong(rows) == []
+    assert _wrong(rows, platform) == []
 
 
 def test_match_converts_one_value_given_as_its_lookup_array_to_a_number() -> None:

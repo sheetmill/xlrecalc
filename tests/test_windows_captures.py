@@ -125,50 +125,24 @@ def test_the_rows_are_the_generator_s_cases(path: Path) -> None:
     assert all(r[5] != "none" for r in rows)
 
 
-COMPARED = [
-    "clean_controls",
-    "codepage",
-    "collate_chars",
-    "collate_words",
-    "collate_functions",
-    "modern",
-    "encodeurl",
-]
-"""The Windows captures the package is compared with, under ``platform="windows"``: those whose
-platform-dependent behavior it implements for Excel for Windows."""
+COMPARED_ELSEWHERE = {
+    "mac_gaps": "a record of which names Excel knows, compared on neither platform",
+    "whole_columns": "tests/test_whole_columns.py, on both platforms",
+}
+"""The Windows captures this file does not compare with the package, and why."""
 
 
-@pytest.mark.parametrize("suite", COMPARED)
+@pytest.mark.parametrize(
+    "suite", [p.stem for p in CAPTURES if p.stem not in COMPARED_ELSEWHERE], ids=str
+)
 def test_the_package_on_windows_gives_every_value_the_capture_holds(suite: str) -> None:
-    """Each row of the Windows capture, computed on an engine for Excel for Windows: the same
-    value and type, bit for bit, as Excel for Windows saved."""
+    """Each row of the Windows capture, computed on an engine for Excel for Windows, classified
+    as ``tests/test_captures.py`` classifies the Mac's: Excel's value bit for bit or within the
+    function's declared tolerance, a listed deviation (the Mac's, or ``WINDOWS_DEVIATIONS``) that
+    must still differ where the Mac's must, an exempt row, or a function not computed."""
     pytest.importorskip("openpyxl")  # tests.test_captures reads the suites
-    from dataclasses import replace
+    from tests.test_captures import SUITES, outcomes
 
-    from tests.captures import _expected, load
-    from tests.test_captures import KNOWN_DEVIATIONS, run
-
-    lines = (WINDOWS / f"{suite}.tsv").read_text(encoding="utf-8").splitlines()
-    fields = [line.split("\t") for line in lines if line and not line.startswith("#")]
-    mac = load(suite)
-    # the rows are the generator's cases (inputs too): test_the_rows_are_the_generator_s_cases
-    assert [f[3] for f in fields] == [r.formula for r in mac.rows]
-    windows = replace(
-        mac,
-        rows=[
-            replace(r, expected=_expected(f[5], f[6]))
-            for r, f in zip(mac.rows, fields, strict=True)
-        ],
-    )
-    engine, s = run(windows, platform="windows")
-    wrong = []
-    for k, (row, on_mac) in enumerate(zip(windows.rows, mac.rows, strict=True)):
-        got = engine.get(s, k, 0)
-        same = type(got) is type(row.expected) and got == row.expected
-        # A row listed as a deviation on the Mac, where Excel for Windows gives the Mac's value,
-        # is the same deviation; it must still differ, as test_captures has it.
-        if (suite, row.case) in KNOWN_DEVIATIONS and repr(row.expected) == repr(on_mac.expected):
-            same = not same
-        if not same:
-            wrong.append((k + 1, row.formula, row.inputs, row.expected, got))
-    assert not wrong, wrong[:10]
+    assert suite in SUITES
+    _counts, _reasons, failures = outcomes(suite, "windows")
+    assert not failures, failures[:10]

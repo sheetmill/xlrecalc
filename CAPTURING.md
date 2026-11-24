@@ -375,7 +375,10 @@ what it requires (`requires`): the edition, Microsoft 365, since it decides whic
 has, and the first Windows build these captures were made with, 16.0.20527.0; the first job,
 `collate_words`, stated neither. `tests/test_windows_captures.py` writes each job again from its
 header's `job_id` and its manifest's `requires`, and requires the same manifest and inputs,
-checksum for checksum, and the generator's cases in order.
+checksum for checksum, and the generator's cases in order. It also computes each suite on an
+engine for Excel for Windows and classifies every row against the Windows capture as
+`tests/test_captures.py` does against the Mac's (`mac_gaps` is compared on neither platform, and
+`whole_columns` in `tests/test_whole_columns.py`, on both).
 
 | capture | rows | what it records |
 |---|---|---|

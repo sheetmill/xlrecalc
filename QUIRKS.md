@@ -248,6 +248,12 @@ not). An empty argument is `#N/A`.
   where the double below it is written `1i` (9 rows, 5 of them among the 63), another platform's last bit can round
   the text the other way: on Linux, `IMSEC("-2.5-1.5j")` gives `-0.364130793588459+...` where Excel gives
   `-0.36413079358846+...`. `tests/test_complex_boundary.py` derives the rows. They are listed on every platform.
+- Excel for Windows' math library: under `platform="windows"` every suite is compared with Excel for Windows' capture
+  (`windows/<suite>`) as with the Mac's. Its last digits differ from Excel for Mac's in 113 rows (`ATAN`, `ATAN2`,
+  `TAN`, `COT`, `ACOT`, `LOG`, `LOG10`, the t distribution, `GAMMA.DIST`, `CONFIDENCE.T`, `BESSELJ`, `BESSELY`, and
+  `BETA.INV` and `F.INV` near 1E-150), all within the functions' declared tolerances or among the rows the Mac lists
+  already, but one: `IMCOSH("3+4i")`, whose imaginary part Excel for Windows writes `-7.58155274274654` and Excel for
+  Mac, as here, `-7.58155274274655`. It is listed for Windows.
 - `VDB` from a fractional start, or late in a schedule, differs in its last bits on 75 of the 317 rows of `finance` that
   sweep fractional periods (5 to 1,131 units in the last place, Excel's rule otherwise reproduced): the book value carried
   period by period rounds differently from Excel's, and a straight-line amount computed once or a closed-form book value
