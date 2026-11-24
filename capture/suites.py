@@ -6,6 +6,7 @@ numbers stay stable.
 
 from __future__ import annotations
 
+import ast
 import itertools
 import math
 import random
@@ -3774,6 +3775,86 @@ def mac_gaps() -> list[Case]:
     ]
 
 
+# Names of capture/functions_list.py that function_names leaves out: each reaches outside the
+# workbook when computed, and a capture never computes such a function.
+NAMES_LEFT_OUT = {
+    "CALL": "loads a code library",
+    "REGISTER.ID": "loads a code library",
+    "RTD": "a real-time data server",
+    "WEBSERVICE": "the network",
+    "IMAGE": "fetches a URL",
+    "STOCKHISTORY": "a network data service",
+    "TRANSLATE": "a network service",
+    **dict.fromkeys(
+        (
+            "CUBEKPIMEMBER",
+            "CUBEMEMBER",
+            "CUBEMEMBERPROPERTY",
+            "CUBERANKEDMEMBER",
+            "CUBESET",
+            "CUBESETCOUNT",
+            "CUBEVALUE",
+        ),
+        "a data connection",
+    ),
+}
+# Calls for the names formula_bar did not call or Excel took no call of, and for the names Excel
+# may not know: both file forms.
+_NAME_CALLS = {
+    "AVERAGEIFS": ["AVERAGEIFS($Z$1:$Z$2,$Z$1:$Z$2,1)"],
+    "CELL": ['CELL("row",$Z$1)'],
+    "ENCODEURL": ['_xlfn.ENCODEURL("a b")', 'ENCODEURL("a b")'],
+    "EUROCONVERT": ['EUROCONVERT(1,"EUR","DEM")', '_xlfn.EUROCONVERT(1,"EUR","DEM")'],
+    "FILTERXML": ['_xlfn.FILTERXML("<a>1</a>","//a")', 'FILTERXML("<a>1</a>","//a")'],
+    "GETPIVOTDATA": ['GETPIVOTDATA("x",$Z$1)'],
+    "HYPERLINK": ['HYPERLINK("#function_names!A1")'],
+    "INFO": ['INFO("recalc")'],
+    "JIS": ['JIS("a")', '_xlfn.JIS("a")'],
+    "LET": ["_xlfn.LET(_xlpm.x,1,_xlpm.x)"],
+    "MAXIFS": ["_xlfn.MAXIFS($Z$1:$Z$2,$Z$1:$Z$2,1)"],
+    "MINIFS": ["_xlfn.MINIFS($Z$1:$Z$2,$Z$1:$Z$2,1)"],
+    "ODDFPRICE": ["ODDFPRICE(1,1,1,1,1,1,1,1)"],
+    "ODDFYIELD": ["ODDFYIELD(1,1,1,1,1,1,1,1)"],
+    "ODDLPRICE": ["ODDLPRICE(1,1,1,1,1,1,1)"],
+    "ODDLYIELD": ["ODDLYIELD(1,1,1,1,1,1,1)"],
+    "SUMIFS": ["SUMIFS($Z$1:$Z$2,$Z$1:$Z$2,1)"],
+}
+
+
+def _formula_bar_calls() -> dict[str, str]:
+    """Each function's first call that the formula_bar capture records Excel taking (file form)."""
+    root = Path(__file__).resolve().parents[1] / "tests/captures"
+    calls: dict[str, str] = {}
+    for name in ("formula_bar.tsv", "formula_bar_ranges.tsv"):
+        for line in (root / name).read_text(encoding="utf-8").split("\n"):
+            parts = line.split("\t")
+            if len(parts) != 3 or parts[0] != "function":
+                continue
+            typed, file = (ast.literal_eval(part) for part in parts[1:])
+            if file != "REJECTED":
+                calls.setdefault(typed[1 : typed.index("(")], file.replace("A1:A2", "$Z$1:$Z$2"))
+    return calls
+
+
+def function_names() -> list[Case]:
+    """Whether Excel knows each name of capture/functions_list.py, called in a form it takes.
+
+    Each call is the first the formula_bar capture records Excel taking (its file form), or one of
+    ``_NAME_CALLS``; a name Excel may not know is written with and without ``_xlfn.``. The cell is
+    TRUE when the call gives ``#NAME?``, FALSE otherwise. ``NAMES_LEFT_OUT`` are not called.
+    """
+    from capture.functions_list import FUNCTIONS
+
+    taken = _formula_bar_calls()
+    cases = []
+    for name in FUNCTIONS:
+        if name in NAMES_LEFT_OUT:
+            continue
+        for call in _NAME_CALLS.get(name) or [taken[name]]:
+            cases.append(Case(name.lower(), f"IFERROR(ERROR.TYPE({call})=5,FALSE)"))
+    return cases
+
+
 def _matrices() -> list[tuple[str, list[list[Input]]]]:
     """The matrices of ``matrix_family``: (tag, rows)."""
     rng = random.Random(20261109)
@@ -5009,4 +5090,5 @@ SUITES = {
     "xirr_method": Suite(xirr_method),
     "xirr_nan": Suite(xirr_nan),
     "xirr_sign_rules": Suite(xirr_sign_rules),
+    "function_names": Suite(function_names, fixed={"Z1": 1.0, "Z2": 2.0}),
 }
