@@ -191,6 +191,15 @@ values, which patches nothing. One run each, xlio 0.3.0 (the README states the 1
 | 100,000 | 300,003 | 1.54 s | 1.09 s | 1.98 s | 4.62 s | 1.35 s | 3.3 / 5.1 MB | 137 MB |
 | 1,000,000 | 3,000,003 | 17.71 s | 12.09 s | 20.68 s | 50.49 s | 14.05 s | 33.7 / 50.7 MB | 887 MB |
 
+At 1,000,000 rows again, xlrecalc 0.11.0 against 0.10.1 from PyPI (both on xlio 0.4.0 and xlformat
+0.8.0, Python 3.11.18), three rounds alternating, best of three (raw output in
+`release_0_11_0.jsonl`, with each run's physical footprint): 0.11.0 loads in 15.18 s, evaluates
+in 12.23 s, writes in 21.23 s, 48.64 s in all, writes again with nothing changed in 14.26 s, and
+peaks at 1,216 MB (`ru_maxrss`, as in the table; 1,149 MB footprint); 0.10.1 takes 48.13 s and
+peaks at 1,215 MB. `engine_bench.py 1000000 --xlsx` changes A1 and recomputes in 5.11 s (0.10.1:
+5.13 s). The two versions write the same bytes and compute the same values. The peak was 887 MB
+in the table above, on xlrecalc and xlio 0.3.0.
+
 The same runs with xlrecalc 0.2.0, whose reader and writer were then its own (raw output in
 `current_py311.jsonl`), below. Its write took about 7% longer than when the writer was first
 measured (18.9 s at 1M rows in alternating runs on the same machine; the writer's first
