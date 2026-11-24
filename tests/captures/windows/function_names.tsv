@@ -1,0 +1,826 @@
+# suite: function_names
+# generator: capture/suites.py:function_names, capture/job.py
+# method: the job beside this file (function_names.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "function_names.xlsx": {
+#      "bytes": 10824,
+#      "sha256": "33666245c9edbb1cb33b2940ae98d5027f247c9dfcba7f77bd94c827cc1807a9"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261124-003427-function-names",
+#    "manifest_sha256": "886253c5d367376d62faa965c9988461cf2a9174c8032cbed6d69273ff4868ca",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+function_names	abs	1	IFERROR(ERROR.TYPE(ABS(1))=5,FALSE)	()	b	False
+function_names	accrint	2	IFERROR(ERROR.TYPE(ACCRINT(1,1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	accrintm	3	IFERROR(ERROR.TYPE(ACCRINTM(1,1,1,1))=5,FALSE)	()	b	False
+function_names	acos	4	IFERROR(ERROR.TYPE(ACOS(1))=5,FALSE)	()	b	False
+function_names	acosh	5	IFERROR(ERROR.TYPE(ACOSH(1))=5,FALSE)	()	b	False
+function_names	acot	6	IFERROR(ERROR.TYPE(_xlfn.ACOT(1))=5,FALSE)	()	b	False
+function_names	acoth	7	IFERROR(ERROR.TYPE(_xlfn.ACOTH(1))=5,FALSE)	()	b	False
+function_names	address	8	IFERROR(ERROR.TYPE(ADDRESS(1,1))=5,FALSE)	()	b	False
+function_names	aggregate	9	IFERROR(ERROR.TYPE(_xlfn.AGGREGATE(1,1,1))=5,FALSE)	()	b	False
+function_names	amordegrc	10	IFERROR(ERROR.TYPE(AMORDEGRC(1,1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	amorlinc	11	IFERROR(ERROR.TYPE(AMORLINC(1,1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	and	12	IFERROR(ERROR.TYPE(AND(1))=5,FALSE)	()	b	False
+function_names	arabic	13	IFERROR(ERROR.TYPE(_xlfn.ARABIC(1))=5,FALSE)	()	b	False
+function_names	areas	14	IFERROR(ERROR.TYPE(AREAS($Z$1:$Z$2))=5,FALSE)	()	b	False
+function_names	arraytotext	15	IFERROR(ERROR.TYPE(_xlfn.ARRAYTOTEXT(1))=5,FALSE)	()	b	False
+function_names	asc	16	IFERROR(ERROR.TYPE(ASC(1))=5,FALSE)	()	b	False
+function_names	asin	17	IFERROR(ERROR.TYPE(ASIN(1))=5,FALSE)	()	b	False
+function_names	asinh	18	IFERROR(ERROR.TYPE(ASINH(1))=5,FALSE)	()	b	False
+function_names	atan	19	IFERROR(ERROR.TYPE(ATAN(1))=5,FALSE)	()	b	False
+function_names	atan2	20	IFERROR(ERROR.TYPE(ATAN2(1,1))=5,FALSE)	()	b	False
+function_names	atanh	21	IFERROR(ERROR.TYPE(ATANH(1))=5,FALSE)	()	b	False
+function_names	avedev	22	IFERROR(ERROR.TYPE(AVEDEV(1))=5,FALSE)	()	b	False
+function_names	average	23	IFERROR(ERROR.TYPE(AVERAGE(1))=5,FALSE)	()	b	False
+function_names	averagea	24	IFERROR(ERROR.TYPE(AVERAGEA(1))=5,FALSE)	()	b	False
+function_names	averageif	25	IFERROR(ERROR.TYPE(AVERAGEIF($Z$1:$Z$2,1))=5,FALSE)	()	b	False
+function_names	averageifs	26	IFERROR(ERROR.TYPE(AVERAGEIFS($Z$1:$Z$2,$Z$1:$Z$2,1))=5,FALSE)	()	b	False
+function_names	bahttext	27	IFERROR(ERROR.TYPE(BAHTTEXT(1))=5,FALSE)	()	b	False
+function_names	base	28	IFERROR(ERROR.TYPE(_xlfn.BASE(1,1))=5,FALSE)	()	b	False
+function_names	besseli	29	IFERROR(ERROR.TYPE(BESSELI(1,1))=5,FALSE)	()	b	False
+function_names	besselj	30	IFERROR(ERROR.TYPE(BESSELJ(1,1))=5,FALSE)	()	b	False
+function_names	besselk	31	IFERROR(ERROR.TYPE(BESSELK(1,1))=5,FALSE)	()	b	False
+function_names	bessely	32	IFERROR(ERROR.TYPE(BESSELY(1,1))=5,FALSE)	()	b	False
+function_names	beta.dist	33	IFERROR(ERROR.TYPE(_xlfn.BETA.DIST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	beta.inv	34	IFERROR(ERROR.TYPE(_xlfn.BETA.INV(1,1,1))=5,FALSE)	()	b	False
+function_names	betadist	35	IFERROR(ERROR.TYPE(BETADIST(1,1,1))=5,FALSE)	()	b	False
+function_names	betainv	36	IFERROR(ERROR.TYPE(BETAINV(1,1,1))=5,FALSE)	()	b	False
+function_names	bin2dec	37	IFERROR(ERROR.TYPE(BIN2DEC(1))=5,FALSE)	()	b	False
+function_names	bin2hex	38	IFERROR(ERROR.TYPE(BIN2HEX(1))=5,FALSE)	()	b	False
+function_names	bin2oct	39	IFERROR(ERROR.TYPE(BIN2OCT(1))=5,FALSE)	()	b	False
+function_names	binom.dist	40	IFERROR(ERROR.TYPE(_xlfn.BINOM.DIST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	binom.dist.range	41	IFERROR(ERROR.TYPE(_xlfn.BINOM.DIST.RANGE(1,1,1))=5,FALSE)	()	b	False
+function_names	binom.inv	42	IFERROR(ERROR.TYPE(_xlfn.BINOM.INV(1,1,1))=5,FALSE)	()	b	False
+function_names	binomdist	43	IFERROR(ERROR.TYPE(BINOMDIST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	bitand	44	IFERROR(ERROR.TYPE(_xlfn.BITAND(1,1))=5,FALSE)	()	b	False
+function_names	bitlshift	45	IFERROR(ERROR.TYPE(_xlfn.BITLSHIFT(1,1))=5,FALSE)	()	b	False
+function_names	bitor	46	IFERROR(ERROR.TYPE(_xlfn.BITOR(1,1))=5,FALSE)	()	b	False
+function_names	bitrshift	47	IFERROR(ERROR.TYPE(_xlfn.BITRSHIFT(1,1))=5,FALSE)	()	b	False
+function_names	bitxor	48	IFERROR(ERROR.TYPE(_xlfn.BITXOR(1,1))=5,FALSE)	()	b	False
+function_names	bycol	49	IFERROR(ERROR.TYPE(_xlfn.BYCOL(1))=5,FALSE)	()	b	False
+function_names	byrow	50	IFERROR(ERROR.TYPE(_xlfn.BYROW(1))=5,FALSE)	()	b	False
+function_names	ceiling	51	IFERROR(ERROR.TYPE(CEILING(1,1))=5,FALSE)	()	b	False
+function_names	ceiling.math	52	IFERROR(ERROR.TYPE(_xlfn.CEILING.MATH(1))=5,FALSE)	()	b	False
+function_names	ceiling.precise	53	IFERROR(ERROR.TYPE(_xlfn.CEILING.PRECISE(1))=5,FALSE)	()	b	False
+function_names	cell	54	IFERROR(ERROR.TYPE(CELL("row",$Z$1))=5,FALSE)	()	b	False
+function_names	char	55	IFERROR(ERROR.TYPE(CHAR(1))=5,FALSE)	()	b	False
+function_names	chidist	56	IFERROR(ERROR.TYPE(CHIDIST(1,1))=5,FALSE)	()	b	False
+function_names	chiinv	57	IFERROR(ERROR.TYPE(CHIINV(1,1))=5,FALSE)	()	b	False
+function_names	chisq.dist	58	IFERROR(ERROR.TYPE(_xlfn.CHISQ.DIST(1,1,1))=5,FALSE)	()	b	False
+function_names	chisq.dist.rt	59	IFERROR(ERROR.TYPE(_xlfn.CHISQ.DIST.RT(1,1))=5,FALSE)	()	b	False
+function_names	chisq.inv	60	IFERROR(ERROR.TYPE(_xlfn.CHISQ.INV(1,1))=5,FALSE)	()	b	False
+function_names	chisq.inv.rt	61	IFERROR(ERROR.TYPE(_xlfn.CHISQ.INV.RT(1,1))=5,FALSE)	()	b	False
+function_names	chisq.test	62	IFERROR(ERROR.TYPE(_xlfn.CHISQ.TEST(1,1))=5,FALSE)	()	b	False
+function_names	chitest	63	IFERROR(ERROR.TYPE(CHITEST(1,1))=5,FALSE)	()	b	False
+function_names	choose	64	IFERROR(ERROR.TYPE(CHOOSE(1,1))=5,FALSE)	()	b	False
+function_names	choosecols	65	IFERROR(ERROR.TYPE(_xlfn.CHOOSECOLS(1,1))=5,FALSE)	()	b	False
+function_names	chooserows	66	IFERROR(ERROR.TYPE(_xlfn.CHOOSEROWS(1,1))=5,FALSE)	()	b	False
+function_names	clean	67	IFERROR(ERROR.TYPE(CLEAN(1))=5,FALSE)	()	b	False
+function_names	code	68	IFERROR(ERROR.TYPE(CODE(1))=5,FALSE)	()	b	False
+function_names	column	69	IFERROR(ERROR.TYPE(COLUMN())=5,FALSE)	()	b	False
+function_names	columns	70	IFERROR(ERROR.TYPE(COLUMNS(1))=5,FALSE)	()	b	False
+function_names	combin	71	IFERROR(ERROR.TYPE(COMBIN(1,1))=5,FALSE)	()	b	False
+function_names	combina	72	IFERROR(ERROR.TYPE(_xlfn.COMBINA(1,1))=5,FALSE)	()	b	False
+function_names	complex	73	IFERROR(ERROR.TYPE(COMPLEX(1,1))=5,FALSE)	()	b	False
+function_names	concat	74	IFERROR(ERROR.TYPE(_xlfn.CONCAT(1))=5,FALSE)	()	b	False
+function_names	concatenate	75	IFERROR(ERROR.TYPE(CONCATENATE(1))=5,FALSE)	()	b	False
+function_names	confidence	76	IFERROR(ERROR.TYPE(CONFIDENCE(1,1,1))=5,FALSE)	()	b	False
+function_names	confidence.norm	77	IFERROR(ERROR.TYPE(_xlfn.CONFIDENCE.NORM(1,1,1))=5,FALSE)	()	b	False
+function_names	confidence.t	78	IFERROR(ERROR.TYPE(_xlfn.CONFIDENCE.T(1,1,1))=5,FALSE)	()	b	False
+function_names	convert	79	IFERROR(ERROR.TYPE(CONVERT(1,1,1))=5,FALSE)	()	b	False
+function_names	correl	80	IFERROR(ERROR.TYPE(CORREL(1,1))=5,FALSE)	()	b	False
+function_names	cos	81	IFERROR(ERROR.TYPE(COS(1))=5,FALSE)	()	b	False
+function_names	cosh	82	IFERROR(ERROR.TYPE(COSH(1))=5,FALSE)	()	b	False
+function_names	cot	83	IFERROR(ERROR.TYPE(_xlfn.COT(1))=5,FALSE)	()	b	False
+function_names	coth	84	IFERROR(ERROR.TYPE(_xlfn.COTH(1))=5,FALSE)	()	b	False
+function_names	count	85	IFERROR(ERROR.TYPE(COUNT(1))=5,FALSE)	()	b	False
+function_names	counta	86	IFERROR(ERROR.TYPE(COUNTA(1))=5,FALSE)	()	b	False
+function_names	countblank	87	IFERROR(ERROR.TYPE(COUNTBLANK($Z$1:$Z$2))=5,FALSE)	()	b	False
+function_names	countif	88	IFERROR(ERROR.TYPE(COUNTIF($Z$1:$Z$2,1))=5,FALSE)	()	b	False
+function_names	countifs	89	IFERROR(ERROR.TYPE(COUNTIFS($Z$1:$Z$2,1))=5,FALSE)	()	b	False
+function_names	coupdaybs	90	IFERROR(ERROR.TYPE(COUPDAYBS(1,1,1))=5,FALSE)	()	b	False
+function_names	coupdays	91	IFERROR(ERROR.TYPE(COUPDAYS(1,1,1))=5,FALSE)	()	b	False
+function_names	coupdaysnc	92	IFERROR(ERROR.TYPE(COUPDAYSNC(1,1,1))=5,FALSE)	()	b	False
+function_names	coupncd	93	IFERROR(ERROR.TYPE(COUPNCD(1,1,1))=5,FALSE)	()	b	False
+function_names	coupnum	94	IFERROR(ERROR.TYPE(COUPNUM(1,1,1))=5,FALSE)	()	b	False
+function_names	couppcd	95	IFERROR(ERROR.TYPE(COUPPCD(1,1,1))=5,FALSE)	()	b	False
+function_names	covar	96	IFERROR(ERROR.TYPE(COVAR(1,1))=5,FALSE)	()	b	False
+function_names	covariance.p	97	IFERROR(ERROR.TYPE(_xlfn.COVARIANCE.P(1,1))=5,FALSE)	()	b	False
+function_names	covariance.s	98	IFERROR(ERROR.TYPE(_xlfn.COVARIANCE.S(1,1))=5,FALSE)	()	b	False
+function_names	critbinom	99	IFERROR(ERROR.TYPE(CRITBINOM(1,1,1))=5,FALSE)	()	b	False
+function_names	csc	100	IFERROR(ERROR.TYPE(_xlfn.CSC(1))=5,FALSE)	()	b	False
+function_names	csch	101	IFERROR(ERROR.TYPE(_xlfn.CSCH(1))=5,FALSE)	()	b	False
+function_names	cumipmt	102	IFERROR(ERROR.TYPE(CUMIPMT(1,1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	cumprinc	103	IFERROR(ERROR.TYPE(CUMPRINC(1,1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	date	104	IFERROR(ERROR.TYPE(DATE(1,1,1))=5,FALSE)	()	b	False
+function_names	datedif	105	IFERROR(ERROR.TYPE(DATEDIF(1,1,1))=5,FALSE)	()	b	False
+function_names	datevalue	106	IFERROR(ERROR.TYPE(DATEVALUE(1))=5,FALSE)	()	b	False
+function_names	daverage	107	IFERROR(ERROR.TYPE(DAVERAGE($Z$1:$Z$2,1,1))=5,FALSE)	()	b	False
+function_names	day	108	IFERROR(ERROR.TYPE(DAY(1))=5,FALSE)	()	b	False
+function_names	days	109	IFERROR(ERROR.TYPE(_xlfn.DAYS(1,1))=5,FALSE)	()	b	False
+function_names	days360	110	IFERROR(ERROR.TYPE(DAYS360(1,1))=5,FALSE)	()	b	False
+function_names	db	111	IFERROR(ERROR.TYPE(DB(1,1,1,1))=5,FALSE)	()	b	False
+function_names	dbcs	112	IFERROR(ERROR.TYPE(DBCS(1))=5,FALSE)	()	b	False
+function_names	dcount	113	IFERROR(ERROR.TYPE(DCOUNT($Z$1:$Z$2,1,1))=5,FALSE)	()	b	False
+function_names	dcounta	114	IFERROR(ERROR.TYPE(DCOUNTA($Z$1:$Z$2,1,1))=5,FALSE)	()	b	False
+function_names	ddb	115	IFERROR(ERROR.TYPE(DDB(1,1,1,1))=5,FALSE)	()	b	False
+function_names	dec2bin	116	IFERROR(ERROR.TYPE(DEC2BIN(1))=5,FALSE)	()	b	False
+function_names	dec2hex	117	IFERROR(ERROR.TYPE(DEC2HEX(1))=5,FALSE)	()	b	False
+function_names	dec2oct	118	IFERROR(ERROR.TYPE(DEC2OCT(1))=5,FALSE)	()	b	False
+function_names	decimal	119	IFERROR(ERROR.TYPE(_xlfn.DECIMAL(1,1))=5,FALSE)	()	b	False
+function_names	degrees	120	IFERROR(ERROR.TYPE(DEGREES(1))=5,FALSE)	()	b	False
+function_names	delta	121	IFERROR(ERROR.TYPE(DELTA(1))=5,FALSE)	()	b	False
+function_names	devsq	122	IFERROR(ERROR.TYPE(DEVSQ(1))=5,FALSE)	()	b	False
+function_names	dget	123	IFERROR(ERROR.TYPE(DGET($Z$1:$Z$2,1,1))=5,FALSE)	()	b	False
+function_names	disc	124	IFERROR(ERROR.TYPE(DISC(1,1,1,1))=5,FALSE)	()	b	False
+function_names	dmax	125	IFERROR(ERROR.TYPE(DMAX($Z$1:$Z$2,1,1))=5,FALSE)	()	b	False
+function_names	dmin	126	IFERROR(ERROR.TYPE(DMIN($Z$1:$Z$2,1,1))=5,FALSE)	()	b	False
+function_names	dollar	127	IFERROR(ERROR.TYPE(DOLLAR(1))=5,FALSE)	()	b	False
+function_names	dollarde	128	IFERROR(ERROR.TYPE(DOLLARDE(1,1))=5,FALSE)	()	b	False
+function_names	dollarfr	129	IFERROR(ERROR.TYPE(DOLLARFR(1,1))=5,FALSE)	()	b	False
+function_names	dproduct	130	IFERROR(ERROR.TYPE(DPRODUCT($Z$1:$Z$2,1,1))=5,FALSE)	()	b	False
+function_names	drop	131	IFERROR(ERROR.TYPE(_xlfn.DROP(1,1))=5,FALSE)	()	b	False
+function_names	dstdev	132	IFERROR(ERROR.TYPE(DSTDEV($Z$1:$Z$2,1,1))=5,FALSE)	()	b	False
+function_names	dstdevp	133	IFERROR(ERROR.TYPE(DSTDEVP($Z$1:$Z$2,1,1))=5,FALSE)	()	b	False
+function_names	dsum	134	IFERROR(ERROR.TYPE(DSUM($Z$1:$Z$2,1,1))=5,FALSE)	()	b	False
+function_names	duration	135	IFERROR(ERROR.TYPE(DURATION(1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	dvar	136	IFERROR(ERROR.TYPE(DVAR($Z$1:$Z$2,1,1))=5,FALSE)	()	b	False
+function_names	dvarp	137	IFERROR(ERROR.TYPE(DVARP($Z$1:$Z$2,1,1))=5,FALSE)	()	b	False
+function_names	edate	138	IFERROR(ERROR.TYPE(EDATE(1,1))=5,FALSE)	()	b	False
+function_names	effect	139	IFERROR(ERROR.TYPE(EFFECT(1,1))=5,FALSE)	()	b	False
+function_names	encodeurl	140	IFERROR(ERROR.TYPE(_xlfn.ENCODEURL("a b"))=5,FALSE)	()	b	False
+function_names	encodeurl	141	IFERROR(ERROR.TYPE(ENCODEURL("a b"))=5,FALSE)	()	b	True
+function_names	eomonth	142	IFERROR(ERROR.TYPE(EOMONTH(1,1))=5,FALSE)	()	b	False
+function_names	erf	143	IFERROR(ERROR.TYPE(ERF(1))=5,FALSE)	()	b	False
+function_names	erf.precise	144	IFERROR(ERROR.TYPE(_xlfn.ERF.PRECISE(1))=5,FALSE)	()	b	False
+function_names	erfc	145	IFERROR(ERROR.TYPE(ERFC(1))=5,FALSE)	()	b	False
+function_names	erfc.precise	146	IFERROR(ERROR.TYPE(_xlfn.ERFC.PRECISE(1))=5,FALSE)	()	b	False
+function_names	error.type	147	IFERROR(ERROR.TYPE(ERROR.TYPE(1))=5,FALSE)	()	b	False
+function_names	euroconvert	148	IFERROR(ERROR.TYPE(EUROCONVERT(1,"EUR","DEM"))=5,FALSE)	()	b	True
+function_names	euroconvert	149	IFERROR(ERROR.TYPE(_xlfn.EUROCONVERT(1,"EUR","DEM"))=5,FALSE)	()	b	True
+function_names	even	150	IFERROR(ERROR.TYPE(EVEN(1))=5,FALSE)	()	b	False
+function_names	exact	151	IFERROR(ERROR.TYPE(EXACT(1,1))=5,FALSE)	()	b	False
+function_names	exp	152	IFERROR(ERROR.TYPE(EXP(1))=5,FALSE)	()	b	False
+function_names	expand	153	IFERROR(ERROR.TYPE(_xlfn.EXPAND(1,1))=5,FALSE)	()	b	False
+function_names	expon.dist	154	IFERROR(ERROR.TYPE(_xlfn.EXPON.DIST(1,1,1))=5,FALSE)	()	b	False
+function_names	expondist	155	IFERROR(ERROR.TYPE(EXPONDIST(1,1,1))=5,FALSE)	()	b	False
+function_names	f.dist	156	IFERROR(ERROR.TYPE(_xlfn.F.DIST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	f.dist.rt	157	IFERROR(ERROR.TYPE(_xlfn.F.DIST.RT(1,1,1))=5,FALSE)	()	b	False
+function_names	f.inv	158	IFERROR(ERROR.TYPE(_xlfn.F.INV(1,1,1))=5,FALSE)	()	b	False
+function_names	f.inv.rt	159	IFERROR(ERROR.TYPE(_xlfn.F.INV.RT(1,1,1))=5,FALSE)	()	b	False
+function_names	f.test	160	IFERROR(ERROR.TYPE(_xlfn.F.TEST(1,1))=5,FALSE)	()	b	False
+function_names	fact	161	IFERROR(ERROR.TYPE(FACT(1))=5,FALSE)	()	b	False
+function_names	factdouble	162	IFERROR(ERROR.TYPE(FACTDOUBLE(1))=5,FALSE)	()	b	False
+function_names	false	163	IFERROR(ERROR.TYPE(FALSE())=5,FALSE)	()	b	False
+function_names	fdist	164	IFERROR(ERROR.TYPE(FDIST(1,1,1))=5,FALSE)	()	b	False
+function_names	filter	165	IFERROR(ERROR.TYPE(_xlfn._xlws.FILTER(1,1))=5,FALSE)	()	b	False
+function_names	filterxml	166	IFERROR(ERROR.TYPE(_xlfn.FILTERXML("<a>1</a>","//a"))=5,FALSE)	()	b	False
+function_names	filterxml	167	IFERROR(ERROR.TYPE(FILTERXML("<a>1</a>","//a"))=5,FALSE)	()	b	True
+function_names	find	168	IFERROR(ERROR.TYPE(FIND(1,1))=5,FALSE)	()	b	False
+function_names	findb	169	IFERROR(ERROR.TYPE(FINDB(1,1))=5,FALSE)	()	b	False
+function_names	finv	170	IFERROR(ERROR.TYPE(FINV(1,1,1))=5,FALSE)	()	b	False
+function_names	fisher	171	IFERROR(ERROR.TYPE(FISHER(1))=5,FALSE)	()	b	False
+function_names	fisherinv	172	IFERROR(ERROR.TYPE(FISHERINV(1))=5,FALSE)	()	b	False
+function_names	fixed	173	IFERROR(ERROR.TYPE(FIXED(1))=5,FALSE)	()	b	False
+function_names	floor	174	IFERROR(ERROR.TYPE(FLOOR(1,1))=5,FALSE)	()	b	False
+function_names	floor.math	175	IFERROR(ERROR.TYPE(_xlfn.FLOOR.MATH(1))=5,FALSE)	()	b	False
+function_names	floor.precise	176	IFERROR(ERROR.TYPE(_xlfn.FLOOR.PRECISE(1))=5,FALSE)	()	b	False
+function_names	forecast	177	IFERROR(ERROR.TYPE(FORECAST(1,1,1))=5,FALSE)	()	b	False
+function_names	forecast.ets	178	IFERROR(ERROR.TYPE(_xlfn.FORECAST.ETS(1,1,1))=5,FALSE)	()	b	False
+function_names	forecast.ets.confint	179	IFERROR(ERROR.TYPE(_xlfn.FORECAST.ETS.CONFINT(1,1,1))=5,FALSE)	()	b	False
+function_names	forecast.ets.seasonality	180	IFERROR(ERROR.TYPE(_xlfn.FORECAST.ETS.SEASONALITY(1,1))=5,FALSE)	()	b	False
+function_names	forecast.ets.stat	181	IFERROR(ERROR.TYPE(_xlfn.FORECAST.ETS.STAT(1,1,1))=5,FALSE)	()	b	False
+function_names	forecast.linear	182	IFERROR(ERROR.TYPE(_xlfn.FORECAST.LINEAR(1,1,1))=5,FALSE)	()	b	False
+function_names	formulatext	183	IFERROR(ERROR.TYPE(_xlfn.FORMULATEXT($Z$1:$Z$2))=5,FALSE)	()	b	False
+function_names	frequency	184	IFERROR(ERROR.TYPE(FREQUENCY(1,1))=5,FALSE)	()	b	False
+function_names	ftest	185	IFERROR(ERROR.TYPE(FTEST(1,1))=5,FALSE)	()	b	False
+function_names	fv	186	IFERROR(ERROR.TYPE(FV(1,1,1))=5,FALSE)	()	b	False
+function_names	fvschedule	187	IFERROR(ERROR.TYPE(FVSCHEDULE(1,1))=5,FALSE)	()	b	False
+function_names	gamma	188	IFERROR(ERROR.TYPE(_xlfn.GAMMA(1))=5,FALSE)	()	b	False
+function_names	gamma.dist	189	IFERROR(ERROR.TYPE(_xlfn.GAMMA.DIST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	gamma.inv	190	IFERROR(ERROR.TYPE(_xlfn.GAMMA.INV(1,1,1))=5,FALSE)	()	b	False
+function_names	gammadist	191	IFERROR(ERROR.TYPE(GAMMADIST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	gammainv	192	IFERROR(ERROR.TYPE(GAMMAINV(1,1,1))=5,FALSE)	()	b	False
+function_names	gammaln	193	IFERROR(ERROR.TYPE(GAMMALN(1))=5,FALSE)	()	b	False
+function_names	gammaln.precise	194	IFERROR(ERROR.TYPE(_xlfn.GAMMALN.PRECISE(1))=5,FALSE)	()	b	False
+function_names	gauss	195	IFERROR(ERROR.TYPE(_xlfn.GAUSS(1))=5,FALSE)	()	b	False
+function_names	gcd	196	IFERROR(ERROR.TYPE(GCD(1))=5,FALSE)	()	b	False
+function_names	geomean	197	IFERROR(ERROR.TYPE(GEOMEAN(1))=5,FALSE)	()	b	False
+function_names	gestep	198	IFERROR(ERROR.TYPE(GESTEP(1))=5,FALSE)	()	b	False
+function_names	getpivotdata	199	IFERROR(ERROR.TYPE(GETPIVOTDATA("x",$Z$1))=5,FALSE)	()	b	False
+function_names	groupby	200	IFERROR(ERROR.TYPE(_xlfn.GROUPBY(1,1,1))=5,FALSE)	()	b	False
+function_names	growth	201	IFERROR(ERROR.TYPE(GROWTH(1))=5,FALSE)	()	b	False
+function_names	harmean	202	IFERROR(ERROR.TYPE(HARMEAN(1))=5,FALSE)	()	b	False
+function_names	hex2bin	203	IFERROR(ERROR.TYPE(HEX2BIN(1))=5,FALSE)	()	b	False
+function_names	hex2dec	204	IFERROR(ERROR.TYPE(HEX2DEC(1))=5,FALSE)	()	b	False
+function_names	hex2oct	205	IFERROR(ERROR.TYPE(HEX2OCT(1))=5,FALSE)	()	b	False
+function_names	hlookup	206	IFERROR(ERROR.TYPE(HLOOKUP(1,1,1))=5,FALSE)	()	b	False
+function_names	hour	207	IFERROR(ERROR.TYPE(HOUR(1))=5,FALSE)	()	b	False
+function_names	hstack	208	IFERROR(ERROR.TYPE(_xlfn.HSTACK(1))=5,FALSE)	()	b	False
+function_names	hyperlink	209	IFERROR(ERROR.TYPE(HYPERLINK("#function_names!A1"))=5,FALSE)	()	b	False
+function_names	hypgeom.dist	210	IFERROR(ERROR.TYPE(_xlfn.HYPGEOM.DIST(1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	hypgeomdist	211	IFERROR(ERROR.TYPE(HYPGEOMDIST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	if	212	IFERROR(ERROR.TYPE(IF(1,1))=5,FALSE)	()	b	False
+function_names	iferror	213	IFERROR(ERROR.TYPE(IFERROR(1,1))=5,FALSE)	()	b	False
+function_names	ifna	214	IFERROR(ERROR.TYPE(_xlfn.IFNA(1,1))=5,FALSE)	()	b	False
+function_names	ifs	215	IFERROR(ERROR.TYPE(_xlfn.IFS(1,1))=5,FALSE)	()	b	False
+function_names	imabs	216	IFERROR(ERROR.TYPE(IMABS(1))=5,FALSE)	()	b	False
+function_names	imaginary	217	IFERROR(ERROR.TYPE(IMAGINARY(1))=5,FALSE)	()	b	False
+function_names	imargument	218	IFERROR(ERROR.TYPE(IMARGUMENT(1))=5,FALSE)	()	b	False
+function_names	imconjugate	219	IFERROR(ERROR.TYPE(IMCONJUGATE(1))=5,FALSE)	()	b	False
+function_names	imcos	220	IFERROR(ERROR.TYPE(IMCOS(1))=5,FALSE)	()	b	False
+function_names	imcosh	221	IFERROR(ERROR.TYPE(_xlfn.IMCOSH(1))=5,FALSE)	()	b	False
+function_names	imcot	222	IFERROR(ERROR.TYPE(_xlfn.IMCOT(1))=5,FALSE)	()	b	False
+function_names	imcsc	223	IFERROR(ERROR.TYPE(_xlfn.IMCSC(1))=5,FALSE)	()	b	False
+function_names	imcsch	224	IFERROR(ERROR.TYPE(_xlfn.IMCSCH(1))=5,FALSE)	()	b	False
+function_names	imdiv	225	IFERROR(ERROR.TYPE(IMDIV(1,1))=5,FALSE)	()	b	False
+function_names	imexp	226	IFERROR(ERROR.TYPE(IMEXP(1))=5,FALSE)	()	b	False
+function_names	imln	227	IFERROR(ERROR.TYPE(IMLN(1))=5,FALSE)	()	b	False
+function_names	imlog10	228	IFERROR(ERROR.TYPE(IMLOG10(1))=5,FALSE)	()	b	False
+function_names	imlog2	229	IFERROR(ERROR.TYPE(IMLOG2(1))=5,FALSE)	()	b	False
+function_names	impower	230	IFERROR(ERROR.TYPE(IMPOWER(1,1))=5,FALSE)	()	b	False
+function_names	improduct	231	IFERROR(ERROR.TYPE(IMPRODUCT(1))=5,FALSE)	()	b	False
+function_names	imreal	232	IFERROR(ERROR.TYPE(IMREAL(1))=5,FALSE)	()	b	False
+function_names	imsec	233	IFERROR(ERROR.TYPE(_xlfn.IMSEC(1))=5,FALSE)	()	b	False
+function_names	imsech	234	IFERROR(ERROR.TYPE(_xlfn.IMSECH(1))=5,FALSE)	()	b	False
+function_names	imsin	235	IFERROR(ERROR.TYPE(IMSIN(1))=5,FALSE)	()	b	False
+function_names	imsinh	236	IFERROR(ERROR.TYPE(_xlfn.IMSINH(1))=5,FALSE)	()	b	False
+function_names	imsqrt	237	IFERROR(ERROR.TYPE(IMSQRT(1))=5,FALSE)	()	b	False
+function_names	imsub	238	IFERROR(ERROR.TYPE(IMSUB(1,1))=5,FALSE)	()	b	False
+function_names	imsum	239	IFERROR(ERROR.TYPE(IMSUM(1))=5,FALSE)	()	b	False
+function_names	imtan	240	IFERROR(ERROR.TYPE(_xlfn.IMTAN(1))=5,FALSE)	()	b	False
+function_names	index	241	IFERROR(ERROR.TYPE(INDEX(1,1))=5,FALSE)	()	b	False
+function_names	indirect	242	IFERROR(ERROR.TYPE(INDIRECT(1))=5,FALSE)	()	b	False
+function_names	info	243	IFERROR(ERROR.TYPE(INFO("recalc"))=5,FALSE)	()	b	False
+function_names	int	244	IFERROR(ERROR.TYPE(INT(1))=5,FALSE)	()	b	False
+function_names	intercept	245	IFERROR(ERROR.TYPE(INTERCEPT(1,1))=5,FALSE)	()	b	False
+function_names	intrate	246	IFERROR(ERROR.TYPE(INTRATE(1,1,1,1))=5,FALSE)	()	b	False
+function_names	ipmt	247	IFERROR(ERROR.TYPE(IPMT(1,1,1,1))=5,FALSE)	()	b	False
+function_names	irr	248	IFERROR(ERROR.TYPE(IRR(1))=5,FALSE)	()	b	False
+function_names	isblank	249	IFERROR(ERROR.TYPE(ISBLANK(1))=5,FALSE)	()	b	False
+function_names	iserr	250	IFERROR(ERROR.TYPE(ISERR(1))=5,FALSE)	()	b	False
+function_names	iserror	251	IFERROR(ERROR.TYPE(ISERROR(1))=5,FALSE)	()	b	False
+function_names	iseven	252	IFERROR(ERROR.TYPE(ISEVEN(1))=5,FALSE)	()	b	False
+function_names	isformula	253	IFERROR(ERROR.TYPE(_xlfn.ISFORMULA($Z$1:$Z$2))=5,FALSE)	()	b	False
+function_names	islogical	254	IFERROR(ERROR.TYPE(ISLOGICAL(1))=5,FALSE)	()	b	False
+function_names	isna	255	IFERROR(ERROR.TYPE(ISNA(1))=5,FALSE)	()	b	False
+function_names	isnontext	256	IFERROR(ERROR.TYPE(ISNONTEXT(1))=5,FALSE)	()	b	False
+function_names	isnumber	257	IFERROR(ERROR.TYPE(ISNUMBER(1))=5,FALSE)	()	b	False
+function_names	iso.ceiling	258	IFERROR(ERROR.TYPE(ISO.CEILING(1))=5,FALSE)	()	b	False
+function_names	isodd	259	IFERROR(ERROR.TYPE(ISODD(1))=5,FALSE)	()	b	False
+function_names	isomitted	260	IFERROR(ERROR.TYPE(_xlfn.ISOMITTED(1))=5,FALSE)	()	b	False
+function_names	isoweeknum	261	IFERROR(ERROR.TYPE(_xlfn.ISOWEEKNUM(1))=5,FALSE)	()	b	False
+function_names	ispmt	262	IFERROR(ERROR.TYPE(ISPMT(1,1,1,1))=5,FALSE)	()	b	False
+function_names	isref	263	IFERROR(ERROR.TYPE(ISREF(1))=5,FALSE)	()	b	False
+function_names	istext	264	IFERROR(ERROR.TYPE(ISTEXT(1))=5,FALSE)	()	b	False
+function_names	jis	265	IFERROR(ERROR.TYPE(JIS("a"))=5,FALSE)	()	b	True
+function_names	jis	266	IFERROR(ERROR.TYPE(_xlfn.JIS("a"))=5,FALSE)	()	b	True
+function_names	kurt	267	IFERROR(ERROR.TYPE(KURT(1))=5,FALSE)	()	b	False
+function_names	lambda	268	IFERROR(ERROR.TYPE(_xlfn.LAMBDA(1))=5,FALSE)	()	b	False
+function_names	large	269	IFERROR(ERROR.TYPE(LARGE(1,1))=5,FALSE)	()	b	False
+function_names	lcm	270	IFERROR(ERROR.TYPE(LCM(1))=5,FALSE)	()	b	False
+function_names	left	271	IFERROR(ERROR.TYPE(LEFT(1))=5,FALSE)	()	b	False
+function_names	leftb	272	IFERROR(ERROR.TYPE(LEFTB(1))=5,FALSE)	()	b	False
+function_names	len	273	IFERROR(ERROR.TYPE(LEN(1))=5,FALSE)	()	b	False
+function_names	lenb	274	IFERROR(ERROR.TYPE(LENB(1))=5,FALSE)	()	b	False
+function_names	let	275	IFERROR(ERROR.TYPE(_xlfn.LET(_xlpm.x,1,_xlpm.x))=5,FALSE)	()	b	False
+function_names	linest	276	IFERROR(ERROR.TYPE(LINEST(1))=5,FALSE)	()	b	False
+function_names	ln	277	IFERROR(ERROR.TYPE(LN(1))=5,FALSE)	()	b	False
+function_names	log	278	IFERROR(ERROR.TYPE(LOG(1))=5,FALSE)	()	b	False
+function_names	log10	279	IFERROR(ERROR.TYPE(LOG10(1))=5,FALSE)	()	b	False
+function_names	logest	280	IFERROR(ERROR.TYPE(LOGEST(1))=5,FALSE)	()	b	False
+function_names	loginv	281	IFERROR(ERROR.TYPE(LOGINV(1,1,1))=5,FALSE)	()	b	False
+function_names	lognorm.dist	282	IFERROR(ERROR.TYPE(_xlfn.LOGNORM.DIST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	lognorm.inv	283	IFERROR(ERROR.TYPE(_xlfn.LOGNORM.INV(1,1,1))=5,FALSE)	()	b	False
+function_names	lognormdist	284	IFERROR(ERROR.TYPE(LOGNORMDIST(1,1,1))=5,FALSE)	()	b	False
+function_names	lookup	285	IFERROR(ERROR.TYPE(LOOKUP(1,1))=5,FALSE)	()	b	False
+function_names	lower	286	IFERROR(ERROR.TYPE(LOWER(1))=5,FALSE)	()	b	False
+function_names	makearray	287	IFERROR(ERROR.TYPE(_xlfn.MAKEARRAY(1,1,1))=5,FALSE)	()	b	False
+function_names	map	288	IFERROR(ERROR.TYPE(_xlfn.MAP(1,1))=5,FALSE)	()	b	False
+function_names	match	289	IFERROR(ERROR.TYPE(MATCH(1,1))=5,FALSE)	()	b	False
+function_names	max	290	IFERROR(ERROR.TYPE(MAX(1))=5,FALSE)	()	b	False
+function_names	maxa	291	IFERROR(ERROR.TYPE(MAXA(1))=5,FALSE)	()	b	False
+function_names	maxifs	292	IFERROR(ERROR.TYPE(_xlfn.MAXIFS($Z$1:$Z$2,$Z$1:$Z$2,1))=5,FALSE)	()	b	False
+function_names	mdeterm	293	IFERROR(ERROR.TYPE(MDETERM(1))=5,FALSE)	()	b	False
+function_names	mduration	294	IFERROR(ERROR.TYPE(MDURATION(1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	median	295	IFERROR(ERROR.TYPE(MEDIAN(1))=5,FALSE)	()	b	False
+function_names	mid	296	IFERROR(ERROR.TYPE(MID(1,1,1))=5,FALSE)	()	b	False
+function_names	midb	297	IFERROR(ERROR.TYPE(MIDB(1,1,1))=5,FALSE)	()	b	False
+function_names	min	298	IFERROR(ERROR.TYPE(MIN(1))=5,FALSE)	()	b	False
+function_names	mina	299	IFERROR(ERROR.TYPE(MINA(1))=5,FALSE)	()	b	False
+function_names	minifs	300	IFERROR(ERROR.TYPE(_xlfn.MINIFS($Z$1:$Z$2,$Z$1:$Z$2,1))=5,FALSE)	()	b	False
+function_names	minute	301	IFERROR(ERROR.TYPE(MINUTE(1))=5,FALSE)	()	b	False
+function_names	minverse	302	IFERROR(ERROR.TYPE(MINVERSE(1))=5,FALSE)	()	b	False
+function_names	mirr	303	IFERROR(ERROR.TYPE(MIRR(1,1,1))=5,FALSE)	()	b	False
+function_names	mmult	304	IFERROR(ERROR.TYPE(MMULT(1,1))=5,FALSE)	()	b	False
+function_names	mod	305	IFERROR(ERROR.TYPE(MOD(1,1))=5,FALSE)	()	b	False
+function_names	mode	306	IFERROR(ERROR.TYPE(MODE(1))=5,FALSE)	()	b	False
+function_names	mode.mult	307	IFERROR(ERROR.TYPE(_xlfn.MODE.MULT(1))=5,FALSE)	()	b	False
+function_names	mode.sngl	308	IFERROR(ERROR.TYPE(_xlfn.MODE.SNGL(1))=5,FALSE)	()	b	False
+function_names	month	309	IFERROR(ERROR.TYPE(MONTH(1))=5,FALSE)	()	b	False
+function_names	mround	310	IFERROR(ERROR.TYPE(MROUND(1,1))=5,FALSE)	()	b	False
+function_names	multinomial	311	IFERROR(ERROR.TYPE(MULTINOMIAL(1))=5,FALSE)	()	b	False
+function_names	munit	312	IFERROR(ERROR.TYPE(_xlfn.MUNIT(1))=5,FALSE)	()	b	False
+function_names	n	313	IFERROR(ERROR.TYPE(N(1))=5,FALSE)	()	b	False
+function_names	na	314	IFERROR(ERROR.TYPE(NA())=5,FALSE)	()	b	False
+function_names	negbinom.dist	315	IFERROR(ERROR.TYPE(_xlfn.NEGBINOM.DIST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	negbinomdist	316	IFERROR(ERROR.TYPE(NEGBINOMDIST(1,1,1))=5,FALSE)	()	b	False
+function_names	networkdays	317	IFERROR(ERROR.TYPE(NETWORKDAYS(1,1))=5,FALSE)	()	b	False
+function_names	networkdays.intl	318	IFERROR(ERROR.TYPE(NETWORKDAYS.INTL(1,1))=5,FALSE)	()	b	False
+function_names	nominal	319	IFERROR(ERROR.TYPE(NOMINAL(1,1))=5,FALSE)	()	b	False
+function_names	norm.dist	320	IFERROR(ERROR.TYPE(_xlfn.NORM.DIST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	norm.inv	321	IFERROR(ERROR.TYPE(_xlfn.NORM.INV(1,1,1))=5,FALSE)	()	b	False
+function_names	norm.s.dist	322	IFERROR(ERROR.TYPE(_xlfn.NORM.S.DIST(1,1))=5,FALSE)	()	b	False
+function_names	norm.s.inv	323	IFERROR(ERROR.TYPE(_xlfn.NORM.S.INV(1))=5,FALSE)	()	b	False
+function_names	normdist	324	IFERROR(ERROR.TYPE(NORMDIST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	norminv	325	IFERROR(ERROR.TYPE(NORMINV(1,1,1))=5,FALSE)	()	b	False
+function_names	normsdist	326	IFERROR(ERROR.TYPE(NORMSDIST(1))=5,FALSE)	()	b	False
+function_names	normsinv	327	IFERROR(ERROR.TYPE(NORMSINV(1))=5,FALSE)	()	b	False
+function_names	not	328	IFERROR(ERROR.TYPE(NOT(1))=5,FALSE)	()	b	False
+function_names	now	329	IFERROR(ERROR.TYPE(NOW())=5,FALSE)	()	b	False
+function_names	nper	330	IFERROR(ERROR.TYPE(NPER(1,1,1))=5,FALSE)	()	b	False
+function_names	npv	331	IFERROR(ERROR.TYPE(NPV(1,1))=5,FALSE)	()	b	False
+function_names	numbervalue	332	IFERROR(ERROR.TYPE(_xlfn.NUMBERVALUE(1))=5,FALSE)	()	b	False
+function_names	oct2bin	333	IFERROR(ERROR.TYPE(OCT2BIN(1))=5,FALSE)	()	b	False
+function_names	oct2dec	334	IFERROR(ERROR.TYPE(OCT2DEC(1))=5,FALSE)	()	b	False
+function_names	oct2hex	335	IFERROR(ERROR.TYPE(OCT2HEX(1))=5,FALSE)	()	b	False
+function_names	odd	336	IFERROR(ERROR.TYPE(ODD(1))=5,FALSE)	()	b	False
+function_names	oddfprice	337	IFERROR(ERROR.TYPE(ODDFPRICE(1,1,1,1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	oddfyield	338	IFERROR(ERROR.TYPE(ODDFYIELD(1,1,1,1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	oddlprice	339	IFERROR(ERROR.TYPE(ODDLPRICE(1,1,1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	oddlyield	340	IFERROR(ERROR.TYPE(ODDLYIELD(1,1,1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	offset	341	IFERROR(ERROR.TYPE(OFFSET($Z$1:$Z$2,1,1))=5,FALSE)	()	b	False
+function_names	or	342	IFERROR(ERROR.TYPE(OR(1))=5,FALSE)	()	b	False
+function_names	pduration	343	IFERROR(ERROR.TYPE(_xlfn.PDURATION(1,1,1))=5,FALSE)	()	b	False
+function_names	pearson	344	IFERROR(ERROR.TYPE(PEARSON(1,1))=5,FALSE)	()	b	False
+function_names	percentile	345	IFERROR(ERROR.TYPE(PERCENTILE(1,1))=5,FALSE)	()	b	False
+function_names	percentile.exc	346	IFERROR(ERROR.TYPE(_xlfn.PERCENTILE.EXC(1,1))=5,FALSE)	()	b	False
+function_names	percentile.inc	347	IFERROR(ERROR.TYPE(_xlfn.PERCENTILE.INC(1,1))=5,FALSE)	()	b	False
+function_names	percentof	348	IFERROR(ERROR.TYPE(_xlfn.PERCENTOF(1,1))=5,FALSE)	()	b	False
+function_names	percentrank	349	IFERROR(ERROR.TYPE(PERCENTRANK(1,1))=5,FALSE)	()	b	False
+function_names	percentrank.exc	350	IFERROR(ERROR.TYPE(_xlfn.PERCENTRANK.EXC(1,1))=5,FALSE)	()	b	False
+function_names	percentrank.inc	351	IFERROR(ERROR.TYPE(_xlfn.PERCENTRANK.INC(1,1))=5,FALSE)	()	b	False
+function_names	permut	352	IFERROR(ERROR.TYPE(PERMUT(1,1))=5,FALSE)	()	b	False
+function_names	permutationa	353	IFERROR(ERROR.TYPE(_xlfn.PERMUTATIONA(1,1))=5,FALSE)	()	b	False
+function_names	phi	354	IFERROR(ERROR.TYPE(_xlfn.PHI(1))=5,FALSE)	()	b	False
+function_names	phonetic	355	IFERROR(ERROR.TYPE(PHONETIC($Z$1:$Z$2))=5,FALSE)	()	b	False
+function_names	pi	356	IFERROR(ERROR.TYPE(PI())=5,FALSE)	()	b	False
+function_names	pivotby	357	IFERROR(ERROR.TYPE(_xlfn.PIVOTBY(1,1,1,1))=5,FALSE)	()	b	False
+function_names	pmt	358	IFERROR(ERROR.TYPE(PMT(1,1,1))=5,FALSE)	()	b	False
+function_names	poisson	359	IFERROR(ERROR.TYPE(POISSON(1,1,1))=5,FALSE)	()	b	False
+function_names	poisson.dist	360	IFERROR(ERROR.TYPE(_xlfn.POISSON.DIST(1,1,1))=5,FALSE)	()	b	False
+function_names	power	361	IFERROR(ERROR.TYPE(POWER(1,1))=5,FALSE)	()	b	False
+function_names	ppmt	362	IFERROR(ERROR.TYPE(PPMT(1,1,1,1))=5,FALSE)	()	b	False
+function_names	price	363	IFERROR(ERROR.TYPE(PRICE(1,1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	pricedisc	364	IFERROR(ERROR.TYPE(PRICEDISC(1,1,1,1))=5,FALSE)	()	b	False
+function_names	pricemat	365	IFERROR(ERROR.TYPE(PRICEMAT(1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	prob	366	IFERROR(ERROR.TYPE(PROB(1,1,1))=5,FALSE)	()	b	False
+function_names	product	367	IFERROR(ERROR.TYPE(PRODUCT(1))=5,FALSE)	()	b	False
+function_names	proper	368	IFERROR(ERROR.TYPE(PROPER(1))=5,FALSE)	()	b	False
+function_names	pv	369	IFERROR(ERROR.TYPE(PV(1,1,1))=5,FALSE)	()	b	False
+function_names	quartile	370	IFERROR(ERROR.TYPE(QUARTILE(1,1))=5,FALSE)	()	b	False
+function_names	quartile.exc	371	IFERROR(ERROR.TYPE(_xlfn.QUARTILE.EXC(1,1))=5,FALSE)	()	b	False
+function_names	quartile.inc	372	IFERROR(ERROR.TYPE(_xlfn.QUARTILE.INC(1,1))=5,FALSE)	()	b	False
+function_names	quotient	373	IFERROR(ERROR.TYPE(QUOTIENT(1,1))=5,FALSE)	()	b	False
+function_names	radians	374	IFERROR(ERROR.TYPE(RADIANS(1))=5,FALSE)	()	b	False
+function_names	rand	375	IFERROR(ERROR.TYPE(RAND())=5,FALSE)	()	b	False
+function_names	randarray	376	IFERROR(ERROR.TYPE(_xlfn.RANDARRAY())=5,FALSE)	()	b	False
+function_names	randbetween	377	IFERROR(ERROR.TYPE(RANDBETWEEN(1,1))=5,FALSE)	()	b	False
+function_names	rank	378	IFERROR(ERROR.TYPE(RANK(1,$Z$1:$Z$2))=5,FALSE)	()	b	False
+function_names	rank.avg	379	IFERROR(ERROR.TYPE(_xlfn.RANK.AVG(1,$Z$1:$Z$2))=5,FALSE)	()	b	False
+function_names	rank.eq	380	IFERROR(ERROR.TYPE(_xlfn.RANK.EQ(1,$Z$1:$Z$2))=5,FALSE)	()	b	False
+function_names	rate	381	IFERROR(ERROR.TYPE(RATE(1,1,1))=5,FALSE)	()	b	False
+function_names	received	382	IFERROR(ERROR.TYPE(RECEIVED(1,1,1,1))=5,FALSE)	()	b	False
+function_names	reduce	383	IFERROR(ERROR.TYPE(_xlfn.REDUCE(1,1,1))=5,FALSE)	()	b	False
+function_names	regexextract	384	IFERROR(ERROR.TYPE(_xlfn.REGEXEXTRACT(1,1))=5,FALSE)	()	b	False
+function_names	regexreplace	385	IFERROR(ERROR.TYPE(_xlfn.REGEXREPLACE(1,1,1))=5,FALSE)	()	b	False
+function_names	regextest	386	IFERROR(ERROR.TYPE(_xlfn.REGEXTEST(1,1))=5,FALSE)	()	b	False
+function_names	replace	387	IFERROR(ERROR.TYPE(REPLACE(1,1,1,1))=5,FALSE)	()	b	False
+function_names	replaceb	388	IFERROR(ERROR.TYPE(REPLACEB(1,1,1,1))=5,FALSE)	()	b	False
+function_names	rept	389	IFERROR(ERROR.TYPE(REPT(1,1))=5,FALSE)	()	b	False
+function_names	right	390	IFERROR(ERROR.TYPE(RIGHT(1))=5,FALSE)	()	b	False
+function_names	rightb	391	IFERROR(ERROR.TYPE(RIGHTB(1))=5,FALSE)	()	b	False
+function_names	roman	392	IFERROR(ERROR.TYPE(ROMAN(1))=5,FALSE)	()	b	False
+function_names	round	393	IFERROR(ERROR.TYPE(ROUND(1,1))=5,FALSE)	()	b	False
+function_names	rounddown	394	IFERROR(ERROR.TYPE(ROUNDDOWN(1,1))=5,FALSE)	()	b	False
+function_names	roundup	395	IFERROR(ERROR.TYPE(ROUNDUP(1,1))=5,FALSE)	()	b	False
+function_names	row	396	IFERROR(ERROR.TYPE(ROW())=5,FALSE)	()	b	False
+function_names	rows	397	IFERROR(ERROR.TYPE(ROWS(1))=5,FALSE)	()	b	False
+function_names	rri	398	IFERROR(ERROR.TYPE(_xlfn.RRI(1,1,1))=5,FALSE)	()	b	False
+function_names	rsq	399	IFERROR(ERROR.TYPE(RSQ(1,1))=5,FALSE)	()	b	False
+function_names	scan	400	IFERROR(ERROR.TYPE(_xlfn.SCAN(1,1,1))=5,FALSE)	()	b	False
+function_names	search	401	IFERROR(ERROR.TYPE(SEARCH(1,1))=5,FALSE)	()	b	False
+function_names	searchb	402	IFERROR(ERROR.TYPE(SEARCHB(1,1))=5,FALSE)	()	b	False
+function_names	sec	403	IFERROR(ERROR.TYPE(_xlfn.SEC(1))=5,FALSE)	()	b	False
+function_names	sech	404	IFERROR(ERROR.TYPE(_xlfn.SECH(1))=5,FALSE)	()	b	False
+function_names	second	405	IFERROR(ERROR.TYPE(SECOND(1))=5,FALSE)	()	b	False
+function_names	sequence	406	IFERROR(ERROR.TYPE(_xlfn.SEQUENCE(1))=5,FALSE)	()	b	False
+function_names	seriessum	407	IFERROR(ERROR.TYPE(SERIESSUM(1,1,1,1))=5,FALSE)	()	b	False
+function_names	sheet	408	IFERROR(ERROR.TYPE(_xlfn.SHEET())=5,FALSE)	()	b	False
+function_names	sheets	409	IFERROR(ERROR.TYPE(_xlfn.SHEETS())=5,FALSE)	()	b	False
+function_names	sign	410	IFERROR(ERROR.TYPE(SIGN(1))=5,FALSE)	()	b	False
+function_names	sin	411	IFERROR(ERROR.TYPE(SIN(1))=5,FALSE)	()	b	False
+function_names	sinh	412	IFERROR(ERROR.TYPE(SINH(1))=5,FALSE)	()	b	False
+function_names	skew	413	IFERROR(ERROR.TYPE(SKEW(1))=5,FALSE)	()	b	False
+function_names	skew.p	414	IFERROR(ERROR.TYPE(_xlfn.SKEW.P(1))=5,FALSE)	()	b	False
+function_names	sln	415	IFERROR(ERROR.TYPE(SLN(1,1,1))=5,FALSE)	()	b	False
+function_names	slope	416	IFERROR(ERROR.TYPE(SLOPE(1,1))=5,FALSE)	()	b	False
+function_names	small	417	IFERROR(ERROR.TYPE(SMALL(1,1))=5,FALSE)	()	b	False
+function_names	sort	418	IFERROR(ERROR.TYPE(_xlfn._xlws.SORT(1))=5,FALSE)	()	b	False
+function_names	sortby	419	IFERROR(ERROR.TYPE(_xlfn.SORTBY(1,1))=5,FALSE)	()	b	False
+function_names	sqrt	420	IFERROR(ERROR.TYPE(SQRT(1))=5,FALSE)	()	b	False
+function_names	sqrtpi	421	IFERROR(ERROR.TYPE(SQRTPI(1))=5,FALSE)	()	b	False
+function_names	standardize	422	IFERROR(ERROR.TYPE(STANDARDIZE(1,1,1))=5,FALSE)	()	b	False
+function_names	stdev	423	IFERROR(ERROR.TYPE(STDEV(1))=5,FALSE)	()	b	False
+function_names	stdev.p	424	IFERROR(ERROR.TYPE(_xlfn.STDEV.P(1))=5,FALSE)	()	b	False
+function_names	stdev.s	425	IFERROR(ERROR.TYPE(_xlfn.STDEV.S(1))=5,FALSE)	()	b	False
+function_names	stdeva	426	IFERROR(ERROR.TYPE(STDEVA(1))=5,FALSE)	()	b	False
+function_names	stdevp	427	IFERROR(ERROR.TYPE(STDEVP(1))=5,FALSE)	()	b	False
+function_names	stdevpa	428	IFERROR(ERROR.TYPE(STDEVPA(1))=5,FALSE)	()	b	False
+function_names	steyx	429	IFERROR(ERROR.TYPE(STEYX(1,1))=5,FALSE)	()	b	False
+function_names	substitute	430	IFERROR(ERROR.TYPE(SUBSTITUTE(1,1,1))=5,FALSE)	()	b	False
+function_names	subtotal	431	IFERROR(ERROR.TYPE(SUBTOTAL(1,$Z$1:$Z$2))=5,FALSE)	()	b	False
+function_names	sum	432	IFERROR(ERROR.TYPE(SUM(1))=5,FALSE)	()	b	False
+function_names	sumif	433	IFERROR(ERROR.TYPE(SUMIF($Z$1:$Z$2,1))=5,FALSE)	()	b	False
+function_names	sumifs	434	IFERROR(ERROR.TYPE(SUMIFS($Z$1:$Z$2,$Z$1:$Z$2,1))=5,FALSE)	()	b	False
+function_names	sumproduct	435	IFERROR(ERROR.TYPE(SUMPRODUCT(1))=5,FALSE)	()	b	False
+function_names	sumsq	436	IFERROR(ERROR.TYPE(SUMSQ(1))=5,FALSE)	()	b	False
+function_names	sumx2my2	437	IFERROR(ERROR.TYPE(SUMX2MY2(1,1))=5,FALSE)	()	b	False
+function_names	sumx2py2	438	IFERROR(ERROR.TYPE(SUMX2PY2(1,1))=5,FALSE)	()	b	False
+function_names	sumxmy2	439	IFERROR(ERROR.TYPE(SUMXMY2(1,1))=5,FALSE)	()	b	False
+function_names	switch	440	IFERROR(ERROR.TYPE(_xlfn.SWITCH(1,1,1))=5,FALSE)	()	b	False
+function_names	syd	441	IFERROR(ERROR.TYPE(SYD(1,1,1,1))=5,FALSE)	()	b	False
+function_names	t	442	IFERROR(ERROR.TYPE(T(1))=5,FALSE)	()	b	False
+function_names	t.dist	443	IFERROR(ERROR.TYPE(_xlfn.T.DIST(1,1,1))=5,FALSE)	()	b	False
+function_names	t.dist.2t	444	IFERROR(ERROR.TYPE(_xlfn.T.DIST.2T(1,1))=5,FALSE)	()	b	False
+function_names	t.dist.rt	445	IFERROR(ERROR.TYPE(_xlfn.T.DIST.RT(1,1))=5,FALSE)	()	b	False
+function_names	t.inv	446	IFERROR(ERROR.TYPE(_xlfn.T.INV(1,1))=5,FALSE)	()	b	False
+function_names	t.inv.2t	447	IFERROR(ERROR.TYPE(_xlfn.T.INV.2T(1,1))=5,FALSE)	()	b	False
+function_names	t.test	448	IFERROR(ERROR.TYPE(_xlfn.T.TEST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	take	449	IFERROR(ERROR.TYPE(_xlfn.TAKE(1,1))=5,FALSE)	()	b	False
+function_names	tan	450	IFERROR(ERROR.TYPE(TAN(1))=5,FALSE)	()	b	False
+function_names	tanh	451	IFERROR(ERROR.TYPE(TANH(1))=5,FALSE)	()	b	False
+function_names	tbilleq	452	IFERROR(ERROR.TYPE(TBILLEQ(1,1,1))=5,FALSE)	()	b	False
+function_names	tbillprice	453	IFERROR(ERROR.TYPE(TBILLPRICE(1,1,1))=5,FALSE)	()	b	False
+function_names	tbillyield	454	IFERROR(ERROR.TYPE(TBILLYIELD(1,1,1))=5,FALSE)	()	b	False
+function_names	tdist	455	IFERROR(ERROR.TYPE(TDIST(1,1,1))=5,FALSE)	()	b	False
+function_names	text	456	IFERROR(ERROR.TYPE(TEXT(1,1))=5,FALSE)	()	b	False
+function_names	textafter	457	IFERROR(ERROR.TYPE(_xlfn.TEXTAFTER(1,1))=5,FALSE)	()	b	False
+function_names	textbefore	458	IFERROR(ERROR.TYPE(_xlfn.TEXTBEFORE(1,1))=5,FALSE)	()	b	False
+function_names	textjoin	459	IFERROR(ERROR.TYPE(_xlfn.TEXTJOIN(1,1,1))=5,FALSE)	()	b	False
+function_names	textsplit	460	IFERROR(ERROR.TYPE(_xlfn.TEXTSPLIT(1,1))=5,FALSE)	()	b	False
+function_names	time	461	IFERROR(ERROR.TYPE(TIME(1,1,1))=5,FALSE)	()	b	False
+function_names	timevalue	462	IFERROR(ERROR.TYPE(TIMEVALUE(1))=5,FALSE)	()	b	False
+function_names	tinv	463	IFERROR(ERROR.TYPE(TINV(1,1))=5,FALSE)	()	b	False
+function_names	tocol	464	IFERROR(ERROR.TYPE(_xlfn.TOCOL(1))=5,FALSE)	()	b	False
+function_names	today	465	IFERROR(ERROR.TYPE(TODAY())=5,FALSE)	()	b	False
+function_names	torow	466	IFERROR(ERROR.TYPE(_xlfn.TOROW(1))=5,FALSE)	()	b	False
+function_names	transpose	467	IFERROR(ERROR.TYPE(TRANSPOSE(1))=5,FALSE)	()	b	False
+function_names	trend	468	IFERROR(ERROR.TYPE(TREND(1))=5,FALSE)	()	b	False
+function_names	trim	469	IFERROR(ERROR.TYPE(TRIM(1))=5,FALSE)	()	b	False
+function_names	trimmean	470	IFERROR(ERROR.TYPE(TRIMMEAN(1,1))=5,FALSE)	()	b	False
+function_names	trimrange	471	IFERROR(ERROR.TYPE(_xlfn.TRIMRANGE(1))=5,FALSE)	()	b	False
+function_names	true	472	IFERROR(ERROR.TYPE(TRUE())=5,FALSE)	()	b	False
+function_names	trunc	473	IFERROR(ERROR.TYPE(TRUNC(1))=5,FALSE)	()	b	False
+function_names	ttest	474	IFERROR(ERROR.TYPE(TTEST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	type	475	IFERROR(ERROR.TYPE(TYPE(1))=5,FALSE)	()	b	False
+function_names	unichar	476	IFERROR(ERROR.TYPE(_xlfn.UNICHAR(1))=5,FALSE)	()	b	False
+function_names	unicode	477	IFERROR(ERROR.TYPE(_xlfn.UNICODE(1))=5,FALSE)	()	b	False
+function_names	unique	478	IFERROR(ERROR.TYPE(_xlfn.UNIQUE(1))=5,FALSE)	()	b	False
+function_names	upper	479	IFERROR(ERROR.TYPE(UPPER(1))=5,FALSE)	()	b	False
+function_names	usdollar	480	IFERROR(ERROR.TYPE(USDOLLAR(1))=5,FALSE)	()	b	False
+function_names	value	481	IFERROR(ERROR.TYPE(VALUE(1))=5,FALSE)	()	b	False
+function_names	valuetotext	482	IFERROR(ERROR.TYPE(_xlfn.VALUETOTEXT(1))=5,FALSE)	()	b	False
+function_names	var	483	IFERROR(ERROR.TYPE(VAR(1))=5,FALSE)	()	b	False
+function_names	var.p	484	IFERROR(ERROR.TYPE(_xlfn.VAR.P(1))=5,FALSE)	()	b	False
+function_names	var.s	485	IFERROR(ERROR.TYPE(_xlfn.VAR.S(1))=5,FALSE)	()	b	False
+function_names	vara	486	IFERROR(ERROR.TYPE(VARA(1))=5,FALSE)	()	b	False
+function_names	varp	487	IFERROR(ERROR.TYPE(VARP(1))=5,FALSE)	()	b	False
+function_names	varpa	488	IFERROR(ERROR.TYPE(VARPA(1))=5,FALSE)	()	b	False
+function_names	vdb	489	IFERROR(ERROR.TYPE(VDB(1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	vlookup	490	IFERROR(ERROR.TYPE(VLOOKUP(1,1,1))=5,FALSE)	()	b	False
+function_names	vstack	491	IFERROR(ERROR.TYPE(_xlfn.VSTACK(1))=5,FALSE)	()	b	False
+function_names	weekday	492	IFERROR(ERROR.TYPE(WEEKDAY(1))=5,FALSE)	()	b	False
+function_names	weeknum	493	IFERROR(ERROR.TYPE(WEEKNUM(1))=5,FALSE)	()	b	False
+function_names	weibull	494	IFERROR(ERROR.TYPE(WEIBULL(1,1,1,1))=5,FALSE)	()	b	False
+function_names	weibull.dist	495	IFERROR(ERROR.TYPE(_xlfn.WEIBULL.DIST(1,1,1,1))=5,FALSE)	()	b	False
+function_names	workday	496	IFERROR(ERROR.TYPE(WORKDAY(1,1))=5,FALSE)	()	b	False
+function_names	workday.intl	497	IFERROR(ERROR.TYPE(WORKDAY.INTL(1,1))=5,FALSE)	()	b	False
+function_names	wrapcols	498	IFERROR(ERROR.TYPE(_xlfn.WRAPCOLS(1,1))=5,FALSE)	()	b	False
+function_names	wraprows	499	IFERROR(ERROR.TYPE(_xlfn.WRAPROWS(1,1))=5,FALSE)	()	b	False
+function_names	xirr	500	IFERROR(ERROR.TYPE(XIRR(1,1))=5,FALSE)	()	b	False
+function_names	xlookup	501	IFERROR(ERROR.TYPE(_xlfn.XLOOKUP(1,1,1))=5,FALSE)	()	b	False
+function_names	xmatch	502	IFERROR(ERROR.TYPE(_xlfn.XMATCH(1,1))=5,FALSE)	()	b	False
+function_names	xnpv	503	IFERROR(ERROR.TYPE(XNPV(1,1,1))=5,FALSE)	()	b	False
+function_names	xor	504	IFERROR(ERROR.TYPE(_xlfn.XOR(1))=5,FALSE)	()	b	False
+function_names	year	505	IFERROR(ERROR.TYPE(YEAR(1))=5,FALSE)	()	b	False
+function_names	yearfrac	506	IFERROR(ERROR.TYPE(YEARFRAC(1,1))=5,FALSE)	()	b	False
+function_names	yield	507	IFERROR(ERROR.TYPE(YIELD(1,1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	yielddisc	508	IFERROR(ERROR.TYPE(YIELDDISC(1,1,1,1))=5,FALSE)	()	b	False
+function_names	yieldmat	509	IFERROR(ERROR.TYPE(YIELDMAT(1,1,1,1,1))=5,FALSE)	()	b	False
+function_names	z.test	510	IFERROR(ERROR.TYPE(_xlfn.Z.TEST(1,1))=5,FALSE)	()	b	False
+function_names	ztest	511	IFERROR(ERROR.TYPE(ZTEST(1,1))=5,FALSE)	()	b	False
