@@ -3855,6 +3855,48 @@ def function_names() -> list[Case]:
     return cases
 
 
+def encodeurl() -> list[Case]:
+    """ENCODEURL over every code from 1 to 127, characters beyond, texts, other values, long text.
+
+    Excel for Mac does not know the function (``mac_gaps``): its capture is ``#NAME?`` in every
+    row, and Excel for Windows' capture gives the values.
+    """
+    call = "_xlfn.ENCODEURL"
+    cases = [Case("ascii", f"{call}(CHAR({{1}}))", (float(n),)) for n in range(1, 128)]
+    for n in (128, 159, 160, 169, 233, 255, 256, 0x20AC, 0x4E2D, 0xFFFD, 0x1F600):
+        cases.append(Case("beyond", f"{call}(_xlfn.UNICHAR({{1}}))", (float(n),)))
+    for text in (
+        "a b",
+        "a+b",
+        "100%",
+        "%20",
+        "a/b?c=d&e=f#g",
+        "https://example.com/a b?q=1&r=é",
+        "naïve café",
+        "  ",
+        "日本語",
+        "a\nb",
+    ):
+        cases.append(Case("text", f"{call}({{1}})", (text,)))
+    for value in (1.0, -2.5, 0.1, 1e20, 1e-7, 123456789012345.0, True, False, NA, None, EMPTY_TEXT):
+        cases.append(Case("value", f"{call}({{1}})", (value,)))
+    cases += [
+        Case("value", f"{call}(1/0)"),
+        Case("value", f"{call}(0.1+0.2)"),
+        Case("value", f'{call}("")'),
+        Case("value", f"{call}({{1}}:{{2}})", ("a", "b")),
+        Case("value", f'{call}({{"a b","c"}})'),
+        Case("length", f'LEN({call}(REPT("a",32767)))'),
+        Case("length", f'LEN({call}(REPT(" ",10922)))'),
+        Case("length", f'LEN({call}(REPT(" ",10923)))'),
+        Case("length", f'LEN({call}(REPT("é",5461)))'),
+        Case("length", f'LEN({call}(REPT("é",5462)))'),
+        Case("length", f"LEN({call}(REPT(_xlfn.UNICHAR(128512),2730)))"),
+        Case("length", f"LEN({call}(REPT(_xlfn.UNICHAR(128512),2731)))"),
+    ]
+    return cases
+
+
 def _matrices() -> list[tuple[str, list[list[Input]]]]:
     """The matrices of ``matrix_family``: (tag, rows)."""
     rng = random.Random(20261109)
@@ -5091,4 +5133,5 @@ SUITES = {
     "xirr_nan": Suite(xirr_nan),
     "xirr_sign_rules": Suite(xirr_sign_rules),
     "function_names": Suite(function_names, fixed={"Z1": 1.0, "Z2": 2.0}),
+    "encodeurl": Suite(encodeurl),
 }
