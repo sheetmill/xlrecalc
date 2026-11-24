@@ -300,6 +300,9 @@ class Engine:
         kept, as the index is, until a formula or a name changes (:meth:`_formulas_changed`)."""
         self.anchors: dict[int, Anchor] = {}
         """Formula cells that fill a range (§7.7), by node."""
+        self._dynamic: dict[int, None] = {}
+        """The anchors that are dynamic arrays, in the anchors' order: the only ones a cell set
+        by hand or an edit can make spill elsewhere."""
         # Per sheet, rebuilt when first needed after anchors change: the ranges anchors fill or
         # want, (r1, c1, r2, c2, anchor); and per column the row spans they fill, sorted, for
         # member_of. A cell an anchor fills is found from its range, not stored per cell.
@@ -577,6 +580,8 @@ class Engine:
             self._outdated.discard(n)
         if array is not None:
             self.anchors[n] = Anchor(array[0], array[1])
+            if array[0]:
+                self._dynamic[n] = None
             self._spill_due = True
             self._index_anchors(sheet)
         if cached is None or stale:
@@ -669,18 +674,28 @@ class Engine:
 
     def _drop_anchor(self, n: int) -> None:
         anchor = self.anchors.pop(n)
+        self._dynamic.pop(n, None)
         sheet, row, col = unpack(n)
         changed = self._release(sheet, anchor.box, (row, col, row, col))
         self._index_anchors(sheet)
         self.stale |= self.dependents([], changed)
 
     def _touch_spill(self, sheet: int, row: int, col: int) -> None:
-        """A cell set by hand: a dynamic array spilling there, or wanting to, is evaluated again."""
-        for r1, c1, r2, c2, a in self._anchor_list(sheet):
-            inside = r1 <= row <= r2 and c1 <= col <= c2 and node(sheet, row, col) != a
-            if inside and self.anchors[a].dynamic:
-                self.stale.add(a)
-                self._unclosed.append(a)
+        """A cell set by hand: a dynamic array spilling there, or wanting to, is evaluated again.
+
+        Only the dynamic arrays are looked at: a file of many legacy array formulas, each set as
+        it is read, would otherwise go through all of them for each.
+        """
+        if not self._dynamic:
+            return
+        n = node(sheet, row, col)
+        for a in [a for a in self._dynamic if a >> SHEET_SHIFT == sheet and a != n]:
+            x = self.anchors[a]
+            for box in (x.box, x.wanted):
+                if box is not None and box[0] <= row <= box[2] and box[1] <= col <= box[3]:
+                    self.stale.add(a)
+                    self._unclosed.append(a)
+                    break
 
     def _blocked(self, sheet: int, box: tuple[int, int, int, int], anchor: int) -> bool:
         s = self.sheets[sheet]
@@ -818,7 +833,7 @@ class Engine:
         anything is read, so a read does too.
         """
         self._spill_due = False
-        stale = [a for a, x in self.anchors.items() if x.dynamic and a in self.stale]
+        stale = [a for a in self._dynamic if a in self.stale]
         if stale:
             self.recalculate(targets=stale, defer_report=True)
 

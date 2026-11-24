@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- Reading a workbook of many legacy array formulas took time growing with the square of their number: every formula
+  read went through every array formula read before it. It now takes time in proportion to them.
 - After an edit that makes a dynamic array spill further, a cell it now spills into, and a formula reading one, read
   the spilled value whichever is read first; they read empty, or the formula's earlier value, until the array's own
   cell had been read. The same holds for `Workbook.values`, `Workbook.values_at`, a lazy `Loader` and
