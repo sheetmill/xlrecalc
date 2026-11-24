@@ -1589,7 +1589,8 @@ After 0.10.1, in this order: an order, not a promise or a date.
 9. A strict option for `recalculate` and `Workbook.save` that raises where a cell cannot be
    computed (`Report.uncomputed`), rather than writing it with the file's value or none; and
    streams as well as paths for `save` and `recalculate`, as `load` takes one.
-10. Then: Excel for Windows' captures of every other suite, to check that nothing else differs there
-   and to declare the math library's last digits per function; the array-backed store and vectorized
-   templates (numpy as an optional extra), the SQLite backend, parallel evaluation of independent
-   template columns on free-threaded Python, and a compiled core only if profiling demands it.
+10. Then: the package compared with Excel for Windows' captures of every suite (CAPTURING.md §5), the
+   math library's last digits declared per function as on the Mac; the array-backed store and
+   vectorized templates (numpy as an optional extra), the SQLite backend, parallel evaluation of
+   independent template columns on free-threaded Python, and a compiled core only if profiling
+   demands it.
