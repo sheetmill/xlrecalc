@@ -1,4 +1,4 @@
-"""Text captures hold no control byte other than tab and newline (gzipped ones decompressed).
+"""Text captures hold no control character but tab and newline, C1 included (gzipped: unpacked).
 
 git and GitHub take a file holding one for binary; a generator writes a value it cannot name
 in readable form (``capture/pipeline.py`` writes inputs and results as Python ``repr``). The
@@ -22,8 +22,8 @@ CAPTURES = sorted(
     for p in ROOT.rglob("*")
     if p.suffix in TEXT or p.name.endswith(tuple(t + ".gz" for t in TEXT))
 )
-CONTROL = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")
-"""Control bytes other than tab and newline (carriage return included)."""
+CONTROL = re.compile(r"[\x00-\x08\x0b-\x1f\x7f-\x9f]")
+"""Control characters other than tab and newline (carriage return and the C1 controls included)."""
 
 
 def _found(data: bytes) -> list[tuple[int, str]]:
@@ -34,11 +34,12 @@ def _found(data: bytes) -> list[tuple[int, str]]:
     ]
 
 
-def test_the_guard_finds_each_control_byte() -> None:
-    """Every control byte but tab and newline, those ``splitlines`` would split at included."""
-    for code in [*range(0x00, 0x09), *range(0x0B, 0x20), 0x7F]:
-        assert _found(b"a\tb\n" + bytes([0x61, code, 0x62]) + b"\n") == [(2, f"a{chr(code)}b")]
-    assert _found(b"a\tb\nc\n") == []
+def test_the_guard_finds_each_control_character() -> None:
+    """Each control character but tab and newline, U+0085 and others splitlines splits at too."""
+    for code in [*range(0x00, 0x09), *range(0x0B, 0x20), *range(0x7F, 0xA0)]:
+        line = f"a{chr(code)}b"
+        assert _found(f"a\tb\n{line}\n".encode()) == [(2, line)]
+    assert _found("a\tb\nc\u00a0d\u2028e\u2029f\n".encode()) == []
 
 
 def test_every_text_capture_is_checked() -> None:
@@ -47,7 +48,7 @@ def test_every_text_capture_is_checked() -> None:
 
 
 @pytest.mark.parametrize("path", CAPTURES, ids=lambda p: str(p.relative_to(ROOT)))
-def test_a_text_capture_holds_no_control_byte(path: Path) -> None:
+def test_a_text_capture_holds_no_control_character(path: Path) -> None:
     data = path.read_bytes()
     if path.suffix == ".gz":
         data = gzip.decompress(data)
