@@ -33,7 +33,7 @@ def _key(v: Any) -> str | None:
 def _condition(value: Any, ctx: Context) -> Callable[[Any], bool]:
     if isinstance(value, str) and value and value[0] not in "<>=":
         value += "*"
-    return criterion(value, ctx.quirks)
+    return criterion(value, ctx.quirks, ctx.platform)
 
 
 def _by_row(ref: Ref) -> dict[int, dict[int, Any]]:

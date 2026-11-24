@@ -19,7 +19,7 @@ from xlrecalc._quirks import Quirks
 from xlrecalc._store import MAX_COL, MAX_ROW
 from xlrecalc._values import BLANK, ErrorValue, Ref
 
-CTX = SimpleNamespace(quirks=Quirks.EXCEL)
+CTX = SimpleNamespace(quirks=Quirks.EXCEL, platform="mac")
 CRITERIA = ["", "=", "<>", "<>1", "<>abc", ">0", "<=2", "1", "abc", "a*", "#N/A", 1.0, True]
 VALUES = [1.0, 2.0, -1.5, 0.0, "1", "abc", "", True, False, ErrorValue.NA, ErrorValue.DIV0]
 

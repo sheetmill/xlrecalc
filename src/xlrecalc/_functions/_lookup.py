@@ -96,7 +96,7 @@ def _approximate(lookup: Any, cells: Any, descending: bool, ctx: Context) -> int
     while lo <= hi:
         mid = (lo + hi) // 2
         i, v = candidates[mid]
-        order = compare(v, lookup, ">=" if descending else "<=", ctx.quirks)
+        order = compare(v, lookup, ">=" if descending else "<=", ctx.quirks, ctx.platform)
         if order is True:
             found = i
             lo = mid + 1
@@ -553,14 +553,16 @@ def _x_compare(key: Any, v: Any, ctx: Context, ordered: bool = False) -> int | N
     if a != b:
         return -1 if a < b else 1
     if ordered:
-        return 0 if compare(v, key, "=", ctx.quirks) is True else _x_below(key, v, ctx)
+        return (
+            0 if compare(v, key, "=", ctx.quirks, ctx.platform) is True else _x_below(key, v, ctx)
+        )
     if lookup_equal(key, v):
         return 0
     return _x_below(key, v, ctx)
 
 
 def _x_below(key: Any, v: Any, ctx: Context) -> int:
-    return -1 if compare(v, key, "<", ctx.quirks) is True else 1
+    return -1 if compare(v, key, "<", ctx.quirks, ctx.platform) is True else 1
 
 
 def _x_gap(cells: list[tuple[int, Any]], size: int, search: int) -> int | None:

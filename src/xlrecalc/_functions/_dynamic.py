@@ -12,7 +12,7 @@ from typing import Any
 
 from xlrecalc._arrays import ArrayLimitError, Padded, broadcast, to_array
 from xlrecalc._coerce import scalar, to_bool, to_number
-from xlrecalc._compare import compare
+from xlrecalc._compare import compare, windows_key
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._registry import function
 from xlrecalc._numtext import DBL_MIN
@@ -383,9 +383,9 @@ def _order(a: Any, b: Any, ctx: Any) -> int:
         x, y = _ERROR_ORDER.get(str(a), 99), _ERROR_ORDER.get(str(b), 99)
         return (x > y) - (x < y)
     if isinstance(a, str):
-        if compare(a, b, "<", ctx.quirks) is True:
+        if compare(a, b, "<", ctx.quirks, ctx.platform) is True:
             return -1
-        return 1 if compare(a, b, ">", ctx.quirks) is True else 0
+        return 1 if compare(a, b, ">", ctx.quirks, ctx.platform) is True else 0
     return int((a > b) - (a < b))
 
 
@@ -411,11 +411,16 @@ def _sorted(items: list[Any], keys: list[tuple[list[Any], int]], ctx: Any) -> li
     return [items[i] for i in sorted(range(len(items)), key=cmp_to_key(cmp))]
 
 
-def _same_key(v: Any) -> tuple[Any, ...]:
-    """A key equal for values UNIQUE takes as the same: text without regard to case."""
+def _same_key(v: Any, platform: str) -> tuple[Any, ...]:
+    """A key equal for values UNIQUE takes as the same.
+
+    Text is the same without regard to case, and on Windows by Excel's ``=`` there (``"ae"`` and
+    ``"æ"`` are one; capture windows/collate_functions).
+    """
     rank = _rank(v)
     if rank == 1:
-        return (1, v.casefold())
+        text = v.casefold()
+        return (1, windows_key(text) if platform == "windows" else text)
     if rank == 3:
         return (3, str(v))
     if rank == 4:
@@ -441,7 +446,7 @@ def _flag(v: Any, ctx: Any) -> bool | ErrorValue:
     "_XLFN.UNIQUE", "array", "raw", "raw", min_args=1, category=C, makes_array=True, padded=True
 )
 def UNIQUE(ctx: Any, array: Any, by_col: Any = MISSING, exactly_once: Any = MISSING) -> Any:
-    """Distinct rows (or columns) in the order they first appear; text compares without case."""
+    """Distinct rows (or columns) in the order they first appear; text as ``_same_key`` has it."""
     cols, once = _flag(by_col, ctx), _flag(exactly_once, ctx)
     if isinstance(cols, ErrorValue):
         return cols
@@ -458,7 +463,7 @@ def UNIQUE(ctx: Any, array: Any, by_col: Any = MISSING, exactly_once: Any = MISS
     counts: dict[tuple[Any, ...], int] = {}
     first: dict[tuple[Any, ...], tuple[Any, ...]] = {}
     for line, times in [(line, 1) for line in lines] + fill:
-        key = tuple(_same_key(v) for v in line)
+        key = tuple(_same_key(v, ctx.platform) for v in line)
         counts[key] = counts.get(key, 0) + times
         first.setdefault(key, line)
     kept = [first[k] for k in first if not once or counts[k] == 1]

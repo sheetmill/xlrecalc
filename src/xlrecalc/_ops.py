@@ -183,7 +183,13 @@ class Ops:
             return self._each(lambda x, y: self._cmp(x, y, op), a, b)
         if type(a) is Lambda or type(b) is Lambda:
             return VALUE
-        return compare(scalar(a, self.context), scalar(b, self.context), op, self.context.quirks)  # type: ignore[arg-type]
+        return compare(
+            scalar(a, self.context),
+            scalar(b, self.context),
+            op,  # type: ignore[arg-type]
+            self.context.quirks,
+            self.context.platform,
+        )
 
     def eq(self, a: Raw, b: Raw) -> Value:
         return self._cmp(a, b, "=")

@@ -78,7 +78,14 @@ def test_the_rows_are_the_generator_s_cases(path: Path) -> None:
     assert all(r[5] != "none" for r in rows)
 
 
-COMPARED = ["clean_controls", "codepage"]
+COMPARED = [
+    "clean_controls",
+    "codepage",
+    "collate_chars",
+    "collate_words",
+    "collate_functions",
+    "modern",
+]
 """The Windows captures the package is compared with, under ``platform="windows"``: those whose
 platform-dependent behavior it implements for Excel for Windows."""
 
@@ -91,12 +98,13 @@ def test_the_package_on_windows_gives_every_value_the_capture_holds(suite: str) 
     from dataclasses import replace
 
     from tests.captures import _expected, load
-    from tests.test_captures import run
+    from tests.test_captures import KNOWN_DEVIATIONS, run
 
     lines = (WINDOWS / f"{suite}.tsv").read_text(encoding="utf-8").splitlines()
     fields = [line.split("\t") for line in lines if line and not line.startswith("#")]
     mac = load(suite)
-    assert [(f[3], f[4]) for f in fields] == [(r.formula, repr(r.inputs)) for r in mac.rows]
+    # the rows are the generator's cases (inputs too): test_the_rows_are_the_generator_s_cases
+    assert [f[3] for f in fields] == [r.formula for r in mac.rows]
     windows = replace(
         mac,
         rows=[
@@ -106,8 +114,13 @@ def test_the_package_on_windows_gives_every_value_the_capture_holds(suite: str) 
     )
     engine, s = run(windows, platform="windows")
     wrong = []
-    for k, row in enumerate(windows.rows):
+    for k, (row, on_mac) in enumerate(zip(windows.rows, mac.rows, strict=True)):
         got = engine.get(s, k, 0)
-        if type(got) is not type(row.expected) or got != row.expected:
+        same = type(got) is type(row.expected) and got == row.expected
+        # A row listed as a deviation on the Mac, where Excel for Windows gives the Mac's value,
+        # is the same deviation; it must still differ, as test_captures has it.
+        if (suite, row.case) in KNOWN_DEVIATIONS and repr(row.expected) == repr(on_mac.expected):
+            same = not same
+        if not same:
             wrong.append((k + 1, row.formula, row.inputs, row.expected, got))
     assert not wrong, wrong[:10]

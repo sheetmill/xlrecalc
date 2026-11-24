@@ -220,7 +220,7 @@ def SUMIF(ctx: Context, ref: Any, crit: Any, sums: Any = MISSING) -> float | Err
         target = _sized_like(ref, sums)
     elif sums is not MISSING:
         return VALUE
-    test = criterion(scalar(crit, ctx), ctx.quirks)
+    test = criterion(scalar(crit, ctx), ctx.quirks, ctx.platform)
     if test(BLANK):  # a blank cell of ref matches, and a blank cell of target adds nothing
         ref.check()
         picked = (v for r, c, v in target.cells() if _numeric(v) and test(ref.value(r, c)))
@@ -248,7 +248,7 @@ def _conditions(
         if not isinstance(ref, Ref) or ref.rows != rows or ref.columns != cols:
             return VALUE
         ref.check()
-        conditions.append((ref, criterion(scalar(pairs[k + 1], ctx), ctx.quirks)))
+        conditions.append((ref, criterion(scalar(pairs[k + 1], ctx), ctx.quirks, ctx.platform)))
     return conditions
 
 
@@ -320,7 +320,7 @@ def AVERAGEIF(ctx: Context, ref: Any, crit: Any, cells: Any = MISSING) -> float 
         target = _sized_like(ref, cells)
     elif cells is not MISSING:
         return VALUE
-    test = criterion(scalar(crit, ctx), ctx.quirks)
+    test = criterion(scalar(crit, ctx), ctx.quirks, ctx.platform)
     ref.check()
     return _mean(list(_picked(target, [(ref, test)])), ctx)
 
@@ -381,7 +381,7 @@ def COUNTIF(ctx: Context, ref: Any, crit: Any) -> float | ErrorValue:
     """Cells meeting the criterion."""
     if not isinstance(ref, Ref):
         return VALUE
-    test = criterion(scalar(crit, ctx), ctx.quirks)
+    test = criterion(scalar(crit, ctx), ctx.quirks, ctx.platform)
     filled = 0
     count = 0
     for _, _, v in ref.cells():

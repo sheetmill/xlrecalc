@@ -6,8 +6,8 @@ though ``ErrorValue`` equals its text for interoperation (§4.2). Captured in
 ``tests/captures/compare.tsv``:
 
 - operators order numbers < text < logicals; text compares without case (``casefold``, so
-  ``"straße"="STRASSE"``), marks before digits before letters (captures ``modern``,
-  ``collate_chars``, ``collate_words``); a blank
+  ``"straße"="STRASSE"``), marks before digits before letters, in the platform's order of text
+  (captures ``modern``, ``collate_chars``, ``collate_words``, on the Mac and on Windows); a blank
   is 0, ``""`` or FALSE by what it meets; an error operand
   gives that error;
 - with ``comparison_rounding``, numbers that agree to 15 significant digits are equal, for the
@@ -116,11 +116,60 @@ def collation(order: str, aliases: dict[str, str]) -> Callable[[str], tuple[list
 
 
 COLLATION = collation(MAC_ORDER, MAC_ALIASES)
-"""The one place the order of text is chosen; every comparison of text reads it."""
+"""Excel for Mac's order of text."""
+
+# Excel for Windows' order (captures windows/collate_chars, collate_words, modern): its word sort.
+# Case is ignored; ``'`` and ``-`` count only between texts otherwise equal, the later position
+# first and ``'`` before ``-``; then marks in code order, ``+ < = >``, ``« » § µ ¶``, digits,
+# letters. ``æ``, ``œ``, ``þ`` expand to two letters and equal them (``"ae"="æ"``); ``ª``, ``º``,
+# ``ð``, ``ø`` are their base letter with a mark of their own, and an accent counts only between
+# texts otherwise equal. A character the captures leave out sorts after all of these, by code
+# point, and a control character before them, as on the Mac.
+WINDOWS_ORDER = ' !"#$%&()*,./:;?@[\\]^_`{|}~¡¿+<=>«»§μ¶0123456789abcdefghijklmnopqrstuvwxyz'
+"""Excel for Windows' primary order of the characters captured, after ``casefold``."""
+
+_WINDOWS_WEIGHTS = {ch: i for i, ch in enumerate(WINDOWS_ORDER, 1)}
+_WINDOWS_BEYOND = len(WINDOWS_ORDER) + 1
+_WINDOWS_SPECIAL = {"'": 0, "-": 1}
+_WINDOWS_EXPAND = {"æ": "ae", "œ": "oe", "þ": "th"}
+_WINDOWS_MARKED = {"ª": ("a", 1), "º": ("o", 1), "ð": ("d", 9), "ø": ("o", 9)}
+
+WindowsKey = tuple[tuple[int, ...], tuple[tuple[int, ...], ...], tuple[tuple[int, int], ...]]
 
 
-def compare(a: Value, b: Value, op: Op, quirks: Quirks = Quirks.EXCEL) -> bool | ErrorValue:
-    """``a op b`` as Excel's comparison operators compute it."""
+def windows_key(text: str) -> WindowsKey:
+    """Excel for Windows' sort key of folded text: letters, then marks, then ``'`` and ``-``."""
+    bases: list[int] = []
+    marks: list[tuple[int, ...]] = []
+    special: list[tuple[int, int]] = []
+    for i, ch in enumerate(text):
+        if ch in _WINDOWS_SPECIAL:
+            special.append((-i, _WINDOWS_SPECIAL[ch]))
+            continue
+        for c in _WINDOWS_EXPAND.get(ch, ch):
+            marked = _WINDOWS_MARKED.get(c)
+            if marked is not None:
+                bases.append(_WINDOWS_WEIGHTS[marked[0]])
+                marks.append((marked[1],))
+                continue
+            d = unicodedata.normalize("NFD", c)
+            weight = _WINDOWS_WEIGHTS.get(d[0])
+            if weight is None:
+                code = ord(d[0])
+                weight = code - 0x20 if code < 0x20 else _WINDOWS_BEYOND + code
+            bases.append(weight)
+            marks.append(tuple(2 + ord(m) for m in d[1:]))
+    return tuple(bases), tuple(marks), tuple(special)
+
+
+COLLATIONS: dict[str, Callable[[str], object]] = {"mac": COLLATION, "windows": windows_key}
+"""The one place the order of text is chosen, by platform; every comparison of text reads it."""
+
+
+def compare(
+    a: Value, b: Value, op: Op, quirks: Quirks = Quirks.EXCEL, platform: str = "mac"
+) -> bool | ErrorValue:
+    """``a op b`` as Excel's comparison operators compute it, in the platform's order of text."""
     if isinstance(a, ErrorValue):
         return a
     if isinstance(b, ErrorValue):
@@ -138,8 +187,9 @@ def compare(a: Value, b: Value, op: Op, quirks: Quirks = Quirks.EXCEL) -> bool |
         elif x.isalnum() and y.isalnum() and x.isascii() and y.isascii():
             order = 1 if x > y else -1  # digits before letters, as the code points are
         else:
-            kx, ky = COLLATION(x), COLLATION(y)
-            order = 0 if kx == ky else (1 if kx > ky else -1)
+            key = COLLATIONS[platform]
+            kx, ky = key(x), key(y)
+            order = 0 if kx == ky else (1 if kx > ky else -1)  # type: ignore[operator]
     elif ra == 2:
         order = int(bool(a)) - int(bool(b))
     else:
@@ -206,15 +256,17 @@ _WILD = re.compile(r"[*?~]")
 _CRITERION = re.compile(r"(<=|>=|<>|=|<|>)?(.*)", re.S)
 
 
-def criterion(value: Value, quirks: Quirks = Quirks.EXCEL) -> Callable[[Value], bool]:
-    """The test a ``COUNTIF``-family criterion applies to each cell."""
+def criterion(
+    value: Value, quirks: Quirks = Quirks.EXCEL, platform: str = "mac"
+) -> Callable[[Value], bool]:
+    """The test a ``COUNTIF``-family criterion applies to each cell, in the platform's order."""
     if isinstance(value, ErrorValue):
         code = value.code
         return lambda cell: isinstance(cell, ErrorValue) and cell.code == code
     if value is BLANK:  # a blank cell as the criterion is 0 (capture criteria)
         value = 0.0
     if not isinstance(value, str):
-        return _equal_to(value, quirks)
+        return _equal_to(value, quirks, platform)
     m = _CRITERION.fullmatch(value)
     assert m is not None
     op, operand = m[1], m[2]
@@ -225,7 +277,7 @@ def criterion(value: Value, quirks: Quirks = Quirks.EXCEL) -> Callable[[Value], 
     if op == "<>" and operand == "":
         return lambda cell: cell is not BLANK
     target = _criterion_value(operand, quirks)
-    test = _equal_to(target, quirks)
+    test = _equal_to(target, quirks, platform)
     if isinstance(target, float):
         # A criterion that reads as a number also matches a text cell spelling it the same
         # way (COUNTIF(r,"3") counts the text "3"; captured).
@@ -238,7 +290,7 @@ def criterion(value: Value, quirks: Quirks = Quirks.EXCEL) -> Callable[[Value], 
         return test
     if op == "<>":
         return lambda cell: not test(cell)
-    return _ordered(target, op, quirks)
+    return _ordered(target, op, quirks, platform)
 
 
 def _criterion_value(operand: str, quirks: Quirks) -> Value:
@@ -253,14 +305,14 @@ def _criterion_value(operand: str, quirks: Quirks) -> Value:
     return operand if number is None else number
 
 
-def _equal_to(target: Value, quirks: Quirks) -> Callable[[Value], bool]:
+def _equal_to(target: Value, quirks: Quirks, platform: str) -> Callable[[Value], bool]:
     if isinstance(target, ErrorValue):
         return lambda cell: isinstance(cell, ErrorValue) and cell.code == target.code
     if isinstance(target, bool):
         return lambda cell: isinstance(cell, bool) and cell == target
     if isinstance(target, str):
         if not _WILD.search(target):  # equality as ``=`` has it: ``"ß"`` counts ``"ss"``
-            return _text_equal_to(target)
+            return _text_equal_to(target, platform)
         pattern = wildcard(utf16_units(target))
         return lambda cell: (
             isinstance(cell, str) and pattern.fullmatch(utf16_units(cell)) is not None
@@ -273,11 +325,12 @@ def _equal_to(target: Value, quirks: Quirks) -> Callable[[Value], bool]:
     )
 
 
-def _text_equal_to(target: str) -> Callable[[Value], bool]:
+def _text_equal_to(target: str, platform: str) -> Callable[[Value], bool]:
     """``cell = target`` for text, as ``compare`` has it, with the target folded once."""
     folded = target.casefold()
     ascii_target = folded.isascii()
-    key = COLLATION(folded)
+    collate = COLLATIONS[platform]
+    key = collate(folded)
 
     def test(cell: Value) -> bool:
         if not isinstance(cell, str):
@@ -287,16 +340,16 @@ def _text_equal_to(target: str) -> Callable[[Value], bool]:
             return True
         if ascii_target and text.isascii():  # ASCII keys are equal only when the texts are
             return False
-        return COLLATION(text) == key
+        return collate(text) == key
 
     return test
 
 
-def _ordered(target: Value, op: str, quirks: Quirks) -> Callable[[Value], bool]:
+def _ordered(target: Value, op: str, quirks: Quirks, platform: str) -> Callable[[Value], bool]:
     def test(cell: Value) -> bool:
         if isinstance(cell, ErrorValue) or cell is BLANK or _rank(cell) != _rank(target):
             return False
-        result = compare(cell, target, op, quirks)  # type: ignore[arg-type]
+        result = compare(cell, target, op, quirks, platform)  # type: ignore[arg-type]
         return result is True
 
     return test

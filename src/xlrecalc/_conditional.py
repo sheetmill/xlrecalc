@@ -247,17 +247,21 @@ class ConditionalFormula:
 
         if self._own is None:
             return to_bool(result(self._formulas[0]), None) is True  # type: ignore[arg-type]
+        platform = self._formulas[0]._engine.platform  # the rule's, as its formulas were parsed
         own = result(self._own)
         bounds = [result(f) for f in self._formulas]
         if isinstance(own, ErrorValue) or any(isinstance(b, ErrorValue) for b in bounds):
             return False
         if self.operator in _RANGES:
             low, high = bounds
-            if compare(low, high, ">") is True:
+            if compare(low, high, ">", platform=platform) is True:
                 low, high = high, low
-            inside = compare(own, low, ">=") is True and compare(own, high, "<=") is True
+            inside = (
+                compare(own, low, ">=", platform=platform) is True
+                and compare(own, high, "<=", platform=platform) is True
+            )
             return inside if self.operator == "between" else not inside
-        return compare(own, bounds[0], _OPERATORS[self.operator or ""]) is True
+        return compare(own, bounds[0], _OPERATORS[self.operator or ""], platform=platform) is True
 
 
 def _rule_formula(

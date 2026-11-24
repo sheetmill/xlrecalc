@@ -1421,9 +1421,9 @@ class Engine:
         names = [s.name for s in self.sheets]
 
         def before(a: int, b: int) -> int:
-            if compare(names[a], names[b], "<") is True:
+            if compare(names[a], names[b], "<", platform=self.platform) is True:
                 return -1
-            return 1 if compare(names[a], names[b], ">") is True else 0
+            return 1 if compare(names[a], names[b], ">", platform=self.platform) is True else 0
 
         by_name = sorted(range(len(names)), key=cmp_to_key(before))
         rank = {sheet: i for i, sheet in enumerate(by_name)}

@@ -16,7 +16,7 @@ from xlrecalc._quirks import Quirks
 from xlrecalc._store import MAX_ROW
 from xlrecalc._values import BLANK, ErrorValue, Ref
 
-CTX = SimpleNamespace(quirks=Quirks.EXCEL)
+CTX = SimpleNamespace(quirks=Quirks.EXCEL, platform="mac")
 NA = ErrorValue.NA
 VALUES = [0.0, 1.0, 2.0, 2.5, 3.0, 7.0, "", "a", "ab", "B", "*", True, False, NA, ErrorValue.DIV0]
 KEYS = [0.0, 1.0, 2.0, 2.2, 9.0, -1.0, "", "a", "b", "a*", "?b", "~*", True, False]
