@@ -1,0 +1,183 @@
+# suite: encodeurl
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# date_system: 1900
+# captured: 2026-11-24
+# generator: capture/suites.py:encodeurl
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# columns: suite tag case formula inputs expected_type expected_repr
+encodeurl	ascii	1	_xlfn.ENCODEURL(CHAR({1}))	(1.0,)	e	#NAME?
+encodeurl	ascii	2	_xlfn.ENCODEURL(CHAR({1}))	(2.0,)	e	#NAME?
+encodeurl	ascii	3	_xlfn.ENCODEURL(CHAR({1}))	(3.0,)	e	#NAME?
+encodeurl	ascii	4	_xlfn.ENCODEURL(CHAR({1}))	(4.0,)	e	#NAME?
+encodeurl	ascii	5	_xlfn.ENCODEURL(CHAR({1}))	(5.0,)	e	#NAME?
+encodeurl	ascii	6	_xlfn.ENCODEURL(CHAR({1}))	(6.0,)	e	#NAME?
+encodeurl	ascii	7	_xlfn.ENCODEURL(CHAR({1}))	(7.0,)	e	#NAME?
+encodeurl	ascii	8	_xlfn.ENCODEURL(CHAR({1}))	(8.0,)	e	#NAME?
+encodeurl	ascii	9	_xlfn.ENCODEURL(CHAR({1}))	(9.0,)	e	#NAME?
+encodeurl	ascii	10	_xlfn.ENCODEURL(CHAR({1}))	(10.0,)	e	#NAME?
+encodeurl	ascii	11	_xlfn.ENCODEURL(CHAR({1}))	(11.0,)	e	#NAME?
+encodeurl	ascii	12	_xlfn.ENCODEURL(CHAR({1}))	(12.0,)	e	#NAME?
+encodeurl	ascii	13	_xlfn.ENCODEURL(CHAR({1}))	(13.0,)	e	#NAME?
+encodeurl	ascii	14	_xlfn.ENCODEURL(CHAR({1}))	(14.0,)	e	#NAME?
+encodeurl	ascii	15	_xlfn.ENCODEURL(CHAR({1}))	(15.0,)	e	#NAME?
+encodeurl	ascii	16	_xlfn.ENCODEURL(CHAR({1}))	(16.0,)	e	#NAME?
+encodeurl	ascii	17	_xlfn.ENCODEURL(CHAR({1}))	(17.0,)	e	#NAME?
+encodeurl	ascii	18	_xlfn.ENCODEURL(CHAR({1}))	(18.0,)	e	#NAME?
+encodeurl	ascii	19	_xlfn.ENCODEURL(CHAR({1}))	(19.0,)	e	#NAME?
+encodeurl	ascii	20	_xlfn.ENCODEURL(CHAR({1}))	(20.0,)	e	#NAME?
+encodeurl	ascii	21	_xlfn.ENCODEURL(CHAR({1}))	(21.0,)	e	#NAME?
+encodeurl	ascii	22	_xlfn.ENCODEURL(CHAR({1}))	(22.0,)	e	#NAME?
+encodeurl	ascii	23	_xlfn.ENCODEURL(CHAR({1}))	(23.0,)	e	#NAME?
+encodeurl	ascii	24	_xlfn.ENCODEURL(CHAR({1}))	(24.0,)	e	#NAME?
+encodeurl	ascii	25	_xlfn.ENCODEURL(CHAR({1}))	(25.0,)	e	#NAME?
+encodeurl	ascii	26	_xlfn.ENCODEURL(CHAR({1}))	(26.0,)	e	#NAME?
+encodeurl	ascii	27	_xlfn.ENCODEURL(CHAR({1}))	(27.0,)	e	#NAME?
+encodeurl	ascii	28	_xlfn.ENCODEURL(CHAR({1}))	(28.0,)	e	#NAME?
+encodeurl	ascii	29	_xlfn.ENCODEURL(CHAR({1}))	(29.0,)	e	#NAME?
+encodeurl	ascii	30	_xlfn.ENCODEURL(CHAR({1}))	(30.0,)	e	#NAME?
+encodeurl	ascii	31	_xlfn.ENCODEURL(CHAR({1}))	(31.0,)	e	#NAME?
+encodeurl	ascii	32	_xlfn.ENCODEURL(CHAR({1}))	(32.0,)	e	#NAME?
+encodeurl	ascii	33	_xlfn.ENCODEURL(CHAR({1}))	(33.0,)	e	#NAME?
+encodeurl	ascii	34	_xlfn.ENCODEURL(CHAR({1}))	(34.0,)	e	#NAME?
+encodeurl	ascii	35	_xlfn.ENCODEURL(CHAR({1}))	(35.0,)	e	#NAME?
+encodeurl	ascii	36	_xlfn.ENCODEURL(CHAR({1}))	(36.0,)	e	#NAME?
+encodeurl	ascii	37	_xlfn.ENCODEURL(CHAR({1}))	(37.0,)	e	#NAME?
+encodeurl	ascii	38	_xlfn.ENCODEURL(CHAR({1}))	(38.0,)	e	#NAME?
+encodeurl	ascii	39	_xlfn.ENCODEURL(CHAR({1}))	(39.0,)	e	#NAME?
+encodeurl	ascii	40	_xlfn.ENCODEURL(CHAR({1}))	(40.0,)	e	#NAME?
+encodeurl	ascii	41	_xlfn.ENCODEURL(CHAR({1}))	(41.0,)	e	#NAME?
+encodeurl	ascii	42	_xlfn.ENCODEURL(CHAR({1}))	(42.0,)	e	#NAME?
+encodeurl	ascii	43	_xlfn.ENCODEURL(CHAR({1}))	(43.0,)	e	#NAME?
+encodeurl	ascii	44	_xlfn.ENCODEURL(CHAR({1}))	(44.0,)	e	#NAME?
+encodeurl	ascii	45	_xlfn.ENCODEURL(CHAR({1}))	(45.0,)	e	#NAME?
+encodeurl	ascii	46	_xlfn.ENCODEURL(CHAR({1}))	(46.0,)	e	#NAME?
+encodeurl	ascii	47	_xlfn.ENCODEURL(CHAR({1}))	(47.0,)	e	#NAME?
+encodeurl	ascii	48	_xlfn.ENCODEURL(CHAR({1}))	(48.0,)	e	#NAME?
+encodeurl	ascii	49	_xlfn.ENCODEURL(CHAR({1}))	(49.0,)	e	#NAME?
+encodeurl	ascii	50	_xlfn.ENCODEURL(CHAR({1}))	(50.0,)	e	#NAME?
+encodeurl	ascii	51	_xlfn.ENCODEURL(CHAR({1}))	(51.0,)	e	#NAME?
+encodeurl	ascii	52	_xlfn.ENCODEURL(CHAR({1}))	(52.0,)	e	#NAME?
+encodeurl	ascii	53	_xlfn.ENCODEURL(CHAR({1}))	(53.0,)	e	#NAME?
+encodeurl	ascii	54	_xlfn.ENCODEURL(CHAR({1}))	(54.0,)	e	#NAME?
+encodeurl	ascii	55	_xlfn.ENCODEURL(CHAR({1}))	(55.0,)	e	#NAME?
+encodeurl	ascii	56	_xlfn.ENCODEURL(CHAR({1}))	(56.0,)	e	#NAME?
+encodeurl	ascii	57	_xlfn.ENCODEURL(CHAR({1}))	(57.0,)	e	#NAME?
+encodeurl	ascii	58	_xlfn.ENCODEURL(CHAR({1}))	(58.0,)	e	#NAME?
+encodeurl	ascii	59	_xlfn.ENCODEURL(CHAR({1}))	(59.0,)	e	#NAME?
+encodeurl	ascii	60	_xlfn.ENCODEURL(CHAR({1}))	(60.0,)	e	#NAME?
+encodeurl	ascii	61	_xlfn.ENCODEURL(CHAR({1}))	(61.0,)	e	#NAME?
+encodeurl	ascii	62	_xlfn.ENCODEURL(CHAR({1}))	(62.0,)	e	#NAME?
+encodeurl	ascii	63	_xlfn.ENCODEURL(CHAR({1}))	(63.0,)	e	#NAME?
+encodeurl	ascii	64	_xlfn.ENCODEURL(CHAR({1}))	(64.0,)	e	#NAME?
+encodeurl	ascii	65	_xlfn.ENCODEURL(CHAR({1}))	(65.0,)	e	#NAME?
+encodeurl	ascii	66	_xlfn.ENCODEURL(CHAR({1}))	(66.0,)	e	#NAME?
+encodeurl	ascii	67	_xlfn.ENCODEURL(CHAR({1}))	(67.0,)	e	#NAME?
+encodeurl	ascii	68	_xlfn.ENCODEURL(CHAR({1}))	(68.0,)	e	#NAME?
+encodeurl	ascii	69	_xlfn.ENCODEURL(CHAR({1}))	(69.0,)	e	#NAME?
+encodeurl	ascii	70	_xlfn.ENCODEURL(CHAR({1}))	(70.0,)	e	#NAME?
+encodeurl	ascii	71	_xlfn.ENCODEURL(CHAR({1}))	(71.0,)	e	#NAME?
+encodeurl	ascii	72	_xlfn.ENCODEURL(CHAR({1}))	(72.0,)	e	#NAME?
+encodeurl	ascii	73	_xlfn.ENCODEURL(CHAR({1}))	(73.0,)	e	#NAME?
+encodeurl	ascii	74	_xlfn.ENCODEURL(CHAR({1}))	(74.0,)	e	#NAME?
+encodeurl	ascii	75	_xlfn.ENCODEURL(CHAR({1}))	(75.0,)	e	#NAME?
+encodeurl	ascii	76	_xlfn.ENCODEURL(CHAR({1}))	(76.0,)	e	#NAME?
+encodeurl	ascii	77	_xlfn.ENCODEURL(CHAR({1}))	(77.0,)	e	#NAME?
+encodeurl	ascii	78	_xlfn.ENCODEURL(CHAR({1}))	(78.0,)	e	#NAME?
+encodeurl	ascii	79	_xlfn.ENCODEURL(CHAR({1}))	(79.0,)	e	#NAME?
+encodeurl	ascii	80	_xlfn.ENCODEURL(CHAR({1}))	(80.0,)	e	#NAME?
+encodeurl	ascii	81	_xlfn.ENCODEURL(CHAR({1}))	(81.0,)	e	#NAME?
+encodeurl	ascii	82	_xlfn.ENCODEURL(CHAR({1}))	(82.0,)	e	#NAME?
+encodeurl	ascii	83	_xlfn.ENCODEURL(CHAR({1}))	(83.0,)	e	#NAME?
+encodeurl	ascii	84	_xlfn.ENCODEURL(CHAR({1}))	(84.0,)	e	#NAME?
+encodeurl	ascii	85	_xlfn.ENCODEURL(CHAR({1}))	(85.0,)	e	#NAME?
+encodeurl	ascii	86	_xlfn.ENCODEURL(CHAR({1}))	(86.0,)	e	#NAME?
+encodeurl	ascii	87	_xlfn.ENCODEURL(CHAR({1}))	(87.0,)	e	#NAME?
+encodeurl	ascii	88	_xlfn.ENCODEURL(CHAR({1}))	(88.0,)	e	#NAME?
+encodeurl	ascii	89	_xlfn.ENCODEURL(CHAR({1}))	(89.0,)	e	#NAME?
+encodeurl	ascii	90	_xlfn.ENCODEURL(CHAR({1}))	(90.0,)	e	#NAME?
+encodeurl	ascii	91	_xlfn.ENCODEURL(CHAR({1}))	(91.0,)	e	#NAME?
+encodeurl	ascii	92	_xlfn.ENCODEURL(CHAR({1}))	(92.0,)	e	#NAME?
+encodeurl	ascii	93	_xlfn.ENCODEURL(CHAR({1}))	(93.0,)	e	#NAME?
+encodeurl	ascii	94	_xlfn.ENCODEURL(CHAR({1}))	(94.0,)	e	#NAME?
+encodeurl	ascii	95	_xlfn.ENCODEURL(CHAR({1}))	(95.0,)	e	#NAME?
+encodeurl	ascii	96	_xlfn.ENCODEURL(CHAR({1}))	(96.0,)	e	#NAME?
+encodeurl	ascii	97	_xlfn.ENCODEURL(CHAR({1}))	(97.0,)	e	#NAME?
+encodeurl	ascii	98	_xlfn.ENCODEURL(CHAR({1}))	(98.0,)	e	#NAME?
+encodeurl	ascii	99	_xlfn.ENCODEURL(CHAR({1}))	(99.0,)	e	#NAME?
+encodeurl	ascii	100	_xlfn.ENCODEURL(CHAR({1}))	(100.0,)	e	#NAME?
+encodeurl	ascii	101	_xlfn.ENCODEURL(CHAR({1}))	(101.0,)	e	#NAME?
+encodeurl	ascii	102	_xlfn.ENCODEURL(CHAR({1}))	(102.0,)	e	#NAME?
+encodeurl	ascii	103	_xlfn.ENCODEURL(CHAR({1}))	(103.0,)	e	#NAME?
+encodeurl	ascii	104	_xlfn.ENCODEURL(CHAR({1}))	(104.0,)	e	#NAME?
+encodeurl	ascii	105	_xlfn.ENCODEURL(CHAR({1}))	(105.0,)	e	#NAME?
+encodeurl	ascii	106	_xlfn.ENCODEURL(CHAR({1}))	(106.0,)	e	#NAME?
+encodeurl	ascii	107	_xlfn.ENCODEURL(CHAR({1}))	(107.0,)	e	#NAME?
+encodeurl	ascii	108	_xlfn.ENCODEURL(CHAR({1}))	(108.0,)	e	#NAME?
+encodeurl	ascii	109	_xlfn.ENCODEURL(CHAR({1}))	(109.0,)	e	#NAME?
+encodeurl	ascii	110	_xlfn.ENCODEURL(CHAR({1}))	(110.0,)	e	#NAME?
+encodeurl	ascii	111	_xlfn.ENCODEURL(CHAR({1}))	(111.0,)	e	#NAME?
+encodeurl	ascii	112	_xlfn.ENCODEURL(CHAR({1}))	(112.0,)	e	#NAME?
+encodeurl	ascii	113	_xlfn.ENCODEURL(CHAR({1}))	(113.0,)	e	#NAME?
+encodeurl	ascii	114	_xlfn.ENCODEURL(CHAR({1}))	(114.0,)	e	#NAME?
+encodeurl	ascii	115	_xlfn.ENCODEURL(CHAR({1}))	(115.0,)	e	#NAME?
+encodeurl	ascii	116	_xlfn.ENCODEURL(CHAR({1}))	(116.0,)	e	#NAME?
+encodeurl	ascii	117	_xlfn.ENCODEURL(CHAR({1}))	(117.0,)	e	#NAME?
+encodeurl	ascii	118	_xlfn.ENCODEURL(CHAR({1}))	(118.0,)	e	#NAME?
+encodeurl	ascii	119	_xlfn.ENCODEURL(CHAR({1}))	(119.0,)	e	#NAME?
+encodeurl	ascii	120	_xlfn.ENCODEURL(CHAR({1}))	(120.0,)	e	#NAME?
+encodeurl	ascii	121	_xlfn.ENCODEURL(CHAR({1}))	(121.0,)	e	#NAME?
+encodeurl	ascii	122	_xlfn.ENCODEURL(CHAR({1}))	(122.0,)	e	#NAME?
+encodeurl	ascii	123	_xlfn.ENCODEURL(CHAR({1}))	(123.0,)	e	#NAME?
+encodeurl	ascii	124	_xlfn.ENCODEURL(CHAR({1}))	(124.0,)	e	#NAME?
+encodeurl	ascii	125	_xlfn.ENCODEURL(CHAR({1}))	(125.0,)	e	#NAME?
+encodeurl	ascii	126	_xlfn.ENCODEURL(CHAR({1}))	(126.0,)	e	#NAME?
+encodeurl	ascii	127	_xlfn.ENCODEURL(CHAR({1}))	(127.0,)	e	#NAME?
+encodeurl	beyond	128	_xlfn.ENCODEURL(_xlfn.UNICHAR({1}))	(128.0,)	e	#NAME?
+encodeurl	beyond	129	_xlfn.ENCODEURL(_xlfn.UNICHAR({1}))	(159.0,)	e	#NAME?
+encodeurl	beyond	130	_xlfn.ENCODEURL(_xlfn.UNICHAR({1}))	(160.0,)	e	#NAME?
+encodeurl	beyond	131	_xlfn.ENCODEURL(_xlfn.UNICHAR({1}))	(169.0,)	e	#NAME?
+encodeurl	beyond	132	_xlfn.ENCODEURL(_xlfn.UNICHAR({1}))	(233.0,)	e	#NAME?
+encodeurl	beyond	133	_xlfn.ENCODEURL(_xlfn.UNICHAR({1}))	(255.0,)	e	#NAME?
+encodeurl	beyond	134	_xlfn.ENCODEURL(_xlfn.UNICHAR({1}))	(256.0,)	e	#NAME?
+encodeurl	beyond	135	_xlfn.ENCODEURL(_xlfn.UNICHAR({1}))	(8364.0,)	e	#NAME?
+encodeurl	beyond	136	_xlfn.ENCODEURL(_xlfn.UNICHAR({1}))	(20013.0,)	e	#NAME?
+encodeurl	beyond	137	_xlfn.ENCODEURL(_xlfn.UNICHAR({1}))	(65533.0,)	e	#NAME?
+encodeurl	beyond	138	_xlfn.ENCODEURL(_xlfn.UNICHAR({1}))	(128512.0,)	e	#NAME?
+encodeurl	text	139	_xlfn.ENCODEURL({1})	('a b',)	e	#NAME?
+encodeurl	text	140	_xlfn.ENCODEURL({1})	('a+b',)	e	#NAME?
+encodeurl	text	141	_xlfn.ENCODEURL({1})	('100%',)	e	#NAME?
+encodeurl	text	142	_xlfn.ENCODEURL({1})	('%20',)	e	#NAME?
+encodeurl	text	143	_xlfn.ENCODEURL({1})	('a/b?c=d&e=f#g',)	e	#NAME?
+encodeurl	text	144	_xlfn.ENCODEURL({1})	('https://example.com/a b?q=1&r=é',)	e	#NAME?
+encodeurl	text	145	_xlfn.ENCODEURL({1})	('naïve café',)	e	#NAME?
+encodeurl	text	146	_xlfn.ENCODEURL({1})	('  ',)	e	#NAME?
+encodeurl	text	147	_xlfn.ENCODEURL({1})	('日本語',)	e	#NAME?
+encodeurl	text	148	_xlfn.ENCODEURL({1})	('a\nb',)	e	#NAME?
+encodeurl	value	149	_xlfn.ENCODEURL({1})	(1.0,)	e	#NAME?
+encodeurl	value	150	_xlfn.ENCODEURL({1})	(-2.5,)	e	#NAME?
+encodeurl	value	151	_xlfn.ENCODEURL({1})	(0.1,)	e	#NAME?
+encodeurl	value	152	_xlfn.ENCODEURL({1})	(1e+20,)	e	#NAME?
+encodeurl	value	153	_xlfn.ENCODEURL({1})	(1e-07,)	e	#NAME?
+encodeurl	value	154	_xlfn.ENCODEURL({1})	(123456789012345.0,)	e	#NAME?
+encodeurl	value	155	_xlfn.ENCODEURL({1})	(True,)	e	#NAME?
+encodeurl	value	156	_xlfn.ENCODEURL({1})	(False,)	e	#NAME?
+encodeurl	value	157	_xlfn.ENCODEURL({1})	(ErrorValue('#N/A'),)	e	#NAME?
+encodeurl	value	158	_xlfn.ENCODEURL({1})	(None,)	e	#NAME?
+encodeurl	value	159	_xlfn.ENCODEURL({1})	(FormulaInput('=""'),)	e	#NAME?
+encodeurl	value	160	_xlfn.ENCODEURL(1/0)	()	e	#NAME?
+encodeurl	value	161	_xlfn.ENCODEURL(0.1+0.2)	()	e	#NAME?
+encodeurl	value	162	_xlfn.ENCODEURL("")	()	e	#NAME?
+encodeurl	value	163	_xlfn.ENCODEURL({1}:{2})	('a', 'b')	e	#NAME?
+encodeurl	value	164	_xlfn.ENCODEURL({"a b","c"})	()	e	#NAME?
+encodeurl	length	165	LEN(_xlfn.ENCODEURL(REPT("a",32767)))	()	e	#NAME?
+encodeurl	length	166	LEN(_xlfn.ENCODEURL(REPT(" ",10922)))	()	e	#NAME?
+encodeurl	length	167	LEN(_xlfn.ENCODEURL(REPT(" ",10923)))	()	e	#NAME?
+encodeurl	length	168	LEN(_xlfn.ENCODEURL(REPT("é",5461)))	()	e	#NAME?
+encodeurl	length	169	LEN(_xlfn.ENCODEURL(REPT("é",5462)))	()	e	#NAME?
+encodeurl	length	170	LEN(_xlfn.ENCODEURL(REPT(_xlfn.UNICHAR(128512),2730)))	()	e	#NAME?
+encodeurl	length	171	LEN(_xlfn.ENCODEURL(REPT(_xlfn.UNICHAR(128512),2731)))	()	e	#NAME?
