@@ -12,8 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `ConditionalFormula.parse` and `ConditionalFormula.cell_is`, and `Workbook.platform` and
   `Workbook.regional_settings`, in the shape xlformat and sheetpeek take them: `platform` is `"mac"`, `"windows"` or an
   `xlformat.Platform` (by its name), `regional_settings` an `xlformat.RegionalSettings`; `None` is the Mac and the
-  platform's en-US preset. `TEXT` passes both on to xlformat. `"windows"` raises `LookupError` until the package has
-  Excel for Windows' captures.
+  platform's en-US preset. `TEXT` passes both on to xlformat.
+- Excel for Windows (`platform="windows"`): `CHAR` and `CODE` in Windows-1252, text ordered and compared as Excel for
+  Windows orders it (operators, criteria, sorting, lookups, `UNIQUE`), the names it knows (`ENCODEURL` and `FILTERXML`
+  without `_xlfn.` are `#NAME?`), and `ENCODEURL`, each from captures of Excel for Windows (CAPTURING.md §5).
 
 ### Changed
 - Requires xlformat 0.8 or later (`platform` and `regional_settings` in `xlformat.text_function`).

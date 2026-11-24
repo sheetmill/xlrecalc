@@ -16,10 +16,7 @@ import xlformat
 PlatformName = Literal["mac", "windows"]
 
 DEFAULT_PLATFORM: PlatformName = "mac"
-"""What ``platform=None`` means while Windows support is partial."""
-
-SUPPORTED: frozenset[str] = frozenset({"mac"})
-"""The platforms whose behavior the package has captured evidence for."""
+"""What ``platform=None`` means."""
 
 
 def resolve(
@@ -33,7 +30,6 @@ def resolve(
     Raises:
         ValueError: ``platform`` is not ``"mac"``, ``"windows"`` or an ``xlformat.Platform``.
         TypeError: ``regional_settings`` is not an ``xlformat.RegionalSettings``.
-        LookupError: The package has no captured evidence for the platform yet.
     """
     if platform is None:
         name: str = DEFAULT_PLATFORM
@@ -47,9 +43,6 @@ def resolve(
     if name not in ("mac", "windows"):
         msg = f"platform must be 'mac', 'windows' or an xlformat.Platform, not {platform!r}"
         raise ValueError(msg)
-    if name not in SUPPORTED:
-        msg = f"no captured evidence for Excel for Windows yet; platform={DEFAULT_PLATFORM!r} works"
-        raise LookupError(msg)
     if regional_settings is None:
         regional_settings = (
             xlformat.RegionalSettings.EN_US_MAC

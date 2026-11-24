@@ -627,7 +627,6 @@ def load(
     Raises:
         PackageError: The file is not a readable xlsx package.
         LimitError: The file exceeds ``limits``.
-        LookupError: ``platform`` is one this package has no captured evidence for yet.
     """
     name, regional = resolve(platform, regional_settings)  # checked before the file is read
     if not isinstance(source, (str, os.PathLike)):

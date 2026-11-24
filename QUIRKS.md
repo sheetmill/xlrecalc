@@ -183,8 +183,12 @@ not). An empty argument is `#N/A`.
   16.114 counted units in `LEN`, `MID`, `REPLACE`, `FIND` and `SEARCH` too).
 - `ENCODEURL`, `FILTERXML` and `EUROCONVERT` give `#NAME?` in Excel 16 for Mac in every file form and with any
   arguments (captures `mac_gaps`, `function_names`, `encodeurl`), and so they do here: a cell using one computes to
-  `#NAME?` where Excel computes it. Any other name the package does not compute (an add-in's function, a name no Excel
-  knows) keeps its cached value and is reported, since what Excel shows depends on add-ins the file does not record.
+  `#NAME?` where Excel computes it. Excel for Windows knows `ENCODEURL` and `FILTERXML` written with `_xlfn.` only
+  (without it, `#NAME?`, as here under `platform="windows"`), and `EUROCONVERT` with its add-in: there `ENCODEURL` is
+  computed (capture `windows/encodeurl`; a result of 32,767 characters or more is `#VALUE!`, our reading of a capture
+  that computes 32,766 characters and refuses an unencoded 32,767-character text), while `FILTERXML` and `EUROCONVERT`
+  are not. Any other name the package does not compute (an add-in's function, a name no Excel knows) keeps its cached
+  value and is reported, since what Excel shows depends on add-ins the file does not record.
 - `NUMBERVALUE` with digits as separators reads a group separator after the decimal one as a digit: `NUMBERVALUE(" 1 2 ",1,2)`
   is 0.2 in Excel and `#VALUE!` here (one row of capture `text_family`).
 - Declared tolerances, `statistics_family`: the sums of powers and regressions (`AVEDEV`, `DEVSQ`, `GEOMEAN`, `HARMEAN`,
@@ -256,10 +260,14 @@ not). An empty argument is `#N/A`.
   controls first, our choice, so they may not sort as Excel sorts them. Sorting, ordered criteria
   and approximate lookups follow the same order; a criterion's equality (`COUNTIF(r,"ß")` counts
   `ss`) and `XMATCH`'s binary search follow `=`, while an exact `MATCH`, `VLOOKUP` or `XLOOKUP`
-  scan ignores case only (`MATCH("ß",r,0)` passes over `ss`; capture `collate_functions`). Of
-  Excel for Windows' order, one capture is recorded (CAPTURING.md §5: Excel 16.0.20527.20196,
-  Microsoft 365, locale and sort locale en-US): 134 of the 2,380 rows of `collate_words` differ
-  from the Mac capture.
+  scan ignores case only (`MATCH("ß",r,0)` passes over `ss`; capture `collate_functions`). Under
+  `platform="windows"` text orders as Excel for Windows orders it, with the same uses of `<` and
+  `=` (captures `windows/collate_chars`, `collate_words`, `collate_functions`, `modern`, Excel
+  16.0.20527.20196, locale and sort locale en-US): case is ignored; `'` and `-` count only between
+  texts otherwise equal; other marks follow code order, then `+ < = >`, `« » § µ ¶`, digits and
+  letters; `æ`, `œ`, `þ` equal two letters (`"ae"="æ"` is TRUE, and `UNIQUE` takes them as one);
+  `ª`, `º`, `ð`, `ø` sort right after their base letter and are not equal to it. Characters outside
+  the captured set follow the same rule as on the Mac.
 - A row off Excel's grid in a file (`r="99999999999"`): Excel opens the file and drops the cell
   (capture `value_forms`), though it refuses rows 0 and 1048577; the reader refuses every row
   off the grid with a `PackageError`.

@@ -1498,9 +1498,10 @@ One workbook is used from one thread at a time, and so is one `Formula`.
 platform's en-US preset, and `Workbook.platform` and `Workbook.regional_settings` say what a
 workbook was loaded with. The two `parse` methods take them when the formula is compiled, as they
 take `quirks`. `TEXT` passes both on to `xlformat.text_function`. What else depends on them (the
-code page of `CHAR` and `CODE`, the order of text, the names Excel knows) is decided from the two
-together inside the package, so nothing public changes when other regional settings come. Excel
-for Windows raises `LookupError` until its captures are in the repository.
+code page of `CHAR` and `CODE` in `_functions/_text.py`, the order of text in `_compare.py`, the
+names Excel knows in `_functions/__init__.py`'s `registry_for`, which formulas compile against) is
+decided from the two together inside the package, so nothing public changes when other regional
+settings come.
 
 **One formula outside a workbook** (`_evaluate.py`). The formula is compiled as a cell's formula
 would be, at `origin`, and its template is run at `at` on an engine that holds no formula cells:
@@ -1588,8 +1589,7 @@ After 0.10.1, in this order: an order, not a promise or a date.
 9. A strict option for `recalculate` and `Workbook.save` that raises where a cell cannot be
    computed (`Report.uncomputed`), rather than writing it with the file's value or none; and
    streams as well as paths for `save` and `recalculate`, as `load` takes one.
-10. Then: settings for Excel for Windows' text order and its character set in `CHAR` and
-   `CODE`, each once captures record it (so far one capture of the text order, CAPTURING.md §5's
-   `collate_words`, from one build and locale); the array-backed store and vectorized templates
-   (numpy as an optional extra), the SQLite backend, parallel evaluation of independent template
-   columns on free-threaded Python, and a compiled core only if profiling demands it.
+10. Then: Excel for Windows' captures of every other suite, to check that nothing else differs there
+   and to declare the math library's last digits per function; the array-backed store and vectorized
+   templates (numpy as an optional extra), the SQLite backend, parallel evaluation of independent
+   template columns on free-threaded Python, and a compiled core only if profiling demands it.

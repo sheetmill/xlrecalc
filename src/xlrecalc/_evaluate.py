@@ -116,7 +116,6 @@ def evaluate(
     Raises:
         FormulaError: Excel's formula bar would not take the formula.
         UnsupportedError: It uses a function or form this package does not compute.
-        LookupError: ``platform`` is one this package has no captured evidence for yet.
     """
     parsed = Formula.parse(
         formula,
@@ -183,7 +182,6 @@ class Formula:
 
         Raises:
             FormulaError: Excel's formula bar would not take it.
-            LookupError: ``platform`` is one this package has no captured evidence for yet.
         """
         name, regional = resolve(platform, regional_settings)
         if not isinstance(formula, str):

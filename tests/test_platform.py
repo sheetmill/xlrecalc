@@ -2,8 +2,9 @@
 
 Every entry point takes both (``load``, ``Loader``, ``recalculate``, ``evaluate``,
 ``Formula.parse``, ``ConditionalFormula.parse`` and ``cell_is``); ``None`` is the Mac and the
-platform's en-US preset. ``TEXT`` passes both on to ``xlformat``. Excel for Windows is refused
-until its captures are in the repository.
+platform's en-US preset. ``TEXT`` passes both on to ``xlformat``. Under Excel for Windows,
+``CHAR`` and ``CODE`` take its code page, text orders as it orders text, and the names it knows
+are its own.
 """
 
 from __future__ import annotations
@@ -36,8 +37,33 @@ def test_the_mac_by_name_or_as_xlformat_platform(platform: object) -> None:
     assert xlrecalc.evaluate('=TEXT(2,"0.0")', platform=platform) == "2.0"  # type: ignore[arg-type]
 
 
-def _entry_points(tmp_path: object) -> dict[str, object]:
+WINDOWS_DATA = package(
+    '<row r="1"><c r="A1"><f>CHAR(233)</f></c><c r="B1"><f>"ae"="æ"</f></c>'
+    '<c r="C1"><f>_xlfn.ENCODEURL("a b~")</f></c>'
+    '<c r="D1"><f>FILTERXML("&lt;a/&gt;","//a")</f></c></row>'
+)
+
+
+@pytest.mark.parametrize("platform", ["windows", xlformat.Platform.WINDOWS])
+def test_windows_by_name_or_as_xlformat_platform(platform: object) -> None:
+    wb = xlrecalc.load(io.BytesIO(WINDOWS_DATA), platform=platform)  # type: ignore[arg-type]
+    assert wb.platform == "windows"
+    assert wb.regional_settings is xlformat.RegionalSettings.EN_US_WINDOWS
+    got = [wb.value(f"Data!{c}1") for c in "ABCD"]
+    assert got == ["é", True, "a%20b%7E", xlrecalc.ErrorValue.NAME]
+    mac = xlrecalc.load(io.BytesIO(WINDOWS_DATA))
+    assert [mac.value(f"Data!{c}1") for c in "ABCD"] == [
+        "È",
+        False,
+        *[xlrecalc.ErrorValue.NAME] * 2,
+    ]
+
+
+def _entry_points(tmp_path: object, existing: bool = False) -> dict[str, object]:
     missing = f"{tmp_path}/none.xlsx"  # refused before the file is opened
+    if existing:
+        with open(missing, "wb") as f:
+            f.write(DATA)
     return {
         "load": lambda **k: xlrecalc.load(missing, **k),
         "Loader": lambda **k: xlrecalc.Loader(xlio.open(io.BytesIO(DATA)), **k),
@@ -65,12 +91,12 @@ def _entry_points(tmp_path: object) -> dict[str, object]:
         "ConditionalFormula.cell_is",
     ],
 )
-def test_each_entry_point_refuses_what_it_cannot_honor(entry: str, tmp_path: object) -> None:
+def test_each_entry_point_takes_windows_and_refuses_what_it_cannot_honor(
+    entry: str, tmp_path: object
+) -> None:
+    for platform in ("windows", xlformat.Platform.WINDOWS):
+        _entry_points(tmp_path, existing=True)[entry](platform=platform)  # type: ignore[operator]
     call = _entry_points(tmp_path)[entry]
-    with pytest.raises(LookupError, match="Windows"):
-        call(platform="windows")  # type: ignore[operator]
-    with pytest.raises(LookupError, match="Windows"):
-        call(platform=xlformat.Platform.WINDOWS)  # type: ignore[operator]
     with pytest.raises(ValueError, match="platform must be"):
         call(platform="linux")  # type: ignore[operator]
     with pytest.raises(TypeError, match="regional_settings"):

@@ -4,8 +4,10 @@ xlrecalc recalculates Excel workbooks in pure Python. It evaluates a workbook's 
 the results Excel computes and writes them back into the file as the cached values Excel
 stores, so that openpyxl's data-only mode, pandas and other readers see values where a
 workbook written by a program has only formulas. Results are tested against values captured
-on Excel for Mac 16.115 (Microsoft 365); they are not yet checked against Excel for Windows,
-and Excel in other languages and locales is not yet supported.
+on Excel for Mac 16.115 (Microsoft 365), the default. With `platform="windows"`, what Excel for
+Windows computes differently (the character set of `CHAR` and `CODE`, the order of text, the
+names it knows, `ENCODEURL`) is tested against values captured on Excel for Windows; the rest is
+not yet checked there. Excel in other languages and locales is not yet supported.
 
 Documentation: <https://xlrecalc.readthedocs.io>.
 

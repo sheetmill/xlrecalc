@@ -78,7 +78,6 @@ def recalculate(
         PackageError: The file is not a readable xlsx package.
         LimitError: The file exceeds ``limits``.
         OSError: The file cannot be read, or the result cannot be written.
-        LookupError: ``platform`` is one this package has no captured evidence for yet.
     """
     name, regional = resolve(platform, regional_settings)
     mode = recalc_mode(recalc_on_load, "full", full, stacklevel=2)
