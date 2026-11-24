@@ -1451,7 +1451,8 @@ import xlrecalc
 report = xlrecalc.recalculate("model.xlsx")              # in place, atomically (§9.2)
 report = xlrecalc.recalculate("model.xlsx", "out.xlsx", recalc_on_load="always")
 # recalculate(source, destination=None, *, recalc_on_load="excel", full_calc_on_load=True,
-#             limits=None, quirks=None) -> Report
+#             limits=None, quirks=None, full=None, platform=None,
+#             regional_settings=None) -> Report
 report.uncomputed                      # {CellRef("Sheet 1", 7, 2), ...}; str(): 'Sheet 1'!B7
 
 wb = xlrecalc.load("model.xlsx")       # cached values trusted per §7.4; or a binary file
@@ -1552,7 +1553,7 @@ in a rule recalculates no cell on opening, so `RecalcCheck` reads no rule. Tests
 
 ## 13. Roadmap
 
-After 0.10.1, in this order: an order, not a promise or a date.
+In this order: an order, not a promise or a date.
 
 1. A `Loader` that also reads sheets lazily where the opening rule answers `"some"`: the static
    dependents of the `ca="1"` cells found from the formulas-only reading, so that only the

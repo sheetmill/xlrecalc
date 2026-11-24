@@ -164,7 +164,7 @@ platform.
 | `DVARP` | database | partial | 154 | 152 | 2 | 4 ulps | computed criteria are not supported |
 | `EDATE` | date and time | implemented | 42 | 42 | 0 |  |  |
 | `EFFECT` | financial | implemented | 148 | 148 | 0 | 4 ulps |  |
-| `ENCODEURL` | text | partial | 179 | 179 | 0 |  | Excel for Windows only: Excel for Mac does not know it (#NAME?, as here) |
+| `ENCODEURL` | text | partial | 179 | 179 | 0 |  | computed under platform="windows"; #NAME? under "mac", as Excel for Mac does not know it |
 | `EOMONTH` | date and time | implemented | 41 | 41 | 0 |  |  |
 | `ERF` | engineering | implemented | 108 | 103 | 5 | 4 ulps |  |
 | `ERF.PRECISE` | engineering | implemented | 56 | 56 | 0 | 4 ulps |  |

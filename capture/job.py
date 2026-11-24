@@ -44,7 +44,8 @@ first one the Windows captures were made with."""
 def manifest(
     suite: str, job_id: str, requires: dict[str, object] | None = REQUIRES
 ) -> dict[str, object]:
-    """The manifest; ``requires=None`` for a job written before new jobs stated it."""
+    """The manifest; ``requires=None`` gives the manifest of a job written before manifests
+    carried ``requires``."""
     head: dict[str, object] = {
         "schema": 1,
         "job_id": job_id,

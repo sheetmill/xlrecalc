@@ -418,7 +418,7 @@ _URL_KEPT = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
     "text",
     category=T,
     status="partial",
-    note="Excel for Windows only: Excel for Mac does not know it (#NAME?, as here)",
+    note='computed under platform="windows"; #NAME? under "mac", as Excel for Mac does not know it',
 )
 def ENCODEURL(ctx: Context, text: str) -> str | ErrorValue:
     """The text percent-encoded as Excel for Windows does it; ``#VALUE!`` from 32,767 characters.
