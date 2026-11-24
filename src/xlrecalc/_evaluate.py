@@ -312,7 +312,7 @@ class _AdHoc(Engine):
         if self.names:
             self.names.clear()
             self._name_templates.clear()
-            self._index = None
+            self._formulas_changed()
         self._resolver = resolver
         for ref, value in values.items():
             m = _REF.match(ref.strip()) if isinstance(ref, str) else None

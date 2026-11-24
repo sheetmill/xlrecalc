@@ -293,6 +293,9 @@ class Engine:
         # The cell being evaluated (the evaluation context of §7.3).
         self.sheet = self.row = self.col = 0
         self._index: DependencyIndex | None = None
+        self._live: dict[tuple[int, int, int], tuple[RefSpec, ...]] = {}
+        """A template's references that can reach a formula cell, per (template, sheet, column):
+        kept, as the index is, until a formula or a name changes (:meth:`_formulas_changed`)."""
         self.anchors: dict[int, Anchor] = {}
         """Formula cells that fill a range (§7.7), by node."""
         # Per sheet, rebuilt when first needed after anchors change: the ranges anchors fill or
@@ -410,7 +413,7 @@ class Engine:
         self.names[(scope, name.casefold())] = text
         self._volatility = None
         self._name_templates.clear()
-        self._index = None
+        self._formulas_changed()
 
     def template_for(
         self, text: str, row: int, col: int, raw: str | None = None, array_mode: bool = False
@@ -514,7 +517,7 @@ class Engine:
             self._drop_anchor(n)
         if row * COLS + col in s.templates:
             s.set_template(row, col, None)
-            self._index = None
+            self._formulas_changed()
         if self._absent:
             self._absent.discard(n)
             self._outdated.discard(n)
@@ -556,7 +559,7 @@ class Engine:
             self._drop_anchor(n)
         self._touch_spill(sheet, row, col)
         s.set_template(row, col, tid)
-        self._index = None
+        self._formulas_changed()
         self._changed = True
         compiled = self.templates[tid]
         self._dormant.discard(n)
@@ -1156,7 +1159,7 @@ class Engine:
         suspects: set[int] = set()  # on a static cycle: evaluated with every read checked
         marked_from = marked_to = 0  # path[marked_from:marked_to] is all in suspects
         clean: set[tuple[int, int, int, int, int]] = set()  # large boxes with nothing stale left
-        live: dict[tuple[int, int, int], tuple[RefSpec, ...]] = {}
+        live = self._live
         waits: dict[int, int] = {}  # a cell stopped by a read, and the cell it read
         for target in targets:  # one at a time: no stack entry per stale cell up front
             if target not in pending:
@@ -1708,10 +1711,11 @@ class Engine:
     ) -> Iterator[int]:
         """``precedents`` that are stale, for one pass of the scheduler.
 
-        Nothing becomes stale during a pass, and no formula appears, so a large box found with
-        nothing stale (``clean``) is not listed again by the many formulas that may refer to it,
-        and a template's references to columns of no formula are dropped once for all its cells
-        (``live``).
+        Nothing becomes stale during a pass, so a large box found with nothing stale (``clean``)
+        is not listed again by the many formulas that may refer to it. A template's references
+        to columns of no formula are dropped once for all its cells (``live``), and stay dropped
+        from one pass to the next until a formula or a name changes: reading cells one by one
+        runs a pass for each.
         """
         at_sheet, row, col = unpack(n)
         tid = self.sheets[at_sheet].templates.at(row, col)
@@ -1748,6 +1752,11 @@ class Engine:
                         found = True
             if not found and (r2 - r1 + 1) * (c2 - c1 + 1) >= _LARGE_BOX:
                 clean.add((sheet, r1, c1, r2, c2))
+
+    def _formulas_changed(self) -> None:
+        """A formula, a name or an array's anchor changed: what is derived from them goes."""
+        self._index = None
+        self._live.clear()
 
     def index(self) -> DependencyIndex:
         """The reverse-dependency index, rebuilt after formulas change.

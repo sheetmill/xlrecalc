@@ -24,7 +24,7 @@ import xlio
 import xlrecalc
 from tests.test_loader_orders import CALCS, MODES, _book, _key
 from tests.xlsx_files import DOC, MAIN, PKG, package
-from xlrecalc._engine import Engine
+from xlrecalc._engine import Engine, unpack
 
 COLUMNS = "ABCDEFG"
 WAYS = ["load", "edited", "loader", "steps"]
@@ -140,6 +140,73 @@ def test_values_at_are_the_values_read_one_by_one(
         with xlio.open(io.BytesIO(data)) as book:
             got.append(_read_at(_workbook(data, mode, way, book), refs, batch))
     assert got[0] == got[1]
+
+
+@contextlib.contextmanager
+def _checked_live() -> Iterator[None]:
+    """Check every use of the references kept per (template, sheet, column) from one pass to
+    the next against those found afresh."""
+    stale_precedents = Engine._stale_precedents
+
+    def checked(self: Engine, n: int, *args: object) -> Iterator[int]:
+        sheet, row, col = unpack(n)
+        tid = self.sheets[sheet].templates.at(row, col)
+        kept = self._live.get((tid, sheet, col)) if tid is not None else None
+        if kept is not None:
+            assert kept == self._live_specs(tid, sheet, col)  # type: ignore[arg-type]
+        return stale_precedents(self, n, *args)  # type: ignore[arg-type]
+
+    Engine._stale_precedents = checked  # type: ignore[assignment,method-assign]
+    try:
+        yield
+    finally:
+        Engine._stale_precedents = stale_precedents  # type: ignore[method-assign]
+
+
+@pytest.mark.parametrize("way", WAYS)
+@pytest.mark.parametrize("mode", MODES)
+@pytest.mark.parametrize("calc", list(CALCS))
+@pytest.mark.parametrize("seed", range(4))
+def test_the_references_kept_between_passes_are_current(
+    seed: int, calc: str, mode: str, way: str
+) -> None:
+    """Reading cells one by one runs a pass for each; the references a template can reach a
+    formula through are kept from one to the next. Through reads, statuses, an edit, a formula
+    in a column that held none, and a recalculation, they are the ones found afresh."""
+    rng = random.Random(seed)
+    data, every = _book(rng, CALCS[calc])
+    half = len(every) // 2
+    random.seed(0)
+    with _checked_live(), xlio.open(io.BytesIO(data)) as book:
+        wb = _workbook(data, mode, way, book)
+        for ref in every[:half]:
+            wb.value(ref)
+        _ = [wb.status(r) for r in every[:half]]
+        wb.set("s1!A2", 3.0)
+        wb.set_formula("s1!K5", "=A2*2")
+        for ref in every[half:]:
+            wb.value(ref)
+        wb.recalculate()
+        _ = [wb.status(r) for r in every]
+
+
+def test_a_formula_in_a_column_that_held_none_is_a_precedent() -> None:
+    """B1 reads C1:C3, which hold no formula, and its reference is dropped; once C2 holds a
+    formula, the reference is kept again and C2 is evaluated before B1."""
+    rows = (
+        '<row r="1"><c r="A1"><v>1</v></c><c r="B1"><f>SUM(C1:C3)</f><v>0</v></c></row>'
+        '<row r="2"><c r="C2"><v>5</v></c></row>'
+    )
+    wb = xlrecalc.load(io.BytesIO(package(rows, workbook_extra=FULL)))
+    with _checked_live():
+        assert wb.value("B1") == 5.0
+        engine = wb._engine
+        key = (engine.sheets[0].templates.at(0, 1), 0, 1)  # B1's template, sheet, column
+        assert engine._live[key] == ()  # kept after the pass: no reference reaches a formula
+        wb.set_formula("C2", "=A1*10")
+        assert key not in engine._live  # dropped with the change
+        assert wb.value("B1") == 10.0
+        assert len(engine._live[key]) == 1  # SUM's reference now reaches one
 
 
 def _kept_book(rows: str, extra: str = "", names: str = "") -> xlrecalc.Workbook:
