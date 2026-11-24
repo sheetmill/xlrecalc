@@ -42,7 +42,7 @@ from xlrecalc._formula._codegen import EXTERNAL, RefSpec
 from xlrecalc._formula._fastkey import raw_key, translate
 from xlrecalc._formula._prefixes import PREFIXES
 from xlrecalc._formula._template import Axis
-from xlrecalc._functions import REGISTRY
+from xlrecalc._functions import registry_for
 from xlrecalc._limits import StepLimitError
 from xlrecalc._opening import Volatility
 from xlrecalc._ops import Ops
@@ -208,6 +208,8 @@ class Engine:
         self.quirks = quirks or Quirks.EXCEL
         self.platform: PlatformName = platform
         """Which Excel computes the workbook, ``"mac"`` or ``"windows"`` (``platform=``)."""
+        self.registry = registry_for(platform)
+        """The functions formulas compile against: the platform's names (``registry_for``)."""
         self.regional_settings = regional_settings or xlformat.RegionalSettings.EN_US_MAC
         """The viewer's regional settings (``regional_settings=``), which ``TEXT`` follows."""
         self.iterate = iterate
@@ -494,10 +496,10 @@ class Engine:
         as_reference: bool = False,
     ) -> int:
         compiled = compile_formula(
-            formula, row, col, REGISTRY, self.ops, self.quirks, array_mode, as_reference
+            formula, row, col, self.registry, self.ops, self.quirks, array_mode, as_reference
         )
         unsupported = {
-            bare_label(c) for c in compiled.calls if c not in REGISTRY and not self._defined(c)
+            bare_label(c) for c in compiled.calls if c not in self.registry and not self._defined(c)
         }
         unsupported |= compiled.features
         template = Template(

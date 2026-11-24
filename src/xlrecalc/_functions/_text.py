@@ -408,6 +408,33 @@ def UNICHAR(ctx: Context, n: float) -> str | ErrorValue:
     return chr(code)
 
 
+# ENCODEURL keeps these and writes every other character as its UTF-8 bytes, %XX each (capture
+# windows/encodeurl: "~" is %7E, a space %20).
+_URL_KEPT = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.")
+
+
+@function(
+    "_xlfn.ENCODEURL",
+    "text",
+    category=T,
+    status="partial",
+    note="Excel for Windows only: Excel for Mac does not know it (#NAME?, as here)",
+)
+def ENCODEURL(ctx: Context, text: str) -> str | ErrorValue:
+    """The text percent-encoded as Excel for Windows does it; ``#VALUE!`` from 32,767 characters.
+
+    A result of 32,766 characters is computed and an unencoded 32,767-character text is refused
+    (capture windows/encodeurl), so the limit is taken on the result. Under the Mac the engine
+    compiles the name as one Excel does not know (``registry_for``).
+    """
+    parts = [
+        ch if ch in _URL_KEPT else "".join(f"%{b:02X}" for b in ch.encode("utf-8", "surrogatepass"))
+        for ch in text
+    ]
+    out = "".join(parts)
+    return VALUE if len(out) >= _MAX_TEXT else out
+
+
 @function("_xlfn.UNICODE", "text", category=T)
 def UNICODE(ctx: Context, text: str) -> float | ErrorValue:
     """The code point of the first character."""

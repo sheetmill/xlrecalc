@@ -3389,8 +3389,9 @@ _EMPTY_TABLE: dict[str, Input] = {
     "BA1": "K", "BB1": "N", "BA2": "a", "BB2": 1.0, "BA3": "b", "BB3": 2.0, "BA4": "c", "BB4": 3.0,
     "BD1": "N", "BD2": ">1", "BE1": "N", "BE2": ">2",
 }  # fmt: skip
+# ENCODEURL: Excel for Mac does not know it (its rows are in encodeurl).
 _EMPTY_SKIP = frozenset(
-    {"_XLFN.ANCHORARRAY", "_XLFN.SINGLE", "RAND", "RANDBETWEEN", "NOW", "TODAY"}
+    {"_XLFN.ANCHORARRAY", "_XLFN.SINGLE", "RAND", "RANDBETWEEN", "NOW", "TODAY", "_XLFN.ENCODEURL"}
 )
 _EMPTY_VALUE = {
     "number": "2", "text": '"a"', "logical": "TRUE", "value": "2", "branch": "2",

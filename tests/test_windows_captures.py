@@ -85,6 +85,7 @@ COMPARED = [
     "collate_words",
     "collate_functions",
     "modern",
+    "encodeurl",
 ]
 """The Windows captures the package is compared with, under ``platform="windows"``: those whose
 platform-dependent behavior it implements for Excel for Windows."""

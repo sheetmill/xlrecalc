@@ -12,7 +12,7 @@ as matching. Whether a matching row is exact or within its tolerance depends on 
 platform's math library, so the page counts them together and is the same on every
 platform.
 
-457 implemented, 17 partial, 49 absent.
+457 implemented, 18 partial, 48 absent.
 
 | function | category | status | rows | match | listed | tolerance | note |
 |---|---|---|---:|---:|---:|---|---|
@@ -72,7 +72,7 @@ platform.
 | `CEILING.MATH` | math | implemented | 246 | 246 | 0 |  |  |
 | `CEILING.PRECISE` | math | implemented | 305 | 305 | 0 |  |  |
 | `CELL` | information | partial | 3 | 3 | 0 |  | the kinds that depend on formatting are unsupported: styles are not read |
-| `CHAR` | text | implemented | 1046 | 1046 | 0 |  |  |
+| `CHAR` | text | implemented | 1173 | 1173 | 0 |  |  |
 | `CHIDIST` | statistical | implemented | 16 | 16 | 0 | 1e-14 relative |  |
 | `CHIINV` | statistical | implemented | 34 | 30 | 4 | 1e-14 relative |  |
 | `CHISQ.DIST` | statistical | implemented | 197 | 197 | 0 | 1e-12 relative |  |
@@ -164,13 +164,13 @@ platform.
 | `DVARP` | database | partial | 154 | 152 | 2 | 4 ulps | computed criteria are not supported |
 | `EDATE` | date and time | implemented | 42 | 42 | 0 |  |  |
 | `EFFECT` | financial | implemented | 148 | 148 | 0 | 4 ulps |  |
-| `ENCODEURL` | | absent | | | | | |
+| `ENCODEURL` | text | partial | 173 | 173 | 0 |  | Excel for Windows only: Excel for Mac does not know it (#NAME?, as here) |
 | `EOMONTH` | date and time | implemented | 41 | 41 | 0 |  |  |
 | `ERF` | engineering | implemented | 108 | 103 | 5 | 4 ulps |  |
 | `ERF.PRECISE` | engineering | implemented | 56 | 56 | 0 | 4 ulps |  |
 | `ERFC` | engineering | implemented | 56 | 54 | 2 | 4 ulps |  |
 | `ERFC.PRECISE` | engineering | implemented | 56 | 54 | 2 | 4 ulps |  |
-| `ERROR.TYPE` | information | implemented | 569 | 529 | 1 |  |  |
+| `ERROR.TYPE` | information | implemented | 569 | 535 | 1 |  |  |
 | `EUROCONVERT` | | absent | | | | | |
 | `EVEN` | math | implemented | 31 | 31 | 0 |  |  |
 | `EXACT` | text | implemented | 85 | 85 | 0 |  |  |
@@ -234,7 +234,7 @@ platform.
 | `HYPGEOM.DIST` | statistical | implemented | 633 | 633 | 0 | 8 ulps |  |
 | `HYPGEOMDIST` | statistical | implemented | 70 | 70 | 0 | 8 ulps |  |
 | `IF` | logical | implemented | 61 | 61 | 0 |  |  |
-| `IFERROR` | logical | implemented | 525 | 486 | 0 |  |  |
+| `IFERROR` | logical | implemented | 525 | 492 | 0 |  |  |
 | `IFNA` | logical | implemented | 15 | 15 | 0 |  |  |
 | `IFS` | logical | implemented | 33 | 33 | 0 |  |  |
 | `IMABS` | engineering | implemented | 19 | 19 | 0 |  |  |
@@ -294,7 +294,7 @@ platform.
 | `LCM` | math | implemented | 214 | 214 | 0 |  |  |
 | `LEFT` | text | implemented | 37 | 37 | 0 |  |  |
 | `LEFTB` | text | implemented | 92 | 92 | 0 |  |  |
-| `LEN` | text | implemented | 418 | 418 | 0 |  |  |
+| `LEN` | text | implemented | 425 | 425 | 0 |  |  |
 | `LENB` | text | implemented | 29 | 29 | 0 |  |  |
 | `LET` | logical | implemented | 59 | 59 | 0 |  |  |
 | `LINEST` | statistical | partial | 73 | 63 | 10 | 4 ulps | one regressor only |
@@ -411,7 +411,7 @@ platform.
 | `REGISTER.ID` | | absent | | | | | |
 | `REPLACE` | text | implemented | 128 | 128 | 0 |  |  |
 | `REPLACEB` | text | implemented | 1350 | 1350 | 0 |  |  |
-| `REPT` | text | implemented | 94 | 94 | 0 |  |  |
+| `REPT` | text | implemented | 101 | 101 | 0 |  |  |
 | `RIGHT` | text | implemented | 64 | 64 | 0 |  |  |
 | `RIGHTB` | text | implemented | 92 | 92 | 0 |  |  |
 | `ROMAN` | math | implemented | 168 | 168 | 0 |  |  |
@@ -502,7 +502,7 @@ platform.
 | `TRUNC` | math | implemented | 307 | 307 | 0 |  |  |
 | `TTEST` | statistical | implemented | 335 | 335 | 0 | 1e-14 relative |  |
 | `TYPE` | information | implemented | 60 | 59 | 1 |  |  |
-| `UNICHAR` | text | implemented | 690 | 690 | 0 |  |  |
+| `UNICHAR` | text | implemented | 703 | 703 | 0 |  |  |
 | `UNICODE` | text | implemented | 286 | 286 | 0 |  |  |
 | `UNIQUE` | lookup and reference | implemented | 36 | 36 | 0 |  |  |
 | `UPPER` | text | implemented | 24 | 24 | 0 |  |  |

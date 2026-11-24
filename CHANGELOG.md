@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Requires xlformat 0.8 or later (`platform` and `regional_settings` in `xlformat.text_function`).
+- `ENCODEURL`, `FILTERXML` and `EUROCONVERT` compute to `#NAME?`, with any arguments, as Excel for Mac gives them
+  (captures `function_names` and `encodeurl`); a cell using one kept its cached value and was reported as not
+  computed, and `evaluate` raised `UnsupportedError`.
 
 ### Fixed
 - Reading a workbook of many dynamic arrays took time growing with the square of their number: every formula read

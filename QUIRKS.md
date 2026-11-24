@@ -181,9 +181,10 @@ not). An empty argument is `#N/A`.
   wildcard's `?` matches one unit, so it takes `??` in `SEARCH` and in criteria (`COUNTIF`, `MATCH`), and a match
   starts only where a character starts; the limit of a text, 32,767, counts units (capture `text_family`, Excel 16.115;
   16.114 counted units in `LEN`, `MID`, `REPLACE`, `FIND` and `SEARCH` too).
-- `ENCODEURL`, `FILTERXML` and `EUROCONVERT` give `#NAME?` in Excel 16 for Mac in every file form (capture `mac_gaps`),
-  so there is no reference for them here: they are not implemented, and a cell using one keeps its cached value and is
-  reported.
+- `ENCODEURL`, `FILTERXML` and `EUROCONVERT` give `#NAME?` in Excel 16 for Mac in every file form and with any
+  arguments (captures `mac_gaps`, `function_names`, `encodeurl`), and so they do here: a cell using one computes to
+  `#NAME?` where Excel computes it. Any other name the package does not compute (an add-in's function, a name no Excel
+  knows) keeps its cached value and is reported, since what Excel shows depends on add-ins the file does not record.
 - `NUMBERVALUE` with digits as separators reads a group separator after the decimal one as a digit: `NUMBERVALUE(" 1 2 ",1,2)`
   is 0.2 in Excel and `#VALUE!` here (one row of capture `text_family`).
 - Declared tolerances, `statistics_family`: the sums of powers and regressions (`AVEDEV`, `DEVSQ`, `GEOMEAN`, `HARMEAN`,
