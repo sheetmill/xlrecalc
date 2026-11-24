@@ -1049,8 +1049,8 @@ Behavior that is not the obvious reading, each from its capture:
   constant only `AVERAGEA` counts them.
 - `TRANSPOSE` (registry kind `matrix`): a range in a legacy formula is intersected first, even
   inside `INDEX` or `SUMPRODUCT`, as in Excel.
-- `CHAR` and `CODE` use the Mac OS Roman set, as Excel for Mac numbers characters (no capture
-  records Excel for Windows' set, and there is no setting for another). `RAND` and `RANDBETWEEN` are
+- `CHAR` and `CODE` use the platform's set with en-US regional settings: Mac OS Roman on the Mac,
+  Windows-1252 on Windows (captures `codepage` and `windows/codepage`). `RAND` and `RANDBETWEEN` are
   volatile, and `RANDBETWEEN` rounds both bounds up.
 - The database functions (captures `misc`, `database_family`): a text condition matches by prefix;
   a computed criterion is not supported, and the cell is reported.

@@ -168,14 +168,18 @@ class CodePage:
     """The 8-bit character set ``CHAR`` and ``CODE`` number characters in.
 
     ``codec`` maps codes 1 to 255 to characters; ``missing`` is ``CODE`` of a character the set
-    lacks; ``passed`` are code points ``CODE`` gives as themselves though the set lacks them.
+    lacks; ``passed`` are code points ``CODE`` gives as themselves though the set lacks them;
+    ``undefined`` are codes the codec leaves out, which ``CHAR`` gives as the code point itself.
     """
 
     codec: str
     missing: int
     passed: range
+    undefined: frozenset[int] = frozenset()
 
     def char(self, code: int) -> str:
+        if code in self.undefined:
+            return chr(code)
         return bytes([code]).decode(self.codec)
 
     def code(self, char: str) -> int:
@@ -189,25 +193,30 @@ MAC_ROMAN = CodePage("mac_roman", 95, range(0x80, 0xA0))
 """Excel for Mac's (captures ``misc``, ``codepage``): Mac OS Roman, 95 for a character outside it,
 and the C1 controls U+0080 to U+009F as their own codes."""
 
-CODE_PAGE = MAC_ROMAN
-"""The one place the code page is chosen; ``CHAR`` and ``CODE`` read it."""
+WINDOWS_1252 = CodePage("cp1252", 63, range(0x80, 0xA0), frozenset({129, 141, 143, 144, 157}))
+"""Excel for Windows' with en-US regional settings (capture ``windows/codepage``): Windows-1252,
+its five undefined codes the C1 controls of those codes, 63 for a character outside it, and the
+C1 controls as their own codes."""
+
+CODE_PAGES = {"mac": MAC_ROMAN, "windows": WINDOWS_1252}
+"""The code page by platform: with en-US regional settings, the one place it is chosen."""
 
 
 @function("CHAR", "number", category=T)
 def CHAR(ctx: Context, n: float) -> str | ErrorValue:
-    """The character with a code from 1 to 255 in the code page (``CODE_PAGE``)."""
+    """The character with a code from 1 to 255 in the platform's code page (``CODE_PAGES``)."""
     k = math.trunc(n)
     if not 1 <= k <= 255:
         return VALUE
-    return CODE_PAGE.char(k)
+    return CODE_PAGES[ctx.platform].char(k)
 
 
 @function("CODE", "text", category=T)
 def CODE(ctx: Context, text: str) -> float | ErrorValue:
-    """The code of a text's first character in the code page (``CODE_PAGE``)."""
+    """The code of a text's first character in the platform's code page (``CODE_PAGES``)."""
     if not text:
         return VALUE
-    return float(CODE_PAGE.code(text[0]))
+    return float(CODE_PAGES[ctx.platform].code(text[0]))
 
 
 def _fixed_text(x: float, decimals: float, grouping: bool) -> str | ErrorValue:

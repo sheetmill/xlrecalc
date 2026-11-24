@@ -78,9 +78,11 @@ the smaller operand, the snapped and kept cases overlap.
 
 ## Excel semantics, not quirks
 
-`CHAR` and `CODE` number characters in the Mac OS Roman set, as Excel for Mac does, and
-`CODE` of a character outside the set is 95. No capture records Excel for Windows' set, and
-there is no setting for another.
+`CHAR` and `CODE` number characters in the platform's set, with en-US regional settings: Excel
+for Mac's is Mac OS Roman, and `CODE` of a character outside it is 95 (capture `codepage`); Excel
+for Windows' is Windows-1252, its five undefined codes (129, 141, 143, 144, 157) giving the C1
+controls of those codes, and `CODE` of a character outside it is 63 (capture `windows/codepage`).
+On both, `CODE` of a C1 control (U+0080 to U+009F) is its own code.
 
 On opening a file whose calculation properties let it keep the cached values, Excel recalculates
 the cells whose formula carries `ca="1"`, the mark it writes on every volatile cell and every cell

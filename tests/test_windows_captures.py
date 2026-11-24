@@ -29,7 +29,7 @@ def _header(path: Path) -> dict[str, object]:
 
 
 def test_there_is_a_windows_capture() -> None:
-    assert [p.name for p in CAPTURES] == ["collate_words.tsv"]
+    assert [p.name for p in CAPTURES] == ["codepage.tsv", "collate_words.tsv"]
 
 
 @pytest.mark.parametrize("path", CAPTURES, ids=lambda p: p.stem)
@@ -67,3 +67,38 @@ def test_the_rows_are_the_generator_s_cases(path: Path) -> None:
     cases = SUITES[path.stem].cases()
     assert [(r[3], r[4]) for r in rows] == [(c.formula, repr(c.inputs)) for c in cases]
     assert all(r[5] != "none" for r in rows)
+
+
+COMPARED = ["codepage"]
+"""The Windows captures the package is compared with, under ``platform="windows"``: those whose
+platform-dependent behavior it implements for Excel for Windows."""
+
+
+@pytest.mark.parametrize("suite", COMPARED)
+def test_the_package_on_windows_gives_every_value_the_capture_holds(suite: str) -> None:
+    """Each row of the Windows capture, computed on an engine for Excel for Windows: the same
+    value and type, bit for bit, as Excel for Windows saved."""
+    pytest.importorskip("openpyxl")  # tests.test_captures reads the suites
+    from dataclasses import replace
+
+    from tests.captures import _expected, load
+    from tests.test_captures import run
+
+    lines = (WINDOWS / f"{suite}.tsv").read_text(encoding="utf-8").splitlines()
+    fields = [line.split("\t") for line in lines if line and not line.startswith("#")]
+    mac = load(suite)
+    assert [(f[3], f[4]) for f in fields] == [(r.formula, repr(r.inputs)) for r in mac.rows]
+    windows = replace(
+        mac,
+        rows=[
+            replace(r, expected=_expected(f[5], f[6]))
+            for r, f in zip(mac.rows, fields, strict=True)
+        ],
+    )
+    engine, s = run(windows, platform="windows")
+    wrong = []
+    for k, row in enumerate(windows.rows):
+        got = engine.get(s, k, 0)
+        if type(got) is not type(row.expected) or got != row.expected:
+            wrong.append((k + 1, row.formula, row.inputs, row.expected, got))
+    assert not wrong, wrong[:10]

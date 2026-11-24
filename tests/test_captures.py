@@ -26,6 +26,7 @@ from xlrecalc._engine import Engine
 from xlrecalc._formula._template import cell_axes
 from xlrecalc._functions import SPECS
 from xlrecalc._numtext import DBL_MIN
+from xlrecalc._platform import PlatformName
 from xlrecalc._quirks import Quirks
 from xlrecalc._values import Value
 
@@ -1039,8 +1040,8 @@ def _input(value: Value) -> Value:
     return value
 
 
-def run(suite: Suite) -> tuple[Engine, int]:
-    engine = Engine(Quirks.EXCEL, date1904=suite.date1904, today=suite.captured)
+def run(suite: Suite, platform: PlatformName = "mac") -> tuple[Engine, int]:
+    engine = Engine(Quirks.EXCEL, date1904=suite.date1904, today=suite.captured, platform=platform)
     s = engine.add_sheet("cases")
     for ref, value in suite.fixed.items():
         r, c = cell_axes(ref, 0, 0)
