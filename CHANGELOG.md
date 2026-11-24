@@ -16,17 +16,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Excel for Windows (`platform="windows"`): `CHAR` and `CODE` in Windows-1252, text ordered and compared as Excel for
   Windows orders it (operators, criteria, sorting, lookups, `UNIQUE`), the names it knows (`ENCODEURL` and `FILTERXML`
   without `_xlfn.` are `#NAME?`), and `ENCODEURL`, each from captures of Excel for Windows (CAPTURING.md §5). Every
-  capture suite is captured on Excel for Windows too and compared with the package under `"windows"` on every test
-  run; the one row past a tolerance there, a digit of `IMCOSH`'s text that the math library decides, is listed in
-  QUIRKS.md.
+  suite of `capture/suites.py` is captured on Excel for Windows too and compared with the package under `"windows"` on
+  every test run (the captures of behavior, such as dynamic arrays, `LAMBDA`, iteration and conditional formats, are
+  Excel for Mac's only); the one row past a tolerance there, a digit of `IMCOSH`'s text that the math library decides,
+  is listed in QUIRKS.md.
 
 ### Changed
 - Requires xlformat 0.8 or later (`platform` and `regional_settings` in `xlformat.text_function`).
 - `ENCODEURL`, `FILTERXML` and `EUROCONVERT` compute to `#NAME?`, with any arguments, as Excel for Mac gives them
   (captures `function_names` and `encodeurl`); a cell using one kept its cached value and was reported as not
   computed, and `evaluate` raised `UnsupportedError`.
-- `JIS` is a name no en-US Excel knows, on the Mac or on Windows (capture `function_names`): `evaluate` gives `#NAME?`
-  for it, where it raised `UnsupportedError`; in a workbook it keeps its cached value and is reported, as before.
+- `JIS` is a name Excel does not know in the two `function_names` captures (Excel 16.115 for Mac and 16.0.20527 for
+  Windows, Microsoft 365, en-US): `evaluate` gives `#NAME?` for it, where it raised `UnsupportedError`; in a workbook
+  it keeps its cached value and is reported, as before.
 
 ### Fixed
 - Reading a workbook of many dynamic arrays took time growing with the square of their number: every formula read
