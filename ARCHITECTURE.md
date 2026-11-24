@@ -540,6 +540,13 @@ template that refers to its own column above (`C2 = C1 + B2`, a running total) m
 cell of its run depend on any earlier one, so a dirty cell of it dirties the rest of its run in
 one step. Changing A1 in the 1M-row benchmark dirties 1,000,005 cells as 4 runs.
 
+The walk (`DependencyIndex.spread`) goes a step at a time: the cells it starts from, and the runs
+each step finds, are merged into the fewest runs per column before their dependents are looked
+up. A lookup passes over every template's references whether it starts from a cell or a run, and
+a run's dependents are those of its cells together, so many starting cells (the formulas keeping
+their value, the formulas a lazy load made stale) cost about one lookup per column of them, not
+one per cell.
+
 **Acceptance test** (`bench/engine_bench.py`, 1M rows, 3,000,003 formulas, one process; full
 table in `bench/results/SUMMARY.md`): changing A1 must re-evaluate faster than a full
 recalculation, and computing what it dirties must take under 1 s.

@@ -228,21 +228,27 @@ class DependencyIndex:
         """Add to ``found`` what depends on the cells; returns the runs it did not hold yet.
 
         What ``found`` already holds is not walked again, so that many calls sharing one
-        ``found`` cost what one walk over all their cells costs.
+        ``found`` cost what one walk over all their cells costs. The walk goes a step at a time:
+        the cells and runs of a step are merged into the fewest runs per column before their
+        dependents are looked up, since one lookup costs about the same for a run as for a
+        cell, and a run's dependents are those of its cells together (§6.4).
         """
         new: list[tuple[int, int, int, int]] = []
-        queue: list[tuple[int, int, int, int]] = list(ranges)
+        step: Runs = defaultdict(list)
+        for sheet, col, first, last in ranges:
+            step[(sheet, col)].append((first, last))
+        mask = (1 << SHEET_SHIFT) - 1
         for n in cells:
-            sheet = n >> SHEET_SHIFT
-            row, col = divmod(n & ((1 << SHEET_SHIFT) - 1), COLS)
-            queue.append((sheet, col, row, row))
-        while queue:
-            sheet, col, first, last = queue.pop()
-            for s, c, a, b in self.direct(sheet, col, first, last):
-                for lo, hi in _add(found[(s, c)], a, b):
-                    run = (s, c, lo, hi)
-                    new.append(run)
-                    queue.append(run)
+            row, col = divmod(n & mask, COLS)
+            step[(n >> SHEET_SHIFT, col)].append((row, row))
+        while step:
+            current, step = step, defaultdict(list)
+            for (sheet, col), runs in current.items():
+                for first, last in _merged(runs):
+                    for s, c, a, b in self.direct(sheet, col, first, last):
+                        for lo, hi in _add(found[(s, c)], a, b):
+                            new.append((s, c, lo, hi))
+                            step[(s, c)].append((lo, hi))
         return new
 
 
@@ -292,6 +298,22 @@ def _make(
         c2.absolute or absolute,
         volatile_name,
     )
+
+
+def _merged(runs: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    """Row runs as the fewest runs covering the same rows: overlapping or touching ones joined."""
+    if len(runs) == 1:
+        return runs
+    runs.sort()
+    out = [runs[0]]
+    for a, b in runs[1:]:
+        lo, hi = out[-1]
+        if a <= hi + 1:
+            if b > hi:
+                out[-1] = (lo, b)
+        else:
+            out.append((a, b))
+    return out
 
 
 def _add(runs: list[tuple[int, int]], a: int, b: int) -> list[tuple[int, int]]:

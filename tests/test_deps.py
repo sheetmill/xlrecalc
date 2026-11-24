@@ -9,6 +9,7 @@ by checking every formula's boxes directly.
 from __future__ import annotations
 
 import random
+from itertools import pairwise
 
 import pytest
 
@@ -167,3 +168,61 @@ def test_a_dormant_cell_has_no_edges_from_a_volatile_name(seed):
             for _ in range(rng.randint(1, 3))
         ]
         assert engine.dependents(changed) == brute_volatile(engine, changed, dormant)
+
+
+def walk_one_by_one(index, cells, ranges, found):
+    """The walk ``DependencyIndex.spread`` took before it went a step at a time: one run, or
+    one cell, per lookup, last in first out. It is the reference the stepped walk must agree
+    with, cell for cell."""
+    from xlrecalc._deps import COLS, SHEET_SHIFT, _add
+
+    new = []
+    queue = list(ranges)
+    for n in cells:
+        row, col = divmod(n & ((1 << SHEET_SHIFT) - 1), COLS)
+        queue.append((n >> SHEET_SHIFT, col, row, row))
+    while queue:
+        sheet, col, first, last = queue.pop()
+        for s, c, a, b in index.direct(sheet, col, first, last):
+            for lo, hi in _add(found[(s, c)], a, b):
+                new.append((s, c, lo, hi))
+                queue.append((s, c, lo, hi))
+    return new
+
+
+def _cells(runs):
+    return {(s, c, r) for s, c, a, b in runs for r in range(a, b + 1)}
+
+
+def _held(found):
+    return {(s, c, r) for (s, c), rs in found.items() for a, b in rs for r in range(a, b + 1)}
+
+
+@pytest.mark.parametrize("seed", range(60))
+def test_the_stepped_walk_finds_what_the_walk_one_by_one_finds(seed):
+    """Many starting cells, adjacent or not, with runs, on calls sharing one ``found`` (as the
+    kept cells' walk shares it), on workbooks with and without dormant cells: what ``found``
+    holds after each call, and the cells each call reports as new, are the same both ways."""
+    from collections import defaultdict
+
+    engine = build(seed) if seed % 2 else build_volatile(seed)[0]
+    index = engine.index()
+    rng = random.Random(seed + 3000)
+    stepped, reference = defaultdict(list), defaultdict(list)
+    for _ in range(4):
+        cells = []
+        for _ in range(rng.randint(1, 4)):  # blocks of adjacent cells, and single ones
+            sheet, col, top = rng.choice([0, 0, 0, 1]), rng.randint(0, 5), rng.randint(0, 45)
+            cells += [node(sheet, r, col) for r in range(top, top + rng.choice([1, 1, 3, 20]))]
+        ranges = [
+            (0, rng.randint(0, 5), a, a + rng.randint(0, 10))
+            for a in (rng.randint(0, 45) for _ in range(rng.randint(0, 2)))
+        ]
+        rng.shuffle(cells)
+        got = index.spread(cells, ranges, stepped)
+        want = walk_one_by_one(index, cells, ranges, reference)
+        assert _held(stepped) == _held(reference)
+        assert _cells(got) == _cells(want)
+        assert sum(b - a + 1 for _, _, a, b in got) == len(_cells(got))  # no cell twice
+        for runs in stepped.values():  # sorted, disjoint, not touching
+            assert all(b1 + 1 < a2 for (_, b1), (a2, _) in pairwise(runs))

@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   cell had been read. The same holds for `Workbook.values`, `Workbook.values_at`, a lazy `Loader` and
   `Workbook.status`.
 
+### Changed
+- Finding what depends on many cells at once looks the dependents up about once per column of those cells, where it
+  looked them up once per cell: the report's passes over a workbook whose formulas mostly keep the file's value, and a
+  read through a lazy `Loader` that loads sheets whose formulas are all to be computed, spent most of their time there.
+  Values, statuses and the report are unchanged.
+
 ## [0.10.0] - 2026-11-23
 
 ### Changed
