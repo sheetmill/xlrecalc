@@ -1,0 +1,1851 @@
+# suite: empty_args
+# generator: capture/suites.py:empty_args, capture/job.py
+# method: the job beside this file (empty_args.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "empty_args.xlsx": {
+#      "bytes": 19902,
+#      "sha256": "c9ff995358467497b48e8d029ff5c03949d593c757d3f2ac826730fd427a511c"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261124-100532-empty-args",
+#    "manifest_sha256": "9c98b0cff5cf00814e96163e484aa244cfde50579a9fcbbf4e3dca8f792954c8",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+empty_args	abs	1	ABS(2)	()	n	2.0
+empty_args	acos	2	ACOS(0.5)	()	n	1.0471975511965976
+empty_args	acosh	3	ACOSH(2)	()	n	1.3169578969248166
+empty_args	address	4	ADDRESS(2,2,2,TRUE,"a")	()	str	'a!B$2'
+empty_args	address	5	ADDRESS(,2,2,TRUE,"a")	()	e	#VALUE!
+empty_args	address	6	ADDRESS(2,,2,TRUE,"a")	()	e	#VALUE!
+empty_args	address	7	ADDRESS(2,2,,TRUE,"a")	()	str	'a!$B$2'
+empty_args	address	8	ADDRESS(2,2,2,,"a")	()	str	'a!B$2'
+empty_args	address	9	ADDRESS(2,2,2,TRUE,)	()	str	'B$2'
+empty_args	address	10	ADDRESS(2,2,,,)	()	str	'$B$2'
+empty_args	address	11	ADDRESS(2,2,)	()	str	'$B$2'
+empty_args	address	12	ADDRESS(2,2,,TRUE)	()	str	'$B$2'
+empty_args	and	13	AND($AA$1:$AA$4,$AA$1:$AA$4)	()	b	True
+empty_args	and	14	AND(,$AA$1:$AA$4)	()	b	False
+empty_args	and	15	AND($AA$1:$AA$4,)	()	b	False
+empty_args	areas	16	AREAS($AA$1:$AA$4)	()	n	1.0
+empty_args	asin	17	ASIN(0.5)	()	n	0.5235987755982989
+empty_args	asinh	18	ASINH(2)	()	n	1.4436354751788103
+empty_args	atan	19	ATAN(2)	()	n	1.1071487177940904
+empty_args	atan2	20	ATAN2(2,2)	()	n	0.7853981633974483
+empty_args	atan2	21	ATAN2(,2)	()	n	1.5707963267948966
+empty_args	atan2	22	ATAN2(2,)	()	n	0.0
+empty_args	atanh	23	ATANH(0.5)	()	n	0.5493061443340549
+empty_args	avedev	24	AVEDEV($AA$1:$AA$4,$AA$1:$AA$4)	()	n	2.25
+empty_args	avedev	25	AVEDEV(,$AA$1:$AA$4)	()	n	2.4
+empty_args	avedev	26	AVEDEV($AA$1:$AA$4,)	()	n	2.4
+empty_args	average	27	AVERAGE($AA$1:$AA$4,$AA$1:$AA$4)	()	n	3.75
+empty_args	average	28	AVERAGE(,$AA$1:$AA$4)	()	n	3.0
+empty_args	average	29	AVERAGE($AA$1:$AA$4,)	()	n	3.0
+empty_args	averagea	30	AVERAGEA($AA$1:$AA$4,$AA$1:$AA$4)	()	n	3.75
+empty_args	averagea	31	AVERAGEA(,$AA$1:$AA$4)	()	n	3.0
+empty_args	averagea	32	AVERAGEA($AA$1:$AA$4,)	()	n	3.0
+empty_args	averageif	33	AVERAGEIF($AA$1:$AA$4,">1",$AB$1:$AB$4)	()	n	6.666666666666667
+empty_args	averageif	34	AVERAGEIF($AA$1:$AA$4,,$AB$1:$AB$4)	()	e	#DIV/0!
+empty_args	averageifs	35	AVERAGEIFS($AB$1:$AB$4,$AA$1:$AA$4,">1")	()	n	6.666666666666667
+empty_args	averageifs	36	AVERAGEIFS($AB$1:$AB$4,$AA$1:$AA$4,)	()	e	#DIV/0!
+empty_args	averageifs	37	AVERAGEIFS($AB$1:$AB$4,$AA$1:$AA$4,">1",$AA$1:$AA$4,">1")	()	n	6.666666666666667
+empty_args	averageifs	38	AVERAGEIFS($AB$1:$AB$4,$AA$1:$AA$4,,$AA$1:$AA$4,">1")	()	e	#DIV/0!
+empty_args	averageifs	39	AVERAGEIFS($AB$1:$AB$4,$AA$1:$AA$4,">1",$AA$1:$AA$4,)	()	e	#DIV/0!
+empty_args	bin2dec	40	BIN2DEC("101")	()	n	5.0
+empty_args	bin2hex	41	BIN2HEX("101",8)	()	str	'00000005'
+empty_args	bin2hex	42	BIN2HEX(,8)	()	e	#N/A
+empty_args	bin2hex	43	BIN2HEX("101",)	()	str	'5'
+empty_args	bin2oct	44	BIN2OCT("101",8)	()	str	'00000005'
+empty_args	bin2oct	45	BIN2OCT(,8)	()	e	#N/A
+empty_args	bin2oct	46	BIN2OCT("101",)	()	str	'5'
+empty_args	ceiling	47	CEILING(2,2)	()	n	2.0
+empty_args	ceiling	48	CEILING(,2)	()	n	0.0
+empty_args	ceiling	49	CEILING(2,)	()	n	0.0
+empty_args	cell	50	CELL("row",$AA$1)	()	n	1.0
+empty_args	cell	51	CELL(,$AA$1)	()	e	#VALUE!
+empty_args	char	52	CHAR(2)	()	str	'_x0002_'
+empty_args	choose	53	CHOOSE(1,2,3)	()	n	2.0
+empty_args	choose	54	CHOOSE(,2,3)	()	e	#VALUE!
+empty_args	choose	55	CHOOSE(1,,3)	()	n	0.0
+empty_args	choose	56	CHOOSE(1,2,)	()	n	2.0
+empty_args	clean	57	CLEAN("a")	()	str	'a'
+empty_args	code	58	CODE("a")	()	n	97.0
+empty_args	column	59	COLUMN($AA$1:$AA$4)	()	n	27.0
+empty_args	column	60	COLUMN()	()	n	1.0
+empty_args	columns	61	COLUMNS($AA$1:$AA$4)	()	n	1.0
+empty_args	combin	62	COMBIN(2,2)	()	n	1.0
+empty_args	combin	63	COMBIN(,2)	()	e	#NUM!
+empty_args	combin	64	COMBIN(2,)	()	n	1.0
+empty_args	concatenate	65	CONCATENATE("a","a")	()	str	'aa'
+empty_args	concatenate	66	CONCATENATE(,"a")	()	str	'a'
+empty_args	concatenate	67	CONCATENATE("a",)	()	str	'a'
+empty_args	confidence	68	CONFIDENCE(0.05,2,50)	()	n	0.554361529739871
+empty_args	confidence	69	CONFIDENCE(,2,50)	()	e	#NUM!
+empty_args	confidence	70	CONFIDENCE(0.05,,50)	()	e	#NUM!
+empty_args	confidence	71	CONFIDENCE(0.05,2,)	()	e	#NUM!
+empty_args	correl	72	CORREL($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0000000000000002
+empty_args	correl	73	CORREL(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	correl	74	CORREL($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	cos	75	COS(2)	()	n	-0.4161468365471424
+empty_args	cosh	76	COSH(2)	()	n	3.7621956910836314
+empty_args	count	77	COUNT($AA$1:$AA$4,$AA$1:$AA$4)	()	n	8.0
+empty_args	count	78	COUNT(,$AA$1:$AA$4)	()	n	5.0
+empty_args	count	79	COUNT($AA$1:$AA$4,)	()	n	5.0
+empty_args	counta	80	COUNTA($AA$1:$AA$4,$AA$1:$AA$4)	()	n	8.0
+empty_args	counta	81	COUNTA(,$AA$1:$AA$4)	()	n	5.0
+empty_args	counta	82	COUNTA($AA$1:$AA$4,)	()	n	5.0
+empty_args	countblank	83	COUNTBLANK($AA$1:$AA$4)	()	n	0.0
+empty_args	countif	84	COUNTIF($AA$1:$AA$4,">1")	()	n	3.0
+empty_args	countif	85	COUNTIF($AA$1:$AA$4,)	()	n	0.0
+empty_args	countifs	86	COUNTIFS($AA$1:$AA$4,">1")	()	n	3.0
+empty_args	countifs	87	COUNTIFS($AA$1:$AA$4,)	()	n	0.0
+empty_args	countifs	88	COUNTIFS($AA$1:$AA$4,">1",$AA$1:$AA$4,">1")	()	n	3.0
+empty_args	countifs	89	COUNTIFS($AA$1:$AA$4,,$AA$1:$AA$4,">1")	()	n	0.0
+empty_args	countifs	90	COUNTIFS($AA$1:$AA$4,">1",$AA$1:$AA$4,)	()	n	0.0
+empty_args	coupdaybs	91	COUPDAYBS(40000,41000,2,1)	()	n	96.0
+empty_args	coupdaybs	92	COUPDAYBS(,41000,2,1)	()	e	#N/A
+empty_args	coupdaybs	93	COUPDAYBS(40000,,2,1)	()	e	#N/A
+empty_args	coupdaybs	94	COUPDAYBS(40000,41000,,1)	()	e	#N/A
+empty_args	coupdaybs	95	COUPDAYBS(40000,41000,2,)	()	n	95.0
+empty_args	coupdays	96	COUPDAYS(40000,41000,2,1)	()	n	183.0
+empty_args	coupdays	97	COUPDAYS(,41000,2,1)	()	e	#N/A
+empty_args	coupdays	98	COUPDAYS(40000,,2,1)	()	e	#N/A
+empty_args	coupdays	99	COUPDAYS(40000,41000,,1)	()	e	#N/A
+empty_args	coupdays	100	COUPDAYS(40000,41000,2,)	()	n	180.0
+empty_args	coupdaysnc	101	COUPDAYSNC(40000,41000,2,1)	()	n	87.0
+empty_args	coupdaysnc	102	COUPDAYSNC(,41000,2,1)	()	e	#N/A
+empty_args	coupdaysnc	103	COUPDAYSNC(40000,,2,1)	()	e	#N/A
+empty_args	coupdaysnc	104	COUPDAYSNC(40000,41000,,1)	()	e	#N/A
+empty_args	coupdaysnc	105	COUPDAYSNC(40000,41000,2,)	()	n	85.0
+empty_args	coupncd	106	COUPNCD(40000,41000,2,1)	()	n	40087.0
+empty_args	coupncd	107	COUPNCD(,41000,2,1)	()	e	#N/A
+empty_args	coupncd	108	COUPNCD(40000,,2,1)	()	e	#N/A
+empty_args	coupncd	109	COUPNCD(40000,41000,,1)	()	e	#N/A
+empty_args	coupncd	110	COUPNCD(40000,41000,2,)	()	n	40087.0
+empty_args	coupnum	111	COUPNUM(40000,41000,2,1)	()	n	6.0
+empty_args	coupnum	112	COUPNUM(,41000,2,1)	()	e	#N/A
+empty_args	coupnum	113	COUPNUM(40000,,2,1)	()	e	#N/A
+empty_args	coupnum	114	COUPNUM(40000,41000,,1)	()	e	#N/A
+empty_args	coupnum	115	COUPNUM(40000,41000,2,)	()	n	6.0
+empty_args	couppcd	116	COUPPCD(40000,41000,2,1)	()	n	39904.0
+empty_args	couppcd	117	COUPPCD(,41000,2,1)	()	e	#N/A
+empty_args	couppcd	118	COUPPCD(40000,,2,1)	()	e	#N/A
+empty_args	couppcd	119	COUPPCD(40000,41000,,1)	()	e	#N/A
+empty_args	couppcd	120	COUPPCD(40000,41000,2,)	()	n	39904.0
+empty_args	covar	121	COVAR($AA$1:$AA$4,$AA$1:$AA$4)	()	n	7.1875
+empty_args	covar	122	COVAR(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	covar	123	COVAR($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	cumipmt	124	CUMIPMT(0.01,12,1000,1,2,0)	()	n	-19.211512113216514
+empty_args	cumipmt	125	CUMIPMT(,12,1000,1,2,0)	()	e	#N/A
+empty_args	cumipmt	126	CUMIPMT(0.01,,1000,1,2,0)	()	e	#N/A
+empty_args	cumipmt	127	CUMIPMT(0.01,12,,1,2,0)	()	e	#N/A
+empty_args	cumipmt	128	CUMIPMT(0.01,12,1000,,2,0)	()	e	#N/A
+empty_args	cumipmt	129	CUMIPMT(0.01,12,1000,1,,0)	()	e	#N/A
+empty_args	cumipmt	130	CUMIPMT(0.01,12,1000,1,2,)	()	e	#N/A
+empty_args	cumprinc	131	CUMPRINC(0.01,12,1000,1,2,0)	()	n	-158.48606524346684
+empty_args	cumprinc	132	CUMPRINC(,12,1000,1,2,0)	()	e	#N/A
+empty_args	cumprinc	133	CUMPRINC(0.01,,1000,1,2,0)	()	e	#N/A
+empty_args	cumprinc	134	CUMPRINC(0.01,12,,1,2,0)	()	e	#N/A
+empty_args	cumprinc	135	CUMPRINC(0.01,12,1000,,2,0)	()	e	#N/A
+empty_args	cumprinc	136	CUMPRINC(0.01,12,1000,1,,0)	()	e	#N/A
+empty_args	cumprinc	137	CUMPRINC(0.01,12,1000,1,2,)	()	e	#N/A
+empty_args	date	138	DATE(2,2,2)	()	n	764.0
+empty_args	date	139	DATE(,2,2)	()	n	33.0
+empty_args	date	140	DATE(2,,2)	()	n	702.0
+empty_args	date	141	DATE(2,2,)	()	n	762.0
+empty_args	datedif	142	DATEDIF(40000,41000,"D")	()	n	1000.0
+empty_args	datedif	143	DATEDIF(,41000,"D")	()	n	41000.0
+empty_args	datedif	144	DATEDIF(40000,,"D")	()	e	#NUM!
+empty_args	datedif	145	DATEDIF(40000,41000,)	()	e	#NUM!
+empty_args	datevalue	146	DATEVALUE("1/1/2021")	()	n	44197.0
+empty_args	daverage	147	DAVERAGE($BA$1:$BB$4,"N",$BD$1:$BD$2)	()	n	2.5
+empty_args	daverage	148	DAVERAGE($BA$1:$BB$4,,$BD$1:$BD$2)	()	e	#VALUE!
+empty_args	daverage	149	DAVERAGE($BA$1:$BB$4,"N",)	()	e	#VALUE!
+empty_args	day	150	DAY(2)	()	n	2.0
+empty_args	days360	151	DAYS360(2,2,TRUE)	()	n	0.0
+empty_args	days360	152	DAYS360(,2,TRUE)	()	n	2.0
+empty_args	days360	153	DAYS360(2,,TRUE)	()	n	-2.0
+empty_args	days360	154	DAYS360(2,2,)	()	n	0.0
+empty_args	db	155	DB(2,2,2,2,2)	()	n	0.0
+empty_args	db	156	DB(,2,2,2,2)	()	n	0.0
+empty_args	db	157	DB(2,,2,2,2)	()	n	1.6666666666666667
+empty_args	db	158	DB(2,2,,2,2)	()	e	#NUM!
+empty_args	db	159	DB(2,2,2,,2)	()	e	#NUM!
+empty_args	db	160	DB(2,2,2,2,)	()	e	#NUM!
+empty_args	dcount	161	DCOUNT($BA$1:$BB$4,"N",$BD$1:$BD$2)	()	n	2.0
+empty_args	dcount	162	DCOUNT($BA$1:$BB$4,,$BD$1:$BD$2)	()	n	2.0
+empty_args	dcount	163	DCOUNT($BA$1:$BB$4,"N",)	()	e	#VALUE!
+empty_args	dcounta	164	DCOUNTA($BA$1:$BB$4,"N",$BD$1:$BD$2)	()	n	2.0
+empty_args	dcounta	165	DCOUNTA($BA$1:$BB$4,,$BD$1:$BD$2)	()	n	2.0
+empty_args	dcounta	166	DCOUNTA($BA$1:$BB$4,"N",)	()	e	#VALUE!
+empty_args	ddb	167	DDB(2,2,2,2,2)	()	n	0.0
+empty_args	ddb	168	DDB(,2,2,2,2)	()	n	0.0
+empty_args	ddb	169	DDB(2,,2,2,2)	()	n	0.0
+empty_args	ddb	170	DDB(2,2,,2,2)	()	e	#NUM!
+empty_args	ddb	171	DDB(2,2,2,,2)	()	e	#NUM!
+empty_args	ddb	172	DDB(2,2,2,2,)	()	e	#NUM!
+empty_args	dec2bin	173	DEC2BIN(2,2)	()	str	'10'
+empty_args	dec2bin	174	DEC2BIN(,2)	()	e	#N/A
+empty_args	dec2bin	175	DEC2BIN(2,)	()	str	'10'
+empty_args	dec2hex	176	DEC2HEX(2,2)	()	str	'02'
+empty_args	dec2hex	177	DEC2HEX(,2)	()	e	#N/A
+empty_args	dec2hex	178	DEC2HEX(2,)	()	str	'2'
+empty_args	dec2oct	179	DEC2OCT(2,2)	()	str	'02'
+empty_args	dec2oct	180	DEC2OCT(,2)	()	e	#N/A
+empty_args	dec2oct	181	DEC2OCT(2,)	()	str	'2'
+empty_args	degrees	182	DEGREES(2)	()	n	114.59155902616465
+empty_args	delta	183	DELTA(2,2)	()	n	1.0
+empty_args	delta	184	DELTA(,2)	()	e	#N/A
+empty_args	delta	185	DELTA(2,)	()	n	0.0
+empty_args	devsq	186	DEVSQ($AA$1:$AA$4,$AA$1:$AA$4)	()	n	57.5
+empty_args	devsq	187	DEVSQ(,$AA$1:$AA$4)	()	n	40.0
+empty_args	devsq	188	DEVSQ($AA$1:$AA$4,)	()	n	40.0
+empty_args	dget	189	DGET($BA$1:$BB$4,"N",$BE$1:$BE$2)	()	n	3.0
+empty_args	dget	190	DGET($BA$1:$BB$4,,$BE$1:$BE$2)	()	e	#VALUE!
+empty_args	dget	191	DGET($BA$1:$BB$4,"N",)	()	e	#VALUE!
+empty_args	disc	192	DISC(40000,41000,97,100,1)	()	n	0.01095750000000001
+empty_args	disc	193	DISC(,41000,97,100,1)	()	e	#N/A
+empty_args	disc	194	DISC(40000,,97,100,1)	()	e	#N/A
+empty_args	disc	195	DISC(40000,41000,,100,1)	()	e	#N/A
+empty_args	disc	196	DISC(40000,41000,97,,1)	()	e	#N/A
+empty_args	disc	197	DISC(40000,41000,97,100,)	()	n	0.010964467005076152
+empty_args	dmax	198	DMAX($BA$1:$BB$4,"N",$BD$1:$BD$2)	()	n	3.0
+empty_args	dmax	199	DMAX($BA$1:$BB$4,,$BD$1:$BD$2)	()	e	#VALUE!
+empty_args	dmax	200	DMAX($BA$1:$BB$4,"N",)	()	e	#VALUE!
+empty_args	dmin	201	DMIN($BA$1:$BB$4,"N",$BD$1:$BD$2)	()	n	2.0
+empty_args	dmin	202	DMIN($BA$1:$BB$4,,$BD$1:$BD$2)	()	e	#VALUE!
+empty_args	dmin	203	DMIN($BA$1:$BB$4,"N",)	()	e	#VALUE!
+empty_args	dollar	204	DOLLAR(2,2)	()	str	'$2.00'
+empty_args	dollar	205	DOLLAR(,2)	()	str	'$0.00'
+empty_args	dollar	206	DOLLAR(2,)	()	str	'$2'
+empty_args	dollarde	207	DOLLARDE(2,2)	()	n	2.0
+empty_args	dollarde	208	DOLLARDE(,2)	()	e	#N/A
+empty_args	dollarde	209	DOLLARDE(2,)	()	e	#N/A
+empty_args	dollarfr	210	DOLLARFR(2,2)	()	n	2.0
+empty_args	dollarfr	211	DOLLARFR(,2)	()	e	#N/A
+empty_args	dollarfr	212	DOLLARFR(2,)	()	e	#N/A
+empty_args	dproduct	213	DPRODUCT($BA$1:$BB$4,"N",$BD$1:$BD$2)	()	n	6.0
+empty_args	dproduct	214	DPRODUCT($BA$1:$BB$4,,$BD$1:$BD$2)	()	e	#VALUE!
+empty_args	dproduct	215	DPRODUCT($BA$1:$BB$4,"N",)	()	e	#VALUE!
+empty_args	dstdev	216	DSTDEV($BA$1:$BB$4,"N",$BD$1:$BD$2)	()	n	0.7071067811865476
+empty_args	dstdev	217	DSTDEV($BA$1:$BB$4,,$BD$1:$BD$2)	()	e	#VALUE!
+empty_args	dstdev	218	DSTDEV($BA$1:$BB$4,"N",)	()	e	#VALUE!
+empty_args	dstdevp	219	DSTDEVP($BA$1:$BB$4,"N",$BD$1:$BD$2)	()	n	0.5
+empty_args	dstdevp	220	DSTDEVP($BA$1:$BB$4,,$BD$1:$BD$2)	()	e	#VALUE!
+empty_args	dstdevp	221	DSTDEVP($BA$1:$BB$4,"N",)	()	e	#VALUE!
+empty_args	dsum	222	DSUM($BA$1:$BB$4,"N",$BD$1:$BD$2)	()	n	5.0
+empty_args	dsum	223	DSUM($BA$1:$BB$4,,$BD$1:$BD$2)	()	e	#VALUE!
+empty_args	dsum	224	DSUM($BA$1:$BB$4,"N",)	()	e	#VALUE!
+empty_args	duration	225	DURATION(40000,41000,0.05,0.06,2,1)	()	n	2.557707510620403
+empty_args	duration	226	DURATION(,41000,0.05,0.06,2,1)	()	e	#N/A
+empty_args	duration	227	DURATION(40000,,0.05,0.06,2,1)	()	e	#N/A
+empty_args	duration	228	DURATION(40000,41000,,0.06,2,1)	()	e	#N/A
+empty_args	duration	229	DURATION(40000,41000,0.05,,2,1)	()	e	#N/A
+empty_args	duration	230	DURATION(40000,41000,0.05,0.06,,1)	()	e	#N/A
+empty_args	duration	231	DURATION(40000,41000,0.05,0.06,2,)	()	n	2.5561137036987276
+empty_args	dvar	232	DVAR($BA$1:$BB$4,"N",$BD$1:$BD$2)	()	n	0.5
+empty_args	dvar	233	DVAR($BA$1:$BB$4,,$BD$1:$BD$2)	()	e	#VALUE!
+empty_args	dvar	234	DVAR($BA$1:$BB$4,"N",)	()	e	#VALUE!
+empty_args	dvarp	235	DVARP($BA$1:$BB$4,"N",$BD$1:$BD$2)	()	n	0.25
+empty_args	dvarp	236	DVARP($BA$1:$BB$4,,$BD$1:$BD$2)	()	e	#VALUE!
+empty_args	dvarp	237	DVARP($BA$1:$BB$4,"N",)	()	e	#VALUE!
+empty_args	edate	238	EDATE(40000,2)	()	n	40062.0
+empty_args	edate	239	EDATE(,2)	()	e	#N/A
+empty_args	edate	240	EDATE(40000,)	()	e	#N/A
+empty_args	effect	241	EFFECT(2,2)	()	n	3.0
+empty_args	effect	242	EFFECT(,2)	()	e	#N/A
+empty_args	effect	243	EFFECT(2,)	()	e	#N/A
+empty_args	eomonth	244	EOMONTH(40000,2)	()	n	40086.0
+empty_args	eomonth	245	EOMONTH(,2)	()	e	#N/A
+empty_args	eomonth	246	EOMONTH(40000,)	()	e	#N/A
+empty_args	error.type	247	ERROR.TYPE(1/0)	()	n	2.0
+empty_args	even	248	EVEN(2)	()	n	2.0
+empty_args	exact	249	EXACT("a","a")	()	b	True
+empty_args	exact	250	EXACT(,"a")	()	b	False
+empty_args	exact	251	EXACT("a",)	()	b	False
+empty_args	exp	252	EXP(2)	()	n	7.38905609893065
+empty_args	fact	253	FACT(2)	()	n	2.0
+empty_args	factdouble	254	FACTDOUBLE(2)	()	n	2.0
+empty_args	find	255	FIND("a","abc",1)	()	n	1.0
+empty_args	find	256	FIND(,"abc",1)	()	n	1.0
+empty_args	find	257	FIND("a",,1)	()	e	#VALUE!
+empty_args	find	258	FIND("a","abc",)	()	e	#VALUE!
+empty_args	findb	259	FINDB("a","abc",1)	()	n	1.0
+empty_args	findb	260	FINDB(,"abc",1)	()	n	1.0
+empty_args	findb	261	FINDB("a",,1)	()	e	#VALUE!
+empty_args	findb	262	FINDB("a","abc",)	()	e	#VALUE!
+empty_args	fisher	263	FISHER(0.5)	()	n	0.5493061443340549
+empty_args	fisherinv	264	FISHERINV(2)	()	n	0.9640275800758169
+empty_args	fixed	265	FIXED(2,2,TRUE)	()	str	'2.00'
+empty_args	fixed	266	FIXED(,2,TRUE)	()	str	'0.00'
+empty_args	fixed	267	FIXED(2,,TRUE)	()	str	'2.00'
+empty_args	fixed	268	FIXED(2,2,)	()	str	'2.00'
+empty_args	fixed	269	FIXED(2,,)	()	str	'2.00'
+empty_args	fixed	270	FIXED(2,)	()	str	'2.00'
+empty_args	floor	271	FLOOR(2,2)	()	n	2.0
+empty_args	floor	272	FLOOR(,2)	()	n	0.0
+empty_args	floor	273	FLOOR(2,)	()	e	#DIV/0!
+empty_args	forecast	274	FORECAST(2,$AA$1:$AA$4,$AA$1:$AA$4)	()	n	2.0
+empty_args	forecast	275	FORECAST(,$AA$1:$AA$4,$AA$1:$AA$4)	()	n	0.0
+empty_args	forecast	276	FORECAST(2,,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	forecast	277	FORECAST(2,$AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	fv	278	FV(2,2,2,2,2)	()	n	-42.0
+empty_args	fv	279	FV(,2,2,2,2)	()	n	-6.0
+empty_args	fv	280	FV(2,,2,2,2)	()	n	-2.0
+empty_args	fv	281	FV(2,2,,2,2)	()	n	-18.0
+empty_args	fv	282	FV(2,2,2,,2)	()	n	-24.0
+empty_args	fv	283	FV(2,2,2,2,)	()	n	-26.0
+empty_args	fv	284	FV(2,2,2,,)	()	n	-8.0
+empty_args	fv	285	FV(2,2,2,)	()	n	-8.0
+empty_args	fvschedule	286	FVSCHEDULE(2,$AA$1:$AA$4)	()	n	540.0
+empty_args	fvschedule	287	FVSCHEDULE(,$AA$1:$AA$4)	()	e	#N/A
+empty_args	fvschedule	288	FVSCHEDULE(2,)	()	e	#N/A
+empty_args	gcd	289	GCD($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	gcd	290	GCD(,$AA$1:$AA$4)	()	e	#N/A
+empty_args	gcd	291	GCD($AA$1:$AA$4,)	()	n	1.0
+empty_args	geomean	292	GEOMEAN($AA$1:$AA$4,$AA$1:$AA$4)	()	n	2.82842712474619
+empty_args	geomean	293	GEOMEAN(,$AA$1:$AA$4)	()	e	#NUM!
+empty_args	geomean	294	GEOMEAN($AA$1:$AA$4,)	()	e	#NUM!
+empty_args	gestep	295	GESTEP(2,2)	()	n	1.0
+empty_args	gestep	296	GESTEP(,2)	()	e	#N/A
+empty_args	gestep	297	GESTEP(2,)	()	n	1.0
+empty_args	harmean	298	HARMEAN($AA$1:$AA$4,$AA$1:$AA$4)	()	n	2.1333333333333333
+empty_args	harmean	299	HARMEAN(,$AA$1:$AA$4)	()	e	#NUM!
+empty_args	harmean	300	HARMEAN($AA$1:$AA$4,)	()	e	#NUM!
+empty_args	hex2bin	301	HEX2BIN(2,2)	()	str	'10'
+empty_args	hex2bin	302	HEX2BIN(,2)	()	e	#N/A
+empty_args	hex2bin	303	HEX2BIN(2,)	()	str	'10'
+empty_args	hex2dec	304	HEX2DEC(2)	()	n	2.0
+empty_args	hex2oct	305	HEX2OCT(2,2)	()	str	'02'
+empty_args	hex2oct	306	HEX2OCT(,2)	()	e	#N/A
+empty_args	hex2oct	307	HEX2OCT(2,)	()	str	'2'
+empty_args	hlookup	308	HLOOKUP(1,$AA$1:$AB$4,2,FALSE)	()	n	2.0
+empty_args	hlookup	309	HLOOKUP(,$AA$1:$AB$4,2,FALSE)	()	e	#N/A
+empty_args	hlookup	310	HLOOKUP(1,,2,FALSE)	()	e	#N/A
+empty_args	hlookup	311	HLOOKUP(1,$AA$1:$AB$4,,FALSE)	()	e	#VALUE!
+empty_args	hlookup	312	HLOOKUP(1,$AA$1:$AB$4,2,)	()	n	2.0
+empty_args	hour	313	HOUR(2)	()	n	0.0
+empty_args	hyperlink	314	HYPERLINK(2,2)	()	n	2.0
+empty_args	hyperlink	315	HYPERLINK(,2)	()	n	2.0
+empty_args	hyperlink	316	HYPERLINK(2,)	()	n	0.0
+empty_args	if	317	IF(TRUE,2,3)	()	n	2.0
+empty_args	if	318	IF(,2,3)	()	n	3.0
+empty_args	if	319	IF(TRUE,,3)	()	n	0.0
+empty_args	if	320	IF(TRUE,2,)	()	n	2.0
+empty_args	if	321	IF(TRUE,,)	()	n	0.0
+empty_args	if	322	IF(TRUE,)	()	n	0.0
+empty_args	iferror	323	IFERROR(2,2)	()	n	2.0
+empty_args	iferror	324	IFERROR(,2)	()	n	0.0
+empty_args	iferror	325	IFERROR(2,)	()	n	2.0
+empty_args	index	326	INDEX($AA$1:$AB$4,2,1,1)	()	n	2.0
+empty_args	index	327	INDEX(,2,1,1)	()	e	#VALUE!
+empty_args	index	328	INDEX($AA$1:$AB$4,,1,1)	()	e	#VALUE!
+empty_args	index	329	INDEX($AA$1:$AB$4,2,,1)	()	e	#VALUE!
+empty_args	index	330	INDEX($AA$1:$AB$4,2,1,)	()	e	#VALUE!
+empty_args	index	331	INDEX($AA$1:$AB$4,2,,)	()	e	#VALUE!
+empty_args	index	332	INDEX($AA$1:$AB$4,2,)	()	e	#VALUE!
+empty_args	indirect	333	INDIRECT("AA1",TRUE)	()	n	1.0
+empty_args	indirect	334	INDIRECT(,TRUE)	()	e	#REF!
+empty_args	indirect	335	INDIRECT("AA1",)	()	e	#REF!
+empty_args	int	336	INT(2)	()	n	2.0
+empty_args	intercept	337	INTERCEPT($AA$1:$AA$4,$AA$1:$AA$4)	()	n	0.0
+empty_args	intercept	338	INTERCEPT(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	intercept	339	INTERCEPT($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	intrate	340	INTRATE(40000,41000,97,100,1)	()	n	0.011296391752577321
+empty_args	intrate	341	INTRATE(,41000,97,100,1)	()	e	#N/A
+empty_args	intrate	342	INTRATE(40000,,97,100,1)	()	e	#N/A
+empty_args	intrate	343	INTRATE(40000,41000,,100,1)	()	e	#N/A
+empty_args	intrate	344	INTRATE(40000,41000,97,,1)	()	e	#N/A
+empty_args	intrate	345	INTRATE(40000,41000,97,100,)	()	n	0.01130357423203726
+empty_args	ipmt	346	IPMT(2,2,2,2,2,2)	()	n	-0.666666666666667
+empty_args	ipmt	347	IPMT(,2,2,2,2,2)	()	n	0.0
+empty_args	ipmt	348	IPMT(2,,2,2,2,2)	()	e	#NUM!
+empty_args	ipmt	349	IPMT(2,2,,2,2,2)	()	e	#NUM!
+empty_args	ipmt	350	IPMT(2,2,2,,2,2)	()	n	0.33333333333333315
+empty_args	ipmt	351	IPMT(2,2,2,2,,2)	()	n	-1.0
+empty_args	ipmt	352	IPMT(2,2,2,2,2,)	()	n	-2.000000000000001
+empty_args	ipmt	353	IPMT(2,2,2,2,,)	()	n	-3.0000000000000004
+empty_args	ipmt	354	IPMT(2,2,2,2,)	()	n	-3.0000000000000004
+empty_args	irr	355	IRR($AE$1:$AE$4,0.1)	()	n	0.3387497096972243
+empty_args	irr	356	IRR(,0.1)	()	e	#VALUE!
+empty_args	irr	357	IRR($AE$1:$AE$4,)	()	n	0.3387497097016243
+empty_args	isblank	358	ISBLANK(2)	()	b	False
+empty_args	iserr	359	ISERR(2)	()	b	False
+empty_args	iserror	360	ISERROR(2)	()	b	False
+empty_args	iseven	361	ISEVEN(2)	()	b	True
+empty_args	islogical	362	ISLOGICAL(2)	()	b	False
+empty_args	isna	363	ISNA(2)	()	b	False
+empty_args	isnontext	364	ISNONTEXT(2)	()	b	True
+empty_args	isnumber	365	ISNUMBER(2)	()	b	True
+empty_args	iso.ceiling	366	ISO.CEILING(2,2)	()	n	2.0
+empty_args	iso.ceiling	367	ISO.CEILING(,2)	()	n	0.0
+empty_args	iso.ceiling	368	ISO.CEILING(2,)	()	n	2.0
+empty_args	isodd	369	ISODD(2)	()	b	False
+empty_args	ispmt	370	ISPMT(2,2,2,2)	()	n	0.0
+empty_args	ispmt	371	ISPMT(,2,2,2)	()	n	0.0
+empty_args	ispmt	372	ISPMT(2,,2,2)	()	n	-4.0
+empty_args	ispmt	373	ISPMT(2,2,,2)	()	e	#DIV/0!
+empty_args	ispmt	374	ISPMT(2,2,2,)	()	n	0.0
+empty_args	isref	375	ISREF($AA$1:$AA$4)	()	b	True
+empty_args	istext	376	ISTEXT(2)	()	b	False
+empty_args	kurt	377	KURT($AA$1:$AA$4,$AA$1:$AA$4)	()	n	-0.9078563327032119
+empty_args	kurt	378	KURT(,$AA$1:$AA$4)	()	n	1.0499999999999972
+empty_args	kurt	379	KURT($AA$1:$AA$4,)	()	n	1.0499999999999972
+empty_args	large	380	LARGE($AA$1:$AA$4,2)	()	n	4.0
+empty_args	large	381	LARGE(,2)	()	e	#NUM!
+empty_args	large	382	LARGE($AA$1:$AA$4,)	()	e	#NUM!
+empty_args	lcm	383	LCM($AA$1:$AA$4,$AA$1:$AA$4)	()	n	8.0
+empty_args	lcm	384	LCM(,$AA$1:$AA$4)	()	e	#N/A
+empty_args	lcm	385	LCM($AA$1:$AA$4,)	()	n	8.0
+empty_args	left	386	LEFT("a",2)	()	str	'a'
+empty_args	left	387	LEFT(,2)	()	str	''
+empty_args	left	388	LEFT("a",)	()	str	''
+empty_args	leftb	389	LEFTB("a",2)	()	str	'a'
+empty_args	leftb	390	LEFTB(,2)	()	str	''
+empty_args	leftb	391	LEFTB("a",)	()	str	''
+empty_args	len	392	LEN("a")	()	n	1.0
+empty_args	lenb	393	LENB("a")	()	n	1.0
+empty_args	linest	394	LINEST($AA$1:$AA$4,$AA$1:$AA$4,TRUE,TRUE)	()	n	1.0
+empty_args	linest	395	LINEST(,$AA$1:$AA$4,TRUE,TRUE)	()	e	#VALUE!
+empty_args	linest	396	LINEST($AA$1:$AA$4,,TRUE,TRUE)	()	n	2.3000000000000003
+empty_args	linest	397	LINEST($AA$1:$AA$4,$AA$1:$AA$4,,TRUE)	()	n	1.0
+empty_args	linest	398	LINEST($AA$1:$AA$4,$AA$1:$AA$4,TRUE,)	()	n	1.0
+empty_args	linest	399	LINEST($AA$1:$AA$4,,,)	()	n	2.3000000000000003
+empty_args	linest	400	LINEST($AA$1:$AA$4,)	()	n	2.3000000000000003
+empty_args	linest	401	LINEST($AA$1:$AA$4,,TRUE)	()	n	2.3000000000000003
+empty_args	ln	402	LN(2)	()	n	0.6931471805599453
+empty_args	log	403	LOG(2,2)	()	n	1.0
+empty_args	log	404	LOG(,2)	()	e	#NUM!
+empty_args	log	405	LOG(2,)	()	e	#NUM!
+empty_args	log10	406	LOG10(2)	()	n	0.3010299956639812
+empty_args	lookup	407	LOOKUP(2,$AA$1:$AA$4,$AB$1:$AB$4)	()	n	5.0
+empty_args	lookup	408	LOOKUP(,$AA$1:$AA$4,$AB$1:$AB$4)	()	e	#N/A
+empty_args	lookup	409	LOOKUP(2,,$AB$1:$AB$4)	()	e	#VALUE!
+empty_args	lookup	410	LOOKUP(2,$AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	lower	411	LOWER("a")	()	str	'a'
+empty_args	match	412	MATCH(2,$AA$1:$AA$4,0)	()	n	2.0
+empty_args	match	413	MATCH(,$AA$1:$AA$4,0)	()	e	#N/A
+empty_args	match	414	MATCH(2,,0)	()	e	#N/A
+empty_args	match	415	MATCH(2,$AA$1:$AA$4,)	()	n	2.0
+empty_args	max	416	MAX($AA$1:$AA$4,$AA$1:$AA$4)	()	n	8.0
+empty_args	max	417	MAX(,$AA$1:$AA$4)	()	n	8.0
+empty_args	max	418	MAX($AA$1:$AA$4,)	()	n	8.0
+empty_args	maxa	419	MAXA($AA$1:$AA$4,$AA$1:$AA$4)	()	n	8.0
+empty_args	maxa	420	MAXA(,$AA$1:$AA$4)	()	n	8.0
+empty_args	maxa	421	MAXA($AA$1:$AA$4,)	()	n	8.0
+empty_args	mduration	422	MDURATION(40000,41000,0.05,0.06,2,1)	()	n	2.4832111753596147
+empty_args	mduration	423	MDURATION(,41000,0.05,0.06,2,1)	()	e	#N/A
+empty_args	mduration	424	MDURATION(40000,,0.05,0.06,2,1)	()	e	#N/A
+empty_args	mduration	425	MDURATION(40000,41000,,0.06,2,1)	()	e	#N/A
+empty_args	mduration	426	MDURATION(40000,41000,0.05,,2,1)	()	e	#N/A
+empty_args	mduration	427	MDURATION(40000,41000,0.05,0.06,,1)	()	e	#N/A
+empty_args	mduration	428	MDURATION(40000,41000,0.05,0.06,2,)	()	n	2.481663789998765
+empty_args	median	429	MEDIAN($AA$1:$AA$4,$AA$1:$AA$4)	()	n	3.0
+empty_args	median	430	MEDIAN(,$AA$1:$AA$4)	()	n	2.0
+empty_args	median	431	MEDIAN($AA$1:$AA$4,)	()	n	2.0
+empty_args	mid	432	MID("a",2,2)	()	str	''
+empty_args	mid	433	MID(,2,2)	()	str	''
+empty_args	mid	434	MID("a",,2)	()	e	#VALUE!
+empty_args	mid	435	MID("a",2,)	()	str	''
+empty_args	midb	436	MIDB("a",2,2)	()	str	''
+empty_args	midb	437	MIDB(,2,2)	()	str	''
+empty_args	midb	438	MIDB("a",,2)	()	e	#VALUE!
+empty_args	midb	439	MIDB("a",2,)	()	str	''
+empty_args	min	440	MIN($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	min	441	MIN(,$AA$1:$AA$4)	()	n	0.0
+empty_args	min	442	MIN($AA$1:$AA$4,)	()	n	0.0
+empty_args	mina	443	MINA($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	mina	444	MINA(,$AA$1:$AA$4)	()	n	0.0
+empty_args	mina	445	MINA($AA$1:$AA$4,)	()	n	0.0
+empty_args	minute	446	MINUTE(2)	()	n	0.0
+empty_args	mirr	447	MIRR($AE$1:$AE$4,0.1,0.1)	()	n	0.25252821638339085
+empty_args	mirr	448	MIRR(,0.1,0.1)	()	e	#VALUE!
+empty_args	mirr	449	MIRR($AE$1:$AE$4,,0.1)	()	n	0.25252821638339085
+empty_args	mirr	450	MIRR($AE$1:$AE$4,0.1,)	()	n	0.21644039911467994
+empty_args	mod	451	MOD(2,2)	()	n	0.0
+empty_args	mod	452	MOD(,2)	()	n	0.0
+empty_args	mod	453	MOD(2,)	()	e	#DIV/0!
+empty_args	mode	454	MODE($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	mode	455	MODE(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	mode	456	MODE($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	month	457	MONTH(2)	()	n	1.0
+empty_args	mround	458	MROUND(5,2)	()	n	6.0
+empty_args	mround	459	MROUND(,2)	()	e	#N/A
+empty_args	mround	460	MROUND(5,)	()	e	#N/A
+empty_args	multinomial	461	MULTINOMIAL($AA$1:$AA$4,$AA$1:$AA$4)	()	n	7.081684156552005e+19
+empty_args	multinomial	462	MULTINOMIAL(,$AA$1:$AA$4)	()	e	#N/A
+empty_args	multinomial	463	MULTINOMIAL($AA$1:$AA$4,)	()	n	675675.0000000001
+empty_args	n	464	N($AA$1:$AA$4)	()	n	1.0
+empty_args	networkdays	465	NETWORKDAYS(2,2,$AA$1:$AA$4)	()	n	0.0
+empty_args	networkdays	466	NETWORKDAYS(,2,$AA$1:$AA$4)	()	e	#N/A
+empty_args	networkdays	467	NETWORKDAYS(2,,$AA$1:$AA$4)	()	e	#N/A
+empty_args	networkdays	468	NETWORKDAYS(2,2,)	()	n	1.0
+empty_args	networkdays.intl	469	NETWORKDAYS.INTL(40000,40100,1,$AH$1:$AH$2)	()	n	71.0
+empty_args	networkdays.intl	470	NETWORKDAYS.INTL(,40100,1,$AH$1:$AH$2)	()	e	#N/A
+empty_args	networkdays.intl	471	NETWORKDAYS.INTL(40000,,1,$AH$1:$AH$2)	()	e	#N/A
+empty_args	networkdays.intl	472	NETWORKDAYS.INTL(40000,40100,,$AH$1:$AH$2)	()	n	71.0
+empty_args	networkdays.intl	473	NETWORKDAYS.INTL(40000,40100,1,)	()	n	73.0
+empty_args	networkdays.intl	474	NETWORKDAYS.INTL(40000,40100,,)	()	n	73.0
+empty_args	networkdays.intl	475	NETWORKDAYS.INTL(40000,40100,)	()	n	73.0
+empty_args	nominal	476	NOMINAL(2,2)	()	n	1.4641016151377544
+empty_args	nominal	477	NOMINAL(,2)	()	e	#N/A
+empty_args	nominal	478	NOMINAL(2,)	()	e	#N/A
+empty_args	normdist	479	NORMDIST(2,2,2,TRUE)	()	n	0.5
+empty_args	normdist	480	NORMDIST(,2,2,TRUE)	()	n	0.158655253931457
+empty_args	normdist	481	NORMDIST(2,,2,TRUE)	()	n	0.841344746068543
+empty_args	normdist	482	NORMDIST(2,2,,TRUE)	()	e	#NUM!
+empty_args	normdist	483	NORMDIST(2,2,2,)	()	n	0.19947114020071635
+empty_args	norminv	484	NORMINV(0.5,2,2)	()	n	2.0
+empty_args	norminv	485	NORMINV(,2,2)	()	e	#NUM!
+empty_args	norminv	486	NORMINV(0.5,,2)	()	n	0.0
+empty_args	norminv	487	NORMINV(0.5,2,)	()	e	#NUM!
+empty_args	normsdist	488	NORMSDIST(2)	()	n	0.9772498680518208
+empty_args	normsinv	489	NORMSINV(0.5)	()	n	0.0
+empty_args	not	490	NOT(TRUE)	()	b	False
+empty_args	nper	491	NPER(2,2,2,2,2)	()	n	-1.4649735207179269
+empty_args	nper	492	NPER(,2,2,2,2)	()	n	-2.0
+empty_args	nper	493	NPER(2,,2,2,2)	()	e	#NUM!
+empty_args	nper	494	NPER(2,2,,2,2)	()	n	-1.0
+empty_args	nper	495	NPER(2,2,2,,2)	()	n	-0.4649735207179272
+empty_args	nper	496	NPER(2,2,2,2,)	()	e	#NUM!
+empty_args	nper	497	NPER(2,2,2,,)	()	n	-1.0
+empty_args	nper	498	NPER(2,2,2,)	()	n	-1.0
+empty_args	npv	499	NPV(2,$AA$1:$AA$4,$AA$1:$AA$4)	()	n	0.8123761621704008
+empty_args	npv	500	NPV(,$AA$1:$AA$4,$AA$1:$AA$4)	()	n	30.0
+empty_args	npv	501	NPV(2,,$AA$1:$AA$4)	()	n	0.2674897119341564
+empty_args	npv	502	NPV(2,$AA$1:$AA$4,)	()	n	0.802469135802469
+empty_args	oct2bin	503	OCT2BIN(2,2)	()	str	'10'
+empty_args	oct2bin	504	OCT2BIN(,2)	()	e	#N/A
+empty_args	oct2bin	505	OCT2BIN(2,)	()	str	'10'
+empty_args	oct2dec	506	OCT2DEC(2)	()	n	2.0
+empty_args	oct2hex	507	OCT2HEX(2,2)	()	str	'02'
+empty_args	oct2hex	508	OCT2HEX(,2)	()	e	#N/A
+empty_args	oct2hex	509	OCT2HEX(2,)	()	str	'2'
+empty_args	odd	510	ODD(2)	()	n	3.0
+empty_args	offset	511	OFFSET($AA$1,1,0,1,1)	()	n	2.0
+empty_args	offset	512	OFFSET($AA$1,,0,1,1)	()	n	1.0
+empty_args	offset	513	OFFSET($AA$1,1,,1,1)	()	n	2.0
+empty_args	offset	514	OFFSET($AA$1,1,0,,1)	()	n	2.0
+empty_args	offset	515	OFFSET($AA$1,1,0,1,)	()	n	2.0
+empty_args	offset	516	OFFSET($AA$1,1,0,,)	()	n	2.0
+empty_args	offset	517	OFFSET($AA$1,1,0,)	()	n	2.0
+empty_args	or	518	OR($AA$1:$AA$4,$AA$1:$AA$4)	()	b	True
+empty_args	or	519	OR(,$AA$1:$AA$4)	()	b	True
+empty_args	or	520	OR($AA$1:$AA$4,)	()	b	True
+empty_args	pearson	521	PEARSON($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0000000000000002
+empty_args	pearson	522	PEARSON(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	pearson	523	PEARSON($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	percentile	524	PERCENTILE($AA$1:$AA$4,0.5)	()	n	3.0
+empty_args	percentile	525	PERCENTILE(,0.5)	()	n	0.0
+empty_args	percentile	526	PERCENTILE($AA$1:$AA$4,)	()	n	1.0
+empty_args	percentrank	527	PERCENTRANK($AA$1:$AA$4,2,3)	()	n	0.333
+empty_args	percentrank	528	PERCENTRANK(,2,3)	()	e	#N/A
+empty_args	percentrank	529	PERCENTRANK($AA$1:$AA$4,,3)	()	e	#N/A
+empty_args	percentrank	530	PERCENTRANK($AA$1:$AA$4,2,)	()	n	0.333
+empty_args	permut	531	PERMUT(2,2)	()	n	2.0
+empty_args	permut	532	PERMUT(,2)	()	e	#NUM!
+empty_args	permut	533	PERMUT(2,)	()	n	1.0
+empty_args	pmt	534	PMT(2,2,2,2,2)	()	n	-1.6666666666666665
+empty_args	pmt	535	PMT(,2,2,2,2)	()	n	-2.0
+empty_args	pmt	536	PMT(2,,2,2,2)	()	e	#NUM!
+empty_args	pmt	537	PMT(2,2,,2,2)	()	n	-0.16666666666666666
+empty_args	pmt	538	PMT(2,2,2,,2)	()	n	-1.5
+empty_args	pmt	539	PMT(2,2,2,2,)	()	n	-5.0
+empty_args	pmt	540	PMT(2,2,2,,)	()	n	-4.5
+empty_args	pmt	541	PMT(2,2,2,)	()	n	-4.5
+empty_args	power	542	POWER(2,2)	()	n	4.0
+empty_args	power	543	POWER(,2)	()	n	0.0
+empty_args	power	544	POWER(2,)	()	n	1.0
+empty_args	ppmt	545	PPMT(2,2,2,2,2,2)	()	n	-1.0
+empty_args	ppmt	546	PPMT(,2,2,2,2,2)	()	n	-2.0
+empty_args	ppmt	547	PPMT(2,,2,2,2,2)	()	e	#NUM!
+empty_args	ppmt	548	PPMT(2,2,,2,2,2)	()	e	#NUM!
+empty_args	ppmt	549	PPMT(2,2,2,,2,2)	()	n	-0.5
+empty_args	ppmt	550	PPMT(2,2,2,2,,2)	()	n	-0.5
+empty_args	ppmt	551	PPMT(2,2,2,2,2,)	()	n	-3.0
+empty_args	ppmt	552	PPMT(2,2,2,2,,)	()	n	-1.5
+empty_args	ppmt	553	PPMT(2,2,2,2,)	()	n	-1.5
+empty_args	price	554	PRICE(40000,41000,0.05,0.06,100,2,1)	()	n	97.50031163757141
+empty_args	price	555	PRICE(,41000,0.05,0.06,100,2,1)	()	e	#N/A
+empty_args	price	556	PRICE(40000,,0.05,0.06,100,2,1)	()	e	#N/A
+empty_args	price	557	PRICE(40000,41000,,0.06,100,2,1)	()	e	#N/A
+empty_args	price	558	PRICE(40000,41000,0.05,,100,2,1)	()	e	#N/A
+empty_args	price	559	PRICE(40000,41000,0.05,0.06,,2,1)	()	e	#N/A
+empty_args	price	560	PRICE(40000,41000,0.05,0.06,100,,1)	()	e	#N/A
+empty_args	price	561	PRICE(40000,41000,0.05,0.06,100,2,)	()	n	97.50165329045704
+empty_args	pricedisc	562	PRICEDISC(40000,41000,0.05,100,1)	()	n	86.3107460643395
+empty_args	pricedisc	563	PRICEDISC(,41000,0.05,100,1)	()	e	#N/A
+empty_args	pricedisc	564	PRICEDISC(40000,,0.05,100,1)	()	e	#N/A
+empty_args	pricedisc	565	PRICEDISC(40000,41000,,100,1)	()	e	#N/A
+empty_args	pricedisc	566	PRICEDISC(40000,41000,0.05,,1)	()	e	#N/A
+empty_args	pricedisc	567	PRICEDISC(40000,41000,0.05,100,)	()	n	86.31944444444444
+empty_args	prob	568	PROB($AA$1:$AA$4,$AF$1:$AF$4,2,4)	()	n	0.5
+empty_args	prob	569	PROB(,$AF$1:$AF$4,2,4)	()	e	#VALUE!
+empty_args	prob	570	PROB($AA$1:$AA$4,,2,4)	()	e	#VALUE!
+empty_args	prob	571	PROB($AA$1:$AA$4,$AF$1:$AF$4,,4)	()	n	0.6000000000000001
+empty_args	prob	572	PROB($AA$1:$AA$4,$AF$1:$AF$4,2,)	()	n	0.2
+empty_args	product	573	PRODUCT($AA$1:$AA$4,$AA$1:$AA$4)	()	n	4096.0
+empty_args	product	574	PRODUCT(,$AA$1:$AA$4)	()	n	64.0
+empty_args	product	575	PRODUCT($AA$1:$AA$4,)	()	n	64.0
+empty_args	proper	576	PROPER("a")	()	str	'A'
+empty_args	pv	577	PV(2,2,2,2,2)	()	n	-2.888888888888889
+empty_args	pv	578	PV(,2,2,2,2)	()	n	-6.0
+empty_args	pv	579	PV(2,,2,2,2)	()	n	-2.0
+empty_args	pv	580	PV(2,2,,2,2)	()	n	-0.2222222222222222
+empty_args	pv	581	PV(2,2,2,,2)	()	n	-2.6666666666666665
+empty_args	pv	582	PV(2,2,2,2,)	()	n	-1.1111111111111112
+empty_args	pv	583	PV(2,2,2,,)	()	n	-0.8888888888888888
+empty_args	pv	584	PV(2,2,2,)	()	n	-0.8888888888888888
+empty_args	quartile	585	QUARTILE($AA$1:$AA$4,2)	()	n	3.0
+empty_args	quartile	586	QUARTILE(,2)	()	n	0.0
+empty_args	quartile	587	QUARTILE($AA$1:$AA$4,)	()	n	1.0
+empty_args	quotient	588	QUOTIENT(5,2)	()	n	2.0
+empty_args	quotient	589	QUOTIENT(,2)	()	e	#N/A
+empty_args	quotient	590	QUOTIENT(5,)	()	e	#N/A
+empty_args	radians	591	RADIANS(2)	()	n	0.03490658503988659
+empty_args	rank	592	RANK(2,$AA$1:$AA$4,2)	()	n	2.0
+empty_args	rank	593	RANK(,$AA$1:$AA$4,2)	()	e	#N/A
+empty_args	rank	594	RANK(2,$AA$1:$AA$4,)	()	n	3.0
+empty_args	rate	595	RATE(12,-100,1000,0,0,0.1)	()	n	0.02922854076913774
+empty_args	rate	596	RATE(,-100,1000,0,0,0.1)	()	e	#NUM!
+empty_args	rate	597	RATE(12,,1000,0,0,0.1)	()	e	#NUM!
+empty_args	rate	598	RATE(12,-100,,0,0,0.1)	()	e	#NUM!
+empty_args	rate	599	RATE(12,-100,1000,,0,0.1)	()	n	0.02922854076913774
+empty_args	rate	600	RATE(12,-100,1000,0,,0.1)	()	n	0.02922854076913774
+empty_args	rate	601	RATE(12,-100,1000,0,0,)	()	n	0.02922854076912796
+empty_args	rate	602	RATE(12,-100,1000,,,)	()	n	0.02922854076912796
+empty_args	rate	603	RATE(12,-100,1000,)	()	n	0.02922854076913774
+empty_args	rate	604	RATE(12,-100,1000,,0)	()	n	0.02922854076913774
+empty_args	received	605	RECEIVED(40000,41000,100,0.05,1)	()	n	115.86042823156225
+empty_args	received	606	RECEIVED(,41000,100,0.05,1)	()	e	#N/A
+empty_args	received	607	RECEIVED(40000,,100,0.05,1)	()	e	#N/A
+empty_args	received	608	RECEIVED(40000,41000,,0.05,1)	()	e	#N/A
+empty_args	received	609	RECEIVED(40000,41000,100,,1)	()	e	#N/A
+empty_args	received	610	RECEIVED(40000,41000,100,0.05,)	()	n	115.84875301689462
+empty_args	replace	611	REPLACE("a",2,2,"a")	()	str	'aa'
+empty_args	replace	612	REPLACE(,2,2,"a")	()	str	'a'
+empty_args	replace	613	REPLACE("a",,2,"a")	()	e	#VALUE!
+empty_args	replace	614	REPLACE("a",2,,"a")	()	str	'aa'
+empty_args	replace	615	REPLACE("a",2,2,)	()	str	'a'
+empty_args	replaceb	616	REPLACEB("a",2,2,"a")	()	str	'aa'
+empty_args	replaceb	617	REPLACEB(,2,2,"a")	()	str	'a'
+empty_args	replaceb	618	REPLACEB("a",,2,"a")	()	e	#VALUE!
+empty_args	replaceb	619	REPLACEB("a",2,,"a")	()	str	'aa'
+empty_args	replaceb	620	REPLACEB("a",2,2,)	()	str	'a'
+empty_args	rept	621	REPT("a",2)	()	str	'aa'
+empty_args	rept	622	REPT(,2)	()	str	''
+empty_args	rept	623	REPT("a",)	()	str	''
+empty_args	right	624	RIGHT("a",2)	()	str	'a'
+empty_args	right	625	RIGHT(,2)	()	str	''
+empty_args	right	626	RIGHT("a",)	()	str	''
+empty_args	rightb	627	RIGHTB("a",2)	()	str	'a'
+empty_args	rightb	628	RIGHTB(,2)	()	str	''
+empty_args	rightb	629	RIGHTB("a",)	()	str	''
+empty_args	roman	630	ROMAN(2,2)	()	str	'II'
+empty_args	roman	631	ROMAN(,2)	()	str	''
+empty_args	roman	632	ROMAN(2,)	()	str	'II'
+empty_args	round	633	ROUND(2,2)	()	n	2.0
+empty_args	round	634	ROUND(,2)	()	n	0.0
+empty_args	round	635	ROUND(2,)	()	n	2.0
+empty_args	rounddown	636	ROUNDDOWN(2,2)	()	n	2.0
+empty_args	rounddown	637	ROUNDDOWN(,2)	()	n	0.0
+empty_args	rounddown	638	ROUNDDOWN(2,)	()	n	2.0
+empty_args	roundup	639	ROUNDUP(2,2)	()	n	2.0
+empty_args	roundup	640	ROUNDUP(,2)	()	n	0.0
+empty_args	roundup	641	ROUNDUP(2,)	()	n	2.0
+empty_args	row	642	ROW($AA$1:$AA$4)	()	n	1.0
+empty_args	row	643	ROW()	()	n	643.0
+empty_args	rows	644	ROWS($AA$1:$AA$4)	()	n	4.0
+empty_args	rsq	645	RSQ($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	rsq	646	RSQ(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	rsq	647	RSQ($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	search	648	SEARCH("a","abc",1)	()	n	1.0
+empty_args	search	649	SEARCH(,"abc",1)	()	n	1.0
+empty_args	search	650	SEARCH("a",,1)	()	e	#VALUE!
+empty_args	search	651	SEARCH("a","abc",)	()	e	#VALUE!
+empty_args	searchb	652	SEARCHB("a","abc",1)	()	n	1.0
+empty_args	searchb	653	SEARCHB(,"abc",1)	()	n	1.0
+empty_args	searchb	654	SEARCHB("a",,1)	()	e	#VALUE!
+empty_args	searchb	655	SEARCHB("a","abc",)	()	e	#VALUE!
+empty_args	second	656	SECOND(2)	()	n	0.0
+empty_args	seriessum	657	SERIESSUM(2,2,2,$AA$1:$AA$4)	()	n	2340.0
+empty_args	seriessum	658	SERIESSUM(,2,2,$AA$1:$AA$4)	()	e	#N/A
+empty_args	seriessum	659	SERIESSUM(2,,2,$AA$1:$AA$4)	()	e	#N/A
+empty_args	seriessum	660	SERIESSUM(2,2,,$AA$1:$AA$4)	()	e	#N/A
+empty_args	seriessum	661	SERIESSUM(2,2,2,)	()	e	#N/A
+empty_args	sign	662	SIGN(2)	()	n	1.0
+empty_args	sin	663	SIN(2)	()	n	0.9092974268256817
+empty_args	sinh	664	SINH(2)	()	n	3.626860407847019
+empty_args	skew	665	SKEW($AA$1:$AA$4,$AA$1:$AA$4)	()	n	0.8191831704936859
+empty_args	skew	666	SKEW(,$AA$1:$AA$4)	()	n	1.1858541225631418
+empty_args	skew	667	SKEW($AA$1:$AA$4,)	()	n	1.185854122563142
+empty_args	sln	668	SLN(2,2,2)	()	n	0.0
+empty_args	sln	669	SLN(,2,2)	()	n	-1.0
+empty_args	sln	670	SLN(2,,2)	()	n	1.0
+empty_args	sln	671	SLN(2,2,)	()	e	#DIV/0!
+empty_args	slope	672	SLOPE($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	slope	673	SLOPE(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	slope	674	SLOPE($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	small	675	SMALL($AA$1:$AA$4,2)	()	n	2.0
+empty_args	small	676	SMALL(,2)	()	e	#NUM!
+empty_args	small	677	SMALL($AA$1:$AA$4,)	()	e	#NUM!
+empty_args	sqrt	678	SQRT(2)	()	n	1.4142135623730951
+empty_args	sqrtpi	679	SQRTPI(2)	()	n	2.5066282746310002
+empty_args	standardize	680	STANDARDIZE(2,2,2)	()	n	0.0
+empty_args	standardize	681	STANDARDIZE(,2,2)	()	n	-1.0
+empty_args	standardize	682	STANDARDIZE(2,,2)	()	n	1.0
+empty_args	standardize	683	STANDARDIZE(2,2,)	()	e	#NUM!
+empty_args	stdev	684	STDEV($AA$1:$AA$4,$AA$1:$AA$4)	()	n	2.866057521105554
+empty_args	stdev	685	STDEV(,$AA$1:$AA$4)	()	n	3.1622776601683795
+empty_args	stdev	686	STDEV($AA$1:$AA$4,)	()	n	3.1622776601683795
+empty_args	stdeva	687	STDEVA($AA$1:$AA$4,$AA$1:$AA$4)	()	n	2.866057521105554
+empty_args	stdeva	688	STDEVA(,$AA$1:$AA$4)	()	n	3.1622776601683795
+empty_args	stdeva	689	STDEVA($AA$1:$AA$4,)	()	n	3.1622776601683795
+empty_args	stdevp	690	STDEVP($AA$1:$AA$4,$AA$1:$AA$4)	()	n	2.680951323690902
+empty_args	stdevp	691	STDEVP(,$AA$1:$AA$4)	()	n	2.8284271247461903
+empty_args	stdevp	692	STDEVP($AA$1:$AA$4,)	()	n	2.8284271247461903
+empty_args	stdevpa	693	STDEVPA($AA$1:$AA$4,$AA$1:$AA$4)	()	n	2.680951323690902
+empty_args	stdevpa	694	STDEVPA(,$AA$1:$AA$4)	()	n	2.8284271247461903
+empty_args	stdevpa	695	STDEVPA($AA$1:$AA$4,)	()	n	2.8284271247461903
+empty_args	steyx	696	STEYX($AA$1:$AA$4,$AA$1:$AA$4)	()	n	0.0
+empty_args	steyx	697	STEYX(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	steyx	698	STEYX($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	substitute	699	SUBSTITUTE("a","a","a",2)	()	str	'a'
+empty_args	substitute	700	SUBSTITUTE(,"a","a",2)	()	str	''
+empty_args	substitute	701	SUBSTITUTE("a",,"a",2)	()	str	'a'
+empty_args	substitute	702	SUBSTITUTE("a","a",,2)	()	str	'a'
+empty_args	substitute	703	SUBSTITUTE("a","a","a",)	()	e	#VALUE!
+empty_args	subtotal	704	SUBTOTAL(9,$AA$1:$AA$4,$AA$1:$AA$4)	()	n	30.0
+empty_args	subtotal	705	SUBTOTAL(,$AA$1:$AA$4,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	sum	706	SUM($AA$1:$AA$4,$AA$1:$AA$4)	()	n	30.0
+empty_args	sum	707	SUM(,$AA$1:$AA$4)	()	n	15.0
+empty_args	sum	708	SUM($AA$1:$AA$4,)	()	n	15.0
+empty_args	sumif	709	SUMIF($AA$1:$AA$4,">1",$AB$1:$AB$4)	()	n	20.0
+empty_args	sumif	710	SUMIF($AA$1:$AA$4,,$AB$1:$AB$4)	()	n	0.0
+empty_args	sumifs	711	SUMIFS($AB$1:$AB$4,$AA$1:$AA$4,">1")	()	n	20.0
+empty_args	sumifs	712	SUMIFS($AB$1:$AB$4,$AA$1:$AA$4,)	()	n	0.0
+empty_args	sumifs	713	SUMIFS($AB$1:$AB$4,$AA$1:$AA$4,">1",$AA$1:$AA$4,">1")	()	n	20.0
+empty_args	sumifs	714	SUMIFS($AB$1:$AB$4,$AA$1:$AA$4,,$AA$1:$AA$4,">1")	()	n	0.0
+empty_args	sumifs	715	SUMIFS($AB$1:$AB$4,$AA$1:$AA$4,">1",$AA$1:$AA$4,)	()	n	0.0
+empty_args	sumproduct	716	SUMPRODUCT($AA$1:$AA$4,$AA$1:$AA$4)	()	n	85.0
+empty_args	sumproduct	717	SUMPRODUCT(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	sumproduct	718	SUMPRODUCT($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	sumsq	719	SUMSQ($AA$1:$AA$4,$AA$1:$AA$4)	()	n	170.0
+empty_args	sumsq	720	SUMSQ(,$AA$1:$AA$4)	()	n	85.0
+empty_args	sumsq	721	SUMSQ($AA$1:$AA$4,)	()	n	85.0
+empty_args	sumx2my2	722	SUMX2MY2($AA$1:$AA$4,$AA$1:$AA$4)	()	n	0.0
+empty_args	sumx2my2	723	SUMX2MY2(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	sumx2my2	724	SUMX2MY2($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	sumx2py2	725	SUMX2PY2($AA$1:$AA$4,$AA$1:$AA$4)	()	n	170.0
+empty_args	sumx2py2	726	SUMX2PY2(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	sumx2py2	727	SUMX2PY2($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	sumxmy2	728	SUMXMY2($AA$1:$AA$4,$AA$1:$AA$4)	()	n	0.0
+empty_args	sumxmy2	729	SUMXMY2(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	sumxmy2	730	SUMXMY2($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	syd	731	SYD(2,2,2,2)	()	n	0.0
+empty_args	syd	732	SYD(,2,2,2)	()	n	-0.6666666666666666
+empty_args	syd	733	SYD(2,,2,2)	()	n	0.6666666666666666
+empty_args	syd	734	SYD(2,2,,2)	()	e	#NUM!
+empty_args	syd	735	SYD(2,2,2,)	()	e	#NUM!
+empty_args	t	736	T($AA$1:$AA$4)	()	str	''
+empty_args	tan	737	TAN(2)	()	n	-2.185039863261519
+empty_args	tanh	738	TANH(2)	()	n	0.964027580075817
+empty_args	tbilleq	739	TBILLEQ(40000,40100,0.05)	()	n	0.05140845070422535
+empty_args	tbilleq	740	TBILLEQ(,40100,0.05)	()	e	#N/A
+empty_args	tbilleq	741	TBILLEQ(40000,,0.05)	()	e	#N/A
+empty_args	tbilleq	742	TBILLEQ(40000,40100,)	()	e	#N/A
+empty_args	tbillprice	743	TBILLPRICE(40000,40100,0.05)	()	n	98.61111111111111
+empty_args	tbillprice	744	TBILLPRICE(,40100,0.05)	()	e	#N/A
+empty_args	tbillprice	745	TBILLPRICE(40000,,0.05)	()	e	#N/A
+empty_args	tbillprice	746	TBILLPRICE(40000,40100,)	()	e	#N/A
+empty_args	tbillyield	747	TBILLYIELD(40000,40100,98)	()	n	0.07346938775510203
+empty_args	tbillyield	748	TBILLYIELD(,40100,98)	()	e	#N/A
+empty_args	tbillyield	749	TBILLYIELD(40000,,98)	()	e	#N/A
+empty_args	tbillyield	750	TBILLYIELD(40000,40100,)	()	e	#N/A
+empty_args	text	751	TEXT(2,2)	()	str	'2'
+empty_args	text	752	TEXT(,2)	()	str	'2'
+empty_args	text	753	TEXT(2,)	()	str	''
+empty_args	time	754	TIME(2,2,2)	()	n	0.08474537037037037
+empty_args	time	755	TIME(,2,2)	()	n	0.001412037037037037
+empty_args	time	756	TIME(2,,2)	()	n	0.08335648148148148
+empty_args	time	757	TIME(2,2,)	()	n	0.08472222222222223
+empty_args	timevalue	758	TIMEVALUE("12:30")	()	n	0.5208333333333334
+empty_args	transpose	759	TRANSPOSE($AA$1:$AA$4)	()	e	#VALUE!
+empty_args	trim	760	TRIM("a")	()	str	'a'
+empty_args	trimmean	761	TRIMMEAN($AA$1:$AA$4,0.25)	()	n	3.75
+empty_args	trimmean	762	TRIMMEAN(,0.25)	()	n	0.0
+empty_args	trimmean	763	TRIMMEAN($AA$1:$AA$4,)	()	n	3.75
+empty_args	trunc	764	TRUNC(2,2)	()	n	2.0
+empty_args	trunc	765	TRUNC(,2)	()	n	0.0
+empty_args	trunc	766	TRUNC(2,)	()	n	2.0
+empty_args	type	767	TYPE($AA$1:$AA$4)	()	n	16.0
+empty_args	upper	768	UPPER("a")	()	str	'A'
+empty_args	usdollar	769	USDOLLAR(2,2)	()	str	'$2.00'
+empty_args	usdollar	770	USDOLLAR(,2)	()	str	'$0.00'
+empty_args	usdollar	771	USDOLLAR(2,)	()	str	'$2'
+empty_args	value	772	VALUE(2)	()	n	2.0
+empty_args	var	773	VAR($AA$1:$AA$4,$AA$1:$AA$4)	()	n	8.214285714285714
+empty_args	var	774	VAR(,$AA$1:$AA$4)	()	n	10.0
+empty_args	var	775	VAR($AA$1:$AA$4,)	()	n	10.0
+empty_args	vara	776	VARA($AA$1:$AA$4,$AA$1:$AA$4)	()	n	8.214285714285714
+empty_args	vara	777	VARA(,$AA$1:$AA$4)	()	n	10.0
+empty_args	vara	778	VARA($AA$1:$AA$4,)	()	n	10.0
+empty_args	varp	779	VARP($AA$1:$AA$4,$AA$1:$AA$4)	()	n	7.1875
+empty_args	varp	780	VARP(,$AA$1:$AA$4)	()	n	8.0
+empty_args	varp	781	VARP($AA$1:$AA$4,)	()	n	8.0
+empty_args	varpa	782	VARPA($AA$1:$AA$4,$AA$1:$AA$4)	()	n	7.1875
+empty_args	varpa	783	VARPA(,$AA$1:$AA$4)	()	n	8.0
+empty_args	varpa	784	VARPA($AA$1:$AA$4,)	()	n	8.0
+empty_args	vdb	785	VDB(2,2,2,2,2,2,TRUE)	()	n	0.0
+empty_args	vdb	786	VDB(,2,2,2,2,2,TRUE)	()	n	0.0
+empty_args	vdb	787	VDB(2,,2,2,2,2,TRUE)	()	n	0.0
+empty_args	vdb	788	VDB(2,2,,2,2,2,TRUE)	()	e	#NUM!
+empty_args	vdb	789	VDB(2,2,2,,2,2,TRUE)	()	n	0.0
+empty_args	vdb	790	VDB(2,2,2,2,,2,TRUE)	()	e	#NUM!
+empty_args	vdb	791	VDB(2,2,2,2,2,,TRUE)	()	n	0.0
+empty_args	vdb	792	VDB(2,2,2,2,2,2,)	()	n	0.0
+empty_args	vdb	793	VDB(2,2,2,2,2,,)	()	e	#DIV/0!
+empty_args	vdb	794	VDB(2,2,2,2,2,)	()	e	#DIV/0!
+empty_args	vlookup	795	VLOOKUP(2,$AA$1:$AB$4,2,FALSE)	()	n	5.0
+empty_args	vlookup	796	VLOOKUP(,$AA$1:$AB$4,2,FALSE)	()	e	#N/A
+empty_args	vlookup	797	VLOOKUP(2,,2,FALSE)	()	e	#N/A
+empty_args	vlookup	798	VLOOKUP(2,$AA$1:$AB$4,,FALSE)	()	e	#VALUE!
+empty_args	vlookup	799	VLOOKUP(2,$AA$1:$AB$4,2,)	()	n	5.0
+empty_args	weekday	800	WEEKDAY(2,2)	()	n	1.0
+empty_args	weekday	801	WEEKDAY(,2)	()	n	6.0
+empty_args	weekday	802	WEEKDAY(2,)	()	e	#NUM!
+empty_args	weeknum	803	WEEKNUM(40000,2)	()	n	28.0
+empty_args	weeknum	804	WEEKNUM(,2)	()	e	#N/A
+empty_args	weeknum	805	WEEKNUM(40000,)	()	n	28.0
+empty_args	workday	806	WORKDAY(2,2,$AA$1:$AA$4)	()	n	5.0
+empty_args	workday	807	WORKDAY(,2,$AA$1:$AA$4)	()	e	#N/A
+empty_args	workday	808	WORKDAY(2,,$AA$1:$AA$4)	()	e	#N/A
+empty_args	workday	809	WORKDAY(2,2,)	()	n	4.0
+empty_args	workday.intl	810	WORKDAY.INTL(40000,5,1,$AH$1:$AH$2)	()	n	40007.0
+empty_args	workday.intl	811	WORKDAY.INTL(,5,1,$AH$1:$AH$2)	()	e	#N/A
+empty_args	workday.intl	812	WORKDAY.INTL(40000,,1,$AH$1:$AH$2)	()	e	#N/A
+empty_args	workday.intl	813	WORKDAY.INTL(40000,5,,$AH$1:$AH$2)	()	n	40007.0
+empty_args	workday.intl	814	WORKDAY.INTL(40000,5,1,)	()	n	40007.0
+empty_args	workday.intl	815	WORKDAY.INTL(40000,5,,)	()	n	40007.0
+empty_args	workday.intl	816	WORKDAY.INTL(40000,5,)	()	n	40007.0
+empty_args	xirr	817	XIRR($AE$1:$AE$4,$AH$1:$AH$4,0.1)	()	n	1.9003657579421995
+empty_args	xirr	818	XIRR(,$AH$1:$AH$4,0.1)	()	e	#N/A
+empty_args	xirr	819	XIRR($AE$1:$AE$4,,0.1)	()	e	#N/A
+empty_args	xirr	820	XIRR($AE$1:$AE$4,$AH$1:$AH$4,)	()	n	1.9003657579421995
+empty_args	xnpv	821	XNPV(0.1,$AE$1:$AE$4,$AH$1:$AH$4)	()	n	70.38389644424164
+empty_args	xnpv	822	XNPV(,$AE$1:$AE$4,$AH$1:$AH$4)	()	e	#N/A
+empty_args	xnpv	823	XNPV(0.1,,$AH$1:$AH$4)	()	e	#N/A
+empty_args	xnpv	824	XNPV(0.1,$AE$1:$AE$4,)	()	e	#N/A
+empty_args	year	825	YEAR(2)	()	n	1900.0
+empty_args	yearfrac	826	YEARFRAC(2,2,2)	()	n	0.0
+empty_args	yearfrac	827	YEARFRAC(,2,2)	()	e	#N/A
+empty_args	yearfrac	828	YEARFRAC(2,,2)	()	e	#N/A
+empty_args	yearfrac	829	YEARFRAC(2,2,)	()	n	0.0
+empty_args	yield	830	YIELD(40000,41000,0.05,95,100,2,1)	()	n	0.07035315312436442
+empty_args	yield	831	YIELD(,41000,0.05,95,100,2,1)	()	e	#N/A
+empty_args	yield	832	YIELD(40000,,0.05,95,100,2,1)	()	e	#N/A
+empty_args	yield	833	YIELD(40000,41000,,95,100,2,1)	()	e	#N/A
+empty_args	yield	834	YIELD(40000,41000,0.05,,100,2,1)	()	e	#N/A
+empty_args	yield	835	YIELD(40000,41000,0.05,95,,2,1)	()	e	#N/A
+empty_args	yield	836	YIELD(40000,41000,0.05,95,100,,1)	()	e	#N/A
+empty_args	yield	837	YIELD(40000,41000,0.05,95,100,2,)	()	n	0.07036428857772116
+empty_args	yielddisc	838	YIELDDISC(40000,41000,97,100,1)	()	n	0.011296391752577321
+empty_args	yielddisc	839	YIELDDISC(,41000,97,100,1)	()	e	#N/A
+empty_args	yielddisc	840	YIELDDISC(40000,,97,100,1)	()	e	#N/A
+empty_args	yielddisc	841	YIELDDISC(40000,41000,,100,1)	()	e	#N/A
+empty_args	yielddisc	842	YIELDDISC(40000,41000,97,,1)	()	e	#N/A
+empty_args	yielddisc	843	YIELDDISC(40000,41000,97,100,)	()	n	0.01130357423203726
+empty_args	acot	844	_xlfn.ACOT(2)	()	n	0.4636476090008061
+empty_args	acoth	845	_xlfn.ACOTH(2)	()	n	0.5493061443340549
+empty_args	arabic	846	_xlfn.ARABIC("XI")	()	n	11.0
+empty_args	arraytotext	847	_xlfn.ARRAYTOTEXT($AA$1:$AA$4,0)	()	str	'1, 2, 4, 8'
+empty_args	arraytotext	848	_xlfn.ARRAYTOTEXT(,0)	()	e	#VALUE!
+empty_args	arraytotext	849	_xlfn.ARRAYTOTEXT($AA$1:$AA$4,)	()	str	'1, 2, 4, 8'
+empty_args	base	850	_xlfn.BASE(2,2,2)	()	str	'10'
+empty_args	base	851	_xlfn.BASE(,2,2)	()	str	'00'
+empty_args	base	852	_xlfn.BASE(2,,2)	()	e	#NUM!
+empty_args	base	853	_xlfn.BASE(2,2,)	()	str	'10'
+empty_args	bitand	854	_xlfn.BITAND(2,2)	()	n	2.0
+empty_args	bitand	855	_xlfn.BITAND(,2)	()	n	0.0
+empty_args	bitand	856	_xlfn.BITAND(2,)	()	n	0.0
+empty_args	bitlshift	857	_xlfn.BITLSHIFT(2,2)	()	n	8.0
+empty_args	bitlshift	858	_xlfn.BITLSHIFT(,2)	()	n	0.0
+empty_args	bitlshift	859	_xlfn.BITLSHIFT(2,)	()	n	2.0
+empty_args	bitor	860	_xlfn.BITOR(2,2)	()	n	2.0
+empty_args	bitor	861	_xlfn.BITOR(,2)	()	n	2.0
+empty_args	bitor	862	_xlfn.BITOR(2,)	()	n	2.0
+empty_args	bitrshift	863	_xlfn.BITRSHIFT(2,2)	()	n	0.0
+empty_args	bitrshift	864	_xlfn.BITRSHIFT(,2)	()	n	0.0
+empty_args	bitrshift	865	_xlfn.BITRSHIFT(2,)	()	n	2.0
+empty_args	bitxor	866	_xlfn.BITXOR(2,2)	()	n	0.0
+empty_args	bitxor	867	_xlfn.BITXOR(,2)	()	n	2.0
+empty_args	bitxor	868	_xlfn.BITXOR(2,)	()	n	2.0
+empty_args	ceiling.math	869	_xlfn.CEILING.MATH(2,2,2)	()	n	2.0
+empty_args	ceiling.math	870	_xlfn.CEILING.MATH(,2,2)	()	n	0.0
+empty_args	ceiling.math	871	_xlfn.CEILING.MATH(2,,2)	()	n	2.0
+empty_args	ceiling.math	872	_xlfn.CEILING.MATH(2,2,)	()	n	2.0
+empty_args	ceiling.math	873	_xlfn.CEILING.MATH(2,,)	()	n	2.0
+empty_args	ceiling.math	874	_xlfn.CEILING.MATH(2,)	()	n	2.0
+empty_args	ceiling.precise	875	_xlfn.CEILING.PRECISE(2,2)	()	n	2.0
+empty_args	ceiling.precise	876	_xlfn.CEILING.PRECISE(,2)	()	n	0.0
+empty_args	ceiling.precise	877	_xlfn.CEILING.PRECISE(2,)	()	n	2.0
+empty_args	combina	878	_xlfn.COMBINA(2,2)	()	n	3.0
+empty_args	combina	879	_xlfn.COMBINA(,2)	()	e	#NUM!
+empty_args	combina	880	_xlfn.COMBINA(2,)	()	n	1.0
+empty_args	concat	881	_xlfn.CONCAT($AA$1:$AA$4,$AA$1:$AA$4)	()	str	'12481248'
+empty_args	concat	882	_xlfn.CONCAT(,$AA$1:$AA$4)	()	str	'1248'
+empty_args	concat	883	_xlfn.CONCAT($AA$1:$AA$4,)	()	str	'1248'
+empty_args	confidence.norm	884	_xlfn.CONFIDENCE.NORM(0.05,2,50)	()	n	0.554361529739871
+empty_args	confidence.norm	885	_xlfn.CONFIDENCE.NORM(,2,50)	()	e	#NUM!
+empty_args	confidence.norm	886	_xlfn.CONFIDENCE.NORM(0.05,,50)	()	e	#NUM!
+empty_args	confidence.norm	887	_xlfn.CONFIDENCE.NORM(0.05,2,)	()	e	#NUM!
+empty_args	cot	888	_xlfn.COT(2)	()	n	-0.45765755436028577
+empty_args	coth	889	_xlfn.COTH(2)	()	n	1.037314720727548
+empty_args	covariance.p	890	_xlfn.COVARIANCE.P($AA$1:$AA$4,$AA$1:$AA$4)	()	n	7.1875
+empty_args	covariance.p	891	_xlfn.COVARIANCE.P(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	covariance.p	892	_xlfn.COVARIANCE.P($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	covariance.s	893	_xlfn.COVARIANCE.S($AA$1:$AA$4,$AA$1:$AA$4)	()	n	9.583333333333334
+empty_args	covariance.s	894	_xlfn.COVARIANCE.S(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	covariance.s	895	_xlfn.COVARIANCE.S($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	csc	896	_xlfn.CSC(2)	()	n	1.0997501702946164
+empty_args	csch	897	_xlfn.CSCH(2)	()	n	0.2757205647717832
+empty_args	days	898	_xlfn.DAYS(2,2)	()	n	0.0
+empty_args	days	899	_xlfn.DAYS(,2)	()	n	-2.0
+empty_args	days	900	_xlfn.DAYS(2,)	()	n	2.0
+empty_args	decimal	901	_xlfn.DECIMAL("11",2)	()	n	3.0
+empty_args	decimal	902	_xlfn.DECIMAL(,2)	()	n	0.0
+empty_args	decimal	903	_xlfn.DECIMAL("11",)	()	e	#NUM!
+empty_args	floor.math	904	_xlfn.FLOOR.MATH(2,2,2)	()	n	2.0
+empty_args	floor.math	905	_xlfn.FLOOR.MATH(,2,2)	()	n	0.0
+empty_args	floor.math	906	_xlfn.FLOOR.MATH(2,,2)	()	n	2.0
+empty_args	floor.math	907	_xlfn.FLOOR.MATH(2,2,)	()	n	2.0
+empty_args	floor.math	908	_xlfn.FLOOR.MATH(2,,)	()	n	2.0
+empty_args	floor.math	909	_xlfn.FLOOR.MATH(2,)	()	n	2.0
+empty_args	floor.precise	910	_xlfn.FLOOR.PRECISE(2,2)	()	n	2.0
+empty_args	floor.precise	911	_xlfn.FLOOR.PRECISE(,2)	()	n	0.0
+empty_args	floor.precise	912	_xlfn.FLOOR.PRECISE(2,)	()	n	2.0
+empty_args	forecast.linear	913	_xlfn.FORECAST.LINEAR(2,$AA$1:$AA$4,$AA$1:$AA$4)	()	n	2.0
+empty_args	forecast.linear	914	_xlfn.FORECAST.LINEAR(,$AA$1:$AA$4,$AA$1:$AA$4)	()	n	0.0
+empty_args	forecast.linear	915	_xlfn.FORECAST.LINEAR(2,,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	forecast.linear	916	_xlfn.FORECAST.LINEAR(2,$AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	formulatext	917	_xlfn.FORMULATEXT($AG$1)	()	str	'=1+1'
+empty_args	gauss	918	_xlfn.GAUSS(2)	()	n	0.4772498680518208
+empty_args	ifna	919	_xlfn.IFNA(2,2)	()	n	2.0
+empty_args	ifna	920	_xlfn.IFNA(,2)	()	n	0.0
+empty_args	ifna	921	_xlfn.IFNA(2,)	()	n	2.0
+empty_args	ifs	922	_xlfn.IFS(FALSE,2)	()	e	#N/A
+empty_args	ifs	923	_xlfn.IFS(,2)	()	e	#N/A
+empty_args	ifs	924	_xlfn.IFS(FALSE,)	()	e	#N/A
+empty_args	ifs	925	_xlfn.IFS(FALSE,2,FALSE,2)	()	e	#N/A
+empty_args	ifs	926	_xlfn.IFS(,2,FALSE,2)	()	e	#N/A
+empty_args	ifs	927	_xlfn.IFS(FALSE,,FALSE,2)	()	e	#N/A
+empty_args	ifs	928	_xlfn.IFS(FALSE,2,,2)	()	e	#N/A
+empty_args	ifs	929	_xlfn.IFS(FALSE,2,FALSE,)	()	e	#N/A
+empty_args	isformula	930	_xlfn.ISFORMULA($AG$1)	()	b	True
+empty_args	isoweeknum	931	_xlfn.ISOWEEKNUM(2)	()	n	1.0
+empty_args	maxifs	932	_xlfn.MAXIFS($AB$1:$AB$4,$AA$1:$AA$4,">1")	()	n	9.0
+empty_args	maxifs	933	_xlfn.MAXIFS($AB$1:$AB$4,$AA$1:$AA$4,)	()	n	0.0
+empty_args	maxifs	934	_xlfn.MAXIFS($AB$1:$AB$4,$AA$1:$AA$4,">1",$AA$1:$AA$4,">1")	()	n	9.0
+empty_args	maxifs	935	_xlfn.MAXIFS($AB$1:$AB$4,$AA$1:$AA$4,,$AA$1:$AA$4,">1")	()	n	0.0
+empty_args	maxifs	936	_xlfn.MAXIFS($AB$1:$AB$4,$AA$1:$AA$4,">1",$AA$1:$AA$4,)	()	n	0.0
+empty_args	minifs	937	_xlfn.MINIFS($AB$1:$AB$4,$AA$1:$AA$4,">1")	()	n	5.0
+empty_args	minifs	938	_xlfn.MINIFS($AB$1:$AB$4,$AA$1:$AA$4,)	()	n	0.0
+empty_args	minifs	939	_xlfn.MINIFS($AB$1:$AB$4,$AA$1:$AA$4,">1",$AA$1:$AA$4,">1")	()	n	5.0
+empty_args	minifs	940	_xlfn.MINIFS($AB$1:$AB$4,$AA$1:$AA$4,,$AA$1:$AA$4,">1")	()	n	0.0
+empty_args	minifs	941	_xlfn.MINIFS($AB$1:$AB$4,$AA$1:$AA$4,">1",$AA$1:$AA$4,)	()	n	0.0
+empty_args	mode.sngl	942	_xlfn.MODE.SNGL($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	mode.sngl	943	_xlfn.MODE.SNGL(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	mode.sngl	944	_xlfn.MODE.SNGL($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	networkdays.intl	945	_xlfn.NETWORKDAYS.INTL(40000,40100,1,$AH$1:$AH$2)	()	n	71.0
+empty_args	networkdays.intl	946	_xlfn.NETWORKDAYS.INTL(,40100,1,$AH$1:$AH$2)	()	e	#N/A
+empty_args	networkdays.intl	947	_xlfn.NETWORKDAYS.INTL(40000,,1,$AH$1:$AH$2)	()	e	#N/A
+empty_args	networkdays.intl	948	_xlfn.NETWORKDAYS.INTL(40000,40100,,$AH$1:$AH$2)	()	n	71.0
+empty_args	networkdays.intl	949	_xlfn.NETWORKDAYS.INTL(40000,40100,1,)	()	n	73.0
+empty_args	networkdays.intl	950	_xlfn.NETWORKDAYS.INTL(40000,40100,,)	()	n	73.0
+empty_args	networkdays.intl	951	_xlfn.NETWORKDAYS.INTL(40000,40100,)	()	n	73.0
+empty_args	norm.dist	952	_xlfn.NORM.DIST(2,2,2,TRUE)	()	n	0.5
+empty_args	norm.dist	953	_xlfn.NORM.DIST(,2,2,TRUE)	()	n	0.158655253931457
+empty_args	norm.dist	954	_xlfn.NORM.DIST(2,,2,TRUE)	()	n	0.841344746068543
+empty_args	norm.dist	955	_xlfn.NORM.DIST(2,2,,TRUE)	()	e	#NUM!
+empty_args	norm.dist	956	_xlfn.NORM.DIST(2,2,2,)	()	n	0.19947114020071635
+empty_args	norm.inv	957	_xlfn.NORM.INV(0.5,2,2)	()	n	2.0
+empty_args	norm.inv	958	_xlfn.NORM.INV(,2,2)	()	e	#NUM!
+empty_args	norm.inv	959	_xlfn.NORM.INV(0.5,,2)	()	n	0.0
+empty_args	norm.inv	960	_xlfn.NORM.INV(0.5,2,)	()	e	#NUM!
+empty_args	norm.s.dist	961	_xlfn.NORM.S.DIST(2,TRUE)	()	n	0.9772498680518208
+empty_args	norm.s.dist	962	_xlfn.NORM.S.DIST(,TRUE)	()	n	0.5
+empty_args	norm.s.dist	963	_xlfn.NORM.S.DIST(2,)	()	n	0.05399096651318806
+empty_args	norm.s.inv	964	_xlfn.NORM.S.INV(0.5)	()	n	0.0
+empty_args	numbervalue	965	_xlfn.NUMBERVALUE("1.5",".",",")	()	n	1.5
+empty_args	numbervalue	966	_xlfn.NUMBERVALUE(,".",",")	()	n	0.0
+empty_args	numbervalue	967	_xlfn.NUMBERVALUE("1.5",,",")	()	e	#VALUE!
+empty_args	numbervalue	968	_xlfn.NUMBERVALUE("1.5",".",)	()	e	#VALUE!
+empty_args	numbervalue	969	_xlfn.NUMBERVALUE("1.5",,)	()	e	#VALUE!
+empty_args	numbervalue	970	_xlfn.NUMBERVALUE("1.5",)	()	e	#VALUE!
+empty_args	pduration	971	_xlfn.PDURATION(2,2,2)	()	n	0.0
+empty_args	pduration	972	_xlfn.PDURATION(,2,2)	()	e	#NUM!
+empty_args	pduration	973	_xlfn.PDURATION(2,,2)	()	e	#NUM!
+empty_args	pduration	974	_xlfn.PDURATION(2,2,)	()	e	#NUM!
+empty_args	percentile.exc	975	_xlfn.PERCENTILE.EXC($AA$1:$AA$4,0.5)	()	n	3.0
+empty_args	percentile.exc	976	_xlfn.PERCENTILE.EXC(,0.5)	()	n	0.0
+empty_args	percentile.exc	977	_xlfn.PERCENTILE.EXC($AA$1:$AA$4,)	()	e	#NUM!
+empty_args	percentile.inc	978	_xlfn.PERCENTILE.INC($AA$1:$AA$4,0.5)	()	n	3.0
+empty_args	percentile.inc	979	_xlfn.PERCENTILE.INC(,0.5)	()	n	0.0
+empty_args	percentile.inc	980	_xlfn.PERCENTILE.INC($AA$1:$AA$4,)	()	n	1.0
+empty_args	percentrank.exc	981	_xlfn.PERCENTRANK.EXC($AA$1:$AA$4,2,3)	()	n	0.4
+empty_args	percentrank.exc	982	_xlfn.PERCENTRANK.EXC(,2,3)	()	e	#N/A
+empty_args	percentrank.exc	983	_xlfn.PERCENTRANK.EXC($AA$1:$AA$4,,3)	()	e	#N/A
+empty_args	percentrank.exc	984	_xlfn.PERCENTRANK.EXC($AA$1:$AA$4,2,)	()	n	0.4
+empty_args	percentrank.inc	985	_xlfn.PERCENTRANK.INC($AA$1:$AA$4,2,3)	()	n	0.333
+empty_args	percentrank.inc	986	_xlfn.PERCENTRANK.INC(,2,3)	()	e	#N/A
+empty_args	percentrank.inc	987	_xlfn.PERCENTRANK.INC($AA$1:$AA$4,,3)	()	e	#N/A
+empty_args	percentrank.inc	988	_xlfn.PERCENTRANK.INC($AA$1:$AA$4,2,)	()	n	0.333
+empty_args	permutationa	989	_xlfn.PERMUTATIONA(2,2)	()	n	4.0
+empty_args	permutationa	990	_xlfn.PERMUTATIONA(,2)	()	n	0.0
+empty_args	permutationa	991	_xlfn.PERMUTATIONA(2,)	()	n	1.0
+empty_args	phi	992	_xlfn.PHI(2)	()	n	0.05399096651318806
+empty_args	quartile.exc	993	_xlfn.QUARTILE.EXC($AA$1:$AA$4,2)	()	n	3.0
+empty_args	quartile.exc	994	_xlfn.QUARTILE.EXC(,2)	()	n	0.0
+empty_args	quartile.exc	995	_xlfn.QUARTILE.EXC($AA$1:$AA$4,)	()	e	#NUM!
+empty_args	quartile.inc	996	_xlfn.QUARTILE.INC($AA$1:$AA$4,2)	()	n	3.0
+empty_args	quartile.inc	997	_xlfn.QUARTILE.INC(,2)	()	n	0.0
+empty_args	quartile.inc	998	_xlfn.QUARTILE.INC($AA$1:$AA$4,)	()	n	1.0
+empty_args	rank.avg	999	_xlfn.RANK.AVG(2,$AA$1:$AA$4,2)	()	n	2.0
+empty_args	rank.avg	1000	_xlfn.RANK.AVG(,$AA$1:$AA$4,2)	()	e	#N/A
+empty_args	rank.avg	1001	_xlfn.RANK.AVG(2,$AA$1:$AA$4,)	()	n	3.0
+empty_args	rank.eq	1002	_xlfn.RANK.EQ(2,$AA$1:$AA$4,2)	()	n	2.0
+empty_args	rank.eq	1003	_xlfn.RANK.EQ(,$AA$1:$AA$4,2)	()	e	#N/A
+empty_args	rank.eq	1004	_xlfn.RANK.EQ(2,$AA$1:$AA$4,)	()	n	3.0
+empty_args	rri	1005	_xlfn.RRI(2,2,2)	()	n	0.0
+empty_args	rri	1006	_xlfn.RRI(,2,2)	()	e	#NUM!
+empty_args	rri	1007	_xlfn.RRI(2,,2)	()	e	#NUM!
+empty_args	rri	1008	_xlfn.RRI(2,2,)	()	n	-1.0
+empty_args	sec	1009	_xlfn.SEC(2)	()	n	-2.402997961722381
+empty_args	sech	1010	_xlfn.SECH(2)	()	n	0.2658022288340797
+empty_args	sheet	1011	_xlfn.SHEET($AA$1:$AA$4)	()	n	1.0
+empty_args	sheet	1012	_xlfn.SHEET()	()	n	1.0
+empty_args	sheets	1013	_xlfn.SHEETS($AA$1:$AA$4)	()	n	1.0
+empty_args	sheets	1014	_xlfn.SHEETS()	()	n	1.0
+empty_args	skew.p	1015	_xlfn.SKEW.P($AA$1:$AA$4,$AA$1:$AA$4)	()	n	0.6568077344996994
+empty_args	skew.p	1016	_xlfn.SKEW.P(,$AA$1:$AA$4)	()	n	0.7954951288348657
+empty_args	skew.p	1017	_xlfn.SKEW.P($AA$1:$AA$4,)	()	n	0.7954951288348656
+empty_args	stdev.p	1018	_xlfn.STDEV.P($AA$1:$AA$4,$AA$1:$AA$4)	()	n	2.680951323690902
+empty_args	stdev.p	1019	_xlfn.STDEV.P(,$AA$1:$AA$4)	()	n	2.8284271247461903
+empty_args	stdev.p	1020	_xlfn.STDEV.P($AA$1:$AA$4,)	()	n	2.8284271247461903
+empty_args	stdev.s	1021	_xlfn.STDEV.S($AA$1:$AA$4,$AA$1:$AA$4)	()	n	2.866057521105554
+empty_args	stdev.s	1022	_xlfn.STDEV.S(,$AA$1:$AA$4)	()	n	3.1622776601683795
+empty_args	stdev.s	1023	_xlfn.STDEV.S($AA$1:$AA$4,)	()	n	3.1622776601683795
+empty_args	switch	1024	_xlfn.SWITCH(2,1,3)	()	e	#N/A
+empty_args	switch	1025	_xlfn.SWITCH(,1,3)	()	e	#N/A
+empty_args	switch	1026	_xlfn.SWITCH(2,,3)	()	e	#N/A
+empty_args	switch	1027	_xlfn.SWITCH(2,1,)	()	e	#N/A
+empty_args	switch	1028	_xlfn.SWITCH(2,1,3,1,3)	()	e	#N/A
+empty_args	switch	1029	_xlfn.SWITCH(,1,3,1,3)	()	e	#N/A
+empty_args	switch	1030	_xlfn.SWITCH(2,,3,1,3)	()	e	#N/A
+empty_args	switch	1031	_xlfn.SWITCH(2,1,,1,3)	()	e	#N/A
+empty_args	switch	1032	_xlfn.SWITCH(2,1,3,,3)	()	e	#N/A
+empty_args	switch	1033	_xlfn.SWITCH(2,1,3,1,)	()	e	#N/A
+empty_args	textafter	1034	_xlfn.TEXTAFTER("a-b-c","-",1,0,0,"none")	()	str	'b-c'
+empty_args	textafter	1035	_xlfn.TEXTAFTER(,"-",1,0,0,"none")	()	e	#VALUE!
+empty_args	textafter	1036	_xlfn.TEXTAFTER("a-b-c",,1,0,0,"none")	()	str	'a-b-c'
+empty_args	textafter	1037	_xlfn.TEXTAFTER("a-b-c","-",,0,0,"none")	()	str	'b-c'
+empty_args	textafter	1038	_xlfn.TEXTAFTER("a-b-c","-",1,,0,"none")	()	str	'b-c'
+empty_args	textafter	1039	_xlfn.TEXTAFTER("a-b-c","-",1,0,,"none")	()	str	'b-c'
+empty_args	textafter	1040	_xlfn.TEXTAFTER("a-b-c","-",1,0,0,)	()	str	'b-c'
+empty_args	textafter	1041	_xlfn.TEXTAFTER("a-b-c","-",,,,)	()	str	'b-c'
+empty_args	textafter	1042	_xlfn.TEXTAFTER("a-b-c","-",)	()	str	'b-c'
+empty_args	textafter	1043	_xlfn.TEXTAFTER("a-b-c","-",,0)	()	str	'b-c'
+empty_args	textbefore	1044	_xlfn.TEXTBEFORE("a-b-c","-",1,0,0,"none")	()	str	'a'
+empty_args	textbefore	1045	_xlfn.TEXTBEFORE(,"-",1,0,0,"none")	()	e	#VALUE!
+empty_args	textbefore	1046	_xlfn.TEXTBEFORE("a-b-c",,1,0,0,"none")	()	str	''
+empty_args	textbefore	1047	_xlfn.TEXTBEFORE("a-b-c","-",,0,0,"none")	()	str	'a'
+empty_args	textbefore	1048	_xlfn.TEXTBEFORE("a-b-c","-",1,,0,"none")	()	str	'a'
+empty_args	textbefore	1049	_xlfn.TEXTBEFORE("a-b-c","-",1,0,,"none")	()	str	'a'
+empty_args	textbefore	1050	_xlfn.TEXTBEFORE("a-b-c","-",1,0,0,)	()	str	'a'
+empty_args	textbefore	1051	_xlfn.TEXTBEFORE("a-b-c","-",,,,)	()	str	'a'
+empty_args	textbefore	1052	_xlfn.TEXTBEFORE("a-b-c","-",)	()	str	'a'
+empty_args	textbefore	1053	_xlfn.TEXTBEFORE("a-b-c","-",,0)	()	str	'a'
+empty_args	textjoin	1054	_xlfn.TEXTJOIN(",",TRUE,$AA$1:$AA$4,$AA$1:$AA$4)	()	str	'1,2,4,8,1,2,4,8'
+empty_args	textjoin	1055	_xlfn.TEXTJOIN(,TRUE,$AA$1:$AA$4,$AA$1:$AA$4)	()	str	'12481248'
+empty_args	textjoin	1056	_xlfn.TEXTJOIN(",",,$AA$1:$AA$4,$AA$1:$AA$4)	()	str	'1,2,4,8,1,2,4,8'
+empty_args	textjoin	1057	_xlfn.TEXTJOIN(",",TRUE,,$AA$1:$AA$4)	()	str	'1,2,4,8'
+empty_args	textjoin	1058	_xlfn.TEXTJOIN(",",TRUE,$AA$1:$AA$4,)	()	str	'1,2,4,8'
+empty_args	unichar	1059	_xlfn.UNICHAR(2)	()	str	'_x0002_'
+empty_args	unicode	1060	_xlfn.UNICODE("a")	()	n	97.0
+empty_args	valuetotext	1061	_xlfn.VALUETOTEXT(2,0)	()	str	'2'
+empty_args	valuetotext	1062	_xlfn.VALUETOTEXT(,0)	()	str	''
+empty_args	valuetotext	1063	_xlfn.VALUETOTEXT(2,)	()	str	'2'
+empty_args	var.p	1064	_xlfn.VAR.P($AA$1:$AA$4,$AA$1:$AA$4)	()	n	7.1875
+empty_args	var.p	1065	_xlfn.VAR.P(,$AA$1:$AA$4)	()	n	8.0
+empty_args	var.p	1066	_xlfn.VAR.P($AA$1:$AA$4,)	()	n	8.0
+empty_args	var.s	1067	_xlfn.VAR.S($AA$1:$AA$4,$AA$1:$AA$4)	()	n	8.214285714285714
+empty_args	var.s	1068	_xlfn.VAR.S(,$AA$1:$AA$4)	()	n	10.0
+empty_args	var.s	1069	_xlfn.VAR.S($AA$1:$AA$4,)	()	n	10.0
+empty_args	workday.intl	1070	_xlfn.WORKDAY.INTL(40000,5,1,$AH$1:$AH$2)	()	n	40007.0
+empty_args	workday.intl	1071	_xlfn.WORKDAY.INTL(,5,1,$AH$1:$AH$2)	()	e	#N/A
+empty_args	workday.intl	1072	_xlfn.WORKDAY.INTL(40000,,1,$AH$1:$AH$2)	()	e	#N/A
+empty_args	workday.intl	1073	_xlfn.WORKDAY.INTL(40000,5,,$AH$1:$AH$2)	()	n	40007.0
+empty_args	workday.intl	1074	_xlfn.WORKDAY.INTL(40000,5,1,)	()	n	40007.0
+empty_args	workday.intl	1075	_xlfn.WORKDAY.INTL(40000,5,,)	()	n	40007.0
+empty_args	workday.intl	1076	_xlfn.WORKDAY.INTL(40000,5,)	()	n	40007.0
+empty_args	xlookup	1077	_xlfn.XLOOKUP(2,$AA$1:$AA$4,$AB$1:$AB$4,"x",0,1)	()	n	5.0
+empty_args	xlookup	1078	_xlfn.XLOOKUP(,$AA$1:$AA$4,$AB$1:$AB$4,"x",0,1)	()	str	'x'
+empty_args	xlookup	1079	_xlfn.XLOOKUP(2,,$AB$1:$AB$4,"x",0,1)	()	e	#VALUE!
+empty_args	xlookup	1080	_xlfn.XLOOKUP(2,$AA$1:$AA$4,,"x",0,1)	()	e	#VALUE!
+empty_args	xlookup	1081	_xlfn.XLOOKUP(2,$AA$1:$AA$4,$AB$1:$AB$4,,0,1)	()	n	5.0
+empty_args	xlookup	1082	_xlfn.XLOOKUP(2,$AA$1:$AA$4,$AB$1:$AB$4,"x",,1)	()	n	5.0
+empty_args	xlookup	1083	_xlfn.XLOOKUP(2,$AA$1:$AA$4,$AB$1:$AB$4,"x",0,)	()	n	5.0
+empty_args	xlookup	1084	_xlfn.XLOOKUP(2,$AA$1:$AA$4,$AB$1:$AB$4,,,)	()	n	5.0
+empty_args	xlookup	1085	_xlfn.XLOOKUP(2,$AA$1:$AA$4,$AB$1:$AB$4,)	()	n	5.0
+empty_args	xlookup	1086	_xlfn.XLOOKUP(2,$AA$1:$AA$4,$AB$1:$AB$4,,0)	()	n	5.0
+empty_args	xmatch	1087	_xlfn.XMATCH(2,$AA$1:$AA$4,0,1)	()	n	2.0
+empty_args	xmatch	1088	_xlfn.XMATCH(,$AA$1:$AA$4,0,1)	()	e	#N/A
+empty_args	xmatch	1089	_xlfn.XMATCH(2,,0,1)	()	e	#VALUE!
+empty_args	xmatch	1090	_xlfn.XMATCH(2,$AA$1:$AA$4,,1)	()	n	2.0
+empty_args	xmatch	1091	_xlfn.XMATCH(2,$AA$1:$AA$4,0,)	()	n	2.0
+empty_args	xmatch	1092	_xlfn.XMATCH(2,$AA$1:$AA$4,,)	()	n	2.0
+empty_args	xmatch	1093	_xlfn.XMATCH(2,$AA$1:$AA$4,)	()	n	2.0
+empty_args	xor	1094	_xlfn.XOR($AA$1:$AA$4,$AA$1:$AA$4)	()	b	False
+empty_args	xor	1095	_xlfn.XOR(,$AA$1:$AA$4)	()	b	False
+empty_args	xor	1096	_xlfn.XOR($AA$1:$AA$4,)	()	b	False
+empty_args	mmult	1097	MMULT({1,2},{3;4})	()	n	11.0
+empty_args	mmult	1098	MMULT(,{3;4})	()	e	#VALUE!
+empty_args	mmult	1099	MMULT({1,2},)	()	e	#VALUE!
+empty_args	sequence	1100	_xlfn.SEQUENCE(2,2,1,1)	()	n	1.0
+empty_args	sequence	1101	_xlfn.SEQUENCE(,2,1,1)	()	n	1.0
+empty_args	sequence	1102	_xlfn.SEQUENCE(2,,1,1)	()	n	1.0
+empty_args	sequence	1103	_xlfn.SEQUENCE(2,2,,1)	()	n	1.0
+empty_args	sequence	1104	_xlfn.SEQUENCE(2,2,1,)	()	n	1.0
+empty_args	sequence	1105	_xlfn.SEQUENCE(2,,,)	()	n	1.0
+empty_args	sequence	1106	_xlfn.SEQUENCE(2,)	()	n	1.0
+empty_args	sequence	1107	_xlfn.SEQUENCE(2,,1)	()	n	1.0
+empty_args	unique	1108	_xlfn.UNIQUE($AA$1:$AA$4,FALSE,FALSE)	()	n	1.0
+empty_args	unique	1109	_xlfn.UNIQUE(,FALSE,FALSE)	()	n	0.0
+empty_args	unique	1110	_xlfn.UNIQUE($AA$1:$AA$4,,FALSE)	()	n	1.0
+empty_args	unique	1111	_xlfn.UNIQUE($AA$1:$AA$4,FALSE,)	()	n	1.0
+empty_args	unique	1112	_xlfn.UNIQUE($AA$1:$AA$4,,)	()	n	1.0
+empty_args	unique	1113	_xlfn.UNIQUE($AA$1:$AA$4,)	()	n	1.0
+empty_args	_xlws.sort	1114	_xlfn._xlws.SORT($AA$1:$AA$4,1,1,FALSE)	()	n	1.0
+empty_args	_xlws.sort	1115	_xlfn._xlws.SORT(,1,1,FALSE)	()	n	0.0
+empty_args	_xlws.sort	1116	_xlfn._xlws.SORT($AA$1:$AA$4,,1,FALSE)	()	n	1.0
+empty_args	_xlws.sort	1117	_xlfn._xlws.SORT($AA$1:$AA$4,1,,FALSE)	()	n	1.0
+empty_args	_xlws.sort	1118	_xlfn._xlws.SORT($AA$1:$AA$4,1,1,)	()	n	1.0
+empty_args	_xlws.sort	1119	_xlfn._xlws.SORT($AA$1:$AA$4,,,)	()	n	1.0
+empty_args	_xlws.sort	1120	_xlfn._xlws.SORT($AA$1:$AA$4,)	()	n	1.0
+empty_args	_xlws.sort	1121	_xlfn._xlws.SORT($AA$1:$AA$4,,1)	()	n	1.0
+empty_args	sortby	1122	_xlfn.SORTBY($AA$1:$AA$4,$AA$1:$AA$4,)	()	n	1.0
+empty_args	_xlws.filter	1123	_xlfn._xlws.FILTER($AA$1:$AA$4,$AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	_xlws.filter	1124	_xlfn._xlws.FILTER(,$AA$1:$AA$4,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	_xlws.filter	1125	_xlfn._xlws.FILTER($AA$1:$AA$4,,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	_xlws.filter	1126	_xlfn._xlws.FILTER($AA$1:$AA$4,$AA$1:$AA$4,)	()	n	1.0
+empty_args	choosecols	1127	_xlfn.CHOOSECOLS($AA$1:$AA$4,1,1)	()	n	1.0
+empty_args	choosecols	1128	_xlfn.CHOOSECOLS(,1,1)	()	e	#VALUE!
+empty_args	choosecols	1129	_xlfn.CHOOSECOLS($AA$1:$AA$4,,1)	()	e	#VALUE!
+empty_args	choosecols	1130	_xlfn.CHOOSECOLS($AA$1:$AA$4,1,)	()	e	#VALUE!
+empty_args	chooserows	1131	_xlfn.CHOOSEROWS($AA$1:$AA$4,2,1)	()	n	2.0
+empty_args	chooserows	1132	_xlfn.CHOOSEROWS(,2,1)	()	e	#VALUE!
+empty_args	chooserows	1133	_xlfn.CHOOSEROWS($AA$1:$AA$4,,1)	()	e	#VALUE!
+empty_args	chooserows	1134	_xlfn.CHOOSEROWS($AA$1:$AA$4,2,)	()	e	#VALUE!
+empty_args	take	1135	_xlfn.TAKE({1,2;3,4},1,1)	()	n	1.0
+empty_args	take	1136	_xlfn.TAKE(,1,1)	()	e	#VALUE!
+empty_args	take	1137	_xlfn.TAKE({1,2;3,4},,1)	()	n	1.0
+empty_args	take	1138	_xlfn.TAKE({1,2;3,4},1,)	()	n	1.0
+empty_args	drop	1139	_xlfn.DROP({1,2;3,4},1,1)	()	n	4.0
+empty_args	drop	1140	_xlfn.DROP(,1,1)	()	e	#VALUE!
+empty_args	drop	1141	_xlfn.DROP({1,2;3,4},,1)	()	n	2.0
+empty_args	drop	1142	_xlfn.DROP({1,2;3,4},1,)	()	n	3.0
+empty_args	expand	1143	_xlfn.EXPAND({1,2},2,3,0)	()	n	1.0
+empty_args	expand	1144	_xlfn.EXPAND(,2,3,0)	()	n	0.0
+empty_args	expand	1145	_xlfn.EXPAND({1,2},,3,0)	()	n	1.0
+empty_args	expand	1146	_xlfn.EXPAND({1,2},2,,0)	()	n	1.0
+empty_args	expand	1147	_xlfn.EXPAND({1,2},2,3,)	()	n	1.0
+empty_args	expand	1148	_xlfn.EXPAND({1,2},2,,)	()	n	1.0
+empty_args	expand	1149	_xlfn.EXPAND({1,2},2,)	()	n	1.0
+empty_args	vstack	1150	_xlfn.VSTACK($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	vstack	1151	_xlfn.VSTACK(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	vstack	1152	_xlfn.VSTACK($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	hstack	1153	_xlfn.HSTACK($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	hstack	1154	_xlfn.HSTACK(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	hstack	1155	_xlfn.HSTACK($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	tocol	1156	_xlfn.TOCOL($AA$1:$AA$4,1,TRUE)	()	n	1.0
+empty_args	tocol	1157	_xlfn.TOCOL(,1,TRUE)	()	e	#VALUE!
+empty_args	tocol	1158	_xlfn.TOCOL($AA$1:$AA$4,,TRUE)	()	n	1.0
+empty_args	tocol	1159	_xlfn.TOCOL($AA$1:$AA$4,1,)	()	n	1.0
+empty_args	tocol	1160	_xlfn.TOCOL($AA$1:$AA$4,,)	()	n	1.0
+empty_args	tocol	1161	_xlfn.TOCOL($AA$1:$AA$4,)	()	n	1.0
+empty_args	torow	1162	_xlfn.TOROW($AA$1:$AA$4,1,TRUE)	()	n	1.0
+empty_args	torow	1163	_xlfn.TOROW(,1,TRUE)	()	e	#VALUE!
+empty_args	torow	1164	_xlfn.TOROW($AA$1:$AA$4,,TRUE)	()	n	1.0
+empty_args	torow	1165	_xlfn.TOROW($AA$1:$AA$4,1,)	()	n	1.0
+empty_args	torow	1166	_xlfn.TOROW($AA$1:$AA$4,,)	()	n	1.0
+empty_args	torow	1167	_xlfn.TOROW($AA$1:$AA$4,)	()	n	1.0
+empty_args	wraprows	1168	_xlfn.WRAPROWS($AA$1:$AA$4,2,0)	()	n	1.0
+empty_args	wraprows	1169	_xlfn.WRAPROWS(,2,0)	()	e	#VALUE!
+empty_args	wraprows	1170	_xlfn.WRAPROWS($AA$1:$AA$4,,0)	()	e	#NUM!
+empty_args	wraprows	1171	_xlfn.WRAPROWS($AA$1:$AA$4,2,)	()	n	1.0
+empty_args	wrapcols	1172	_xlfn.WRAPCOLS($AA$1:$AA$4,2,0)	()	n	1.0
+empty_args	wrapcols	1173	_xlfn.WRAPCOLS(,2,0)	()	e	#VALUE!
+empty_args	wrapcols	1174	_xlfn.WRAPCOLS($AA$1:$AA$4,,0)	()	e	#NUM!
+empty_args	wrapcols	1175	_xlfn.WRAPCOLS($AA$1:$AA$4,2,)	()	n	1.0
+empty_args	munit	1176	_xlfn.MUNIT(2)	()	n	1.0
+empty_args	mdeterm	1177	MDETERM({1,2;3,4})	()	n	-2.0
+empty_args	minverse	1178	MINVERSE({1,2;3,4})	()	n	-1.9999999999999998
+empty_args	frequency	1179	FREQUENCY($AA$1:$AA$4,$AA$1:$AA$4)	()	n	1.0
+empty_args	frequency	1180	FREQUENCY(,$AA$1:$AA$4)	()	e	#VALUE!
+empty_args	frequency	1181	FREQUENCY($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	mode.mult	1182	_xlfn.MODE.MULT({1,1,2},{1,1,2})	()	n	1.0
+empty_args	mode.mult	1183	_xlfn.MODE.MULT(,{1,1,2})	()	e	#VALUE!
+empty_args	mode.mult	1184	_xlfn.MODE.MULT({1,1,2},)	()	e	#VALUE!
+empty_args	textsplit	1185	_xlfn.TEXTSPLIT("a,b;c",",",";",FALSE,0,"-")	()	str	'a'
+empty_args	textsplit	1186	_xlfn.TEXTSPLIT(,",",";",FALSE,0,"-")	()	e	#VALUE!
+empty_args	textsplit	1187	_xlfn.TEXTSPLIT("a,b;c",,";",FALSE,0,"-")	()	str	'a,b'
+empty_args	textsplit	1188	_xlfn.TEXTSPLIT("a,b;c",",",,FALSE,0,"-")	()	str	'a'
+empty_args	textsplit	1189	_xlfn.TEXTSPLIT("a,b;c",",",";",,0,"-")	()	str	'a'
+empty_args	textsplit	1190	_xlfn.TEXTSPLIT("a,b;c",",",";",FALSE,,"-")	()	str	'a'
+empty_args	textsplit	1191	_xlfn.TEXTSPLIT("a,b;c",",",";",FALSE,0,)	()	str	'a'
+empty_args	textsplit	1192	_xlfn.TEXTSPLIT("a,b;c",",",,,,)	()	str	'a'
+empty_args	textsplit	1193	_xlfn.TEXTSPLIT("a,b;c",",",)	()	str	'a'
+empty_args	textsplit	1194	_xlfn.TEXTSPLIT("a,b;c",",",,FALSE)	()	str	'a'
+empty_args	randarray	1195	_xlfn.RANDARRAY(1,1,5,5,FALSE)	()	n	5.0
+empty_args	randarray	1196	_xlfn.RANDARRAY(,1,5,5,FALSE)	()	n	5.0
+empty_args	randarray	1197	_xlfn.RANDARRAY(1,,5,5,FALSE)	()	n	5.0
+empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	1.6333153312175597
+empty_args	randarray	1199	_xlfn.RANDARRAY(1,1,5,,FALSE)	()	e	#VALUE!
+empty_args	randarray	1200	_xlfn.RANDARRAY(1,1,5,5,)	()	n	5.0
+empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.02949377046899393
+empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.9712711426274678
+empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.6126925236610032
+empty_args	let	1204	_xlfn.LET(_xlpm.x,1,_xlpm.x+1)	()	n	2.0
+empty_args	let	1205	_xlfn.LET(_xlpm.x,,_xlpm.x+1)	()	n	1.0
+empty_args	let	1206	_xlfn.LET(_xlpm.x,1,)	()	n	0.0
+empty_args	let	1207	_xlfn.LET(_xlpm.x,,_xlpm.x)	()	n	0.0
+empty_args	let	1208	_xlfn.LET(_xlpm.x,1,_xlpm.y,,_xlpm.x+_xlpm.y)	()	n	1.0
+empty_args	let	1209	_xlfn.LET(_xlpm.x,,ISBLANK(_xlpm.x))	()	b	True
+empty_args	let	1210	_xlfn.LET(_xlpm.x,1,_xlpm.y,)	()	n	0.0
+empty_args	binomdist	1211	BINOMDIST(3,10,0.5,TRUE)	()	n	0.17187500000000006
+empty_args	binomdist	1212	BINOMDIST(,10,0.5,TRUE)	()	n	0.0009765625
+empty_args	binomdist	1213	BINOMDIST(3,,0.5,TRUE)	()	e	#NUM!
+empty_args	binomdist	1214	BINOMDIST(3,10,,TRUE)	()	n	1.0
+empty_args	binomdist	1215	BINOMDIST(3,10,0.5,)	()	n	0.11718750000000003
+empty_args	critbinom	1216	CRITBINOM(10,0.5,0.5)	()	n	5.0
+empty_args	critbinom	1217	CRITBINOM(,0.5,0.5)	()	n	0.0
+empty_args	critbinom	1218	CRITBINOM(10,,0.5)	()	e	#NUM!
+empty_args	critbinom	1219	CRITBINOM(10,0.5,)	()	e	#NUM!
+empty_args	erf	1220	ERF(2,2)	()	n	0.0
+empty_args	erf	1221	ERF(,2)	()	e	#N/A
+empty_args	erf	1222	ERF(2,)	()	e	#N/A
+empty_args	erfc	1223	ERFC(2)	()	n	0.0046777349810472645
+empty_args	expondist	1224	EXPONDIST(2,2,TRUE)	()	n	0.9816843611112658
+empty_args	expondist	1225	EXPONDIST(,2,TRUE)	()	n	0.0
+empty_args	expondist	1226	EXPONDIST(2,,TRUE)	()	e	#NUM!
+empty_args	expondist	1227	EXPONDIST(2,2,)	()	n	0.03663127777746836
+empty_args	gammaln	1228	GAMMALN(2)	()	n	0.0
+empty_args	hypgeomdist	1229	HYPGEOMDIST(1,4,8,20)	()	n	0.3632610939112486
+empty_args	hypgeomdist	1230	HYPGEOMDIST(,4,8,20)	()	n	0.10216718266253864
+empty_args	hypgeomdist	1231	HYPGEOMDIST(1,,8,20)	()	n	0.0
+empty_args	hypgeomdist	1232	HYPGEOMDIST(1,4,,20)	()	n	0.0
+empty_args	hypgeomdist	1233	HYPGEOMDIST(1,4,8,)	()	e	#NUM!
+empty_args	loginv	1234	LOGINV(0.5,0,1)	()	n	1.0
+empty_args	loginv	1235	LOGINV(,0,1)	()	e	#NUM!
+empty_args	loginv	1236	LOGINV(0.5,,1)	()	n	1.0
+empty_args	loginv	1237	LOGINV(0.5,0,)	()	e	#NUM!
+empty_args	lognormdist	1238	LOGNORMDIST(2,2,2)	()	n	0.25674070875159427
+empty_args	lognormdist	1239	LOGNORMDIST(,2,2)	()	e	#NUM!
+empty_args	lognormdist	1240	LOGNORMDIST(2,,2)	()	n	0.6355441552634643
+empty_args	lognormdist	1241	LOGNORMDIST(2,2,)	()	e	#NUM!
+empty_args	negbinomdist	1242	NEGBINOMDIST(2,3,0.5)	()	n	0.1875
+empty_args	negbinomdist	1243	NEGBINOMDIST(,3,0.5)	()	n	0.12500000000000003
+empty_args	negbinomdist	1244	NEGBINOMDIST(2,,0.5)	()	e	#NUM!
+empty_args	negbinomdist	1245	NEGBINOMDIST(2,3,)	()	e	#NUM!
+empty_args	poisson	1246	POISSON(2,2,TRUE)	()	n	0.6766764161830634
+empty_args	poisson	1247	POISSON(,2,TRUE)	()	n	0.1353352832366127
+empty_args	poisson	1248	POISSON(2,,TRUE)	()	n	1.0
+empty_args	poisson	1249	POISSON(2,2,)	()	n	0.27067056647322546
+empty_args	weibull	1250	WEIBULL(2,2,2,TRUE)	()	n	0.6321205588285577
+empty_args	weibull	1251	WEIBULL(,2,2,TRUE)	()	n	0.0
+empty_args	weibull	1252	WEIBULL(2,,2,TRUE)	()	e	#NUM!
+empty_args	weibull	1253	WEIBULL(2,2,,TRUE)	()	e	#NUM!
+empty_args	weibull	1254	WEIBULL(2,2,2,)	()	n	0.36787944117144233
+empty_args	binom.dist	1255	_xlfn.BINOM.DIST(3,10,0.5,TRUE)	()	n	0.17187500000000006
+empty_args	binom.dist	1256	_xlfn.BINOM.DIST(,10,0.5,TRUE)	()	n	0.0009765625
+empty_args	binom.dist	1257	_xlfn.BINOM.DIST(3,,0.5,TRUE)	()	e	#NUM!
+empty_args	binom.dist	1258	_xlfn.BINOM.DIST(3,10,,TRUE)	()	n	1.0
+empty_args	binom.dist	1259	_xlfn.BINOM.DIST(3,10,0.5,)	()	n	0.11718750000000003
+empty_args	binom.dist.range	1260	_xlfn.BINOM.DIST.RANGE(10,0.5,3,7)	()	n	0.890625
+empty_args	binom.dist.range	1261	_xlfn.BINOM.DIST.RANGE(,0.5,3,7)	()	e	#NUM!
+empty_args	binom.dist.range	1262	_xlfn.BINOM.DIST.RANGE(10,,3,7)	()	n	0.0
+empty_args	binom.dist.range	1263	_xlfn.BINOM.DIST.RANGE(10,0.5,,7)	()	n	0.9453125
+empty_args	binom.dist.range	1264	_xlfn.BINOM.DIST.RANGE(10,0.5,3,)	()	n	0.11718750000000003
+empty_args	binom.inv	1265	_xlfn.BINOM.INV(10,0.5,0.5)	()	n	5.0
+empty_args	binom.inv	1266	_xlfn.BINOM.INV(,0.5,0.5)	()	n	0.0
+empty_args	binom.inv	1267	_xlfn.BINOM.INV(10,,0.5)	()	e	#NUM!
+empty_args	binom.inv	1268	_xlfn.BINOM.INV(10,0.5,)	()	e	#NUM!
+empty_args	erf.precise	1269	_xlfn.ERF.PRECISE(2)	()	n	0.9953222650189527
+empty_args	erfc.precise	1270	_xlfn.ERFC.PRECISE(2)	()	n	0.0046777349810472645
+empty_args	expon.dist	1271	_xlfn.EXPON.DIST(2,2,TRUE)	()	n	0.9816843611112658
+empty_args	expon.dist	1272	_xlfn.EXPON.DIST(,2,TRUE)	()	n	0.0
+empty_args	expon.dist	1273	_xlfn.EXPON.DIST(2,,TRUE)	()	e	#NUM!
+empty_args	expon.dist	1274	_xlfn.EXPON.DIST(2,2,)	()	n	0.03663127777746836
+empty_args	gamma	1275	_xlfn.GAMMA(2)	()	n	1.0
+empty_args	gammaln.precise	1276	_xlfn.GAMMALN.PRECISE(2)	()	n	0.0
+empty_args	hypgeom.dist	1277	_xlfn.HYPGEOM.DIST(1,4,8,20,TRUE)	()	n	0.46542827657378727
+empty_args	hypgeom.dist	1278	_xlfn.HYPGEOM.DIST(,4,8,20,TRUE)	()	n	0.10216718266253864
+empty_args	hypgeom.dist	1279	_xlfn.HYPGEOM.DIST(1,,8,20,TRUE)	()	n	1.0
+empty_args	hypgeom.dist	1280	_xlfn.HYPGEOM.DIST(1,4,,20,TRUE)	()	n	1.0
+empty_args	hypgeom.dist	1281	_xlfn.HYPGEOM.DIST(1,4,8,,TRUE)	()	e	#NUM!
+empty_args	hypgeom.dist	1282	_xlfn.HYPGEOM.DIST(1,4,8,20,)	()	n	0.3632610939112486
+empty_args	lognorm.dist	1283	_xlfn.LOGNORM.DIST(2,2,2,TRUE)	()	n	0.25674070875159427
+empty_args	lognorm.dist	1284	_xlfn.LOGNORM.DIST(,2,2,TRUE)	()	e	#NUM!
+empty_args	lognorm.dist	1285	_xlfn.LOGNORM.DIST(2,,2,TRUE)	()	n	0.6355441552634643
+empty_args	lognorm.dist	1286	_xlfn.LOGNORM.DIST(2,2,,TRUE)	()	e	#NUM!
+empty_args	lognorm.dist	1287	_xlfn.LOGNORM.DIST(2,2,2,)	()	n	0.08056298881431997
+empty_args	lognorm.inv	1288	_xlfn.LOGNORM.INV(0.5,0,1)	()	n	1.0
+empty_args	lognorm.inv	1289	_xlfn.LOGNORM.INV(,0,1)	()	e	#NUM!
+empty_args	lognorm.inv	1290	_xlfn.LOGNORM.INV(0.5,,1)	()	n	1.0
+empty_args	lognorm.inv	1291	_xlfn.LOGNORM.INV(0.5,0,)	()	e	#NUM!
+empty_args	negbinom.dist	1292	_xlfn.NEGBINOM.DIST(2,3,0.5,TRUE)	()	n	0.5000000000000001
+empty_args	negbinom.dist	1293	_xlfn.NEGBINOM.DIST(,3,0.5,TRUE)	()	n	0.12500000000000003
+empty_args	negbinom.dist	1294	_xlfn.NEGBINOM.DIST(2,,0.5,TRUE)	()	e	#NUM!
+empty_args	negbinom.dist	1295	_xlfn.NEGBINOM.DIST(2,3,,TRUE)	()	e	#NUM!
+empty_args	negbinom.dist	1296	_xlfn.NEGBINOM.DIST(2,3,0.5,)	()	n	0.1875
+empty_args	poisson.dist	1297	_xlfn.POISSON.DIST(2,2,TRUE)	()	n	0.6766764161830634
+empty_args	poisson.dist	1298	_xlfn.POISSON.DIST(,2,TRUE)	()	n	0.1353352832366127
+empty_args	poisson.dist	1299	_xlfn.POISSON.DIST(2,,TRUE)	()	n	1.0
+empty_args	poisson.dist	1300	_xlfn.POISSON.DIST(2,2,)	()	n	0.27067056647322546
+empty_args	weibull.dist	1301	_xlfn.WEIBULL.DIST(2,2,2,TRUE)	()	n	0.6321205588285577
+empty_args	weibull.dist	1302	_xlfn.WEIBULL.DIST(,2,2,TRUE)	()	n	0.0
+empty_args	weibull.dist	1303	_xlfn.WEIBULL.DIST(2,,2,TRUE)	()	e	#NUM!
+empty_args	weibull.dist	1304	_xlfn.WEIBULL.DIST(2,2,,TRUE)	()	e	#NUM!
+empty_args	weibull.dist	1305	_xlfn.WEIBULL.DIST(2,2,2,)	()	n	0.36787944117144233
+empty_args	betadist	1306	BETADIST(0.4,2,3,0,1)	()	n	0.5248
+empty_args	betadist	1307	BETADIST(,2,3,0,1)	()	n	0.0
+empty_args	betadist	1308	BETADIST(0.4,,3,0,1)	()	e	#NUM!
+empty_args	betadist	1309	BETADIST(0.4,2,,0,1)	()	e	#NUM!
+empty_args	betadist	1310	BETADIST(0.4,2,3,,1)	()	n	0.5248
+empty_args	betadist	1311	BETADIST(0.4,2,3,0,)	()	n	0.5248
+empty_args	betadist	1312	BETADIST(0.4,2,3,,)	()	n	0.5248
+empty_args	betadist	1313	BETADIST(0.4,2,3,)	()	n	0.5248
+empty_args	betainv	1314	BETAINV(0.4,2,3,0,1)	()	n	0.32916650337840797
+empty_args	betainv	1315	BETAINV(,2,3,0,1)	()	e	#NUM!
+empty_args	betainv	1316	BETAINV(0.4,,3,0,1)	()	e	#NUM!
+empty_args	betainv	1317	BETAINV(0.4,2,,0,1)	()	e	#NUM!
+empty_args	betainv	1318	BETAINV(0.4,2,3,,1)	()	n	0.32916650337840797
+empty_args	betainv	1319	BETAINV(0.4,2,3,0,)	()	n	0.32916650337840797
+empty_args	betainv	1320	BETAINV(0.4,2,3,,)	()	n	0.32916650337840797
+empty_args	betainv	1321	BETAINV(0.4,2,3,)	()	n	0.32916650337840797
+empty_args	chidist	1322	CHIDIST(2,2)	()	n	0.36787944117144233
+empty_args	chidist	1323	CHIDIST(,2)	()	n	1.0
+empty_args	chidist	1324	CHIDIST(2,)	()	e	#NUM!
+empty_args	chiinv	1325	CHIINV(0.4,3)	()	n	2.9461660731019483
+empty_args	chiinv	1326	CHIINV(,3)	()	e	#NUM!
+empty_args	chiinv	1327	CHIINV(0.4,)	()	e	#NUM!
+empty_args	chitest	1328	CHITEST($AA$1:$AA$4,$AB$1:$AB$4)	()	n	0.27122388006543474
+empty_args	chitest	1329	CHITEST(,$AB$1:$AB$4)	()	e	#VALUE!
+empty_args	chitest	1330	CHITEST($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	fdist	1331	FDIST(2,2,2)	()	n	0.3333333333333333
+empty_args	fdist	1332	FDIST(,2,2)	()	n	1.0
+empty_args	fdist	1333	FDIST(2,,2)	()	e	#NUM!
+empty_args	fdist	1334	FDIST(2,2,)	()	e	#NUM!
+empty_args	finv	1335	FINV(0.4,3,5)	()	n	1.1978047828924256
+empty_args	finv	1336	FINV(,3,5)	()	e	#NUM!
+empty_args	finv	1337	FINV(0.4,,5)	()	e	#NUM!
+empty_args	finv	1338	FINV(0.4,3,)	()	e	#NUM!
+empty_args	ftest	1339	FTEST($AA$1:$AA$4,$AB$1:$AB$4)	()	n	0.7339430049127206
+empty_args	ftest	1340	FTEST(,$AB$1:$AB$4)	()	e	#VALUE!
+empty_args	ftest	1341	FTEST($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	gammadist	1342	GAMMADIST(2,2,2,TRUE)	()	n	0.2642411176571152
+empty_args	gammadist	1343	GAMMADIST(,2,2,TRUE)	()	n	0.0
+empty_args	gammadist	1344	GAMMADIST(2,,2,TRUE)	()	e	#NUM!
+empty_args	gammadist	1345	GAMMADIST(2,2,,TRUE)	()	e	#NUM!
+empty_args	gammadist	1346	GAMMADIST(2,2,2,)	()	n	0.18393972058572114
+empty_args	gammainv	1347	GAMMAINV(0.4,3,2)	()	n	4.570153808006762
+empty_args	gammainv	1348	GAMMAINV(,3,2)	()	n	0.0
+empty_args	gammainv	1349	GAMMAINV(0.4,,2)	()	e	#NUM!
+empty_args	gammainv	1350	GAMMAINV(0.4,3,)	()	e	#NUM!
+empty_args	tdist	1351	TDIST(2,2,2)	()	n	0.18350341907227397
+empty_args	tdist	1352	TDIST(,2,2)	()	n	1.0
+empty_args	tdist	1353	TDIST(2,,2)	()	e	#NUM!
+empty_args	tdist	1354	TDIST(2,2,)	()	e	#NUM!
+empty_args	tinv	1355	TINV(0.4,3)	()	n	0.9784723123633047
+empty_args	tinv	1356	TINV(,3)	()	e	#NUM!
+empty_args	tinv	1357	TINV(0.4,)	()	e	#NUM!
+empty_args	ttest	1358	TTEST($AA$1:$AA$4,$AB$1:$AB$4,2,2)	()	n	0.35358111224262795
+empty_args	ttest	1359	TTEST(,$AB$1:$AB$4,2,2)	()	e	#VALUE!
+empty_args	ttest	1360	TTEST($AA$1:$AA$4,,2,2)	()	e	#VALUE!
+empty_args	ttest	1361	TTEST($AA$1:$AA$4,$AB$1:$AB$4,,2)	()	e	#NUM!
+empty_args	ttest	1362	TTEST($AA$1:$AA$4,$AB$1:$AB$4,2,)	()	e	#NUM!
+empty_args	ztest	1363	ZTEST($AA$1:$AA$4,2,2)	()	n	0.0400591568638171
+empty_args	ztest	1364	ZTEST(,2,2)	()	e	#DIV/0!
+empty_args	ztest	1365	ZTEST($AA$1:$AA$4,,2)	()	n	8.841728520080376e-05
+empty_args	ztest	1366	ZTEST($AA$1:$AA$4,2,)	()	e	#NUM!
+empty_args	beta.dist	1367	_xlfn.BETA.DIST(0.4,2,3,TRUE,0,1)	()	n	0.5248
+empty_args	beta.dist	1368	_xlfn.BETA.DIST(,2,3,TRUE,0,1)	()	n	0.0
+empty_args	beta.dist	1369	_xlfn.BETA.DIST(0.4,,3,TRUE,0,1)	()	e	#NUM!
+empty_args	beta.dist	1370	_xlfn.BETA.DIST(0.4,2,,TRUE,0,1)	()	e	#NUM!
+empty_args	beta.dist	1371	_xlfn.BETA.DIST(0.4,2,3,,0,1)	()	n	1.728
+empty_args	beta.dist	1372	_xlfn.BETA.DIST(0.4,2,3,TRUE,,1)	()	n	0.5248
+empty_args	beta.dist	1373	_xlfn.BETA.DIST(0.4,2,3,TRUE,0,)	()	n	0.5248
+empty_args	beta.dist	1374	_xlfn.BETA.DIST(0.4,2,3,TRUE,,)	()	n	0.5248
+empty_args	beta.dist	1375	_xlfn.BETA.DIST(0.4,2,3,TRUE,)	()	n	0.5248
+empty_args	beta.inv	1376	_xlfn.BETA.INV(0.4,2,3,0,1)	()	n	0.32916650337840797
+empty_args	beta.inv	1377	_xlfn.BETA.INV(,2,3,0,1)	()	e	#NUM!
+empty_args	beta.inv	1378	_xlfn.BETA.INV(0.4,,3,0,1)	()	e	#NUM!
+empty_args	beta.inv	1379	_xlfn.BETA.INV(0.4,2,,0,1)	()	e	#NUM!
+empty_args	beta.inv	1380	_xlfn.BETA.INV(0.4,2,3,,1)	()	n	0.32916650337840797
+empty_args	beta.inv	1381	_xlfn.BETA.INV(0.4,2,3,0,)	()	n	0.32916650337840797
+empty_args	beta.inv	1382	_xlfn.BETA.INV(0.4,2,3,,)	()	n	0.32916650337840797
+empty_args	beta.inv	1383	_xlfn.BETA.INV(0.4,2,3,)	()	n	0.32916650337840797
+empty_args	chisq.dist	1384	_xlfn.CHISQ.DIST(2,2,TRUE)	()	n	0.6321205588285577
+empty_args	chisq.dist	1385	_xlfn.CHISQ.DIST(,2,TRUE)	()	n	0.0
+empty_args	chisq.dist	1386	_xlfn.CHISQ.DIST(2,,TRUE)	()	e	#NUM!
+empty_args	chisq.dist	1387	_xlfn.CHISQ.DIST(2,2,)	()	n	0.18393972058572117
+empty_args	chisq.dist.rt	1388	_xlfn.CHISQ.DIST.RT(2,2)	()	n	0.36787944117144233
+empty_args	chisq.dist.rt	1389	_xlfn.CHISQ.DIST.RT(,2)	()	n	1.0
+empty_args	chisq.dist.rt	1390	_xlfn.CHISQ.DIST.RT(2,)	()	e	#NUM!
+empty_args	chisq.inv	1391	_xlfn.CHISQ.INV(0.4,3)	()	n	1.8691684033887164
+empty_args	chisq.inv	1392	_xlfn.CHISQ.INV(,3)	()	n	0.0
+empty_args	chisq.inv	1393	_xlfn.CHISQ.INV(0.4,)	()	e	#NUM!
+empty_args	chisq.inv.rt	1394	_xlfn.CHISQ.INV.RT(0.4,3)	()	n	2.9461660731019483
+empty_args	chisq.inv.rt	1395	_xlfn.CHISQ.INV.RT(,3)	()	e	#NUM!
+empty_args	chisq.inv.rt	1396	_xlfn.CHISQ.INV.RT(0.4,)	()	e	#NUM!
+empty_args	chisq.test	1397	_xlfn.CHISQ.TEST($AA$1:$AA$4,$AB$1:$AB$4)	()	n	0.27122388006543474
+empty_args	chisq.test	1398	_xlfn.CHISQ.TEST(,$AB$1:$AB$4)	()	e	#VALUE!
+empty_args	chisq.test	1399	_xlfn.CHISQ.TEST($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	confidence.t	1400	_xlfn.CONFIDENCE.T(0.05,2,10)	()	n	1.4307138119413296
+empty_args	confidence.t	1401	_xlfn.CONFIDENCE.T(,2,10)	()	e	#NUM!
+empty_args	confidence.t	1402	_xlfn.CONFIDENCE.T(0.05,,10)	()	e	#NUM!
+empty_args	confidence.t	1403	_xlfn.CONFIDENCE.T(0.05,2,)	()	e	#NUM!
+empty_args	f.dist	1404	_xlfn.F.DIST(2,2,2,TRUE)	()	n	0.6666666666666667
+empty_args	f.dist	1405	_xlfn.F.DIST(,2,2,TRUE)	()	n	0.0
+empty_args	f.dist	1406	_xlfn.F.DIST(2,,2,TRUE)	()	e	#NUM!
+empty_args	f.dist	1407	_xlfn.F.DIST(2,2,,TRUE)	()	e	#NUM!
+empty_args	f.dist	1408	_xlfn.F.DIST(2,2,2,)	()	n	0.1111111111111111
+empty_args	f.dist.rt	1409	_xlfn.F.DIST.RT(2,2,2)	()	n	0.3333333333333333
+empty_args	f.dist.rt	1410	_xlfn.F.DIST.RT(,2,2)	()	n	1.0
+empty_args	f.dist.rt	1411	_xlfn.F.DIST.RT(2,,2)	()	e	#NUM!
+empty_args	f.dist.rt	1412	_xlfn.F.DIST.RT(2,2,)	()	e	#NUM!
+empty_args	f.inv	1413	_xlfn.F.INV(0.4,3,5)	()	n	0.6821342707772092
+empty_args	f.inv	1414	_xlfn.F.INV(,3,5)	()	n	0.0
+empty_args	f.inv	1415	_xlfn.F.INV(0.4,,5)	()	e	#NUM!
+empty_args	f.inv	1416	_xlfn.F.INV(0.4,3,)	()	e	#NUM!
+empty_args	f.inv.rt	1417	_xlfn.F.INV.RT(0.4,3,5)	()	n	1.1978047828924256
+empty_args	f.inv.rt	1418	_xlfn.F.INV.RT(,3,5)	()	e	#NUM!
+empty_args	f.inv.rt	1419	_xlfn.F.INV.RT(0.4,,5)	()	e	#NUM!
+empty_args	f.inv.rt	1420	_xlfn.F.INV.RT(0.4,3,)	()	e	#NUM!
+empty_args	f.test	1421	_xlfn.F.TEST($AA$1:$AA$4,$AB$1:$AB$4)	()	n	0.7339430049127206
+empty_args	f.test	1422	_xlfn.F.TEST(,$AB$1:$AB$4)	()	e	#VALUE!
+empty_args	f.test	1423	_xlfn.F.TEST($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	gamma.dist	1424	_xlfn.GAMMA.DIST(2,2,2,TRUE)	()	n	0.2642411176571152
+empty_args	gamma.dist	1425	_xlfn.GAMMA.DIST(,2,2,TRUE)	()	n	0.0
+empty_args	gamma.dist	1426	_xlfn.GAMMA.DIST(2,,2,TRUE)	()	e	#NUM!
+empty_args	gamma.dist	1427	_xlfn.GAMMA.DIST(2,2,,TRUE)	()	e	#NUM!
+empty_args	gamma.dist	1428	_xlfn.GAMMA.DIST(2,2,2,)	()	n	0.18393972058572114
+empty_args	gamma.inv	1429	_xlfn.GAMMA.INV(0.4,3,2)	()	n	4.570153808006762
+empty_args	gamma.inv	1430	_xlfn.GAMMA.INV(,3,2)	()	n	0.0
+empty_args	gamma.inv	1431	_xlfn.GAMMA.INV(0.4,,2)	()	e	#NUM!
+empty_args	gamma.inv	1432	_xlfn.GAMMA.INV(0.4,3,)	()	e	#NUM!
+empty_args	t.dist	1433	_xlfn.T.DIST(2,2,TRUE)	()	n	0.908248290463863
+empty_args	t.dist	1434	_xlfn.T.DIST(,2,TRUE)	()	n	0.5
+empty_args	t.dist	1435	_xlfn.T.DIST(2,,TRUE)	()	e	#NUM!
+empty_args	t.dist	1436	_xlfn.T.DIST(2,2,)	()	n	0.06804138174397716
+empty_args	t.dist.2t	1437	_xlfn.T.DIST.2T(2,2)	()	n	0.18350341907227397
+empty_args	t.dist.2t	1438	_xlfn.T.DIST.2T(,2)	()	n	1.0
+empty_args	t.dist.2t	1439	_xlfn.T.DIST.2T(2,)	()	e	#NUM!
+empty_args	t.dist.rt	1440	_xlfn.T.DIST.RT(2,2)	()	n	0.09175170953613698
+empty_args	t.dist.rt	1441	_xlfn.T.DIST.RT(,2)	()	n	0.5
+empty_args	t.dist.rt	1442	_xlfn.T.DIST.RT(2,)	()	e	#NUM!
+empty_args	t.inv	1443	_xlfn.T.INV(0.4,3)	()	n	-0.27667066233268955
+empty_args	t.inv	1444	_xlfn.T.INV(,3)	()	e	#NUM!
+empty_args	t.inv	1445	_xlfn.T.INV(0.4,)	()	e	#NUM!
+empty_args	t.inv.2t	1446	_xlfn.T.INV.2T(0.4,3)	()	n	0.9784723123633047
+empty_args	t.inv.2t	1447	_xlfn.T.INV.2T(,3)	()	e	#NUM!
+empty_args	t.inv.2t	1448	_xlfn.T.INV.2T(0.4,)	()	e	#NUM!
+empty_args	t.test	1449	_xlfn.T.TEST($AA$1:$AA$4,$AB$1:$AB$4,2,2)	()	n	0.35358111224262795
+empty_args	t.test	1450	_xlfn.T.TEST(,$AB$1:$AB$4,2,2)	()	e	#VALUE!
+empty_args	t.test	1451	_xlfn.T.TEST($AA$1:$AA$4,,2,2)	()	e	#VALUE!
+empty_args	t.test	1452	_xlfn.T.TEST($AA$1:$AA$4,$AB$1:$AB$4,,2)	()	e	#NUM!
+empty_args	t.test	1453	_xlfn.T.TEST($AA$1:$AA$4,$AB$1:$AB$4,2,)	()	e	#NUM!
+empty_args	z.test	1454	_xlfn.Z.TEST($AA$1:$AA$4,2,2)	()	n	0.0400591568638171
+empty_args	z.test	1455	_xlfn.Z.TEST(,2,2)	()	e	#DIV/0!
+empty_args	z.test	1456	_xlfn.Z.TEST($AA$1:$AA$4,,2)	()	n	8.841728520080376e-05
+empty_args	z.test	1457	_xlfn.Z.TEST($AA$1:$AA$4,2,)	()	e	#NUM!
+empty_args	complex	1458	COMPLEX(3,4,"j")	()	str	'3+4j'
+empty_args	complex	1459	COMPLEX(,4,"j")	()	e	#N/A
+empty_args	complex	1460	COMPLEX(3,,"j")	()	e	#N/A
+empty_args	complex	1461	COMPLEX(3,4,)	()	str	'3+4i'
+empty_args	imabs	1462	IMABS(2)	()	n	2.0
+empty_args	imaginary	1463	IMAGINARY(2)	()	n	0.0
+empty_args	imargument	1464	IMARGUMENT(2)	()	n	0.0
+empty_args	imconjugate	1465	IMCONJUGATE(2)	()	str	'2'
+empty_args	imcos	1466	IMCOS(2)	()	str	'-0.416146836547142'
+empty_args	imdiv	1467	IMDIV("3+4j","1-2j")	()	str	'-1+2j'
+empty_args	imdiv	1468	IMDIV(,"1-2j")	()	e	#N/A
+empty_args	imdiv	1469	IMDIV("3+4j",)	()	e	#N/A
+empty_args	imexp	1470	IMEXP(2)	()	str	'7.38905609893065'
+empty_args	imln	1471	IMLN(2)	()	str	'0.693147180559945'
+empty_args	imlog10	1472	IMLOG10(2)	()	str	'0.301029995663981'
+empty_args	imlog2	1473	IMLOG2(2)	()	str	'1'
+empty_args	impower	1474	IMPOWER("3+4j",2)	()	str	'-7+24j'
+empty_args	impower	1475	IMPOWER(,2)	()	e	#N/A
+empty_args	impower	1476	IMPOWER("3+4j",)	()	e	#N/A
+empty_args	improduct	1477	IMPRODUCT("3+4j","1-2j")	()	str	'11-2j'
+empty_args	improduct	1478	IMPRODUCT(,"1-2j")	()	e	#N/A
+empty_args	improduct	1479	IMPRODUCT("3+4j",)	()	str	'3+4j'
+empty_args	imreal	1480	IMREAL(2)	()	n	2.0
+empty_args	imsin	1481	IMSIN(2)	()	str	'0.909297426825682'
+empty_args	imsqrt	1482	IMSQRT(2)	()	str	'1.4142135623731'
+empty_args	imsub	1483	IMSUB("3+4j","1-2j")	()	str	'2+6j'
+empty_args	imsub	1484	IMSUB(,"1-2j")	()	e	#N/A
+empty_args	imsub	1485	IMSUB("3+4j",)	()	e	#N/A
+empty_args	imsum	1486	IMSUM("3+4j","1-2j")	()	str	'4+2j'
+empty_args	imsum	1487	IMSUM(,"1-2j")	()	e	#N/A
+empty_args	imsum	1488	IMSUM("3+4j",)	()	str	'3+4j'
+empty_args	imcosh	1489	_xlfn.IMCOSH(2)	()	str	'3.76219569108363'
+empty_args	imcot	1490	_xlfn.IMCOT(2)	()	str	'-0.457657554360286'
+empty_args	imcsc	1491	_xlfn.IMCSC(2)	()	str	'1.09975017029462'
+empty_args	imcsch	1492	_xlfn.IMCSCH(2)	()	str	'0.275720564771783'
+empty_args	imsec	1493	_xlfn.IMSEC(2)	()	str	'-2.40299796172238'
+empty_args	imsech	1494	_xlfn.IMSECH(2)	()	str	'0.26580222883408'
+empty_args	imsinh	1495	_xlfn.IMSINH(2)	()	str	'3.62686040784702'
+empty_args	imtan	1496	_xlfn.IMTAN(2)	()	str	'-2.18503986326152'
+empty_args	lambda	1497	_xlfn.LAMBDA(_xlpm.x,_xlpm.x+1)(2)	()	n	3.0
+empty_args	lambda	1498	_xlfn.LAMBDA(_xlpm.x,_xlpm.y,_xlpm.x+_xlpm.y)(,2)	()	n	2.0
+empty_args	lambda	1499	_xlfn.LAMBDA(_xlpm.x,_xlpm.y,_xlpm.x+_xlpm.y)(2,)	()	n	2.0
+empty_args	isomitted	1500	_xlfn.ISOMITTED($AA$1:$AA$4)	()	b	False
+empty_args	map	1501	_xlfn.MAP($AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.a,_xlpm.a*2))	()	n	2.0
+empty_args	map	1502	_xlfn.MAP(,_xlfn.LAMBDA(_xlpm.a,_xlpm.a*2))	()	e	#VALUE!
+empty_args	map	1503	_xlfn.MAP($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	reduce	1504	_xlfn.REDUCE(1,$AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))	()	n	16.0
+empty_args	reduce	1505	_xlfn.REDUCE(1,,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))	()	e	#VALUE!
+empty_args	reduce	1506	_xlfn.REDUCE(1,$AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	scan	1507	_xlfn.SCAN(1,$AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))	()	n	2.0
+empty_args	scan	1508	_xlfn.SCAN(,$AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))	()	n	1.0
+empty_args	scan	1509	_xlfn.SCAN(1,,_xlfn.LAMBDA(_xlpm.a,_xlpm.b,_xlpm.a+_xlpm.b))	()	e	#VALUE!
+empty_args	scan	1510	_xlfn.SCAN(1,$AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	byrow	1511	_xlfn.BYROW($AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r)))	()	n	1.0
+empty_args	byrow	1512	_xlfn.BYROW(,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r)))	()	e	#VALUE!
+empty_args	byrow	1513	_xlfn.BYROW($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	bycol	1514	_xlfn.BYCOL($AA$1:$AA$4,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r)))	()	n	15.0
+empty_args	bycol	1515	_xlfn.BYCOL(,_xlfn.LAMBDA(_xlpm.r,SUM(_xlpm.r)))	()	e	#VALUE!
+empty_args	bycol	1516	_xlfn.BYCOL($AA$1:$AA$4,)	()	e	#VALUE!
+empty_args	makearray	1517	_xlfn.MAKEARRAY(2,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c))	()	n	2.0
+empty_args	makearray	1518	_xlfn.MAKEARRAY(,2,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c))	()	n	2.0
+empty_args	makearray	1519	_xlfn.MAKEARRAY(2,,_xlfn.LAMBDA(_xlpm.r,_xlpm.c,_xlpm.r+_xlpm.c))	()	n	2.0
+empty_args	makearray	1520	_xlfn.MAKEARRAY(2,2,)	()	e	#VALUE!
+empty_args	besseli	1521	BESSELI(2,2)	()	n	0.6889484491977633
+empty_args	besseli	1522	BESSELI(,2)	()	e	#N/A
+empty_args	besseli	1523	BESSELI(2,)	()	e	#N/A
+empty_args	besselj	1524	BESSELJ(2,2)	()	n	0.3528342075141756
+empty_args	besselj	1525	BESSELJ(,2)	()	e	#N/A
+empty_args	besselj	1526	BESSELJ(2,)	()	e	#N/A
+empty_args	besselk	1527	BESSELK(2,2)	()	n	0.25375976
+empty_args	besselk	1528	BESSELK(,2)	()	e	#N/A
+empty_args	besselk	1529	BESSELK(2,)	()	e	#N/A
+empty_args	bessely	1530	BESSELY(2,2)	()	n	-0.6174080983850512
+empty_args	bessely	1531	BESSELY(,2)	()	e	#N/A
+empty_args	bessely	1532	BESSELY(2,)	()	e	#N/A
+empty_args	convert	1533	CONVERT(1,"m","ft")	()	n	3.2808398950131235
+empty_args	convert	1534	CONVERT(,"m","ft")	()	e	#N/A
+empty_args	convert	1535	CONVERT(1,,"ft")	()	e	#N/A
+empty_args	convert	1536	CONVERT(1,"m",)	()	e	#N/A

@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "job_id": "xlrecalc-20261124-100449-math-trig",
+  "package": "xlrecalc",
+  "purpose": "capture suite math_trig: open the workbook, save a copy with the cached values",
+  "requires": {
+    "excel_build_min": {
+      "windows": "16.0.20527.0"
+    },
+    "edition": "Microsoft 365"
+  },
+  "limits": {
+    "job_seconds": 3600,
+    "step_seconds": 600
+  },
+  "audit": false,
+  "workbooks": [
+    {
+      "file": "math_trig.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "math_trig.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    }
+  ]
+}

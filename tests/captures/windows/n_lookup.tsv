@@ -1,0 +1,371 @@
+# suite: n_lookup
+# generator: capture/suites.py:n_lookup, capture/job.py
+# method: the job beside this file (n_lookup.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "n_lookup.xlsx": {
+#      "bytes": 5778,
+#      "sha256": "71d6d7e4c31d49c0bf729574b75006a82d875c3921bb6bd4fa7f72139f639e58"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261124-100337-n-lookup",
+#    "manifest_sha256": "dc96fab77509aa99def5cba2aa4bdd3c8daf3d17cbb3a184c5083eb752b24175",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+n_lookup	n	1	N({1})	(2.5,)	n	2.5
+n_lookup	n	2	N({1})	(-2.5,)	n	-2.5
+n_lookup	n	3	N({1})	(0.0,)	n	0.0
+n_lookup	n	4	N({1})	('3',)	n	0.0
+n_lookup	n	5	N({1})	('abc',)	n	0.0
+n_lookup	n	6	N({1})	(True,)	n	1.0
+n_lookup	n	7	N({1})	(False,)	n	0.0
+n_lookup	n	8	N({1})	(None,)	n	0.0
+n_lookup	n	9	N({1})	(FormulaInput('=""'),)	n	0.0
+n_lookup	n	10	N({1})	(ErrorValue('#N/A'),)	e	#N/A
+n_lookup	n	11	N(AA1:AA3)	()	n	1.0
+n_lookup	n	12	N(Z1:Z3)	()	n	0.0
+n_lookup	n	13	N({1,2})	()	n	1.0
+n_lookup	n	14	SUM(N({1,2}))	()	n	3.0
+n_lookup	n	15	N(1/0)	()	e	#DIV/0!
+n_lookup	n	16	N(DATE(2024,1,2))	()	n	45293.0
+n_lookup	lookup	17	LOOKUP({1},AC1:AC5,AD1:AD5)	(0.0,)	e	#N/A
+n_lookup	lookup	18	LOOKUP({1},AC1:AC5,AD1:AD5)	(1.0,)	str	'x1'
+n_lookup	lookup	19	LOOKUP({1},AC1:AC5,AD1:AD5)	(2.0,)	str	'x1'
+n_lookup	lookup	20	LOOKUP({1},AC1:AC5,AD1:AD5)	(4.0,)	str	'x3'
+n_lookup	lookup	21	LOOKUP({1},AC1:AC5,AD1:AD5)	(5.0,)	str	'x5'
+n_lookup	lookup	22	LOOKUP({1},AC1:AC5,AD1:AD5)	(9.0,)	str	'x9'
+n_lookup	lookup	23	LOOKUP({1},AC1:AC5,AD1:AD5)	(100.0,)	str	'x9'
+n_lookup	lookup	24	LOOKUP({1},AC1:AC5,AD1:AD5)	('3',)	e	#N/A
+n_lookup	lookup	25	LOOKUP({1},AC1:AC5,AD1:AD5)	(True,)	e	#N/A
+n_lookup	lookup	26	LOOKUP({1},AC1:AC5,AD1:AD5)	('a',)	e	#N/A
+n_lookup	lookup	27	LOOKUP({1},AC1:AC5,AD1:AD5)	(None,)	e	#N/A
+n_lookup	lookup	28	LOOKUP({1},AC1:AC5,AD1:AD5)	(ErrorValue('#N/A'),)	e	#N/A
+n_lookup	lookup	29	LOOKUP({1},AC1:AC5)	(0.0,)	e	#N/A
+n_lookup	lookup	30	LOOKUP({1},AC1:AC5)	(1.0,)	n	1.0
+n_lookup	lookup	31	LOOKUP({1},AC1:AC5)	(2.0,)	n	1.0
+n_lookup	lookup	32	LOOKUP({1},AC1:AC5)	(4.0,)	n	3.0
+n_lookup	lookup	33	LOOKUP({1},AC1:AC5)	(5.0,)	n	5.0
+n_lookup	lookup	34	LOOKUP({1},AC1:AC5)	(9.0,)	n	9.0
+n_lookup	lookup	35	LOOKUP({1},AC1:AC5)	(100.0,)	n	9.0
+n_lookup	lookup	36	LOOKUP({1},AC1:AC5)	('3',)	e	#N/A
+n_lookup	lookup	37	LOOKUP({1},AC1:AC5)	(True,)	e	#N/A
+n_lookup	lookup	38	LOOKUP({1},AC1:AC5)	('a',)	e	#N/A
+n_lookup	lookup	39	LOOKUP({1},AC1:AC5)	(None,)	e	#N/A
+n_lookup	lookup	40	LOOKUP({1},AC1:AC5)	(ErrorValue('#N/A'),)	e	#N/A
+n_lookup	lookup	41	LOOKUP("b",Z1:Z3,AA1:AA3)	()	n	2.0
+n_lookup	lookup	42	LOOKUP("bb",Z1:Z3,AA1:AA3)	()	n	2.0
+n_lookup	lookup	43	LOOKUP("zz",Z1:Z3)	()	str	'c'
+n_lookup	lookup	44	LOOKUP("A",Z1:Z3,AA1:AA3)	()	n	1.0
+n_lookup	lookup	45	LOOKUP("0",Z1:Z3,AA1:AA3)	()	e	#N/A
+n_lookup	lookup	46	LOOKUP(4,AC1:AD5)	()	str	'x3'
+n_lookup	lookup	47	LOOKUP(2,{1,2,3;4,5,6})	()	n	5.0
+n_lookup	lookup	48	LOOKUP(2,{1,2;3,4})	()	n	2.0
+n_lookup	lookup	49	LOOKUP(4,{1,3,5},{"a","b","c"})	()	str	'b'
+n_lookup	lookup	50	LOOKUP(7,AC1:AC5,AD1:AD3)	()	str	'x7'
+n_lookup	lookup	51	LOOKUP(4,AC1:AC5,AE1:AI1)	()	n	9.0
+n_lookup	lookup	52	LOOKUP(4,AC1:AC5,{1,2,3,4,5})	()	n	2.0
+n_lookup	lookup	53	LOOKUP(1,Z4:Z6)	()	n	1.0
+n_lookup	lookup	54	LOOKUP(2,Z4:AA6)	()	str	'two'
+n_lookup	lookup	55	LOOKUP(4,AC1:AC5,AD1)	()	n	0.0
+n_lookup	lookup	56	LOOKUP(4,AC1)	()	n	1.0

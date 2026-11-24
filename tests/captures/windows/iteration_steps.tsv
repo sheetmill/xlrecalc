@@ -1,0 +1,351 @@
+# suite: iteration_steps
+# generator: capture/suites.py:iteration_steps, capture/job.py
+# method: the job beside this file (iteration_steps.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "iteration_steps.xlsx": {
+#      "bytes": 5594,
+#      "sha256": "c00034bec316e207dc37f1ce73307dd00f82655cda80a9109fe1dd4863153593"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261124-100742-iteration-steps",
+#    "manifest_sha256": "fab469ebd5b09c604d57ba47cb0cd10f5db47c8a5e65f02f9052de62a59bed99",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+iteration_steps	irr_x	1	IRR({-1,3000000})	()	n	2999998.999580666
+iteration_steps	irr_x	2	IRR({-1,4000000})	()	n	3999998.999440888
+iteration_steps	irr_x	3	IRR({-1,5000000})	()	n	4999998.9998562215
+iteration_steps	irr_x	4	IRR({-1,6000000})	()	n	5999998.999161332
+iteration_steps	irr_x	5	IRR({-1,7000000})	()	n	6999998.998244398
+iteration_steps	irr_x	6	IRR({-1,8000000})	()	n	7999998.998881776
+iteration_steps	irr_x	7	IRR({-1,9000000})	()	n	8999999.0017396
+iteration_steps	irr_x	8	IRR({-1,10000000})	()	e	#NUM!
+iteration_steps	irr_x	9	IRR({-1,15000000})	()	e	#NUM!
+iteration_steps	irr_x	10	IRR({-1,20000000})	()	e	#NUM!
+iteration_steps	irr_x	11	IRR({-1,40000000})	()	e	#NUM!
+iteration_steps	irr_x	12	IRR({-1,100000000})	()	e	#NUM!
+iteration_steps	irr_x	13	IRR({-1,300000000})	()	e	#NUM!
+iteration_steps	irr_x	14	IRR({-1,1000000000})	()	e	#NUM!
+iteration_steps	rate_n	15	RATE({1},-1,{2})	(100.0, 50.0)	n	0.015849621839607305
+iteration_steps	rate_n	16	RATE({1},-1,{2})	(200.0, 100.0)	n	0.007946427671534494
+iteration_steps	rate_n	17	RATE({1},-1,{2})	(300.0, 150.0)	n	0.005302433574224673
+iteration_steps	rate_n	18	RATE({1},-1,{2})	(500.0, 250.0)	n	0.003183773861095054
+iteration_steps	rate_n	19	RATE({1},-1,{2})	(1000.0, 500.0)	n	0.0015927552892097876
+iteration_steps	rate_n	20	RATE({1},-1,{2})	(1500.0, 750.0)	e	#NUM!
+iteration_steps	rate_guess	21	RATE({1},{2},{3},0,0,{4})	(48.0, -200.0, 8000.0, 8.0)	n	0.007701472488250733
+iteration_steps	rate_guess	22	RATE({1},{2},{3},0,0,{4})	(48.0, -200.0, 8000.0, 20.0)	e	#NUM!
+iteration_steps	rate_guess	23	RATE({1},{2},{3},0,0,{4})	(48.0, -200.0, 8000.0, 40.0)	e	#NUM!
+iteration_steps	rate_guess	24	RATE({1},{2},{3},0,0,{4})	(48.0, -200.0, 8000.0, 80.0)	e	#NUM!
+iteration_steps	rate_guess	25	RATE({1},{2},{3},0,0,{4})	(60.0, -50.0, 2000.0, 8.0)	n	0.014394781000913877
+iteration_steps	rate_guess	26	RATE({1},{2},{3},0,0,{4})	(60.0, -50.0, 2000.0, 10.0)	e	#NUM!
+iteration_steps	rate_guess	27	RATE({1},{2},{3},0,0,{4})	(60.0, -50.0, 2000.0, 20.0)	e	#NUM!
+iteration_steps	rate_guess	28	RATE({1},{2},{3},0,0,{4})	(60.0, -50.0, 2000.0, 40.0)	e	#NUM!
+iteration_steps	rate_guess	29	RATE({1},{2},{3},0,0,{4})	(60.0, -50.0, 2000.0, 80.0)	e	#NUM!
+iteration_steps	rate_guess	30	RATE({1},{2},{3},0,0,{4})	(60.0, -50.0, 2000.0, 200.0)	e	#NUM!
+iteration_steps	rate_guess	31	RATE({1},{2},{3},0,0,{4})	(120.0, -100.0, 8000.0, 5.0)	e	#NUM!
+iteration_steps	rate_guess	32	RATE({1},{2},{3},0,0,{4})	(120.0, -100.0, 8000.0, 12.0)	e	#NUM!
+iteration_steps	rate_guess	33	RATE({1},{2},{3},0,0,{4})	(120.0, -100.0, 8000.0, 25.0)	e	#NUM!
+iteration_steps	rate_guess	34	RATE({1},{2},{3},0,0,{4})	(120.0, -100.0, 8000.0, 100.0)	e	#NUM!
+iteration_steps	rate_guess	35	RATE({1},{2},{3},0,0,{4})	(120.0, -100.0, 8000.0, 200.0)	e	#NUM!
+iteration_steps	rate_guess	36	RATE({1},{2},{3},0,0,{4})	(360.0, -1000.0, 200000.0, 60.0)	e	#NUM!

@@ -1,0 +1,675 @@
+# suite: matrix_family
+# generator: capture/suites.py:matrix_family, capture/job.py
+# method: the job beside this file (matrix_family.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "matrix_family.xlsx": {
+#      "bytes": 13329,
+#      "sha256": "e219a750385242885a8956c398d58f27461928d3754f94bb91a7754ca84946fc"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261124-100631-matrix-family",
+#    "manifest_sha256": "d5fe24f46f46bace843ef4085f67a461b88a9ad45be52f717789dc8234b9a889",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+matrix_family	mdeterm	1	MDETERM($AA$1:$AA$1)	()	n	5.0
+matrix_family	minverse	2	INDEX(MINVERSE($AA$1:$AA$1),1,1)	()	n	0.2
+matrix_family	mdeterm	3	MDETERM($AA$3:$AA$3)	()	n	0.0
+matrix_family	minverse	4	INDEX(MINVERSE($AA$3:$AA$3),1,1)	()	e	#NUM!
+matrix_family	mdeterm	5	MDETERM($AA$5:$AA$5)	()	n	-3.5
+matrix_family	minverse	6	INDEX(MINVERSE($AA$5:$AA$5),1,1)	()	n	-0.2857142857142857
+matrix_family	mdeterm	7	MDETERM($AA$7:$AB$8)	()	n	-2.0
+matrix_family	minverse	8	INDEX(MINVERSE($AA$7:$AB$8),1,1)	()	n	-1.9999999999999998
+matrix_family	minverse	9	INDEX(MINVERSE($AA$7:$AB$8),1,2)	()	n	1.0
+matrix_family	minverse	10	INDEX(MINVERSE($AA$7:$AB$8),2,1)	()	n	1.4999999999999998
+matrix_family	minverse	11	INDEX(MINVERSE($AA$7:$AB$8),2,2)	()	n	-0.49999999999999994
+matrix_family	mdeterm	12	MDETERM($AA$10:$AB$11)	()	n	-1.0
+matrix_family	minverse	13	INDEX(MINVERSE($AA$10:$AB$11),1,1)	()	n	0.0
+matrix_family	minverse	14	INDEX(MINVERSE($AA$10:$AB$11),1,2)	()	n	1.0
+matrix_family	minverse	15	INDEX(MINVERSE($AA$10:$AB$11),2,1)	()	n	1.0
+matrix_family	minverse	16	INDEX(MINVERSE($AA$10:$AB$11),2,2)	()	n	0.0
+matrix_family	mdeterm	17	MDETERM($AA$13:$AB$14)	()	n	0.0
+matrix_family	minverse	18	INDEX(MINVERSE($AA$13:$AB$14),1,1)	()	e	#NUM!
+matrix_family	minverse	19	INDEX(MINVERSE($AA$13:$AB$14),1,2)	()	e	#NUM!
+matrix_family	minverse	20	INDEX(MINVERSE($AA$13:$AB$14),2,1)	()	e	#NUM!
+matrix_family	minverse	21	INDEX(MINVERSE($AA$13:$AB$14),2,2)	()	e	#NUM!
+matrix_family	mdeterm	22	MDETERM($AA$16:$AC$18)	()	n	4.0
+matrix_family	minverse	23	INDEX(MINVERSE($AA$16:$AC$18),1,1)	()	n	0.75
+matrix_family	minverse	24	INDEX(MINVERSE($AA$16:$AC$18),1,2)	()	n	0.5
+matrix_family	minverse	25	INDEX(MINVERSE($AA$16:$AC$18),1,3)	()	n	0.24999999999999997
+matrix_family	minverse	26	INDEX(MINVERSE($AA$16:$AC$18),2,1)	()	n	0.5
+matrix_family	minverse	27	INDEX(MINVERSE($AA$16:$AC$18),2,2)	()	n	1.0
+matrix_family	minverse	28	INDEX(MINVERSE($AA$16:$AC$18),2,3)	()	n	0.49999999999999994
+matrix_family	minverse	29	INDEX(MINVERSE($AA$16:$AC$18),3,1)	()	n	0.24999999999999997
+matrix_family	minverse	30	INDEX(MINVERSE($AA$16:$AC$18),3,2)	()	n	0.49999999999999994
+matrix_family	minverse	31	INDEX(MINVERSE($AA$16:$AC$18),3,3)	()	n	0.7499999999999999
+matrix_family	mdeterm	32	MDETERM($AA$20:$AC$22)	()	n	6.661338147750939e-16
+matrix_family	minverse	33	INDEX(MINVERSE($AA$20:$AC$22),1,1)	()	n	-4503599627370498.0
+matrix_family	minverse	34	INDEX(MINVERSE($AA$20:$AC$22),1,2)	()	n	9007199254740992.0
+matrix_family	minverse	35	INDEX(MINVERSE($AA$20:$AC$22),1,3)	()	n	-4503599627370496.0
+matrix_family	minverse	36	INDEX(MINVERSE($AA$20:$AC$22),2,1)	()	n	9007199254740996.0
+matrix_family	minverse	37	INDEX(MINVERSE($AA$20:$AC$22),2,2)	()	n	-1.8014398509481984e+16
+matrix_family	minverse	38	INDEX(MINVERSE($AA$20:$AC$22),2,3)	()	n	9007199254740991.0
+matrix_family	minverse	39	INDEX(MINVERSE($AA$20:$AC$22),3,1)	()	n	-4503599627370498.0
+matrix_family	minverse	40	INDEX(MINVERSE($AA$20:$AC$22),3,2)	()	n	9007199254740992.0
+matrix_family	minverse	41	INDEX(MINVERSE($AA$20:$AC$22),3,3)	()	n	-4503599627370495.5
+matrix_family	mdeterm	42	MDETERM($AA$24:$AD$27)	()	n	87.99999999999997
+matrix_family	minverse	43	INDEX(MINVERSE($AA$24:$AD$27),1,1)	()	n	0.011363636363636385
+matrix_family	minverse	44	INDEX(MINVERSE($AA$24:$AD$27),1,2)	()	n	-0.2840909090909091
+matrix_family	minverse	45	INDEX(MINVERSE($AA$24:$AD$27),1,3)	()	n	0.4772727272727276
+matrix_family	minverse	46	INDEX(MINVERSE($AA$24:$AD$27),1,4)	()	n	0.11363636363636363
+matrix_family	minverse	47	INDEX(MINVERSE($AA$24:$AD$27),2,1)	()	n	0.07954545454545459
+matrix_family	minverse	48	INDEX(MINVERSE($AA$24:$AD$27),2,2)	()	n	0.011363636363636465
+matrix_family	minverse	49	INDEX(MINVERSE($AA$24:$AD$27),2,3)	()	n	1.3409090909090913
+matrix_family	minverse	50	INDEX(MINVERSE($AA$24:$AD$27),2,4)	()	n	-0.20454545454545459
+matrix_family	minverse	51	INDEX(MINVERSE($AA$24:$AD$27),3,1)	()	n	-0.09090909090909094
+matrix_family	minverse	52	INDEX(MINVERSE($AA$24:$AD$27),3,2)	()	n	0.2727272727272727
+matrix_family	minverse	53	INDEX(MINVERSE($AA$24:$AD$27),3,3)	()	n	-0.8181818181818185
+matrix_family	minverse	54	INDEX(MINVERSE($AA$24:$AD$27),3,4)	()	n	0.09090909090909093
+matrix_family	minverse	55	INDEX(MINVERSE($AA$24:$AD$27),4,1)	()	n	0.29545454545454547
+matrix_family	minverse	56	INDEX(MINVERSE($AA$24:$AD$27),4,2)	()	n	-0.38636363636363635
+matrix_family	minverse	57	INDEX(MINVERSE($AA$24:$AD$27),4,3)	()	n	0.4090909090909092
+matrix_family	minverse	58	INDEX(MINVERSE($AA$24:$AD$27),4,4)	()	n	-0.04545454545454546
+matrix_family	mdeterm	59	MDETERM($AA$29:$AC$31)	()	n	1.0
+matrix_family	minverse	60	INDEX(MINVERSE($AA$29:$AC$31),1,1)	()	n	0.0
+matrix_family	minverse	61	INDEX(MINVERSE($AA$29:$AC$31),1,2)	()	n	1.0
+matrix_family	minverse	62	INDEX(MINVERSE($AA$29:$AC$31),1,3)	()	n	0.0
+matrix_family	minverse	63	INDEX(MINVERSE($AA$29:$AC$31),2,1)	()	n	0.0
+matrix_family	minverse	64	INDEX(MINVERSE($AA$29:$AC$31),2,2)	()	n	0.0
+matrix_family	minverse	65	INDEX(MINVERSE($AA$29:$AC$31),2,3)	()	n	1.0
+matrix_family	minverse	66	INDEX(MINVERSE($AA$29:$AC$31),3,1)	()	n	1.0
+matrix_family	minverse	67	INDEX(MINVERSE($AA$29:$AC$31),3,2)	()	n	0.0
+matrix_family	minverse	68	INDEX(MINVERSE($AA$29:$AC$31),3,3)	()	n	0.0
+matrix_family	mdeterm	69	MDETERM($AA$33:$AB$34)	()	n	2.220446049250313e-16
+matrix_family	minverse	70	INDEX(MINVERSE($AA$33:$AB$34),1,1)	()	n	4503599627370497.0
+matrix_family	minverse	71	INDEX(MINVERSE($AA$33:$AB$34),1,2)	()	n	-4503599627370496.0
+matrix_family	minverse	72	INDEX(MINVERSE($AA$33:$AB$34),2,1)	()	n	-4503599627370496.0
+matrix_family	minverse	73	INDEX(MINVERSE($AA$33:$AB$34),2,2)	()	n	4503599627370496.0
+matrix_family	mdeterm	74	MDETERM($AA$36:$AB$37)	()	n	-1.0
+matrix_family	minverse	75	INDEX(MINVERSE($AA$36:$AB$37),1,1)	()	n	-1.0
+matrix_family	minverse	76	INDEX(MINVERSE($AA$36:$AB$37),1,2)	()	n	1.0
+matrix_family	minverse	77	INDEX(MINVERSE($AA$36:$AB$37),2,1)	()	n	1.0
+matrix_family	minverse	78	INDEX(MINVERSE($AA$36:$AB$37),2,2)	()	n	-1e-20
+matrix_family	mdeterm	79	MDETERM($AA$39:$AB$40)	()	e	#NUM!
+matrix_family	minverse	80	INDEX(MINVERSE($AA$39:$AB$40),1,1)	()	n	-1.9999999999999994e-200
+matrix_family	minverse	81	INDEX(MINVERSE($AA$39:$AB$40),1,2)	()	n	9.999999999999998e-201
+matrix_family	minverse	82	INDEX(MINVERSE($AA$39:$AB$40),2,1)	()	n	1.4999999999999997e-200
+matrix_family	minverse	83	INDEX(MINVERSE($AA$39:$AB$40),2,2)	()	n	-4.999999999999999e-201
+matrix_family	mdeterm	84	MDETERM($AA$42:$AB$43)	()	n	0.0
+matrix_family	minverse	85	INDEX(MINVERSE($AA$42:$AB$43),1,1)	()	n	-1.9999999999999996e+200
+matrix_family	minverse	86	INDEX(MINVERSE($AA$42:$AB$43),1,2)	()	n	9.999999999999998e+199
+matrix_family	minverse	87	INDEX(MINVERSE($AA$42:$AB$43),2,1)	()	n	1.4999999999999996e+200
+matrix_family	minverse	88	INDEX(MINVERSE($AA$42:$AB$43),2,2)	()	n	-4.999999999999998e+199
+matrix_family	mdeterm	89	MDETERM($AA$45:$AA$45)	()	n	1e+308
+matrix_family	minverse	90	INDEX(MINVERSE($AA$45:$AA$45),1,1)	()	n	0.0
+matrix_family	mdeterm	91	MDETERM($AA$47:$AA$47)	()	n	0.0
+matrix_family	minverse	92	INDEX(MINVERSE($AA$47:$AA$47),1,1)	()	e	#NUM!
+matrix_family	mdeterm	93	MDETERM($AA$49:$AC$51)	()	n	0.00046296296296296135
+matrix_family	minverse	94	INDEX(MINVERSE($AA$49:$AC$51),1,1)	()	n	9.000000000000028
+matrix_family	minverse	95	INDEX(MINVERSE($AA$49:$AC$51),1,2)	()	n	-36.00000000000014
+matrix_family	minverse	96	INDEX(MINVERSE($AA$49:$AC$51),1,3)	()	n	30.000000000000128
+matrix_family	minverse	97	INDEX(MINVERSE($AA$49:$AC$51),2,1)	()	n	-36.00000000000014
+matrix_family	minverse	98	INDEX(MINVERSE($AA$49:$AC$51),2,2)	()	n	192.0000000000007
+matrix_family	minverse	99	INDEX(MINVERSE($AA$49:$AC$51),2,3)	()	n	-180.00000000000063
+matrix_family	minverse	100	INDEX(MINVERSE($AA$49:$AC$51),3,1)	()	n	30.00000000000013
+matrix_family	minverse	101	INDEX(MINVERSE($AA$49:$AC$51),3,2)	()	n	-180.00000000000065
+matrix_family	minverse	102	INDEX(MINVERSE($AA$49:$AC$51),3,3)	()	n	180.00000000000057
+matrix_family	mdeterm	103	MDETERM($AA$53:$AD$56)	()	n	1.6534391534393e-07
+matrix_family	minverse	104	INDEX(MINVERSE($AA$53:$AD$56),1,1)	()	n	15.999999999999297
+matrix_family	minverse	105	INDEX(MINVERSE($AA$53:$AD$56),1,2)	()	n	-119.99999999999164
+matrix_family	minverse	106	INDEX(MINVERSE($AA$53:$AD$56),1,3)	()	n	239.9999999999793
+matrix_family	minverse	107	INDEX(MINVERSE($AA$53:$AD$56),1,4)	()	n	-139.99999999998636
+matrix_family	minverse	108	INDEX(MINVERSE($AA$53:$AD$56),2,1)	()	n	-119.99999999999176
+matrix_family	minverse	109	INDEX(MINVERSE($AA$53:$AD$56),2,2)	()	n	1199.9999999999013
+matrix_family	minverse	110	INDEX(MINVERSE($AA$53:$AD$56),2,3)	()	n	-2699.9999999997563
+matrix_family	minverse	111	INDEX(MINVERSE($AA$53:$AD$56),2,4)	()	n	1679.9999999998388
+matrix_family	minverse	112	INDEX(MINVERSE($AA$53:$AD$56),3,1)	()	n	239.99999999997976
+matrix_family	minverse	113	INDEX(MINVERSE($AA$53:$AD$56),3,2)	()	n	-2699.999999999758
+matrix_family	minverse	114	INDEX(MINVERSE($AA$53:$AD$56),3,3)	()	n	6479.9999999994025
+matrix_family	minverse	115	INDEX(MINVERSE($AA$53:$AD$56),3,4)	()	n	-4199.999999999606
+matrix_family	minverse	116	INDEX(MINVERSE($AA$53:$AD$56),4,1)	()	n	-139.99999999998667
+matrix_family	minverse	117	INDEX(MINVERSE($AA$53:$AD$56),4,2)	()	n	1679.999999999841
+matrix_family	minverse	118	INDEX(MINVERSE($AA$53:$AD$56),4,3)	()	n	-4199.999999999608
+matrix_family	minverse	119	INDEX(MINVERSE($AA$53:$AD$56),4,4)	()	n	2799.999999999742
+matrix_family	mdeterm	120	MDETERM($AA$58:$AE$62)	()	n	3.7492951325152245e-12
+matrix_family	minverse	121	INDEX(MINVERSE($AA$58:$AE$62),1,1)	()	n	24.9999999999919
+matrix_family	minverse	122	INDEX(MINVERSE($AA$58:$AE$62),1,2)	()	n	-299.9999999998822
+matrix_family	minverse	123	INDEX(MINVERSE($AA$58:$AE$62),1,3)	()	n	1049.9999999995835
+matrix_family	minverse	124	INDEX(MINVERSE($AA$58:$AE$62),1,4)	()	n	-1399.9999999994616
+matrix_family	minverse	125	INDEX(MINVERSE($AA$58:$AE$62),1,5)	()	n	629.9999999997744
+matrix_family	minverse	126	INDEX(MINVERSE($AA$58:$AE$62),2,1)	()	n	-299.99999999987847
+matrix_family	minverse	127	INDEX(MINVERSE($AA$58:$AE$62),2,2)	()	n	4799.999999998405
+matrix_family	minverse	128	INDEX(MINVERSE($AA$58:$AE$62),2,3)	()	n	-18899.999999994987
+matrix_family	minverse	129	INDEX(MINVERSE($AA$58:$AE$62),2,4)	()	n	26879.999999994343
+matrix_family	minverse	130	INDEX(MINVERSE($AA$58:$AE$62),2,5)	()	n	-12599.99999999793
+matrix_family	minverse	131	INDEX(MINVERSE($AA$58:$AE$62),3,1)	()	n	1049.9999999995548
+matrix_family	minverse	132	INDEX(MINVERSE($AA$58:$AE$62),3,2)	()	n	-18899.999999994736
+matrix_family	minverse	133	INDEX(MINVERSE($AA$58:$AE$62),3,3)	()	n	79379.9999999856
+matrix_family	minverse	134	INDEX(MINVERSE($AA$58:$AE$62),3,4)	()	n	-117599.99999998687
+matrix_family	minverse	135	INDEX(MINVERSE($AA$58:$AE$62),3,5)	()	n	56699.99999999666
+matrix_family	minverse	136	INDEX(MINVERSE($AA$58:$AE$62),4,1)	()	n	-1399.9999999994084
+matrix_family	minverse	137	INDEX(MINVERSE($AA$58:$AE$62),4,2)	()	n	26879.999999993695
+matrix_family	minverse	138	INDEX(MINVERSE($AA$58:$AE$62),4,3)	()	n	-117599.9999999856
+matrix_family	minverse	139	INDEX(MINVERSE($AA$58:$AE$62),4,4)	()	n	179199.99999999156
+matrix_family	minverse	140	INDEX(MINVERSE($AA$58:$AE$62),4,5)	()	n	-88200.00000000063
+matrix_family	minverse	141	INDEX(MINVERSE($AA$58:$AE$62),5,1)	()	n	629.9999999997392
+matrix_family	minverse	142	INDEX(MINVERSE($AA$58:$AE$62),5,2)	()	n	-12599.999999997495
+matrix_family	minverse	143	INDEX(MINVERSE($AA$58:$AE$62),5,3)	()	n	56699.99999999555
+matrix_family	minverse	144	INDEX(MINVERSE($AA$58:$AE$62),5,4)	()	n	-88199.99999999988
+matrix_family	minverse	145	INDEX(MINVERSE($AA$58:$AE$62),5,5)	()	n	44100.0000000023
+matrix_family	mdeterm	146	MDETERM($AA$64:$AF$69)	()	n	5.367299886816843e-18
+matrix_family	minverse	147	INDEX(MINVERSE($AA$64:$AF$69),1,1)	()	n	36.000000001212925
+matrix_family	mdeterm	148	MDETERM($AA$71:$AG$77)	()	n	4.835802607684246e-25
+matrix_family	minverse	149	INDEX(MINVERSE($AA$71:$AG$77),1,1)	()	n	49.00000005986885
+matrix_family	mdeterm	150	MDETERM($AA$79:$AB$80)	()	n	0.10082156511226444
+matrix_family	minverse	151	INDEX(MINVERSE($AA$79:$AB$80),1,1)	()	n	-1.504529483120975
+matrix_family	minverse	152	INDEX(MINVERSE($AA$79:$AB$80),1,2)	()	n	0.2021381207970243
+matrix_family	minverse	153	INDEX(MINVERSE($AA$79:$AB$80),2,1)	()	n	-2.3625780711489397
+matrix_family	minverse	154	INDEX(MINVERSE($AA$79:$AB$80),2,2)	()	n	-6.275015526289413
+matrix_family	mdeterm	155	MDETERM($AA$82:$AC$84)	()	n	-0.3464172005835553
+matrix_family	minverse	156	INDEX(MINVERSE($AA$82:$AC$84),1,1)	()	n	1.635219221658874
+matrix_family	minverse	157	INDEX(MINVERSE($AA$82:$AC$84),1,2)	()	n	2.1218938394677607
+matrix_family	minverse	158	INDEX(MINVERSE($AA$82:$AC$84),1,3)	()	n	-0.05947722076235416
+matrix_family	minverse	159	INDEX(MINVERSE($AA$82:$AC$84),2,1)	()	n	2.4355281430717435
+matrix_family	minverse	160	INDEX(MINVERSE($AA$82:$AC$84),2,2)	()	n	2.62530372957404
+matrix_family	minverse	161	INDEX(MINVERSE($AA$82:$AC$84),2,3)	()	n	-1.0990263594083425
+matrix_family	minverse	162	INDEX(MINVERSE($AA$82:$AC$84),3,1)	()	n	0.3115480609063751
+matrix_family	minverse	163	INDEX(MINVERSE($AA$82:$AC$84),3,2)	()	n	-0.7914409851693043
+matrix_family	minverse	164	INDEX(MINVERSE($AA$82:$AC$84),3,3)	()	n	1.0298617859437258
+matrix_family	mdeterm	165	MDETERM($AA$86:$AD$89)	()	n	-0.049423926170374805
+matrix_family	minverse	166	INDEX(MINVERSE($AA$86:$AD$89),1,1)	()	n	-1.565777184650206
+matrix_family	minverse	167	INDEX(MINVERSE($AA$86:$AD$89),1,2)	()	n	9.766912263805825
+matrix_family	minverse	168	INDEX(MINVERSE($AA$86:$AD$89),1,3)	()	n	5.619138570430461
+matrix_family	minverse	169	INDEX(MINVERSE($AA$86:$AD$89),1,4)	()	n	-1.8388901458299163
+matrix_family	minverse	170	INDEX(MINVERSE($AA$86:$AD$89),2,1)	()	n	-2.0698641629226597
+matrix_family	minverse	171	INDEX(MINVERSE($AA$86:$AD$89),2,2)	()	n	11.034945961122162
+matrix_family	minverse	172	INDEX(MINVERSE($AA$86:$AD$89),2,3)	()	n	6.082222535812511
+matrix_family	minverse	173	INDEX(MINVERSE($AA$86:$AD$89),2,4)	()	n	-3.0514711476188467
+matrix_family	minverse	174	INDEX(MINVERSE($AA$86:$AD$89),3,1)	()	n	1.7180365424583093
+matrix_family	minverse	175	INDEX(MINVERSE($AA$86:$AD$89),3,2)	()	n	-2.0954589964842985
+matrix_family	minverse	176	INDEX(MINVERSE($AA$86:$AD$89),3,3)	()	n	-1.8172928615136814
+matrix_family	minverse	177	INDEX(MINVERSE($AA$86:$AD$89),3,4)	()	n	0.17136827575090283
+matrix_family	minverse	178	INDEX(MINVERSE($AA$86:$AD$89),4,1)	()	n	0.7261245360509753
+matrix_family	minverse	179	INDEX(MINVERSE($AA$86:$AD$89),4,2)	()	n	2.1753550985258503
+matrix_family	minverse	180	INDEX(MINVERSE($AA$86:$AD$89),4,3)	()	n	-0.3242821984643533
+matrix_family	minverse	181	INDEX(MINVERSE($AA$86:$AD$89),4,4)	()	n	0.3532204704357989
+matrix_family	mdeterm	182	MDETERM($AA$91:$AE$95)	()	n	0.33309242433721836
+matrix_family	minverse	183	INDEX(MINVERSE($AA$91:$AE$95),1,1)	()	n	-0.2915594004069778
+matrix_family	minverse	184	INDEX(MINVERSE($AA$91:$AE$95),1,2)	()	n	0.7409881732634174
+matrix_family	minverse	185	INDEX(MINVERSE($AA$91:$AE$95),1,3)	()	n	-1.6990505423146536
+matrix_family	minverse	186	INDEX(MINVERSE($AA$91:$AE$95),1,4)	()	n	3.092878490959286
+matrix_family	minverse	187	INDEX(MINVERSE($AA$91:$AE$95),1,5)	()	n	0.5604362476611034
+matrix_family	minverse	188	INDEX(MINVERSE($AA$91:$AE$95),2,1)	()	n	-0.3445754039759705
+matrix_family	minverse	189	INDEX(MINVERSE($AA$91:$AE$95),2,2)	()	n	-0.6808676660199576
+matrix_family	minverse	190	INDEX(MINVERSE($AA$91:$AE$95),2,3)	()	n	0.5200729646333339
+matrix_family	minverse	191	INDEX(MINVERSE($AA$91:$AE$95),2,4)	()	n	-0.41765710934730305
+matrix_family	minverse	192	INDEX(MINVERSE($AA$91:$AE$95),2,5)	()	n	0.37814866276726694
+matrix_family	minverse	193	INDEX(MINVERSE($AA$91:$AE$95),3,1)	()	n	1.1568649922804095
+matrix_family	minverse	194	INDEX(MINVERSE($AA$91:$AE$95),3,2)	()	n	1.8784335171285869
+matrix_family	minverse	195	INDEX(MINVERSE($AA$91:$AE$95),3,3)	()	n	-0.4803434687158357
+matrix_family	minverse	196	INDEX(MINVERSE($AA$91:$AE$95),3,4)	()	n	2.397247650017002
+matrix_family	minverse	197	INDEX(MINVERSE($AA$91:$AE$95),3,5)	()	n	1.0427376941535202
+matrix_family	minverse	198	INDEX(MINVERSE($AA$91:$AE$95),4,1)	()	n	-0.9729112573879818
+matrix_family	minverse	199	INDEX(MINVERSE($AA$91:$AE$95),4,2)	()	n	-0.4129240556512218
+matrix_family	minverse	200	INDEX(MINVERSE($AA$91:$AE$95),4,3)	()	n	-0.04866910094874427
+matrix_family	minverse	201	INDEX(MINVERSE($AA$91:$AE$95),4,4)	()	n	0.4409075042322307
+matrix_family	minverse	202	INDEX(MINVERSE($AA$91:$AE$95),4,5)	()	n	-0.6117286613653306
+matrix_family	minverse	203	INDEX(MINVERSE($AA$91:$AE$95),5,1)	()	n	0.4384839729641829
+matrix_family	minverse	204	INDEX(MINVERSE($AA$91:$AE$95),5,2)	()	n	-0.9876090825423331
+matrix_family	minverse	205	INDEX(MINVERSE($AA$91:$AE$95),5,3)	()	n	1.0570983156606322
+matrix_family	minverse	206	INDEX(MINVERSE($AA$91:$AE$95),5,4)	()	n	-1.8128390225151365
+matrix_family	minverse	207	INDEX(MINVERSE($AA$91:$AE$95),5,5)	()	n	-0.8320786330444715
+matrix_family	mdeterm	208	MDETERM($AA$97:$AF$102)	()	n	-0.5121788533356377
+matrix_family	minverse	209	INDEX(MINVERSE($AA$97:$AF$102),1,1)	()	n	-0.1189616421881668
+matrix_family	mdeterm	210	MDETERM($AA$104:$AG$110)	()	n	-0.445760392128027
+matrix_family	minverse	211	INDEX(MINVERSE($AA$104:$AG$110),1,1)	()	n	0.28969535880191644
+matrix_family	mdeterm	212	MDETERM($AA$112:$AH$119)	()	n	0.3956735340944687
+matrix_family	minverse	213	INDEX(MINVERSE($AA$112:$AH$119),1,1)	()	n	6.230121360077219
+matrix_family	mdeterm	214	MDETERM($AA$121:$AC$123)	()	n	483.0000000000001
+matrix_family	minverse	215	INDEX(MINVERSE($AA$121:$AC$123),1,1)	()	n	0.0082815734989648
+matrix_family	minverse	216	INDEX(MINVERSE($AA$121:$AC$123),1,2)	()	n	-0.14078674948240166
+matrix_family	minverse	217	INDEX(MINVERSE($AA$121:$AC$123),1,3)	()	n	0.15527950310559005
+matrix_family	minverse	218	INDEX(MINVERSE($AA$121:$AC$123),2,1)	()	n	0.049689440993788817
+matrix_family	minverse	219	INDEX(MINVERSE($AA$121:$AC$123),2,2)	()	n	0.15527950310559005
+matrix_family	minverse	220	INDEX(MINVERSE($AA$121:$AC$123),2,3)	()	n	-0.06832298136645962
+matrix_family	minverse	221	INDEX(MINVERSE($AA$121:$AC$123),3,1)	()	n	-0.11801242236024843
+matrix_family	minverse	222	INDEX(MINVERSE($AA$121:$AC$123),3,2)	()	n	0.006211180124223604
+matrix_family	minverse	223	INDEX(MINVERSE($AA$121:$AC$123),3,3)	()	n	0.03726708074534161
+matrix_family	mdeterm	224	MDETERM($AA$125:$AE$129)	()	n	-46884.999999999985
+matrix_family	minverse	225	INDEX(MINVERSE($AA$125:$AE$129),1,1)	()	n	-0.05372720486296257
+matrix_family	minverse	226	INDEX(MINVERSE($AA$125:$AE$129),1,2)	()	n	0.028068678681881183
+matrix_family	minverse	227	INDEX(MINVERSE($AA$125:$AE$129),1,3)	()	n	0.009619281220006385
+matrix_family	minverse	228	INDEX(MINVERSE($AA$125:$AE$129),1,4)	()	n	-0.05042124346806014
+matrix_family	minverse	229	INDEX(MINVERSE($AA$125:$AE$129),1,5)	()	n	0.08111336248267037
+matrix_family	minverse	230	INDEX(MINVERSE($AA$125:$AE$129),2,1)	()	n	-0.01411965447371227
+matrix_family	minverse	231	INDEX(MINVERSE($AA$125:$AE$129),2,2)	()	n	-0.08909032739682202
+matrix_family	minverse	232	INDEX(MINVERSE($AA$125:$AE$129),2,3)	()	n	0.011261597525861176
+matrix_family	minverse	233	INDEX(MINVERSE($AA$125:$AE$129),2,4)	()	n	0.014140983256905187
+matrix_family	minverse	234	INDEX(MINVERSE($AA$125:$AE$129),2,5)	()	n	-0.1001599658739469
+matrix_family	minverse	235	INDEX(MINVERSE($AA$125:$AE$129),3,1)	()	n	-0.06895595606270662
+matrix_family	minverse	236	INDEX(MINVERSE($AA$125:$AE$129),3,2)	()	n	0.016572464540897933
+matrix_family	minverse	237	INDEX(MINVERSE($AA$125:$AE$129),3,3)	()	n	0.04291351178415271
+matrix_family	minverse	238	INDEX(MINVERSE($AA$125:$AE$129),3,4)	()	n	0.07661298922896448
+matrix_family	minverse	239	INDEX(MINVERSE($AA$125:$AE$129),3,5)	()	n	0.042572251253066004
+matrix_family	minverse	240	INDEX(MINVERSE($AA$125:$AE$129),4,1)	()	n	-0.10790231417297645
+matrix_family	minverse	241	INDEX(MINVERSE($AA$125:$AE$129),4,2)	()	n	0.20285805694785117
+matrix_family	minverse	242	INDEX(MINVERSE($AA$125:$AE$129),4,3)	()	n	-0.06801748960221822
+matrix_family	minverse	243	INDEX(MINVERSE($AA$125:$AE$129),4,4)	()	n	0.07936440226085102
+matrix_family	minverse	244	INDEX(MINVERSE($AA$125:$AE$129),4,5)	()	n	0.014034339340940618
+matrix_family	minverse	245	INDEX(MINVERSE($AA$125:$AE$129),5,1)	()	n	0.03566172549856033
+matrix_family	minverse	246	INDEX(MINVERSE($AA$125:$AE$129),5,2)	()	n	-0.11033379545696922
+matrix_family	minverse	247	INDEX(MINVERSE($AA$125:$AE$129),5,3)	()	n	0.137719953076677
+matrix_family	minverse	248	INDEX(MINVERSE($AA$125:$AE$129),5,4)	()	n	-0.014567558920763592
+matrix_family	minverse	249	INDEX(MINVERSE($AA$125:$AE$129),5,5)	()	n	-0.058206249333475554
+matrix_family	mdeterm	250	MDETERM($AA$131:$AC$133)	()	n	0.0001351171280699347
+matrix_family	minverse	251	INDEX(MINVERSE($AA$131:$AC$133),1,1)	()	n	-17.72981178522678
+matrix_family	minverse	252	INDEX(MINVERSE($AA$131:$AC$133),1,2)	()	n	-32437.77971233765
+matrix_family	minverse	253	INDEX(MINVERSE($AA$131:$AC$133),1,3)	()	n	0.015003055319258107
+matrix_family	minverse	254	INDEX(MINVERSE($AA$131:$AC$133),2,1)	()	n	-12.346568020393237
+matrix_family	minverse	255	INDEX(MINVERSE($AA$131:$AC$133),2,2)	()	n	-22795.07129750188
+matrix_family	minverse	256	INDEX(MINVERSE($AA$131:$AC$133),2,3)	()	n	7.998585664492769e-07
+matrix_family	minverse	257	INDEX(MINVERSE($AA$131:$AC$133),3,1)	()	n	-0.010626917987216064
+matrix_family	minverse	258	INDEX(MINVERSE($AA$131:$AC$133),3,2)	()	n	-39976.96112035785
+matrix_family	minverse	259	INDEX(MINVERSE($AA$131:$AC$133),3,3)	()	n	1.4013802149166195e-06
+matrix_family	mdeterm	260	MDETERM($AA$135:$AD$138)	()	n	3431948413499509.5
+matrix_family	minverse	261	INDEX(MINVERSE($AA$135:$AD$138),1,1)	()	n	0.29090913572001664
+matrix_family	minverse	262	INDEX(MINVERSE($AA$135:$AD$138),1,2)	()	n	-1.293821997056631e-07
+matrix_family	minverse	263	INDEX(MINVERSE($AA$135:$AD$138),1,3)	()	n	4.497754516167763e-08
+matrix_family	minverse	264	INDEX(MINVERSE($AA$135:$AD$138),1,4)	()	n	6.757884322608541e-07
+matrix_family	minverse	265	INDEX(MINVERSE($AA$135:$AD$138),2,1)	()	n	-0.0011509637063541603
+matrix_family	minverse	266	INDEX(MINVERSE($AA$135:$AD$138),2,2)	()	n	0.0026690968131146183
+matrix_family	minverse	267	INDEX(MINVERSE($AA$135:$AD$138),2,3)	()	n	-1.7795066635449528e-10
+matrix_family	minverse	268	INDEX(MINVERSE($AA$135:$AD$138),2,4)	()	n	7.722688649026036e-11
+matrix_family	minverse	269	INDEX(MINVERSE($AA$135:$AD$138),3,1)	()	n	-0.010329994024890179
+matrix_family	minverse	270	INDEX(MINVERSE($AA$135:$AD$138),3,2)	()	n	5.200238666717516e-11
+matrix_family	minverse	271	INDEX(MINVERSE($AA$135:$AD$138),3,3)	()	n	-1.5971233376361725e-09
+matrix_family	minverse	272	INDEX(MINVERSE($AA$135:$AD$138),3,4)	()	n	-1.853076159000333e-13
+matrix_family	minverse	273	INDEX(MINVERSE($AA$135:$AD$138),4,1)	()	n	-6.605769633950816e-07
+matrix_family	minverse	274	INDEX(MINVERSE($AA$135:$AD$138),4,2)	()	n	7.530213059362611e-07
+matrix_family	minverse	275	INDEX(MINVERSE($AA$135:$AD$138),4,3)	()	n	-1.5638224853082434e-05
+matrix_family	minverse	276	INDEX(MINVERSE($AA$135:$AD$138),4,4)	()	n	-7.584234595978174e-13
+matrix_family	mdeterm	277	MDETERM($AA$140:$AB$141)	()	e	#VALUE!
+matrix_family	minverse	278	INDEX(MINVERSE($AA$140:$AB$141),1,1)	()	e	#VALUE!
+matrix_family	minverse	279	INDEX(MINVERSE($AA$140:$AB$141),1,2)	()	e	#VALUE!
+matrix_family	minverse	280	INDEX(MINVERSE($AA$140:$AB$141),2,1)	()	e	#VALUE!
+matrix_family	minverse	281	INDEX(MINVERSE($AA$140:$AB$141),2,2)	()	e	#VALUE!
+matrix_family	mdeterm	282	MDETERM($AA$143:$AB$144)	()	e	#VALUE!
+matrix_family	minverse	283	INDEX(MINVERSE($AA$143:$AB$144),1,1)	()	e	#VALUE!
+matrix_family	minverse	284	INDEX(MINVERSE($AA$143:$AB$144),1,2)	()	e	#VALUE!
+matrix_family	minverse	285	INDEX(MINVERSE($AA$143:$AB$144),2,1)	()	e	#VALUE!
+matrix_family	minverse	286	INDEX(MINVERSE($AA$143:$AB$144),2,2)	()	e	#VALUE!
+matrix_family	mdeterm	287	MDETERM($AA$146:$AB$147)	()	e	#VALUE!
+matrix_family	minverse	288	INDEX(MINVERSE($AA$146:$AB$147),1,1)	()	e	#VALUE!
+matrix_family	minverse	289	INDEX(MINVERSE($AA$146:$AB$147),1,2)	()	e	#VALUE!
+matrix_family	minverse	290	INDEX(MINVERSE($AA$146:$AB$147),2,1)	()	e	#VALUE!
+matrix_family	minverse	291	INDEX(MINVERSE($AA$146:$AB$147),2,2)	()	e	#VALUE!
+matrix_family	mdeterm	292	MDETERM($AA$149:$AB$150)	()	e	#N/A
+matrix_family	minverse	293	INDEX(MINVERSE($AA$149:$AB$150),1,1)	()	e	#N/A
+matrix_family	minverse	294	INDEX(MINVERSE($AA$149:$AB$150),1,2)	()	e	#N/A
+matrix_family	minverse	295	INDEX(MINVERSE($AA$149:$AB$150),2,1)	()	e	#N/A
+matrix_family	minverse	296	INDEX(MINVERSE($AA$149:$AB$150),2,2)	()	e	#N/A
+matrix_family	mdeterm	297	MDETERM($AA$152:$AB$153)	()	e	#VALUE!
+matrix_family	minverse	298	INDEX(MINVERSE($AA$152:$AB$153),1,1)	()	e	#VALUE!
+matrix_family	minverse	299	INDEX(MINVERSE($AA$152:$AB$153),1,2)	()	e	#VALUE!
+matrix_family	minverse	300	INDEX(MINVERSE($AA$152:$AB$153),2,1)	()	e	#VALUE!
+matrix_family	minverse	301	INDEX(MINVERSE($AA$152:$AB$153),2,2)	()	e	#VALUE!
+matrix_family	mdeterm	302	MDETERM($AA$155:$AC$156)	()	e	#VALUE!
+matrix_family	minverse	303	INDEX(MINVERSE($AA$155:$AC$156),1,1)	()	e	#VALUE!
+matrix_family	minverse	304	INDEX(MINVERSE($AA$64:$AF$69),1,6)	()	n	-2772.000000299682
+matrix_family	minverse	305	INDEX(MINVERSE($AA$64:$AF$69),6,1)	()	n	-2772.000000288425
+matrix_family	minverse	306	INDEX(MINVERSE($AA$71:$AG$77),1,7)	()	n	12012.000046973582
+matrix_family	minverse	307	INDEX(MINVERSE($AA$71:$AG$77),7,1)	()	n	12012.000046247314
+matrix_family	minverse	308	INDEX(MINVERSE($AA$97:$AF$102),1,6)	()	n	0.2178628399928669
+matrix_family	minverse	309	INDEX(MINVERSE($AA$97:$AF$102),6,1)	()	n	-1.0959858256075696
+matrix_family	minverse	310	INDEX(MINVERSE($AA$104:$AG$110),1,7)	()	n	0.5509565740017407
+matrix_family	minverse	311	INDEX(MINVERSE($AA$104:$AG$110),7,1)	()	n	0.8639468104333097
+matrix_family	minverse	312	INDEX(MINVERSE($AA$112:$AH$119),1,8)	()	n	2.524117059462462
+matrix_family	minverse	313	INDEX(MINVERSE($AA$112:$AH$119),8,1)	()	n	-6.306460851980626
+matrix_family	mdeterm	314	MDETERM(5)	()	n	5.0
+matrix_family	mdeterm	315	MDETERM("5")	()	e	#VALUE!
+matrix_family	mdeterm	316	MDETERM(TRUE)	()	e	#VALUE!
+matrix_family	mdeterm	317	MDETERM(#N/A)	()	e	#N/A
+matrix_family	mdeterm	318	MDETERM({1,2;3,4})	()	n	-2.0
+matrix_family	mdeterm	319	MDETERM({1,2})	()	e	#VALUE!
+matrix_family	mdeterm	320	MDETERM({1.0})	()	n	1.0
+matrix_family	mdeterm	321	MDETERM($AA$1)	()	n	5.0
+matrix_family	mdeterm	322	MDETERM($ZZ$1)	()	e	#VALUE!
+matrix_family	mdeterm	323	MDETERM("x")	()	e	#VALUE!
+matrix_family	mdeterm	324	MDETERM(_xlfn.MUNIT(3))	()	n	1.0
+matrix_family	mdeterm	325	MDETERM(MMULT($AA$7:$AB$8,$AA$7:$AB$8))	()	n	4.000000000000012
+matrix_family	minverse	326	INDEX(MINVERSE(4),1,1)	()	n	0.25
+matrix_family	minverse	327	INDEX(MINVERSE({4.0}),1,1)	()	n	0.25
+matrix_family	minverse	328	INDEX(MINVERSE(0),1,1)	()	e	#NUM!
+matrix_family	minverse	329	INDEX(MINVERSE("4"),1,1)	()	e	#VALUE!
+matrix_family	minverse	330	INDEX(MINVERSE(#N/A),1,1)	()	e	#N/A
+matrix_family	minverse	331	MINVERSE({1,2;3,4})	()	n	-1.9999999999999998
+matrix_family	minverse	332	INDEX(MINVERSE({1,2;3,4}),2,1)	()	n	1.4999999999999998
+matrix_family	minverse	333	ROWS(MINVERSE({1,2;3,4}))	()	n	2.0
+matrix_family	minverse	334	SUM(MINVERSE(_xlfn.MUNIT(4)))	()	n	4.0
+matrix_family	minverse	335	INDEX(MINVERSE($ZZ$1),1,1)	()	e	#VALUE!
+matrix_family	munit	336	INDEX(_xlfn.MUNIT(1),1,1)	()	n	1.0
+matrix_family	munit	337	INDEX(_xlfn.MUNIT(3),2,2)	()	n	1.0
+matrix_family	munit	338	INDEX(_xlfn.MUNIT(3),1,3)	()	n	0.0
+matrix_family	munit	339	_xlfn.MUNIT(0)	()	e	#VALUE!
+matrix_family	munit	340	_xlfn.MUNIT(-1)	()	e	#VALUE!
+matrix_family	munit	341	ROWS(_xlfn.MUNIT(2.7))	()	n	2.0
+matrix_family	munit	342	ROWS(_xlfn.MUNIT("3"))	()	n	3.0
+matrix_family	munit	343	ROWS(_xlfn.MUNIT(TRUE))	()	n	1.0
+matrix_family	munit	344	_xlfn.MUNIT(#N/A)	()	e	#N/A
+matrix_family	munit	345	ROWS(_xlfn.MUNIT("x"))	()	e	#VALUE!
+matrix_family	munit	346	SUM(_xlfn.MUNIT(5))	()	n	5.0
+matrix_family	munit	347	ROWS(_xlfn.MUNIT(1000))	()	n	1000.0
+matrix_family	munit	348	COLUMNS(_xlfn.MUNIT(7))	()	n	7.0
+matrix_family	munit	349	_xlfn.MUNIT(0.5)	()	e	#VALUE!
+matrix_family	munit	350	_xlfn.MUNIT(1)	()	n	1.0
+matrix_family	munit	351	_xlfn.MUNIT($ZZ$1)	()	e	#VALUE!
+matrix_family	munit	352	SUM(_xlfn.MUNIT({2,3}))	()	n	2.0
+matrix_family	munit	353	ROWS(_xlfn.MUNIT(1E-300))	()	e	#VALUE!
+matrix_family	mdeterm	354	MDETERM(_xlfn.MUNIT(1))	()	n	1.0
+matrix_family	minverse	355	INDEX(MINVERSE(_xlfn.MUNIT(1)),1,1)	()	n	1.0
+matrix_family	mdeterm	356	MDETERM(_xlfn.SEQUENCE(1))	()	n	1.0
+matrix_family	mdeterm	357	MDETERM(--{5.0})	()	n	5.0
+matrix_family	mdeterm	358	MDETERM(INDEX({5.0},1,1))	()	n	5.0
+matrix_family	mmult	359	MMULT({2.0},{3.0})	()	n	6.0
+matrix_family	mmult	360	MMULT(_xlfn.MUNIT(1),2)	()	n	2.0

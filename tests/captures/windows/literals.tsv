@@ -1,0 +1,441 @@
+# suite: literals
+# generator: capture/suites.py:literals, capture/job.py
+# method: the job beside this file (literals.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "literals.xlsx": {
+#      "bytes": 5993,
+#      "sha256": "1df33733628b41e06c643eaf69b3719b27710d41601f88c72f132cf60865c608"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261124-100330-literals",
+#    "manifest_sha256": "07560fc59fecb58986ac70bd5b95733ab8874b768ae592d8b8fa13a1a287b7d5",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+literals	literal:{x}	1	0.1234567890123456	()	n	0.123456789012345
+literals	literal:{x}	2	0.12345678901234567	()	n	0.123456789012345
+literals	literal:{x}	3	0.123456789012345678	()	n	0.123456789012345
+literals	literal:{x}	4	0.99999999999999999	()	n	0.999999999999999
+literals	literal:{x}	5	0.9999999999999999	()	n	0.999999999999999
+literals	literal:{x}	6	1.0000000000000009	()	n	1.0
+literals	literal:{x}	7	1.00000000000000000001	()	n	1.0
+literals	literal:{x}	8	123456789012345678	()	n	1.23456789012345e+17
+literals	literal:{x}	9	12345678901234567890	()	n	1.23456789012345e+19
+literals	literal:{x}	10	9007199254740993	()	n	9007199254740990.0
+literals	literal:{x}	11	1234567890123456.7	()	n	1234567890123450.0
+literals	literal:{x}	12	2.6749999999999999	()	n	2.67499999999999
+literals	literal:{x}	13	1.234567890123456789E+20	()	n	1.23456789012345e+20
+literals	literal:{x}	14	1.2345678901234567E-300	()	n	1.23456789012345e-300
+literals	literal:{x}	15	0.000000000000000012345678901234567	()	n	1.23456789012345e-17
+literals	literal:{x}	16	3.14159265358979323846	()	n	3.14159265358979
+literals	literal:{x}	17	0.123456789012345	()	n	0.123456789012345
+literals	literal:{x}	18	0.30000000000000004	()	n	0.3
+literals	literal:-{x}	19	-0.1234567890123456	()	n	-0.123456789012345
+literals	literal:-{x}	20	-0.12345678901234567	()	n	-0.123456789012345
+literals	literal:-{x}	21	-0.123456789012345678	()	n	-0.123456789012345
+literals	literal:-{x}	22	-0.99999999999999999	()	n	-0.999999999999999
+literals	literal:-{x}	23	-0.9999999999999999	()	n	-0.999999999999999
+literals	literal:-{x}	24	-1.0000000000000009	()	n	-1.0
+literals	literal:-{x}	25	-1.00000000000000000001	()	n	-1.0
+literals	literal:-{x}	26	-123456789012345678	()	n	-1.23456789012345e+17
+literals	literal:-{x}	27	-12345678901234567890	()	n	-1.23456789012345e+19
+literals	literal:-{x}	28	-9007199254740993	()	n	-9007199254740990.0
+literals	literal:-{x}	29	-1234567890123456.7	()	n	-1234567890123450.0
+literals	literal:-{x}	30	-2.6749999999999999	()	n	-2.67499999999999
+literals	literal:-{x}	31	-1.234567890123456789E+20	()	n	-1.23456789012345e+20
+literals	literal:-{x}	32	-1.2345678901234567E-300	()	n	-1.23456789012345e-300
+literals	literal:-{x}	33	-0.000000000000000012345678901234567	()	n	-1.23456789012345e-17
+literals	literal:-{x}	34	-3.14159265358979323846	()	n	-3.14159265358979
+literals	literal:-{x}	35	-0.123456789012345	()	n	-0.123456789012345
+literals	literal:-{x}	36	-0.30000000000000004	()	n	-0.3
+literals	literal:{x}*1	37	0.1234567890123456*1	()	n	0.123456789012345
+literals	literal:{x}*1	38	0.12345678901234567*1	()	n	0.123456789012345
+literals	literal:{x}*1	39	0.123456789012345678*1	()	n	0.123456789012345
+literals	literal:{x}*1	40	0.99999999999999999*1	()	n	0.999999999999999
+literals	literal:{x}*1	41	0.9999999999999999*1	()	n	0.999999999999999
+literals	literal:{x}*1	42	1.0000000000000009*1	()	n	1.0
+literals	literal:{x}*1	43	1.00000000000000000001*1	()	n	1.0
+literals	literal:{x}*1	44	123456789012345678*1	()	n	1.23456789012345e+17
+literals	literal:{x}*1	45	12345678901234567890*1	()	n	1.23456789012345e+19
+literals	literal:{x}*1	46	9007199254740993*1	()	n	9007199254740990.0
+literals	literal:{x}*1	47	1234567890123456.7*1	()	n	1234567890123450.0
+literals	literal:{x}*1	48	2.6749999999999999*1	()	n	2.67499999999999
+literals	literal:{x}*1	49	1.234567890123456789E+20*1	()	n	1.23456789012345e+20
+literals	literal:{x}*1	50	1.2345678901234567E-300*1	()	n	1.23456789012345e-300
+literals	literal:{x}*1	51	0.000000000000000012345678901234567*1	()	n	1.23456789012345e-17
+literals	literal:{x}*1	52	3.14159265358979323846*1	()	n	3.14159265358979
+literals	literal:{x}*1	53	0.123456789012345*1	()	n	0.123456789012345
+literals	literal:{x}*1	54	0.30000000000000004*1	()	n	0.3
+literals	literal:SUM({x})	55	SUM(0.1234567890123456)	()	n	0.123456789012345
+literals	literal:SUM({x})	56	SUM(0.12345678901234567)	()	n	0.123456789012345
+literals	literal:SUM({x})	57	SUM(0.123456789012345678)	()	n	0.123456789012345
+literals	literal:SUM({x})	58	SUM(0.99999999999999999)	()	n	0.999999999999999
+literals	literal:SUM({x})	59	SUM(0.9999999999999999)	()	n	0.999999999999999
+literals	literal:SUM({x})	60	SUM(1.0000000000000009)	()	n	1.0
+literals	literal:SUM({x})	61	SUM(1.00000000000000000001)	()	n	1.0
+literals	literal:SUM({x})	62	SUM(123456789012345678)	()	n	1.23456789012345e+17
+literals	literal:SUM({x})	63	SUM(12345678901234567890)	()	n	1.23456789012345e+19
+literals	literal:SUM({x})	64	SUM(9007199254740993)	()	n	9007199254740990.0
+literals	literal:SUM({x})	65	SUM(1234567890123456.7)	()	n	1234567890123450.0
+literals	literal:SUM({x})	66	SUM(2.6749999999999999)	()	n	2.67499999999999
+literals	literal:SUM({x})	67	SUM(1.234567890123456789E+20)	()	n	1.23456789012345e+20
+literals	literal:SUM({x})	68	SUM(1.2345678901234567E-300)	()	n	1.23456789012345e-300
+literals	literal:SUM({x})	69	SUM(0.000000000000000012345678901234567)	()	n	1.23456789012345e-17
+literals	literal:SUM({x})	70	SUM(3.14159265358979323846)	()	n	3.14159265358979
+literals	literal:SUM({x})	71	SUM(0.123456789012345)	()	n	0.123456789012345
+literals	literal:SUM({x})	72	SUM(0.30000000000000004)	()	n	0.3
+literals	literal:SUM({{{x},0}})	73	SUM({0.1234567890123456,0})	()	n	0.123456789012345
+literals	literal:SUM({{{x},0}})	74	SUM({0.12345678901234567,0})	()	n	0.123456789012345
+literals	literal:SUM({{{x},0}})	75	SUM({0.123456789012345678,0})	()	n	0.123456789012345
+literals	literal:SUM({{{x},0}})	76	SUM({0.99999999999999999,0})	()	n	0.999999999999999
+literals	literal:SUM({{{x},0}})	77	SUM({0.9999999999999999,0})	()	n	0.999999999999999
+literals	literal:SUM({{{x},0}})	78	SUM({1.0000000000000009,0})	()	n	1.0
+literals	literal:SUM({{{x},0}})	79	SUM({1.00000000000000000001,0})	()	n	1.0
+literals	literal:SUM({{{x},0}})	80	SUM({123456789012345678,0})	()	n	1.23456789012345e+17
+literals	literal:SUM({{{x},0}})	81	SUM({12345678901234567890,0})	()	n	1.23456789012345e+19
+literals	literal:SUM({{{x},0}})	82	SUM({9007199254740993,0})	()	n	9007199254740990.0
+literals	literal:SUM({{{x},0}})	83	SUM({1234567890123456.7,0})	()	n	1234567890123450.0
+literals	literal:SUM({{{x},0}})	84	SUM({2.6749999999999999,0})	()	n	2.67499999999999
+literals	literal:SUM({{{x},0}})	85	SUM({1.234567890123456789E+20,0})	()	n	1.23456789012345e+20
+literals	literal:SUM({{{x},0}})	86	SUM({1.2345678901234567E-300,0})	()	n	1.23456789012345e-300
+literals	literal:SUM({{{x},0}})	87	SUM({0.000000000000000012345678901234567,0})	()	n	1.23456789012345e-17
+literals	literal:SUM({{{x},0}})	88	SUM({3.14159265358979323846,0})	()	n	3.14159265358979
+literals	literal:SUM({{{x},0}})	89	SUM({0.123456789012345,0})	()	n	0.123456789012345
+literals	literal:SUM({{{x},0}})	90	SUM({0.30000000000000004,0})	()	n	0.3
+literals	literal:IF(TRUE,{x})	91	IF(TRUE,0.1234567890123456)	()	n	0.123456789012345
+literals	literal:IF(TRUE,{x})	92	IF(TRUE,0.12345678901234567)	()	n	0.123456789012345
+literals	literal:IF(TRUE,{x})	93	IF(TRUE,0.123456789012345678)	()	n	0.123456789012345
+literals	literal:IF(TRUE,{x})	94	IF(TRUE,0.99999999999999999)	()	n	0.999999999999999
+literals	literal:IF(TRUE,{x})	95	IF(TRUE,0.9999999999999999)	()	n	0.999999999999999
+literals	literal:IF(TRUE,{x})	96	IF(TRUE,1.0000000000000009)	()	n	1.0
+literals	literal:IF(TRUE,{x})	97	IF(TRUE,1.00000000000000000001)	()	n	1.0
+literals	literal:IF(TRUE,{x})	98	IF(TRUE,123456789012345678)	()	n	1.23456789012345e+17
+literals	literal:IF(TRUE,{x})	99	IF(TRUE,12345678901234567890)	()	n	1.23456789012345e+19
+literals	literal:IF(TRUE,{x})	100	IF(TRUE,9007199254740993)	()	n	9007199254740990.0
+literals	literal:IF(TRUE,{x})	101	IF(TRUE,1234567890123456.7)	()	n	1234567890123450.0
+literals	literal:IF(TRUE,{x})	102	IF(TRUE,2.6749999999999999)	()	n	2.67499999999999
+literals	literal:IF(TRUE,{x})	103	IF(TRUE,1.234567890123456789E+20)	()	n	1.23456789012345e+20
+literals	literal:IF(TRUE,{x})	104	IF(TRUE,1.2345678901234567E-300)	()	n	1.23456789012345e-300
+literals	literal:IF(TRUE,{x})	105	IF(TRUE,0.000000000000000012345678901234567)	()	n	1.23456789012345e-17
+literals	literal:IF(TRUE,{x})	106	IF(TRUE,3.14159265358979323846)	()	n	3.14159265358979
+literals	literal:IF(TRUE,{x})	107	IF(TRUE,0.123456789012345)	()	n	0.123456789012345
+literals	literal:IF(TRUE,{x})	108	IF(TRUE,0.30000000000000004)	()	n	0.3
+literals	literal:{x}&""	109	0.1234567890123456&""	()	str	'0.123456789012345'
+literals	literal:{x}&""	110	0.12345678901234567&""	()	str	'0.123456789012345'
+literals	literal:{x}&""	111	0.123456789012345678&""	()	str	'0.123456789012345'
+literals	literal:{x}&""	112	0.99999999999999999&""	()	str	'0.999999999999999'
+literals	literal:{x}&""	113	0.9999999999999999&""	()	str	'0.999999999999999'
+literals	literal:{x}&""	114	1.0000000000000009&""	()	str	'1'
+literals	literal:{x}&""	115	1.00000000000000000001&""	()	str	'1'
+literals	literal:{x}&""	116	123456789012345678&""	()	str	'123456789012345000'
+literals	literal:{x}&""	117	12345678901234567890&""	()	str	'12345678901234500000'
+literals	literal:{x}&""	118	9007199254740993&""	()	str	'9007199254740990'
+literals	literal:{x}&""	119	1234567890123456.7&""	()	str	'1234567890123450'
+literals	literal:{x}&""	120	2.6749999999999999&""	()	str	'2.67499999999999'
+literals	literal:{x}&""	121	1.234567890123456789E+20&""	()	str	'1.23456789012345E+20'
+literals	literal:{x}&""	122	1.2345678901234567E-300&""	()	str	'1.2345678901235E-300'
+literals	literal:{x}&""	123	0.000000000000000012345678901234567&""	()	str	'1.23456789012345E-17'
+literals	literal:{x}&""	124	3.14159265358979323846&""	()	str	'3.14159265358979'
+literals	literal:{x}&""	125	0.123456789012345&""	()	str	'0.123456789012345'
+literals	literal:{x}&""	126	0.30000000000000004&""	()	str	'0.3'

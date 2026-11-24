@@ -1,0 +1,347 @@
+# suite: sums
+# generator: capture/suites.py:sums, capture/job.py
+# method: the job beside this file (sums.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "sums.xlsx": {
+#      "bytes": 6094,
+#      "sha256": "35fe9951bb0b36a8632e2fe5800a05e371418b353d583f68d151cefe8d41b1b9"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261124-100316-sums",
+#    "manifest_sha256": "52c431f1745cd1f331490dca85ad0533c987b5e5a7f1a5b75db64a662e4ff965",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+sums	sum_range	1	SUM({1}:{10})	(0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)	n	0.9999999999999999
+sums	sum_args	2	SUM({1},{2},{3},{4},{5},{6},{7},{8},{9},{10})	(0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)	n	0.9999999999999999
+sums	plus_chain	3	{1}+{2}+{3}+{4}+{5}+{6}+{7}+{8}+{9}+{10}+0	(0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)	n	0.9999999999999999
+sums	average	4	AVERAGE({1}:{10})	(0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)	n	0.09999999999999999
+sums	sum_range	5	SUM({1}:{3})	(1e+16, 1.0, -1e+16)	n	0.0
+sums	sum_args	6	SUM({1},{2},{3})	(1e+16, 1.0, -1e+16)	n	0.0
+sums	plus_chain	7	{1}+{2}+{3}+0	(1e+16, 1.0, -1e+16)	n	0.0
+sums	average	8	AVERAGE({1}:{3})	(1e+16, 1.0, -1e+16)	n	0.0
+sums	sum_range	9	SUM({1}:{4})	(1.0, 1e+100, 1.0, -1e+100)	n	0.0
+sums	sum_args	10	SUM({1},{2},{3},{4})	(1.0, 1e+100, 1.0, -1e+100)	n	0.0
+sums	plus_chain	11	{1}+{2}+{3}+{4}+0	(1.0, 1e+100, 1.0, -1e+100)	n	0.0
+sums	average	12	AVERAGE({1}:{4})	(1.0, 1e+100, 1.0, -1e+100)	n	0.0
+sums	sum_range	13	SUM({1}:{3})	(0.1, 0.2, 0.3)	n	0.6000000000000001
+sums	sum_args	14	SUM({1},{2},{3})	(0.1, 0.2, 0.3)	n	0.6000000000000001
+sums	plus_chain	15	{1}+{2}+{3}+0	(0.1, 0.2, 0.3)	n	0.6000000000000001
+sums	average	16	AVERAGE({1}:{3})	(0.1, 0.2, 0.3)	n	0.20000000000000004
+sums	sum_range	17	SUM({1}:{5})	(1e+16, 1.0, 1.0, 1.0, 1.0)	n	1e+16
+sums	sum_args	18	SUM({1},{2},{3},{4},{5})	(1e+16, 1.0, 1.0, 1.0, 1.0)	n	1e+16
+sums	plus_chain	19	{1}+{2}+{3}+{4}+{5}+0	(1e+16, 1.0, 1.0, 1.0, 1.0)	n	1e+16
+sums	average	20	AVERAGE({1}:{5})	(1e+16, 1.0, 1.0, 1.0, 1.0)	n	2000000000000000.0
+sums	sum_range	21	SUM({1}:{10})	(0.7, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)	n	1.6000000000000003
+sums	sum_args	22	SUM({1},{2},{3},{4},{5},{6},{7},{8},{9},{10})	(0.7, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)	n	1.6000000000000003
+sums	plus_chain	23	{1}+{2}+{3}+{4}+{5}+{6}+{7}+{8}+{9}+{10}+0	(0.7, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)	n	1.6000000000000003
+sums	average	24	AVERAGE({1}:{10})	(0.7, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)	n	0.16000000000000003
+sums	sum_range	25	SUM({1}:{10})	(123456.789, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001)	n	123456.79800000004
+sums	sum_args	26	SUM({1},{2},{3},{4},{5},{6},{7},{8},{9},{10})	(123456.789, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001)	n	123456.79800000004
+sums	plus_chain	27	{1}+{2}+{3}+{4}+{5}+{6}+{7}+{8}+{9}+{10}+0	(123456.789, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001)	n	123456.79800000004
+sums	average	28	AVERAGE({1}:{10})	(123456.789, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001)	n	12345.679800000004
+sums	sum_range	29	SUM({1}:{10})	(3.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, -3.7)	n	0.10000000000000053
+sums	sum_args	30	SUM({1},{2},{3},{4},{5},{6},{7},{8},{9},{10})	(3.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, -3.7)	n	0.10000000000000053
+sums	plus_chain	31	{1}+{2}+{3}+{4}+{5}+{6}+{7}+{8}+{9}+{10}+0	(3.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, -3.7)	n	0.10000000000000053
+sums	average	32	AVERAGE({1}:{10})	(3.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, -3.7)	n	0.010000000000000054

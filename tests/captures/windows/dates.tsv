@@ -1,0 +1,372 @@
+# suite: dates
+# generator: capture/suites.py:dates, capture/job.py
+# method: the job beside this file (dates.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "dates.xlsx": {
+#      "bytes": 5780,
+#      "sha256": "d983d0224b3996edb7822b41ba8a29a6f5d6be4ebb93e973d3f8995b28800376"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261124-100302-dates",
+#    "manifest_sha256": "453b917b496bb986c381f23360cdfc86e406bd2441e3d6890ca708a6e5cc3eb3",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+dates	date	1	DATE({1},{2},{3})	(1900.0, 1.0, 0.0)	n	0.0
+dates	date	2	DATE({1},{2},{3})	(1900.0, 1.0, 1.0)	n	1.0
+dates	date	3	DATE({1},{2},{3})	(1900.0, 2.0, 28.0)	n	59.0
+dates	date	4	DATE({1},{2},{3})	(1900.0, 2.0, 29.0)	n	60.0
+dates	date	5	DATE({1},{2},{3})	(1900.0, 3.0, 1.0)	n	61.0
+dates	date	6	DATE({1},{2},{3})	(1899.0, 12.0, 31.0)	n	693962.0
+dates	date	7	DATE({1},{2},{3})	(1900.0, 0.0, 1.0)	e	#NUM!
+dates	date	8	DATE({1},{2},{3})	(1904.0, 1.0, 1.0)	n	1462.0
+dates	date	9	DATE({1},{2},{3})	(1904.0, 1.0, 2.0)	n	1463.0
+dates	date	10	DATE({1},{2},{3})	(2025.0, 3.0, 4.0)	n	45720.0
+dates	date	11	DATE({1},{2},{3})	(9999.0, 12.0, 31.0)	n	2958465.0
+dates	date	12	DATE({1},{2},{3})	(10000.0, 1.0, 1.0)	e	#NUM!
+dates	year	13	YEAR({1})	(-1.0,)	e	#NUM!
+dates	month	14	MONTH({1})	(-1.0,)	e	#NUM!
+dates	day	15	DAY({1})	(-1.0,)	e	#NUM!
+dates	weekday	16	WEEKDAY({1})	(-1.0,)	e	#NUM!
+dates	year	17	YEAR({1})	(0.0,)	n	1900.0
+dates	month	18	MONTH({1})	(0.0,)	n	1.0
+dates	day	19	DAY({1})	(0.0,)	n	0.0
+dates	weekday	20	WEEKDAY({1})	(0.0,)	n	7.0
+dates	year	21	YEAR({1})	(1.0,)	n	1900.0
+dates	month	22	MONTH({1})	(1.0,)	n	1.0
+dates	day	23	DAY({1})	(1.0,)	n	1.0
+dates	weekday	24	WEEKDAY({1})	(1.0,)	n	1.0
+dates	year	25	YEAR({1})	(59.0,)	n	1900.0
+dates	month	26	MONTH({1})	(59.0,)	n	2.0
+dates	day	27	DAY({1})	(59.0,)	n	28.0
+dates	weekday	28	WEEKDAY({1})	(59.0,)	n	3.0
+dates	year	29	YEAR({1})	(60.0,)	n	1900.0
+dates	month	30	MONTH({1})	(60.0,)	n	2.0
+dates	day	31	DAY({1})	(60.0,)	n	29.0
+dates	weekday	32	WEEKDAY({1})	(60.0,)	n	4.0
+dates	year	33	YEAR({1})	(61.0,)	n	1900.0
+dates	month	34	MONTH({1})	(61.0,)	n	3.0
+dates	day	35	DAY({1})	(61.0,)	n	1.0
+dates	weekday	36	WEEKDAY({1})	(61.0,)	n	5.0
+dates	year	37	YEAR({1})	(1461.0,)	n	1903.0
+dates	month	38	MONTH({1})	(1461.0,)	n	12.0
+dates	day	39	DAY({1})	(1461.0,)	n	31.0
+dates	weekday	40	WEEKDAY({1})	(1461.0,)	n	5.0
+dates	year	41	YEAR({1})	(2958465.0,)	n	9999.0
+dates	month	42	MONTH({1})	(2958465.0,)	n	12.0
+dates	day	43	DAY({1})	(2958465.0,)	n	31.0
+dates	weekday	44	WEEKDAY({1})	(2958465.0,)	n	6.0
+dates	year	45	YEAR({1})	(2958466.0,)	e	#NUM!
+dates	month	46	MONTH({1})	(2958466.0,)	e	#NUM!
+dates	day	47	DAY({1})	(2958466.0,)	e	#NUM!
+dates	weekday	48	WEEKDAY({1})	(2958466.0,)	e	#NUM!
+dates	year	49	YEAR({1})	(60.5,)	n	1900.0
+dates	month	50	MONTH({1})	(60.5,)	n	2.0
+dates	day	51	DAY({1})	(60.5,)	n	29.0
+dates	weekday	52	WEEKDAY({1})	(60.5,)	n	4.0
+dates	datevalue	53	DATEVALUE({1})	('2/29/1900',)	n	60.0
+dates	datevalue	54	DATEVALUE({1})	('1/1/1900',)	n	1.0
+dates	datevalue	55	DATEVALUE({1})	('1/1/1904',)	n	1462.0
+dates	datevalue	56	DATEVALUE({1})	('1/2/1904',)	n	1463.0
+dates	datevalue	57	DATEVALUE({1})	('12/31/1903',)	n	1461.0

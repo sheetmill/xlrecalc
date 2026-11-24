@@ -1,0 +1,459 @@
+# suite: criteria
+# generator: capture/suites.py:criteria, capture/job.py
+# method: the job beside this file (criteria.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "criteria.xlsx": {
+#      "bytes": 6506,
+#      "sha256": "969b306ec0c9b8e349168dab3e6c34d3e1019312da5793ccbf77a6db8f0137d4"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261124-100441-criteria",
+#    "manifest_sha256": "35beca58e103a0422d49e693abfb20d24d2d1dc641cab77e3f49f682c5b0d59c",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+criteria	countif	1	COUNTIF($T$1:$T$8,$Y$1)	()	n	2.0
+criteria	sumif	2	SUMIF($T$1:$T$8,$Y$1,$U$1:$U$8)	()	n	33.0
+criteria	sumif_own	3	SUMIF($U$1:$U$8,$Y$1)	()	n	0.0
+criteria	averageif	4	AVERAGEIF($T$1:$T$8,$Y$1,$U$1:$U$8)	()	n	16.5
+criteria	countifs	5	COUNTIFS($T$1:$T$8,$Y$1)	()	n	2.0
+criteria	sumifs	6	SUMIFS($U$1:$U$8,$T$1:$T$8,$Y$1)	()	n	33.0
+criteria	averageifs	7	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,$Y$1)	()	n	16.5
+criteria	maxifs	8	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,$Y$1)	()	n	32.0
+criteria	minifs	9	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,$Y$1)	()	n	1.0
+criteria	countif	10	COUNTIF($T$1:$T$8,$X$1)	()	n	2.0
+criteria	sumif	11	SUMIF($T$1:$T$8,$X$1,$U$1:$U$8)	()	n	12.0
+criteria	sumif_own	12	SUMIF($U$1:$U$8,$X$1)	()	n	0.0
+criteria	averageif	13	AVERAGEIF($T$1:$T$8,$X$1,$U$1:$U$8)	()	n	6.0
+criteria	countifs	14	COUNTIFS($T$1:$T$8,$X$1)	()	n	2.0
+criteria	sumifs	15	SUMIFS($U$1:$U$8,$T$1:$T$8,$X$1)	()	n	12.0
+criteria	averageifs	16	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,$X$1)	()	n	6.0
+criteria	maxifs	17	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,$X$1)	()	n	8.0
+criteria	minifs	18	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,$X$1)	()	n	4.0
+criteria	countif	19	COUNTIF($T$1:$T$8,$X$2)	()	n	2.0
+criteria	sumif	20	SUMIF($T$1:$T$8,$X$2,$U$1:$U$8)	()	n	33.0
+criteria	sumif_own	21	SUMIF($U$1:$U$8,$X$2)	()	n	0.0
+criteria	averageif	22	AVERAGEIF($T$1:$T$8,$X$2,$U$1:$U$8)	()	n	16.5
+criteria	countifs	23	COUNTIFS($T$1:$T$8,$X$2)	()	n	2.0
+criteria	sumifs	24	SUMIFS($U$1:$U$8,$T$1:$T$8,$X$2)	()	n	33.0
+criteria	averageifs	25	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,$X$2)	()	n	16.5
+criteria	maxifs	26	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,$X$2)	()	n	32.0
+criteria	minifs	27	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,$X$2)	()	n	1.0
+criteria	countif	28	COUNTIF($T$1:$T$8,"")	()	n	2.0
+criteria	sumif	29	SUMIF($T$1:$T$8,"",$U$1:$U$8)	()	n	12.0
+criteria	sumif_own	30	SUMIF($U$1:$U$8,"")	()	n	0.0
+criteria	averageif	31	AVERAGEIF($T$1:$T$8,"",$U$1:$U$8)	()	n	6.0
+criteria	countifs	32	COUNTIFS($T$1:$T$8,"")	()	n	2.0
+criteria	sumifs	33	SUMIFS($U$1:$U$8,$T$1:$T$8,"")	()	n	12.0
+criteria	averageifs	34	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,"")	()	n	6.0
+criteria	maxifs	35	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,"")	()	n	8.0
+criteria	minifs	36	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,"")	()	n	4.0
+criteria	countif	37	COUNTIF($T$1:$T$8,"=")	()	n	1.0
+criteria	sumif	38	SUMIF($T$1:$T$8,"=",$U$1:$U$8)	()	n	4.0
+criteria	sumif_own	39	SUMIF($U$1:$U$8,"=")	()	n	0.0
+criteria	averageif	40	AVERAGEIF($T$1:$T$8,"=",$U$1:$U$8)	()	n	4.0
+criteria	countifs	41	COUNTIFS($T$1:$T$8,"=")	()	n	1.0
+criteria	sumifs	42	SUMIFS($U$1:$U$8,$T$1:$T$8,"=")	()	n	4.0
+criteria	averageifs	43	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,"=")	()	n	4.0
+criteria	maxifs	44	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,"=")	()	n	4.0
+criteria	minifs	45	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,"=")	()	n	4.0
+criteria	countif	46	COUNTIF($T$1:$T$8,"<>")	()	n	7.0
+criteria	sumif	47	SUMIF($T$1:$T$8,"<>",$U$1:$U$8)	()	n	251.0
+criteria	sumif_own	48	SUMIF($U$1:$U$8,"<>")	()	n	255.0
+criteria	averageif	49	AVERAGEIF($T$1:$T$8,"<>",$U$1:$U$8)	()	n	35.857142857142854
+criteria	countifs	50	COUNTIFS($T$1:$T$8,"<>")	()	n	7.0
+criteria	sumifs	51	SUMIFS($U$1:$U$8,$T$1:$T$8,"<>")	()	n	251.0
+criteria	averageifs	52	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,"<>")	()	n	35.857142857142854
+criteria	maxifs	53	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,"<>")	()	n	128.0
+criteria	minifs	54	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,"<>")	()	n	1.0
+criteria	countif	55	COUNTIF($T$1:$T$8,0)	()	n	2.0
+criteria	sumif	56	SUMIF($T$1:$T$8,0,$U$1:$U$8)	()	n	33.0
+criteria	sumif_own	57	SUMIF($U$1:$U$8,0)	()	n	0.0
+criteria	averageif	58	AVERAGEIF($T$1:$T$8,0,$U$1:$U$8)	()	n	16.5
+criteria	countifs	59	COUNTIFS($T$1:$T$8,0)	()	n	2.0
+criteria	sumifs	60	SUMIFS($U$1:$U$8,$T$1:$T$8,0)	()	n	33.0
+criteria	averageifs	61	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,0)	()	n	16.5
+criteria	maxifs	62	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,0)	()	n	32.0
+criteria	minifs	63	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,0)	()	n	1.0
+criteria	countif	64	COUNTIF($T$1:$T$8,"0")	()	n	2.0
+criteria	sumif	65	SUMIF($T$1:$T$8,"0",$U$1:$U$8)	()	n	33.0
+criteria	sumif_own	66	SUMIF($U$1:$U$8,"0")	()	n	0.0
+criteria	averageif	67	AVERAGEIF($T$1:$T$8,"0",$U$1:$U$8)	()	n	16.5
+criteria	countifs	68	COUNTIFS($T$1:$T$8,"0")	()	n	2.0
+criteria	sumifs	69	SUMIFS($U$1:$U$8,$T$1:$T$8,"0")	()	n	33.0
+criteria	averageifs	70	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,"0")	()	n	16.5
+criteria	maxifs	71	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,"0")	()	n	32.0
+criteria	minifs	72	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,"0")	()	n	1.0
+criteria	countif	73	COUNTIF($T$1:$T$8,"=0")	()	n	2.0
+criteria	sumif	74	SUMIF($T$1:$T$8,"=0",$U$1:$U$8)	()	n	33.0
+criteria	sumif_own	75	SUMIF($U$1:$U$8,"=0")	()	n	0.0
+criteria	averageif	76	AVERAGEIF($T$1:$T$8,"=0",$U$1:$U$8)	()	n	16.5
+criteria	countifs	77	COUNTIFS($T$1:$T$8,"=0")	()	n	2.0
+criteria	sumifs	78	SUMIFS($U$1:$U$8,$T$1:$T$8,"=0")	()	n	33.0
+criteria	averageifs	79	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,"=0")	()	n	16.5
+criteria	maxifs	80	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,"=0")	()	n	32.0
+criteria	minifs	81	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,"=0")	()	n	1.0
+criteria	countif	82	COUNTIF($T$1:$T$8,$W$1)	()	n	1.0
+criteria	sumif	83	SUMIF($T$1:$T$8,$W$1,$U$1:$U$8)	()	n	16.0
+criteria	sumif_own	84	SUMIF($U$1:$U$8,$W$1)	()	n	0.0
+criteria	averageif	85	AVERAGEIF($T$1:$T$8,$W$1,$U$1:$U$8)	()	n	16.0
+criteria	countifs	86	COUNTIFS($T$1:$T$8,$W$1)	()	n	1.0
+criteria	sumifs	87	SUMIFS($U$1:$U$8,$T$1:$T$8,$W$1)	()	n	16.0
+criteria	averageifs	88	AVERAGEIFS($U$1:$U$8,$T$1:$T$8,$W$1)	()	n	16.0
+criteria	maxifs	89	_xlfn.MAXIFS($U$1:$U$8,$T$1:$T$8,$W$1)	()	n	16.0
+criteria	minifs	90	_xlfn.MINIFS($U$1:$U$8,$T$1:$T$8,$W$1)	()	n	16.0
+criteria	whole_column	91	COUNTIF($T:$T,$Y$1)	()	n	2.0
+criteria	all_blank	92	COUNTIF($Z$1:$Z$9,$Y$1)	()	n	0.0
+criteria	all_blank_sum	93	SUMIF($Z$1:$Z$9,$Y$1,$U$1:$U$8)	()	n	0.0
+criteria	second_criterion	94	COUNTIFS($T$1:$T$8,$Y$1,$U$1:$U$8,">0")	()	n	2.0
+criteria	an_offset	95	COUNTIF($T$1:$T$8,OFFSET($Y$1,0,0))	()	n	2.0
+criteria	an_index	96	COUNTIF($T$1:$T$8,INDEX($Y$1:$Y$2,1))	()	n	2.0
+criteria	computed_blank	97	COUNTIF($T$1:$T$8,IF(TRUE,$Y$1))	()	n	2.0
+criteria	match_exact	98	MATCH($Y$1,$T$1:$T$8,0)	()	n	1.0
+criteria	match_sorted	99	MATCH($Y$1,$T$1:$T$2,1)	()	n	1.0
+criteria	vlookup	100	VLOOKUP($Y$1,$T$1:$U$8,2,FALSE)	()	n	1.0
+criteria	hlookup	101	HLOOKUP($Y$1,$T$1:$U$1,1,FALSE)	()	n	0.0
+criteria	xlookup	102	_xlfn.XLOOKUP($Y$1,$T$1:$T$8,$U$1:$U$8)	()	n	4.0
+criteria	xmatch	103	_xlfn.XMATCH($Y$1,$T$1:$T$8)	()	n	3.0
+criteria	found_blank	104	VLOOKUP(1,$AA$1:$AB$2,2,FALSE)	()	n	0.0
+criteria	found_blank	105	ISBLANK(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	b	True
+criteria	found_blank	106	ISNUMBER(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	b	False
+criteria	found_blank	107	ISTEXT(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	b	False
+criteria	found_blank	108	ISLOGICAL(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	b	False
+criteria	found_blank	109	ISERROR(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	b	False
+criteria	found_blank	110	VLOOKUP(1,$AA$1:$AB$2,2,FALSE)+1	()	n	1.0
+criteria	found_blank	111	VLOOKUP(1,$AA$1:$AB$2,2,FALSE)&""	()	str	''
+criteria	found_blank	112	LEN(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	n	0.0
+criteria	found_blank	113	VLOOKUP(1,$AA$1:$AB$2,2,FALSE)=""	()	b	True
+criteria	found_blank	114	VLOOKUP(1,$AA$1:$AB$2,2,FALSE)=0	()	b	True
+criteria	found_blank	115	N(VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	n	0.0
+criteria	found_blank	116	IF(ISBLANK(VLOOKUP(1,$AA$1:$AB$2,2,FALSE)),"na",VLOOKUP(1,$AA$1:$AB$2,2,FALSE))	()	str	'na'
+criteria	found_blank	117	ISBLANK(HLOOKUP(1,$AC$1:$AD$2,2,FALSE))	()	b	True
+criteria	found_blank	118	ISBLANK(LOOKUP(1,$AA$1:$AA$2,$AB$1:$AB$2))	()	b	True
+criteria	found_blank	119	ISBLANK(_xlfn.XLOOKUP(1,$AA$1:$AA$2,$AB$1:$AB$2))	()	b	True
+criteria	found_blank	120	ISBLANK(INDEX($AB$1:$AB$2,1))	()	b	True
+criteria	found_blank	121	ISBLANK(CHOOSE(1,$AB$1))	()	b	True
+criteria	found_blank	122	ISBLANK(IF(TRUE,$AB$1))	()	b	True
+criteria	found_blank	123	ISBLANK(OFFSET($AB$1,0,0))	()	b	True
+criteria	found_blank	124	ISBLANK($AB$1)	()	b	True
+criteria	found_blank	125	ISBLANK($X$1)	()	b	False
+criteria	found_blank	126	ISBLANK("")	()	b	False
+criteria	found_blank	127	ISBLANK(0)	()	b	False
+criteria	found_blank	128	ISBLANK(MATCH(1,$AA$1:$AA$2,0))	()	b	False
+criteria	range_error	129	SUM(OFFSET($AB$2,NA(),0):$AB$2)	()	e	#N/A
+criteria	range_error	130	SUM($AB$2:OFFSET($AB$2,NA(),0))	()	e	#N/A
+criteria	range_error	131	SUM(OFFSET($AB$2,NA(),0):OFFSET($AB$2,1/0,0))	()	e	#N/A
+criteria	range_error	132	SUM(OFFSET($AB$2,1/0,0):OFFSET($AB$2,NA(),0))	()	e	#DIV/0!
+criteria	range_error	133	ROWS(OFFSET($AB$2,NA(),0):$AB$2)	()	e	#N/A
+criteria	range_error	134	COUNT(OFFSET($AB$2,NA(),0):$AB$2)	()	n	0.0
+criteria	range_error	135	SUM(INDEX($AA$1:$AA$2,3):$AA$2)	()	e	#REF!
+criteria	range_error	136	CORREL(OFFSET($AA$1,NA(),0):$AA$2,$AA$1:$AA$2)	()	e	#N/A
+criteria	meets_itself	137	$AA$2 $AA$2	()	n	2.0
+criteria	meets_itself	138	SUM($AA$2 $AA$2)	()	n	2.0
+criteria	meets_itself	139	CONCATENATE("x",$AA$2 $AA$2)	()	str	'x2'
+criteria	meets_itself	140	CONCATENATE("x",$AA$1:$AB$2 $AA$2)	()	str	'x2'
+criteria	meets_itself	141	$AA$1 $AA$2	()	e	#NULL!
+criteria	meets_itself	142	SUM($AA$1 $AA$2)	()	e	#NULL!
+criteria	meets_itself	143	SUM($AA$1:$AA$2 $AA$2:$AB$2)	()	n	2.0
+criteria	meets_itself	144	SUM($AA$1:$AA$2 $AB$1:$AB$2)	()	e	#NULL!

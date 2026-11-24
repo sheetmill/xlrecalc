@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "job_id": "xlrecalc-20261124-100638-distributions-family",
+  "package": "xlrecalc",
+  "purpose": "capture suite distributions_family: open the workbook, save a copy with the cached values",
+  "requires": {
+    "excel_build_min": {
+      "windows": "16.0.20527.0"
+    },
+    "edition": "Microsoft 365"
+  },
+  "limits": {
+    "job_seconds": 3600,
+    "step_seconds": 600
+  },
+  "audit": false,
+  "workbooks": [
+    {
+      "file": "distributions_family.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "distributions_family.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    }
+  ]
+}
