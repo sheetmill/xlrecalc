@@ -32,6 +32,7 @@ def test_there_is_a_windows_capture() -> None:
     assert [p.name for p in CAPTURES] == [
         "clean_controls.tsv",
         "codepage.tsv",
+        "collate_chars.tsv",
         "collate_words.tsv",
     ]
 
