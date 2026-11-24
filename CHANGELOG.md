@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reading cells one by one costs about what reading them in one pass costs: each read's evaluation no longer works out
   again which of a formula's references can reach another formula; that is kept from one read to the next until a
   formula or a defined name changes.
+- `Workbook.status` answers at once where the report names no cell, and works out a cell's labels only for the states
+  that carry them.
 
 ## [0.10.0] - 2026-11-23
 

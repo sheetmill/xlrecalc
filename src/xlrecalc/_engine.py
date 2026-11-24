@@ -137,6 +137,8 @@ class _Cells:
 _PAD_ROWS = 4096
 """A range taller than this whose data fills less than half of it is padded, not made dense."""
 _LARGE_BOX = 256  # cells: smaller boxes are listed again rather than remembered
+_COMPUTED = CellStatus("computed")  # frozen: one instance serves every such cell
+_CONSTANT = CellStatus("constant")
 
 
 class _NotEvaluatedError(Exception):
@@ -1031,31 +1033,40 @@ class Engine:
         """A cell's status from the report as it stands, in :class:`CellStatus`'s order."""
         sheet, row, col = unpack(n)
         s = self.sheets[sheet]
+        tid = s.templates.get(row * COLS + col)
+        report = self.report
+        if not filled and not (
+            report.refused or report.uncomputed or report.circular or report.from_kept
+        ):  # a report naming no cell: the usual answer, without building the cell's reference
+            return _CONSTANT if tid is None else _COMPUTED
         where = CellRef(s.name, row + 1, col + 1)
         anchor = where if filled else None
-        report = self.report
-        tid = s.templates.get(row * COLS + col)
-        labels = set(self._stopped.get(n, ()))
-        if tid is not None:
-            labels.update(self.templates[tid].unsupported)
-        own = tuple(sorted(labels))
         refusal = report.refused.get(where)
         if refusal is not None:
             return CellStatus("refused", refusal=refusal, anchor=anchor)
-        error = report.exceptions.get(where)
         if where in report.uncomputed:
+            own = self._labels(n, tid)
+            error = report.exceptions.get(where)
             inherited = not own and error is None
             return CellStatus("uncomputed", own, error, inherited=inherited, anchor=anchor)
         if tid is None:
             if where in report.from_kept:  # a data table's, or an array formula's with no text
-                return CellStatus("kept", own, anchor=anchor)
-            return CellStatus("constant")
+                return CellStatus("kept", self._labels(n, tid), anchor=anchor)
+            return _CONSTANT
         if where in report.circular:
             return CellStatus("circular", anchor=anchor)
         if where in report.from_kept:
             kept = n in self._absent
-            return CellStatus("kept", own if kept else (), inherited=not kept, anchor=anchor)
-        return CellStatus("computed", anchor=anchor)
+            own = self._labels(n, tid) if kept else ()
+            return CellStatus("kept", own, inherited=not kept, anchor=anchor)
+        return CellStatus("computed", anchor=anchor) if filled else _COMPUTED
+
+    def _labels(self, n: int, tid: int | None) -> tuple[str, ...]:
+        """A cell's own labels: the limits its evaluation passed and its formula's features."""
+        labels = set(self._stopped.get(n, ()))
+        if tid is not None:
+            labels.update(self.templates[tid].unsupported)
+        return tuple(sorted(labels))
 
     def _order_report(self) -> None:
         """The report's cells in sheet, row and column order, and its labels in text order.

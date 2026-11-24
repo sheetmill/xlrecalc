@@ -24,7 +24,7 @@ import xlio
 import xlrecalc
 from tests.test_loader_orders import CALCS, MODES, _book, _key
 from tests.xlsx_files import DOC, MAIN, PKG, package
-from xlrecalc._engine import Engine, unpack
+from xlrecalc._engine import COLS, CellRef, CellStatus, Engine, node, unpack
 
 COLUMNS = "ABCDEFG"
 WAYS = ["load", "edited", "loader", "steps"]
@@ -207,6 +207,65 @@ def test_a_formula_in_a_column_that_held_none_is_a_precedent() -> None:
         assert key not in engine._live  # dropped with the change
         assert wb.value("B1") == 10.0
         assert len(engine._live[key]) == 1  # SUM's reference now reaches one
+
+
+def _classify_in_full(engine: Engine, n: int, filled: bool) -> CellStatus:
+    """A cell's status worked out in full from the report, as ``Engine._classify`` did before
+    it answered a report naming no cell at once: the reference the shortcut must agree with."""
+    sheet, row, col = unpack(n)
+    s = engine.sheets[sheet]
+    where = CellRef(s.name, row + 1, col + 1)
+    anchor = where if filled else None
+    report = engine.report
+    tid = s.templates.get(row * COLS + col)
+    labels = set(engine._stopped.get(n, ()))
+    if tid is not None:
+        labels.update(engine.templates[tid].unsupported)
+    own = tuple(sorted(labels))
+    refusal = report.refused.get(where)
+    if refusal is not None:
+        return CellStatus("refused", refusal=refusal, anchor=anchor)
+    error = report.exceptions.get(where)
+    if where in report.uncomputed:
+        inherited = not own and error is None
+        return CellStatus("uncomputed", own, error, inherited=inherited, anchor=anchor)
+    if tid is None:
+        if where in report.from_kept:
+            return CellStatus("kept", own, anchor=anchor)
+        return CellStatus("constant")
+    if where in report.circular:
+        return CellStatus("circular", anchor=anchor)
+    if where in report.from_kept:
+        kept = n in engine._absent
+        return CellStatus("kept", own if kept else (), inherited=not kept, anchor=anchor)
+    return CellStatus("computed", anchor=anchor)
+
+
+@pytest.mark.parametrize("way", WAYS)
+@pytest.mark.parametrize("mode", MODES)
+@pytest.mark.parametrize("calc", list(CALCS))
+@pytest.mark.parametrize("seed", range(4))
+def test_each_status_is_the_one_worked_out_in_full(
+    seed: int, calc: str, mode: str, way: str
+) -> None:
+    """Every cell's status, the formula cells, the cells arrays fill and some constants, after
+    reading and after an edit, is the one worked out in full from the report."""
+    rng = random.Random(seed)
+    data, every = _book(rng, CALCS[calc])
+    random.seed(0)
+    with xlio.open(io.BytesIO(data)) as book:
+        wb = _workbook(data, mode, way, book)
+        engine = wb._engine
+        for step in range(2):
+            for ref in [*every, "s1!A1", "s1!A2", "s1!Z9"]:
+                got = wb.status(ref)
+                sheet, row, col = wb._cell(ref)
+                n = node(sheet, row, col)
+                anchor = engine.member_of(n)
+                filled = anchor is not None
+                assert got == _classify_in_full(engine, anchor if filled else n, filled), ref
+            if step == 0:
+                wb.set("s1!A2", 3.0)
 
 
 def _kept_book(rows: str, extra: str = "", names: str = "") -> xlrecalc.Workbook:
