@@ -3895,6 +3895,18 @@ def encodeurl() -> list[Case]:
         Case("length", f"LEN({call}(REPT(_xlfn.UNICHAR(128512),2730)))"),
         Case("length", f"LEN({call}(REPT(_xlfn.UNICHAR(128512),2731)))"),
     ]
+    # A short argument with a long result tells a limit on the argument from one on the result:
+    # results of 32,766 and 32,767 characters from arguments far shorter, and a long argument
+    # that encodes to itself.
+    for text in (
+        'REPT(" ",10921)&"aaa"',
+        'REPT(" ",10922)&"a"',
+        'REPT("é",5461)&"a"',
+        'REPT(_xlfn.UNICHAR(128512),2730)&"aaaaaa"',
+        'REPT(_xlfn.UNICHAR(128512),2730)&"aaaaaaa"',
+        'REPT("a",32766)',
+    ):
+        cases.append(Case("length", f"LEN({call}({text}))"))
     return cases
 
 

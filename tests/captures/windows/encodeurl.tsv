@@ -304,12 +304,12 @@
 #    "format": 1,
 #    "inputs": {
 #     "encodeurl.xlsx": {
-#      "bytes": 7398,
-#      "sha256": "6db179c49bb1dba95a20a93d672109b1bf5685767bbc13270a4962cb61ea5ca7"
+#      "bytes": 7479,
+#      "sha256": "d219c006deedd1ef50506621ad53132ca22e366d7ca9ab2d78d87fea1e8266c1"
 #     }
 #    },
-#    "job_id": "xlrecalc-20261124-004247-encodeurl",
-#    "manifest_sha256": "a9aebf2f5c26695aaeb9016f4211b1a8cc1d0464ad05fe9942608f87be2c0222",
+#    "job_id": "xlrecalc-20261124-095405-encodeurl",
+#    "manifest_sha256": "d8e80ce9b9db8aa685febd212d5a0bf18df9ee98ca9b618281a3f51c13a59aa0",
 #    "runner_version": "0.1.28"
 #   }
 # columns: suite tag case formula inputs expected_type expected_repr
@@ -484,3 +484,9 @@ encodeurl	length	168	LEN(_xlfn.ENCODEURL(REPT("é",5461)))	()	n	32766.0
 encodeurl	length	169	LEN(_xlfn.ENCODEURL(REPT("é",5462)))	()	e	#VALUE!
 encodeurl	length	170	LEN(_xlfn.ENCODEURL(REPT(_xlfn.UNICHAR(128512),2730)))	()	n	32760.0
 encodeurl	length	171	LEN(_xlfn.ENCODEURL(REPT(_xlfn.UNICHAR(128512),2731)))	()	e	#VALUE!
+encodeurl	length	172	LEN(_xlfn.ENCODEURL(REPT(" ",10921)&"aaa"))	()	n	32766.0
+encodeurl	length	173	LEN(_xlfn.ENCODEURL(REPT(" ",10922)&"a"))	()	e	#VALUE!
+encodeurl	length	174	LEN(_xlfn.ENCODEURL(REPT("é",5461)&"a"))	()	e	#VALUE!
+encodeurl	length	175	LEN(_xlfn.ENCODEURL(REPT(_xlfn.UNICHAR(128512),2730)&"aaaaaa"))	()	n	32766.0
+encodeurl	length	176	LEN(_xlfn.ENCODEURL(REPT(_xlfn.UNICHAR(128512),2730)&"aaaaaaa"))	()	e	#VALUE!
+encodeurl	length	177	LEN(_xlfn.ENCODEURL(REPT("a",32766)))	()	n	32766.0

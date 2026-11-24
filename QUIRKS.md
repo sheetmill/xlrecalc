@@ -185,10 +185,10 @@ not). An empty argument is `#N/A`.
   arguments (captures `mac_gaps`, `function_names`, `encodeurl`), and so they do here: a cell using one computes to
   `#NAME?` where Excel computes it. Excel for Windows knows `ENCODEURL` and `FILTERXML` written with `_xlfn.` only
   (without it, `#NAME?`, as here under `platform="windows"`), and `EUROCONVERT` with its add-in: there `ENCODEURL` is
-  computed (capture `windows/encodeurl`; a result of 32,767 characters or more is `#VALUE!`, our reading of a capture
-  that computes 32,766 characters and refuses an unencoded 32,767-character text), while `FILTERXML` and `EUROCONVERT`
-  are not. Any other name the package does not compute (an add-in's function, a name no Excel knows) keeps its cached
-  value and is reported, since what Excel shows depends on add-ins the file does not record.
+  computed (capture `windows/encodeurl`; a result of 32,767 characters or more is `#VALUE!`, whatever the argument's
+  length), while `FILTERXML` and `EUROCONVERT` are not. Any other name the package does not compute (an add-in's
+  function, a name no Excel knows) keeps its cached value and is reported, since what Excel shows depends on add-ins
+  the file does not record.
 - `NUMBERVALUE` with digits as separators reads a group separator after the decimal one as a digit: `NUMBERVALUE(" 1 2 ",1,2)`
   is 0.2 in Excel and `#VALUE!` here (one row of capture `text_family`).
 - Declared tolerances, `statistics_family`: the sums of powers and regressions (`AVEDEV`, `DEVSQ`, `GEOMEAN`, `HARMEAN`,

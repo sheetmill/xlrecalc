@@ -164,7 +164,7 @@ platform.
 | `DVARP` | database | partial | 154 | 152 | 2 | 4 ulps | computed criteria are not supported |
 | `EDATE` | date and time | implemented | 42 | 42 | 0 |  |  |
 | `EFFECT` | financial | implemented | 148 | 148 | 0 | 4 ulps |  |
-| `ENCODEURL` | text | partial | 173 | 173 | 0 |  | Excel for Windows only: Excel for Mac does not know it (#NAME?, as here) |
+| `ENCODEURL` | text | partial | 179 | 179 | 0 |  | Excel for Windows only: Excel for Mac does not know it (#NAME?, as here) |
 | `EOMONTH` | date and time | implemented | 41 | 41 | 0 |  |  |
 | `ERF` | engineering | implemented | 108 | 103 | 5 | 4 ulps |  |
 | `ERF.PRECISE` | engineering | implemented | 56 | 56 | 0 | 4 ulps |  |
@@ -294,7 +294,7 @@ platform.
 | `LCM` | math | implemented | 214 | 214 | 0 |  |  |
 | `LEFT` | text | implemented | 37 | 37 | 0 |  |  |
 | `LEFTB` | text | implemented | 92 | 92 | 0 |  |  |
-| `LEN` | text | implemented | 425 | 425 | 0 |  |  |
+| `LEN` | text | implemented | 431 | 431 | 0 |  |  |
 | `LENB` | text | implemented | 29 | 29 | 0 |  |  |
 | `LET` | logical | implemented | 59 | 59 | 0 |  |  |
 | `LINEST` | statistical | partial | 73 | 63 | 10 | 4 ulps | one regressor only |
@@ -411,7 +411,7 @@ platform.
 | `REGISTER.ID` | | absent | | | | | |
 | `REPLACE` | text | implemented | 128 | 128 | 0 |  |  |
 | `REPLACEB` | text | implemented | 1350 | 1350 | 0 |  |  |
-| `REPT` | text | implemented | 101 | 101 | 0 |  |  |
+| `REPT` | text | implemented | 107 | 107 | 0 |  |  |
 | `RIGHT` | text | implemented | 64 | 64 | 0 |  |  |
 | `RIGHTB` | text | implemented | 92 | 92 | 0 |  |  |
 | `ROMAN` | math | implemented | 168 | 168 | 0 |  |  |
@@ -502,7 +502,7 @@ platform.
 | `TRUNC` | math | implemented | 307 | 307 | 0 |  |  |
 | `TTEST` | statistical | implemented | 335 | 335 | 0 | 1e-14 relative |  |
 | `TYPE` | information | implemented | 60 | 59 | 1 |  |  |
-| `UNICHAR` | text | implemented | 703 | 703 | 0 |  |  |
+| `UNICHAR` | text | implemented | 705 | 705 | 0 |  |  |
 | `UNICODE` | text | implemented | 286 | 286 | 0 |  |  |
 | `UNIQUE` | lookup and reference | implemented | 36 | 36 | 0 |  |  |
 | `UPPER` | text | implemented | 24 | 24 | 0 |  |  |

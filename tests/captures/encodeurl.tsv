@@ -181,3 +181,9 @@ encodeurl	length	168	LEN(_xlfn.ENCODEURL(REPT("é",5461)))	()	e	#NAME?
 encodeurl	length	169	LEN(_xlfn.ENCODEURL(REPT("é",5462)))	()	e	#NAME?
 encodeurl	length	170	LEN(_xlfn.ENCODEURL(REPT(_xlfn.UNICHAR(128512),2730)))	()	e	#NAME?
 encodeurl	length	171	LEN(_xlfn.ENCODEURL(REPT(_xlfn.UNICHAR(128512),2731)))	()	e	#NAME?
+encodeurl	length	172	LEN(_xlfn.ENCODEURL(REPT(" ",10921)&"aaa"))	()	e	#NAME?
+encodeurl	length	173	LEN(_xlfn.ENCODEURL(REPT(" ",10922)&"a"))	()	e	#NAME?
+encodeurl	length	174	LEN(_xlfn.ENCODEURL(REPT("é",5461)&"a"))	()	e	#NAME?
+encodeurl	length	175	LEN(_xlfn.ENCODEURL(REPT(_xlfn.UNICHAR(128512),2730)&"aaaaaa"))	()	e	#NAME?
+encodeurl	length	176	LEN(_xlfn.ENCODEURL(REPT(_xlfn.UNICHAR(128512),2730)&"aaaaaaa"))	()	e	#NAME?
+encodeurl	length	177	LEN(_xlfn.ENCODEURL(REPT("a",32766)))	()	e	#NAME?

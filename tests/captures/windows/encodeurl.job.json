@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "job_id": "xlrecalc-20261124-004247-encodeurl",
+  "job_id": "xlrecalc-20261124-095405-encodeurl",
   "package": "xlrecalc",
   "purpose": "capture suite encodeurl: open the workbook, save a copy with the cached values",
   "requires": {

@@ -423,9 +423,10 @@ _URL_KEPT = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
 def ENCODEURL(ctx: Context, text: str) -> str | ErrorValue:
     """The text percent-encoded as Excel for Windows does it; ``#VALUE!`` from 32,767 characters.
 
-    A result of 32,766 characters is computed and an unencoded 32,767-character text is refused
-    (capture windows/encodeurl), so the limit is taken on the result. Under the Mac the engine
-    compiles the name as one Excel does not know (``registry_for``).
+    The limit is on the result: a 10,923-character text that encodes to 32,767 characters is
+    refused, and a 32,766-character one that encodes to itself computed (capture
+    windows/encodeurl). Under the Mac the engine compiles the name as one Excel does not know
+    (``registry_for``).
     """
     parts = [
         ch if ch in _URL_KEPT else "".join(f"%{b:02X}" for b in ch.encode("utf-8", "surrogatepass"))
