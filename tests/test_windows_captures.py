@@ -146,3 +146,17 @@ def test_the_package_on_windows_gives_every_value_the_capture_holds(suite: str) 
     assert suite in SUITES
     _counts, _reasons, failures = outcomes(suite, "windows")
     assert not failures, failures[:10]
+
+
+def test_capturing_md_says_which_windows_captures_are_compared() -> None:
+    """CAPTURING.md §5 says "not compared" of no Windows capture this file compares."""
+    text = (WINDOWS.parents[2] / "CAPTURING.md").read_text(encoding="utf-8")
+    section = text[text.index("## 5. ") :]
+    section = section[: section.index("\n## ", 1)] if "\n## " in section[1:] else section
+    rows = [line for line in section.split("\n") if line.startswith("| `tests/captures/windows/")]
+    compared = {p.stem for p in CAPTURES} - set(COMPARED_ELSEWHERE)
+    assert rows
+    for row in rows:
+        name = row.split("`")[1].removeprefix("tests/captures/windows/").removesuffix(".tsv")
+        if name == "<suite>" or name in compared:
+            assert "not compared" not in row.lower(), row[:120]
