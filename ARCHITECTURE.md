@@ -864,10 +864,13 @@ spans per column, `Engine.member_of`) rather than stored per cell. A formula rea
 orders after the anchor, and a member's dependents become stale with the anchor. A spill that
 changes size makes the dependents of the cells it reached or left stale, and evaluation repeats
 until nothing moves (at most 100 rounds). A read evaluates the stale dynamic arrays before anything
-else, as Excel recalculates them before anything is read: a blank cell an array would now spill
-into, or a formula reading one, has no edge to it until the array is evaluated. An anchor writes its result into the store element by
-element, and the writer generates the cells of its range as it writes them (`Fill`), so a
-legacy array over ten full columns (10,485,760 cells) is computed and written in about 1.8 GiB.
+else: a blank cell an array would now spill into, or a formula reading one, has no edge to it until
+the array is evaluated, and after an edit Excel shows such cells with the array's new range
+whichever is read first (capture `spill_edit`: a spill growing, shrinking, blocked and free again,
+a spill reference, a reader on another sheet). An anchor writes its result into the store element
+by element, and the writer generates the cells of its range as it writes them (xlio's
+`ArrayFill`), so a legacy array over ten full columns (10,485,760 cells) is computed and written in
+about 1.8 GiB.
 
 **Size.** Every array a formula makes is checked against `ReadLimits.max_array_cells` (default
 10,485,760, ten full columns) before anything is allocated: a range an array formula fills, a

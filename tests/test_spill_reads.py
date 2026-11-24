@@ -1,8 +1,9 @@
 """A dynamic array an edit makes stale: a read finds the cells it now spills into (§7.7).
 
-Excel recalculates every dynamic array an edit reaches before anything is read. Read lazily, a
-blank cell the array now spills into, and a formula reading one, must see the spilled value too,
-however the cells are read: one by one, in one pass, or through a lazy ``Loader``.
+After such an edit Excel shows a blank cell the array now spills into, and a formula reading one,
+with the spilled value (capture ``spill_edit``, ``tests/test_spill_edit.py``). Read lazily, they
+must show it too, however the cells are read: one by one, in one pass, or through a lazy
+``Loader``.
 """
 
 from __future__ import annotations

@@ -1,0 +1,43 @@
+# suite: spill_edit
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-23
+# generator: capture/spill_edit_probe.py
+# method: each case of capture/spill_edit_cases.py written with its dynamic arrays as
+#   Excel writes them, saved by Excel, opened (automatic calculation), then each step
+#   taken (a number entered in a cell); each cell's value as Excel shows it, as text
+#   ('' blank), after opening and after each step
+# columns: case cell shown_after_opening then one column per step
+grow	probe!D1	1.0	1.0
+grow	probe!D2	2.0	2.0
+grow	probe!D3		3.0
+grow	probe!D4		
+grow	probe!F1	1.0	4.0
+grow	probe!G1	3.0	6.0
+grow	probe!H1	2.0	3.0
+shrink	probe!D1	1.0	1.0
+shrink	probe!D2	2.0	2.0
+shrink	probe!D3	3.0	
+shrink	probe!D4		
+shrink	probe!F1	4.0	1.0
+shrink	probe!G1	6.0	3.0
+shrink	probe!H1	3.0	2.0
+grow_then_shrink	probe!D1	1.0	1.0	1.0
+grow_then_shrink	probe!D2	2.0	2.0	
+grow_then_shrink	probe!D3		3.0	
+grow_then_shrink	probe!D4		4.0	
+grow_then_shrink	probe!D5			
+grow_then_shrink	probe!F1	1.0	5.0	1.0
+grow_then_shrink	probe!G1	3.0	10.0	1.0
+spill_ref	probe!I1	10.0	10.0
+spill_ref	probe!I2	20.0	20.0
+spill_ref	probe!I3		30.0
+spill_ref	probe!I4		
+spill_ref	probe!J1	1.0	31.0
+spill_ref	probe!K1	30.0	60.0
+blocked	probe!D2	2.0		2.0
+blocked	probe!D3	7.0	7.0	7.0
+blocked	probe!F1	0.0	9.0	0.0
+blocked	probe!G1	9.0	7.0	9.0
+other_sheet	probe!D3		3.0
+other_sheet	other!A1	0.0	6.0

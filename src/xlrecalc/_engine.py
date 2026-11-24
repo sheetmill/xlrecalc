@@ -829,8 +829,9 @@ class Engine:
 
         A dynamic array an edit makes stale may spill into cells outside the range it fills now:
         a blank cell there, or a formula reading one, has no edge to it until it is evaluated
-        and its range grows (§7.7). Excel recalculates every dynamic array an edit reaches before
-        anything is read, so a read does too.
+        and its range grows (§7.7). After an edit, Excel shows such cells with the array's new
+        range, whichever is read first (capture ``spill_edit``); evaluating the arrays first
+        gives the same.
         """
         self._spill_due = False
         stale = [a for a in self._dynamic if a in self.stale]
