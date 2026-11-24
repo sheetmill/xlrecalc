@@ -96,6 +96,7 @@ def test_errors_are_values() -> None:
 def test_a_name_excel_does_not_know_is_name_error() -> None:
     """As in Excel: ``#NAME?``, even in an untaken branch it is not reached."""
     assert evaluate("=NOSUCHFN(1)") == ErrorValue("#NAME?")
+    assert evaluate('=JIS("a")') == ErrorValue("#NAME?")  # no en-US Excel knows it (function_names)
     assert evaluate("=IF(TRUE,2,NOSUCHFN())") == 2.0
     assert Formula.parse("=NOSUCHFN(1)").unsupported == frozenset()
 

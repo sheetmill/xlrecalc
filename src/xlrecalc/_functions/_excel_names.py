@@ -272,7 +272,6 @@ EXCEL_NAMES: frozenset[str] = frozenset(
         "ISPMT",
         "ISREF",
         "ISTEXT",
-        "JIS",
         "KURT",
         "LAMBDA",
         "LARGE",
