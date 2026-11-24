@@ -29,7 +29,11 @@ def _header(path: Path) -> dict[str, object]:
 
 
 def test_there_is_a_windows_capture() -> None:
-    assert [p.name for p in CAPTURES] == ["codepage.tsv", "collate_words.tsv"]
+    assert [p.name for p in CAPTURES] == [
+        "clean_controls.tsv",
+        "codepage.tsv",
+        "collate_words.tsv",
+    ]
 
 
 @pytest.mark.parametrize("path", CAPTURES, ids=lambda p: p.stem)
@@ -69,7 +73,7 @@ def test_the_rows_are_the_generator_s_cases(path: Path) -> None:
     assert all(r[5] != "none" for r in rows)
 
 
-COMPARED = ["codepage"]
+COMPARED = ["clean_controls", "codepage"]
 """The Windows captures the package is compared with, under ``platform="windows"``: those whose
 platform-dependent behavior it implements for Excel for Windows."""
 
