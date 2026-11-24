@@ -4,7 +4,7 @@
     uv run python -m capture.job read SUITE JOB_DIR RESULT_DIR
 
 The job format is sheetmill's, version 1:
-https://github.com/sheetmill/sheetmill/blob/e3a5207c251929a8a19d713777b70ace3506fb95/docs/capture-jobs.md
+https://github.com/sheetmill/sheetmill/blob/3adb865500f4d2223e5c1a758b466e081d3fdc79/docs/capture-jobs.md
 ``write`` makes the job folder, the manifest (``job.json``: open the suite's workbook, save a copy)
 and the workbook in ``files/``, built as ``capture/pipeline.py`` builds it, with its zip entries'
 times and its document properties fixed, so that writing it again gives the same bytes and the
@@ -33,12 +33,28 @@ FIXED_TIME = "2026-01-01T00:00:00Z"
 ZIP_TIME = (1980, 1, 1, 0, 0, 0)
 
 
-def manifest(suite: str, job_id: str) -> dict[str, object]:
-    return {
+REQUIRES: dict[str, object] = {
+    "excel_build_min": {"windows": "16.0.20527.0"},
+    "edition": "Microsoft 365",
+}
+"""What a new job requires: the edition decides which functions Excel has, and the build is the
+first one the Windows captures were made with."""
+
+
+def manifest(
+    suite: str, job_id: str, requires: dict[str, object] | None = REQUIRES
+) -> dict[str, object]:
+    """The manifest; ``requires=None`` for a job written before new jobs stated it."""
+    head: dict[str, object] = {
         "schema": 1,
         "job_id": job_id,
         "package": "xlrecalc",
         "purpose": f"capture suite {suite}: open the workbook, save a copy with the cached values",
+    }
+    if requires is not None:
+        head["requires"] = requires
+    return {
+        **head,
         "limits": {"job_seconds": 3600, "step_seconds": 600},
         "audit": False,
         "workbooks": [
@@ -78,11 +94,14 @@ def workbook(suite: str, path: Path) -> None:
                 out.writestr(entry, data)
 
 
-def write(suite: str, job_id: str, out: Path) -> Path:
+def write(
+    suite: str, job_id: str, out: Path, requires: dict[str, object] | None = REQUIRES
+) -> Path:
     """The job folder ``out/<job_id>``."""
     folder = out / job_id
     (folder / "files").mkdir(parents=True)
-    (folder / "job.json").write_text(json.dumps(manifest(suite, job_id), indent=2) + "\n")
+    text = json.dumps(manifest(suite, job_id, requires), indent=2) + "\n"
+    (folder / "job.json").write_text(text)
     workbook(suite, folder / "files" / f"{suite}.xlsx")
     return folder
 

@@ -360,7 +360,7 @@ difference found there is settled by a capture, and its output stays local.
 ## 5. Captures made by a job on Windows
 
 A capture can also be made by an Excel capture job, in the format sheetmill describes
-([docs/capture-jobs.md at e3a5207](https://github.com/sheetmill/sheetmill/blob/e3a5207c251929a8a19d713777b70ace3506fb95/docs/capture-jobs.md),
+([docs/capture-jobs.md at 3adb865](https://github.com/sheetmill/sheetmill/blob/3adb865500f4d2223e5c1a758b466e081d3fdc79/docs/capture-jobs.md),
 version 1): a manifest of operations beside the input files, run by a program that drives Excel
 and records the machine. `capture/job.py` writes the job for a suite of `capture/suites.py` (the
 manifest opens the suite's workbook and saves a copy; the workbook is built as the pipeline
@@ -368,9 +368,12 @@ builds it, with fixed zip times and document properties, so that writing it agai
 bytes) and turns the result into the capture: each formula's cached value and type, read from the
 saved copy as the pipeline reads them, under the result's `header` copied whole (the format
 version, the runner's version, the job, the SHA-256 of the manifest and of each input, and the
-machine's record). The manifest is committed beside the capture, byte for byte.
-`tests/test_windows_captures.py` writes each job again from its header's `job_id` and requires
-the same manifest and inputs, checksum for checksum, and the generator's cases in order.
+machine's record). The manifest is committed beside the capture, byte for byte. A job states
+what it requires (`requires`): the edition, Microsoft 365, since it decides which functions Excel
+has, and the first Windows build these captures were made with, 16.0.20527.0; the first job,
+`collate_words`, stated neither. `tests/test_windows_captures.py` writes each job again from its
+header's `job_id` and its manifest's `requires`, and requires the same manifest and inputs,
+checksum for checksum, and the generator's cases in order.
 
 | capture | rows | what it records |
 |---|---|---|

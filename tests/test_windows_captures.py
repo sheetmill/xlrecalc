@@ -47,7 +47,8 @@ def test_writing_the_job_again_gives_the_same_files(path: Path, tmp_path: Path) 
     from capture.job import write
 
     header = _header(path)
-    folder = write(path.stem, str(header["job_id"]), tmp_path)
+    committed = json.loads(path.with_suffix(".job.json").read_text(encoding="utf-8"))
+    folder = write(path.stem, str(header["job_id"]), tmp_path, committed.get("requires"))
     assert (folder / "job.json").read_bytes() == path.with_suffix(".job.json").read_bytes()
     inputs = header["inputs"]
     assert isinstance(inputs, dict)
