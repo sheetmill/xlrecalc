@@ -11,7 +11,7 @@ import pytest
 from tests.xlsx_files import package
 from xlrecalc import recalculate
 from xlrecalc._engine import Engine, node
-from xlrecalc._functions import REGISTRY, function
+from xlrecalc._functions import REGISTRY, SPECS, function
 from xlrecalc._load import load, refused_in_file
 from xlrecalc._values import BLANK, ErrorValue
 
@@ -225,6 +225,7 @@ def test_an_internal_error_is_contained():
         assert "RuntimeError: boom" in report.exceptions[("S", 1, 1)]
     finally:
         REGISTRY.pop("_TESTBOOM")
+        SPECS.pop("_TESTBOOM")  # generated suites (empty_args) read SPECS
 
 
 def test_changing_a_value_recomputes_its_dependents():

@@ -24,7 +24,7 @@ import xlrecalc
 from tests.test_loader_orders import Reads
 from tests.xlsx_files import DOC, PKG, package
 from xlrecalc import CellRef, CellStatus, Report
-from xlrecalc._functions import REGISTRY, function
+from xlrecalc._functions import REGISTRY, SPECS, function
 
 ROWS = 4
 COLUMNS = "ABC"
@@ -42,6 +42,7 @@ def _boom() -> Iterator[None]:
 
     yield
     REGISTRY.pop("_TESTBOOM")
+    SPECS.pop("_TESTBOOM")  # generated suites (empty_args) read SPECS
 
 
 def _formula(rng: random.Random, sheets: int, row: int) -> tuple[str, set[str]]:
