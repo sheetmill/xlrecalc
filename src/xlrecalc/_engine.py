@@ -20,6 +20,8 @@ from dataclasses import dataclass, replace
 from functools import cmp_to_key
 from typing import Any
 
+import xlformat
+
 from xlrecalc._arith import flush
 from xlrecalc._arrays import (
     ArrayLimitError,
@@ -44,6 +46,7 @@ from xlrecalc._functions import REGISTRY
 from xlrecalc._limits import StepLimitError
 from xlrecalc._opening import Volatility
 from xlrecalc._ops import Ops
+from xlrecalc._platform import PlatformName
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef, CellStatus, Report
 from xlrecalc._store import COLS, MAX_COL, MAX_ROW, Sheet
@@ -199,8 +202,14 @@ class Engine:
         iterate_delta: float = 0.001,
         max_iteration_evaluations: int | None = 100_000_000,
         max_function_steps: int | None = 1_000_000_000,
+        platform: PlatformName = "mac",
+        regional_settings: xlformat.RegionalSettings | None = None,
     ) -> None:
         self.quirks = quirks or Quirks.EXCEL
+        self.platform: PlatformName = platform
+        """Which Excel computes the workbook, ``"mac"`` or ``"windows"`` (``platform=``)."""
+        self.regional_settings = regional_settings or xlformat.RegionalSettings.EN_US_MAC
+        """The viewer's regional settings (``regional_settings=``), which ``TEXT`` follows."""
         self.iterate = iterate
         """The workbook has iterative calculation on (``<calcPr iterate>``): §7.2."""
         self.iterate_count = max(1, iterate_count)

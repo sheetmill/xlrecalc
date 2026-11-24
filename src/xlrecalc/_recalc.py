@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import os
 
+import xlformat
 import xlio
 
 from xlrecalc._formula._fastkey import translate
 from xlrecalc._limits import ReadLimits, io_limits
 from xlrecalc._load import RecalcOnLoad, load, recalc_mode
+from xlrecalc._platform import resolve
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import Report
 from xlrecalc._save import array_edits, lookups
@@ -25,6 +27,8 @@ def recalculate(
     limits: ReadLimits | None = None,
     quirks: Quirks | None = None,
     full: bool | None = None,
+    platform: str | xlformat.Platform | None = None,
+    regional_settings: xlformat.RegionalSettings | None = None,
 ) -> Report:
     """Recalculate a workbook and write the results into the file as its cached values.
 
@@ -59,6 +63,10 @@ def recalculate(
             run of iterative calculation, and the steps of loops inside functions.
         quirks: Which Excel quirks to reproduce; all by default.
         full: Deprecated, to be removed in 1.0: ``True`` is ``recalc_on_load="always"``.
+        platform: Which Excel computes the workbook: ``"mac"`` (the default) or ``"windows"``, or
+            an ``xlformat.Platform``, which counts by its name.
+        regional_settings: The viewer's regional settings, an ``xlformat.RegionalSettings``
+            (en-US only), which ``TEXT`` follows; by default the platform's en-US preset.
 
     Returns:
         What could not be done: unsupported functions, uncomputed cells (whose cached values
@@ -70,10 +78,20 @@ def recalculate(
         PackageError: The file is not a readable xlsx package.
         LimitError: The file exceeds ``limits``.
         OSError: The file cannot be read, or the result cannot be written.
+        LookupError: ``platform`` is one this package has no captured evidence for yet.
     """
+    name, regional = resolve(platform, regional_settings)
     mode = recalc_mode(recalc_on_load, "full", full, stacklevel=2)
     # A load, then a save: in manual calculation Excel saves recalculated what it showed as cached.
-    engine = load(source, quirks=quirks, limits=limits, recalc_on_load=mode, saving=True)
+    engine = load(
+        source,
+        quirks=quirks,
+        limits=limits,
+        recalc_on_load=mode,
+        saving=True,
+        platform=name,
+        regional_settings=regional,
+    )
     engine.recalculate(full=mode == "always")
     engine.save_run()  # an opening, then a save: Excel's saved copy (§7.2)
     target = source if destination is None else destination

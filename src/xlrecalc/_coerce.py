@@ -11,9 +11,12 @@ import itertools
 from collections.abc import Iterator
 from typing import Protocol
 
+import xlformat
+
 from xlrecalc._arrays import Padded
 from xlrecalc._formula import MISSING
 from xlrecalc._numtext import number_to_text, text_to_number
+from xlrecalc._platform import PlatformName
 from xlrecalc._quirks import Quirks
 from xlrecalc._values import BLANK, ErrorValue, Lambda, Ref, Value
 
@@ -37,6 +40,8 @@ class Context(Protocol):
     quirks: Quirks
     date1904: bool
     today: dt.date
+    platform: PlatformName
+    regional_settings: xlformat.RegionalSettings
     sheet: int
     row: int
     col: int

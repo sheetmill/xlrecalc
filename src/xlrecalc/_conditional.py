@@ -18,6 +18,8 @@ import re
 from collections.abc import Mapping, Sequence
 from typing import Any
 
+import xlformat
+
 from xlrecalc._coerce import to_bool
 from xlrecalc._compare import Op, compare
 from xlrecalc._evaluate import Formula, Resolver
@@ -140,6 +142,8 @@ class ConditionalFormula:
         sqref: str,
         sheet: str | None = None,
         quirks: Quirks | None = None,
+        platform: str | xlformat.Platform | None = None,
+        regional_settings: xlformat.RegionalSettings | None = None,
     ) -> ConditionalFormula:
         """An expression rule: the format applies where the formula is true.
 
@@ -150,13 +154,16 @@ class ConditionalFormula:
                 spaces (``D2:D3 B4:C5``), a whole column (``C:C``) or row (``2:2``) allowed.
             sheet: The name of the sheet the rule is on, if references name it.
             quirks: Departures from Excel's behavior, as in :func:`load`.
+            platform: As :meth:`Formula.parse` takes it.
+            regional_settings: As :meth:`Formula.parse` takes it.
 
         Raises:
             FormulaError: The formula is not well formed, or holds what Excel refuses in a rule
                 (an array constant, a structured reference: Excel offers to repair such a file).
             ValueError: ``sqref`` is not a range.
         """
-        return cls(sqref, (_rule_formula(formula, sqref, sheet, quirks),), None)
+        rule = _rule_formula(formula, sqref, sheet, quirks, platform, regional_settings)
+        return cls(sqref, (rule,), None)
 
     @classmethod
     def cell_is(
@@ -167,6 +174,8 @@ class ConditionalFormula:
         sqref: str,
         sheet: str | None = None,
         quirks: Quirks | None = None,
+        platform: str | xlformat.Platform | None = None,
+        regional_settings: xlformat.RegionalSettings | None = None,
     ) -> ConditionalFormula:
         """A ``cellIs`` rule: the format applies where the cell's value compares as stated.
 
@@ -183,6 +192,8 @@ class ConditionalFormula:
             sqref: The range, as :meth:`parse` takes it.
             sheet: As :meth:`parse` takes it.
             quirks: As :meth:`parse` takes it.
+            platform: As :meth:`parse` takes it.
+            regional_settings: As :meth:`parse` takes it.
 
         Raises:
             ValueError: An operator not listed, or the wrong number of bounds for it.
@@ -193,7 +204,9 @@ class ConditionalFormula:
             raise ValueError(f"not a cellIs operator: {operator!r}")
         if len(formulas) != count:
             raise ValueError(f"{operator} takes {count} formula(s), not {len(formulas)}")
-        parsed = tuple(_rule_formula(f, sqref, sheet, quirks) for f in formulas)
+        parsed = tuple(
+            _rule_formula(f, sqref, sheet, quirks, platform, regional_settings) for f in formulas
+        )
         return cls(sqref, parsed, operator)
 
     def applies(
@@ -247,7 +260,14 @@ class ConditionalFormula:
         return compare(own, bounds[0], _OPERATORS[self.operator or ""]) is True
 
 
-def _rule_formula(text: str, sqref: str, sheet: str | None, quirks: Quirks | None) -> Formula:
+def _rule_formula(
+    text: str,
+    sqref: str,
+    sheet: str | None,
+    quirks: Quirks | None,
+    platform: str | xlformat.Platform | None = None,
+    regional_settings: xlformat.RegionalSettings | None = None,
+) -> Formula:
     reason = _refused(text)
     if reason is not None:
         raise FormulaError(
@@ -256,4 +276,11 @@ def _rule_formula(text: str, sqref: str, sheet: str | None, quirks: Quirks | Non
         )
     areas = _areas(sqref)
     anchor = f"{_letters(min(a[1] for a in areas))}{min(a[0] for a in areas)}"
-    return Formula.parse(text, sheet=sheet, origin=anchor, quirks=quirks)
+    return Formula.parse(
+        text,
+        sheet=sheet,
+        origin=anchor,
+        quirks=quirks,
+        platform=platform,
+        regional_settings=regional_settings,
+    )

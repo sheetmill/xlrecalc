@@ -11,6 +11,7 @@ import re
 from collections.abc import Callable, Iterable, Iterator
 from typing import BinaryIO, TypeAlias
 
+import xlformat
 import xlio
 from xlio import CellEdit
 
@@ -39,6 +40,7 @@ from xlrecalc._limits import ReadLimits, io_limits
 from xlrecalc._load import RecalcOnLoad, _Loader, recalc_mode, refused_in_file
 from xlrecalc._load import load as _load_engine
 from xlrecalc._opening import Opening
+from xlrecalc._platform import PlatformName, resolve
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef, CellStatus, Report
 from xlrecalc._save import array_edits, file_value, lookups
@@ -138,6 +140,16 @@ class Workbook:
         """
         self._engine.load_all()  # it covers every sheet's formulas
         return self._engine.settled_report()
+
+    @property
+    def platform(self) -> PlatformName:
+        """Which Excel computes the workbook, ``"mac"`` or ``"windows"``, as it was loaded."""
+        return self._engine.platform
+
+    @property
+    def regional_settings(self) -> xlformat.RegionalSettings:
+        """The viewer's regional settings the workbook was loaded with, which ``TEXT`` follows."""
+        return self._engine.regional_settings
 
     @property
     def sheet_names(self) -> list[str]:
@@ -581,6 +593,8 @@ def load(
     limits: ReadLimits | None = None,
     recalc_on_load: RecalcOnLoad = "excel",
     trust_cached: bool | None = None,
+    platform: str | xlformat.Platform | None = None,
+    regional_settings: xlformat.RegionalSettings | None = None,
 ) -> Workbook:
     """Read an xlsx workbook.
 
@@ -605,15 +619,28 @@ def load(
             is evaluated in every mode.
         trust_cached: Deprecated, to be removed in 1.0: ``False`` is ``recalc_on_load="always"``,
             ``True`` the default.
+        platform: Which Excel computes the workbook: ``"mac"`` (the default) or ``"windows"``, or
+            an ``xlformat.Platform``, which counts by its name.
+        regional_settings: The viewer's regional settings, an ``xlformat.RegionalSettings``
+            (en-US only), which ``TEXT`` follows; by default the platform's en-US preset.
 
     Raises:
         PackageError: The file is not a readable xlsx package.
         LimitError: The file exceeds ``limits``.
+        LookupError: ``platform`` is one this package has no captured evidence for yet.
     """
+    name, regional = resolve(platform, regional_settings)  # checked before the file is read
     if not isinstance(source, (str, os.PathLike)):
         source = io.BytesIO(source.read())
     mode = recalc_mode(recalc_on_load, "trust_cached", trust_cached, stacklevel=2)
-    engine = _load_engine(source, quirks=quirks, limits=limits, recalc_on_load=mode)
+    engine = _load_engine(
+        source,
+        quirks=quirks,
+        limits=limits,
+        recalc_on_load=mode,
+        platform=name,
+        regional_settings=regional,
+    )
     return Workbook(engine, source, limits)
 
 
@@ -660,6 +687,8 @@ class Loader:
             ``"always"``; ``"never"``.
         limits: The computing limits (``max_array_cells``, ``max_iteration_evaluations``,
             ``max_function_steps``); the archive limits are the book's.
+        platform: As for :func:`load`.
+        regional_settings: As for :func:`load`.
 
     The workbook :meth:`workbook` returns is computed and edited as any other, but has no file
     to copy, so :meth:`Workbook.save` raises; :func:`recalculate` writes a file's values.
@@ -671,8 +700,17 @@ class Loader:
         *,
         recalc_on_load: RecalcOnLoad = "excel",
         limits: ReadLimits | None = None,
+        platform: str | xlformat.Platform | None = None,
+        regional_settings: xlformat.RegionalSettings | None = None,
     ) -> None:
-        self._loader = _Loader(book, recalc_on_load=recalc_on_load, limits=limits)
+        name, regional = resolve(platform, regional_settings)
+        self._loader = _Loader(
+            book,
+            recalc_on_load=recalc_on_load,
+            limits=limits,
+            platform=name,
+            regional_settings=regional,
+        )
         self._limits = limits
         self._workbook: Workbook | None = None
 

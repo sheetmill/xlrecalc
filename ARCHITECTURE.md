@@ -1413,6 +1413,7 @@ src/xlrecalc/
   __init__.py      public names
   _values.py       ErrorValue, BLANK, Ref
   _quirks.py       Quirks
+  _platform.py     platform= and regional_settings=: the name and the regional settings a call means
   _numtext.py      number to text, text to number, dates and times in text (§4.3)
   _coerce.py       conversions shared by operators and functions (§4.3)
   _compare.py      operators, exact lookups, criteria, lookup keys (§4.3)
@@ -1489,6 +1490,17 @@ xlrecalc.ConditionalFormula.cell_is("between", ["$Z$1", "10"], sqref="A1:A5")
 ```
 
 One workbook is used from one thread at a time, and so is one `Formula`.
+
+**Platform and regional settings.** Every entry point above (`load`, `Loader`, `recalculate`,
+`evaluate`, `Formula.parse`, `ConditionalFormula.parse` and `cell_is`) takes `platform=`
+(`"mac"`, `"windows"`, or an `xlformat.Platform`, which counts by its name) and
+`regional_settings=` (an `xlformat.RegionalSettings`, en-US only); `None` is the Mac and the
+platform's en-US preset, and `Workbook.platform` and `Workbook.regional_settings` say what a
+workbook was loaded with. The two `parse` methods take them when the formula is compiled, as they
+take `quirks`. `TEXT` passes both on to `xlformat.text_function`. What else depends on them (the
+code page of `CHAR` and `CODE`, the order of text, the names Excel knows) is decided from the two
+together inside the package, so nothing public changes when other regional settings come. Excel
+for Windows raises `LookupError` until its captures are in the repository.
 
 **One formula outside a workbook** (`_evaluate.py`). The formula is compiled as a cell's formula
 would be, at `origin`, and its template is run at `at` on an engine that holds no formula cells:

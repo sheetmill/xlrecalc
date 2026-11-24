@@ -129,7 +129,14 @@ def TEXT(ctx: Context, v: Any, fmt: Any) -> str | ErrorValue:
     fmt = to_text(fmt, ctx)
     if isinstance(fmt, ErrorValue):
         return fmt
-    text = xlformat.text_function(v, fmt, date1904=ctx.date1904, quirks=ctx.quirks.to_xlformat())
+    text = xlformat.text_function(
+        v,
+        fmt,
+        date1904=ctx.date1904,
+        quirks=ctx.quirks.to_xlformat(),
+        platform=ctx.platform,
+        regional_settings=ctx.regional_settings,
+    )
     if isinstance(text, xlformat.ExcelError):
         return ErrorValue(str(text))
     return text

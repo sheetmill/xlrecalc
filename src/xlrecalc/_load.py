@@ -18,6 +18,7 @@ from array import array
 from collections.abc import Generator, Iterable, Iterator
 from typing import Any, BinaryIO, Literal
 
+import xlformat
 import xlio
 
 from xlrecalc._dates import date_serial
@@ -28,6 +29,7 @@ from xlrecalc._formula._nodes import Call, Reference
 from xlrecalc._formula._prefixes import PREFIXES
 from xlrecalc._limits import ReadLimits, io_limits
 from xlrecalc._opening import Opening, Rule, Volatility
+from xlrecalc._platform import PlatformName
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef
 from xlrecalc._store import COLS
@@ -588,6 +590,8 @@ def load(
     recalc_on_load: RecalcOnLoad = "excel",
     today: dt.date | None = None,
     saving: bool = False,
+    platform: PlatformName = "mac",
+    regional_settings: xlformat.RegionalSettings | None = None,
 ) -> Engine:
     """Read a workbook into an engine; formulas whose cached values are trusted stay unevaluated.
 
@@ -612,6 +616,8 @@ def load(
             today=today,
             saving=saving,
             path=path,
+            platform=platform,
+            regional_settings=regional_settings,
         )
         for sheet in book.sheets:
             for _ in loader.cells(sheet):
@@ -642,6 +648,8 @@ class _Loader:
         today: dt.date | None = None,
         saving: bool = False,
         path: str | None = None,
+        platform: PlatformName = "mac",
+        regional_settings: xlformat.RegionalSettings | None = None,
     ) -> None:
         if recalc_on_load not in RECALC_ON_LOAD:
             raise ValueError(f"recalc_on_load must be one of {RECALC_ON_LOAD}: {recalc_on_load!r}")
@@ -655,6 +663,8 @@ class _Loader:
             book.calc.iterate_delta if book.calc.iterate_delta is not None else 0.001,
             (limits or ReadLimits()).max_iteration_evaluations,
             (limits or ReadLimits()).max_function_steps,
+            platform,
+            regional_settings,
         )
         if path is not None:
             engine.path = path

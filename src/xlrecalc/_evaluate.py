@@ -13,12 +13,15 @@ from collections.abc import Callable, Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
+import xlformat
+
 from xlrecalc._arrays import ArrayLimitError, NotImplementedFormError, element, is_array, shape
 from xlrecalc._engine import Engine, Template, _at, _Cells
 from xlrecalc._formula import FormulaSyntaxError, TokenizeError
 from xlrecalc._functions._excel_names import EXCEL_NAMES
 from xlrecalc._limits import StepLimitError
 from xlrecalc._load import refused_in_file
+from xlrecalc._platform import PlatformName, resolve
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import column_letters
 from xlrecalc._store import COLS, MAX_COL, MAX_ROW
@@ -83,6 +86,8 @@ def evaluate(
     legacy: bool = False,
     quirks: Quirks | None = None,
     date1904: bool = False,
+    platform: str | xlformat.Platform | None = None,
+    regional_settings: xlformat.RegionalSettings | None = None,
 ) -> Any:
     """Evaluate one formula outside a workbook, as Excel would in a cell.
 
@@ -99,6 +104,10 @@ def evaluate(
             in Excel today (a dynamic array).
         quirks: Departures from Excel's behavior, as in :func:`load`.
         date1904: The 1904 date system.
+        platform: Which Excel computes it: ``"mac"`` (the default) or ``"windows"``, or an
+            ``xlformat.Platform``, which counts by its name.
+        regional_settings: The viewer's regional settings, an ``xlformat.RegionalSettings``
+            (en-US only), which ``TEXT`` follows; by default the platform's en-US preset.
 
     Returns:
         The value a cell would show: a number, text, logical or :class:`ErrorValue`, or for a
@@ -107,8 +116,17 @@ def evaluate(
     Raises:
         FormulaError: Excel's formula bar would not take the formula.
         UnsupportedError: It uses a function or form this package does not compute.
+        LookupError: ``platform`` is one this package has no captured evidence for yet.
     """
-    parsed = Formula.parse(formula, sheet=sheet, origin=at, legacy=legacy, quirks=quirks)
+    parsed = Formula.parse(
+        formula,
+        sheet=sheet,
+        origin=at,
+        legacy=legacy,
+        quirks=quirks,
+        platform=platform,
+        regional_settings=regional_settings,
+    )
     return parsed.evaluate(values, resolver=resolver, names=names, date1904=date1904)
 
 
@@ -120,7 +138,14 @@ class Formula:
     """
 
     def __init__(
-        self, text: str, sheet: str | None, origin: tuple[int, int], legacy: bool, quirks: Quirks
+        self,
+        text: str,
+        sheet: str | None,
+        origin: tuple[int, int],
+        legacy: bool,
+        quirks: Quirks,
+        platform: PlatformName = "mac",
+        regional_settings: xlformat.RegionalSettings | None = None,
     ) -> None:
         self.text = text
         """The formula in file form, without ``=``."""
@@ -128,7 +153,9 @@ class Formula:
         self.legacy = legacy
         self._origin = origin
         self._quirks = quirks
-        self._engine = _AdHoc(sheet, quirks=quirks)
+        self._engine = _AdHoc(
+            sheet, quirks=quirks, platform=platform, regional_settings=regional_settings
+        )
         row, col = origin
         try:
             tid = self._engine.template_for(text, row, col, array_mode=not legacy)
@@ -145,15 +172,20 @@ class Formula:
         origin: str | None = None,
         legacy: bool = False,
         quirks: Quirks | None = None,
+        platform: str | xlformat.Platform | None = None,
+        regional_settings: xlformat.RegionalSettings | None = None,
     ) -> Formula:
         """Compile a formula: as typed (``=...``) or in file form (no ``=``).
 
         ``origin`` is the cell it was written for (default A1); see :func:`evaluate` for the
-        rest.
+        rest. ``platform`` and ``regional_settings`` are taken here, as ``quirks`` is: which
+        names Excel knows is decided when the formula is compiled.
 
         Raises:
             FormulaError: Excel's formula bar would not take it.
+            LookupError: ``platform`` is one this package has no captured evidence for yet.
         """
+        name, regional = resolve(platform, regional_settings)
         if not isinstance(formula, str):
             raise FormulaError(f"a formula is text: {formula!r}")
         if formula.startswith("="):  # as typed: the file form the formula bar would give
@@ -163,7 +195,9 @@ class Formula:
             reason = refused_in_file(file_text)
             if reason is not None:
                 raise FormulaError(f"{formula!r}: {reason}")
-        return cls(file_text, sheet, _position(origin), legacy, quirks or Quirks.EXCEL)
+        return cls(
+            file_text, sheet, _position(origin), legacy, quirks or Quirks.EXCEL, name, regional
+        )
 
     @property
     def references(self) -> tuple[Reference, ...]:

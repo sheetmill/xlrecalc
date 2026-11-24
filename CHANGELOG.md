@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `platform=` and `regional_settings=` on `load`, `Loader`, `recalculate`, `evaluate`, `Formula.parse`,
+  `ConditionalFormula.parse` and `ConditionalFormula.cell_is`, and `Workbook.platform` and
+  `Workbook.regional_settings`, in the shape xlformat and sheetpeek take them: `platform` is `"mac"`, `"windows"` or an
+  `xlformat.Platform` (by its name), `regional_settings` an `xlformat.RegionalSettings`; `None` is the Mac and the
+  platform's en-US preset. `TEXT` passes both on to xlformat. `"windows"` raises `LookupError` until the package has
+  Excel for Windows' captures.
+
+### Changed
+- Requires xlformat 0.8 or later (`platform` and `regional_settings` in `xlformat.text_function`).
+
 ### Fixed
 - Reading a workbook of many dynamic arrays took time growing with the square of their number: every formula read
   went through every dynamic array read before it. It now takes time in proportion to them.
