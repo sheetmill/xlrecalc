@@ -1144,11 +1144,11 @@ wheels = [
 
 [[package]]
 name = "xlformat"
-version = "0.8.0"
+version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/c3/a8/ba6719954c255237f89d736cc0e3a95429c7356f99938a22eb6c2f005d79/xlformat-0.8.0.tar.gz", hash = "sha256:46c44c5d37dcc20e730fa80b75a4cbaffa21e6d55adc44a9deef891f70abc77f", size = 9460824, upload-time = "2026-11-24T04:34:55.803Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/12/32/1f7f511c26f3ee0f842fbe1e64e8aae72beb34c74952533093b90af95cb6/xlformat-0.9.0.tar.gz", hash = "sha256:2a2ac26b2f12d5a955975a3971e45b8aae4f3ef3e51321f7be38724c17312b3b", size = 10375348, upload-time = "2026-11-24T22:05:06.533Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/52/57/3db296ee6f7fc73cc5438b9b4499ed404b6cc81b968f9778f1990f81e58a/xlformat-0.8.0-py3-none-any.whl", hash = "sha256:c54637c16be1d94abb0726b03a3dbfb2ebbe3396b36e5a498f4f3daca3fc8fa9", size = 112165, upload-time = "2026-11-24T04:34:54.345Z" },
+    { url = "https://files.pythonhosted.org/packages/26/8f/ac4a225c6a0594f081e86c0536112477bb1b459731eaa044463baa34592d/xlformat-0.9.0-py3-none-any.whl", hash = "sha256:e69806f7db00748efb0b7f6ffb9488989c442dc4fff7abd29a94bb268da3e6ed", size = 120881, upload-time = "2026-11-24T22:05:05.062Z" },
 ]
 
 [[package]]
