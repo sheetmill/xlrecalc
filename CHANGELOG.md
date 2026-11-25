@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `LINEST` with several x columns, and `LOGEST`, `TREND` and `GROWTH`, computed as capture
+  `linest_multi` shows Excel for Mac and for Windows computing them, which agree on every row.
+  Such a `LINEST` kept the value the file caches and was reported under `LINEST with several
+  regressors`; the other three were not computed. The fit is a QR decomposition that picks at
+  each step the column with the most left; a column within 1E-6 of the ones before it is
+  collinear: coefficient and standard error 0, and one more residual degree of freedom. A zero
+  column, or a constant one beside the constant, gets coefficient 0 without the extra degree of
+  freedom, with Excel's `ssresid` and `ssreg` (QUIRKS.md). Results are within a declared relative
+  tolerance of 5E-14; where exactly collinear columns tie, Excel may drop another of them than
+  the package does (listed rows).
+- The `linest_multi` capture (864 formulas), and `empty_args` with `LOGEST`, `TREND` and `GROWTH`,
+  from Excel for Mac and Excel for Windows.
+
 ## [0.12.0] - 2026-11-25
 
 ### Added

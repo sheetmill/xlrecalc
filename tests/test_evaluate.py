@@ -144,7 +144,6 @@ def test_an_unsupported_form_is_named_and_raises(text: str, label: str) -> None:
     ("text", "label"),
     [
         ("=CELL(B1,A1)", 'CELL("format")'),
-        ("=LINEST(A1:A3,B1:C3)", "LINEST with several regressors"),
     ],
 )
 def test_an_unsupported_case_found_only_by_its_values_raises(text: str, label: str) -> None:

@@ -37,9 +37,9 @@ _OWN = "*"  # the formula's own sheet when it has no name: no sheet can be calle
 class UnsupportedError(FormulaError):
     """The formula uses what Excel computes and this package does not: a function or a form.
 
-    The forms: a structured, 3-D or external reference, ``CELL``'s formatting kinds, ``LINEST``
-    with several regressors, a union of ranges given to a function no capture shows reading one,
-    and the others the workbook's report names (``Report.unsupported``).
+    The forms: a structured, 3-D or external reference, ``CELL``'s formatting kinds, a union of
+    ranges given to a function no capture shows reading one, and the others the workbook's report
+    names (``Report.unsupported``).
 
     A name Excel itself does not know is no error here: it evaluates to ``#NAME?``, as in Excel.
     """
@@ -230,9 +230,9 @@ class Formula:
         Functions Excel has (``_XLFN.AGGREGATE``) and forms: a structured, 3-D or external
         reference, ``CELL`` given a formatting kind as text (``CELL("format")``). A name Excel
         does not know is not here: it evaluates to ``#NAME?``, as in Excel. What depends on the
-        values or on the function reached (``CELL`` given its kind in a cell, ``LINEST`` with
-        several regressors, a union given to a function no capture shows reading one) is found
-        while evaluating, which raises ``UnsupportedError`` then.
+        values or on the function reached (``CELL`` given its kind in a cell, a union given to a
+        function no capture shows reading one) is found while evaluating, which raises
+        ``UnsupportedError`` then.
         """
         template = self._template
         spans = any(spec.sheet is not None and ":" in spec.sheet for spec in template.refs)

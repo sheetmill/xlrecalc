@@ -3615,6 +3615,7 @@ _EMPTY_ADDED += (  # LAMBDA and the functions that call one
 )  # fmt: skip
 _EMPTY_ADDED += ("BESSELI", "BESSELJ", "BESSELK", "BESSELY")  # the Bessel functions
 _EMPTY_ADDED += ("CONVERT",)
+_EMPTY_ADDED += ("LOGEST", "TREND", "GROWTH")  # the regression arrays (linest_multi)
 _EMPTY_VALID["CONVERT"] = ("1", '"m"', '"ft"')
 
 # Functions whose arguments the generator cannot fill (LET's are names, the others take a
@@ -4107,6 +4108,165 @@ def three_d_snap() -> list[Case]:
         "Jan!B1+Feb!B1+Mar!B1", "SUM(Jan:Mar!A1:B1)", "SUM(Jan:Mar!A1,Jan:Mar!B1)",
     ]  # fmt: skip
     return [Case("form", f) for f in forms]
+
+
+def _regression_blocks() -> dict[str, list[list[Input]]]:
+    """The data of ``linest_multi``: name -> columns (y first, then the x columns)."""
+    rng = random.Random(20261125)
+
+    def ints(n: int, lo: int = -20, hi: int = 20) -> list[float]:
+        return [float(rng.randint(lo, hi)) for _ in range(n)]
+
+    def noisy(xs: list[list[float]], coef: list[float], base: float) -> list[float]:
+        return [
+            base + sum(c * x[i] for c, x in zip(coef, xs, strict=True)) + rng.randint(-8, 8) / 4
+            for i in range(len(xs[0]))
+        ]
+
+    x = [ints(10) for _ in range(5)]
+    blocks: dict[str, list[list[Input]]] = {"base": [noisy(x, [2, -1, 0.5, 3, -2], 3.0), *x]}
+    a, b = ints(10), ints(10)
+    exact = {
+        "dup": [a, a, b],  # the second column repeats the first
+        "sum": [a, b, [p + q for p, q in zip(a, b, strict=True)]],  # the third is the sum
+        "scaled": [a, [2 * p for p in a], b],  # the second is twice the first
+        "constant": [a, [5.0] * 10, b],  # the second is a constant: the intercept's column
+        "zero": [a, [0.0] * 10, b],  # the second is all zero
+        "first_dup": [a, b, a],  # the third repeats the first
+    }
+    for name, cols in exact.items():
+        blocks[name] = [noisy([a, b], [1.5, -2], 4.0), *cols]
+    for e in (6, 9, 12, 14):
+        jitter = [rng.choice((-1.0, 1.0)) * 10.0**-e for _ in range(10)]
+        near = [p + q + j for p, q, j in zip(a, b, jitter, strict=True)]
+        blocks[f"near{e}"] = [noisy([a, b], [1.5, -2], 4.0), a, b, near]
+    w = [ints(3) for _ in range(4)]
+    blocks["wide"] = [[1.0, 4.0, 2.5], *w]  # more columns than rows
+    s = [ints(4) for _ in range(3)]
+    blocks["square"] = [noisy(s, [1, 2, 3], 1.0), *s]  # as many rows as unknowns
+    k = [ints(5) for _ in range(2)]
+    yk = noisy(k, [1, 1], 0.0)
+    for name, (col, row, value) in {
+        "x_blank": (1, 2, None), "x_text": (1, 2, "a"), "x_numtext": (2, 3, "5"),
+        "x_logical": (2, 0, True), "y_blank": (0, 1, None), "y_text": (0, 4, "b"),
+    }.items():  # fmt: skip
+        cols: list[list[Input]] = [list(yk), list(k[0]), list(k[1])]
+        cols[col][row] = value
+        blocks[name] = cols
+    g = [ints(10, 1, 9) for _ in range(3)]
+    blocks["pos"] = [
+        [round(2.0 * 1.1 ** g[0][i] * 0.9 ** g[1][i] * 1.05 ** g[2][i], 6) for i in range(10)],
+        *g,
+    ]
+    blocks["pos_sum"] = [
+        blocks["pos"][0],
+        g[0],
+        g[1],
+        [p + q for p, q in zip(g[0], g[1], strict=True)],
+    ]
+    blocks["new"] = [ints(4) for _ in range(3)]  # new x values: four rows, three columns
+    return blocks
+
+
+def _regression_layout() -> tuple[dict[str, Input], dict[str, list[str]]]:
+    """The blocks side by side from column AA, a column between: cells, and name -> the
+    ranges of its columns."""
+    cells: dict[str, Input] = {}
+    ranges: dict[str, list[str]] = {}
+    col = 27
+    for name, cols in _regression_blocks().items():
+        ranges[name] = []
+        for values in cols:
+            letter = _letters(col)
+            ranges[name].append(f"{letter}1:{letter}{len(values)}")
+            for r, v in enumerate(values, 1):
+                if v is not None:
+                    cells[f"{letter}{r}"] = v
+            col += 1
+        col += 1
+    base = _regression_blocks()["base"]
+    for r, values in enumerate(base[:3], 20):  # y and two x columns of base as rows 20 to 22
+        for c, v in enumerate(values, 27):
+            cells[f"{_letters(c)}{r}"] = v
+    ranges["rows"] = ["AA20:AJ20", "AA21:AJ22"]
+    return cells, ranges
+
+
+def _span(ranges: list[str]) -> str:
+    """One range over adjacent columns: ``AB1:AB10`` .. ``AD1:AD10`` -> ``AB1:AD10``."""
+    return ranges[0].split(":")[0] + ":" + ranges[-1].split(":")[1]
+
+
+def linest_multi() -> list[Case]:
+    """LINEST and LOGEST with several x columns, then TREND and GROWTH.
+
+    Every cell of the result, read by ``INDEX``: with and without the constant, with the
+    statistics, over 2 to 5 well-conditioned columns, over columns that are exactly collinear (a
+    repeated, summed, scaled, constant or zero column), nearly collinear (a sum off by 1E-6 to
+    1E-14), more columns than rows, as many rows as unknowns, x given in rows, and blanks, text and
+    logicals in the inputs; without the statistics; then TREND and GROWTH of the fit and of new x
+    values.
+    """
+    _, ranges = _regression_layout()
+    cases: list[Case] = []
+
+    def full(tag: str, fn: str, y: str, x: str, k: int, const: str) -> None:
+        for r in range(1, 6):
+            for c in range(1, k + 2):
+                cases.append(Case(tag, f"INDEX({fn}({y},{x},{const},TRUE),{r},{c})"))
+
+    base = ranges["base"]
+    for k in (2, 3, 4, 5):
+        for const in ("TRUE", "FALSE"):
+            full("base", "LINEST", base[0], _span(base[1 : k + 1]), k, const)
+    for name in ("dup", "sum", "scaled", "constant", "zero", "first_dup"):
+        for const in ("TRUE", "FALSE"):
+            full(name, "LINEST", ranges[name][0], _span(ranges[name][1:]), 3, const)
+    for e in (6, 9, 12, 14):
+        name = f"near{e}"
+        for const in ("TRUE", "FALSE"):
+            full(name, "LINEST", ranges[name][0], _span(ranges[name][1:]), 3, const)
+    for const in ("TRUE", "FALSE"):
+        full("wide", "LINEST", ranges["wide"][0], _span(ranges["wide"][1:]), 4, const)
+        full("square", "LINEST", ranges["square"][0], _span(ranges["square"][1:]), 3, const)
+    for const in ("TRUE", "FALSE"):
+        full("rows", "LINEST", ranges["rows"][0], ranges["rows"][1], 2, const)
+    for name in ("x_blank", "x_text", "x_numtext", "x_logical", "y_blank", "y_text"):
+        cases.append(
+            Case("kinds", f"INDEX(LINEST({ranges[name][0]},{_span(ranges[name][1:])}),1,1)")
+        )
+    x3 = _span(base[1:4])
+    for const in ("TRUE", "FALSE"):
+        for c in range(1, 5):
+            cases.append(Case("nostats", f"INDEX(LINEST({base[0]},{x3},{const},FALSE),1,{c})"))
+            cases.append(Case("nostats", f"INDEX(LINEST({base[0]},{x3},{const}),1,{c})"))
+    pos = ranges["pos"]
+    for const in ("TRUE", "FALSE"):
+        full("logest", "LOGEST", pos[0], _span(pos[1:3]), 2, const)
+        full("logest", "LOGEST", pos[0], _span(pos[1:]), 3, const)
+        full("logest_sum", "LOGEST", ranges["pos_sum"][0], _span(ranges["pos_sum"][1:]), 3, const)
+    new = _span(ranges["new"])
+    for fn, block in (("TREND", base), ("GROWTH", pos)):
+        for const in ("TRUE", "FALSE"):
+            for i in range(1, 5):
+                cases.append(
+                    Case(
+                        fn.lower(), f"INDEX({fn}({block[0]},{_span(block[1:4])},{new},{const}),{i})"
+                    )
+                )
+            for i in (1, 5, 10):
+                cases.append(
+                    Case(fn.lower(), f"INDEX({fn}({block[0]},{_span(block[1:4])},,{const}),{i})")
+                )
+        cases.append(Case(fn.lower(), f"INDEX({fn}({block[0]},{_span(block[1:3])},{new}),1)"))
+    for i in (1, 4):
+        cases.append(
+            Case(
+                "trend_sum",
+                f"INDEX(TREND({ranges['sum'][0]},{_span(ranges['sum'][1:])},{new}),{i})",
+            )
+        )
+    return cases
 
 
 def encodeurl() -> list[Case]:
@@ -5405,4 +5565,5 @@ SUITES = {
     "three_d": Suite(three_d, fixed=_THREE_D_TABLE),
     "unions": Suite(unions, fixed=_UNIONS_TABLE),
     "three_d_snap": Suite(three_d_snap, fixed=_THREE_D_SNAP_TABLE),
+    "linest_multi": Suite(linest_multi, fixed=_regression_layout()[0]),
 }

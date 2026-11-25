@@ -1065,6 +1065,18 @@ Behavior that is not the obvious reading, each from its capture:
   × (1 + |a| + |b|). Flows with a root at 0, and the negative brackets of some roots, are not
   reproduced (`QUIRKS.md`). `XIRR` reads text dates and dates in any order after the first, unlike
   `XNPV`.
+- Regression over several x columns (capture `linest_multi`, Mac and Windows alike): `LINEST`,
+  `LOGEST`, `TREND` and `GROWTH` fit by a Householder QR decomposition (`_functions/_regression.py`):
+  the column of ones first when there is a constant, then at each step the x column with the
+  largest remaining norm, the first on a tie in the order the swaps leave. A column left with at
+  most 1E-6 of its own norm is collinear with those before it: its coefficient and standard error
+  are 0, and it adds one to the residual degrees of freedom. An all-zero column, or one holding a
+  single value beside the constant, has coefficient 0 but keeps its place: the degrees of freedom
+  stay, and the residual sum of squares is read after every column's place, as Excel reads it
+  (QUIRKS.md). With as many rows as kept columns, the standard errors and sey are 0, r2 is 1 and
+  F `#NUM!`. A blank, text or logical among the inputs is `#VALUE!`; x is given in columns beside
+  a y column, or in rows beside a y row. `LOGEST` and `GROWTH` fit the logarithms of y. One x
+  column keeps `LINEST`'s own sums (capture `statistics`).
 - Day counts and coupons (capture `bonds`): `DAYS360`'s US method and `YEARFRAC` basis 0 differ at
   the end of February; actual/actual takes year lengths from the calendar (1900 has 365 days
   there); coupon dates step back from maturity keeping its day (the month's last day when maturity
@@ -1553,9 +1565,8 @@ the package does not compute raises `UnsupportedError`, as does a form it does n
 structured or external reference, a 3-D reference, which has no sheets outside a workbook,
 `CELL`'s formatting kinds: what the report names in a workbook). `Formula.unsupported` names what
 the text shows, the code generator recording the forms it meets (`Compiled.forms`); a case that
-depends on the values or on the function reached (`CELL` given its kind in a cell, `LINEST` with
-several regressors, a union given to a function no capture shows reading one) raises while
-evaluating. The template is run by the engine that compiled it, since the operators
+depends on the values or on the function reached (`CELL` given its kind in a cell, a union given
+to a function no capture shows reading one) raises while evaluating. The template is run by the engine that compiled it, since the operators
 read that engine's position; each call clears its cells and names first. Tests:
 `tests/test_evaluate.py`, where a captured formula evaluated alone gives the engine's value in the
 capture's sheet, in every suite whose inputs are values (not formulas or fixed cells), unsupported
@@ -1599,8 +1610,7 @@ In this order: an order, not a promise or a date.
    spill and the writer would have to carry.
 3. Arrays of references (`N(OFFSET(Z1,{0;1},0))`), which QUIRKS.md lists as not computed, on
    the `Areas` value unions use (§7.3), with a capture of their own.
-4. The functions still absent, by family, each family's captures first: bonds with odd periods, the regression arrays (`TREND`, `GROWTH`, `LOGEST`) and
-   `TRIMRANGE`, then `AGGREGATE` and the others one by one; those with large questions of their
+4. The functions still absent, by family, each family's captures first: bonds with odd periods and `TRIMRANGE`, then `AGGREGATE` and the others one by one; those with large questions of their
    own (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable.
    `docs/coverage.md` lists what exists.
 5. A live openpyxl adapter: `xlrecalc.from_openpyxl(workbook)` would build an engine from an

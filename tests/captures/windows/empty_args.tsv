@@ -304,12 +304,12 @@
 #    "format": 1,
 #    "inputs": {
 #     "empty_args.xlsx": {
-#      "bytes": 19902,
-#      "sha256": "c9ff995358467497b48e8d029ff5c03949d593c757d3f2ac826730fd427a511c"
+#      "bytes": 20128,
+#      "sha256": "8eaf8e176525fc21bac105dc00b58e455fbf5e9b50e0c8a52078d28416a91a01"
 #     }
 #    },
-#    "job_id": "xlrecalc-20261124-100532-empty-args",
-#    "manifest_sha256": "9c98b0cff5cf00814e96163e484aa244cfde50579a9fcbbf4e3dca8f792954c8",
+#    "job_id": "xlrecalc-20261125-123028-empty-args",
+#    "manifest_sha256": "bf70d3365e51e0003b406ef343f48be560346613283dd797774a634a2629c67b",
 #    "runner_version": "0.1.28"
 #   }
 # columns: suite tag case formula inputs expected_type expected_repr
@@ -1510,12 +1510,12 @@ empty_args	textsplit	1194	_xlfn.TEXTSPLIT("a,b;c",",",,FALSE)	()	str	'a'
 empty_args	randarray	1195	_xlfn.RANDARRAY(1,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1196	_xlfn.RANDARRAY(,1,5,5,FALSE)	()	n	5.0
 empty_args	randarray	1197	_xlfn.RANDARRAY(1,,5,5,FALSE)	()	n	5.0
-empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	1.6333153312175597
+empty_args	randarray	1198	_xlfn.RANDARRAY(1,1,,5,FALSE)	()	n	4.908653336337197
 empty_args	randarray	1199	_xlfn.RANDARRAY(1,1,5,,FALSE)	()	e	#VALUE!
 empty_args	randarray	1200	_xlfn.RANDARRAY(1,1,5,5,)	()	n	5.0
-empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.02949377046899393
-empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.9712711426274678
-empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.6126925236610032
+empty_args	randarray	1201	_xlfn.RANDARRAY(,,,,)	()	n	0.3297173914128855
+empty_args	randarray	1202	_xlfn.RANDARRAY()	()	n	0.10029637117936407
+empty_args	randarray	1203	_xlfn.RANDARRAY(,1)	()	n	0.6312636341425717
 empty_args	let	1204	_xlfn.LET(_xlpm.x,1,_xlpm.x+1)	()	n	2.0
 empty_args	let	1205	_xlfn.LET(_xlpm.x,,_xlpm.x+1)	()	n	1.0
 empty_args	let	1206	_xlfn.LET(_xlpm.x,1,)	()	n	0.0
@@ -1849,3 +1849,27 @@ empty_args	convert	1533	CONVERT(1,"m","ft")	()	n	3.2808398950131235
 empty_args	convert	1534	CONVERT(,"m","ft")	()	e	#N/A
 empty_args	convert	1535	CONVERT(1,,"ft")	()	e	#N/A
 empty_args	convert	1536	CONVERT(1,"m",)	()	e	#N/A
+empty_args	logest	1537	LOGEST($AA$1:$AA$4,$AA$1:$AA$4,TRUE,TRUE)	()	n	1.3195079107728942
+empty_args	logest	1538	LOGEST(,$AA$1:$AA$4,TRUE,TRUE)	()	e	#VALUE!
+empty_args	logest	1539	LOGEST($AA$1:$AA$4,,TRUE,TRUE)	()	n	1.9999999999999998
+empty_args	logest	1540	LOGEST($AA$1:$AA$4,$AA$1:$AA$4,,TRUE)	()	n	1.3195079107728942
+empty_args	logest	1541	LOGEST($AA$1:$AA$4,$AA$1:$AA$4,TRUE,)	()	n	1.3195079107728942
+empty_args	logest	1542	LOGEST($AA$1:$AA$4,,,)	()	n	1.9999999999999998
+empty_args	logest	1543	LOGEST($AA$1:$AA$4,)	()	n	1.9999999999999998
+empty_args	logest	1544	LOGEST($AA$1:$AA$4,,TRUE)	()	n	1.9999999999999998
+empty_args	trend	1545	TREND($AA$1:$AA$4,$AA$1:$AA$4,$AA$1:$AA$4,TRUE)	()	n	1.0
+empty_args	trend	1546	TREND(,$AA$1:$AA$4,$AA$1:$AA$4,TRUE)	()	e	#VALUE!
+empty_args	trend	1547	TREND($AA$1:$AA$4,,$AA$1:$AA$4,TRUE)	()	n	0.2999999999999994
+empty_args	trend	1548	TREND($AA$1:$AA$4,$AA$1:$AA$4,,TRUE)	()	n	1.0
+empty_args	trend	1549	TREND($AA$1:$AA$4,$AA$1:$AA$4,$AA$1:$AA$4,)	()	n	1.0
+empty_args	trend	1550	TREND($AA$1:$AA$4,,,)	()	n	0.2999999999999994
+empty_args	trend	1551	TREND($AA$1:$AA$4,)	()	n	0.2999999999999994
+empty_args	trend	1552	TREND($AA$1:$AA$4,,$AA$1:$AA$4)	()	n	0.2999999999999994
+empty_args	growth	1553	GROWTH($AA$1:$AA$4,$AA$1:$AA$4,$AA$1:$AA$4,TRUE)	()	n	1.3195079107728942
+empty_args	growth	1554	GROWTH(,$AA$1:$AA$4,$AA$1:$AA$4,TRUE)	()	e	#VALUE!
+empty_args	growth	1555	GROWTH($AA$1:$AA$4,,$AA$1:$AA$4,TRUE)	()	n	1.0
+empty_args	growth	1556	GROWTH($AA$1:$AA$4,$AA$1:$AA$4,,TRUE)	()	n	1.3195079107728942
+empty_args	growth	1557	GROWTH($AA$1:$AA$4,$AA$1:$AA$4,$AA$1:$AA$4,)	()	n	1.3195079107728942
+empty_args	growth	1558	GROWTH($AA$1:$AA$4,,,)	()	n	1.0
+empty_args	growth	1559	GROWTH($AA$1:$AA$4,)	()	n	1.0
+empty_args	growth	1560	GROWTH($AA$1:$AA$4,,$AA$1:$AA$4)	()	n	1.0

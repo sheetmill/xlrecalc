@@ -10,6 +10,7 @@ from xlrecalc._coerce import Context, numbers, to_number
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._math import _total
 from xlrecalc._functions._registry import function
+from xlrecalc._functions._regression import _FIT, several
 from xlrecalc._values import BLANK, Areas, ErrorValue, Ref
 
 DIV0, NA, NUM, VALUE = ErrorValue.DIV0, ErrorValue.NA, ErrorValue.NUM, ErrorValue.VALUE
@@ -297,14 +298,16 @@ def CORREL(ctx: Context, xs: Any, ys: Any) -> float | ErrorValue:
 
 @function(
     "LINEST", "array", "array", "logical", "logical", min_args=1, category=S,
-    ulps=4, ulps_reason=_REGRESSION, status="partial", note="one regressor only", makes_array=True,
+    ulps=4, ulps_reason=_REGRESSION, rel=5e-14, rel_reason=_FIT, makes_array=True,
 )  # fmt: skip
 def LINEST(ctx: Context, ys: Any, xs: Any = MISSING, const: Any = True, stats: Any = False) -> Any:
     """Least-squares line through the points: slope and intercept, with statistics."""
     yv = _cells(ys)
     xv = [float(i) for i in range(1, len(yv) + 1)] if xs is MISSING else _cells(xs)
-    if yv and len(xv) > len(yv) and len(xv) % len(yv) == 0:  # several regressors: reported
-        return ctx.unsupported("LINEST with several regressors")  # type: ignore[attr-defined]
+    if xs is not MISSING and yv and len(xv) > len(yv):  # several x columns (capture linest_multi)
+        result = several(ys, xs, const, stats)
+        if result is not None:
+            return result
     if len(xv) != len(yv):
         return ErrorValue.REF
     for v in (*yv, *xv):

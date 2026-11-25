@@ -367,21 +367,24 @@ def test_a_workbook_qualified_name_against_excel():
     assert not engine.report.uncomputed
 
 
-def test_linest_with_several_regressors_is_reported_not_a_wrong_value():
-    """Several x columns are reported, not given as #REF!; an x range of another size is #REF!."""
+def test_linest_with_several_regressors_is_computed():
+    """Several x columns are fitted (capture linest_multi): an exact plane comes back as its
+    coefficients, last column first; an x range of another size is #REF!."""
     e = Engine()
     s = e.add_sheet("s")
-    for r, (a, b, c) in enumerate([(1, 2, 3), (2, 1, 5), (3, 4, 8), (4, 3, 9), (5, 6, 13)]):
-        for col, v in enumerate((a, b, c)):
+    for r, (a, b) in enumerate([(1, 2), (2, 1), (3, 4), (4, 3), (5, 6)]):
+        for col, v in enumerate((a, b, 1 + 2 * a + 3 * b)):  # y = 1 + 2a + 3b
             e.sheets[s].set(r, col, float(v))
-    e.set_formula(s, 0, 5, "INDEX(LINEST(C1:C5,A1:B5),1,1)")
-    e.set_formula(s, 1, 5, "INDEX(LINEST(C1:C5,A1:A5),1,1)")
-    e.set_formula(s, 2, 5, "LINEST(C1:C5,A1:A4)")
+    for c in range(3):
+        e.set_formula(s, c, 5, f"INDEX(LINEST(C1:C5,A1:B5),1,{c + 1})")
+    e.set_formula(s, 3, 5, "INDEX(LINEST(C1:C5,A1:A5),1,1)")
+    e.set_formula(s, 4, 5, "LINEST(C1:C5,A1:A4)")
     e.recalculate(full=True)
-    assert e.get(s, 1, 5) == 2.4
-    assert e.get(s, 2, 5) == ErrorValue.REF
-    assert e.report.unsupported == {"LINEST with several regressors": 1}
-    assert {str(c) for c in e.report.uncomputed} == {"s!F1"}
+    for c, want in enumerate((3.0, 2.0, 1.0)):
+        assert abs(e.get(s, c, 5) - want) < 1e-12
+    assert e.get(s, 4, 5) == ErrorValue.REF
+    assert not e.report.unsupported
+    assert not e.report.uncomputed
 
 
 def test_a_computed_database_criterion_is_reported_not_a_wrong_value():

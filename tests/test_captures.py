@@ -119,10 +119,9 @@ _PRICE_EXTREME = (
     "PRICE at a yield of 1000%: 64 units in the last place from Excel, beyond its tolerance"
 )
 _LINEST_CANCEL = (
-    "LINEST near cancellation (an intercept of -0.02 from means of 7.05 and 3.5, and the "
-    "statistics built on it; R squared of values near 1E9): Excel's regression differs by 26 "
-    "to 4,607 units in the last place (plain and compensated means, two intercept and "
-    "sum-of-squares forms tried)"
+    "LINEST near cancellation (an intercept of -0.02 from means of 7.05 and 3.5, 512 units in the "
+    "last place; R squared of values near 1E9, 25,087 units): Excel's regression differs past "
+    "the tolerance (plain and compensated means, two intercept and sum-of-squares forms tried)"
 )
 _NORMAL_TAIL = (
     "the normal distribution's lower tail (z of -2.3 and below): 5 to 80 units in the last "
@@ -168,6 +167,21 @@ _UNION_CELL = (
     "($X$1,$Z$1:$Z$3 for (X1:X3,Z1:Z3)) settles no rule for its text"
 )
 _REGEX = "the regular-expression match mode (3) is not implemented, and the cell is reported"
+_REGRESSION_TIE = (
+    "LINEST and LOGEST over exactly collinear columns whose remaining norms tie: rounding in "
+    "Excel's own QR steps decides which column it drops, and the package's steps drop another; "
+    "r2, F and the sums of squares agree"
+)
+_REGRESSION_TIE_CASES = (
+    *(241, 242, 243, 245, 246, 247),  # sum, without the constant
+    *(381, 383, 385, 387),  # first_dup, with the constant
+    *(561, 562, 563, 565, 566, 567),  # near14, without the constant
+    *(813, 814, 815, 817, 818, 819),  # LOGEST over a sum, without the constant
+)
+_LOGEST_NOISE = (
+    "LOGEST of a nearly exact fit (ssresid near 4E-14): its residuals are rounding noise, and "
+    "Excel's standard errors, sey, F and ssresid differ from the package's past the tolerance"
+)
 _AT_SIGN = "the @ the formula bar shows in a legacy formula is not shown by FORMULATEXT"
 _WEEKNUM_ODD_TYPE = (
     "WEEKNUM with a type its documentation lacks: Excel's result can change between runs and "
@@ -611,6 +625,8 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
         for case in (3783, 3785, 3787, 3789, 3791, 3793, 3795, 3797, 3803, 3805, 3807, 3809)
     },
     ("unions", 66): _UNION_CELL,
+    **{("linest_multi", case): _REGRESSION_TIE for case in _REGRESSION_TIE_CASES},
+    **{("linest_multi", case): _LOGEST_NOISE for case in (742, 743, 744, 745, 747, 750, 755)},
     ("info_family", 468): _AT_SIGN,
     **{("dates_family", case): _WEEKNUM_ODD_TYPE for case in _WEEKNUM_ODD_CASES},
     ("dates_family", 2004): _DATEDIF_MARCH,
@@ -845,10 +861,7 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     ("bonds", 2299): _YIELD_ZERO_COUPON,
     **{("bonds", case): _FEB29_MATURITY for case in (1999, 2004, 2006, 2007)},
     ("bonds", 2295): _PRICE_EXTREME,
-    **{
-        ("statistics", case): _LINEST_CANCEL
-        for case in (489, 499, 519, 520, 521, 523, 524, 527, 539, 551)
-    },
+    **{("statistics", case): _LINEST_CANCEL for case in (489, 499, 519, 539, 551)},
     **{("finance", case): _VDB_ROUNDING for case in (785, 786, 787)},
     **{("finance", case): _VDB_EDGES for case in (903, 920)},
     **{("misc", case): _RANDOM for case in (183, 188)},
@@ -965,6 +978,7 @@ SUITES = [
     "three_d",
     "unions",
     "three_d_snap",
+    "linest_multi",
 ]
 # Suites compared in part: only the rows whose tag is named. Of ``iteration``, the XIRR rows; its
 # IRR, RATE and YIELD rows are evidence for their methods, not matched.

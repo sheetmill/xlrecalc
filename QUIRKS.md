@@ -301,11 +301,24 @@ not). An empty argument is `#N/A`.
   with the integer flag.
 - Declared tolerances ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1), statistics: the variances and standard
   deviations (five formulas tried), `CORREL`, `LINEST` and the normal distribution within 4
-  units in the last place on every captured row of `statistics` but 21: `LINEST` near
-  cancellation (an intercept of -0.02 from means of 7.05 and 3.5; R squared of values near
-  1E9), 26 to 4,607 units away, and the normal distribution's lower tail (z of -2.3 and
-  below), 5 to 80 units away, where Excel is closer to the true value than `math.erfc` and
-  does not use Cody's algorithm either.
+  units in the last place on every captured row of `statistics` but 16: five `LINEST`
+  statistics within 5E-14 relative (26 to 41 units), the tolerance its fit over several
+  columns declares; `LINEST` near cancellation (an intercept of -0.02 from means of 7.05 and
+  3.5, 512 units away; R squared of values near 1E9, 25,087 units away), listed; and the normal
+  distribution's lower tail (z of -2.3 and below), 5 to 80 units away, where Excel is closer to
+  the true value than `math.erfc` and does not use Cody's algorithm either.
+- Declared tolerances, regression over several x columns (capture `linest_multi`): `LINEST`,
+  `LOGEST`, `TREND` and `GROWTH` within 5E-14 relative: the coefficients within 31 units in the
+  last place, the statistics within 67, and up to 195 beside a zero or constant column or with as
+  many rows as unknowns; the QR steps are not Excel's own. Listed: where exactly collinear
+  columns tie, rounding in Excel's steps picks the column it drops, and on four of the captured
+  fits it picks another than the package does (22 rows; r2, F and the sums of squares agree); and
+  `LOGEST` of a nearly exact fit, whose residuals are rounding noise (7 rows).
+- `LINEST` and `LOGEST` with an all-zero x column, or with a column holding one value beside the
+  constant: the column's coefficient and standard error are 0, as for a collinear column, but
+  the residual degrees of freedom do not grow, and `ssresid` is too small and `ssreg` too large by
+  the same amount, as Excel gives them (capture `linest_multi`: `ssresid` 2.28 where the residual
+  of the fit is 7.51, with the zero column and the constant). The package gives Excel's values.
 - Declared tolerances ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md) §8.1), bonds: `PRICE` within 8 units in the last
   place (7 at quarterly coupons; two summation orders tried), `DURATION` and `MDURATION`
   within 4, on every captured row of `bonds` but those listed below.

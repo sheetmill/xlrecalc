@@ -1,0 +1,1179 @@
+# suite: linest_multi
+# generator: capture/suites.py:linest_multi, capture/job.py
+# method: the job beside this file (linest_multi.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "linest_multi.xlsx": {
+#      "bytes": 15974,
+#      "sha256": "4be35c665cf36647de66bdbed6fdceedb71f66c177ba735a8f70b4acab592b46"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261125-121424-linest-multi",
+#    "manifest_sha256": "0b4054717e315fe9c333dd3053107371629cb800c302a10b9f073541af48a3ed",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+linest_multi	base	1	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),1,1)	()	n	-0.8404285910847754
+linest_multi	base	2	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),1,2)	()	n	2.3715219784926864
+linest_multi	base	3	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),1,3)	()	n	0.8376951257544603
+linest_multi	base	4	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),2,1)	()	n	0.7958376807031553
+linest_multi	base	5	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),2,2)	()	n	1.0021473153217808
+linest_multi	base	6	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),2,3)	()	n	12.199216550635953
+linest_multi	base	7	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),3,1)	()	n	0.47318599788563653
+linest_multi	base	8	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),3,2)	()	n	37.489531457029535
+linest_multi	base	9	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	base	10	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),4,1)	()	n	3.1437110364431846
+linest_multi	base	11	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),4,2)	()	n	7.0
+linest_multi	base	12	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	base	13	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),5,1)	()	n	8836.751467926748
+linest_multi	base	14	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),5,2)	()	n	9838.25478207325
+linest_multi	base	15	INDEX(LINEST(AA1:AA10,AB1:AC10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	base	16	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),1,1)	()	n	-0.8275504456446107
+linest_multi	base	17	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),1,2)	()	n	2.3693797422219274
+linest_multi	base	18	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),1,3)	()	n	0.0
+linest_multi	base	19	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),2,1)	()	n	0.7237160241625984
+linest_multi	base	20	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),2,2)	()	n	0.9372841668806161
+linest_multi	base	21	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),2,3)	()	e	#N/A
+linest_multi	base	22	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),3,1)	()	n	0.4744859354057485
+linest_multi	base	23	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),3,2)	()	n	35.08005478940561
+linest_multi	base	24	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	base	25	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),4,1)	()	n	3.6115945690024356
+linest_multi	base	26	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),4,2)	()	n	8.0
+linest_multi	base	27	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	base	28	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),5,1)	()	n	8888.930547778404
+linest_multi	base	29	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),5,2)	()	n	9844.881952221596
+linest_multi	base	30	INDEX(LINEST(AA1:AA10,AB1:AC10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	base	31	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),1,1)	()	n	0.9662377046981537
+linest_multi	base	32	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),1,2)	()	n	-0.9708356515588782
+linest_multi	base	33	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),1,3)	()	n	2.2611659291403514
+linest_multi	base	34	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),1,4)	()	n	0.5231347747674737
+linest_multi	base	35	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),2,1)	()	n	0.9119070258418727
+linest_multi	base	36	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),2,2)	()	n	0.7984945889563946
+linest_multi	base	37	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),2,3)	()	n	0.9989218416801279
+linest_multi	base	38	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),2,4)	()	n	12.097320891837818
+linest_multi	base	39	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),3,1)	()	n	0.5562244037930459
+linest_multi	base	40	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),3,2)	()	n	37.16519884865935
+linest_multi	base	41	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	base	42	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	base	43	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),4,1)	()	n	2.506782295138427
+linest_multi	base	44	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),4,2)	()	n	6.0
+linest_multi	base	45	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	base	46	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	base	47	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),5,1)	()	n	10387.494217237656
+linest_multi	base	48	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),5,2)	()	n	8287.512032762343
+linest_multi	base	49	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	base	50	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	base	51	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),1,1)	()	n	0.967205439394614
+linest_multi	base	52	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),1,2)	()	n	-0.9629287918028523
+linest_multi	base	53	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),1,3)	()	n	2.259718396148532
+linest_multi	base	54	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),1,4)	()	n	0.0
+linest_multi	base	55	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),2,1)	()	n	0.8441391116994228
+linest_multi	base	56	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),2,2)	()	n	0.719732179222462
+linest_multi	base	57	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),2,3)	()	n	0.9244465554577559
+linest_multi	base	58	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	base	59	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),3,1)	()	n	0.5574795564613922
+linest_multi	base	60	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),3,2)	()	n	34.41364973517903
+linest_multi	base	61	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	base	62	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	base	63	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),4,1)	()	n	2.939492741491301
+linest_multi	base	64	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),4,2)	()	n	7.0
+linest_multi	base	65	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	base	66	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	base	67	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),5,1)	()	n	10443.717483330885
+linest_multi	base	68	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),5,2)	()	n	8290.095016669115
+linest_multi	base	69	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	base	70	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	base	71	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),1,1)	()	n	2.5373626613981033
+linest_multi	base	72	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),1,2)	()	n	0.16563075168951424
+linest_multi	base	73	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),1,3)	()	n	-0.9492023624775324
+linest_multi	base	74	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),1,4)	()	n	2.5704647309358193
+linest_multi	base	75	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),1,5)	()	n	-2.943109881575878
+linest_multi	base	76	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),2,1)	()	n	0.7456572726591117
+linest_multi	base	77	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),2,2)	()	n	0.5969059195001116
+linest_multi	base	78	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),2,3)	()	n	0.480397843660125
+linest_multi	base	79	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),2,4)	()	n	0.6077634007822542
+linest_multi	base	80	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),2,5)	()	n	7.3484099956707505
+linest_multi	base	81	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),3,1)	()	n	0.866166680530743
+linest_multi	base	82	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),3,2)	()	n	22.357719371826015
+linest_multi	base	83	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	base	84	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	base	85	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),3,5)	()	e	#N/A
+linest_multi	base	86	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),4,1)	()	n	8.089976060947503
+linest_multi	base	87	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),4,2)	()	n	5.0
+linest_multi	base	88	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	base	89	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	base	90	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),4,5)	()	e	#N/A
+linest_multi	base	91	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),5,1)	()	n	16175.668172453377
+linest_multi	base	92	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),5,2)	()	n	2499.3380775466217
+linest_multi	base	93	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	base	94	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	base	95	INDEX(LINEST(AA1:AA10,AB1:AE10,TRUE,TRUE),5,5)	()	e	#N/A
+linest_multi	base	96	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),1,1)	()	n	2.4959650862845644
+linest_multi	base	97	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),1,2)	()	n	0.17335303837116472
+linest_multi	base	98	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),1,3)	()	n	-0.9931838504233903
+linest_multi	base	99	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),1,4)	()	n	2.5734056692193743
+linest_multi	base	100	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),1,5)	()	n	0.0
+linest_multi	base	101	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),2,1)	()	n	0.6848453588549774
+linest_multi	base	102	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),2,2)	()	n	0.5532807902322715
+linest_multi	base	103	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),2,3)	()	n	0.4337241926702934
+linest_multi	base	104	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),2,4)	()	n	0.5635977370588482
+linest_multi	base	105	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),2,5)	()	e	#N/A
+linest_multi	base	106	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),3,1)	()	n	0.8623066781715676
+linest_multi	base	107	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),3,2)	()	n	20.7345158035099
+linest_multi	base	108	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	base	109	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	base	110	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),3,5)	()	e	#N/A
+linest_multi	base	111	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),4,1)	()	n	9.39377451340028
+linest_multi	base	112	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),4,2)	()	n	6.0
+linest_multi	base	113	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	base	114	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	base	115	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),4,5)	()	e	#N/A
+linest_multi	base	116	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),5,1)	()	n	16154.291626363989
+linest_multi	base	117	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),5,2)	()	n	2579.5208736360114
+linest_multi	base	118	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	base	119	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	base	120	INDEX(LINEST(AA1:AA10,AB1:AE10,FALSE,TRUE),5,5)	()	e	#N/A
+linest_multi	base	121	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),1,1)	()	n	-2.0367323020387227
+linest_multi	base	122	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),1,2)	()	n	3.033617365239345
+linest_multi	base	123	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),1,3)	()	n	0.5720461225116621
+linest_multi	base	124	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),1,4)	()	n	-1.0386232811638745
+linest_multi	base	125	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),1,5)	()	n	1.9522860192062792
+linest_multi	base	126	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),1,6)	()	n	2.919064328446079
+linest_multi	base	127	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),2,1)	()	n	0.023657727726738766
+linest_multi	base	128	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),2,2)	()	n	0.020201653203066224
+linest_multi	base	129	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),2,3)	()	n	0.016202296006588485
+linest_multi	base	130	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),2,4)	()	n	0.012517232642750108
+linest_multi	base	131	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),2,5)	()	n	0.017338025699542393
+linest_multi	base	132	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),2,6)	()	n	0.20259534471546112
+linest_multi	base	133	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),3,1)	()	n	0.9999278114897415
+linest_multi	base	134	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),3,2)	()	n	0.5805430389414261
+linest_multi	base	135	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	base	136	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	base	137	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),3,5)	()	e	#N/A
+linest_multi	base	138	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),3,6)	()	e	#N/A
+linest_multi	base	139	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),4,1)	()	n	11081.2959891905
+linest_multi	base	140	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),4,2)	()	n	4.0
+linest_multi	base	141	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	base	142	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	base	143	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),4,5)	()	e	#N/A
+linest_multi	base	144	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),4,6)	()	e	#N/A
+linest_multi	base	145	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),5,1)	()	n	18673.658129119744
+linest_multi	base	146	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),5,2)	()	n	1.3481208802533846
+linest_multi	base	147	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	base	148	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	base	149	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),5,5)	()	e	#N/A
+linest_multi	base	150	INDEX(LINEST(AA1:AA10,AB1:AF10,TRUE,TRUE),5,6)	()	e	#N/A
+linest_multi	base	151	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),1,1)	()	n	-1.9221663496033412
+linest_multi	base	152	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),1,2)	()	n	3.042124256127234
+linest_multi	base	153	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),1,3)	()	n	0.5423913175292867
+linest_multi	base	154	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),1,4)	()	n	-0.9948989055347628
+linest_multi	base	155	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),1,5)	()	n	1.9844710918636705
+linest_multi	base	156	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),1,6)	()	n	0.0
+linest_multi	base	157	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),2,1)	()	n	0.14494966529447528
+linest_multi	base	158	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),2,2)	()	n	0.13136349737849673
+linest_multi	base	159	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),2,3)	()	n	0.10454838817254904
+linest_multi	base	160	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),2,4)	()	n	0.0790001838648124
+linest_multi	base	161	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),2,5)	()	n	0.11185060031731374
+linest_multi	base	162	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),2,6)	()	e	#N/A
+linest_multi	base	163	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),3,1)	()	n	0.9961932059936383
+linest_multi	base	164	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),3,2)	()	n	3.77665897696113
+linest_multi	base	165	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	base	166	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	base	167	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),3,5)	()	e	#N/A
+linest_multi	base	168	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),3,6)	()	e	#N/A
+linest_multi	base	169	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),4,1)	()	n	261.688235383589
+linest_multi	base	170	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),4,2)	()	n	5.0
+linest_multi	base	171	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	base	172	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	base	173	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),4,5)	()	e	#N/A
+linest_multi	base	174	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),4,6)	()	e	#N/A
+linest_multi	base	175	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),5,1)	()	n	18662.496734858694
+linest_multi	base	176	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),5,2)	()	n	71.31576514130545
+linest_multi	base	177	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	base	178	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	base	179	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),5,5)	()	e	#N/A
+linest_multi	base	180	INDEX(LINEST(AA1:AA10,AB1:AF10,FALSE,TRUE),5,6)	()	e	#N/A
+linest_multi	dup	181	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),1,1)	()	n	-1.985651557083667
+linest_multi	dup	182	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),1,2)	()	n	1.4902881067672469
+linest_multi	dup	183	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),1,3)	()	n	0.0
+linest_multi	dup	184	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),1,4)	()	n	4.5577831498741315
+linest_multi	dup	185	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),2,1)	()	n	0.04832980510910791
+linest_multi	dup	186	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),2,2)	()	n	0.048432569003809024
+linest_multi	dup	187	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),2,3)	()	n	0.0
+linest_multi	dup	188	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),2,4)	()	n	0.6758642251715334
+linest_multi	dup	189	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),3,1)	()	n	0.9966558083900621
+linest_multi	dup	190	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),3,2)	()	n	1.4238484829068307
+linest_multi	dup	191	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	dup	192	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	dup	193	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),4,1)	()	n	1043.0907484484615
+linest_multi	dup	194	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),4,2)	()	n	7.0
+linest_multi	dup	195	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	dup	196	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	dup	197	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),5,1)	()	n	4229.408588484067
+linest_multi	dup	198	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),5,2)	()	n	14.191411515932586
+linest_multi	dup	199	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	dup	200	INDEX(LINEST(AH1:AH10,AI1:AK10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	dup	201	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),1,1)	()	n	-2.185130330625153
+linest_multi	dup	202	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),1,2)	()	n	1.6803661622002277
+linest_multi	dup	203	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),1,3)	()	n	0.0
+linest_multi	dup	204	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),1,4)	()	n	0.0
+linest_multi	dup	205	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),2,1)	()	n	0.09788809558674748
+linest_multi	dup	206	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),2,2)	()	n	0.10087383851233638
+linest_multi	dup	207	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),2,3)	()	n	0.0
+linest_multi	dup	208	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	dup	209	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),3,1)	()	n	0.9909042676177713
+linest_multi	dup	210	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),3,2)	()	n	3.6467148539599803
+linest_multi	dup	211	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	dup	212	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	dup	213	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),4,1)	()	n	435.76667649272446
+linest_multi	dup	214	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),4,2)	()	n	8.0
+linest_multi	dup	215	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	dup	216	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	dup	217	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),5,1)	()	n	11590.111766191261
+linest_multi	dup	218	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),5,2)	()	n	106.38823380873887
+linest_multi	dup	219	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	dup	220	INDEX(LINEST(AH1:AH10,AI1:AK10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	sum	221	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),1,1)	()	n	-1.973478997119668
+linest_multi	sum	222	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),1,2)	()	n	0.0
+linest_multi	sum	223	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),1,3)	()	n	3.4377504963024093
+linest_multi	sum	224	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),1,4)	()	n	4.0268595246532595
+linest_multi	sum	225	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),2,1)	()	n	0.04612008749373078
+linest_multi	sum	226	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),2,2)	()	n	0.0
+linest_multi	sum	227	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),2,3)	()	n	0.0739610438572653
+linest_multi	sum	228	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),2,4)	()	n	0.6449626090654238
+linest_multi	sum	229	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),3,1)	()	n	0.9968946758755979
+linest_multi	sum	230	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),3,2)	()	n	1.3587478050289827
+linest_multi	sum	231	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	sum	232	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	sum	233	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),4,1)	()	n	1123.5965154639734
+linest_multi	sum	234	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),4,2)	()	n	7.0
+linest_multi	sum	235	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	sum	236	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	sum	237	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),5,1)	()	n	4148.7578808163025
+linest_multi	sum	238	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),5,2)	()	n	12.923369183697547
+linest_multi	sum	239	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	sum	240	INDEX(LINEST(AM1:AM10,AN1:AP10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	sum	241	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),1,1)	()	n	1.6322078846531647
+linest_multi	sum	242	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),1,2)	()	n	-3.7819289215512875
+linest_multi	sum	243	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),1,3)	()	n	0.0
+linest_multi	sum	244	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),1,4)	()	n	0.0
+linest_multi	sum	245	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),2,1)	()	n	0.09010822460627682
+linest_multi	sum	246	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),2,2)	()	n	0.11821686975679155
+linest_multi	sum	247	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),2,3)	()	n	0.0
+linest_multi	sum	248	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	sum	249	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),3,1)	()	n	0.9924186469141673
+linest_multi	sum	250	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),3,2)	()	n	3.2575245076599906
+linest_multi	sum	251	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	sum	252	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	sum	253	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),4,1)	()	n	523.610303162745
+linest_multi	sum	254	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),4,2)	()	n	8.0
+linest_multi	sum	255	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	sum	256	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	sum	257	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),5,1)	()	n	11112.545772655956
+linest_multi	sum	258	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),5,2)	()	n	84.89172734404372
+linest_multi	sum	259	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	sum	260	INDEX(LINEST(AM1:AM10,AN1:AP10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	scaled	261	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),1,1)	()	n	-2.018122364447213
+linest_multi	scaled	262	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),1,2)	()	n	0.7485001183278134
+linest_multi	scaled	263	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),1,3)	()	n	0.0
+linest_multi	scaled	264	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),1,4)	()	n	3.0953664544940693
+linest_multi	scaled	265	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),2,1)	()	n	0.04822113042280568
+linest_multi	scaled	266	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),2,2)	()	n	0.024161831621001953
+linest_multi	scaled	267	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),2,3)	()	n	0.0
+linest_multi	scaled	268	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),2,4)	()	n	0.674344472867803
+linest_multi	scaled	269	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),3,1)	()	n	0.9967537729018537
+linest_multi	scaled	270	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),3,2)	()	n	1.4206468087665673
+linest_multi	scaled	271	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	scaled	272	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	scaled	273	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),4,1)	()	n	1074.6747222794563
+linest_multi	scaled	274	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),4,2)	()	n	7.0
+linest_multi	scaled	275	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	scaled	276	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	scaled	277	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),5,1)	()	n	4337.897338513189
+linest_multi	scaled	278	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),5,2)	()	n	14.127661486810425
+linest_multi	scaled	279	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	scaled	280	INDEX(LINEST(AR1:AR10,AS1:AU10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	scaled	281	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),1,1)	()	n	-2.1535960988702705
+linest_multi	scaled	282	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),1,2)	()	n	0.8130447902851616
+linest_multi	scaled	283	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),1,3)	()	n	0.0
+linest_multi	scaled	284	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),1,4)	()	n	0.0
+linest_multi	scaled	285	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),2,1)	()	n	0.07143135793020165
+linest_multi	scaled	286	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),2,2)	()	n	0.03680506409577948
+linest_multi	scaled	287	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),2,3)	()	n	0.0
+linest_multi	scaled	288	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	scaled	289	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),3,1)	()	n	0.9949255735472093
+linest_multi	scaled	290	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),3,2)	()	n	2.6610977815147594
+linest_multi	scaled	291	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	scaled	292	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	scaled	293	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),4,1)	()	n	784.2664252233214
+linest_multi	scaled	294	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),4,2)	()	n	8.0
+linest_multi	scaled	295	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	scaled	296	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	scaled	297	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),5,1)	()	n	11107.473468777738
+linest_multi	scaled	298	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),5,2)	()	n	56.65153122226219
+linest_multi	scaled	299	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	scaled	300	INDEX(LINEST(AR1:AR10,AS1:AU10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	constant	301	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),1,1)	()	n	-1.9621530634641724
+linest_multi	constant	302	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),1,2)	()	n	0.0
+linest_multi	constant	303	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),1,3)	()	n	1.523584511195773
+linest_multi	constant	304	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),1,4)	()	n	3.9861351990298335
+linest_multi	constant	305	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),2,1)	()	n	0.03615616065891124
+linest_multi	constant	306	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),2,2)	()	n	0.0
+linest_multi	constant	307	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),2,3)	()	n	0.03623303967545932
+linest_multi	constant	308	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),2,4)	()	n	0.5056228853757028
+linest_multi	constant	309	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),3,1)	()	n	0.9983905406113605
+linest_multi	constant	310	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),3,2)	()	n	1.0651997123866874
+linest_multi	constant	311	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	constant	312	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	constant	313	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),4,1)	()	n	1240.653287257305
+linest_multi	constant	314	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),4,2)	()	n	6.0
+linest_multi	constant	315	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	constant	316	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	constant	317	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),5,1)	()	n	4223.123347436387
+linest_multi	constant	318	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),5,2)	()	n	6.807902563612091
+linest_multi	constant	319	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	constant	320	INDEX(LINEST(AW1:AW10,AX1:AZ10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	constant	321	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),1,1)	()	n	-1.9621530634641722
+linest_multi	constant	322	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),1,2)	()	n	0.797227039805967
+linest_multi	constant	323	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),1,3)	()	n	1.5235845111957733
+linest_multi	constant	324	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),1,4)	()	n	0.0
+linest_multi	constant	325	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),2,1)	()	n	0.040429693354389826
+linest_multi	constant	326	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),2,2)	()	n	0.11307715109216482
+linest_multi	constant	327	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),2,3)	()	n	0.040515659203854554
+linest_multi	constant	328	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	constant	329	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),3,1)	()	n	0.9991287715912617
+linest_multi	constant	330	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),3,2)	()	n	1.1911026211895046
+linest_multi	constant	331	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	constant	332	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	constant	333	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),4,1)	()	n	2675.8774664184953
+linest_multi	constant	334	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),4,2)	()	n	7.0
+linest_multi	constant	335	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	constant	336	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	constant	337	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),5,1)	()	n	11389.006421820568
+linest_multi	constant	338	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),5,2)	()	n	9.931078179431559
+linest_multi	constant	339	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	constant	340	INDEX(LINEST(AW1:AW10,AX1:AZ10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	zero	341	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),1,1)	()	n	-1.9124781890571907
+linest_multi	zero	342	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),1,2)	()	n	0.0
+linest_multi	zero	343	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),1,3)	()	n	1.4948027726720379
+linest_multi	zero	344	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),1,4)	()	n	4.777371123844468
+linest_multi	zero	345	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),2,1)	()	n	0.020920828597077164
+linest_multi	zero	346	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),2,2)	()	n	0.0
+linest_multi	zero	347	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),2,3)	()	n	0.02096531265452694
+linest_multi	zero	348	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),2,4)	()	n	0.29256562441724715
+linest_multi	zero	349	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),3,1)	()	n	0.9994349676977212
+linest_multi	zero	350	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),3,2)	()	n	0.6163503037484523
+linest_multi	zero	351	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	zero	352	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	zero	353	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),4,1)	()	n	3537.620641039717
+linest_multi	zero	354	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),4,2)	()	n	6.0
+linest_multi	zero	355	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	zero	356	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	zero	357	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),5,1)	()	n	4031.6956738184153
+linest_multi	zero	358	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),5,2)	()	n	2.2793261815848567
+linest_multi	zero	359	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	zero	360	INDEX(LINEST(BB1:BB10,BC1:BE10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	zero	361	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),1,1)	()	n	-2.1215675865120303
+linest_multi	zero	362	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),1,2)	()	n	0.0
+linest_multi	zero	363	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),1,3)	()	n	1.6940385378328067
+linest_multi	zero	364	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),1,4)	()	n	0.0
+linest_multi	zero	365	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),2,1)	()	n	0.10582031769271676
+linest_multi	zero	366	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),2,2)	()	n	0.0
+linest_multi	zero	367	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),2,3)	()	n	0.10904800603460105
+linest_multi	zero	368	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	zero	369	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),3,1)	()	n	0.990416020155698
+linest_multi	zero	370	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),3,2)	()	n	3.942221187037157
+linest_multi	zero	371	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	zero	372	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	zero	373	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),4,1)	()	n	241.1285031103824
+linest_multi	zero	374	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),4,2)	()	n	7.0
+linest_multi	zero	375	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	zero	376	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	zero	377	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),5,1)	()	n	11242.212244787328
+linest_multi	zero	378	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),5,2)	()	n	108.78775521267255
+linest_multi	zero	379	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	zero	380	INDEX(LINEST(BB1:BB10,BC1:BE10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	first_dup	381	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),1,1)	()	n	1.5068864335016077
+linest_multi	first_dup	382	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),1,2)	()	n	-2.1013521864895384
+linest_multi	first_dup	383	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),1,3)	()	n	0.0
+linest_multi	first_dup	384	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),1,4)	()	n	3.9181092441611725
+linest_multi	first_dup	385	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),2,1)	()	n	0.02955521359436982
+linest_multi	first_dup	386	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),2,2)	()	n	0.02949250354367146
+linest_multi	first_dup	387	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),2,3)	()	n	0.0
+linest_multi	first_dup	388	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),2,4)	()	n	0.412435514914911
+linest_multi	first_dup	389	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),3,1)	()	n	0.9988554111637739
+linest_multi	first_dup	390	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),3,2)	()	n	0.8688811455576768
+linest_multi	first_dup	391	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	first_dup	392	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	first_dup	393	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),4,1)	()	n	3054.3666235643204
+linest_multi	first_dup	394	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),4,2)	()	n	7.0
+linest_multi	first_dup	395	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	first_dup	396	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	first_dup	397	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),5,1)	()	n	4611.81531888426
+linest_multi	first_dup	398	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),5,2)	()	n	5.284681115739345
+linest_multi	first_dup	399	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	first_dup	400	INDEX(LINEST(BG1:BG10,BH1:BJ10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	first_dup	401	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),1,1)	()	n	0.0
+linest_multi	first_dup	402	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),1,2)	()	n	-2.272834593819166
+linest_multi	first_dup	403	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),1,3)	()	n	1.6702874909048566
+linest_multi	first_dup	404	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),1,4)	()	n	0.0
+linest_multi	first_dup	405	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),2,1)	()	n	0.0
+linest_multi	first_dup	406	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),2,2)	()	n	0.08131775172743762
+linest_multi	first_dup	407	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),2,3)	()	n	0.08379807275615586
+linest_multi	first_dup	408	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	first_dup	409	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),3,1)	()	n	0.9939856157085009
+linest_multi	first_dup	410	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),3,2)	()	n	3.029404661900725
+linest_multi	first_dup	411	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	first_dup	412	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	first_dup	413	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),4,1)	()	n	661.0722345184474
+linest_multi	first_dup	414	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),4,2)	()	n	8.0
+linest_multi	first_dup	415	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	first_dup	416	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	first_dup	417	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),5,1)	()	n	12133.706659155634
+linest_multi	first_dup	418	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),5,2)	()	n	73.41834084436677
+linest_multi	first_dup	419	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	first_dup	420	INDEX(LINEST(BG1:BG10,BH1:BJ10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	near6	421	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),1,1)	()	n	-2.0393801592846423
+linest_multi	near6	422	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),1,2)	()	n	0.0
+linest_multi	near6	423	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),1,3)	()	n	3.5688595332780553
+linest_multi	near6	424	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),1,4)	()	n	4.199442798105272
+linest_multi	near6	425	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),2,1)	()	n	0.0432483772392108
+linest_multi	near6	426	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),2,2)	()	n	0.0
+linest_multi	near6	427	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),2,3)	()	n	0.06935579267459509
+linest_multi	near6	428	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),2,4)	()	n	0.6048034308254171
+linest_multi	near6	429	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),3,1)	()	n	0.9974581072944948
+linest_multi	near6	430	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),3,2)	()	n	1.2741441534176907
+linest_multi	near6	431	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	near6	432	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	near6	433	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),4,1)	()	n	1373.426725671721
+linest_multi	near6	434	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),4,2)	()	n	7.0
+linest_multi	near6	435	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	near6	436	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	near6	437	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),5,1)	()	n	4459.36089673418
+linest_multi	near6	438	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),5,2)	()	n	11.364103265819384
+linest_multi	near6	439	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	near6	440	INDEX(LINEST(BL1:BL10,BM1:BO10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	near6	441	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),1,1)	()	n	-2.223175578642727
+linest_multi	near6	442	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),1,2)	()	n	0.0
+linest_multi	near6	443	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),1,3)	()	n	3.927788766632415
+linest_multi	near6	444	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),1,4)	()	n	0.0
+linest_multi	near6	445	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),2,1)	()	n	0.08985003277005267
+linest_multi	near6	446	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),2,2)	()	n	0.0
+linest_multi	near6	447	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),2,3)	()	n	0.12147361159593172
+linest_multi	near6	448	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	near6	449	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),3,1)	()	n	0.992568165437467
+linest_multi	near6	450	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),3,2)	()	n	3.347265650872173
+linest_multi	near6	451	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	near6	452	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	near6	453	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),4,1)	()	n	534.225113374521
+linest_multi	near6	454	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),4,2)	()	n	8.0
+linest_multi	near6	455	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	near6	456	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	near6	457	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),5,1)	()	n	11971.11650129993
+linest_multi	near6	458	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),5,2)	()	n	89.63349870006971
+linest_multi	near6	459	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	near6	460	INDEX(LINEST(BL1:BL10,BM1:BO10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	near9	461	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),1,1)	()	n	1.5416179764171376
+linest_multi	near9	462	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),1,2)	()	n	-3.539758451795555
+linest_multi	near9	463	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),1,3)	()	n	0.0
+linest_multi	near9	464	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),1,4)	()	n	3.5796133130238625
+linest_multi	near9	465	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),2,1)	()	n	0.04888752957557179
+linest_multi	near9	466	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),2,2)	()	n	0.07823273964388332
+linest_multi	near9	467	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),2,3)	()	n	0.0
+linest_multi	near9	468	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),2,4)	()	n	0.6822130846846405
+linest_multi	near9	469	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),3,1)	()	n	0.9966930793370482
+linest_multi	near9	470	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),3,2)	()	n	1.4372236752036278
+linest_multi	near9	471	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	near9	472	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	near9	473	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),4,1)	()	n	1054.8864436820063
+linest_multi	near9	474	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),4,2)	()	n	7.0
+linest_multi	near9	475	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	near9	476	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	near9	477	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),5,1)	()	n	4357.971966752039
+linest_multi	near9	478	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),5,2)	()	n	14.459283247960762
+linest_multi	near9	479	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	near9	480	INDEX(LINEST(BQ1:BQ10,BR1:BT10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	near9	481	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),1,1)	()	n	1.6909023796750584
+linest_multi	near9	482	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),1,2)	()	n	-3.845710438824342
+linest_multi	near9	483	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),1,3)	()	n	0.0
+linest_multi	near9	484	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),1,4)	()	n	0.0
+linest_multi	near9	485	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),2,1)	()	n	0.08259708784409735
+linest_multi	near9	486	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),2,2)	()	n	0.1083626851931889
+linest_multi	near9	487	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),2,3)	()	n	0.0
+linest_multi	near9	488	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	near9	489	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),3,1)	()	n	0.9938053921328394
+linest_multi	near9	490	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),3,2)	()	n	2.985987562252168
+linest_multi	near9	491	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	near9	492	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	near9	493	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),4,1)	()	n	641.72287476098
+linest_multi	near9	494	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),4,2)	()	n	8.0
+linest_multi	near9	495	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	near9	496	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	near9	497	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),5,1)	()	n	11443.358526224603
+linest_multi	near9	498	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),5,2)	()	n	71.32897377539716
+linest_multi	near9	499	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	near9	500	INDEX(LINEST(BQ1:BQ10,BR1:BT10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	near12	501	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),1,1)	()	n	-2.0133111432918307
+linest_multi	near12	502	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),1,2)	()	n	0.0
+linest_multi	near12	503	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),1,3)	()	n	3.5459832918673366
+linest_multi	near12	504	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),1,4)	()	n	3.631916904447413
+linest_multi	near12	505	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),2,1)	()	n	0.041458531431223695
+linest_multi	near12	506	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),2,2)	()	n	0.0
+linest_multi	near12	507	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),2,3)	()	n	0.06648548231525703
+linest_multi	near12	508	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),2,4)	()	n	0.5797734577918586
+linest_multi	near12	509	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),3,1)	()	n	0.9976250530923939
+linest_multi	near12	510	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),3,2)	()	n	1.2214133069361541
+linest_multi	near12	511	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	near12	512	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	near12	513	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),4,1)	()	n	1470.217155019753
+linest_multi	near12	514	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),4,2)	()	n	7.0
+linest_multi	near12	515	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	near12	516	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	near12	517	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),5,1)	()	n	4386.688296735475
+linest_multi	near12	518	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),5,2)	()	n	10.442953264524984
+linest_multi	near12	519	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	near12	520	INDEX(LINEST(BV1:BV10,BW1:BY10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	near12	521	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),1,1)	()	n	-2.1722678785905973
+linest_multi	near12	522	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),1,2)	()	n	0.0
+linest_multi	near12	523	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),1,3)	()	n	3.8564057024715614
+linest_multi	near12	524	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),1,4)	()	n	0.0
+linest_multi	near12	525	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),2,1)	()	n	0.07882531871478952
+linest_multi	near12	526	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),2,2)	()	n	0.0
+linest_multi	near12	527	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),2,3)	()	n	0.10656864058449916
+linest_multi	near12	528	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	near12	529	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),3,1)	()	n	0.9940492484746134
+linest_multi	near12	530	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),3,2)	()	n	2.9365517727395027
+linest_multi	near12	531	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	near12	532	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	near12	533	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),4,1)	()	n	668.1840061604918
+linest_multi	near12	534	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),4,2)	()	n	8.0
+linest_multi	near12	535	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	near12	536	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	near12	537	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),5,1)	()	n	11523.950809488164
+linest_multi	near12	538	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),5,2)	()	n	68.98669051183613
+linest_multi	near12	539	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	near12	540	INDEX(LINEST(BV1:BV10,BW1:BY10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	near14	541	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),1,1)	()	n	1.4376004713493413
+linest_multi	near14	542	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),1,2)	()	n	-3.372969574424516
+linest_multi	near14	543	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),1,3)	()	n	0.0
+linest_multi	near14	544	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),1,4)	()	n	4.9013671767229
+linest_multi	near14	545	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),2,1)	()	n	0.032604821962568656
+linest_multi	near14	546	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),2,2)	()	n	0.05217618009701441
+linest_multi	near14	547	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),2,3)	()	n	0.0
+linest_multi	near14	548	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),2,4)	()	n	0.4549920267672398
+linest_multi	near14	549	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),3,1)	()	n	0.998391788510399
+linest_multi	near14	550	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),3,2)	()	n	0.9585352840399531
+linest_multi	near14	551	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	near14	552	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	near14	553	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),4,1)	()	n	2172.830677048181
+linest_multi	near14	554	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),4,2)	()	n	7.0
+linest_multi	near14	555	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	near14	556	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	near14	557	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),5,1)	()	n	3992.7497207647534
+linest_multi	near14	558	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),5,2)	()	n	6.431529235246876
+linest_multi	near14	559	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	near14	560	INDEX(LINEST(CA1:CA10,CB1:CD10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	near14	561	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),1,1)	()	n	-2.149885388940196
+linest_multi	near14	562	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),1,2)	()	n	0.0
+linest_multi	near14	563	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),1,3)	()	n	3.791892764102031
+linest_multi	near14	564	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),1,4)	()	n	0.0
+linest_multi	near14	565	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),2,1)	()	n	0.1009074871483452
+linest_multi	near14	566	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),2,2)	()	n	0.0
+linest_multi	near14	567	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),2,3)	()	n	0.1364228385692445
+linest_multi	near14	568	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	near14	569	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),3,1)	()	n	0.9899737716461874
+linest_multi	near14	570	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),3,2)	()	n	3.759199012443195
+linest_multi	near14	571	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	near14	572	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	near14	573	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),4,1)	()	n	394.9536103552758
+linest_multi	near14	574	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),4,2)	()	n	8.0
+linest_multi	near14	575	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	near14	576	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	near14	577	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),5,1)	()	n	11162.63488227877
+linest_multi	near14	578	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),5,2)	()	n	113.05261772123114
+linest_multi	near14	579	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	near14	580	INDEX(LINEST(CA1:CA10,CB1:CD10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	wide	581	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),1,1)	()	n	0.0
+linest_multi	wide	582	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),1,2)	()	n	0.022975929978118165
+linest_multi	wide	583	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),1,3)	()	n	0.0
+linest_multi	wide	584	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),1,4)	()	n	-0.11159737417943105
+linest_multi	wide	585	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),1,5)	()	n	2.7330415754923414
+linest_multi	wide	586	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),2,1)	()	n	0.0
+linest_multi	wide	587	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),2,2)	()	n	0.0
+linest_multi	wide	588	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),2,3)	()	n	0.0
+linest_multi	wide	589	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),2,4)	()	n	0.0
+linest_multi	wide	590	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),2,5)	()	n	0.0
+linest_multi	wide	591	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),3,1)	()	n	1.0
+linest_multi	wide	592	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),3,2)	()	n	0.0
+linest_multi	wide	593	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	wide	594	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	wide	595	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),3,5)	()	e	#N/A
+linest_multi	wide	596	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),4,1)	()	e	#NUM!
+linest_multi	wide	597	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),4,2)	()	n	0.0
+linest_multi	wide	598	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	wide	599	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	wide	600	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),4,5)	()	e	#N/A
+linest_multi	wide	601	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),5,1)	()	n	4.5
+linest_multi	wide	602	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),5,2)	()	n	0.0
+linest_multi	wide	603	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	wide	604	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	wide	605	INDEX(LINEST(CF1:CF3,CG1:CJ3,TRUE,TRUE),5,5)	()	e	#N/A
+linest_multi	square	606	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),1,1)	()	n	3.0768156424581
+linest_multi	square	607	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),1,2)	()	n	2.1256983240223457
+linest_multi	square	608	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),1,3)	()	n	1.1592178770949717
+linest_multi	square	609	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),1,4)	()	n	-0.43156424581005126
+linest_multi	square	610	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),2,1)	()	n	0.0
+linest_multi	square	611	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),2,2)	()	n	0.0
+linest_multi	square	612	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),2,3)	()	n	0.0
+linest_multi	square	613	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),2,4)	()	n	0.0
+linest_multi	square	614	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),3,1)	()	n	1.0
+linest_multi	square	615	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),3,2)	()	n	0.0
+linest_multi	square	616	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	square	617	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	square	618	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),4,1)	()	e	#NUM!
+linest_multi	square	619	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),4,2)	()	n	0.0
+linest_multi	square	620	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	square	621	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	square	622	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),5,1)	()	n	3968.546875
+linest_multi	square	623	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),5,2)	()	n	0.0
+linest_multi	square	624	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	square	625	INDEX(LINEST(CL1:CL4,CM1:CO4,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	wide	626	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),1,1)	()	n	0.3489801620564402
+linest_multi	wide	627	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),1,2)	()	n	-0.15800502933780383
+linest_multi	wide	628	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),1,3)	()	n	0.0
+linest_multi	wide	629	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),1,4)	()	n	0.21905560212349798
+linest_multi	wide	630	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),1,5)	()	n	0.0
+linest_multi	wide	631	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),2,1)	()	n	0.0
+linest_multi	wide	632	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),2,2)	()	n	0.0
+linest_multi	wide	633	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),2,3)	()	n	0.0
+linest_multi	wide	634	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),2,4)	()	n	0.0
+linest_multi	wide	635	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),2,5)	()	e	#N/A
+linest_multi	wide	636	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),3,1)	()	n	1.0
+linest_multi	wide	637	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),3,2)	()	n	0.0
+linest_multi	wide	638	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	wide	639	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	wide	640	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),3,5)	()	e	#N/A
+linest_multi	wide	641	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),4,1)	()	e	#NUM!
+linest_multi	wide	642	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),4,2)	()	n	0.0
+linest_multi	wide	643	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	wide	644	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	wide	645	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),4,5)	()	e	#N/A
+linest_multi	wide	646	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),5,1)	()	n	23.25
+linest_multi	wide	647	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),5,2)	()	n	0.0
+linest_multi	wide	648	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	wide	649	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	wide	650	INDEX(LINEST(CF1:CF3,CG1:CJ3,FALSE,TRUE),5,5)	()	e	#N/A
+linest_multi	square	651	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),1,1)	()	n	3.0636621012583913
+linest_multi	square	652	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),1,2)	()	n	2.1070874536650344
+linest_multi	square	653	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),1,3)	()	n	1.1318108932880517
+linest_multi	square	654	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),1,4)	()	n	0.0
+linest_multi	square	655	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),2,1)	()	n	0.05146328066076894
+linest_multi	square	656	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),2,2)	()	n	0.025831989810826773
+linest_multi	square	657	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),2,3)	()	n	0.06389815561196795
+linest_multi	square	658	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	square	659	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),3,1)	()	n	0.9998995149012885
+linest_multi	square	660	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),3,2)	()	n	0.6494361869232099
+linest_multi	square	661	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	square	662	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	square	663	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),4,1)	()	n	3316.9081045288067
+linest_multi	square	664	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),4,2)	()	n	1.0
+linest_multi	square	665	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	square	666	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	square	667	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),5,1)	()	n	4196.8907326391145
+linest_multi	square	668	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),5,2)	()	n	0.42176736088535843
+linest_multi	square	669	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	square	670	INDEX(LINEST(CL1:CL4,CM1:CO4,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	rows	671	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),1,1)	()	n	-0.8404285910847754
+linest_multi	rows	672	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),1,2)	()	n	2.3715219784926864
+linest_multi	rows	673	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),1,3)	()	n	0.8376951257544603
+linest_multi	rows	674	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),2,1)	()	n	0.7958376807031553
+linest_multi	rows	675	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),2,2)	()	n	1.0021473153217808
+linest_multi	rows	676	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),2,3)	()	n	12.199216550635953
+linest_multi	rows	677	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),3,1)	()	n	0.47318599788563653
+linest_multi	rows	678	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),3,2)	()	n	37.489531457029535
+linest_multi	rows	679	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	rows	680	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),4,1)	()	n	3.1437110364431846
+linest_multi	rows	681	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),4,2)	()	n	7.0
+linest_multi	rows	682	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	rows	683	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),5,1)	()	n	8836.751467926748
+linest_multi	rows	684	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),5,2)	()	n	9838.25478207325
+linest_multi	rows	685	INDEX(LINEST(AA20:AJ20,AA21:AJ22,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	rows	686	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),1,1)	()	n	-0.8275504456446107
+linest_multi	rows	687	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),1,2)	()	n	2.3693797422219274
+linest_multi	rows	688	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),1,3)	()	n	0.0
+linest_multi	rows	689	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),2,1)	()	n	0.7237160241625984
+linest_multi	rows	690	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),2,2)	()	n	0.9372841668806161
+linest_multi	rows	691	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),2,3)	()	e	#N/A
+linest_multi	rows	692	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),3,1)	()	n	0.4744859354057485
+linest_multi	rows	693	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),3,2)	()	n	35.08005478940561
+linest_multi	rows	694	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	rows	695	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),4,1)	()	n	3.6115945690024356
+linest_multi	rows	696	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),4,2)	()	n	8.0
+linest_multi	rows	697	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	rows	698	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),5,1)	()	n	8888.930547778404
+linest_multi	rows	699	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),5,2)	()	n	9844.881952221596
+linest_multi	rows	700	INDEX(LINEST(AA20:AJ20,AA21:AJ22,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	kinds	701	INDEX(LINEST(CQ1:CQ5,CR1:CS5),1,1)	()	e	#VALUE!
+linest_multi	kinds	702	INDEX(LINEST(CU1:CU5,CV1:CW5),1,1)	()	e	#VALUE!
+linest_multi	kinds	703	INDEX(LINEST(CY1:CY5,CZ1:DA5),1,1)	()	e	#VALUE!
+linest_multi	kinds	704	INDEX(LINEST(DC1:DC5,DD1:DE5),1,1)	()	e	#VALUE!
+linest_multi	kinds	705	INDEX(LINEST(DG1:DG5,DH1:DI5),1,1)	()	e	#VALUE!
+linest_multi	kinds	706	INDEX(LINEST(DK1:DK5,DL1:DM5),1,1)	()	e	#VALUE!
+linest_multi	nostats	707	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,FALSE),1,1)	()	n	0.9662377046981537
+linest_multi	nostats	708	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE),1,1)	()	n	0.9662377046981537
+linest_multi	nostats	709	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,FALSE),1,2)	()	n	-0.9708356515588782
+linest_multi	nostats	710	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE),1,2)	()	n	-0.9708356515588782
+linest_multi	nostats	711	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,FALSE),1,3)	()	n	2.2611659291403514
+linest_multi	nostats	712	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE),1,3)	()	n	2.2611659291403514
+linest_multi	nostats	713	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE,FALSE),1,4)	()	n	0.5231347747674737
+linest_multi	nostats	714	INDEX(LINEST(AA1:AA10,AB1:AD10,TRUE),1,4)	()	n	0.5231347747674737
+linest_multi	nostats	715	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,FALSE),1,1)	()	n	0.967205439394614
+linest_multi	nostats	716	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE),1,1)	()	n	0.967205439394614
+linest_multi	nostats	717	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,FALSE),1,2)	()	n	-0.9629287918028523
+linest_multi	nostats	718	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE),1,2)	()	n	-0.9629287918028523
+linest_multi	nostats	719	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,FALSE),1,3)	()	n	2.259718396148532
+linest_multi	nostats	720	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE),1,3)	()	n	2.259718396148532
+linest_multi	nostats	721	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE,FALSE),1,4)	()	n	0.0
+linest_multi	nostats	722	INDEX(LINEST(AA1:AA10,AB1:AD10,FALSE),1,4)	()	n	0.0
+linest_multi	logest	723	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),1,1)	()	n	0.9469480303366816
+linest_multi	logest	724	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),1,2)	()	n	1.1176650739232106
+linest_multi	logest	725	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),1,3)	()	n	1.7607627594224597
+linest_multi	logest	726	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),2,1)	()	n	0.006841302778181944
+linest_multi	logest	727	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),2,2)	()	n	0.00535005927672418
+linest_multi	logest	728	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),2,3)	()	n	0.05638412808152412
+linest_multi	logest	729	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),3,1)	()	n	0.9912247726031937
+linest_multi	logest	730	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),3,2)	()	n	0.044777518986916516
+linest_multi	logest	731	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	logest	732	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),4,1)	()	n	395.35006299367416
+linest_multi	logest	733	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),4,2)	()	n	7.0
+linest_multi	logest	734	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	logest	735	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),5,1)	()	n	1.5853744741852702
+linest_multi	logest	736	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),5,2)	()	n	0.014035183446365684
+linest_multi	logest	737	INDEX(LOGEST(DO1:DO10,DP1:DQ10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	logest	738	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),1,1)	()	n	1.05000002271651
+linest_multi	logest	739	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),1,2)	()	n	0.9000000060453931
+linest_multi	logest	740	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),1,3)	()	n	1.0999999749471507
+linest_multi	logest	741	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),1,4)	()	n	2.000000056006457
+linest_multi	logest	742	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),2,1)	()	n	3.320778558106774e-08
+linest_multi	logest	743	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),2,2)	()	n	3.6736628209059815e-08
+linest_multi	logest	744	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),2,3)	()	n	1.450508754214262e-08
+linest_multi	logest	745	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),2,4)	()	n	1.3352207039285207e-07
+linest_multi	logest	746	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),3,1)	()	n	0.9999999999999756
+linest_multi	logest	747	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),3,2)	()	n	8.063368187519952e-08
+linest_multi	logest	748	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	logest	749	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	logest	750	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),4,1)	()	n	81998418746118.47
+linest_multi	logest	751	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),4,2)	()	n	6.0
+linest_multi	logest	752	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	logest	753	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	logest	754	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),5,1)	()	n	1.5994096576315968
+linest_multi	logest	755	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),5,2)	()	n	3.901074391650528e-14
+linest_multi	logest	756	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	logest	757	INDEX(LOGEST(DO1:DO10,DP1:DR10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	logest_sum	758	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),1,1)	()	n	1.0
+linest_multi	logest_sum	759	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),1,2)	()	n	0.9469480303366816
+linest_multi	logest_sum	760	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),1,3)	()	n	1.1176650739232106
+linest_multi	logest_sum	761	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),1,4)	()	n	1.7607627594224597
+linest_multi	logest_sum	762	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),2,1)	()	n	0.0
+linest_multi	logest_sum	763	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),2,2)	()	n	0.006841302778181944
+linest_multi	logest_sum	764	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),2,3)	()	n	0.00535005927672418
+linest_multi	logest_sum	765	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),2,4)	()	n	0.05638412808152412
+linest_multi	logest_sum	766	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),3,1)	()	n	0.9912247726031937
+linest_multi	logest_sum	767	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),3,2)	()	n	0.044777518986916516
+linest_multi	logest_sum	768	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),3,3)	()	e	#N/A
+linest_multi	logest_sum	769	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),3,4)	()	e	#N/A
+linest_multi	logest_sum	770	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),4,1)	()	n	395.35006299367416
+linest_multi	logest_sum	771	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),4,2)	()	n	7.0
+linest_multi	logest_sum	772	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),4,3)	()	e	#N/A
+linest_multi	logest_sum	773	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),4,4)	()	e	#N/A
+linest_multi	logest_sum	774	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),5,1)	()	n	1.5853744741852702
+linest_multi	logest_sum	775	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),5,2)	()	n	0.014035183446365684
+linest_multi	logest_sum	776	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),5,3)	()	e	#N/A
+linest_multi	logest_sum	777	INDEX(LOGEST(DT1:DT10,DU1:DW10,TRUE,TRUE),5,4)	()	e	#N/A
+linest_multi	logest	778	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),1,1)	()	n	1.003595286922139
+linest_multi	logest	779	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),1,2)	()	n	1.1661912260642646
+linest_multi	logest	780	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),1,3)	()	n	1.0
+linest_multi	logest	781	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),2,1)	()	n	0.013366740292727103
+linest_multi	logest	782	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),2,2)	()	n	0.011990102014168596
+linest_multi	logest	783	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),2,3)	()	e	#N/A
+linest_multi	logest	784	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),3,1)	()	n	0.9777236162763768
+linest_multi	logest	785	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),3,2)	()	n	0.16427702165382582
+linest_multi	logest	786	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	logest	787	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),4,1)	()	n	175.56235848811255
+linest_multi	logest	788	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),4,2)	()	n	8.0
+linest_multi	logest	789	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	logest	790	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),5,1)	()	n	9.47578161458634
+linest_multi	logest	791	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),5,2)	()	n	0.21589551874761245
+linest_multi	logest	792	INDEX(LOGEST(DO1:DO10,DP1:DQ10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	logest	793	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),1,1)	()	n	0.9387904237252702
+linest_multi	logest	794	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),1,2)	()	n	1.0538815723652495
+linest_multi	logest	795	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),1,3)	()	n	1.1758339228028742
+linest_multi	logest	796	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),1,4)	()	n	1.0
+linest_multi	logest	797	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),2,1)	()	n	0.0495477105797896
+linest_multi	logest	798	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),2,2)	()	n	0.040455192012452665
+linest_multi	logest	799	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),2,3)	()	n	0.013231360200861632
+linest_multi	logest	800	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	logest	801	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),3,1)	()	n	0.9819208134733135
+linest_multi	logest	802	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),3,2)	()	n	0.1582121715788947
+linest_multi	logest	803	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	logest	804	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	logest	805	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),4,1)	()	n	126.7285207434039
+linest_multi	logest	806	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),4,2)	()	n	7.0
+linest_multi	logest	807	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	logest	808	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	logest	809	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),5,1)	()	n	9.516459494683986
+linest_multi	logest	810	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),5,2)	()	n	0.1752176386499673
+linest_multi	logest	811	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	logest	812	INDEX(LOGEST(DO1:DO10,DP1:DR10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	logest_sum	813	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),1,1)	()	n	1.003595286922139
+linest_multi	logest_sum	814	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),1,2)	()	n	1.0
+linest_multi	logest_sum	815	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),1,3)	()	n	1.1620134542887108
+linest_multi	logest_sum	816	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),1,4)	()	n	1.0
+linest_multi	logest_sum	817	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),2,1)	()	n	0.013366740292727105
+linest_multi	logest_sum	818	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),2,2)	()	n	0.0
+linest_multi	logest_sum	819	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),2,3)	()	n	0.023516027146850044
+linest_multi	logest_sum	820	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),2,4)	()	e	#N/A
+linest_multi	logest_sum	821	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),3,1)	()	n	0.9777236162763768
+linest_multi	logest_sum	822	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),3,2)	()	n	0.16427702165382585
+linest_multi	logest_sum	823	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),3,3)	()	e	#N/A
+linest_multi	logest_sum	824	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),3,4)	()	e	#N/A
+linest_multi	logest_sum	825	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),4,1)	()	n	175.5623584881125
+linest_multi	logest_sum	826	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),4,2)	()	n	8.0
+linest_multi	logest_sum	827	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),4,3)	()	e	#N/A
+linest_multi	logest_sum	828	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),4,4)	()	e	#N/A
+linest_multi	logest_sum	829	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),5,1)	()	n	9.47578161458634
+linest_multi	logest_sum	830	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),5,2)	()	n	0.2158955187476125
+linest_multi	logest_sum	831	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),5,3)	()	e	#N/A
+linest_multi	logest_sum	832	INDEX(LOGEST(DT1:DT10,DU1:DW10,FALSE,TRUE),5,4)	()	e	#N/A
+linest_multi	trend	833	INDEX(TREND(AA1:AA10,AB1:AD10,DY1:EA4,TRUE),1)	()	n	46.666711593665404
+linest_multi	trend	834	INDEX(TREND(AA1:AA10,AB1:AD10,DY1:EA4,TRUE),2)	()	n	4.719931993073777
+linest_multi	trend	835	INDEX(TREND(AA1:AA10,AB1:AD10,DY1:EA4,TRUE),3)	()	n	-14.026776479537123
+linest_multi	trend	836	INDEX(TREND(AA1:AA10,AB1:AD10,DY1:EA4,TRUE),4)	()	n	49.000002605486266
+linest_multi	trend	837	INDEX(TREND(AA1:AA10,AB1:AD10,,TRUE),1)	()	n	-50.437836727039056
+linest_multi	trend	838	INDEX(TREND(AA1:AA10,AB1:AD10,,TRUE),5)	()	n	-2.9746281367167384
+linest_multi	trend	839	INDEX(TREND(AA1:AA10,AB1:AD10,,TRUE),10)	()	n	47.37349972711787
+linest_multi	trend	840	INDEX(TREND(AA1:AA10,AB1:AD10,DY1:EA4,FALSE),1)	()	n	46.20433983828287
+linest_multi	trend	841	INDEX(TREND(AA1:AA10,AB1:AD10,DY1:EA4,FALSE),2)	()	n	4.164028924295653
+linest_multi	trend	842	INDEX(TREND(AA1:AA10,AB1:AD10,DY1:EA4,FALSE),3)	()	n	-14.564333279611212
+linest_multi	trend	843	INDEX(TREND(AA1:AA10,AB1:AD10,DY1:EA4,FALSE),4)	()	n	48.36980816991287
+linest_multi	trend	844	INDEX(TREND(AA1:AA10,AB1:AD10,,FALSE),1)	()	n	-51.053196978031224
+linest_multi	trend	845	INDEX(TREND(AA1:AA10,AB1:AD10,,FALSE),5)	()	n	-3.633651474645699
+linest_multi	trend	846	INDEX(TREND(AA1:AA10,AB1:AD10,,FALSE),10)	()	n	46.70034028969896
+linest_multi	trend	847	INDEX(TREND(AA1:AA10,AB1:AC10,DY1:EA4),1)	()	e	#REF!
+linest_multi	growth	848	INDEX(GROWTH(DO1:DO10,DP1:DR10,DY1:EA4,TRUE),1)	()	n	8.024002029451914
+linest_multi	growth	849	INDEX(GROWTH(DO1:DO10,DP1:DR10,DY1:EA4,TRUE),2)	()	n	3.4024310214155613
+linest_multi	growth	850	INDEX(GROWTH(DO1:DO10,DP1:DR10,DY1:EA4,TRUE),3)	()	n	1.5944826963954912
+linest_multi	growth	851	INDEX(GROWTH(DO1:DO10,DP1:DR10,DY1:EA4,TRUE),4)	()	n	28.92640231233343
+linest_multi	growth	852	INDEX(GROWTH(DO1:DO10,DP1:DR10,,TRUE),1)	()	n	2.5233470429858973
+linest_multi	growth	853	INDEX(GROWTH(DO1:DO10,DP1:DR10,,TRUE),5)	()	n	3.1738531670605887
+linest_multi	growth	854	INDEX(GROWTH(DO1:DO10,DP1:DR10,,TRUE),10)	()	n	1.787495008465294
+linest_multi	growth	855	INDEX(GROWTH(DO1:DO10,DP1:DR10,DY1:EA4,FALSE),1)	()	n	21.53242659190795
+linest_multi	growth	856	INDEX(GROWTH(DO1:DO10,DP1:DR10,DY1:EA4,FALSE),2)	()	n	0.4321391157734035
+linest_multi	growth	857	INDEX(GROWTH(DO1:DO10,DP1:DR10,DY1:EA4,FALSE),3)	()	n	0.06644133163822386
+linest_multi	growth	858	INDEX(GROWTH(DO1:DO10,DP1:DR10,DY1:EA4,FALSE),4)	()	n	12.39288240417187
+linest_multi	growth	859	INDEX(GROWTH(DO1:DO10,DP1:DR10,,FALSE),1)	()	n	2.47878398792919
+linest_multi	growth	860	INDEX(GROWTH(DO1:DO10,DP1:DR10,,FALSE),5)	()	n	3.9869161314970145
+linest_multi	growth	861	INDEX(GROWTH(DO1:DO10,DP1:DR10,,FALSE),10)	()	n	2.0126574774458277
+linest_multi	growth	862	INDEX(GROWTH(DO1:DO10,DP1:DQ10,DY1:EA4),1)	()	e	#REF!
+linest_multi	trend_sum	863	INDEX(TREND(AM1:AM10,AN1:AP10,DY1:EA4),1)	()	n	51.0736004823851
+linest_multi	trend_sum	864	INDEX(TREND(AM1:AM10,AN1:AP10,DY1:EA4),4)	()	n	69.85332645233596

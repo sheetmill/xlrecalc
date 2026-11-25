@@ -12,7 +12,7 @@ as matching. Whether a matching row is exact or within its tolerance depends on 
 platform's math library, so the page counts them together and is the same on every
 platform.
 
-457 implemented, 18 partial, 48 absent.
+461 implemented, 17 partial, 45 absent.
 
 | function | category | status | rows | match | listed | tolerance | note |
 |---|---|---|---:|---:|---:|---|---|
@@ -170,7 +170,7 @@ platform.
 | `ERF.PRECISE` | engineering | implemented | 57 | 57 | 0 | 4 ulps |  |
 | `ERFC` | engineering | implemented | 56 | 54 | 2 | 4 ulps |  |
 | `ERFC.PRECISE` | engineering | implemented | 57 | 55 | 2 | 4 ulps |  |
-| `ERROR.TYPE` | information | implemented | 722 | 689 | 0 |  |  |
+| `ERROR.TYPE` | information | implemented | 722 | 692 | 0 |  |  |
 | `EUROCONVERT` | | absent | | | | | |
 | `EVEN` | math | implemented | 31 | 31 | 0 |  |  |
 | `EXACT` | text | implemented | 85 | 85 | 0 |  |  |
@@ -222,7 +222,7 @@ platform.
 | `GESTEP` | engineering | implemented | 136 | 136 | 0 |  |  |
 | `GETPIVOTDATA` | | absent | | | | | |
 | `GROUPBY` | | absent | | | | | |
-| `GROWTH` | | absent | | | | | |
+| `GROWTH` | statistical | implemented | 24 | 24 | 0 | 5e-14 relative |  |
 | `HARMEAN` | statistical | implemented | 35 | 35 | 0 | 4 ulps |  |
 | `HEX2BIN` | engineering | implemented | 311 | 311 | 0 |  |  |
 | `HEX2DEC` | engineering | implemented | 28 | 28 | 0 |  |  |
@@ -234,7 +234,7 @@ platform.
 | `HYPGEOM.DIST` | statistical | implemented | 634 | 634 | 0 | 8 ulps |  |
 | `HYPGEOMDIST` | statistical | implemented | 70 | 70 | 0 | 8 ulps |  |
 | `IF` | logical | implemented | 69 | 69 | 0 |  |  |
-| `IFERROR` | logical | implemented | 678 | 645 | 0 |  |  |
+| `IFERROR` | logical | implemented | 678 | 648 | 0 |  |  |
 | `IFNA` | logical | implemented | 16 | 16 | 0 |  |  |
 | `IFS` | logical | implemented | 34 | 34 | 0 |  |  |
 | `IMABS` | engineering | implemented | 25 | 25 | 0 |  |  |
@@ -263,7 +263,7 @@ platform.
 | `IMSUB` | engineering | implemented | 70 | 70 | 0 |  |  |
 | `IMSUM` | engineering | implemented | 72 | 72 | 0 |  |  |
 | `IMTAN` | engineering | implemented | 36 | 34 | 2 |  |  |
-| `INDEX` | lookup and reference | implemented | 513 | 503 | 10 |  |  |
+| `INDEX` | lookup and reference | implemented | 1377 | 1343 | 34 |  |  |
 | `INDIRECT` | lookup and reference | implemented | 15 | 15 | 0 |  |  |
 | `INFO` | | absent | | | | | |
 | `INT` | math | implemented | 19 | 18 | 1 |  |  |
@@ -297,11 +297,11 @@ platform.
 | `LEN` | text | implemented | 431 | 431 | 0 |  |  |
 | `LENB` | text | implemented | 29 | 29 | 0 |  |  |
 | `LET` | logical | implemented | 61 | 61 | 0 |  |  |
-| `LINEST` | statistical | partial | 73 | 63 | 10 | 4 ulps | one regressor only |
+| `LINEST` | statistical | implemented | 795 | 774 | 21 | 4 ulps |  |
 | `LN` | math | implemented | 18 | 18 | 0 |  |  |
 | `LOG` | math | implemented | 229 | 229 | 0 | 4 ulps |  |
 | `LOG10` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
-| `LOGEST` | | absent | | | | | |
+| `LOGEST` | statistical | implemented | 119 | 106 | 13 | 5e-14 relative |  |
 | `LOGINV` | statistical | implemented | 21 | 21 | 0 | 4 ulps |  |
 | `LOGNORM.DIST` | statistical | implemented | 263 | 247 | 16 | 4 ulps |  |
 | `LOGNORM.INV` | statistical | implemented | 168 | 168 | 0 | 4 ulps |  |
@@ -494,7 +494,7 @@ platform.
 | `TOROW` | lookup and reference | implemented | 17 | 17 | 0 |  |  |
 | `TRANSLATE` | | absent | | | | | |
 | `TRANSPOSE` | lookup and reference | implemented | 16 | 16 | 0 |  |  |
-| `TREND` | | absent | | | | | |
+| `TREND` | statistical | implemented | 26 | 26 | 0 | 5e-14 relative |  |
 | `TRIM` | text | implemented | 24 | 24 | 0 |  |  |
 | `TRIMMEAN` | statistical | implemented | 246 | 246 | 0 | 4 ulps |  |
 | `TRIMRANGE` | | absent | | | | | |

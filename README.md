@@ -192,18 +192,19 @@ union given to a function no capture shows reading one) raises `UnsupportedError
 
 ## What it computes, and what not yet
 
-- **Functions**: 475 of Excel's functions (18 of them partly): math, statistics,
+- **Functions**: 478 of Excel's functions (17 of them partly): math, statistics,
   logic, text, dates, lookup (`VLOOKUP`, `INDEX`, `MATCH`, `OFFSET`, `INDIRECT`...), the
   financial and bond functions, the database functions, complex numbers, Bessel functions,
   unit conversion.
   The [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 121,793 formulas computed by Excel and compared with xlrecalc's results: 120,978
+- **Evidence**: 122,681 formulas computed by Excel and compared with xlrecalc's results: 121,845
   match, bit for bit or within a small tolerance declared per function (a few units in the last
-  place, or a relative one: 1E-9 for `IRR`, `RATE` and `YIELD`, 1E-15 to 1E-12 for the beta,
-  gamma, chi-squared, F and t distributions), 780 known deviations, each listed with its reason
-  in [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md), and 35 not
-  evaluated (calls of functions xlrecalc does not compute). Each listed
+  place, or a relative one: 1E-9 for `IRR`, `RATE` and `YIELD`, 5E-14 for `LINEST`, `LOGEST`,
+  `TREND` and `GROWTH`, 1E-15 to 1E-12 for the beta, gamma, chi-squared, F and t
+  distributions), 804 known deviations, each listed with its reason in
+  [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md), and 32 not evaluated
+  (calls of functions xlrecalc does not compute). Each listed
   deviation is still computed and compared with Excel on every test run, and one that starts to
   match fails the run, except a few that can match by chance (a random result, a result Excel
   varies between runs, a row that depends on the platform's math library). The largest group of deviations is `BINOM.DIST`,
@@ -223,8 +224,7 @@ union given to a function no capture shows reading one) raises `UnsupportedError
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists as absent;
   arrays of references (`N(OFFSET(A1,{0;1},0))`) and a union of ranges given to a function no
   capture shows reading one; structured (table) references; `CELL`'s formatting kinds; computed
-  criteria in the database functions; `LINEST` with several regressors; inserting or deleting
-  rows and columns. A formula xlrecalc cannot compute keeps the value the
+  criteria in the database functions; inserting or deleting rows and columns. A formula xlrecalc cannot compute keeps the value the
   file holds, or is written with none where the file holds none, and the report lists it.
 
 <!-- usage-end -->
