@@ -3,12 +3,15 @@
 Each case is a dynamic-array formula in file form at the anchor of its own block of ``BLOCK``
 rows in column B; it may put constants in its way (``way``: offsets from the anchor), read it
 from plain formulas in column N (``readers``: ``{a}`` is the anchor), or be written as a plain
-formula without the dynamic-array marker (``legacy``). The data, in columns AA on, holds a
-first and a second set of values for each kind of input. New cases go at the end of a suite.
+formula without the dynamic-array marker (``legacy``) or as a legacy array formula over a range
+of ``(rows, columns)`` from the anchor (``cse``, as Ctrl+Shift+Enter enters one). The data, in
+columns AA on, holds a first and a second set of values for each kind of input. New cases go at
+the end of a suite.
 """
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 
 from xlrecalc._values import ErrorValue
@@ -30,7 +33,17 @@ class DynCase:
     way: dict[tuple[int, int], object] = field(default_factory=dict)
     readers: tuple[str, ...] = ()
     legacy: bool = False
+    cse: tuple[int, int] | None = None
 
+
+def _below(x: float, k: int) -> float:
+    """``x`` moved ``k`` units in the last place down."""
+    for _ in range(k):
+        x = math.nextafter(x, -math.inf)
+    return x
+
+
+_CANCEL = ((1.5, 1), (0.3, 4), (123.456, 7), (1.5, 8), (0.3, 16))
 
 # Data: column letter -> values from row 1 (None is a blank; "=..." is a plain formula).
 DATA: dict[str, list[object]] = {
@@ -102,6 +115,15 @@ DATA: dict[str, list[object]] = {
     "CK": ["-", "--"],
     "CL": ["--", "-"],
     "CM": ["-p", "pqr"],
+    # cancellation: a left operand (CO) and a right one (CP) k units in the last place of the left
+    # below it, k 1, 4, 7 (Excel's rule snaps a scalar's result to 0), 8 and 16 (it does not);
+    # 0.1+0.2 less 0.3; then a pair far apart. CQ is CP negated, for an addition. CR sums to
+    # 5.55E-17 in order, as 0.1+0.2-0.3 does; CS weights it by 1.
+    "CO": [1.5, 0.3, 123.456, 1.5, 0.3, 0.1 + 0.2, 5.0],
+    "CP": [*(_below(a, k) for a, k in _CANCEL), 0.3, 2.0],
+    "CQ": [*(-_below(a, k) for a, k in _CANCEL), -0.3, -2.0],
+    "CR": [0.1, 0.2, -0.3],
+    "CS": [1.0, 1.0, 1.0],
 }
 
 
@@ -977,6 +999,35 @@ WHOLE = [
     DynCase("AA:AA*1"),
 ]
 
+# Cancellation snapping (QUIRKS.md, cancellation_snapping) inside arrays: a subtraction or an
+# addition of arrays as the formula's last operation, in a dynamic array and a legacy array
+# formula; the same nested, or under a function; SUM and SUMPRODUCT of an array expression, and
+# their own additions (CR: 0.1, 0.2, -0.3)
+_D = "CO1:CO7-CP1:CP7"
+CANCEL = [
+    DynCase(_D),
+    DynCase("CO1:CO7+CQ1:CQ7"),
+    DynCase(f"({_D})*1"),
+    DynCase(f"{_D}+0"),
+    DynCase("CO1:CO7*1-CP1:CP7"),
+    DynCase(f"IF(TRUE,{_D})"),
+    DynCase(_let("~x", "CO1:CO7", f"{PM}x-CP1:CP7")),
+    DynCase("CO1:CO7-CP1"),
+    DynCase("CO1-CP1:CP7"),
+    DynCase(_D, cse=(7, 1)),
+    DynCase(f"({_D})*1", cse=(7, 1)),
+    DynCase(f"SUM({_D})"),
+    DynCase(f"SUMPRODUCT({_D})"),
+    DynCase("SUM(CR1:CR3)"),
+    DynCase("SUM(CR1:CR3*1)"),
+    DynCase("SUMPRODUCT(CR1:CR3)"),
+    DynCase("SUMPRODUCT(CR1:CR3,CS1:CS3)"),
+    DynCase("SUMPRODUCT(CR1:CR3)", legacy=True),
+    DynCase("SUM({0.1,0.2,-0.3})"),
+    DynCase(f"TRANSPOSE({_D})"),
+    DynCase("SUM(CR1:CR3*1)", cse=(1, 1)),
+]
+
 SUITES: dict[str, list[DynCase]] = {
     "sequence": SEQUENCE,
     "mmult": MMULT,
@@ -996,6 +1047,7 @@ SUITES: dict[str, list[DynCase]] = {
     "randarray": RANDARRAY,
     "let": LET,
     "whole_columns": WHOLE,
+    "cancel": CANCEL,
 }
 
 
@@ -1038,7 +1090,11 @@ def layout(suite: str) -> list[tuple[str, str, str]]:
         anchor = f"{_letter(col)}{row}"
         for (dr, dc), v in case.way.items():
             out.append(("way", f"{_letter(col + dc)}{row + dr}", repr(v)))
-        out.append(("legacy" if case.legacy else "dynamic", anchor, case.formula))
+        if case.cse is not None:
+            last = f"{_letter(col + case.cse[1] - 1)}{row + case.cse[0] - 1}"
+            out.append(("cse", f"{anchor}:{last}", case.formula))
+        else:
+            out.append(("legacy" if case.legacy else "dynamic", anchor, case.formula))
         for j, text in enumerate(case.readers):
             out.append(("reader", f"N{row + j}", text.replace("{a}", anchor)))
     return out

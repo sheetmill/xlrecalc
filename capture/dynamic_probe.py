@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import ast
 import datetime as dt
+import re
 import sys
 import zipfile
 from pathlib import Path
@@ -48,6 +49,7 @@ def build(path: Path, suite: str) -> list[tuple[str, str, str]]:
     ws = wb.active
     ws.title = "probe"
     dynamic = []
+    numbers: dict[str, float] = {}
     for kind, where, text in inputs:
         if kind == "name":
             from openpyxl.workbook.defined_name import DefinedName
@@ -58,15 +60,39 @@ def build(path: Path, suite: str) -> list[tuple[str, str, str]]:
             dynamic.append((kind, where, text))
         elif kind in ("legacy", "reader"):
             ws[where] = "=" + text
+        elif kind == "cse":  # a legacy array formula over its range, as Ctrl+Shift+Enter enters it
+            from openpyxl.worksheet.formula import ArrayFormula
+
+            ws[where.partition(":")[0]] = ArrayFormula(where, "=" + text)
         else:  # a constant: data, or a cell in a result's way
             value = eval_constant(text)
             cell = ws[where]
             cell.value = str(value) if isinstance(value, ErrorValue) else value
+            if type(value) is float:
+                numbers[where] = value
             if isinstance(value, ErrorValue):
                 cell.data_type = "e"
     wb.save(path)
+    _exact_numbers(path, numbers)
     add_dynamic(path, dynamic)
     return inputs
+
+
+def _exact_numbers(path: Path, numbers: dict[str, float]) -> None:
+    """Write each number constant as its shortest exact text: openpyxl may round its digits."""
+    with zipfile.ZipFile(path) as z:
+        parts = {name: z.read(name) for name in z.namelist()}
+    sheet = parts["xl/worksheets/sheet1.xml"].decode()
+
+    def exact(m: re.Match[str]) -> str:
+        value = numbers.get(m[2])
+        return m[0] if value is None else f"{m[1]}{number_text(value)}{m[3]}"
+
+    sheet = re.sub(r'(<c r="([A-Z]+[0-9]+)"[^>]*><v>)[^<]*(</v>)', exact, sheet)
+    parts["xl/worksheets/sheet1.xml"] = sheet.encode()
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
+        for name, data in parts.items():
+            z.writestr(name, data)
 
 
 def eval_constant(text: str) -> object:
@@ -74,6 +100,39 @@ def eval_constant(text: str) -> object:
     if text.startswith("ErrorValue("):
         return ErrorValue(ast.literal_eval(text[len("ErrorValue(") : -1]))
     return ast.literal_eval(text)
+
+
+def records(inputs: list[tuple[str, str, str]], copy: Path) -> list[str]:
+    """The capture's rows: its inputs, then every cell of Excel's saved copy."""
+    body = ["\t".join(["input", kind, where, repr(text)]) for kind, where, text in inputs]
+    with Book(copy) as book:
+        for c in book.cells("probe"):
+            f = c.formula
+            value = number_text(c.value) if isinstance(c.value, float) else c.value
+            body.append(
+                "\t".join(
+                    [
+                        "cell",
+                        f"{_col(c.column)}{c.row}",
+                        c.type,
+                        repr(value),
+                        repr(f.text if f else None),
+                        f.kind if f else "",
+                        (f.ref or "") if f else "",
+                        c.cm or "",
+                        c.vm or "",
+                    ]
+                )
+            )
+    return body
+
+
+def rich_parts(copy: Path, folder: Path, stem: str) -> None:
+    """Keep the copy's rich-value parts, behind errors such as #SPILL! and #CALC!"""
+    with zipfile.ZipFile(copy) as z:
+        for name in z.namelist():
+            if name.startswith("xl/richData/") and name.endswith(".xml"):
+                (folder / f"{stem}_{Path(name).name}").write_bytes(z.read(name))
 
 
 def run(suite: str) -> None:
@@ -102,32 +161,10 @@ def run(suite: str) -> None:
         "# input rows: input, kind, cell, text (formula in file form, or a constant's repr)",
         "# cell rows: cell, address, type, value (repr), formula (repr), f_t, f_ref, cm, vm",
     ]
-    body = ["\t".join(["input", kind, where, repr(text)]) for kind, where, text in inputs]
-    with Book(copy) as book:
-        for c in book.cells("probe"):
-            f = c.formula
-            value = number_text(c.value) if isinstance(c.value, float) else c.value
-            body.append(
-                "\t".join(
-                    [
-                        "cell",
-                        f"{_col(c.column)}{c.row}",
-                        c.type,
-                        repr(value),
-                        repr(f.text if f else None),
-                        f.kind if f else "",
-                        (f.ref or "") if f else "",
-                        c.cm or "",
-                        c.vm or "",
-                    ]
-                )
-            )
+    body = records(inputs, copy)
     out = CAPTURES / f"dyn_{suite}.tsv"
     out.write_text("\n".join([*header, *body]) + "\n", encoding="utf-8")
-    with zipfile.ZipFile(copy) as z:
-        for name in z.namelist():  # the rich values behind errors such as #SPILL! and #CALC!
-            if name.startswith("xl/richData/") and name.endswith(".xml"):
-                (CAPTURES / f"dyn_{suite}_{Path(name).name}").write_bytes(z.read(name))
+    rich_parts(copy, CAPTURES, f"dyn_{suite}")
     print(f"dyn_{suite}: {len(inputs)} inputs, {len(body) - len(inputs)} cells -> {out.name}")
     for p in (src, copy):
         p.unlink(missing_ok=True)
@@ -142,7 +179,7 @@ def main() -> None:
         run(name)
 
 
-__all__ = ["anchor_of", "build", "main", "run"]
+__all__ = ["anchor_of", "build", "main", "records", "rich_parts", "run"]
 
 if __name__ == "__main__":
     main()

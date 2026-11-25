@@ -36,11 +36,13 @@ def _size(suite: str, unit: str) -> int:
     rows = _lines(suite)
     if unit == "cells" and any(r[0] == "input" for r in rows):  # inputs and cells interleaved
         return sum(1 for r in rows if r[0] == "cell")
-    if unit == "cases":  # an anchor in column B: B1, B13, B25...
+    if unit == "cases":  # an anchor in column B: B1, B13, B25... (a legacy array: B109:B115)
         return sum(
             1
             for r in rows
-            if r[0] == "input" and r[1] in ("dynamic", "legacy") and re.fullmatch(r"B\d+", r[2])
+            if r[0] == "input"
+            and r[1] in ("dynamic", "legacy", "cse")
+            and re.fullmatch(r"B\d+(?::[A-Z]+\d+)?", r[2])
         )
     return len(rows)
 

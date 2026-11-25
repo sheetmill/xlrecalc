@@ -7,6 +7,7 @@ input files, checksum for checksum, and the capture's rows are the generator's c
 
 from __future__ import annotations
 
+import ast
 import hashlib
 import json
 from pathlib import Path
@@ -52,6 +53,7 @@ def test_there_is_a_windows_capture() -> None:
         "dates_1904.tsv",
         "dates_family.tsv",
         "distributions_family.tsv",
+        "dyn_cancel.tsv",
         "empty_args.tsv",
         "encodeurl.tsv",
         "engineering_family.tsv",
@@ -120,6 +122,13 @@ def test_the_rows_are_the_generator_s_cases(path: Path) -> None:
 
     rows = [line.split("\t") for line in path.read_text(encoding="utf-8").splitlines()]
     rows = [r for r in rows if r[0] and not r[0].startswith("#")]
+    if path.stem.startswith("dyn_"):  # capture/dynamic_suites.py: the layout, then every cell
+        from capture.dynamic_suites import layout
+
+        inputs = [(r[1], r[2], ast.literal_eval(r[3])) for r in rows if r[0] == "input"]
+        assert inputs == layout(path.stem.removeprefix("dyn_"))
+        assert all(r[0] in ("input", "cell") for r in rows)
+        return
     cases = SUITES[path.stem].cases()
     assert [(r[3], r[4]) for r in rows] == [(c.formula, repr(c.inputs)) for c in cases]
     assert all(r[5] != "none" for r in rows)
@@ -128,6 +137,7 @@ def test_the_rows_are_the_generator_s_cases(path: Path) -> None:
 COMPARED_ELSEWHERE = {
     "mac_gaps": "a record of which names Excel knows, compared on neither platform",
     "whole_columns": "tests/test_whole_columns.py, on both platforms",
+    "dyn_cancel": "tests/test_dynamic_arrays.py, on both platforms",
 }
 """The Windows captures this file does not compare with the package, and why."""
 

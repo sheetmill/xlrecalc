@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `SECURITY.md`, linked from the README: how to report a security problem privately, through
   GitHub's private vulnerability reporting, and which releases receive fixes (the latest).
+- The `dyn_cancel` capture, from Excel for Mac and Excel for Windows, which agree: cancellation
+  snapping applies to an array result element by element, in a dynamic array and a legacy array
+  formula, and `SUM` snaps its additions over an array while `SUMPRODUCT` does not, as the package
+  computes them (no change in results). `capture/job.py` writes and reads Excel capture jobs for
+  the dynamic-array suites (`dyn_<suite>`), and `capture/dynamic_probe.py` writes legacy array
+  formulas and every number constant exactly.
 
 ### Fixed
 - Computing many dynamic arrays whose ranges change took time growing with the square of their

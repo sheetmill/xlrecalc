@@ -61,20 +61,27 @@ against values 1 to 15 parts in 1E16 away, 1 to 8 units in the last place either
 ## `cancellation_snapping`
 
 **Excel**: when the last operation of a formula, outside any parentheses, is an addition or a
-subtraction, and its result is less than 8 units in the last place of its left operand, the
-formula gives 0. `=0.1+0.2-0.3`, `=(0.1+0.2)-0.3` and `=-0.3+0.1+0.2` are 0. Anywhere else the
-IEEE result stands: `=(0.1+0.2-0.3)`, `=0.1+0.2-0.3+0`, `=(0.1+0.2-0.3)*1`,
-`=IF(TRUE,0.1+0.2-0.3)` and `=SUM(0.1+0.2-0.3)` are 5.55E-17, and `=0.1+0.2-0.3=0` is FALSE.
-`SUM` applies the same rule to its own additions: `=SUM(0.1,0.2,-0.3)` is 0.
+subtraction, and its result is less than 8 units in the last place of its left operand, the formula
+gives 0. `=0.1+0.2-0.3`, `=(0.1+0.2)-0.3` and `=-0.3+0.1+0.2` are 0. Anywhere else the IEEE result
+stands: `=(0.1+0.2-0.3)`, `=0.1+0.2-0.3+0`, `=(0.1+0.2-0.3)*1`, `=IF(TRUE,0.1+0.2-0.3)` and
+`=SUM(0.1+0.2-0.3)` are 5.55E-17, and `=0.1+0.2-0.3=0` is FALSE. `SUM` applies the same rule to its
+own additions: `=SUM(0.1,0.2,-0.3)` is 0, and so is `SUM` of an array expression holding them;
+`SUMPRODUCT` does not, and gives 5.55E-17. An array result follows the rule element by element: in
+`=A1:A7-B1:B7`, a dynamic array or a legacy array formula, each element is 0 where its result is
+less than 8 units in the last place of its own left operand, and only there; nested
+(`=(A1:A7-B1:B7)*1`, `IF`, `LET`, `TRANSPOSE`) no element snaps.
 
 **Strict**: the IEEE result.
 
-**Evidence**: suite `cancellation` (703 rows): nine bases from 5E-300 to 1E15, each minus a value
-0 to 4,096 units in the last place away, as the last operation and inside `(…)*1`; then 5 to 10
-units either way, in both operand orders, for bases at both ends of a binade. Measured in units
-of the left operand's last place, every result below 7.5 units snapped and every result from 8
-units on did not; measured relative to either operand's magnitude, or in units of the larger or
-the smaller operand, the snapped and kept cases overlap.
+**Evidence**: suite `cancellation` (703 rows): nine bases from 5E-300 to 1E15, each minus a value 0
+to 4,096 units in the last place away, as the last operation and inside `(…)*1`; then 5 to 10 units
+either way, in both operand orders, for bases at both ends of a binade. Measured in units of the
+left operand's last place, every result below 7.5 units snapped and every result from 8 units on did
+not; measured relative to either operand's magnitude, or in units of the larger or the smaller
+operand, the snapped and kept cases overlap. Suite `dyn_cancel` (21 formulas, captured from Excel
+for Mac and for Windows, which agree): arrays of pairs 1, 4, 7, 8 and 16 units in the last place
+apart, as the last operation and nested, in dynamic and legacy array formulas, and `SUM` and
+`SUMPRODUCT` of array expressions.
 
 ## Excel semantics, not quirks
 

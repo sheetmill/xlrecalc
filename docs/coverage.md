@@ -233,7 +233,7 @@ platform.
 | `HYPERLINK` | lookup and reference | implemented | 64 | 64 | 0 |  |  |
 | `HYPGEOM.DIST` | statistical | implemented | 633 | 633 | 0 | 8 ulps |  |
 | `HYPGEOMDIST` | statistical | implemented | 70 | 70 | 0 | 8 ulps |  |
-| `IF` | logical | implemented | 61 | 61 | 0 |  |  |
+| `IF` | logical | implemented | 63 | 63 | 0 |  |  |
 | `IFERROR` | logical | implemented | 525 | 492 | 0 |  |  |
 | `IFNA` | logical | implemented | 15 | 15 | 0 |  |  |
 | `IFS` | logical | implemented | 33 | 33 | 0 |  |  |
@@ -296,7 +296,7 @@ platform.
 | `LEFTB` | text | implemented | 92 | 92 | 0 |  |  |
 | `LEN` | text | implemented | 431 | 431 | 0 |  |  |
 | `LENB` | text | implemented | 29 | 29 | 0 |  |  |
-| `LET` | logical | implemented | 59 | 59 | 0 |  |  |
+| `LET` | logical | implemented | 61 | 61 | 0 |  |  |
 | `LINEST` | statistical | partial | 73 | 63 | 10 | 4 ulps | one regressor only |
 | `LN` | math | implemented | 18 | 18 | 0 |  |  |
 | `LOG` | math | implemented | 229 | 229 | 0 | 4 ulps |  |
@@ -457,10 +457,10 @@ platform.
 | `STOCKHISTORY` | | absent | | | | | |
 | `SUBSTITUTE` | text | implemented | 521 | 521 | 0 |  |  |
 | `SUBTOTAL` | math | implemented | 17 | 17 | 0 |  |  |
-| `SUM` | math | implemented | 112 | 112 | 0 |  |  |
+| `SUM` | math | implemented | 120 | 120 | 0 |  |  |
 | `SUMIF` | math | implemented | 87 | 87 | 0 |  |  |
 | `SUMIFS` | math | implemented | 44 | 44 | 0 |  |  |
-| `SUMPRODUCT` | math | implemented | 11 | 11 | 0 |  |  |
+| `SUMPRODUCT` | math | implemented | 19 | 19 | 0 |  |  |
 | `SUMSQ` | statistical | implemented | 38 | 38 | 0 |  |  |
 | `SUMX2MY2` | math | implemented | 9 | 9 | 0 |  |  |
 | `SUMX2PY2` | math | implemented | 9 | 9 | 0 |  |  |
@@ -493,7 +493,7 @@ platform.
 | `TODAY` | date and time | implemented | 1 | 1 | 0 |  |  |
 | `TOROW` | lookup and reference | implemented | 16 | 16 | 0 |  |  |
 | `TRANSLATE` | | absent | | | | | |
-| `TRANSPOSE` | lookup and reference | implemented | 14 | 14 | 0 |  |  |
+| `TRANSPOSE` | lookup and reference | implemented | 16 | 16 | 0 |  |  |
 | `TREND` | | absent | | | | | |
 | `TRIM` | text | implemented | 24 | 24 | 0 |  |  |
 | `TRIMMEAN` | statistical | implemented | 246 | 246 | 0 | 4 ulps |  |

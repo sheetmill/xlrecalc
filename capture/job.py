@@ -13,6 +13,10 @@ the manifest's and the inputs' SHA-256 against the result's, and writes
 ``tests/captures/windows/<suite>.tsv``: the cached value and type of each formula, read from the
 saved copy with ``capture/pipeline.py``'s reader, under the result's ``header`` copied whole; the
 manifest is copied beside it, byte for byte, as ``<suite>.job.json``.
+
+A suite named ``dyn_<name>`` is one of ``capture/dynamic_suites.py``: its workbook is built as
+``capture/dynamic_probe.py`` builds it, and its capture records every cell of the saved copy as
+that probe does, with the copy's rich-value parts beside it.
 """
 
 from __future__ import annotations
@@ -72,12 +76,17 @@ def manifest(
 
 def workbook(suite: str, path: Path) -> None:
     """The suite's workbook, the same bytes every time it is written."""
-    from capture.suites import SUITES
-
-    spec = SUITES[suite]
     with tempfile.TemporaryDirectory() as tmp:
         raw = Path(tmp) / "raw.xlsx"
-        build(raw, spec.cases(), spec.date1904, spec.fixed)
+        if suite.startswith("dyn_"):
+            from capture.dynamic_probe import build as build_dynamic
+
+            build_dynamic(raw, suite[len("dyn_") :])
+        else:
+            from capture.suites import SUITES
+
+            spec = SUITES[suite]
+            build(raw, spec.cases(), spec.date1904, spec.fixed)
         with zipfile.ZipFile(raw) as source, zipfile.ZipFile(path, "w") as out:
             for info in source.infolist():
                 data = source.read(info.filename)
@@ -124,9 +133,12 @@ def read(suite: str, job: Path, result: Path) -> Path:
     for name, entry in header["inputs"].items():
         if entry["sha256"] != _sha256(job / "files" / name):
             sys.exit(f"the result's input {name} is not this job's")
+    text = json.dumps(header, indent=1, sort_keys=True, ensure_ascii=False)
+    WINDOWS.mkdir(exist_ok=True)
+    if suite.startswith("dyn_"):
+        return _read_dynamic(suite, job, result, text)
     cases = SUITES[suite].cases()
     results = read_results(result / "artifacts" / f"{suite}.saved.xlsx", len(cases))
-    text = json.dumps(header, indent=1, sort_keys=True, ensure_ascii=False)
     lines = [
         f"# suite: {suite}",
         f"# generator: capture/suites.py:{SUITES[suite].cases.__name__}, capture/job.py",
@@ -143,9 +155,34 @@ def read(suite: str, job: Path, result: Path) -> Path:
         lines.append(
             "\t".join([suite, case.tag, str(k), case.formula, repr(case.inputs), kind, text])
         )
-    WINDOWS.mkdir(exist_ok=True)
     path = WINDOWS / f"{suite}.tsv"
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    shutil.copyfile(job / "job.json", WINDOWS / f"{suite}.job.json")
+    return path
+
+
+def _read_dynamic(suite: str, job: Path, result: Path, header: str) -> Path:
+    """A ``dyn_`` suite's capture: its inputs and every cell of the saved copy."""
+    from capture.dynamic_probe import records, rich_parts
+    from capture.dynamic_suites import BLOCK, layout
+
+    saved = result / "artifacts" / f"{suite}.saved.xlsx"
+    lines = [
+        f"# suite: {suite}",
+        "# generator: capture/dynamic_probe.py, capture/job.py",
+        "# method: the job beside this file (" + suite + ".job.json) opens the workbook the",
+        "#   generator writes (dynamic-array formulas, one per block of "
+        f"{BLOCK} rows in column B) and saves",
+        "#   a copy; every cell of the copy is recorded as capture/dynamic_probe.py records it",
+        "# header (the job's result, copied whole):",
+        *("#   " + line for line in header.splitlines()),
+        "# input rows: input, kind, cell, text (formula in file form, or a constant's repr)",
+        "# cell rows: cell, address, type, value (repr), formula (repr), f_t, f_ref, cm, vm",
+        *records(layout(suite[len("dyn_") :]), saved),
+    ]
+    path = WINDOWS / f"{suite}.tsv"
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    rich_parts(saved, WINDOWS, suite)
     shutil.copyfile(job / "job.json", WINDOWS / f"{suite}.job.json")
     return path
 

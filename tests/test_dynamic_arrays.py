@@ -34,7 +34,10 @@ CAPTURES = Path(__file__).with_name("captures")
 SUITES = (
     "sequence", "mmult", "unique", "sort", "sortby", "filter",
     "choose", "droptake", "stack", "tocol", "wrap", "index", "matrix", "frequency", "textsplit",
-    "randarray", "let",
+    "randarray", "let", "cancel",
+    # Excel for Windows' captures of the same suites (tests/captures/windows/), under
+    # platform="windows"
+    "windows:cancel",
 )  # fmt: skip
 RICH = "{http://schemas.microsoft.com/office/spreadsheetml/2017/richdata}"
 _ERROR_TYPES = {"8": "#SPILL!", "13": "#CALC!"}
@@ -48,18 +51,25 @@ RANDOM = "RANDARRAY's values are random draws; its readers check their number, b
 RANDOM_CASES = frozenset(("randarray", case) for case in (0, 1, 2, 3, 11, 15))
 
 
+def _file(suite: str, tail: str = ".tsv") -> Path:
+    """A suite's capture file: ``windows:<suite>`` is Excel for Windows' (``capture/job.py``)."""
+    if suite.startswith("windows:"):
+        return CAPTURES / "windows" / f"dyn_{suite.removeprefix('windows:')}{tail}"
+    return CAPTURES / f"dyn_{suite}{tail}"
+
+
 def _rows(suite: str) -> list[list[str]]:
-    text = (CAPTURES / f"dyn_{suite}.tsv").read_text(encoding="utf-8")
+    text = _file(suite).read_text(encoding="utf-8")
     return [line.split("\t") for line in text.splitlines() if not line.startswith("#")]
 
 
 def _rich_errors(suite: str) -> dict[str, str]:
     """vm (1-based, as cells carry it) -> the error its rich value holds (none without parts)."""
-    if not (CAPTURES / f"dyn_{suite}_rdrichvalue.xml").exists():
+    if not _file(suite, "_rdrichvalue.xml").exists():
         return {}
-    structures = ET.parse(CAPTURES / f"dyn_{suite}_rdrichvaluestructure.xml").getroot()
+    structures = ET.parse(_file(suite, "_rdrichvaluestructure.xml")).getroot()
     keys = [[k.get("n") for k in s.iter(f"{RICH}k")] for s in structures.iter(f"{RICH}s")]
-    values = ET.parse(CAPTURES / f"dyn_{suite}_rdrichvalue.xml").getroot()
+    values = ET.parse(_file(suite, "_rdrichvalue.xml")).getroot()
     out = {}
     for i, rv in enumerate(values.iter(f"{RICH}rv"), 1):
         fields = dict(
@@ -77,6 +87,12 @@ def workbook(suite: str) -> bytes:
         value = ast.literal_eval(text)
         if kind == "name":
             names += f'<definedName name="{where}">{text_escape(value)}</definedName>'
+            continue
+        if kind == "cse":  # a legacy array formula over its range
+            anchor = where.partition(":")[0]
+            r, c = _cell(anchor)
+            f = text_escape(value)
+            cells[r, c] = f'<c r="{anchor}"><f t="array" ref="{where}">{f}</f></c>'
             continue
         r, c = _cell(where)
         if kind == "dynamic":
@@ -126,7 +142,8 @@ _ENGINES: dict[str, object] = {}
 
 def engine_for(suite: str):  # type: ignore[no-untyped-def]
     if suite not in _ENGINES:
-        e = load(io.BytesIO(workbook(suite)))
+        platform = "windows" if suite.startswith("windows:") else "mac"
+        e = load(io.BytesIO(workbook(suite)), platform=platform)
         e.recalculate()
         _ENGINES[suite] = e
     return _ENGINES[suite]
@@ -221,6 +238,7 @@ def _outermost(text: str) -> str | None:
 
 _SIZED = ("INDEX", "OFFSET")  # marked or not by their arguments (_workbook._may_be_array)
 _SIZED += ("_XLFN.LET",)  # marked or not by its calculation (capture let_typed)
+_SIZED += ("IF",)  # an array when the argument it returns is one (dyn_cancel)
 
 
 def test_array_makers_are_flagged_as_the_captures_show() -> None:
@@ -271,3 +289,20 @@ def test_array_makers_are_flagged_as_the_captures_show() -> None:
     makes &= SPECS.keys()  # a function captured before it is implemented has no flag yet
     assert not makes & plain
     assert flagged == makes, (sorted(flagged - makes), sorted(makes - flagged))
+
+
+def test_the_probe_writes_each_number_exactly(tmp_path: Path) -> None:
+    """``capture/dynamic_probe.py`` writes a number constant as its shortest exact text, where
+    openpyxl alone wrote 1.4999999999999998 as 1.5 (the data of ``dyn_cancel``)."""
+    pytest.importorskip("openpyxl")  # the probe builds its workbook with it
+    from capture._file import number_text
+    from capture.dynamic_probe import build
+    from capture.dynamic_suites import DATA
+
+    path = tmp_path / "cancel.xlsx"
+    build(path, "cancel")
+    with zipfile.ZipFile(path) as z:
+        sheet = z.read("xl/worksheets/sheet1.xml").decode()
+    for r, value in enumerate(DATA["CP"], 1):
+        assert float(number_text(value)) == value
+        assert f'<c r="CP{r}" t="n"><v>{number_text(value)}</v>' in sheet, r
