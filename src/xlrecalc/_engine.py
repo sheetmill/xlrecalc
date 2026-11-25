@@ -18,6 +18,7 @@ from collections import defaultdict
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from dataclasses import dataclass, replace
 from functools import cmp_to_key
+from itertools import chain
 from typing import Any
 
 import xlformat
@@ -324,12 +325,15 @@ class Engine:
         self._spill_height: dict[tuple[int, int], int] = {}
         self._spill_wide: dict[int, list[tuple[int, int, int, int, int]]] = {}
         self._spill_entered: dict[int, tuple[tuple[int, int, int, int], ...]] = {}
-        # Per sheet, rebuilt when first needed after anchors change: the ranges anchors fill or
-        # want, (r1, c1, r2, c2, anchor); and per column the row spans they fill, sorted, for
-        # member_of. A cell an anchor fills is found from its range, not stored per cell.
-        self._anchor_boxes: dict[int, list[tuple[int, int, int, int, int]]] = {}
+        # Per sheet, kept up to date anchor by anchor as anchors come, go and change range: the
+        # ranges each anchor fills or wants, (r1, c1, r2, c2, anchor), in the order of
+        # self.anchors; and per column the row spans anchors fill, (first row, last row, anchor)
+        # sorted with their first rows alongside, for member_of; and per anchor the range it was
+        # entered with, to take it out. A cell an anchor fills is found from its range, not
+        # stored per cell.
+        self._anchor_boxes: dict[int, dict[int, tuple[tuple[int, int, int, int, int], ...]]] = {}
         self._member_spans: dict[int, dict[int, tuple[list[int], list[tuple[int, int, int]]]]] = {}
-        self._anchors_dirty: set[int] = set()
+        self._member_entered: dict[int, tuple[int, int, int, int]] = {}
         self._moved: list[tuple[int, int, int, int, int]] = []
         self.evaluated_anchors: set[int] = set()
         """Anchors evaluated since loading: the writer rewrites their ranges."""
@@ -605,7 +609,7 @@ class Engine:
                 self._dynamic[n] = None
                 self._enter_spill(n)
             self._spill_due = True
-            self._index_anchors(sheet)
+            self._index_anchor(n)
         if cached is None or stale:
             s.set(row, col, BLANK if cached is None else cached)
             self.stale.add(n)
@@ -627,42 +631,41 @@ class Engine:
 
     # Arrays (§7.7) ----------------------------------------------------------------------------
 
-    def _index_anchors(self, sheet: int) -> None:
-        self._anchors_dirty.add(sheet)
-
-    def _anchor_list(self, sheet: int) -> list[tuple[int, int, int, int, int]]:
-        """The ranges the sheet's anchors fill or want, as (r1, c1, r2, c2, anchor)."""
-        if sheet in self._anchors_dirty:
-            self._rebuild_anchors(sheet)
-        return self._anchor_boxes.get(sheet, [])
-
-    def _rebuild_anchors(self, sheet: int) -> None:
-        self._anchors_dirty.discard(sheet)
-        boxes: list[tuple[int, int, int, int, int]] = []
-        columns: dict[int, list[tuple[int, int, int]]] = {}
-        for n, a in self.anchors.items():
-            if n >> SHEET_SHIFT != sheet:
-                continue
-            boxes.append((*a.box, n))
-            if a.wanted is not None:
-                boxes.append((*a.wanted, n))
-            r1, c1, r2, c2 = a.box
+    def _index_anchor(self, n: int) -> None:
+        """Bring the anchor index up to date for one anchor: added, dropped or changed range."""
+        sheet = n >> SHEET_SHIFT
+        spans = self._member_spans.setdefault(sheet, {})
+        old = self._member_entered.pop(n, None)
+        if old is not None:
+            r1, c1, r2, c2 = old
             for c in range(c1, c2 + 1):
-                columns.setdefault(c, []).append((r1, r2, n))
-        spans = {}
-        for c, found in columns.items():
-            found.sort()
-            spans[c] = ([f[0] for f in found], found)
-        self._anchor_boxes[sheet] = boxes
-        self._member_spans[sheet] = spans
+                starts, found = spans[c]
+                i = bisect.bisect_left(found, (r1, r2, n))
+                del starts[i], found[i]
+        a = self.anchors.get(n)
+        boxes = self._anchor_boxes.setdefault(sheet, {})
+        if a is None:
+            boxes.pop(n, None)
+            return
+        # An anchor already indexed keeps its place: the order is that of self.anchors.
+        boxes[n] = ((*a.box, n),) if a.wanted is None else ((*a.box, n), (*a.wanted, n))
+        r1, c1, r2, c2 = a.box
+        for c in range(c1, c2 + 1):
+            starts, found = spans.setdefault(c, ([], []))
+            i = bisect.bisect_left(found, (r1, r2, n))
+            starts.insert(i, r1)
+            found.insert(i, (r1, r2, n))
+        self._member_entered[n] = a.box
+
+    def _anchor_list(self, sheet: int) -> Iterator[tuple[int, int, int, int, int]]:
+        """The ranges the sheet's anchors fill or want, as (r1, c1, r2, c2, anchor)."""
+        return chain.from_iterable(self._anchor_boxes.get(sheet, {}).values())
 
     def member_of(self, n: int) -> int | None:
         """The anchor whose range holds this cell (the anchor itself excluded), or ``None``."""
         if not self.anchors:
             return None
         sheet, row, col = unpack(n)
-        if sheet in self._anchors_dirty:
-            self._rebuild_anchors(sheet)
         found = self._member_spans.get(sheet, {}).get(col)
         if not found:
             return None
@@ -701,7 +704,7 @@ class Engine:
             self._leave_spill(n)
         sheet, row, col = unpack(n)
         changed = self._release(sheet, anchor.box, (row, col, row, col))
-        self._index_anchors(sheet)
+        self._index_anchor(n)
         self.stale |= self.dependents([], changed)
 
     def _touch_spill(self, sheet: int, row: int, col: int) -> None:
@@ -813,9 +816,11 @@ class Engine:
                 s.set(r, c, self._result(v))
                 if released:
                     released.discard(node(sheet, r, c))
-        if box != old or anchor.wanted is not None:
-            anchor.box = box
-            self._index_anchors(sheet)
+        anchor.box = box
+        if self._anchor_boxes[sheet][n] != (
+            ((*box, n),) if anchor.wanted is None else ((*box, n), (*anchor.wanted, n))
+        ):
+            self._index_anchor(n)
         if anchor.dynamic and self._spill_entered.get(n) != self._spill_ranges(n):
             self._leave_spill(n)
             self._enter_spill(n)

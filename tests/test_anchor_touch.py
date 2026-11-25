@@ -1,7 +1,9 @@
 """A cell set by hand or read from a file wakes the dynamic arrays whose range holds it (§7.7).
 
 Only dynamic arrays spill, so only they are looked at; a file of many legacy array formulas,
-each set as it is read, does not go through every anchor for each.
+each set as it is read, does not go through every anchor for each. The index of the ranges
+anchors fill is kept up to date anchor by anchor, so arrays whose ranges change as they are
+evaluated do not go through every anchor for each either.
 """
 
 from __future__ import annotations
@@ -27,6 +29,28 @@ def _woken_by_any_anchor(engine: Engine, sheet: int, row: int, col: int) -> set[
             if box is not None and box[0] <= row <= box[2] and box[1] <= col <= box[3]:
                 out.add(a)
     return out
+
+
+def _assert_index_is_rebuilt_as_is(engine: Engine) -> None:
+    """The anchor index kept up to date equals one built from every anchor: the reference."""
+    boxes: dict[int, dict[int, tuple[tuple[int, ...], ...]]] = {}
+    columns: dict[int, dict[int, list[tuple[int, int, int]]]] = {}
+    for a, x in engine.anchors.items():
+        sheet = a >> 34
+        entry = ((*x.box, a),) if x.wanted is None else ((*x.box, a), (*x.wanted, a))
+        boxes.setdefault(sheet, {})[a] = entry
+        for c in range(x.box[1], x.box[3] + 1):
+            columns.setdefault(sheet, {}).setdefault(c, []).append((x.box[0], x.box[2], a))
+    kept = {sheet: d for sheet, d in engine._anchor_boxes.items() if d}
+    assert kept == boxes
+    assert {sheet: list(d) for sheet, d in kept.items()} == {  # the order of each sheet's
+        sheet: list(d) for sheet, d in boxes.items()
+    }
+    for sheet in set(engine._member_spans) | set(columns):
+        spans = {c: v for c, v in engine._member_spans.get(sheet, {}).items() if v[1]}
+        expected = {c: sorted(v) for c, v in columns.get(sheet, {}).items()}
+        assert {c: found for c, (_, found) in spans.items()} == expected
+        assert all(starts == [f[0] for f in found] for starts, found in spans.values())
 
 
 SIZES = 30  # column AE: the cells holding each array's height and width
@@ -56,6 +80,7 @@ def test_a_set_cell_wakes_the_dynamic_arrays_holding_it(seed: int) -> None:
         placed.append(node(sheet, row, col))
     for _ in range(4):
         engine.recalculate()
+        _assert_index_is_rebuilt_as_is(engine)
         for _ in range(60):
             sheet, row, col = rng.randint(0, 1), rng.randint(0, 40), rng.randint(0, 90)
             expected = _woken_by_any_anchor(engine, sheet, row, col)
@@ -78,31 +103,81 @@ def test_a_set_cell_wakes_the_dynamic_arrays_holding_it(seed: int) -> None:
             engine.set_value(a >> 34, (a & ((1 << 34) - 1)) // 16384, a % 16384, 0.0)
 
 
-def test_reading_many_legacy_array_formulas_does_not_rebuild_the_anchor_ranges() -> None:
-    """2,000 single-cell legacy array formulas: loading them, a read and an edit rebuild the
-    anchors' ranges a few times at most, where loading rebuilt them for every formula read."""
+class _CountedAnchors(dict):  # type: ignore[type-arg]
+    """``Engine.anchors``, counting the walks over every anchor."""
+
+    walks = 0
+
+    def __iter__(self):  # type: ignore[no-untyped-def]
+        _CountedAnchors.walks += 1
+        return super().__iter__()
+
+    def items(self):  # type: ignore[no-untyped-def]
+        _CountedAnchors.walks += 1
+        return super().items()
+
+    def values(self):  # type: ignore[no-untyped-def]
+        _CountedAnchors.walks += 1
+        return super().values()
+
+    # keys() is not counted: Engine.dependents intersects it with a set, which walks the set.
+
+
+def _counting_anchors() -> object:
+    """Make every new engine count the walks over its anchors; returns the original __init__."""
+    init = Engine.__init__
+
+    def counted(self: Engine, *args: object, **kwargs: object) -> None:
+        init(self, *args, **kwargs)  # type: ignore[arg-type]
+        self.anchors = _CountedAnchors()
+
+    _CountedAnchors.walks = 0
+    Engine.__init__ = counted  # type: ignore[method-assign]
+    return init
+
+
+def test_reading_many_legacy_array_formulas_does_not_go_through_every_anchor() -> None:
+    """2,000 single-cell legacy array formulas: loading them, a read and an edit walk the
+    anchors a few times at most, where loading rebuilt their ranges for every formula read."""
     rows = "".join(
         f'<row r="{r}"><c r="A{r}"><v>{r}</v></c>'
         f'<c r="B{r}"><f t="array" ref="B{r}">A{r}*2</f><v>{2 * r}</v></c></row>'
         for r in range(1, 2001)
     )
     data = package(rows, workbook_extra='<calcPr fullCalcOnLoad="1"/>')
-    count = [0]
-    rebuild = Engine._rebuild_anchors
-
-    def counted(self: Engine, sheet: int) -> None:
-        count[0] += 1
-        rebuild(self, sheet)
-
-    Engine._rebuild_anchors = counted  # type: ignore[method-assign]
+    init = _counting_anchors()
     try:
         wb = xlrecalc.load(io.BytesIO(data))
         assert wb.value("B2000") == 4000.0
         wb.set("A1", 5.0)
         assert wb.value("B1") == 10.0
     finally:
-        Engine._rebuild_anchors = rebuild  # type: ignore[method-assign]
-    assert count[0] <= 5
+        Engine.__init__ = init  # type: ignore[method-assign]
+    assert len(wb._engine.anchors) == 2000
+    assert _CountedAnchors.walks <= 5
+
+
+def test_dynamic_arrays_whose_ranges_change_do_not_go_through_every_anchor() -> None:
+    """2,000 dynamic arrays set with their anchor cell as their range, spilling over two rows
+    when evaluated, then all resized by an edit: each range change updates the index for its
+    own anchor, where each rebuilt it from every anchor on the sheet."""
+    init = _counting_anchors()
+    try:
+        engine = Engine.from_cells({"S": {"C1": 2.0}})
+        for k in range(2000):
+            engine.set_formula(
+                0, 3 * k, 0, "_xlfn.SEQUENCE($C$1)", array=(True, (3 * k, 0, 3 * k, 0))
+            )
+        engine.recalculate()
+        assert engine.sheets[0].values[(3 * 1999 + 1) * 16384] == 2.0
+        engine.set_value(0, 0, 2, 3.0)  # three rows: each array now blocked by the next
+        engine.recalculate()
+        engine.set_value(0, 0, 2, 1.0)
+        engine.recalculate()
+    finally:
+        Engine.__init__ = init  # type: ignore[method-assign]
+    _assert_index_is_rebuilt_as_is(engine)
+    assert _CountedAnchors.walks <= 5
 
 
 class _CountedWalks(dict):  # type: ignore[type-arg]
