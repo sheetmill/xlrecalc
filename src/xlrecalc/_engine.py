@@ -208,11 +208,15 @@ class Engine:
         max_function_steps: int | None = 1_000_000_000,
         platform: PlatformName = "mac",
         regional_settings: xlformat.RegionalSettings | None = None,
+        saved_by_excel: bool = False,
     ) -> None:
         self.quirks = quirks or Quirks.EXCEL
         self.platform: PlatformName = platform
         """Which Excel computes the workbook, ``"mac"`` or ``"windows"`` (``platform=``)."""
-        self.registry = registry_for(platform)
+        self.saved_by_excel = saved_by_excel
+        """The file was saved by Excel, or holds a VBA project: a name Excel writes with a prefix,
+        found without it, is a macro's or an add-in's function, kept and reported."""
+        self.registry = registry_for(platform, bare=not saved_by_excel)
         """The functions formulas compile against: the platform's names (``registry_for``)."""
         self.regional_settings = regional_settings or xlformat.RegionalSettings.EN_US_MAC
         """The viewer's regional settings (``regional_settings=``), which ``TEXT`` follows."""
@@ -506,10 +510,16 @@ class Engine:
             formula, row, col, self.registry, self.ops, self.quirks, array_mode, as_reference
         )
         unsupported = {
-            bare_label(c) for c in compiled.calls if c not in self.registry and not self._defined(c)
+            bare_label(c, self.saved_by_excel)
+            for c in compiled.calls
+            if c not in self.registry and not self._defined(c)
         }
         unsupported |= compiled.features
-        bare = frozenset(missing_prefix_label(c) for c in compiled.calls if c in BARE_NAMES)
+        bare = frozenset(
+            missing_prefix_label(c)
+            for c in compiled.calls
+            if c in BARE_NAMES and not self.saved_by_excel
+        )
         template = Template(
             key,
             compiled.fn,
@@ -2058,17 +2068,23 @@ def missing_prefix_label(name: str) -> str:
     return f"{name} written without the {PREFIXES[name]} prefix Excel requires; Excel shows #NAME?"
 
 
-def bare_label(name: str) -> str:
+def bare_label(name: str, saved_by_excel: bool = False) -> str:
     """The report's label for a function the registry does not have.
 
     A name Excel writes with a prefix in a file (``_xlfn.XLOOKUP``), found there without it, is
-    a name Excel does not know: the label says so and gives the prefix. Otherwise the name.
+    a name Excel does not know: the label says so and gives the prefix. In a file Excel saved it
+    is a macro's or an add-in's function by that name, which Excel computed. Otherwise the name.
     """
     prefix = PREFIXES.get(name)
     if not prefix:
         return name
     if name in _BARE_REFUSED_NAMES:
         return f"{name} written without Excel's file prefix ({prefix}): Excel refuses the file"
+    if saved_by_excel:
+        return (
+            f"{name} without the {prefix} prefix in a file Excel saved: a macro's or an add-in's "
+            "function, which keeps the file's value"
+        )
     return f"{name} written without Excel's file prefix ({prefix}): Excel shows #NAME?"
 
 

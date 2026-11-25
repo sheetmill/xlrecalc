@@ -761,10 +761,12 @@ array formula's range with no formula text, keeps its cached values: `from_kept`
 cells evaluated from them. `unsupported` counts each cell once for each label it carries.
 
 A formula set through `set_formula` is taken as the formula bar takes it: without its `_xlfn.` prefix it computes and is written with
-it. The same text read from a file is what Excel reads there, a name it does not know: `#NAME?`, whatever value the
-file caches, on both platforms (capture `bare_names`: every name Excel writes with a prefix but `LET`, called bare), and
-the report counts the cell under a label that names the prefix (`XLOOKUP written without the _xlfn. prefix Excel
-requires; Excel shows #NAME?`). `SORT` and `FILTER` written so make Excel refuse the file (captures `dyn_*`); a bare
+it. The same text read from a file another program wrote is what Excel reads there, a name it does not know:
+`#NAME?`, whatever value the file caches, on both platforms (capture `bare_names`: every name Excel writes with a
+prefix but `LET`, called bare), and the report counts the cell under a label that names the prefix (`XLOOKUP written
+without the _xlfn. prefix Excel requires; Excel shows #NAME?`). Excel never writes its own names bare, so in a file it
+saved (`<fileVersion appName="xl">`), or one holding a VBA project, such a name is a macro's or an add-in's function
+that Excel computed: the cell keeps its cached value and is reported, as an unsupported function is. `SORT` and `FILTER` written so make Excel refuse the file (captures `dyn_*`); a bare
 `LET`, not captured, keeps its cached value and is reported.
 
 Cells without a computable value (an unsupported function and no cached value, a caught exception),

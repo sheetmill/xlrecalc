@@ -577,6 +577,18 @@ def file_app(book: xlio.Workbook) -> str | None:
     )
 
 
+def saved_by_excel(book: xlio.Workbook) -> bool:
+    """Excel saved the file (``<fileVersion appName="xl">``), or it holds a VBA project.
+
+    Then a function called by a name Excel writes with a prefix, found without it, is a macro's or
+    an add-in's: Excel itself never writes such a name bare. openpyxl writes no
+    ``<fileVersion>``, though its ``docProps/app.xml`` names Microsoft Excel.
+    """
+    return file_app(book) == "xl" or any(
+        name.lower().endswith("vbaproject.bin") for name in book.parts
+    )
+
+
 def _iterate_count(count: int | None) -> int:
     """The file's ``iterateCount`` in Excel's range, 1 to 32,767; 100 when absent or unreadable."""
     return 100 if count is None or count < 1 else min(count, 32_767)
@@ -665,6 +677,7 @@ class _Loader:
             (limits or ReadLimits()).max_function_steps,
             platform,
             regional_settings,
+            saved_by_excel(book),
         )
         if path is not None:
             engine.path = path

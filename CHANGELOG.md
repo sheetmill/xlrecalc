@@ -8,12 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- A name Excel writes with a file prefix, read from a file without it (`=XLOOKUP(...)` as openpyxl
-  writes it), computes to `#NAME?`, as Excel shows it, where the formula kept the value the file
-  caches, or was uncomputed without one. `Report.unsupported` counts such cells under
-  `XLOOKUP written without the _xlfn. prefix Excel requires; Excel shows #NAME?`; the cells are
-  computed, not in `from_kept` or `uncomputed`. A bare `SORT` or `FILTER` stays refused, and a
-  bare `LET`, not captured, keeps its value and is reported as before.
+- A name Excel writes with a file prefix, read without it from a file another program wrote
+  (`=XLOOKUP(...)` as openpyxl writes it), computes to `#NAME?`, as Excel shows it, where the
+  formula kept the value the file caches, or was uncomputed without one. `Report.unsupported`
+  counts such cells under `XLOOKUP written without the _xlfn. prefix Excel requires; Excel shows
+  #NAME?`; the cells are computed, not in `from_kept` or `uncomputed`. In a file Excel saved
+  (`<fileVersion appName="xl">`) or one holding a VBA project, where Excel never writes its own
+  names bare, such a name is a macro's or an add-in's function: the cell keeps the file's value
+  and is reported, as for any function the package does not compute, under a label saying so. A
+  bare `SORT` or `FILTER` stays refused, and a bare `LET`, not captured, keeps its value.
 
 ### Added
 - `SECURITY.md`, linked from the README: how to report a security problem privately, through

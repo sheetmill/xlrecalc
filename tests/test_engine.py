@@ -454,6 +454,47 @@ def test_a_bare_prefixed_name_in_a_file_is_reported_with_its_fix(tmp_path):
     assert [wb.value(c) for c in ("B1", "C1", "G1")] == [xlrecalc.ErrorValue.NAME] * 3
 
 
+@pytest.mark.parametrize(
+    ("kind", "extra", "parts"),
+    [
+        ("another program", "", {}),
+        ("Excel", '<fileVersion appName="xl"/><calcPr calcId="191029"/>', {}),
+        ("a VBA project", "", {"xl/vbaProject.bin": "VBA"}),
+    ],
+)
+def test_a_bare_prefixed_name_is_excel_s_name_or_a_macro_s(kind, extra, parts):
+    """A name Excel writes with a prefix, found without it: in a file another program wrote, the
+    name Excel does not know (#NAME?, capture bare_names); in a file Excel saved, or one holding a
+    VBA project, a macro's or an add-in's function by that name (Excel never writes its own bare),
+    whose cached value is kept and reported as for any unknown function."""
+    import io
+
+    import xlrecalc
+    from tests.xlsx_files import package
+
+    cells = (
+        '<c r="A1"><v>1</v></c>'
+        '<c r="B1" t="e"><f>Concat("C",A1:A1,"Q")</f><v>#VALUE!</v></c>'
+        '<c r="C1"><f>B1</f><v>0</v></c>'
+    )
+    data = package(f'<row r="1">{cells}</row>', workbook_extra=extra, extra_parts=parts)
+    wb = xlrecalc.load(io.BytesIO(data))
+    report = wb.recalculate(full=True)
+    if kind == "another program":
+        assert wb.value("B1") == xlrecalc.ErrorValue.NAME
+        assert report.unsupported == {
+            "CONCAT written without the _xlfn. prefix Excel requires; Excel shows #NAME?": 1
+        }
+        assert not report.from_kept
+    else:
+        assert wb.value("B1") == xlrecalc.ErrorValue.VALUE  # the file's value
+        assert report.unsupported == {
+            "CONCAT without the _xlfn. prefix in a file Excel saved: a macro's or an add-in's "
+            "function, which keeps the file's value": 1
+        }
+        assert report.from_kept == {xlrecalc.CellRef("Data", 1, 2), xlrecalc.CellRef("Data", 1, 3)}
+
+
 def test_number_literals_as_excel_takes_them_in_a_file():
     """A literal from 1E+308 up, or below 1E-309, makes Excel refuse the file; others are read as
     Excel reads them, 15 digits cut, a value below the smallest double as 0 (number_literals)."""

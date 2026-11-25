@@ -75,17 +75,24 @@ _UNKNOWN: dict[str, tuple[str, ...]] = {
     ),
     "windows": ("ENCODEURL", "FILTERXML"),
 }
-# The names Excel writes with a file prefix (_xlfn.XLOOKUP), found without it: Excel shows #NAME?
-# for each on both platforms (capture bare_names). SORT and FILTER without theirs make Excel refuse
-# the file (the formula is refused instead), and LET without its prefix was not captured.
+# The names Excel writes with a file prefix (_xlfn.XLOOKUP), found without it in a file another
+# program wrote: Excel shows #NAME? for each on both platforms (capture bare_names). SORT and FILTER
+# without theirs make Excel refuse the file (the formula is refused instead), and LET without its
+# prefix was not captured. In a file Excel saved, such a name is a macro's or an add-in's function,
+# which Excel computed: it is not one of these (registry_for(platform, bare=False)).
 BARE_NAMES: frozenset[str] = frozenset(PREFIXES) - {"SORT", "FILTER", "LET"}
-_REGISTRIES: dict[str, Mapping[str, Callable[..., Any]]] = {}
+_REGISTRIES: dict[tuple[str, bool], Mapping[str, Callable[..., Any]]] = {}
 
 
-def registry_for(platform: str) -> Mapping[str, Callable[..., Any]]:
-    """The functions a formula compiles against: ``REGISTRY`` and the platform's unknown names."""
-    found = _REGISTRIES.get(platform)
+def registry_for(platform: str, bare: bool = True) -> Mapping[str, Callable[..., Any]]:
+    """The functions a formula compiles against: ``REGISTRY`` and the platform's unknown names.
+
+    With ``bare``, the names of ``BARE_NAMES`` are among the unknown ones (``#NAME?``): a file
+    another program wrote. Without, as in a file Excel saved, they are not in the registry at all.
+    """
+    found = _REGISTRIES.get((platform, bare))
     if found is None:
-        unknown = dict.fromkeys((*_UNKNOWN[platform], *sorted(BARE_NAMES)), _unknown_name)
-        found = _REGISTRIES[platform] = ChainMap(unknown, REGISTRY)  # REGISTRY as it grows
+        names = (*_UNKNOWN[platform], *sorted(BARE_NAMES)) if bare else _UNKNOWN[platform]
+        unknown = dict.fromkeys(names, _unknown_name)
+        found = _REGISTRIES[platform, bare] = ChainMap(unknown, REGISTRY)  # REGISTRY as it grows
     return found
