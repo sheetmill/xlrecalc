@@ -58,7 +58,7 @@ platform.
 | `BIN2OCT` | engineering | implemented | 205 | 205 | 0 |  |  |
 | `BINOM.DIST` | statistical | implemented | 597 | 532 | 65 | 8 ulps |  |
 | `BINOM.DIST.RANGE` | statistical | implemented | 171 | 145 | 26 | 8 ulps |  |
-| `BINOM.INV` | statistical | implemented | 164 | 163 | 1 |  |  |
+| `BINOM.INV` | statistical | implemented | 182 | 172 | 10 |  |  |
 | `BINOMDIST` | statistical | implemented | 94 | 94 | 0 | 8 ulps |  |
 | `BITAND` | engineering | implemented | 201 | 201 | 0 |  |  |
 | `BITLSHIFT` | engineering | implemented | 229 | 229 | 0 |  |  |
@@ -116,7 +116,7 @@ platform.
 | `COVAR` | statistical | implemented | 25 | 25 | 0 | 4 ulps |  |
 | `COVARIANCE.P` | statistical | implemented | 26 | 26 | 0 | 4 ulps |  |
 | `COVARIANCE.S` | statistical | implemented | 26 | 26 | 0 | 4 ulps |  |
-| `CRITBINOM` | statistical | implemented | 53 | 53 | 0 |  |  |
+| `CRITBINOM` | statistical | implemented | 67 | 61 | 6 |  |  |
 | `CSC` | math | implemented | 32 | 32 | 0 | 4 ulps |  |
 | `CSCH` | math | implemented | 32 | 32 | 0 | 4 ulps |  |
 | `CUBEKPIMEMBER` | | absent | | | | | |
@@ -237,7 +237,7 @@ platform.
 | `IFERROR` | logical | implemented | 678 | 645 | 0 |  |  |
 | `IFNA` | logical | implemented | 16 | 16 | 0 |  |  |
 | `IFS` | logical | implemented | 34 | 34 | 0 |  |  |
-| `IMABS` | engineering | implemented | 19 | 19 | 0 |  |  |
+| `IMABS` | engineering | implemented | 25 | 25 | 0 |  |  |
 | `IMAGE` | | absent | | | | | |
 | `IMAGINARY` | engineering | implemented | 35 | 35 | 0 |  |  |
 | `IMARGUMENT` | engineering | implemented | 16 | 16 | 0 | 4 ulps |  |
@@ -249,12 +249,12 @@ platform.
 | `IMCSCH` | engineering | implemented | 17 | 14 | 3 |  |  |
 | `IMDIV` | engineering | implemented | 70 | 70 | 0 |  |  |
 | `IMEXP` | engineering | implemented | 16 | 11 | 5 |  |  |
-| `IMLN` | engineering | implemented | 29 | 29 | 0 |  |  |
+| `IMLN` | engineering | implemented | 35 | 35 | 0 |  |  |
 | `IMLOG10` | engineering | implemented | 29 | 26 | 3 |  |  |
 | `IMLOG2` | engineering | implemented | 29 | 23 | 6 |  |  |
 | `IMPOWER` | engineering | implemented | 186 | 160 | 26 |  |  |
 | `IMPRODUCT` | engineering | implemented | 72 | 72 | 0 |  |  |
-| `IMREAL` | engineering | implemented | 36 | 36 | 0 |  |  |
+| `IMREAL` | engineering | implemented | 42 | 42 | 0 |  |  |
 | `IMSEC` | engineering | implemented | 17 | 14 | 3 |  |  |
 | `IMSECH` | engineering | implemented | 17 | 14 | 3 |  |  |
 | `IMSIN` | engineering | implemented | 16 | 14 | 2 |  |  |

@@ -367,8 +367,9 @@ _DISTRIBUTION_LIBRARY = (
     "distributions_family)"
 )
 _BINOM_INV_TIE = (
-    "BINOM.INV(TRUE,0.5,0.5) is 1 in Excel, where a cumulative 0.5 reaches alpha at 0 as "
-    'documented, and as BINOM.INV("3",0.5,0.5) is 1 at its tie'
+    "BINOM.INV and CRITBINOM where alpha equals the probability of no success: Excel gives 1 with "
+    "1, 2 or 4 trials and 0 with 3 (ties_tiny), where the documented rule gives 0; at a tie past 0 "
+    "it follows the rule. No computation of the cumulative probability tried fits every tie"
 )
 _DISCRETE_CASES = (
     57,
@@ -622,6 +623,21 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     **{("distributions_family", case): _DISCRETE_TERMS for case in _DISCRETE_CASES},
     **{("distributions_family", case): _DISTRIBUTION_LIBRARY for case in _LIBRARY_CASES},
     ("distributions_family", 3364): _BINOM_INV_TIE,
+    ("ties_tiny", 1): _BINOM_INV_TIE,
+    ("ties_tiny", 2): _BINOM_INV_TIE,
+    ("ties_tiny", 3): _BINOM_INV_TIE,
+    ("ties_tiny", 4): _BINOM_INV_TIE,
+    ("ties_tiny", 13): _BINOM_INV_TIE,
+    ("ties_tiny", 14): _BINOM_INV_TIE,
+    ("ties_tiny", 21): _BINOM_INV_TIE,
+    ("ties_tiny", 22): _BINOM_INV_TIE,
+    ("ties_tiny", 23): _BINOM_INV_TIE,
+    ("ties_tiny", 24): _BINOM_INV_TIE,
+    ("ties_tiny", 27): _BINOM_INV_TIE,
+    ("ties_tiny", 28): _BINOM_INV_TIE,
+    ("ties_tiny", 29): _BINOM_INV_TIE,
+    ("ties_tiny", 30): _BINOM_INV_TIE,
+    ("ties_tiny", 32): _BINOM_INV_TIE,
     **{
         ("continuous_family", case): reason
         for reason, cases in _CONTINUOUS.items()
@@ -945,6 +961,7 @@ SUITES = [
     "function_names",
     "encodeurl",
     "bare_names",
+    "ties_tiny",
 ]
 # Suites compared in part: only the rows whose tag is named. Of ``iteration``, the XIRR rows; its
 # IRR, RATE and YIELD rows are evidence for their methods, not matched.

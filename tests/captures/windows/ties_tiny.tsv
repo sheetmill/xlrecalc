@@ -1,0 +1,365 @@
+# suite: ties_tiny
+# generator: capture/suites.py:ties_tiny, capture/job.py
+# method: the job beside this file (ties_tiny.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "ties_tiny.xlsx": {
+#      "bytes": 5765,
+#      "sha256": "7bed026ad1c70f1d3d4e2ba246838d57c343349a80510a27bb32554e6c6784f8"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261124-193704-ties-tiny",
+#    "manifest_sha256": "eb606b89f95dfe667935c4178004465dc1d8d6f147dc91af0cc9a33d2c7d5bcb",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+ties_tiny	tie	1	_xlfn.BINOM.INV({1},0.5,{2})	(1.0, 0.5)	n	1.0
+ties_tiny	tie	2	CRITBINOM({1},0.5,{2})	(1.0, 0.5)	n	1.0
+ties_tiny	tie	3	_xlfn.BINOM.INV({1},0.5,{2})	(2.0, 0.25)	n	1.0
+ties_tiny	tie	4	CRITBINOM({1},0.5,{2})	(2.0, 0.25)	n	1.0
+ties_tiny	tie	5	_xlfn.BINOM.INV({1},0.5,{2})	(2.0, 0.75)	n	1.0
+ties_tiny	tie	6	CRITBINOM({1},0.5,{2})	(2.0, 0.75)	n	1.0
+ties_tiny	tie	7	_xlfn.BINOM.INV({1},0.5,{2})	(3.0, 0.125)	n	0.0
+ties_tiny	tie	8	CRITBINOM({1},0.5,{2})	(3.0, 0.125)	n	0.0
+ties_tiny	tie	9	_xlfn.BINOM.INV({1},0.5,{2})	(3.0, 0.5)	n	1.0
+ties_tiny	tie	10	CRITBINOM({1},0.5,{2})	(3.0, 0.5)	n	1.0
+ties_tiny	tie	11	_xlfn.BINOM.INV({1},0.5,{2})	(3.0, 0.875)	n	2.0
+ties_tiny	tie	12	CRITBINOM({1},0.5,{2})	(3.0, 0.875)	n	2.0
+ties_tiny	tie	13	_xlfn.BINOM.INV({1},0.5,{2})	(4.0, 0.0625)	n	1.0
+ties_tiny	tie	14	CRITBINOM({1},0.5,{2})	(4.0, 0.0625)	n	1.0
+ties_tiny	tie	15	_xlfn.BINOM.INV({1},0.5,{2})	(4.0, 0.3125)	n	1.0
+ties_tiny	tie	16	CRITBINOM({1},0.5,{2})	(4.0, 0.3125)	n	1.0
+ties_tiny	tie	17	_xlfn.BINOM.INV({1},0.5,{2})	(4.0, 0.6875)	n	2.0
+ties_tiny	tie	18	CRITBINOM({1},0.5,{2})	(4.0, 0.6875)	n	2.0
+ties_tiny	tie	19	_xlfn.BINOM.INV({1},0.5,{2})	(4.0, 0.9375)	n	3.0
+ties_tiny	tie	20	CRITBINOM({1},0.5,{2})	(4.0, 0.9375)	n	3.0
+ties_tiny	tie_kind	21	_xlfn.BINOM.INV({1},0.5,0.5)	(True,)	n	1.0
+ties_tiny	tie_kind	22	CRITBINOM({1},0.5,0.5)	(True,)	n	1.0
+ties_tiny	tie_kind	23	_xlfn.BINOM.INV({1},0.5,0.5)	('1',)	n	1.0
+ties_tiny	tie_kind	24	CRITBINOM({1},0.5,0.5)	('1',)	n	1.0
+ties_tiny	tie_kind	25	_xlfn.BINOM.INV({1},0.5,0.5)	('2',)	n	1.0
+ties_tiny	tie_kind	26	CRITBINOM({1},0.5,0.5)	('2',)	n	1.0
+ties_tiny	tie_kind	27	_xlfn.BINOM.INV({1},0.5,0.5)	(1.0,)	n	1.0
+ties_tiny	tie_kind	28	CRITBINOM({1},0.5,0.5)	(1.0,)	n	1.0
+ties_tiny	tie_p	29	_xlfn.BINOM.INV({1},{2},{3})	(1.0, 0.25, 0.75)	n	1.0
+ties_tiny	tie_p	30	_xlfn.BINOM.INV({1},{2},{3})	(2.0, 0.25, 0.5625)	n	1.0
+ties_tiny	tie_p	31	_xlfn.BINOM.INV({1},{2},{3})	(3.0, 0.75, 0.015625)	n	0.0
+ties_tiny	tie_p	32	_xlfn.BINOM.INV({1},{2},{3})	(1.0, 0.75, 0.25)	n	1.0
+ties_tiny	tiny	33	IMREAL({1})	('5E-324',)	e	#NUM!
+ties_tiny	tiny	34	IMABS({1})	('5E-324',)	e	#NUM!
+ties_tiny	tiny	35	IMLN({1})	('5E-324',)	e	#NUM!
+ties_tiny	tiny	36	IMREAL({1})	('4.9E-324',)	e	#NUM!
+ties_tiny	tiny	37	IMABS({1})	('4.9E-324',)	e	#NUM!
+ties_tiny	tiny	38	IMLN({1})	('4.9E-324',)	e	#NUM!
+ties_tiny	tiny	39	IMREAL({1})	('1E-320',)	e	#NUM!
+ties_tiny	tiny	40	IMABS({1})	('1E-320',)	e	#NUM!
+ties_tiny	tiny	41	IMLN({1})	('1E-320',)	e	#NUM!
+ties_tiny	tiny	42	IMREAL({1})	('1E-310',)	e	#NUM!
+ties_tiny	tiny	43	IMABS({1})	('1E-310',)	e	#NUM!
+ties_tiny	tiny	44	IMLN({1})	('1E-310',)	e	#NUM!
+ties_tiny	tiny	45	IMREAL({1})	('2.2250738585072E-308',)	n	0.0
+ties_tiny	tiny	46	IMABS({1})	('2.2250738585072E-308',)	n	0.0
+ties_tiny	tiny	47	IMLN({1})	('2.2250738585072E-308',)	e	#NUM!
+ties_tiny	tiny	48	IMREAL({1})	('2.2250738585073E-308',)	n	2.2250738585073e-308
+ties_tiny	tiny	49	IMABS({1})	('2.2250738585073E-308',)	n	2.2250738585073e-308
+ties_tiny	tiny	50	IMLN({1})	('2.2250738585073E-308',)	str	'-708.396418532264'

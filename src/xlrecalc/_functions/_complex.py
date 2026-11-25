@@ -24,11 +24,13 @@ argument empty is refused in a file (``_load.py``), each as Excel does (capture 
 
 from __future__ import annotations
 
+import decimal
 import math
 import re
 import sys
 from typing import Any
 
+from xlrecalc._arith import flush
 from xlrecalc._coerce import Context, to_number
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._registry import function
@@ -43,6 +45,18 @@ _NUMBER_TEXT = re.compile(rf"[+-]?{_NUMBER}")
 Complex = tuple[float, float, str | None]  # real, imaginary, suffix (None: no imaginary part)
 
 
+def _too_small(number: str) -> bool:
+    """A part Excel does not read: a number below 1E-309, as for a literal in a formula.
+
+    Its exponent in scientific form below -309, the bound of a formula's literals (capture
+    ``number_literals``): ``IMREAL("1E-310")`` is #NUM!. A part from there to the smallest normal
+    number is read as 0: ``IMREAL("2.2250738585072E-308")`` is 0 and ``IMLN`` of it #NUM! (capture
+    ``ties_tiny``).
+    """
+    value = decimal.Decimal(number)
+    return bool(value) and value.adjusted() < -309
+
+
 def _parse(text: str) -> Complex | ErrorValue:
     """A complex number from its text, or #NUM!: spaces at either end are dropped.
 
@@ -55,7 +69,9 @@ def _parse(text: str) -> Complex | ErrorValue:
     if text[-1] not in "ij":
         if not _NUMBER_TEXT.fullmatch(text) or not math.isfinite(float(text)):
             return NUM
-        return float(text), 0.0, None
+        if _too_small(text):
+            return NUM
+        return flush(float(text)), 0.0, None
     body, suffix = text[:-1], text[-1]
     cut = 0
     for k in range(1, len(body)):
@@ -75,9 +91,11 @@ def _parse(text: str) -> Complex | ErrorValue:
     imaginary = float(digits) if digits else 1.0
     if not math.isfinite(imaginary) or (real_text and not math.isfinite(float(real_text))):
         return NUM
+    if (digits and _too_small(digits)) or (real_text and _too_small(real_text)):
+        return NUM
     if imag_text[:signs].count("-") % 2:
         imaginary = -imaginary
-    return float(real_text) if real_text else 0.0, imaginary, suffix
+    return flush(float(real_text)) if real_text else 0.0, flush(imaginary), suffix
 
 
 def _arg(v: Any, ctx: Context) -> Complex | ErrorValue:

@@ -3887,6 +3887,43 @@ def bare_names() -> list[Case]:
     return cases
 
 
+def ties_tiny() -> list[Case]:
+    """BINOM.INV and CRITBINOM where alpha equals a cumulative probability exactly, and complex
+    functions of a text holding a subnormal number.
+
+    ``BINOM.INV(TRUE,0.5,0.5)`` is 1 in ``distributions_family``, where the documented rule (the
+    smallest count whose cumulative probability reaches alpha) gives 0: here each tie at
+    one-half from 1 to 4 trials, given as a number, a logical and a text, and ties at other
+    probabilities. Then ``IMREAL``, ``IMABS`` and ``IMLN`` of texts from the smallest subnormal to
+    the smallest normal number (in texts only: a file holding a number below 1E-309 may be
+    refused, as one holding such a literal in a formula is).
+    """
+    cases = []
+    for n in (1, 2, 3, 4):
+        cdf = 0.0
+        for k in range(n):
+            cdf += math.comb(n, k) / 2**n
+            for fn in ("_xlfn.BINOM.INV", "CRITBINOM"):
+                cases.append(Case("tie", f"{fn}({{1}},0.5,{{2}})", (float(n), cdf)))
+    for trials in (True, "1", "2", 1.0):
+        for fn in ("_xlfn.BINOM.INV", "CRITBINOM"):
+            cases.append(Case("tie_kind", f"{fn}({{1}},0.5,0.5)", (trials,)))
+    for n, p_, alpha in ((1, 0.25, 0.75), (2, 0.25, 0.5625), (3, 0.75, 0.015625), (1, 0.75, 0.25)):
+        cases.append(Case("tie_p", "_xlfn.BINOM.INV({1},{2},{3})", (float(n), p_, alpha)))
+    texts = (
+        "5E-324",
+        "4.9E-324",
+        "1E-320",
+        "1E-310",
+        "2.2250738585072E-308",
+        "2.2250738585073E-308",
+    )
+    for t in texts:
+        for fn in ("IMREAL", "IMABS", "IMLN"):
+            cases.append(Case("tiny", f"{fn}({{1}})", (t,)))
+    return cases
+
+
 def encodeurl() -> list[Case]:
     """ENCODEURL over every code from 1 to 127, characters beyond, texts, other values, long text.
 
@@ -5179,4 +5216,5 @@ SUITES = {
     "function_names": Suite(function_names, fixed={"Z1": 1.0, "Z2": 2.0}),
     "encodeurl": Suite(encodeurl),
     "bare_names": Suite(bare_names, fixed={"Z1": 1.0, "Z2": 2.0}),
+    "ties_tiny": Suite(ties_tiny),
 }

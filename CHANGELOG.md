@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `SECURITY.md`, linked from the README: how to report a security problem privately, through
   GitHub's private vulnerability reporting, and which releases receive fixes (the latest).
+- The `ties_tiny` capture, from Excel for Mac and Excel for Windows, which agree: `BINOM.INV` and
+  `CRITBINOM` where alpha equals a cumulative probability exactly, and complex-number texts holding
+  numbers below the smallest normal one.
 - The `bare_names` capture, from Excel for Mac and Excel for Windows, which agree: each of 153 names
   Excel writes with a file prefix, called without it in a file with no cached values, is `#NAME?`.
 - The `dyn_cancel` capture, from Excel for Mac and Excel for Windows, which agree: cancellation
@@ -28,6 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   formulas and every number constant exactly.
 
 ### Fixed
+- The complex-number functions read a part of a text below 1E-309 as Excel does, as `#NUM!`, and one
+  from there to the smallest normal number as 0: `IMREAL("5E-324")` is `#NUM!` where it was 0, and
+  `IMLN("2.2250738585072E-308")` `#NUM!` where it was -708.396418532264.
 - `NUMBERVALUE` reads a group separator after the decimal one as a digit when it is a digit, as Excel
   does: `NUMBERVALUE(" 1 2 ",1,2)` is 0.2, where it was `#VALUE!`.
 - Computing many dynamic arrays whose ranges change took time growing with the square of their

@@ -1,0 +1,62 @@
+# suite: ties_tiny
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# date_system: 1900
+# captured: 2026-11-24
+# generator: capture/suites.py:ties_tiny
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# columns: suite tag case formula inputs expected_type expected_repr
+ties_tiny	tie	1	_xlfn.BINOM.INV({1},0.5,{2})	(1.0, 0.5)	n	1.0
+ties_tiny	tie	2	CRITBINOM({1},0.5,{2})	(1.0, 0.5)	n	1.0
+ties_tiny	tie	3	_xlfn.BINOM.INV({1},0.5,{2})	(2.0, 0.25)	n	1.0
+ties_tiny	tie	4	CRITBINOM({1},0.5,{2})	(2.0, 0.25)	n	1.0
+ties_tiny	tie	5	_xlfn.BINOM.INV({1},0.5,{2})	(2.0, 0.75)	n	1.0
+ties_tiny	tie	6	CRITBINOM({1},0.5,{2})	(2.0, 0.75)	n	1.0
+ties_tiny	tie	7	_xlfn.BINOM.INV({1},0.5,{2})	(3.0, 0.125)	n	0.0
+ties_tiny	tie	8	CRITBINOM({1},0.5,{2})	(3.0, 0.125)	n	0.0
+ties_tiny	tie	9	_xlfn.BINOM.INV({1},0.5,{2})	(3.0, 0.5)	n	1.0
+ties_tiny	tie	10	CRITBINOM({1},0.5,{2})	(3.0, 0.5)	n	1.0
+ties_tiny	tie	11	_xlfn.BINOM.INV({1},0.5,{2})	(3.0, 0.875)	n	2.0
+ties_tiny	tie	12	CRITBINOM({1},0.5,{2})	(3.0, 0.875)	n	2.0
+ties_tiny	tie	13	_xlfn.BINOM.INV({1},0.5,{2})	(4.0, 0.0625)	n	1.0
+ties_tiny	tie	14	CRITBINOM({1},0.5,{2})	(4.0, 0.0625)	n	1.0
+ties_tiny	tie	15	_xlfn.BINOM.INV({1},0.5,{2})	(4.0, 0.3125)	n	1.0
+ties_tiny	tie	16	CRITBINOM({1},0.5,{2})	(4.0, 0.3125)	n	1.0
+ties_tiny	tie	17	_xlfn.BINOM.INV({1},0.5,{2})	(4.0, 0.6875)	n	2.0
+ties_tiny	tie	18	CRITBINOM({1},0.5,{2})	(4.0, 0.6875)	n	2.0
+ties_tiny	tie	19	_xlfn.BINOM.INV({1},0.5,{2})	(4.0, 0.9375)	n	3.0
+ties_tiny	tie	20	CRITBINOM({1},0.5,{2})	(4.0, 0.9375)	n	3.0
+ties_tiny	tie_kind	21	_xlfn.BINOM.INV({1},0.5,0.5)	(True,)	n	1.0
+ties_tiny	tie_kind	22	CRITBINOM({1},0.5,0.5)	(True,)	n	1.0
+ties_tiny	tie_kind	23	_xlfn.BINOM.INV({1},0.5,0.5)	('1',)	n	1.0
+ties_tiny	tie_kind	24	CRITBINOM({1},0.5,0.5)	('1',)	n	1.0
+ties_tiny	tie_kind	25	_xlfn.BINOM.INV({1},0.5,0.5)	('2',)	n	1.0
+ties_tiny	tie_kind	26	CRITBINOM({1},0.5,0.5)	('2',)	n	1.0
+ties_tiny	tie_kind	27	_xlfn.BINOM.INV({1},0.5,0.5)	(1.0,)	n	1.0
+ties_tiny	tie_kind	28	CRITBINOM({1},0.5,0.5)	(1.0,)	n	1.0
+ties_tiny	tie_p	29	_xlfn.BINOM.INV({1},{2},{3})	(1.0, 0.25, 0.75)	n	1.0
+ties_tiny	tie_p	30	_xlfn.BINOM.INV({1},{2},{3})	(2.0, 0.25, 0.5625)	n	1.0
+ties_tiny	tie_p	31	_xlfn.BINOM.INV({1},{2},{3})	(3.0, 0.75, 0.015625)	n	0.0
+ties_tiny	tie_p	32	_xlfn.BINOM.INV({1},{2},{3})	(1.0, 0.75, 0.25)	n	1.0
+ties_tiny	tiny	33	IMREAL({1})	('5E-324',)	e	#NUM!
+ties_tiny	tiny	34	IMABS({1})	('5E-324',)	e	#NUM!
+ties_tiny	tiny	35	IMLN({1})	('5E-324',)	e	#NUM!
+ties_tiny	tiny	36	IMREAL({1})	('4.9E-324',)	e	#NUM!
+ties_tiny	tiny	37	IMABS({1})	('4.9E-324',)	e	#NUM!
+ties_tiny	tiny	38	IMLN({1})	('4.9E-324',)	e	#NUM!
+ties_tiny	tiny	39	IMREAL({1})	('1E-320',)	e	#NUM!
+ties_tiny	tiny	40	IMABS({1})	('1E-320',)	e	#NUM!
+ties_tiny	tiny	41	IMLN({1})	('1E-320',)	e	#NUM!
+ties_tiny	tiny	42	IMREAL({1})	('1E-310',)	e	#NUM!
+ties_tiny	tiny	43	IMABS({1})	('1E-310',)	e	#NUM!
+ties_tiny	tiny	44	IMLN({1})	('1E-310',)	e	#NUM!
+ties_tiny	tiny	45	IMREAL({1})	('2.2250738585072E-308',)	n	0.0
+ties_tiny	tiny	46	IMABS({1})	('2.2250738585072E-308',)	n	0.0
+ties_tiny	tiny	47	IMLN({1})	('2.2250738585072E-308',)	e	#NUM!
+ties_tiny	tiny	48	IMREAL({1})	('2.2250738585073E-308',)	n	2.2250738585073e-308
+ties_tiny	tiny	49	IMABS({1})	('2.2250738585073E-308',)	n	2.2250738585073e-308
+ties_tiny	tiny	50	IMLN({1})	('2.2250738585073E-308',)	str	'-708.396418532264'

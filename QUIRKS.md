@@ -211,8 +211,11 @@ not). An empty argument is `#N/A`.
   round the other way). 121 rows of the discrete ones are further, most at 1,000 trials and more, where Excel's terms
   are none of the exact count of ways times the powers, `lgamma` or Catherine Loader's saddle-point algorithm (the
   largest group of known deviations), and 48 of the others, for Excel's own `exp`, `pow`, `erf` and `gamma`; both
-  groups rest on the platform's math library. `BINOM.INV(TRUE,0.5,0.5)` is 1 in Excel, where a cumulative probability
-  of 0.5 reaches alpha at 0, as documented and as `BINOM.INV("3",0.5,0.5)` gives at its own tie (one row).
+  groups rest on the platform's math library. `BINOM.INV` and `CRITBINOM` where alpha equals the
+  probability of no success give 1 in Excel with 1, 2 or 4 trials and 0 with 3, where the documented rule gives 0; at
+  a tie past 0 they follow the rule (capture `ties_tiny`, 15 rows, and one of `distributions_family`). No computation of
+  the cumulative probability tried, as a sum of exact terms, of `lgamma` terms or of logarithms, with either
+  comparison, fits every tie.
 - Declared tolerances, `continuous_family` (5,059 rows): the beta, gamma, chi-squared, F and t distributions, their
   inverses and tests declare a relative tolerance ([ARCHITECTURE.md](https://github.com/sheetmill/xlrecalc/blob/main/ARCHITECTURE.md)
   §8.1), each its largest difference from Excel on the capture (in parentheses, on the reference platform,
