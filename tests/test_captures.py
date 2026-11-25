@@ -962,6 +962,7 @@ SUITES = [
     "encodeurl",
     "bare_names",
     "ties_tiny",
+    "three_d",
 ]
 # Suites compared in part: only the rows whose tag is named. Of ``iteration``, the XIRR rows; its
 # IRR, RATE and YIELD rows are evidence for their methods, not matched.
@@ -1069,12 +1070,18 @@ def _input(value: Value) -> Value:
 def run(suite: Suite, platform: PlatformName = "mac") -> tuple[Engine, int]:
     engine = Engine(Quirks.EXCEL, date1904=suite.date1904, today=suite.captured, platform=platform)
     s = engine.add_sheet("cases")
+    sheets = {"": s}
+    for ref in suite.fixed:  # "S1!A1": a cell of another sheet, added after "cases" in order
+        name = ref.rpartition("!")[0]
+        if name not in sheets:
+            sheets[name] = engine.add_sheet(name)
     for ref, value in suite.fixed.items():
-        r, c = cell_axes(ref, 0, 0)
+        name, _, cell = ref.rpartition("!")
+        r, c = cell_axes(cell, 0, 0)
         if isinstance(value, Formula):
-            engine.set_formula(s, r.value, c.value, value.text[1:])
+            engine.set_formula(sheets[name], r.value, c.value, value.text[1:])
         else:
-            engine.sheets[s].set(r.value, c.value, _input(value))
+            engine.sheets[sheets[name]].set(r.value, c.value, _input(value))
     for k, row in enumerate(suite.rows, 1):
         for i, value in enumerate(row.inputs, 1):
             if isinstance(value, Formula):

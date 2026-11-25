@@ -91,8 +91,11 @@ def build(
     ws.title = "cases"
     if date1904:
         wb.epoch = openpyxl.utils.datetime.CALENDAR_MAC_1904
-    for ref, value in (fixed or {}).items():
-        _set_input(ws[ref], value)
+    for ref, value in (fixed or {}).items():  # "S1!A1": a cell of another sheet, after "cases"
+        sheet, _, cell = ref.rpartition("!")
+        if sheet and sheet not in wb.sheetnames:
+            wb.create_sheet(sheet)
+        _set_input((wb[sheet] if sheet else ws)[cell], value)
     for row, case in enumerate(cases, 1):
         ws.cell(row, 1, "=" + formula_text(case, row))
         for k, value in enumerate(case.inputs, 2):

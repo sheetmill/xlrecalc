@@ -205,16 +205,18 @@ def parts(path: Path, skip: frozenset[str] = frozenset()) -> Iterator[str]:
 def _edit(path: Path, out: Path, last_row: int) -> None:
     """Edits of every kind through the public API, saved to ``out``."""
     book = load_book(path)
-    book.set("A1", 1000)  # a constant changed
-    book.set("A3", " text ")  # a number made text with outer whitespace
-    book.set("A4", True)  # a logical
-    book.set("A5", ErrorValue.NA)  # an error
-    book.set("B2", None)  # a formula cleared
-    book.set("C6", 7)  # a formula made a constant
-    book.set_formula("E2", '=IFNA(B3,0)&"!"')  # a new cell in a row
-    book.set_formula(f"A{last_row + 2}", "=SUM(A1:A10)")  # a new row at the end
-    book.set("Z1", 1.5)
-    book.set_formula("Z2", "=Z1*2")
+    names = book.sheet_names
+    on = (lambda ref: f"'{names[0]}'!{ref}") if len(names) > 1 else (lambda ref: ref)  # first sheet
+    book.set(on("A1"), 1000)  # a constant changed
+    book.set(on("A3"), " text ")  # a number made text with outer whitespace
+    book.set(on("A4"), True)  # a logical
+    book.set(on("A5"), ErrorValue.NA)  # an error
+    book.set(on("B2"), None)  # a formula cleared
+    book.set(on("C6"), 7)  # a formula made a constant
+    book.set_formula(on("E2"), '=IFNA(B3,0)&"!"')  # a new cell in a row
+    book.set_formula(on(f"A{last_row + 2}"), "=SUM(A1:A10)")  # a new row at the end
+    book.set(on("Z1"), 1.5)
+    book.set_formula(on("Z2"), "=Z1*2")
     book.save(out)
 
 

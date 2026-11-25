@@ -1,0 +1,412 @@
+# suite: three_d
+# generator: capture/suites.py:three_d, capture/job.py
+# method: the job beside this file (three_d.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "three_d.xlsx": {
+#      "bytes": 7909,
+#      "sha256": "92f12444d9503861d16e3b5e96ee7b1253683681782ac686ea380cdc1d7ea0d2"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261124-220030-three-d",
+#    "manifest_sha256": "68d075a6d75534ad867873375f368bc3e1d3baf106a5a90de7b4d045bedc8a60",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+three_d	function	1	SUM(Jan:Mar!A1:A3)	()	n	666.0
+three_d	function	2	AVERAGE(Jan:Mar!A1:A3)	()	n	74.0
+three_d	function	3	AVERAGEA(Jan:Mar!A1:A3)	()	n	74.0
+three_d	function	4	COUNT(Jan:Mar!A1:A3)	()	n	9.0
+three_d	function	5	COUNTA(Jan:Mar!A1:A3)	()	n	9.0
+three_d	function	6	COUNTBLANK(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	7	MAX(Jan:Mar!A1:A3)	()	n	300.0
+three_d	function	8	MAXA(Jan:Mar!A1:A3)	()	n	300.0
+three_d	function	9	MIN(Jan:Mar!A1:A3)	()	n	1.0
+three_d	function	10	MINA(Jan:Mar!A1:A3)	()	n	1.0
+three_d	function	11	PRODUCT(Jan:Mar!A1:A3)	()	n	216000000000.0
+three_d	function	12	STDEV(Jan:Mar!A1:A3)	()	n	107.31379221703052
+three_d	function	13	_xlfn.STDEV.S(Jan:Mar!A1:A3)	()	n	107.31379221703052
+three_d	function	14	_xlfn.STDEV.P(Jan:Mar!A1:A3)	()	n	101.17641358867523
+three_d	function	15	STDEVA(Jan:Mar!A1:A3)	()	n	107.31379221703052
+three_d	function	16	STDEVP(Jan:Mar!A1:A3)	()	n	101.17641358867523
+three_d	function	17	STDEVPA(Jan:Mar!A1:A3)	()	n	101.17641358867523
+three_d	function	18	VAR(Jan:Mar!A1:A3)	()	n	11516.25
+three_d	function	19	_xlfn.VAR.S(Jan:Mar!A1:A3)	()	n	11516.25
+three_d	function	20	_xlfn.VAR.P(Jan:Mar!A1:A3)	()	n	10236.666666666666
+three_d	function	21	VARA(Jan:Mar!A1:A3)	()	n	11516.25
+three_d	function	22	VARP(Jan:Mar!A1:A3)	()	n	10236.666666666666
+three_d	function	23	VARPA(Jan:Mar!A1:A3)	()	n	10236.666666666666
+three_d	function	24	MEDIAN(Jan:Mar!A1:A3)	()	n	20.0
+three_d	function	25	MODE(Jan:Mar!A1:A3)	()	e	#REF!
+three_d	function	26	LARGE(Jan:Mar!A1:A3,2)	()	n	200.0
+three_d	function	27	SMALL(Jan:Mar!A1:A3,2)	()	n	2.0
+three_d	function	28	RANK(20,Jan:Mar!A1:A3)	()	n	5.0
+three_d	function	29	PERCENTILE(Jan:Mar!A1:A3,0.5)	()	n	20.0
+three_d	function	30	QUARTILE(Jan:Mar!A1:A3,1)	()	n	3.0
+three_d	function	31	AVEDEV(Jan:Mar!A1:A3)	()	n	84.0
+three_d	function	32	DEVSQ(Jan:Mar!A1:A3)	()	n	92130.0
+three_d	function	33	GEOMEAN(Jan:Mar!A1:A3)	()	n	18.171205928321395
+three_d	function	34	HARMEAN(Jan:Mar!A1:A3)	()	n	4.422604422604423
+three_d	function	35	KURT(Jan:Mar!A1:A3)	()	n	1.4289680095457404
+three_d	function	36	SKEW(Jan:Mar!A1:A3)	()	n	1.552217187124616
+three_d	function	37	SUMSQ(Jan:Mar!A1:A3)	()	n	141414.0
+three_d	function	38	SUMPRODUCT(Jan:Mar!A1:A3)	()	e	#REF!
+three_d	function	39	SUBTOTAL(9,Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	40	SUBTOTAL(109,Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	41	_xlfn.AGGREGATE(9,0,Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	42	_xlfn.CONCAT(Jan:Mar!A1:A3)	()	str	'123102030100200300'
+three_d	function	43	_xlfn.TEXTJOIN(",",TRUE,Jan:Mar!A1:A3)	()	str	'1,2,3,10,20,30,100,200,300'
+three_d	function	44	COUNTIF(Jan:Mar!A1:A3,">5")	()	e	#VALUE!
+three_d	function	45	SUMIF(Jan:Mar!A1:A3,">5")	()	e	#VALUE!
+three_d	function	46	AVERAGEIF(Jan:Mar!A1:A3,">5")	()	e	#VALUE!
+three_d	function	47	COUNTIFS(Jan:Mar!A1:A3,">5")	()	e	#VALUE!
+three_d	function	48	_xlfn.MAXIFS(Jan:Mar!A1:A3,Jan:Mar!A1:A3,">5")	()	e	#VALUE!
+three_d	function	49	VLOOKUP(10,Jan:Mar!A1:B3,2,FALSE)	()	e	#VALUE!
+three_d	function	50	HLOOKUP(10,Jan:Mar!A1:B3,2,FALSE)	()	e	#VALUE!
+three_d	function	51	MATCH(20,Jan:Mar!A1:A3,0)	()	e	#VALUE!
+three_d	function	52	INDEX(Jan:Mar!A1:A3,2)	()	e	#VALUE!
+three_d	function	53	INDEX(Jan:Mar!A1:A3,2,1)	()	e	#VALUE!
+three_d	function	54	LOOKUP(20,Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	55	_xlfn.XLOOKUP(20,Jan:Mar!A1:A3,Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	56	ROWS(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	57	COLUMNS(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	58	ROW(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	59	COLUMN(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	60	AREAS(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	61	_xlfn.SHEETS(Jan:Mar!A1:A3)	()	n	3.0
+three_d	function	62	_xlfn.SHEET(Jan:Mar!A1:A3)	()	n	2.0
+three_d	function	63	ISREF(Jan:Mar!A1:A3)	()	b	False
+three_d	function	64	N(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	65	T(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	66	CELL("address",Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	67	ISBLANK(Jan:Mar!A1:A3)	()	b	False
+three_d	function	68	_xlfn.FORMULATEXT(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	69	OFFSET(Jan:Mar!A1:A3,0,0)	()	e	#VALUE!
+three_d	function	70	SUM(OFFSET(Jan:Mar!A1:A3,0,0))	()	e	#VALUE!
+three_d	mixed	71	SUM(Jan:Mar!B1:B3)	()	n	11.0
+three_d	mixed	72	COUNT(Jan:Mar!B1:B3)	()	n	2.0
+three_d	mixed	73	COUNTA(Jan:Mar!B1:B3)	()	n	7.0
+three_d	mixed	74	AVERAGEA(Jan:Mar!B1:B3)	()	n	1.7142857142857142
+three_d	mixed	75	MAXA(Jan:Mar!B1:B3)	()	n	7.0
+three_d	mixed	76	MINA(Jan:Mar!B1:B3)	()	n	0.0
+three_d	mixed	77	PRODUCT(Jan:Mar!B1:B3)	()	n	28.0
+three_d	error	78	SUM(Jan:Mar!C1:C3)	()	e	#N/A
+three_d	error	79	COUNT(Jan:Mar!C1:C3)	()	n	0.0
+three_d	error	80	COUNTA(Jan:Mar!C1:C3)	()	n	1.0
+three_d	error	81	MAX(Jan:Mar!C1:C3)	()	e	#N/A
+three_d	form	82	SUM(Mar:Jan!A1:A3)	()	n	666.0
+three_d	form	83	SUM(Jan:Jan!A1:A3)	()	n	6.0
+three_d	form	84	SUM(Feb:Mar!A2)	()	n	220.0
+three_d	form	85	SUM(Jan:Mar!A:A)	()	n	666.0
+three_d	form	86	SUM(cases:Feb!Z1)	()	n	1000.0
+three_d	form	87	SUM('Feb:Q 4'!A1)	()	n	5110.0
+three_d	form	88	COUNT('Jan:Q 4'!A1:A3)	()	n	10.0
+three_d	form	89	Jan:Mar!A1+1	()	e	#REF!
+three_d	form	90	-Jan:Mar!A1	()	e	#REF!
+three_d	form	91	Jan:Mar!A1	()	e	#REF!
+three_d	form	92	IF(TRUE,Jan:Mar!A1)	()	e	#REF!
+three_d	form	93	SUM(IF(TRUE,Jan:Mar!A1:A3))	()	n	666.0
+three_d	form	94	SUM(Jan:Mar!A1,Jan!A2,5)	()	n	118.0
+three_d	form	95	SUM(Jan:Mar!A1:A3)/COUNT(Jan:Mar!A1:A3)	()	n	74.0
+three_d	form	96	SUM(Jan:Mar!A1:A3,Jan:Mar!A1:A3)	()	n	1332.0
+three_d	form	97	MAX(Feb:Mar!A1:A3)-MIN(Jan:Feb!A1:A3)	()	n	299.0

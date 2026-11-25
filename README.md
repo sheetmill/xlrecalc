@@ -198,13 +198,13 @@ text shows before evaluating.
   unit conversion.
   The [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 121,504 formulas computed by Excel and compared with xlrecalc's results: 120,680
+- **Evidence**: 121,601 formulas computed by Excel and compared with xlrecalc's results: 120,680
   match, bit for bit or within a small tolerance declared per function (a few units in the last
   place, or a relative one: 1E-9 for `IRR`, `RATE` and `YIELD`, 1E-15 to 1E-12 for the beta,
   gamma, chi-squared, F and t distributions), 791 known deviations, each listed with its reason
-  in [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md), and 33 not
+  in [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md), and 130 not
   evaluated (calls of functions xlrecalc does not compute, in the suite that records which names
-  Excel knows). Each listed
+  Excel knows, and 3-D references, captured before they are computed). Each listed
   deviation is still computed and compared with Excel on every test run, and one that starts to
   match fails the run, except a few that can match by chance (a random result, a result Excel
   varies between runs, a row that depends on the platform's math library). The largest group of deviations is `BINOM.DIST`,

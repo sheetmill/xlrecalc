@@ -3924,6 +3924,66 @@ def ties_tiny() -> list[Case]:
     return cases
 
 
+_THREE_D_TABLE: dict[str, Input] = {
+    "Z1": 1000.0,  # on the case sheet, inside a span that includes it
+    **{f"Jan!A{r}": v for r, v in ((1, 1.0), (2, 2.0), (3, 3.0))},
+    **{f"Feb!A{r}": v for r, v in ((1, 10.0), (2, 20.0), (3, 30.0))},
+    **{f"Mar!A{r}": v for r, v in ((1, 100.0), (2, 200.0), (3, 300.0))},
+    "Jan!B1": "x", "Jan!B2": True,
+    "Feb!B1": 4.0, "Feb!B2": "5", "Feb!B3": False,
+    "Mar!B2": 7.0, "Mar!B3": EMPTY_TEXT,
+    "Feb!C2": NA,
+    "Q 4!A1": 5000.0,
+}  # fmt: skip
+"""Sheets Jan, Feb, Mar and "Q 4" after the case sheet (no name that reads as a cell, which a span
+would have to quote): numbers in A1:A3, mixed kinds in B1:B3 (text, a logical, a blank, a number
+as text, an empty text), an error in C2."""
+
+
+def three_d() -> list[Case]:
+    """3-D references (``Jan:Mar!A1:A3``): every function that takes a reference, then the forms.
+
+    Each function is called once over the numbers of three sheets; the aggregates also over the
+    mixed kinds and over the error. Then the span reversed, one sheet, one cell, a whole column,
+    a span holding the formula's own sheet, a quoted span, a 3-D reference in arithmetic, under
+    ``IF`` and among other arguments.
+    """
+    r, mixed, err = "Jan:Mar!A1:A3", "Jan:Mar!B1:B3", "Jan:Mar!C1:C3"
+    calls = [
+        f"SUM({r})", f"AVERAGE({r})", f"AVERAGEA({r})", f"COUNT({r})", f"COUNTA({r})",
+        f"COUNTBLANK({r})", f"MAX({r})", f"MAXA({r})", f"MIN({r})", f"MINA({r})",
+        f"PRODUCT({r})", f"STDEV({r})", f"_xlfn.STDEV.S({r})", f"_xlfn.STDEV.P({r})",
+        f"STDEVA({r})", f"STDEVP({r})", f"STDEVPA({r})", f"VAR({r})", f"_xlfn.VAR.S({r})",
+        f"_xlfn.VAR.P({r})", f"VARA({r})", f"VARP({r})", f"VARPA({r})", f"MEDIAN({r})",
+        f"MODE({r})", f"LARGE({r},2)", f"SMALL({r},2)", f"RANK(20,{r})",
+        f"PERCENTILE({r},0.5)", f"QUARTILE({r},1)", f"AVEDEV({r})", f"DEVSQ({r})",
+        f"GEOMEAN({r})", f"HARMEAN({r})", f"KURT({r})", f"SKEW({r})", f"SUMSQ({r})",
+        f"SUMPRODUCT({r})", f"SUBTOTAL(9,{r})", f"SUBTOTAL(109,{r})",
+        f"_xlfn.AGGREGATE(9,0,{r})", f'_xlfn.CONCAT({r})', f'_xlfn.TEXTJOIN(",",TRUE,{r})',
+        f'COUNTIF({r},">5")', f'SUMIF({r},">5")', f'AVERAGEIF({r},">5")',
+        f'COUNTIFS({r},">5")', f'_xlfn.MAXIFS({r},{r},">5")', "VLOOKUP(10,Jan:Mar!A1:B3,2,FALSE)",
+        "HLOOKUP(10,Jan:Mar!A1:B3,2,FALSE)", f"MATCH(20,{r},0)", f"INDEX({r},2)",
+        f"INDEX({r},2,1)", f"LOOKUP(20,{r})", f"_xlfn.XLOOKUP(20,{r},{r})", f"ROWS({r})",
+        f"COLUMNS({r})", f"ROW({r})", f"COLUMN({r})", f"AREAS({r})", f"_xlfn.SHEETS({r})",
+        f"_xlfn.SHEET({r})", f"ISREF({r})", f"N({r})", f"T({r})", f'CELL("address",{r})',
+        f"ISBLANK({r})", f"_xlfn.FORMULATEXT({r})", f"OFFSET({r},0,0)", f"SUM(OFFSET({r},0,0))",
+    ]  # fmt: skip
+    cases = [Case("function", c) for c in calls]
+    for fn in ("SUM", "COUNT", "COUNTA", "AVERAGEA", "MAXA", "MINA", "PRODUCT"):
+        cases.append(Case("mixed", f"{fn}({mixed})"))
+    for fn in ("SUM", "COUNT", "COUNTA", "MAX"):
+        cases.append(Case("error", f"{fn}({err})"))
+    forms = [
+        "SUM(Mar:Jan!A1:A3)", "SUM(Jan:Jan!A1:A3)", "SUM(Feb:Mar!A2)", "SUM(Jan:Mar!A:A)",
+        "SUM(cases:Feb!Z1)", "SUM('Feb:Q 4'!A1)", "COUNT('Jan:Q 4'!A1:A3)", "Jan:Mar!A1+1",
+        "-Jan:Mar!A1", "Jan:Mar!A1", "IF(TRUE,Jan:Mar!A1)", "SUM(IF(TRUE,Jan:Mar!A1:A3))",
+        "SUM(Jan:Mar!A1,Jan!A2,5)", "SUM(Jan:Mar!A1:A3)/COUNT(Jan:Mar!A1:A3)",
+        "SUM(Jan:Mar!A1:A3,Jan:Mar!A1:A3)", "MAX(Feb:Mar!A1:A3)-MIN(Jan:Feb!A1:A3)",
+    ]  # fmt: skip
+    cases += [Case("form", f) for f in forms]
+    return cases
+
+
 def encodeurl() -> list[Case]:
     """ENCODEURL over every code from 1 to 127, characters beyond, texts, other values, long text.
 
@@ -5217,4 +5277,5 @@ SUITES = {
     "encodeurl": Suite(encodeurl),
     "bare_names": Suite(bare_names, fixed={"Z1": 1.0, "Z2": 2.0}),
     "ties_tiny": Suite(ties_tiny),
+    "three_d": Suite(three_d, fixed=_THREE_D_TABLE),
 }

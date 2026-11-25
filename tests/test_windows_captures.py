@@ -83,6 +83,7 @@ def test_there_is_a_windows_capture() -> None:
         "text_family.tsv",
         "text_number.tsv",
         "textfmt.tsv",
+        "three_d.tsv",
         "ties_tiny.tsv",
         "whole_columns.tsv",
         "workdays.tsv",

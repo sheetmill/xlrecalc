@@ -22,7 +22,7 @@ from tests.captures import Formula, load
 from tests.formula_corpus import CORPUS as FORMULAS
 from tests.test_array_limit import two_sheets
 from tests.test_captures import SUITES, column_letters, formula_text
-from tests.xlsx_files import MAIN, package
+from tests.xlsx_files import DOC, MAIN, PKG, package
 from xlrecalc._formula import FormulaSyntaxError, TokenizeError, parse
 from xlrecalc._formula._nodes import Call, Invoke, Union
 from xlrecalc._formula._template import cell_axes
@@ -50,21 +50,43 @@ def suite_file(name: str) -> bytes:
     """A capture suite laid out as ``tests/test_captures.py`` lays it out, in a file."""
     suite = load(name)
     cells: dict[tuple[int, int], str] = {}
+    others: dict[str, dict[tuple[int, int], str]] = {}  # "Jan!A1": a cell of another sheet
     for ref, value in suite.fixed.items():
+        sheet_name, _, ref = ref.rpartition("!")
         r, c = cell_axes(ref, 0, 0)
-        cells[r.value, c.value] = _cell(ref, value)
+        (others.setdefault(sheet_name, {}) if sheet_name else cells)[r.value, c.value] = _cell(
+            ref, value
+        )
     for k, row in enumerate(suite.rows, 1):
         for i, value in enumerate(row.inputs, 1):
             cells[k - 1, i] = _cell(f"{column_letters(i + 1)}{k}", value)
         text = formula_text(row, k)
         cells[k - 1, 0] = _cell(f"A{k}", Formula("=" + text))
+    pr = '<workbookPr date1904="1"/>' if suite.date1904 else ""
+    if not others:
+        return package(sheet_xml=_worksheet(cells), workbook_extra=pr)
+    names = ["cases", *others]  # the case sheet first, as capture/pipeline.py builds it
+    sheets = "".join(
+        f'<sheet name="{n}" sheetId="{i}" r:id="rId{i}"/>' for i, n in enumerate(names, 1)
+    )
+    rels = "".join(
+        f'<Relationship Id="rId{i}" Type="{DOC}/worksheet" Target="worksheets/sheet{i}.xml"/>'
+        for i in range(1, len(names) + 1)
+    )
+    extra: dict[str, str | bytes] = {
+        "xl/_rels/workbook.xml.rels": f'<Relationships xmlns="{PKG}">{rels}</Relationships>'
+    }
+    for i, n in enumerate(others.values(), 2):
+        extra[f"xl/worksheets/sheet{i}.xml"] = _worksheet(n)
+    return package(sheet_xml=_worksheet(cells), workbook_extra=pr, sheets=sheets, extra_parts=extra)
+
+
+def _worksheet(cells: dict[tuple[int, int], str]) -> str:
     rows: dict[int, list[str]] = {}
     for (r, _c), xml in sorted(cells.items()):
         rows.setdefault(r, []).append(xml)
     data = "".join(f'<row r="{r + 1}">{"".join(x)}</row>' for r, x in sorted(rows.items()))
-    pr = '<workbookPr date1904="1"/>' if suite.date1904 else ""
-    sheet = f'<worksheet xmlns="{MAIN}"><sheetData>{data}</sheetData></worksheet>'
-    return package(sheet_xml=sheet, workbook_extra=pr)
+    return f'<worksheet xmlns="{MAIN}"><sheetData>{data}</sheetData></worksheet>'
 
 
 def stale_and_unreported(data: bytes) -> tuple[list[str], int]:

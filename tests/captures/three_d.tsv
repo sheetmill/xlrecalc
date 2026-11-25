@@ -1,0 +1,110 @@
+# suite: three_d
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# date_system: 1900
+# captured: 2026-11-24
+# generator: capture/suites.py:three_d
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# fixed: {'Z1': 1000.0, 'Jan!A1': 1.0, 'Jan!A2': 2.0, 'Jan!A3': 3.0, 'Feb!A1': 10.0, 'Feb!A2': 20.0, 'Feb!A3': 30.0, 'Mar!A1': 100.0, 'Mar!A2': 200.0, 'Mar!A3': 300.0, 'Jan!B1': 'x', 'Jan!B2': True, 'Feb!B1': 4.0, 'Feb!B2': '5', 'Feb!B3': False, 'Mar!B2': 7.0, 'Mar!B3': FormulaInput('=""'), 'Feb!C2': ErrorValue('#N/A'), 'Q 4!A1': 5000.0}
+# columns: suite tag case formula inputs expected_type expected_repr
+three_d	function	1	SUM(Jan:Mar!A1:A3)	()	n	666.0
+three_d	function	2	AVERAGE(Jan:Mar!A1:A3)	()	n	74.0
+three_d	function	3	AVERAGEA(Jan:Mar!A1:A3)	()	n	74.0
+three_d	function	4	COUNT(Jan:Mar!A1:A3)	()	n	9.0
+three_d	function	5	COUNTA(Jan:Mar!A1:A3)	()	n	9.0
+three_d	function	6	COUNTBLANK(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	7	MAX(Jan:Mar!A1:A3)	()	n	300.0
+three_d	function	8	MAXA(Jan:Mar!A1:A3)	()	n	300.0
+three_d	function	9	MIN(Jan:Mar!A1:A3)	()	n	1.0
+three_d	function	10	MINA(Jan:Mar!A1:A3)	()	n	1.0
+three_d	function	11	PRODUCT(Jan:Mar!A1:A3)	()	n	216000000000.0
+three_d	function	12	STDEV(Jan:Mar!A1:A3)	()	n	107.31379221703052
+three_d	function	13	_xlfn.STDEV.S(Jan:Mar!A1:A3)	()	n	107.31379221703052
+three_d	function	14	_xlfn.STDEV.P(Jan:Mar!A1:A3)	()	n	101.17641358867523
+three_d	function	15	STDEVA(Jan:Mar!A1:A3)	()	n	107.31379221703052
+three_d	function	16	STDEVP(Jan:Mar!A1:A3)	()	n	101.17641358867523
+three_d	function	17	STDEVPA(Jan:Mar!A1:A3)	()	n	101.17641358867523
+three_d	function	18	VAR(Jan:Mar!A1:A3)	()	n	11516.25
+three_d	function	19	_xlfn.VAR.S(Jan:Mar!A1:A3)	()	n	11516.25
+three_d	function	20	_xlfn.VAR.P(Jan:Mar!A1:A3)	()	n	10236.666666666666
+three_d	function	21	VARA(Jan:Mar!A1:A3)	()	n	11516.25
+three_d	function	22	VARP(Jan:Mar!A1:A3)	()	n	10236.666666666666
+three_d	function	23	VARPA(Jan:Mar!A1:A3)	()	n	10236.666666666666
+three_d	function	24	MEDIAN(Jan:Mar!A1:A3)	()	n	20.0
+three_d	function	25	MODE(Jan:Mar!A1:A3)	()	e	#REF!
+three_d	function	26	LARGE(Jan:Mar!A1:A3,2)	()	n	200.0
+three_d	function	27	SMALL(Jan:Mar!A1:A3,2)	()	n	2.0
+three_d	function	28	RANK(20,Jan:Mar!A1:A3)	()	n	5.0
+three_d	function	29	PERCENTILE(Jan:Mar!A1:A3,0.5)	()	n	20.0
+three_d	function	30	QUARTILE(Jan:Mar!A1:A3,1)	()	n	3.0
+three_d	function	31	AVEDEV(Jan:Mar!A1:A3)	()	n	84.0
+three_d	function	32	DEVSQ(Jan:Mar!A1:A3)	()	n	92130.0
+three_d	function	33	GEOMEAN(Jan:Mar!A1:A3)	()	n	18.171205928321395
+three_d	function	34	HARMEAN(Jan:Mar!A1:A3)	()	n	4.422604422604423
+three_d	function	35	KURT(Jan:Mar!A1:A3)	()	n	1.4289680095457404
+three_d	function	36	SKEW(Jan:Mar!A1:A3)	()	n	1.552217187124616
+three_d	function	37	SUMSQ(Jan:Mar!A1:A3)	()	n	141414.0
+three_d	function	38	SUMPRODUCT(Jan:Mar!A1:A3)	()	e	#REF!
+three_d	function	39	SUBTOTAL(9,Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	40	SUBTOTAL(109,Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	41	_xlfn.AGGREGATE(9,0,Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	42	_xlfn.CONCAT(Jan:Mar!A1:A3)	()	str	'123102030100200300'
+three_d	function	43	_xlfn.TEXTJOIN(",",TRUE,Jan:Mar!A1:A3)	()	str	'1,2,3,10,20,30,100,200,300'
+three_d	function	44	COUNTIF(Jan:Mar!A1:A3,">5")	()	e	#VALUE!
+three_d	function	45	SUMIF(Jan:Mar!A1:A3,">5")	()	e	#VALUE!
+three_d	function	46	AVERAGEIF(Jan:Mar!A1:A3,">5")	()	e	#VALUE!
+three_d	function	47	COUNTIFS(Jan:Mar!A1:A3,">5")	()	e	#VALUE!
+three_d	function	48	_xlfn.MAXIFS(Jan:Mar!A1:A3,Jan:Mar!A1:A3,">5")	()	e	#VALUE!
+three_d	function	49	VLOOKUP(10,Jan:Mar!A1:B3,2,FALSE)	()	e	#VALUE!
+three_d	function	50	HLOOKUP(10,Jan:Mar!A1:B3,2,FALSE)	()	e	#VALUE!
+three_d	function	51	MATCH(20,Jan:Mar!A1:A3,0)	()	e	#VALUE!
+three_d	function	52	INDEX(Jan:Mar!A1:A3,2)	()	e	#VALUE!
+three_d	function	53	INDEX(Jan:Mar!A1:A3,2,1)	()	e	#VALUE!
+three_d	function	54	LOOKUP(20,Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	55	_xlfn.XLOOKUP(20,Jan:Mar!A1:A3,Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	56	ROWS(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	57	COLUMNS(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	58	ROW(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	59	COLUMN(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	60	AREAS(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	61	_xlfn.SHEETS(Jan:Mar!A1:A3)	()	n	3.0
+three_d	function	62	_xlfn.SHEET(Jan:Mar!A1:A3)	()	n	2.0
+three_d	function	63	ISREF(Jan:Mar!A1:A3)	()	b	False
+three_d	function	64	N(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	65	T(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	66	CELL("address",Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	67	ISBLANK(Jan:Mar!A1:A3)	()	b	False
+three_d	function	68	_xlfn.FORMULATEXT(Jan:Mar!A1:A3)	()	e	#VALUE!
+three_d	function	69	OFFSET(Jan:Mar!A1:A3,0,0)	()	e	#VALUE!
+three_d	function	70	SUM(OFFSET(Jan:Mar!A1:A3,0,0))	()	e	#VALUE!
+three_d	mixed	71	SUM(Jan:Mar!B1:B3)	()	n	11.0
+three_d	mixed	72	COUNT(Jan:Mar!B1:B3)	()	n	2.0
+three_d	mixed	73	COUNTA(Jan:Mar!B1:B3)	()	n	7.0
+three_d	mixed	74	AVERAGEA(Jan:Mar!B1:B3)	()	n	1.7142857142857142
+three_d	mixed	75	MAXA(Jan:Mar!B1:B3)	()	n	7.0
+three_d	mixed	76	MINA(Jan:Mar!B1:B3)	()	n	0.0
+three_d	mixed	77	PRODUCT(Jan:Mar!B1:B3)	()	n	28.0
+three_d	error	78	SUM(Jan:Mar!C1:C3)	()	e	#N/A
+three_d	error	79	COUNT(Jan:Mar!C1:C3)	()	n	0.0
+three_d	error	80	COUNTA(Jan:Mar!C1:C3)	()	n	1.0
+three_d	error	81	MAX(Jan:Mar!C1:C3)	()	e	#N/A
+three_d	form	82	SUM(Mar:Jan!A1:A3)	()	n	666.0
+three_d	form	83	SUM(Jan:Jan!A1:A3)	()	n	6.0
+three_d	form	84	SUM(Feb:Mar!A2)	()	n	220.0
+three_d	form	85	SUM(Jan:Mar!A:A)	()	n	666.0
+three_d	form	86	SUM(cases:Feb!Z1)	()	n	1000.0
+three_d	form	87	SUM('Feb:Q 4'!A1)	()	n	5110.0
+three_d	form	88	COUNT('Jan:Q 4'!A1:A3)	()	n	10.0
+three_d	form	89	Jan:Mar!A1+1	()	e	#REF!
+three_d	form	90	-Jan:Mar!A1	()	e	#REF!
+three_d	form	91	Jan:Mar!A1	()	e	#REF!
+three_d	form	92	IF(TRUE,Jan:Mar!A1)	()	e	#REF!
+three_d	form	93	SUM(IF(TRUE,Jan:Mar!A1:A3))	()	n	666.0
+three_d	form	94	SUM(Jan:Mar!A1,Jan!A2,5)	()	n	118.0
+three_d	form	95	SUM(Jan:Mar!A1:A3)/COUNT(Jan:Mar!A1:A3)	()	n	74.0
+three_d	form	96	SUM(Jan:Mar!A1:A3,Jan:Mar!A1:A3)	()	n	1332.0
+three_d	form	97	MAX(Feb:Mar!A1:A3)-MIN(Jan:Feb!A1:A3)	()	n	299.0

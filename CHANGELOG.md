@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `SECURITY.md`, linked from the README: how to report a security problem privately, through
   GitHub's private vulnerability reporting, and which releases receive fixes (the latest).
+- The `three_d` capture, from Excel for Mac and Excel for Windows, which agree: 3-D references
+  over three sheets in every function that takes a reference, and their forms. A capture suite's
+  fixed cells may name another sheet (`Jan!A1`), which the workbook then holds after the case
+  sheet.
 - The `ties_tiny` capture, from Excel for Mac and Excel for Windows, which agree: `BINOM.INV` and
   `CRITBINOM` where alpha equals a cumulative probability exactly, and complex-number texts holding
   numbers below the smallest normal one.
