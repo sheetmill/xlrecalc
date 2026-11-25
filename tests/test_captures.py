@@ -172,6 +172,11 @@ _REGRESSION_TIE = (
     "Excel's own QR steps decides which column it drops, and the package's steps drop another; "
     "r2, F and the sums of squares agree"
 )
+_ILL_CONDITIONED = (
+    "LINEST over an ill-conditioned fit (a date serial beside the constant): Excel's coefficients "
+    "are within 6.2E-14 of the exact solution and the package's within 3.3E-13, up to 3.9E-13 "
+    "from Excel's, past the tolerance"
+)
 _REGRESSION_TIE_CASES = (
     *(241, 242, 243, 245, 246, 247),  # sum, without the constant
     *(381, 383, 385, 387),  # first_dup, with the constant
@@ -627,6 +632,7 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     ("unions", 66): _UNION_CELL,
     **{("linest_multi", case): _REGRESSION_TIE for case in _REGRESSION_TIE_CASES},
     **{("linest_multi", case): _LOGEST_NOISE for case in (742, 743, 744, 745, 747, 750, 755)},
+    **{("linest_ill", case): _ILL_CONDITIONED for case in (7, 9, 11, 12)},
     ("info_family", 468): _AT_SIGN,
     **{("dates_family", case): _WEEKNUM_ODD_TYPE for case in _WEEKNUM_ODD_CASES},
     ("dates_family", 2004): _DATEDIF_MARCH,
@@ -979,6 +985,7 @@ SUITES = [
     "unions",
     "three_d_snap",
     "linest_multi",
+    "linest_ill",
 ]
 # Suites compared in part: only the rows whose tag is named. Of ``iteration``, the XIRR rows; its
 # IRR, RATE and YIELD rows are evidence for their methods, not matched.

@@ -1,0 +1,357 @@
+# suite: linest_ill
+# generator: capture/suites.py:linest_ill, capture/job.py
+# method: the job beside this file (linest_ill.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "linest_ill.xlsx": {
+#      "bytes": 21251,
+#      "sha256": "cef51778b65f79a80811f6d10c08ffd9958f81bff04fb556b82f659fbf21fa2d"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261125-141608-linest-ill",
+#    "manifest_sha256": "907cb7dbdc3e94a3e409276e809497509b53a739278cf717febc4362e1293607",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+linest_ill	coef	1	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,1)	()	n	-1.7045431601848142
+linest_ill	coef	2	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,2)	()	n	242.53257426447658
+linest_ill	coef	3	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,3)	()	n	-9.347181577826893
+linest_ill	coef	4	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,4)	()	n	-2622.9458957319453
+linest_ill	coef	5	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,5)	()	n	-1425.9356580991214
+linest_ill	coef	6	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,6)	()	n	-1641.345478823258
+linest_ill	coef	7	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,7)	()	n	-316.24093121240236
+linest_ill	coef	8	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,8)	()	n	2533.5379241296064
+linest_ill	coef	9	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,9)	()	n	-169.39274380231433
+linest_ill	coef	10	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,10)	()	n	-1715.5689520185672
+linest_ill	coef	11	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,11)	()	n	118.56552785331193
+linest_ill	coef	12	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,12)	()	n	-396.35354545268984
+linest_ill	coef	13	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,13)	()	n	-2871.885726541937
+linest_ill	coef	14	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,14)	()	n	2310.0933732994094
+linest_ill	coef	15	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),1,15)	()	n	494706.92435209814
+linest_ill	stats	16	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),3,1)	()	n	0.9820908483197707
+linest_ill	stats	17	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),3,2)	()	n	287.14547564539464
+linest_ill	stats	18	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),4,1)	()	n	1116.3322559833314
+linest_ill	stats	19	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),4,2)	()	n	285.0
+linest_ill	stats	20	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),5,1)	()	n	1288621772.6678884
+linest_ill	stats	21	INDEX(LINEST(AA1:AA300,AB1:AO300,TRUE,TRUE),5,2)	()	n	23498969.392331675
+linest_ill	coef	22	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,1)	()	n	-1.7204298020048936
+linest_ill	coef	23	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,2)	()	n	244.80305030184695
+linest_ill	coef	24	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,3)	()	n	3.9183241994422495
+linest_ill	coef	25	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,4)	()	n	-2290.943146290026
+linest_ill	coef	26	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,5)	()	n	-759.5780266056408
+linest_ill	coef	27	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,6)	()	n	-645.1042419452211
+linest_ill	coef	28	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,7)	()	n	1011.4731455612492
+linest_ill	coef	29	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,8)	()	n	4194.843171912618
+linest_ill	coef	30	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,9)	()	n	1820.4452183032126
+linest_ill	coef	31	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,10)	()	n	607.0340193130437
+linest_ill	coef	32	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,11)	()	n	2777.2974691013787
+linest_ill	coef	33	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,12)	()	n	2590.619331143722
+linest_ill	coef	34	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,13)	()	n	445.3855909577904
+linest_ill	coef	35	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,14)	()	n	5960.087907201744
+linest_ill	coef	36	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),1,15)	()	n	0.0
+linest_ill	stats	37	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),3,1)	()	n	0.99999635428136
+linest_ill	stats	38	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),3,2)	()	n	302.8345219629998
+linest_ill	stats	39	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),4,1)	()	n	5603421.154758595
+linest_ill	stats	40	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),4,2)	()	n	286.0
+linest_ill	stats	41	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),5,1)	()	n	7194358316556.62
+linest_ill	stats	42	INDEX(LINEST(AA1:AA300,AB1:AO300,FALSE,TRUE),5,2)	()	n	26228701.840071764

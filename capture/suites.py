@@ -4269,6 +4269,54 @@ def linest_multi() -> list[Case]:
     return cases
 
 
+def _ill_columns() -> list[list[float]]:
+    """``linest_ill``'s data, y first: 300 days, 11 month dummies (December left out), a date
+    serial near 37,000, a temperature and its square; the date beside the constant makes the
+    fit ill-conditioned."""
+    rng = random.Random(20261125)
+    n = 300
+    dates = [float(37000 + i) for i in range(n)]
+    months = [(i * 12) // n for i in range(n)]  # 0..11, 25 days each
+    temps = [float(rng.randint(30, 95)) for _ in range(n)]
+    dummies = [[1.0 if m == j else 0.0 for m in months] for j in range(11)]
+    effects = [rng.randint(-3000, 3000) for _ in range(11)]
+    y = [
+        round(
+            5e5
+            - 9.5 * dates[i]
+            + sum(e * d[i] for e, d in zip(effects, dummies, strict=True))
+            + 250.0 * temps[i]
+            - 1.75 * temps[i] ** 2
+            + rng.uniform(-500.0, 500.0),
+            2,
+        )
+        for i in range(n)
+    ]
+    return [y, *dummies, dates, temps, [t * t for t in temps]]
+
+
+def _ill_layout() -> dict[str, Input]:
+    """The columns from AA, rows 1 to 300."""
+    return {
+        f"{_letters(27 + j)}{r}": v
+        for j, col in enumerate(_ill_columns())
+        for r, v in enumerate(col, 1)
+    }
+
+
+def linest_ill() -> list[Case]:
+    """LINEST over an ill-conditioned fit (14 x columns, a date serial beside the constant),
+    with and without the constant: every coefficient, then r2, sey, F, df, ssreg and ssresid."""
+    y, x = "AA1:AA300", f"AB1:{_letters(27 + 14)}300"
+    cases = []
+    for const in ("TRUE", "FALSE"):
+        for c in range(1, 16):
+            cases.append(Case("coef", f"INDEX(LINEST({y},{x},{const},TRUE),1,{c})"))
+        for r, c in ((3, 1), (3, 2), (4, 1), (4, 2), (5, 1), (5, 2)):
+            cases.append(Case("stats", f"INDEX(LINEST({y},{x},{const},TRUE),{r},{c})"))
+    return cases
+
+
 def encodeurl() -> list[Case]:
     """ENCODEURL over every code from 1 to 127, characters beyond, texts, other values, long text.
 
@@ -5566,4 +5614,5 @@ SUITES = {
     "unions": Suite(unions, fixed=_UNIONS_TABLE),
     "three_d_snap": Suite(three_d_snap, fixed=_THREE_D_SNAP_TABLE),
     "linest_multi": Suite(linest_multi, fixed=_regression_layout()[0]),
+    "linest_ill": Suite(linest_ill, fixed=_ill_layout()),
 }

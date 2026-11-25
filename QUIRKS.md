@@ -312,8 +312,11 @@ not). An empty argument is `#N/A`.
   last place, the statistics within 67, and up to 195 beside a zero or constant column or with as
   many rows as unknowns; the QR steps are not Excel's own. Listed: where exactly collinear
   columns tie, rounding in Excel's steps picks the column it drops, and on four of the captured
-  fits it picks another than the package does (22 rows; r2, F and the sums of squares agree); and
-  `LOGEST` of a nearly exact fit, whose residuals are rounding noise (7 rows).
+  fits it picks another than the package does (22 rows; r2, F and the sums of squares agree);
+  `LOGEST` of a nearly exact fit, whose residuals are rounding noise (7 rows); and four
+  coefficients of an ill-conditioned fit (capture `linest_ill`: 14 columns, a date serial beside
+  the constant), where Excel's coefficients are within 6.2E-14 of the exact least-squares
+  solution and the package's within 3.3E-13, up to 3.9E-13 from Excel's.
 - `LINEST` and `LOGEST` with an all-zero x column, or with a column holding one value beside the
   constant: the column's coefficient and standard error are 0, as for a collinear column, but
   the residual degrees of freedom do not grow, and `ssresid` is too small and `ssreg` too large by

@@ -66,6 +66,7 @@ def test_there_is_a_windows_capture() -> None:
         "iteration.tsv",
         "iteration_steps.tsv",
         "iterative.tsv",
+        "linest_ill.tsv",
         "linest_multi.tsv",
         "literals.tsv",
         "mac_gaps.tsv",

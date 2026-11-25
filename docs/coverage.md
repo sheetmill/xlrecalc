@@ -263,7 +263,7 @@ platform.
 | `IMSUB` | engineering | implemented | 70 | 70 | 0 |  |  |
 | `IMSUM` | engineering | implemented | 72 | 72 | 0 |  |  |
 | `IMTAN` | engineering | implemented | 36 | 34 | 2 |  |  |
-| `INDEX` | lookup and reference | implemented | 1377 | 1343 | 34 |  |  |
+| `INDEX` | lookup and reference | implemented | 1419 | 1381 | 38 |  |  |
 | `INDIRECT` | lookup and reference | implemented | 15 | 15 | 0 |  |  |
 | `INFO` | | absent | | | | | |
 | `INT` | math | implemented | 19 | 18 | 1 |  |  |
@@ -297,7 +297,7 @@ platform.
 | `LEN` | text | implemented | 431 | 431 | 0 |  |  |
 | `LENB` | text | implemented | 29 | 29 | 0 |  |  |
 | `LET` | logical | implemented | 61 | 61 | 0 |  |  |
-| `LINEST` | statistical | implemented | 795 | 774 | 21 | 4 ulps |  |
+| `LINEST` | statistical | implemented | 837 | 812 | 25 | 4 ulps |  |
 | `LN` | math | implemented | 18 | 18 | 0 |  |  |
 | `LOG` | math | implemented | 229 | 229 | 0 | 4 ulps |  |
 | `LOG10` | math | implemented | 31 | 31 | 0 | 4 ulps |  |

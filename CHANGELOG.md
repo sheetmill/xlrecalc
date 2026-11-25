@@ -18,8 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   freedom, with Excel's `ssresid` and `ssreg` (QUIRKS.md). Results are within a declared relative
   tolerance of 5E-14; where exactly collinear columns tie, Excel may drop another of them than
   the package does (listed rows).
-- The `linest_multi` capture (864 formulas), and `empty_args` with `LOGEST`, `TREND` and `GROWTH`,
-  from Excel for Mac and Excel for Windows.
+- The `linest_multi` capture (864 formulas), `linest_ill` (an ill-conditioned fit, 42 formulas),
+  and `empty_args` with `LOGEST`, `TREND` and `GROWTH`, from Excel for Mac and Excel for Windows.
 
 ## [0.12.0] - 2026-11-25
 
