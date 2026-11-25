@@ -19,8 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   bare `SORT` or `FILTER` stays refused, and a bare `LET`, not captured, keeps its value.
 
 ### Added
-- `SECURITY.md`, linked from the README: how to report a security problem privately, through
-  GitHub's private vulnerability reporting, and which releases receive fixes (the latest).
+- `SECURITY.md`, linked from the README: what the package does with untrusted workbooks, how to
+  report a security problem privately, through GitHub's private vulnerability reporting, where a
+  problem of xlio, xlformat or sheetpeek goes, and which releases receive fixes (the latest).
 - The `three_d` capture, from Excel for Mac and Excel for Windows, which agree: 3-D references
   over three sheets in every function that takes a reference, and their forms. A capture suite's
   fixed cells may name another sheet (`Jan!A1`), which the workbook then holds after the case
