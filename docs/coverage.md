@@ -353,7 +353,7 @@ platform.
 | `NOW` | date and time | implemented | 1 | 1 | 0 |  |  |
 | `NPER` | financial | implemented | 120 | 120 | 0 |  |  |
 | `NPV` | financial | implemented | 88 | 88 | 0 | 4 ulps |  |
-| `NUMBERVALUE` | text | implemented | 522 | 521 | 1 |  |  |
+| `NUMBERVALUE` | text | implemented | 522 | 522 | 0 |  |  |
 | `OCT2BIN` | engineering | implemented | 306 | 306 | 0 |  |  |
 | `OCT2DEC` | engineering | implemented | 23 | 23 | 0 |  |  |
 | `OCT2HEX` | engineering | implemented | 207 | 207 | 0 |  |  |

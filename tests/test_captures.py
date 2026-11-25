@@ -255,9 +255,6 @@ _WEEKNUM_ODD_CASES = (
     1371,
     1373,
 )
-_NUMBERVALUE_GROUP = (
-    "NUMBERVALUE reads a group separator after the decimal one as a digit when both are digits"
-)
 _VARIANCE_NOISE = (
     "DVAR and DSTDEV: past the declared 4 units in the last place, for a sum of squares no tried "
     "form reproduces (seven forms; each misses other rows by more)"
@@ -617,7 +614,6 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     ("info_family", 468): _AT_SIGN,
     **{("dates_family", case): _WEEKNUM_ODD_TYPE for case in _WEEKNUM_ODD_CASES},
     ("dates_family", 2004): _DATEDIF_MARCH,
-    ("text_family", 1761): _NUMBERVALUE_GROUP,
     **{("cum_large", case): _TINY_PRINCIPAL for case in (8, 18)},
     ("empty_args", 463): _MULTINOMIAL,
     ("empty_args", 124): _CUMULATIVE_NOISE,

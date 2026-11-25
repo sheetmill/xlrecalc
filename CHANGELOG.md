@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   formulas and every number constant exactly.
 
 ### Fixed
+- `NUMBERVALUE` reads a group separator after the decimal one as a digit when it is a digit, as Excel
+  does: `NUMBERVALUE(" 1 2 ",1,2)` is 0.2, where it was `#VALUE!`.
 - Computing many dynamic arrays whose ranges change took time growing with the square of their
   number: each range that changed rebuilt the index of every array's range on the sheet. Each
   now updates the index for its own array, and doubling their number about doubles the time.

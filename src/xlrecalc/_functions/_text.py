@@ -557,7 +557,9 @@ def NUMBERVALUE(
         return 0.0
     percents = len(body) - len(stripped)
     whole, point, fraction = stripped.partition(decimal[0])
-    if group[0] in fraction:
+    # After the decimal separator a group separator is an error, but a digit is read as a digit
+    # whatever it separates: NUMBERVALUE(" 1 2 ",1,2) is 0.2 (capture text_family).
+    if group[0] in fraction and group[0] not in "0123456789":
         return VALUE
     number = text_to_number(
         whole.replace(group[0], "") + (("." + fraction) if point else ""),

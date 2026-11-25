@@ -196,8 +196,6 @@ not). An empty argument is `#N/A`.
   length), while `FILTERXML` and `EUROCONVERT` are not. Any other name the package does not compute (an add-in's
   function, a name no Excel knows) keeps its cached value and is reported, since what Excel shows depends on add-ins
   the file does not record.
-- `NUMBERVALUE` with digits as separators reads a group separator after the decimal one as a digit: `NUMBERVALUE(" 1 2 ",1,2)`
-  is 0.2 in Excel and `#VALUE!` here (one row of capture `text_family`).
 - Declared tolerances, `statistics_family`: the sums of powers and regressions (`AVEDEV`, `DEVSQ`, `GEOMEAN`, `HARMEAN`,
   `KURT`, `SKEW`, `SKEW.P`, `TRIMMEAN`, `FISHER`, `FISHERINV`, the regression family, `PHI`, `GAUSS`, `CONFIDENCE`) within
   4 units in the last place; `GEOMEAN` near 1E150 and `KURT` and `FORECAST` on a few rows are further, and listed.
