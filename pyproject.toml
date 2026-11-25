@@ -71,6 +71,7 @@ include = [
   "CAPTURING.md",
   "QUIRKS.md",
   "CONTRIBUTING.md",
+  "SECURITY.md",
   "LICENSE",
   "pagefind.yml",
 ]

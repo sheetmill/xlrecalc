@@ -230,13 +230,13 @@ text shows before evaluating.
 <!-- usage-end -->
 ## Speed and memory
 
-On a workbook of 1,000,000 rows and 3,000,003 formulas written by openpyxl (so no formula has
-a cached value), `recalculate` reads the file, computes every formula and writes the values
-back in 48.6 s, with a peak memory of 1,216 MB. Changing the first cell of a dependency chain
-a million cells long and computing again takes 5.1 s. Measured with xlrecalc 0.11.0 and xlio
-0.4.0 on an Apple M4 Pro with 24 GB, CPython 3.11.18, best of three. Formulas of the same relative shape share
-one compiled function, and dependents come from their geometry rather than per-cell links, so
-most of the memory holds the cells' values.
+On a workbook of 1,000,000 rows and 3,000,003 formulas written by openpyxl (so no formula has a
+cached value), `recalculate` reads the file, computes every formula and writes the values back in
+48.6 s, with a peak resident set (`ru_maxrss`) of 1,216 MB. Changing the first cell of a dependency
+chain a million cells long and computing again takes 5.1 s. Measured with xlrecalc 0.11.0 and xlio
+0.4.0 on an Apple M4 Pro with 24 GB, CPython 3.11.18, best of three. Formulas of the same relative
+shape share one compiled function, and dependents come from their geometry rather than per-cell
+links, so most of the memory holds the cells' values.
 
 To reproduce, in a clone of the repository:
 
@@ -245,6 +245,11 @@ cd bench && uv run python gen.py 1000000 && cd ..   # the workbook (openpyxl)
 uv run python bench/recalc_bench.py 1000000         # read, compute, write back
 uv run python bench/engine_bench.py 1000000 --xlsx  # compute, then change A1
 ```
+
+## Security
+
+To report a security problem, see
+[SECURITY.md](https://github.com/sheetmill/xlrecalc/blob/main/SECURITY.md).
 
 ## Part of sheetmill
 

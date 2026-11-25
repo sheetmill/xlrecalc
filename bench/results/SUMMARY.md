@@ -181,7 +181,7 @@ reader, before it moved into xlio, 0.07 s, 0.59 s and 5.9 s (25 to 28 MB).
 environment (Python 3.11, Apple M4 Pro): openpyxl's `bench_<N>.xlsx` (no cached values, so every
 formula is evaluated) is loaded (through xlio), evaluated, and written in place by xlio's
 surgical writer, which patches every formula cell; then written once more, now holding its
-values, which patches nothing. One run each, xlio 0.3.0 (the README states the 1M-row figures);
+values, which patches nothing. One run each, xlio 0.3.0 (the README states 0.11.0's figures, below);
 `engine_bench.py 1000000 --xlsx` then changes A1 and recomputes in 5.26 s and 5.35 s (two runs):
 
 | rows | formulas | load | evaluate | write | total | write, nothing changed | file before / after | peak |
