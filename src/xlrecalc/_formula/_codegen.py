@@ -172,8 +172,8 @@ class Compiled:
     features: frozenset[str] = frozenset()
     """Features the formula uses that are not implemented yet."""
     forms: frozenset[str] = frozenset()
-    """Forms in its text that are not computed when evaluation reaches them (a union of ranges, a
-    structured reference, ``CELL`` given a formatting kind as text), named for ``Formula``."""
+    """Forms in its text that are not computed when evaluation reaches them (a structured
+    reference, ``CELL`` given a formatting kind as text), named for ``Formula``."""
     intersects: bool = False
     """Whether, as a legacy formula, it takes an implicit intersection somewhere: an operator or
     a one-value argument given a range outside an array argument (§7.7)."""
@@ -374,9 +374,13 @@ class _Generator:
                 return self.chain(node, top)
             case Group(_, inner, _):
                 return self.expr(inner)
-            case Union(items, _):
-                self.forms.add("a union of ranges")
-                return self.emit(f"ops.union({', '.join(self.opaque(i) for i in items)})")
+            case Union(items, _):  # its items are references: a cell compiles as one
+                saved, self.padded = self.padded, False
+                try:
+                    code = ", ".join(self.argument(i) for i in items)
+                finally:
+                    self.padded = saved
+                return self.emit(f"ops.union({code})")
             case Call(name, _, args, _, _, prefix):
                 # An element-wise function passes the outer mark on to its lifted argument.
                 fn = self.registry.get(name.text.upper()) if prefix is None else None
@@ -623,9 +627,9 @@ class _Generator:
         if name.text.upper() in ("ROW", "COLUMN") and len(args) == 1 and _is_union(args[0]):
             self.calls.add(name.text.upper())
             return self.constant(ErrorValue.REF)  # of several areas (capture array_refs)
-        if name.text.upper() in ("AREAS", "ISREF") and len(args) == 1 and _is_union(args[0]):
-            self.calls.add(name.text.upper())  # known from the formula alone (capture info_family)
-            return self.constant(float(_areas(args[0])) if name.text.upper() == "AREAS" else True)
+        if name.text.upper() == "ISREF" and len(args) == 1 and _is_union(args[0]):
+            self.calls.add("ISREF")  # known from the formula alone (capture info_family)
+            return self.constant(True)
         kind = _text_literal(args[0]) if name.text.upper() == "CELL" and args else None
         if kind is not None and kind.lower() in CELL_FORMATTING:
             self.forms.add(f'CELL("{kind.lower()}")')
@@ -805,13 +809,6 @@ def _is_union(node: Node) -> bool:
     while isinstance(node, Group):
         node = node.inner
     return isinstance(node, Union)
-
-
-def _areas(node: Node) -> int:
-    """The areas a union names, nested unions included."""
-    while isinstance(node, Group):
-        node = node.inner
-    return sum(_areas(item) for item in node.items) if isinstance(node, Union) else 1
 
 
 def kind_at(kinds: tuple[str, ...], i: int, cycle: int = 1) -> str:

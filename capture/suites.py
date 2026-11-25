@@ -3940,16 +3940,10 @@ would have to quote): numbers in A1:A3, mixed kinds in B1:B3 (text, a logical, a
 as text, an empty text), an error in C2."""
 
 
-def three_d() -> list[Case]:
-    """3-D references (``Jan:Mar!A1:A3``): every function that takes a reference, then the forms.
-
-    Each function is called once over the numbers of three sheets; the aggregates also over the
-    mixed kinds and over the error. Then the span reversed, one sheet, one cell, a whole column,
-    a span holding the formula's own sheet, a quoted span, a 3-D reference in arithmetic, under
-    ``IF`` and among other arguments.
-    """
-    r, mixed, err = "Jan:Mar!A1:A3", "Jan:Mar!B1:B3", "Jan:Mar!C1:C3"
-    calls = [
+def _reference_calls(r: str, wide: str) -> list[str]:
+    """Every function that takes a reference, called once with ``r`` (``wide``: two columns, for
+    ``VLOOKUP`` and ``HLOOKUP``): the cases ``three_d`` and ``unions`` share."""
+    return [
         f"SUM({r})", f"AVERAGE({r})", f"AVERAGEA({r})", f"COUNT({r})", f"COUNTA({r})",
         f"COUNTBLANK({r})", f"MAX({r})", f"MAXA({r})", f"MIN({r})", f"MINA({r})",
         f"PRODUCT({r})", f"STDEV({r})", f"_xlfn.STDEV.S({r})", f"_xlfn.STDEV.P({r})",
@@ -3961,13 +3955,25 @@ def three_d() -> list[Case]:
         f"SUMPRODUCT({r})", f"SUBTOTAL(9,{r})", f"SUBTOTAL(109,{r})",
         f"_xlfn.AGGREGATE(9,0,{r})", f'_xlfn.CONCAT({r})', f'_xlfn.TEXTJOIN(",",TRUE,{r})',
         f'COUNTIF({r},">5")', f'SUMIF({r},">5")', f'AVERAGEIF({r},">5")',
-        f'COUNTIFS({r},">5")', f'_xlfn.MAXIFS({r},{r},">5")', "VLOOKUP(10,Jan:Mar!A1:B3,2,FALSE)",
-        "HLOOKUP(10,Jan:Mar!A1:B3,2,FALSE)", f"MATCH(20,{r},0)", f"INDEX({r},2)",
+        f'COUNTIFS({r},">5")', f'_xlfn.MAXIFS({r},{r},">5")', f"VLOOKUP(10,{wide},2,FALSE)",
+        f"HLOOKUP(10,{wide},2,FALSE)", f"MATCH(20,{r},0)", f"INDEX({r},2)",
         f"INDEX({r},2,1)", f"LOOKUP(20,{r})", f"_xlfn.XLOOKUP(20,{r},{r})", f"ROWS({r})",
         f"COLUMNS({r})", f"ROW({r})", f"COLUMN({r})", f"AREAS({r})", f"_xlfn.SHEETS({r})",
         f"_xlfn.SHEET({r})", f"ISREF({r})", f"N({r})", f"T({r})", f'CELL("address",{r})',
         f"ISBLANK({r})", f"_xlfn.FORMULATEXT({r})", f"OFFSET({r},0,0)", f"SUM(OFFSET({r},0,0))",
     ]  # fmt: skip
+
+
+def three_d() -> list[Case]:
+    """3-D references (``Jan:Mar!A1:A3``): every function that takes a reference, then the forms.
+
+    Each function is called once over the numbers of three sheets; the aggregates also over the
+    mixed kinds and over the error. Then the span reversed, one sheet, one cell, a whole column,
+    a span holding the formula's own sheet, a quoted span, a 3-D reference in arithmetic, under
+    ``IF`` and among other arguments.
+    """
+    r, mixed, err = "Jan:Mar!A1:A3", "Jan:Mar!B1:B3", "Jan:Mar!C1:C3"
+    calls = _reference_calls(r, "Jan:Mar!A1:B3")
     cases = [Case("function", c) for c in calls]
     for fn in ("SUM", "COUNT", "COUNTA", "AVERAGEA", "MAXA", "MINA", "PRODUCT"):
         cases.append(Case("mixed", f"{fn}({mixed})"))
@@ -3981,6 +3987,102 @@ def three_d() -> list[Case]:
         "SUM(Jan:Mar!A1:A3,Jan:Mar!A1:A3)", "MAX(Feb:Mar!A1:A3)-MIN(Jan:Feb!A1:A3)",
     ]  # fmt: skip
     cases += [Case("form", f) for f in forms]
+    return cases
+
+
+_UNIONS_TABLE: dict[str, Input] = {
+    **{f"X{r}": float(r) for r in (1, 2, 3)},
+    **{f"Y{r}": t for r, t in ((1, "a"), (2, "b"), (3, "c"))},
+    **{f"Z{r}": 10.0 * r for r in (1, 2, 3)},
+    **{f"AA{r}": t for r, t in ((1, "d"), (2, "e"), (3, "f"))},
+    **{f"AB{r}": 100.0 * r for r in (1, 2, 3)},
+    "AC1": "x", "AC2": True,
+    "AD1": 4.0, "AD2": "5", "AD3": False,
+    "AE2": NA,
+    **{k: v for k, v in _THREE_D_TABLE.items() if k[:4] in ("Jan!", "Feb!", "Mar!")},
+}  # fmt: skip
+"""The case sheet's areas, right of the formulas: numbers in X1:X3, Z1:Z3 and AB1:AB3, texts in
+Y1:Y3 and AA1:AA3, mixed kinds in AC1:AD3 (a text, a logical, a blank, a number, a number as
+text, a logical), an error in AE2; and sheets Jan, Feb and Mar of ``three_d``."""
+
+
+def unions() -> list[Case]:
+    """Unions of references (``(X1:X3,Z1:Z3)``): every function ``three_d`` calls, then the forms.
+
+    Each function is called once with a union of two areas of one column each; the aggregates
+    also over mixed kinds and over an error. Then overlapping areas, single cells, three areas,
+    nested unions, ``INDEX`` with an area number, ``AREAS``, ``ROWS`` and ``COLUMNS``, criteria
+    functions, a union in an operator, under ``IF`` and ``CHOOSE``, in array arithmetic, among
+    other arguments, intersected, as a formula's result, over whole columns, across sheets and
+    of 3-D references.
+    """
+    u = "(X1:X3,Z1:Z3)"
+    cases = [Case("function", c) for c in _reference_calls(u, "(X1:Y3,Z1:AA3)")]
+    for fn in ("SUM", "COUNT", "COUNTA", "AVERAGEA", "MAXA", "MINA", "PRODUCT"):
+        cases.append(Case("mixed", f"{fn}((AC1:AC3,AD1:AD3))"))
+    for fn in ("SUM", "COUNT", "COUNTA", "MAX"):
+        cases.append(Case("error", f"{fn}((X1:X3,AE1:AE3))"))
+    t, nested = "(X1:X3,Z1:Z3,AB1:AB3)", "((X1:X3,Z1:Z3),AB1:AB3)"
+    forms = {
+        "overlap": [
+            "SUM((X1:X2,X2:X3))", "COUNT((X1:X2,X2:X3))", "AVERAGE((X1:X2,X2:X3))",
+            "LARGE((X1:X2,X2:X3),2)", "SMALL((X1:X2,X2:X3),3)", "RANK(2,(X1:X2,X2:X3))",
+            "_xlfn.CONCAT((X1:X2,X2:X3))", "SUM((X1:X3,X1:X3))", "AREAS((X1:X3,X1:X3))",
+            "MEDIAN((X1:X2,X2:X3))",
+        ],
+        "cells": [
+            "SUM((X1,Z2))", "SUM((X1,Z2,AB3))", "COUNT((X1,X1))", "MAX((X1,AB3))",
+            "AREAS((X1,Z1))", "ISREF((X1,Z1))", "ROWS((X1,X1))", "N((X1,Z1))",
+        ],
+        "three": [
+            f"SUM({t})", f"COUNT({t})", f"AREAS({t})", f"LARGE({t},4)", f"MEDIAN({t})",
+            f"INDEX({t},1,1,3)", f"_xlfn.TEXTJOIN(\"-\",TRUE,{t})",
+        ],
+        "nested": [
+            f"SUM({nested})", f"AREAS({nested})", f"INDEX({nested},2,1,3)",
+            "AREAS((X1:X3,(Z1:Z3,AB1:AB3)))", "SUM((X1:X3,(Z1:Z3,AB1:AB3)))",
+            "SUM(((X1:X3)))", "AREAS(((X1:X3)))",
+        ],
+        "index": [
+            f"INDEX({u},2,1,1)", f"INDEX({u},2,1,2)", f"INDEX({u},3,1,2)", f"INDEX({u},1,1,3)",
+            f"INDEX({u},1,1,0)", f"INDEX({u},2,,2)", f"INDEX({u},4,1,2)", f"INDEX({u},1,2,2)",
+            f"INDEX({u},2,1,1.9)", f'INDEX({u},2,1,"2")', f"INDEX({u},2,1,TRUE)",
+            f"INDEX({u},2,1,-1)", f"SUM(INDEX({u},0,1,2))", f"SUM(INDEX({u},0,0,2))",
+            f"ROW(INDEX({u},2,1,2))", f'CELL("address",INDEX({u},2,1,2))',
+            f"AREAS(INDEX({u},1,1,2))", "INDEX((X1:Y3,Z1:AA3),2,2,2)",
+            "SUM(INDEX((X1:X3,Z1:Z3),0,1,2):AB3)",
+        ],
+        "shape": [
+            "COLUMNS((X1:Y3,Z1:Z3))", "ROWS((X1:X3,Z1:Z3,AB1:AB3))", "ROW((X2,Z3))",
+            "COLUMN((X2,Z3))", "AREAS(X1:X3)",
+        ],
+        "criteria": [
+            'COUNTIF((X1,Z1),">0")', 'SUMIF(X1:X3,">1",(Z1:Z3,AB1:AB3))',
+            'SUMIFS(X1:X3,(Z1:Z3,AB1:AB3),">1")', 'SUMPRODUCT((X1:X3,Z1:Z3)*1)',
+        ],
+        "operator": [
+            "(X1,Z1)+1", "-(X1,Z1)", '(X1:X3,Z1:Z3)&""', "(X1,Z1)=1", "(X1:X3,Z1:Z3)",
+            "(X1,Z1)", "SUM((X1:X3,Z1:Z3) X2:Z2)", "SUM((X1,Z2):X3)", "X1+(X1,Z1)",
+        ],
+        "context": [
+            f"IF(TRUE,{u})", f"SUM(IF(TRUE,{u}))", "SUM(IF(FALSE,1,(X1,Z1)))",
+            f"SUM(CHOOSE(2,X1,{u}))", f"SUM({u}*1)", f"SUM({u}+0)", f"MAX(IF({u}>5,1))",
+            f"SUM({u},5,X2)", f"SUM({u},{u})", f"SUM({u})/COUNT({u})", f"ISERROR({u})",
+            "SUM(OFFSET((X1,Z1),1,0))",
+        ],
+        "column": ["SUM((X:X,Z:Z))", "COUNT((X:X,AB1))", "AREAS((X:X,Z:Z))"],
+        "sheets": [
+            "SUM((Jan!A1:A3,Jan!B1:B3))", "COUNT((Jan!A1:A3,Jan!B1:B3))",
+            "AREAS((Jan!A1:A3,Jan!B1:B3))", "SUM((Jan!A1,Feb!A1))", "COUNT((Jan!A1,Feb!A1))",
+            "AREAS((Jan!A1,Feb!A1))", "(Jan!A1,Feb!A1)", "SUM((Jan!A1,X1))", "SUM((X1,Jan!A1))",
+        ],
+        "three_d": [
+            "SUM((Jan:Mar!A1,Jan:Mar!A2))", "SUM((Jan:Mar!A1,X1))", "AREAS((Jan:Mar!A1,X1))",
+            "COUNT((Jan:Feb!A1:A3,Mar!A1))",
+        ],
+    }  # fmt: skip
+    for tag, formulas in forms.items():
+        cases += [Case(tag, f) for f in formulas]
     return cases
 
 
@@ -5278,4 +5380,5 @@ SUITES = {
     "bare_names": Suite(bare_names, fixed={"Z1": 1.0, "Z2": 2.0}),
     "ties_tiny": Suite(ties_tiny),
     "three_d": Suite(three_d, fixed=_THREE_D_TABLE),
+    "unions": Suite(unions, fixed=_UNIONS_TABLE),
 }

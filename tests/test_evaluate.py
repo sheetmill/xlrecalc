@@ -111,13 +111,22 @@ def test_a_function_excel_has_and_the_package_does_not_compute_raises() -> None:
     assert issubclass(UnsupportedError, FormulaError)
 
 
+def test_a_union_is_computed_where_a_capture_shows_excel_reading_one() -> None:
+    values = {"A1": 1.0, "A2": 2.0, "C1": 10.0}
+    assert evaluate("=SUM((A1,A2,C1))", values) == 13.0
+    assert evaluate("=INDEX((A1:A2,C1),1,1,2)", values) == 10.0
+    f = Formula.parse('=CELL("address",(A1,A2))')
+    assert f.unsupported == frozenset()  # found while evaluating, as for LINEST
+    with pytest.raises(UnsupportedError, match=re.escape("a union of ranges in CELL")):
+        f.evaluate(values)
+
+
 @pytest.mark.parametrize(
     ("text", "label"),
     [
         ('=CELL("format",A1)', 'CELL("format")'),
         ('=CELL("Width",A1)', 'CELL("width")'),
         ('=CELL("color",A1)', 'CELL("color")'),
-        ("=SUM((A1,A2))", "a union of ranges"),
         ("=Table1[Price]", "structured reference"),
         ("=Sheet1:Sheet2!A1", "external or 3-D reference"),
         ("=[1]Sheet1!A1", "external or 3-D reference"),

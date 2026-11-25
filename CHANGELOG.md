@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   names bare, such a name is a macro's or an add-in's function: the cell keeps the file's value
   and is reported, as for any function the package does not compute, under a label saying so. A
   bare `SORT` or `FILTER` stays refused, and a bare `LET`, not captured, keeps its value.
+- `xlrecalc.evaluate` and `Formula.evaluate` compute a union of ranges, where they raised
+  `UnsupportedError`; a union given to a function no capture shows reading one still raises, while
+  evaluating, and `Formula.unsupported` no longer names `a union of ranges`.
 
 ### Added
 - 3-D references (`SUM(Jan:Mar!A1:A3)`), read as capture `three_d` shows Excel for Mac and for
@@ -25,6 +28,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `SHEET` of one; `#VALUE!` in the lookup, criteria and reference functions, `#REF!` in `MODE` and
   `SUMPRODUCT` and as a value. An edit on any sheet of the span reaches the formula. A function
   not captured with a 3-D reference keeps the file's value and is reported, as the form was before.
+- Unions of references (`SUM((A1:A3,C1:C3))`), read as capture `unions` shows Excel for Mac and
+  for Windows reading them, with the union rows of `modern` and `info_family`: the lists of values,
+  the statistics and `SUBTOTAL` over every area, an overlapped cell once for each area holding it;
+  `LARGE`, `SMALL`, `RANK`, `PERCENTILE` and `QUARTILE` over the areas as one list; `INDEX`'s area
+  number; `AREAS`, nested unions flattened; `N`, `T`, `FORMULATEXT` and `ISFORMULA` of the first
+  cell; `IF` and `CHOOSE` passing a union on; an intersection with a union and a range from one.
+  `#VALUE!` as a value, in an operator or an array, in `CONCAT`, `TEXTJOIN`, `MODE`,
+  `SUMPRODUCT` and the criteria functions, and for areas on two sheets; `#N/A` in the lookups;
+  `#REF!` in `ROWS` and `COLUMNS`; `#NAME?` for a 3-D reference in a union. An edit in any area
+  reaches the formula. A function given a union that no capture shows reading one (`CELL`)
+  keeps the file's value and is reported, under `a union of ranges in CELL`; such cells were
+  all kept and reported before.
 - `SECURITY.md`, linked from the README: what the package does with untrusted workbooks, how to
   report a security problem privately, through GitHub's private vulnerability reporting, where a
   problem of xlio, xlformat or sheetpeek goes, and which releases receive fixes (the latest).

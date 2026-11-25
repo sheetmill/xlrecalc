@@ -85,6 +85,7 @@ def test_there_is_a_windows_capture() -> None:
         "textfmt.tsv",
         "three_d.tsv",
         "ties_tiny.tsv",
+        "unions.tsv",
         "whole_columns.tsv",
         "workdays.tsv",
         "xirr_method.tsv",

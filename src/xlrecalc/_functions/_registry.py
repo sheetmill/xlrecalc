@@ -49,6 +49,7 @@ counted apart from both.
 from __future__ import annotations
 
 import inspect
+import math
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
@@ -230,12 +231,14 @@ def _given_lambda(name: str, kinds: tuple[str, ...], cycle: int, args: tuple[Any
     return None
 
 
-# What each function does with a reference of several areas, a 3-D reference (capture three_d,
-# both platforms): "expand", read each area as an argument of its own (the lists of values);
-# "stack", read the cells of every area as one array (an argument that takes one range); "pass",
-# take the areas as they are (IF returns its branch; RANK reads every area); or the result
-# whatever the areas hold. A function not here was not captured with one: its cell is
-# reported as not computed.
+# What each function does with a reference of several areas (captures three_d and unions, both
+# platforms), one table for a 3-D reference and one for a union: "expand", read each area as an
+# argument of its own (the lists of values); "stack", read the cells of every area as one array
+# (an argument that takes one range); "pass", take the areas as they are (IF and CHOOSE return
+# their branch; RANK reads every area); "first", read the first area's first cell (N, T,
+# FORMULATEXT of a union); "index", pick the area INDEX's area number names; or the result
+# whatever the areas hold. A function not in the table of its form was not captured with it:
+# its cell is reported as not computed.
 _AREAS: dict[str, Any] = {
     **dict.fromkeys(
         (
@@ -268,7 +271,43 @@ _AREAS: dict[str, Any] = {
 }  # fmt: skip
 
 
-def _with_areas(name: str, args: tuple[Any, ...]) -> tuple[Any, ...] | Any:
+_UNION_AREAS: dict[str, Any] = {
+    **dict.fromkeys(
+        (
+            "SUM", "AVERAGE", "AVERAGEA", "COUNT", "COUNTA", "MAX", "MAXA", "MIN", "MINA",
+            "PRODUCT", "STDEV", "_XLFN.STDEV.S", "_XLFN.STDEV.P", "STDEVA", "STDEVP", "STDEVPA",
+            "VAR", "_XLFN.VAR.S", "_XLFN.VAR.P", "VARA", "VARP", "VARPA", "MEDIAN", "AVEDEV",
+            "DEVSQ", "GEOMEAN", "HARMEAN", "KURT", "SKEW", "SUMSQ", "SUBTOTAL",
+        ),
+        "expand",
+    ),
+    **dict.fromkeys(("LARGE", "SMALL", "PERCENTILE", "QUARTILE"), "stack"),
+    **dict.fromkeys(("IF", "CHOOSE", "RANK"), "pass"),
+    **dict.fromkeys(("N", "T", "_XLFN.FORMULATEXT", "_XLFN.ISFORMULA"), "first"),
+    "INDEX": "index",
+    **dict.fromkeys(
+        (
+            "COUNTBLANK", "COUNTIF", "SUMIF", "AVERAGEIF", "COUNTIFS", "SUMIFS", "_XLFN.MAXIFS",
+            "MODE", "SUMPRODUCT", "_XLFN.CONCAT", "_XLFN.TEXTJOIN", "OFFSET",
+        ),
+        ErrorValue.VALUE,
+    ),
+    **dict.fromkeys(
+        ("VLOOKUP", "HLOOKUP", "MATCH", "LOOKUP", "_XLFN.XLOOKUP"), ErrorValue.NA
+    ),
+    **dict.fromkeys(("ROWS", "COLUMNS", "ROW", "COLUMN"), ErrorValue.REF),
+    "ISREF": True,
+    "ISBLANK": False,
+    # as the value #VALUE! (capture info_family)
+    "ISERROR": True, "ISNONTEXT": True, "TYPE": 16.0, "ERROR.TYPE": 3.0,
+    "ISEVEN": ErrorValue.VALUE, "ISODD": ErrorValue.VALUE,
+    "AREAS": lambda areas: float(len(areas.refs)),
+    "_XLFN.SHEETS": 1.0,
+    "_XLFN.SHEET": lambda areas: float(areas.refs[0].sheet + 1),
+}  # fmt: skip
+
+
+def _with_areas(name: str, args: tuple[Any, ...], ctx: Context) -> tuple[Any, ...] | Any:
     """The arguments a function reads given a reference of several areas, or its result.
 
     Returns a tuple of arguments, or the result itself (any other value).
@@ -276,9 +315,11 @@ def _with_areas(name: str, args: tuple[Any, ...]) -> tuple[Any, ...] | Any:
     Raises:
         NotImplementedFormError: The function was not captured with such a reference.
     """
-    rule = _AREAS.get(name)
+    areas = next(a for a in args if type(a) is Areas)
+    rule = (_UNION_AREAS if areas.union else _AREAS).get(name)
     if rule is None:
-        raise NotImplementedFormError(f"a 3-D reference in {name}")
+        form = "a union of ranges" if areas.union else "a 3-D reference"
+        raise NotImplementedFormError(f"{form} in {name}")
     if rule == "pass":
         return args
     if rule == "expand":
@@ -288,9 +329,38 @@ def _with_areas(name: str, args: tuple[Any, ...]) -> tuple[Any, ...] | Any:
             tuple(row for ref in a.refs for row in to_array(ref)) if type(a) is Areas else a
             for a in args
         )
+    if rule == "first":
+        return tuple(_first_cell(a) if type(a) is Areas else a for a in args)
+    if rule == "index":
+        return _index_area(args, ctx)
     if callable(rule):
-        return rule(next(a for a in args if type(a) is Areas))
+        return rule(areas)
     return rule
+
+
+def _first_cell(areas: Areas) -> Ref:
+    first = areas.refs[0]
+    return Ref(first.source, first.sheet, first.r1, first.c1, first.r1, first.c1)
+
+
+def _index_area(args: tuple[Any, ...], ctx: Context) -> tuple[Any, ...] | ErrorValue:
+    """``INDEX``'s arguments with the area its area number picks (capture unions).
+
+    The number is truncated and is 1 when left out; below 1 it is ``#VALUE!``, past the last
+    area ``#REF!``.
+    """
+    if type(args[0]) is not Areas:
+        return VALUE
+    given = args[3] if len(args) > 3 and args[3] is not MISSING else 1.0
+    n = to_number(given, ctx)
+    if isinstance(n, ErrorValue):
+        return n
+    k = math.trunc(n)
+    if k < 1:
+        return VALUE
+    if k > len(args[0].refs):
+        return ErrorValue.REF
+    return (args[0].refs[k - 1], *args[1:3], 1.0)
 
 
 def _map_padded(call: Callable[..., Any], args: tuple[Any, ...], pads: list[int]) -> Padded:
@@ -378,7 +448,7 @@ def function(
 
         def call(ctx: Context, *args: Any) -> Any:
             if Areas in map(type, args):
-                given = _with_areas(upper, args)
+                given = _with_areas(upper, args, ctx)
                 if type(given) is not tuple:
                     return given
                 args = given

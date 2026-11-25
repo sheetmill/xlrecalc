@@ -24,8 +24,9 @@ from tests.test_array_limit import two_sheets
 from tests.test_captures import SUITES, column_letters, formula_text
 from tests.xlsx_files import DOC, MAIN, PKG, package
 from xlrecalc._formula import FormulaSyntaxError, TokenizeError, parse
-from xlrecalc._formula._nodes import Call, Invoke, Union
+from xlrecalc._formula._nodes import Call, Group, Invoke, Union
 from xlrecalc._formula._template import cell_axes
+from xlrecalc._functions._registry import _UNION_AREAS
 from xlrecalc._values import BLANK, ErrorValue
 
 SENTINEL = 987654.125
@@ -158,11 +159,9 @@ def test_array_refs_leave_no_old_value_unreported():
 
 
 NOT_IMPLEMENTED = [
-    "SUM((D!A1,D!B2))",
-    "COUNT((D!A1,D!B2))",
-    "LARGE((D!A1,D!B2),1)",
-    "(D!A1,D!B2)",
-    "SUM(D!A1:A2,(D!A1,D!B2))",
+    'CELL("address",(D!A1,D!B2))',  # a union where no capture shows Excel reading one
+    "ABS((D!A1,D!B2))",
+    "SUM(D!A1:A2,ABS((D!A1,D!B2)))",
     "SUM(1)(2)",
     "SUM(S:D!A1)",
     "SUM(Table1[a])",
@@ -178,8 +177,8 @@ def test_a_form_not_implemented_keeps_its_value_and_is_reported(formula):
 
 
 def _has_form_not_implemented(node: object) -> bool:
-    """Whether a parsed formula has a union (not as ``ROW``'s reference) or a call of a result
-    other than a ``LAMBDA``'s."""
+    """Whether a parsed formula calls a result other than a ``LAMBDA``'s, or gives a union to a
+    function whose union rules (``_UNION_AREAS``) do not name it."""
     stack = [node]
     while stack:
         item = stack.pop()
@@ -189,8 +188,25 @@ def _has_form_not_implemented(node: object) -> bool:
                 callee = callee.callee
             if not (isinstance(callee, Call) and callee.name.text.upper() == "_XLFN.LAMBDA"):
                 return True
-        if isinstance(item, Call) and item.name.text.upper() in ("ROW", "COLUMN"):
-            continue
+        if isinstance(item, Call):
+            name = item.name.text.upper()
+            if name not in _UNION_AREAS and name not in ("ROW", "COLUMN", "ISREF"):
+                for arg in item.args:
+                    while isinstance(arg, Group):
+                        arg = arg.inner
+                    if isinstance(arg, Union):
+                        return True
+        if isinstance(item, list | tuple):
+            stack.extend(item)
+        elif dataclasses.is_dataclass(item):
+            stack.extend(getattr(item, f.name) for f in dataclasses.fields(item))
+    return False
+
+
+def _has_union(node: object) -> bool:
+    stack = [node]
+    while stack:
+        item = stack.pop()
         if isinstance(item, Union):
             return True
         if isinstance(item, list | tuple):
@@ -201,22 +217,26 @@ def _has_form_not_implemented(node: object) -> bool:
 
 
 def test_every_such_form_in_the_formula_corpus_is_reported():
-    """Generated from the corpus's parse trees, so a new form of this kind cannot be missed."""
+    """Generated from the corpus's parse trees, so a new form of this kind cannot be missed: each
+    formula holding a union or a call of a result computes without an exception, and one whose
+    form is not computed is reported."""
     formulas = []
     for text in FORMULAS:
         try:
-            if _has_form_not_implemented(parse(text).root):
-                formulas.append(text)
+            root = parse(text).root
         except (FormulaSyntaxError, TokenizeError):
             continue
+        if _has_union(root) or _has_form_not_implemented(root):
+            formulas.append((text, _has_form_not_implemented(root)))
     assert formulas
     wrong = []
-    for text in formulas:
+    for text, not_computed in formulas:
         data = two_sheets(escape(text), cached=str(SENTINEL))
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / "book.xlsx"
             path.write_bytes(data)
             report = xlrecalc.recalculate(path, recalc_on_load="always")
-        if not (report.uncomputed or report.from_kept or report.refused or report.circular):
+        reported = report.uncomputed or report.from_kept or report.refused or report.circular
+        if report.exceptions or (not_computed and not reported):
             wrong.append(text)
     assert wrong == []

@@ -367,7 +367,7 @@ def SHEETS(ctx: Any, v: Any = MISSING) -> Any:
 
 @function("AREAS", "raw", errors=True, category=L)
 def AREAS(ctx: Any, ref: Any) -> Any:
-    """The number of areas in a reference; a union is counted where the formula is compiled."""
+    """The number of areas in a reference: 1 here, a union's count in ``_UNION_AREAS``."""
     if isinstance(ref, Ref):
         return 1.0
     return ref if isinstance(ref, ErrorValue) else VALUE

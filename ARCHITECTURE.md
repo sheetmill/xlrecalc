@@ -102,7 +102,7 @@ three `SUM` cells over whole columns. Full tables in `bench/results/SUMMARY.md`.
 | error | `ErrorValue` (§4.2) | not a `str` |
 | blank | `BLANK` internally, `None` in the public API | distinct from `""` and `0`; coerces by context |
 | array | a tuple of rows, each a tuple of values (§7.7) | array constants, array arithmetic, functions returning arrays |
-| reference | `Ref` (sheet, box, or a union of boxes) | exists only during evaluation |
+| reference | `Ref` (a sheet and a box), or `Areas` (several: a 3-D reference or a union, §7.3) | exists only during evaluation |
 
 Type tests in the hot path use `type(v) is float` and friends; because `bool` is a subclass of
 `int` and Excel's logicals are not numbers, no test uses `isinstance(v, int | float)`.
@@ -686,6 +686,22 @@ criteria and reference functions `#VALUE!`. A function not captured with one is 
 computed (`a 3-D reference in RANK.EQ`) and keeps the file's value. As a value, in an operator, in
 an array or as a formula's result, a 3-D reference is `#REF!`.
 
+A union (`(A1:A3,C1:C3)`) is an `Areas` too, its areas as written, a nested union's flattened,
+an overlapped cell read once for each area holding it (`ops.union`; its dependencies are the
+RefSpecs of its areas). Areas on two sheets are `#VALUE!`, and a 3-D reference among them
+`#NAME?`, as Excel reads them in a file. The registry's `_UNION_AREAS` table, from capture
+`unions` (both platforms) and the union rows of `modern` and `info_family`, differs from the 3-D
+one: `SUBTOTAL` reads each area, `CONCAT`, `TEXTJOIN`, `MODE` and `SUMPRODUCT` are `#VALUE!`, the
+lookups `#N/A`, `ROWS`, `COLUMNS`, `ROW` and `COLUMN` `#REF!`; `AREAS` counts the areas, `INDEX`
+reads the area its area number names (truncated; below 1 `#VALUE!`, past the last `#REF!`), `N`,
+`T`, `FORMULATEXT` and `ISFORMULA` the first area's first cell, and `CHOOSE` passes a union on
+as `IF` does. The functions of a value (`TYPE`, `ERROR.TYPE`, `ISERROR`, `ISNONTEXT`, `ISEVEN`)
+read `#VALUE!`, which a union is as a value, in an operator, in an array or as a formula's
+result. An intersection with a union is the union of the areas that meet, and a range from one
+is the range around its areas. `ISREF`, `ROW` and `COLUMN` of a union written in the formula are
+known when it is compiled. A function the table does not name is reported as not computed (`a
+union of ranges in CELL`).
+
 ### 7.4 When cached values are trusted
 
 A workbook loaded from a file starts with the cached values the file holds. The rule:
@@ -1074,7 +1090,8 @@ Behavior that is not the obvious reading, each from its capture:
 - The database functions (captures `misc`, `database_family`): a text condition matches by prefix;
   a computed criterion is not supported, and the cell is reported.
 - `INDEX` with a 0 index gives a whole row or column, and into a range returns a reference; its
-  area number is 1, since a union is not computed (below 1 `#VALUE!`, above `#REF!`).
+  area number picks an area of a union (§7.3), and of one range is 1 (below 1 `#VALUE!`, above
+  `#REF!`).
 - `SUBTOTAL` reads the rows the file marks hidden: codes 101 to 111 leave out every hidden row,
   and 1 to 11 do too when a filter is hiding rows on a sheet the call names (capture
   `hidden_rows`).
@@ -1532,12 +1549,13 @@ then from the resolver, asked once for each box the evaluation reads (`OFFSET` a
 included); a cell neither gives is blank, as in Excel. The formula is a dynamic array unless
 `legacy=True`; a dynamic result comes back as rows. A name Excel does not know evaluates to
 `#NAME?`; a function Excel has (`EXCEL_NAMES`, from the `formula_bar` capture's function list) that
-the package does not compute raises `UnsupportedError`, as does a form it does not compute (a union
-of ranges, a structured or external reference, a 3-D reference, which has no sheets outside a
-workbook, `CELL`'s formatting kinds: what the report names in a workbook). `Formula.unsupported`
-names what the text shows, the code generator recording the forms it meets (`Compiled.forms`); a
-case that depends on the values (`CELL` given its kind in a cell, `LINEST` with several regressors)
-raises while evaluating. The template is run by the engine that compiled it, since the operators
+the package does not compute raises `UnsupportedError`, as does a form it does not compute (a
+structured or external reference, a 3-D reference, which has no sheets outside a workbook,
+`CELL`'s formatting kinds: what the report names in a workbook). `Formula.unsupported` names what
+the text shows, the code generator recording the forms it meets (`Compiled.forms`); a case that
+depends on the values or on the function reached (`CELL` given its kind in a cell, `LINEST` with
+several regressors, a union given to a function no capture shows reading one) raises while
+evaluating. The template is run by the engine that compiled it, since the operators
 read that engine's position; each call clears its cells and names first. Tests:
 `tests/test_evaluate.py`, where a captured formula evaluated alone gives the engine's value in the
 capture's sheet, in every suite whose inputs are values (not formulas or fixed cells), unsupported

@@ -12,12 +12,12 @@ from types import GeneratorType
 from typing import Any
 
 from xlrecalc._arith import flush, snap
-from xlrecalc._arrays import NotImplementedFormError, Padded, broadcast, pair
+from xlrecalc._arrays import Padded, broadcast, pair
 from xlrecalc._coerce import Context, Raw, scalar, to_bool, to_number, to_text
 from xlrecalc._compare import compare, switch_equal, utf16_length
 from xlrecalc._formula import MISSING
 from xlrecalc._numtext import DBL_MIN
-from xlrecalc._values import BLANK, ErrorValue, Lambda, Ref, Value
+from xlrecalc._values import BLANK, Areas, ErrorValue, Lambda, Ref, Value
 
 __all__ = ["Ops"]
 
@@ -33,6 +33,21 @@ NESTED_HELPERS = 20
 """Calls of a function value made by ``MAP`` and its siblings, one inside another, that Excel
 takes; the next is ``#VALUE!`` (capture ``lambda_more``: recursion through ``MAP`` 20 deep
 computes, 21 does not). Each such call is a call stack of its own, so this bounds Python's."""
+
+
+def _around(refs: tuple[Ref, ...]) -> Ref | ErrorValue:
+    """The one range around references on one sheet."""
+    first = refs[0]
+    if any(r.sheet != first.sheet for r in refs):
+        return VALUE
+    return Ref(
+        first.source,
+        first.sheet,
+        min(r.r1 for r in refs),
+        min(r.c1 for r in refs),
+        max(r.r2 for r in refs),
+        max(r.c2 for r in refs),
+    )
 
 
 _ARRAYS = (tuple, Padded)
@@ -309,11 +324,16 @@ class Ops:
 
     def range(self, a: Raw, b: Raw) -> Value:
         # Between computed references (A1:INDEX(...), a name): an error in either is the result,
-        # and references on two sheets or anything else are a value error (capture names).
+        # and references on two sheets or anything else are a value error (capture names). A
+        # union's areas are read as one range around them all (capture unions).
         if isinstance(a, ErrorValue):
             return a
         if isinstance(b, ErrorValue):
             return b
+        if type(a) is Areas and a.union:
+            a = _around(a.refs)
+        if type(b) is Areas and b.union:
+            b = _around(b.refs)
         if isinstance(a, Ref) and isinstance(b, Ref) and a.sheet == b.sheet:
             return Ref(  # type: ignore[return-value]
                 a.source,
@@ -326,16 +346,44 @@ class Ops:
         return VALUE
 
     def intersect(self, a: Raw, b: Raw) -> Value:
-        if isinstance(a, Ref) and isinstance(b, Ref) and a.sheet == b.sheet:
-            r1, c1 = max(a.r1, b.r1), max(a.c1, b.c1)
-            r2, c2 = min(a.r2, b.r2), min(a.c2, b.c2)
-            if r1 > r2 or c1 > c2:
-                return NULL
-            return Ref(a.source, a.sheet, r1, c1, r2, c2)  # type: ignore[return-value]
-        return VALUE
+        # A union intersects area by area, and the areas that meet are the result (capture
+        # unions: SUM((X1:X3,Z1:Z3) X2:Z2) is X2+Z2).
+        left = a.refs if type(a) is Areas and a.union else (a,)
+        right = b.refs if type(b) is Areas and b.union else (b,)
+        met = []
+        for x in left:
+            for y in right:
+                if not (isinstance(x, Ref) and isinstance(y, Ref) and x.sheet == y.sheet):
+                    return VALUE
+                r1, c1 = max(x.r1, y.r1), max(x.c1, y.c1)
+                r2, c2 = min(x.r2, y.r2), min(x.c2, y.c2)
+                if r1 <= r2 and c1 <= c2:
+                    met.append(Ref(x.source, x.sheet, r1, c1, r2, c2))
+        if not met:
+            return NULL
+        return met[0] if len(met) == 1 else Areas(tuple(met), union=True)  # type: ignore[return-value]
 
     def union(self, *items: Raw) -> Value:
-        raise NotImplementedFormError("a union of ranges")
+        """A union of references: its areas as written, a nested union's flattened (capture unions).
+
+        An error among them is the result; areas on two sheets are ``#VALUE!``, and a 3-D
+        reference among them ``#NAME?``, as Excel reads such a union in a file.
+        """
+        refs: list[Ref] = []
+        for item in items:
+            if type(item) is Areas:
+                if not item.union:
+                    return ErrorValue.NAME
+                refs += item.refs
+            elif isinstance(item, Ref):
+                refs.append(item)
+            elif isinstance(item, ErrorValue):
+                return item
+            else:
+                return VALUE
+        if any(r.sheet != refs[0].sheet for r in refs):
+            return VALUE
+        return Areas(tuple(refs), union=True)  # type: ignore[return-value]
 
     # LAMBDA (captures lambda_calls, lambda_names, lambda_depth) ---------------------------------
 

@@ -163,7 +163,10 @@ _COMPUTED_CRITERIA = (
     "a computed criterion (a formula under a name the database lacks, evaluated for each "
     "record) is not supported, and the cell is reported"
 )
-_UNION = "a union of ranges is not implemented, and the cell is reported"
+_UNION_CELL = (
+    "CELL given a union is not computed, and the cell is reported: one captured row "
+    "($X$1,$Z$1:$Z$3 for (X1:X3,Z1:Z3)) settles no rule for its text"
+)
 _REGEX = "the regular-expression match mode (3) is not implemented, and the cell is reported"
 _AT_SIGN = "the @ the formula bar shows in a legacy formula is not shown by FORMULATEXT"
 _WEEKNUM_ODD_TYPE = (
@@ -260,7 +263,7 @@ _VARIANCE_NOISE = (
     "form reproduces (seven forms; each misses other rows by more)"
 )
 _MOMENT_NOISE = (
-    "GEOMEAN near 1E150, and KURT and FORECAST on two rows each, are past the declared 4 units in "
+    "GEOMEAN near 1E150, KURT on three rows and FORECAST on two are past the declared 4 units in "
     "the last place, for sums no tried order reproduces"
 )
 _CUMULATIVE_NOISE = (
@@ -607,11 +610,7 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
         ("math_integers", case): _MULTINOMIAL
         for case in (3783, 3785, 3787, 3789, 3791, 3793, 3795, 3797, 3803, 3805, 3807, 3809)
     },
-    **{("modern", case): _UNION for case in (300, 328)},
-    **{
-        ("info_family", case): _UNION
-        for case in (272, 303, 334, 396, 427, 452, 475, 484, 485, 505, 506)
-    },
+    ("unions", 66): _UNION_CELL,
     ("info_family", 468): _AT_SIGN,
     **{("dates_family", case): _WEEKNUM_ODD_TYPE for case in _WEEKNUM_ODD_CASES},
     ("dates_family", 2004): _DATEDIF_MARCH,
@@ -725,6 +724,7 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
         )
     },
     **{("statistics_family", case): _MOMENT_NOISE for case in (65, 66, 118, 141, 414, 582)},
+    ("unions", 35): _MOMENT_NOISE,
     ("statistics_family", 4432): _MULTINOMIAL,
     ("statistics_family", 1011): _LIBM_CANCELLATION,
     **{("empty_args", case): _LIBM_CANCELLATION for case in (346, 350)},
@@ -963,6 +963,7 @@ SUITES = [
     "bare_names",
     "ties_tiny",
     "three_d",
+    "unions",
 ]
 # Suites compared in part: only the rows whose tag is named. Of ``iteration``, the XIRR rows; its
 # IRR, RATE and YIELD rows are evidence for their methods, not matched.

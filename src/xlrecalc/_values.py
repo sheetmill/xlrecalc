@@ -155,18 +155,25 @@ class Lambda:
 
 
 class Areas:
-    """A reference of several areas during evaluation.
+    """A reference of several areas during evaluation: a 3-D reference or a union.
 
-    A 3-D reference is one :class:`Ref` per sheet of its span, in tab order (ARCHITECTURE.md
-    §7.3). The functions that read every area receive the areas (the registry's ``_AREAS`` table);
-    elsewhere a reference of several areas is ``#VALUE!``, or ``#REF!`` as a value (capture
-    ``three_d``).
+    A 3-D reference is one :class:`Ref` per sheet of its span, in tab order; a union
+    (``(A1:A3,C1:C3)``, ``union`` true) its areas as written, nested unions flattened, on one
+    sheet (ARCHITECTURE.md §7.3). The functions that read the areas receive them (the registry's
+    ``_AREAS`` and ``_UNION_AREAS`` tables, from captures ``three_d`` and ``unions``); as a value
+    a 3-D reference is ``#REF!`` and a union ``#VALUE!``.
     """
 
-    __slots__ = ("refs",)
+    __slots__ = ("refs", "union")
 
-    def __init__(self, refs: tuple[Ref, ...]) -> None:
+    def __init__(self, refs: tuple[Ref, ...], union: bool = False) -> None:
         self.refs = refs
+        self.union = union
+
+    @property
+    def as_value(self) -> ErrorValue:
+        """The reference as one value, in an operator or as a formula's result."""
+        return ErrorValue.VALUE if self.union else ErrorValue.REF
 
 
 class Ref:

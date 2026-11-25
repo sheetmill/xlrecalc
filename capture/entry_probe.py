@@ -2,6 +2,7 @@
 
     uv run python -m capture.entry_probe [--limit N]
     uv run python -m capture.entry_probe --batches N [N ...]
+    uv run python -m capture.entry_probe --suite NAME
 
 Excel refuses a whole file for one formula it does not take (-50), so the probes that name
 refused formulas (``empty_probe``, ``database_probe``) open one workbook for each known refusal
@@ -15,6 +16,10 @@ apart. Prints the agreements, every disagreement, and how long the sets took.
 ``--batches`` opens workbooks of the first N formulas ``empty_args`` holds that Excel takes in a
 file (none refused), for each N given, and prints whether each opened and how long it took: how
 large a batch can confirm a known-accepted set in one open.
+
+``--suite`` sets every case of a suite (``capture/suites.py``) into a workbook holding the suite's
+fixed cells and sheets, and prints each case Excel does not take: the check before a suite whose
+forms Excel may refuse is first captured, since one refused formula fails its whole workbook.
 """
 
 from __future__ import annotations
@@ -28,7 +33,7 @@ from pathlib import Path
 import openpyxl
 
 from capture.excel_watch import osascript_or_exit
-from capture.pipeline import CAPTURES, CONTAINER
+from capture.pipeline import CAPTURES, CONTAINER, Input, build
 from capture.refusals import known_accepted, known_refused
 from xlrecalc._formula._fileform import display_form
 
@@ -74,9 +79,10 @@ def batches(sizes: list[int]) -> None:
         )
 
 
-def entered(file_forms: list[str]) -> list[bool | None]:
+def entered(file_forms: list[str], fixed: dict[str, Input] | None = None) -> list[bool | None]:
     """For each formula (file form), whether Excel takes it set in an open workbook.
 
+    ``fixed``: cells the workbook holds first, as a suite's (sheets of their own included).
     ``None`` for one longer than AppleScript's 255 characters, which cannot be set this way.
     """
     typed = ["=" + display_form(f) for f in file_forms]
@@ -85,7 +91,10 @@ def entered(file_forms: list[str]) -> list[bool | None]:
     if path.exists():
         sys.exit(f"{path.name} exists: remove it or close it in Excel first")
     CONTAINER.mkdir(parents=True, exist_ok=True)
-    openpyxl.Workbook().save(path)
+    if fixed:
+        build(path, [], fixed=fixed)
+    else:
+        openpyxl.Workbook().save(path)
     with tempfile.NamedTemporaryFile("w", suffix=".txt", encoding="utf-8", delete=False) as f:
         f.write("\n".join("" if k in long else t for k, t in enumerate(typed)))
         listing = f.name
@@ -112,7 +121,24 @@ def still_refused(file_forms: list[str]) -> set[str]:
     return {f for f, ok in zip(file_forms, entered(file_forms), strict=True) if ok is False}
 
 
+def suite(name: str) -> None:
+    from capture.suites import SUITES
+
+    cases = SUITES[name].cases()
+    file_forms = [_filled(c.formula) for c in cases]
+    verdicts = entered(file_forms, SUITES[name].fixed)
+    refused = [
+        (k, f) for k, (f, ok) in enumerate(zip(file_forms, verdicts, strict=True), 1) if not ok
+    ]
+    print(f"{name}: {len(cases)} cases, {len(refused)} not taken")
+    for k, f in refused:
+        print(f"{k}\t{f}\t{'longer than 255' if verdicts[k - 1] is None else 'refused'}")
+
+
 def main() -> None:
+    if "--suite" in sys.argv:
+        suite(sys.argv[sys.argv.index("--suite") + 1])
+        return
     if "--batches" in sys.argv:
         batches([int(a) for a in sys.argv[sys.argv.index("--batches") + 1 :]])
         return

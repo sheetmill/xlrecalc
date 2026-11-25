@@ -186,9 +186,9 @@ read as typed in Excel's formula bar; without `=`, in the file form a file store
 
 Relative references move from `origin` to the cell `at`, as a conditional format's formula does
 over its range. Errors are values (`#DIV/0!`, and `#NAME?` for a name Excel does not know); a
-function or form Excel computes and xlrecalc does not (a union of ranges, a table reference,
-`CELL("format")`) raises `UnsupportedError`, and `Formula.unsupported` names those the formula's
-text shows before evaluating.
+function or form Excel computes and xlrecalc does not (a table reference, `CELL("format")`, a
+union given to a function no capture shows reading one) raises `UnsupportedError`, and
+`Formula.unsupported` names those the formula's text shows before evaluating.
 
 ## What it computes, and what not yet
 
@@ -198,11 +198,11 @@ text shows before evaluating.
   unit conversion.
   The [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 121,601 formulas computed by Excel and compared with xlrecalc's results: 120,776
+- **Evidence**: 121,779 formulas computed by Excel and compared with xlrecalc's results: 120,964
   match, bit for bit or within a small tolerance declared per function (a few units in the last
   place, or a relative one: 1E-9 for `IRR`, `RATE` and `YIELD`, 1E-15 to 1E-12 for the beta,
-  gamma, chi-squared, F and t distributions), 791 known deviations, each listed with its reason
-  in [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md), and 34 not
+  gamma, chi-squared, F and t distributions), 780 known deviations, each listed with its reason
+  in [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md), and 35 not
   evaluated (calls of functions xlrecalc does not compute). Each listed
   deviation is still computed and compared with Excel on every test run, and one that starts to
   match fails the run, except a few that can match by chance (a random result, a result Excel

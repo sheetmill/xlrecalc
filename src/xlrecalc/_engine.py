@@ -873,7 +873,7 @@ class Engine:
     def arr(self, v: Any) -> Any:
         """A value for an array context: a range's values as an array (§7.7)."""
         if type(v) is Areas:
-            return REF
+            return v.as_value
         if isinstance(v, Ref):
             return v.value(0, 0) if v.is_cell() else to_array(v)
         return v
@@ -1647,8 +1647,8 @@ class Engine:
             value = value[0][0]
         if isinstance(value, Ref):  # the first of an array of references too
             value = intersect(value, self)
-        if type(value) is Areas:  # a 3-D reference as the result (capture three_d)
-            return ErrorValue.REF
+        if type(value) is Areas:  # several areas as the result (captures three_d, unions)
+            return value.as_value
         if value is BLANK or value is MISSING:
             return 0.0
         if isinstance(value, float):

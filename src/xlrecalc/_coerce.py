@@ -66,8 +66,8 @@ def scalar(v: Raw, ctx: Context) -> Value:
         return intersect(v, ctx)
     if v is MISSING:
         return BLANK
-    if type(v) is Areas:  # a 3-D reference as one value (capture three_d)
-        return ErrorValue.REF
+    if type(v) is Areas:  # several areas as one value (captures three_d, unions)
+        return v.as_value
     return v  # type: ignore[return-value]
 
 

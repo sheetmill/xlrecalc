@@ -172,12 +172,14 @@ not). An empty argument is `#N/A`.
   any evaluation has reached the cycle, is computed from the cycle's cached value; Excel gives 0 (capture
   `circular_cached`). Once evaluation has met the cycle, the formula is 0, as in Excel.
 - `XLOOKUP` and `XMATCH` with the regular-expression match mode (3) are not computed, and are
-  reported. Nor is a union of ranges (`LARGE((A1:A3,C1:C3),1)`, `SUM((A1,B2))`): the formula keeps
-  the value the file holds and is reported (capture `modern`). `ROW` and `COLUMN` of a union are
-  `#REF!`, as in Excel.
+  reported.
+- A union of ranges (`SUM((A1:A3,C1:C3))`) is read as captures `unions` (both platforms), `modern`
+  and `info_family` show Excel reading it; a function given a union that no capture shows is not
+  computed, and the cell keeps the file's value and is reported (`a union of ranges in ABS`).
+  `CELL` given a union is among them: one captured row (`$X$1,$Z$1:$Z$3` for `(X1:X3,Z1:Z3)`)
+  settles no rule for its text.
 - `FORMULATEXT` gives a legacy formula as the file holds it, without the `@` the formula bar shows
-  (`=@{1,2;3,4}`; capture `info_family`). `AREAS` and `ISREF` of a union are computed, from the
-  formula alone; the other functions of that family are not, as for any union.
+  (`=@{1,2;3,4}`; capture `info_family`).
 - `WEEKNUM` with a type the documentation lacks gives `#NUM!` here. Excel's result for such a type can change between runs, and even between two cells holding the same formula in one calculation, `#NUM!` or a week number, so no result can be expected to repeat it; every such row of capture `dates_family` is listed, whatever it gives. `DATEDIF` from December 31, 1900 to March
   1, 2000 in `YD` is 60 here and 61 in Excel, where every neighbor fits the rule (one row).
 - `FINDB`, `SEARCHB`, `LEFTB`, `RIGHTB`, `MIDB`, `LENB` and `REPLACEB` behave as this English Excel for Mac computes
