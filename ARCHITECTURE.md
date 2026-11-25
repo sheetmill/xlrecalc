@@ -1597,8 +1597,8 @@ In this order: an order, not a promise or a date.
 2. Padded results of the dynamic-array functions (§7.7), if profiling shows the need: a
    `FILTER` whose fill passes, `SORT` of a whole column, which the compiler's containment, the
    spill and the writer would have to carry.
-3. Unions of ranges together with arrays of references, which QUIRKS.md lists as not
-   computed.
+3. Arrays of references (`N(OFFSET(Z1,{0;1},0))`), which QUIRKS.md lists as not computed, on
+   the `Areas` value unions use (§7.3), with a capture of their own.
 4. The functions still absent, by family, each family's captures first: bonds with odd periods, the regression arrays (`TREND`, `GROWTH`, `LOGEST`) and
    `TRIMRANGE`, then `AGGREGATE` and the others one by one; those with large questions of their
    own (regular expressions, `GETPIVOTDATA`, `FORECAST.ETS`) only if tractable.

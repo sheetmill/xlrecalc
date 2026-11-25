@@ -7,70 +7,69 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-11-25
+
+### Added
+- 3-D references (`SUM(Jan:Mar!A1:A3)`) are computed, as capture `three_d` shows Excel for Mac and
+  for Windows reading them. A formula holding one kept the value the file caches and was reported
+  under `external or 3-D reference` (uncomputed where the file cached nothing). The lists of values
+  and the statistics read every sheet of the span, `LARGE`, `SMALL`, `RANK`, `PERCENTILE`,
+  `QUARTILE`, `CONCAT` and `TEXTJOIN` too, and `SHEETS` and `SHEET` take one; the lookup, criteria
+  and reference functions give `#VALUE!`, `MODE` and `SUMPRODUCT` `#REF!`, and a 3-D reference used
+  as a value `#REF!`. An edit on any sheet of the span reaches the formula.
+- Unions of references (`SUM((A1:A3,C1:C3))`) are computed, as capture `unions` shows Excel for Mac
+  and for Windows reading them, with the union rows of `modern` and `info_family`. A formula
+  holding one kept the file's value and was reported under `a union of ranges`. The lists of
+  values, the statistics and `SUBTOTAL` read every area, an overlapped cell once for each area
+  holding it; `LARGE`, `SMALL`, `RANK`, `PERCENTILE` and `QUARTILE` read the areas as one list;
+  `INDEX` takes its area number and `AREAS` counts the areas, nested unions flattened; `N`, `T`,
+  `FORMULATEXT` and `ISFORMULA` read the first cell; `IF` and `CHOOSE` pass a union on, and an
+  intersection with a union or a range from one is a reference. A union is `#VALUE!` as a value,
+  in an operator or an array, in `CONCAT`, `TEXTJOIN`, `MODE`, `SUMPRODUCT` and the criteria
+  functions, and when its areas are on two sheets; the lookups give `#N/A`, `ROWS` and `COLUMNS`
+  `#REF!`, and a union holding a 3-D reference `#NAME?`. An edit in any area reaches the formula.
+- A 3-D reference or a union given to a function no capture shows reading one still keeps the
+  file's value and is reported, now under a label naming the function (`a 3-D reference in
+  RANK.EQ`, `a union of ranges in CELL`).
+- `SECURITY.md`, linked from the README: what the package does with untrusted workbooks, how to
+  report a security problem privately, through GitHub's private vulnerability reporting, where a
+  problem of xlio, xlformat or sheetpeek goes, and which releases receive fixes (the latest).
+- Captures from Excel for Mac and Excel for Windows, which agree on every row: `three_d` and
+  `unions` (above); `bare_names` (each of 153 names Excel writes with a file prefix, called without
+  it in a file with no cached values, is `#NAME?`); `ties_tiny` (`BINOM.INV` and `CRITBINOM` where
+  alpha equals a cumulative probability exactly, complex-number texts below the smallest normal
+  number); `dyn_cancel`: cancellation snapping applies to an array result element by element,
+  in a dynamic array and a legacy array formula, and `SUM` snaps its additions over an array while
+  `SUMPRODUCT` does not; and `three_d_snap`: a `SUM` over a 3-D reference snaps cancellation as
+  one over a range does. `dyn_cancel` and `three_d_snap` show what the package already computed
+  (no change in results).
+
 ### Changed
-- A name Excel writes with a file prefix, read without it from a file another program wrote
-  (`=XLOOKUP(...)` as openpyxl writes it), computes to `#NAME?`, as Excel shows it, where the
-  formula kept the value the file caches, or was uncomputed without one. `Report.unsupported`
-  counts such cells under `XLOOKUP written without the _xlfn. prefix Excel requires; Excel shows
-  #NAME?`; the cells are computed, not in `from_kept` or `uncomputed`. In a file Excel saved
-  (`<fileVersion appName="xl">`) or one holding a VBA project, where Excel never writes its own
-  names bare, such a name is a macro's or an add-in's function: the cell keeps the file's value
-  and is reported, as for any function the package does not compute, under a label saying so. A
-  bare `SORT` or `FILTER` stays refused, and a bare `LET`, not captured, keeps its value.
+- A name Excel writes with a file prefix, read without it (`=XLOOKUP(...)` as openpyxl writes
+  it), depends on who wrote the file. In a file another program wrote, it computes to `#NAME?`, as
+  Excel shows it, where the formula kept the value the file caches (uncomputed without one);
+  `Report.unsupported` counts such cells under `XLOOKUP written without the _xlfn. prefix Excel
+  requires; Excel shows #NAME?`, and they are computed, not in `from_kept` or `uncomputed`. In a
+  file Excel saved (`<fileVersion appName="xl">`) or one holding a VBA project, where Excel never
+  writes its own names bare, such a name is a macro's or an add-in's function: the cell keeps the
+  file's value and is reported, as for any function the package does not compute, under a label
+  saying so. A bare `SORT` or `FILTER` stays refused, and a bare `LET`, not captured, keeps its
+  value.
 - `xlrecalc.evaluate` and `Formula.evaluate` compute a union of ranges, where they raised
   `UnsupportedError`; a union given to a function no capture shows reading one still raises, while
   evaluating, and `Formula.unsupported` no longer names `a union of ranges`.
 
-### Added
-- 3-D references (`SUM(Jan:Mar!A1:A3)`), read as capture `three_d` shows Excel for Mac and for
-  Windows reading them: the lists of values and the statistics over every sheet of the span,
-  `LARGE`, `SMALL`, `RANK`, `PERCENTILE`, `QUARTILE`, `CONCAT` and `TEXTJOIN` too, `SHEETS` and
-  `SHEET` of one; `#VALUE!` in the lookup, criteria and reference functions, `#REF!` in `MODE` and
-  `SUMPRODUCT` and as a value. An edit on any sheet of the span reaches the formula. A function
-  not captured with a 3-D reference keeps the file's value and is reported, as the form was before.
-- Unions of references (`SUM((A1:A3,C1:C3))`), read as capture `unions` shows Excel for Mac and
-  for Windows reading them, with the union rows of `modern` and `info_family`: the lists of values,
-  the statistics and `SUBTOTAL` over every area, an overlapped cell once for each area holding it;
-  `LARGE`, `SMALL`, `RANK`, `PERCENTILE` and `QUARTILE` over the areas as one list; `INDEX`'s area
-  number; `AREAS`, nested unions flattened; `N`, `T`, `FORMULATEXT` and `ISFORMULA` of the first
-  cell; `IF` and `CHOOSE` passing a union on; an intersection with a union and a range from one.
-  `#VALUE!` as a value, in an operator or an array, in `CONCAT`, `TEXTJOIN`, `MODE`,
-  `SUMPRODUCT` and the criteria functions, and for areas on two sheets; `#N/A` in the lookups;
-  `#REF!` in `ROWS` and `COLUMNS`; `#NAME?` for a 3-D reference in a union. An edit in any area
-  reaches the formula. A function given a union that no capture shows reading one (`CELL`)
-  keeps the file's value and is reported, under `a union of ranges in CELL`; such cells were
-  all kept and reported before.
-- `SECURITY.md`, linked from the README: what the package does with untrusted workbooks, how to
-  report a security problem privately, through GitHub's private vulnerability reporting, where a
-  problem of xlio, xlformat or sheetpeek goes, and which releases receive fixes (the latest).
-- The `three_d_snap` capture, from Excel for Mac and Excel for Windows, which agree: a `SUM` over a
-  3-D reference snaps cancellation as a `SUM` over one range does, as the package computes it (no
-  change in results).
-- The `three_d` capture, from Excel for Mac and Excel for Windows, which agree: 3-D references
-  over three sheets in every function that takes a reference, and their forms. A capture suite's
-  fixed cells may name another sheet (`Jan!A1`), which the workbook then holds after the case
-  sheet.
-- The `ties_tiny` capture, from Excel for Mac and Excel for Windows, which agree: `BINOM.INV` and
-  `CRITBINOM` where alpha equals a cumulative probability exactly, and complex-number texts holding
-  numbers below the smallest normal one.
-- The `bare_names` capture, from Excel for Mac and Excel for Windows, which agree: each of 153 names
-  Excel writes with a file prefix, called without it in a file with no cached values, is `#NAME?`.
-- The `dyn_cancel` capture, from Excel for Mac and Excel for Windows, which agree: cancellation
-  snapping applies to an array result element by element, in a dynamic array and a legacy array
-  formula, and `SUM` snaps its additions over an array while `SUMPRODUCT` does not, as the package
-  computes them (no change in results). `capture/job.py` writes and reads Excel capture jobs for
-  the dynamic-array suites (`dyn_<suite>`), and `capture/dynamic_probe.py` writes legacy array
-  formulas and every number constant exactly.
-
 ### Fixed
-- The complex-number functions read a part of a text below 1E-309 as Excel does, as `#NUM!`, and one
-  from there to the smallest normal number as 0: `IMREAL("5E-324")` is `#NUM!` where it was 0, and
-  `IMLN("2.2250738585072E-308")` `#NUM!` where it was -708.396418532264.
-- `NUMBERVALUE` reads a group separator after the decimal one as a digit when it is a digit, as Excel
-  does: `NUMBERVALUE(" 1 2 ",1,2)` is 0.2, where it was `#VALUE!`.
+- The complex-number functions read a part of a text below 1E-309 as Excel does, as `#NUM!`, and
+  one from there to the smallest normal number as 0: `IMREAL("5E-324")` is `#NUM!` where it was 0,
+  and `IMLN("2.2250738585072E-308")` `#NUM!` where it was -708.396418532264.
+- `NUMBERVALUE` reads a group separator after the decimal one as a digit when it is a digit, as
+  Excel does: `NUMBERVALUE(" 1 2 ",1,2)` is 0.2, where it was `#VALUE!`.
 - Computing many dynamic arrays whose ranges change took time growing with the square of their
   number: each range that changed rebuilt the index of every array's range on the sheet. Each
   now updates the index for its own array, and doubling their number about doubles the time.
+- The API reference links xlformat's `Platform`, `RegionalSettings` and `Quirks` to xlformat's
+  documentation, which lists them by their public names.
 
 ## [0.11.0] - 2026-11-24
 
@@ -903,7 +902,8 @@ First release.
   calculation settings; archive limits (`ReadLimits`, `LimitError`) and a refusal of DTDs
   protect against hostile files; `PackageError` for a file that is not a readable package.
 
-[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/sheetmill/xlrecalc/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/sheetmill/xlrecalc/compare/v0.10.1...v0.11.0
 [0.10.1]: https://github.com/sheetmill/xlrecalc/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/sheetmill/xlrecalc/compare/v0.9.0...v0.10.0
