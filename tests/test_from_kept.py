@@ -253,13 +253,13 @@ def test_recalculating_a_written_file_again_is_stable(tmp_path: Path) -> None:
     assert second.from_kept == first.from_kept
 
 
-# A reference form not implemented: into another workbook, or across sheets ---------------------
+# A reference form not implemented: into another workbook --------------------------------------
 
-REACHING_OUT = ["[1]Other!F1", "[1]!Rate", "SUM(Data:Data2!F1)", "'[2]My Sheet'!F1*1"]
+REACHING_OUT = ["[1]Other!F1", "[1]!Rate", "'[2]My Sheet'!F1*1"]
 
 
 @pytest.mark.parametrize("formula", REACHING_OUT)
-def test_an_external_or_3d_reference_keeps_its_value(tmp_path: Path, formula: str) -> None:
+def test_an_external_reference_keeps_its_value(tmp_path: Path, formula: str) -> None:
     """It keeps the file's value in the store as an absent function does, so a lazy read, a full
     recalculation and the written file agree, and what is computed from it is named."""
     source = book(tmp_path, chain(formula))
@@ -279,9 +279,7 @@ def test_an_external_or_3d_reference_keeps_its_value(tmp_path: Path, formula: st
 
 
 @pytest.mark.parametrize("formula", REACHING_OUT[:3])
-def test_an_external_or_3d_reference_without_a_value_is_uncomputed(
-    tmp_path: Path, formula: str
-) -> None:
+def test_an_external_reference_without_a_value_is_uncomputed(tmp_path: Path, formula: str) -> None:
     wb = xlrecalc.load(book(tmp_path, chain(formula, cached=None)))
     assert values(wb, "A1", "B1", "C1", "D1") == [ErrorValue.NAME] * 4
     assert wb.report.uncomputed == refs("A1", "B1", "C1", "D1")

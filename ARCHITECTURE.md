@@ -672,6 +672,20 @@ evaluating anything: the scheduler has already computed what a formula reads. It
 cells come row-major (the order sums are taken in), and only those are visited, so a
 whole-column reference costs what the column holds, not a million positions.
 
+A 3-D reference (`Jan:Mar!A1:A3`) is every sheet from one end of its span to the other by
+position, the ends in either order (`Engine.span`); a missing sheet is `#REF!`. Its dependencies
+are its box on each sheet of the span, so an edit on any of them reaches it (`RefSpec.sheet`
+keeps the span's text; `_spec_boxes` and the dependency index give a box per sheet). As an
+argument it is an `Areas`, one `Ref` per sheet, which the registry's `_AREAS` table hands to each
+function as capture `three_d` shows Excel reading it (both platforms): the lists of values (`SUM`,
+the statistics, `CONCAT`, `TEXTJOIN`) read each sheet as an argument of its own; `LARGE`,
+`SMALL`, `PERCENTILE` and `QUARTILE` read every sheet's cells as one array, and `RANK` counts
+over them; `IF` returns it as it is; `SHEETS` counts its sheets and `SHEET` gives the first's
+position; `MODE` and `SUMPRODUCT` give `#REF!`, `ISREF` and `ISBLANK` FALSE, and the lookup,
+criteria and reference functions `#VALUE!`. A function not captured with one is reported as not
+computed (`a 3-D reference in RANK.EQ`) and keeps the file's value. As a value, in an operator, in
+an array or as a formula's result, a 3-D reference is `#REF!`.
+
 ### 7.4 When cached values are trusted
 
 A workbook loaded from a file starts with the cached values the file holds. The rule:
@@ -742,7 +756,7 @@ becomes `#VALUE!`, and is recorded in the report with the exception, so one bug 
 recalculation. An unsupported function is listed in the report. A cell using one keeps its cached value when the file
 holds one, since Excel computed it, in a full load too, and what depends on it is computed from that. So does a cell
 whose formula uses a reference form not implemented, found when the formula is compiled: a reference into another
-workbook (`[1]Sheet1!A1`, `[1]!Rate`) or across sheets (`Sheet1:Sheet3!A1`); `[0]!Rate` is the workbook's own name.
+workbook (`[1]Sheet1!A1`, `[1]!Rate`); `[0]!Rate` is the workbook's own name. A 3-D reference is computed (§7.3).
 A lazy read, a full recalculation and the written file then agree on its value.
 `Report.from_kept` names them all, so "which values rest on something not computed here?" has one
 answer. A change upstream of the formula puts its kept value out of date: it and what depends on it
@@ -1075,7 +1089,7 @@ Behavior that is not the obvious reading, each from its capture:
   `XLOOKUP(...):A9` is a range. Their next-smaller and next-larger searches order numbers, text,
   logicals and a blank key last; a blank key finds a blank cell.
 
-Not yet: structured references, 3-D references.
+Not yet: structured references.
 
 ### 8.3 The xlformat seam
 
@@ -1510,25 +1524,24 @@ decided from the two together inside the package, so nothing public changes when
 settings come.
 
 **One formula outside a workbook** (`_evaluate.py`). The formula is compiled as a cell's formula
-would be, at `origin`, and its template is run at `at` on an engine that holds no formula cells:
-it is not placed in a cell, since a conditional format's formula may read the cell it applies
-to. Text starting with `=` is the formula bar's form (the file-form printer adds prefixes,
-§5.2); text without it is the file form, as a file stores it, used as it is. Cell values come
-from the mapping, then from the resolver, asked once for each box the evaluation reads (`OFFSET`
-and `INDIRECT` included); a cell neither gives is blank, as in Excel. The formula is a dynamic
-array unless `legacy=True`; a dynamic result comes back as rows. A name Excel does not know
-evaluates to `#NAME?`; a function Excel has (`EXCEL_NAMES`, from the `formula_bar` capture's
-function list) that the package does not compute raises `UnsupportedError`, as does a form it
-does not compute (a union of ranges, a structured, 3-D or external reference, `CELL`'s
-formatting kinds: what the report names in a workbook). `Formula.unsupported` names what the
-text shows, the code generator recording the forms it meets (`Compiled.forms`); a case that
-depends on the values (`CELL` given its kind in a cell, `LINEST` with several regressors) raises
-while evaluating. The template is run by the engine that compiled it, since the operators read
-that engine's position; each call clears its cells and names first. Tests:
-`tests/test_evaluate.py`, where a captured formula evaluated alone gives the engine's value in
-the capture's sheet, in every suite whose inputs are values (not formulas or fixed cells),
-unsupported and volatile formulas left out: every 25th row by default, every row in the slow
-tier.
+would be, at `origin`, and its template is run at `at` on an engine that holds no formula cells: it
+is not placed in a cell, since a conditional format's formula may read the cell it applies to. Text
+starting with `=` is the formula bar's form (the file-form printer adds prefixes, §5.2); text
+without it is the file form, as a file stores it, used as it is. Cell values come from the mapping,
+then from the resolver, asked once for each box the evaluation reads (`OFFSET` and `INDIRECT`
+included); a cell neither gives is blank, as in Excel. The formula is a dynamic array unless
+`legacy=True`; a dynamic result comes back as rows. A name Excel does not know evaluates to
+`#NAME?`; a function Excel has (`EXCEL_NAMES`, from the `formula_bar` capture's function list) that
+the package does not compute raises `UnsupportedError`, as does a form it does not compute (a union
+of ranges, a structured or external reference, a 3-D reference, which has no sheets outside a
+workbook, `CELL`'s formatting kinds: what the report names in a workbook). `Formula.unsupported`
+names what the text shows, the code generator recording the forms it meets (`Compiled.forms`); a
+case that depends on the values (`CELL` given its kind in a cell, `LINEST` with several regressors)
+raises while evaluating. The template is run by the engine that compiled it, since the operators
+read that engine's position; each call clears its cells and names first. Tests:
+`tests/test_evaluate.py`, where a captured formula evaluated alone gives the engine's value in the
+capture's sheet, in every suite whose inputs are values (not formulas or fixed cells), unsupported
+and volatile formulas left out: every 25th row by default, every row in the slow tier.
 
 **A conditional format's rule** (`_conditional.py`, `ConditionalFormula`; capture `cf_rules`,
 `capture/cf_probe.py`: 76 cases read through `display format` against a control rule). A rule's

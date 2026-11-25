@@ -10,7 +10,7 @@ from xlrecalc._coerce import Context, numbers, to_number
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._math import _total
 from xlrecalc._functions._registry import function
-from xlrecalc._values import BLANK, ErrorValue, Ref
+from xlrecalc._values import BLANK, Areas, ErrorValue, Ref
 
 DIV0, NA, NUM, VALUE = ErrorValue.DIV0, ErrorValue.NA, ErrorValue.NUM, ErrorValue.VALUE
 S = "statistical"
@@ -355,10 +355,12 @@ def LINEST(ctx: Context, ys: Any, xs: Any = MISSING, const: Any = True, stats: A
 
 
 def _rank(ctx: Context, x: float, ref: Any, order: float, average: bool) -> float | ErrorValue:
-    if not isinstance(ref, Ref):
+    """The rank of x among a reference's numbers: of every sheet of a 3-D reference too."""
+    refs = ref.refs if type(ref) is Areas else (ref,)
+    if not all(isinstance(r, Ref) for r in refs):
         return VALUE
     values = []
-    for _, _, v in ref.cells():
+    for _, _, v in (cell for r in refs for cell in r.cells()):
         if isinstance(v, ErrorValue):
             return v
         if type(v) is float:

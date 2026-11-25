@@ -53,11 +53,11 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
-from xlrecalc._arrays import Padded, broadcast, is_array, to_array
+from xlrecalc._arrays import NotImplementedFormError, Padded, broadcast, is_array, to_array
 from xlrecalc._coerce import Context, scalar, to_bool, to_number, to_text
 from xlrecalc._formula import MISSING
 from xlrecalc._formula._codegen import kind_at
-from xlrecalc._values import ErrorValue, Lambda, Ref
+from xlrecalc._values import Areas, ErrorValue, Lambda, Ref
 
 __all__ = ["REGISTRY", "SPECS", "Spec", "function"]
 
@@ -230,6 +230,69 @@ def _given_lambda(name: str, kinds: tuple[str, ...], cycle: int, args: tuple[Any
     return None
 
 
+# What each function does with a reference of several areas, a 3-D reference (capture three_d,
+# both platforms): "expand", read each area as an argument of its own (the lists of values);
+# "stack", read the cells of every area as one array (an argument that takes one range); "pass",
+# take the areas as they are (IF returns its branch; RANK reads every area); or the result
+# whatever the areas hold. A function not here was not captured with one: its cell is
+# reported as not computed.
+_AREAS: dict[str, Any] = {
+    **dict.fromkeys(
+        (
+            "SUM", "AVERAGE", "AVERAGEA", "COUNT", "COUNTA", "MAX", "MAXA", "MIN", "MINA",
+            "PRODUCT", "STDEV", "_XLFN.STDEV.S", "_XLFN.STDEV.P", "STDEVA", "STDEVP", "STDEVPA",
+            "VAR", "_XLFN.VAR.S", "_XLFN.VAR.P", "VARA", "VARP", "VARPA", "MEDIAN", "AVEDEV",
+            "DEVSQ", "GEOMEAN", "HARMEAN", "KURT", "SKEW", "SUMSQ", "_XLFN.CONCAT",
+            "_XLFN.TEXTJOIN",
+        ),
+        "expand",
+    ),
+    **dict.fromkeys(("LARGE", "SMALL", "PERCENTILE", "QUARTILE"), "stack"),
+    "IF": "pass",
+    "RANK": "pass",
+    **dict.fromkeys(
+        (
+            "COUNTBLANK", "SUBTOTAL", "COUNTIF", "SUMIF", "AVERAGEIF", "COUNTIFS",
+            "_XLFN.MAXIFS", "VLOOKUP", "HLOOKUP", "MATCH", "INDEX", "LOOKUP", "_XLFN.XLOOKUP",
+            "ROWS", "COLUMNS", "ROW", "COLUMN", "AREAS", "N", "T", "CELL", "_XLFN.FORMULATEXT",
+            "OFFSET",
+        ),
+        ErrorValue.VALUE,
+    ),
+    "MODE": ErrorValue.REF,
+    "SUMPRODUCT": ErrorValue.REF,
+    "ISREF": False,
+    "ISBLANK": False,
+    "_XLFN.SHEETS": lambda areas: float(len(areas.refs)),
+    "_XLFN.SHEET": lambda areas: float(areas.refs[0].sheet + 1),
+}  # fmt: skip
+
+
+def _with_areas(name: str, args: tuple[Any, ...]) -> tuple[Any, ...] | Any:
+    """The arguments a function reads given a reference of several areas, or its result.
+
+    Returns a tuple of arguments, or the result itself (any other value).
+
+    Raises:
+        NotImplementedFormError: The function was not captured with such a reference.
+    """
+    rule = _AREAS.get(name)
+    if rule is None:
+        raise NotImplementedFormError(f"a 3-D reference in {name}")
+    if rule == "pass":
+        return args
+    if rule == "expand":
+        return tuple(r for a in args for r in (a.refs if type(a) is Areas else (a,)))
+    if rule == "stack":
+        return tuple(
+            tuple(row for ref in a.refs for row in to_array(ref)) if type(a) is Areas else a
+            for a in args
+        )
+    if callable(rule):
+        return rule(next(a for a in args if type(a) is Areas))
+    return rule
+
+
 def _map_padded(call: Callable[..., Any], args: tuple[Any, ...], pads: list[int]) -> Padded:
     """``call`` element by element over padded arguments of one size.
 
@@ -314,6 +377,11 @@ def function(
         )
 
         def call(ctx: Context, *args: Any) -> Any:
+            if Areas in map(type, args):
+                given = _with_areas(upper, args)
+                if type(given) is not tuple:
+                    return given
+                args = given
             if Lambda in map(type, args):
                 given = _given_lambda(upper, kinds, cycle, args)
                 if given is not None:

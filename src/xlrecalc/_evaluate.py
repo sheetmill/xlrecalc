@@ -18,6 +18,7 @@ import xlformat
 from xlrecalc._arrays import ArrayLimitError, NotImplementedFormError, element, is_array, shape
 from xlrecalc._engine import Engine, Template, _at, _Cells
 from xlrecalc._formula import FormulaSyntaxError, TokenizeError
+from xlrecalc._formula._codegen import EXTERNAL
 from xlrecalc._functions._excel_names import EXCEL_NAMES
 from xlrecalc._limits import StepLimitError
 from xlrecalc._load import refused_in_file
@@ -233,9 +234,11 @@ class Formula:
         regressors) is found while evaluating, which raises ``UnsupportedError`` then.
         """
         template = self._template
+        spans = any(spec.sheet is not None and ":" in spec.sheet for spec in template.refs)
         return (
             frozenset(n for n in template.unsupported if _excel_knows(n) or not _is_name(n))
             | template.forms
+            | ({EXTERNAL} if spans else set())  # a 3-D reference: no sheets outside a workbook
         )
 
     @property

@@ -147,10 +147,11 @@ class DependencyIndex:
                     if target is not None:
                         yield _make(tid, target, inner, absolute=True, volatile_name=volatile)
             return
-        target = None if spec.sheet is None else engine.sheet_index(spec.sheet)
-        if spec.sheet is not None and target is None:
+        if spec.sheet is None:
+            yield _make(tid, None, spec, absolute=False)
             return
-        yield _make(tid, target, spec, absolute=False)
+        for target in engine.span(spec.sheet) or ():  # a 3-D reference: an edge per sheet
+            yield _make(tid, target, spec, absolute=False)
 
     # Queries ---------------------------------------------------------------------------------
 

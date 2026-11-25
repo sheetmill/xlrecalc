@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   bare `SORT` or `FILTER` stays refused, and a bare `LET`, not captured, keeps its value.
 
 ### Added
+- 3-D references (`SUM(Jan:Mar!A1:A3)`), read as capture `three_d` shows Excel for Mac and for
+  Windows reading them: the lists of values and the statistics over every sheet of the span,
+  `LARGE`, `SMALL`, `RANK`, `PERCENTILE`, `QUARTILE`, `CONCAT` and `TEXTJOIN` too, `SHEETS` and
+  `SHEET` of one; `#VALUE!` in the lookup, criteria and reference functions, `#REF!` in `MODE` and
+  `SUMPRODUCT` and as a value. An edit on any sheet of the span reaches the formula. A function
+  not captured with a 3-D reference keeps the file's value and is reported, as the form was before.
 - `SECURITY.md`, linked from the README: what the package does with untrusted workbooks, how to
   report a security problem privately, through GitHub's private vulnerability reporting, where a
   problem of xlio, xlformat or sheetpeek goes, and which releases receive fixes (the latest).

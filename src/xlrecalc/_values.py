@@ -8,7 +8,7 @@ from typing import Any, ClassVar, Final
 
 import xlformat
 
-__all__ = ["BLANK", "ErrorValue", "Lambda", "Ref", "Value"]
+__all__ = ["BLANK", "Areas", "ErrorValue", "Lambda", "Ref", "Value"]
 
 _CODE: Final = re.compile(r"#[A-Z0-9_/]+[!?]?")
 _CODES: Final = (
@@ -152,6 +152,21 @@ class Lambda:
 
     def __repr__(self) -> str:
         return f"Lambda({self.required}/{self.total})"
+
+
+class Areas:
+    """A reference of several areas during evaluation.
+
+    A 3-D reference is one :class:`Ref` per sheet of its span, in tab order (ARCHITECTURE.md
+    §7.3). The functions that read every area receive the areas (the registry's ``_AREAS`` table);
+    elsewhere a reference of several areas is ``#VALUE!``, or ``#REF!`` as a value (capture
+    ``three_d``).
+    """
+
+    __slots__ = ("refs",)
+
+    def __init__(self, refs: tuple[Ref, ...]) -> None:
+        self.refs = refs
 
 
 class Ref:

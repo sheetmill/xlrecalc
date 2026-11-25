@@ -18,7 +18,7 @@ from xlrecalc._formula import MISSING
 from xlrecalc._numtext import number_to_text, text_to_number
 from xlrecalc._platform import PlatformName
 from xlrecalc._quirks import Quirks
-from xlrecalc._values import BLANK, ErrorValue, Lambda, Ref, Value
+from xlrecalc._values import BLANK, Areas, ErrorValue, Lambda, Ref, Value
 
 __all__ = [
     "Context",
@@ -66,6 +66,8 @@ def scalar(v: Raw, ctx: Context) -> Value:
         return intersect(v, ctx)
     if v is MISSING:
         return BLANK
+    if type(v) is Areas:  # a 3-D reference as one value (capture three_d)
+        return ErrorValue.REF
     return v  # type: ignore[return-value]
 
 

@@ -51,7 +51,7 @@ from xlrecalc._platform import PlatformName
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef, CellStatus, Report
 from xlrecalc._store import COLS, MAX_COL, MAX_ROW, Sheet
-from xlrecalc._values import BLANK, ErrorValue, Lambda, Ref, Value
+from xlrecalc._values import BLANK, Areas, ErrorValue, Lambda, Ref, Value
 
 __all__ = ["Engine", "Report", "Template"]
 
@@ -382,6 +382,26 @@ class Engine:
         self.sheets.append(Sheet(name))
         self._sheet_index[name.casefold()] = index
         return index
+
+    def span(self, text: str) -> list[int] | None:
+        """The sheets a reference's sheet text names, in tab order: one, or a 3-D span's.
+
+        ``Jan:Mar`` is every sheet from Jan to Mar by position, the endpoints in either order;
+        ``None`` when a sheet is missing. Sheets a lazy read has not loaded are loaded.
+        """
+        if ":" not in text:
+            index = self.sheet_index(text)
+            return None if index is None else [index]
+        first, _, last = text.partition(":")
+        a, b = self.sheet_index(first), self.sheet_index(last)
+        if a is None or b is None:
+            return None
+        lo, hi = min(a, b), max(a, b)
+        if self._unloaded:
+            for index in range(lo, hi + 1):
+                if index in self._unloaded:
+                    self.need(index)
+        return list(range(lo, hi + 1))
 
     def sheet_index(self, name: str) -> int | None:
         index = self._sheet_index.get(name.casefold())
@@ -852,6 +872,8 @@ class Engine:
 
     def arr(self, v: Any) -> Any:
         """A value for an array context: a range's values as an array (§7.7)."""
+        if type(v) is Areas:
+            return REF
         if isinstance(v, Ref):
             return v.value(0, 0) if v.is_cell() else to_array(v)
         return v
@@ -1625,6 +1647,8 @@ class Engine:
             value = value[0][0]
         if isinstance(value, Ref):  # the first of an array of references too
             value = intersect(value, self)
+        if type(value) is Areas:  # a 3-D reference as the result (capture three_d)
+            return ErrorValue.REF
         if value is BLANK or value is MISSING:
             return 0.0
         if isinstance(value, float):
@@ -1778,14 +1802,15 @@ class Engine:
             for inner in self.name_boxes(spec.name or "", sheet):
                 yield from self._spec_boxes(inner, sheet, 0, 0)
             return
-        target = sheet if spec.sheet is None else self.sheet_index(spec.sheet)
-        if target is None:
+        targets = [sheet] if spec.sheet is None else self.span(spec.sheet)
+        if not targets:
             return
         r1, c1 = _at(spec.r1, row), _at(spec.c1, col)
         r2, c2 = _at(spec.r2, row), _at(spec.c2, col)
         r1, r2 = max(0, min(r1, r2)), min(MAX_ROW, max(r1, r2))
         c1, c2 = max(0, min(c1, c2)), min(MAX_COL, max(c1, c2))
-        yield target, r1, c1, r2, c2
+        for target in targets:  # a 3-D reference: the same box on each sheet of its span
+            yield target, r1, c1, r2, c2
 
     def precedents(self, n: int) -> Iterator[int]:
         """Formula cells a formula cell reads: anchors for the cells they fill (§7.7)."""
@@ -1808,18 +1833,22 @@ class Engine:
         """
         out = []
         for spec in self.templates[tid].refs:
-            target = sheet if spec.sheet is None else self.sheet_index(spec.sheet)
+            targets = [sheet] if spec.sheet is None else self.span(spec.sheet)
             if spec.kind == "box" and not self.anchors:
-                if target is None:
+                if not targets:
                     continue
                 c1, c2 = _at(spec.c1, col), _at(spec.c2, col)
                 c1, c2 = max(0, min(c1, c2)), min(MAX_COL, max(c1, c2))
-                columns = self.sheets[target].formula_columns
-                candidates = range(c1, c2 + 1) if c2 - c1 < len(columns) else columns
-                if not any(c1 <= c <= c2 and columns.get(c) for c in candidates):
+                if not any(self._has_formulas(t, c1, c2) for t in targets):
                     continue
             out.append(spec)
         return tuple(out)
+
+    def _has_formulas(self, sheet: int, c1: int, c2: int) -> bool:
+        """Some column from c1 to c2 of the sheet holds a formula."""
+        columns = self.sheets[sheet].formula_columns
+        candidates = range(c1, c2 + 1) if c2 - c1 < len(columns) else columns
+        return any(c1 <= c <= c2 and columns.get(c) for c in candidates)
 
     def _stale_precedents(
         self,
@@ -1948,6 +1977,8 @@ class Engine:
         return REF if index is None else index
 
     def cell(self, sheet: str | None, row: int, col: int) -> Value:
+        if sheet is not None and ":" in sheet and "[" not in sheet:
+            return REF  # a 3-D reference as a value (capture three_d)
         target = self._target(sheet)
         if isinstance(target, ErrorValue):
             return target
@@ -1957,10 +1988,20 @@ class Engine:
             self._check(target, row, col)
         return self.sheets[target].values.get(row * COLS + col, BLANK)
 
-    def cref(self, sheet: str | None, row: int, col: int) -> Ref | ErrorValue:
+    def cref(self, sheet: str | None, row: int, col: int) -> Ref | Areas | ErrorValue:
         return self.box(sheet, row, col, row, col)
 
-    def box(self, sheet: str | None, r1: int, c1: int, r2: int, c2: int) -> Ref | ErrorValue:
+    def box(
+        self, sheet: str | None, r1: int, c1: int, r2: int, c2: int
+    ) -> Ref | Areas | ErrorValue:
+        if sheet is not None and ":" in sheet and "[" not in sheet:  # a 3-D reference
+            span = self.span(sheet)
+            if span is None:
+                return REF
+            if min(r1, r2, c1, c2) < 0 or max(r1, r2) > MAX_ROW or max(c1, c2) > MAX_COL:
+                return REF
+            source = self.checked if self._strict else self.cells
+            return Areas(tuple(Ref(source, t, r1, c1, r2, c2) for t in span))
         target = self._target(sheet)
         if isinstance(target, ErrorValue):
             return target
@@ -1968,10 +2009,10 @@ class Engine:
             return REF
         return Ref(self.checked if self._strict else self.cells, target, r1, c1, r2, c2)
 
-    def columns(self, sheet: str | None, c1: int, c2: int) -> Ref | ErrorValue:
+    def columns(self, sheet: str | None, c1: int, c2: int) -> Ref | Areas | ErrorValue:
         return self.box(sheet, 0, c1, MAX_ROW, c2)
 
-    def rows(self, sheet: str | None, r1: int, r2: int) -> Ref | ErrorValue:
+    def rows(self, sheet: str | None, r1: int, r2: int) -> Ref | Areas | ErrorValue:
         return self.box(sheet, r1, 0, r2, MAX_COL)
 
     def _name_text(self, name: str, sheet: int | None) -> str | None:

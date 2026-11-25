@@ -353,7 +353,11 @@ def SHEET(ctx: Any, v: Any = MISSING) -> Any:
 
 @function("_xlfn.SHEETS", "raw", min_args=0, errors=True, category=INFO)
 def SHEETS(ctx: Any, v: Any = MISSING) -> Any:
-    """The number of sheets in the workbook, or in a reference (one here: no 3-D references)."""
+    """The number of sheets in the workbook, or in a reference.
+
+    A reference here is on one sheet; a 3-D reference's sheets are counted by the registry
+    (``_AREAS``).
+    """
     if v is MISSING:
         return float(len(ctx.sheets))
     if isinstance(v, Ref):

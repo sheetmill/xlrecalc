@@ -855,13 +855,13 @@ EXTERNAL = "external or 3-D reference"
 
 
 def reaches_out(sheet: str, *, name: bool = False) -> bool:
-    """A prefix naming another workbook (``[1]``) or several sheets (``S1:S3``).
+    """A prefix naming another workbook (``[1]``), or several sheets (``S1:S3``) before a name.
 
     ``[0]!Rate`` is this workbook's own name (capture ``workbook_name``), so for a name ``[0]``
     is not another workbook.
     """
-    if ":" in sheet:
-        return True
+    if ":" in sheet:  # a 3-D reference is computed (Engine.span); a name has no span
+        return name
     return "[" in sheet and not (name and sheet == "[0]")
 
 
