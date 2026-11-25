@@ -6,6 +6,10 @@ Build: ``uv run --group docs sphinx-build -W docs docs/_build/html``, then
 
 from __future__ import annotations
 
+from typing import Any
+
+from sphinx.ext import intersphinx
+
 import xlrecalc
 
 project = "xlrecalc"
@@ -62,3 +66,21 @@ html_theme_options = {
     "source_branch": "main",
     "source_directory": "docs/",
 }
+
+
+def _public_xlformat_name(app: Any, env: Any, node: Any, contnode: Any) -> Any:
+    """Resolve an xlformat type named by its private module through its public name.
+
+    Type hints name xlformat's classes by the module that defines them (``xlformat._platform``);
+    xlformat documents them as ``xlformat.Platform``, and its inventory lists only that name.
+    """
+    target = node.get("reftarget", "")
+    if not target.startswith("xlformat._"):
+        return None
+    node["reftarget"] = "xlformat." + target.rsplit(".", 1)[1]
+    return intersphinx.missing_reference(app, env, node, contnode)
+
+
+def setup(app: Any) -> None:
+    """Register the xlformat name resolver."""
+    app.connect("missing-reference", _public_xlformat_name)
