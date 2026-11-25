@@ -198,7 +198,10 @@ in 12.23 s, writes in 21.23 s, 48.64 s in all, writes again with nothing changed
 peaks at 1,216 MB (`ru_maxrss`, as in the table; 1,149 MB footprint); 0.10.1 takes 48.13 s and
 peaks at 1,215 MB. `engine_bench.py 1000000 --xlsx` changes A1 and recomputes in 5.11 s (0.10.1:
 5.13 s). The two versions write the same bytes and compute the same values. The peak was 887 MB
-in the table above, on xlrecalc and xlio 0.3.0.
+in the table above, on xlrecalc and xlio 0.3.0. Python's allocation peak (`tracemalloc`) while
+recalculating the 1M-row file is the same, 651 MiB, for xlrecalc 0.3.0 on xlio 0.3.0 and for
+0.11.0, so that resident figure was most likely measured under memory pressure, which keeps part
+of a process's memory out of its resident set.
 
 The same runs with xlrecalc 0.2.0, whose reader and writer were then its own (raw output in
 `current_py311.jsonl`), below. Its write took about 7% longer than when the writer was first
