@@ -266,7 +266,8 @@ versions alternating. `kept_sheets_1000_26.xlsx` holds six sheets, 78,000 formul
 linked workbook (they keep the file's value) and 35,341 others; it is read as a reader showing one
 sheet at a time reads it: a `Loader` fed each worksheet, then every formula's value, then every
 formula's status. Both versions give the same statuses (1,207 computed, 112,134 kept). Best of
-three; peak memory as `bench/rss.py` measures it, the interpreter included.
+three; peak memory as `bench/rss.py` measures it, the interpreter included. The table leaves out
+the sixth sheet, `Rates`, which holds one constant.
 
 | sheet | 0.10.1 | 0.10.0 |
 |---|---|---|

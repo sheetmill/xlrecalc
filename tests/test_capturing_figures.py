@@ -96,3 +96,16 @@ def test_a_suite_no_test_compares_says_so():
             if suite not in compared and not named and "Not compared" not in line:
                 missing.append(suite)
     assert missing == []
+
+
+def test_the_windows_modern_row_counts_the_macs_deviations():
+    """The ``windows/modern`` row names as many Mac deviations as ``KNOWN_DEVIATIONS`` lists."""
+    from tests.test_captures import KNOWN_DEVIATIONS
+
+    words = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
+    text = (ROOT / "CAPTURING.md").read_text(encoding="utf-8")
+    row = next(line for line in text.splitlines() if "`tests/captures/windows/modern.tsv`" in line)
+    stated = re.search(r"every row but the (\w+) listed as its deviations on the Mac", row)
+    assert stated is not None
+    listed = sum(1 for suite, _ in KNOWN_DEVIATIONS if suite == "modern")
+    assert stated[1] == words[listed]

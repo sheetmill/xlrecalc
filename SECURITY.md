@@ -30,5 +30,5 @@ xlrecalc is in alpha. Fixes go into the next release; only the latest release re
 
 ## What happens after a report
 
-The report is acknowledged, reproduced and fixed in the next release, whose changelog states the fix in its Security
-section. Reporters are credited there unless they prefer not to be.
+The report is acknowledged, reproduced and fixed in the next release, whose changelog states the
+fix in its Security section. Reporters are credited there unless they prefer not to be.

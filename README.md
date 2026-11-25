@@ -221,9 +221,10 @@ union given to a function no capture shows reading one) raises `UnsupportedError
   Four quirks can be turned off (`Quirks`).
 - **Not yet**: the functions the
   [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists as absent;
-  unions of ranges; structured (table) references; `CELL`'s formatting
-  kinds; computed criteria in the database functions; `LINEST` with several regressors;
-  inserting or deleting rows and columns. A formula xlrecalc cannot compute keeps the value the
+  arrays of references (`N(OFFSET(A1,{0;1},0))`) and a union of ranges given to a function no
+  capture shows reading one; structured (table) references; `CELL`'s formatting kinds; computed
+  criteria in the database functions; `LINEST` with several regressors; inserting or deleting
+  rows and columns. A formula xlrecalc cannot compute keeps the value the
   file holds, or is written with none where the file holds none, and the report lists it.
 
 <!-- usage-end -->
