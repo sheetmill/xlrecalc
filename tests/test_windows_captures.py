@@ -31,6 +31,7 @@ def _header(path: Path) -> dict[str, object]:
 
 def test_there_is_a_windows_capture() -> None:
     assert [p.name for p in CAPTURES] == [
+        "bare_names.tsv",
         "bessel_family.tsv",
         "bonds.tsv",
         "cancellation.tsv",

@@ -43,7 +43,7 @@ from xlrecalc._formula._codegen import EXTERNAL, RefSpec
 from xlrecalc._formula._fastkey import raw_key, translate
 from xlrecalc._formula._prefixes import PREFIXES
 from xlrecalc._formula._template import Axis
-from xlrecalc._functions import registry_for
+from xlrecalc._functions import BARE_NAMES, registry_for
 from xlrecalc._limits import StepLimitError
 from xlrecalc._opening import Volatility
 from xlrecalc._ops import Ops
@@ -93,6 +93,9 @@ class Template:
     """Compiled as an array formula: ranges are arrays, the result may be an array."""
     forms: frozenset[str] = frozenset()
     """Forms its text uses that are not computed where evaluation reaches them (``Compiled``)."""
+    bare: frozenset[str] = frozenset()
+    """Labels of the names it calls without the file prefix Excel requires (``BARE_NAMES``): each
+    call is ``#NAME?``, as in Excel, and the report counts the label for every cell evaluated."""
 
 
 @dataclass
@@ -506,6 +509,7 @@ class Engine:
             bare_label(c) for c in compiled.calls if c not in self.registry and not self._defined(c)
         }
         unsupported |= compiled.features
+        bare = frozenset(missing_prefix_label(c) for c in compiled.calls if c in BARE_NAMES)
         template = Template(
             key,
             compiled.fn,
@@ -518,6 +522,7 @@ class Engine:
             compiled.intersects,
             array_mode,
             compiled.forms,
+            bare,
         )
         tid = len(self.templates)
         self.templates.append(template)
@@ -1544,6 +1549,8 @@ class Engine:
         where = CellRef(s.name, row + 1, col + 1)
         if template.unsupported:
             self._count_labels(n, template.unsupported)
+        if template.bare:
+            self._count_labels(n, template.bare)
         if self._held_back and n in self._held_back:  # rests on a value out of date (§7.6)
             if key not in s.values:
                 s.values[key] = NAME
@@ -2044,6 +2051,11 @@ class Engine:
     def is_subtotal(self, sheet: int, row: int, col: int) -> bool:
         tid = self.sheets[sheet].templates.at(row, col)
         return tid is not None and self.templates[tid].subtotal
+
+
+def missing_prefix_label(name: str) -> str:
+    """The report's label for a name Excel writes with a prefix, called without it."""
+    return f"{name} written without the {PREFIXES[name]} prefix Excel requires; Excel shows #NAME?"
 
 
 def bare_label(name: str) -> str:

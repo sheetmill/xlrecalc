@@ -21,17 +21,17 @@ platform.
 | `ACCRINTM` | | absent | | | | | |
 | `ACOS` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
 | `ACOSH` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
-| `ACOT` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
-| `ACOTH` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
+| `ACOT` | math | implemented | 32 | 32 | 0 | 4 ulps |  |
+| `ACOTH` | math | implemented | 32 | 32 | 0 | 4 ulps |  |
 | `ADDRESS` | lookup and reference | implemented | 152 | 152 | 0 |  |  |
 | `AGGREGATE` | | absent | | | | | |
 | `AMORDEGRC` | | absent | | | | | |
 | `AMORLINC` | | absent | | | | | |
 | `ANCHORARRAY` | lookup and reference | implemented | 0 | 0 | 0 |  |  |
 | `AND` | logical | implemented | 28 | 28 | 0 |  |  |
-| `ARABIC` | math | implemented | 44 | 44 | 0 |  |  |
+| `ARABIC` | math | implemented | 45 | 45 | 0 |  |  |
 | `AREAS` | lookup and reference | implemented | 16 | 16 | 0 |  |  |
-| `ARRAYTOTEXT` | text | implemented | 199 | 199 | 0 |  |  |
+| `ARRAYTOTEXT` | text | implemented | 200 | 200 | 0 |  |  |
 | `ASC` | | absent | | | | | |
 | `ASIN` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
 | `ASINH` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
@@ -44,64 +44,64 @@ platform.
 | `AVERAGEIF` | math | implemented | 72 | 72 | 0 |  |  |
 | `AVERAGEIFS` | math | implemented | 87 | 87 | 0 |  |  |
 | `BAHTTEXT` | | absent | | | | | |
-| `BASE` | math | implemented | 305 | 305 | 0 |  |  |
+| `BASE` | math | implemented | 306 | 306 | 0 |  |  |
 | `BESSELI` | engineering | implemented | 1287 | 1287 | 0 |  |  |
 | `BESSELJ` | engineering | implemented | 1366 | 1366 | 0 | 8 ulps |  |
 | `BESSELK` | engineering | implemented | 759 | 759 | 0 |  |  |
 | `BESSELY` | engineering | implemented | 963 | 963 | 0 | 8 ulps |  |
-| `BETA.DIST` | statistical | implemented | 694 | 693 | 1 | 1e-13 relative |  |
-| `BETA.INV` | statistical | implemented | 166 | 156 | 10 | 1e-13 relative |  |
+| `BETA.DIST` | statistical | implemented | 695 | 694 | 1 | 1e-13 relative |  |
+| `BETA.INV` | statistical | implemented | 167 | 157 | 10 | 1e-13 relative |  |
 | `BETADIST` | statistical | implemented | 33 | 33 | 0 | 1e-14 relative |  |
 | `BETAINV` | statistical | implemented | 17 | 17 | 0 | 1e-14 relative |  |
 | `BIN2DEC` | engineering | implemented | 21 | 21 | 0 |  |  |
 | `BIN2HEX` | engineering | implemented | 304 | 304 | 0 |  |  |
 | `BIN2OCT` | engineering | implemented | 205 | 205 | 0 |  |  |
-| `BINOM.DIST` | statistical | implemented | 596 | 531 | 65 | 8 ulps |  |
-| `BINOM.DIST.RANGE` | statistical | implemented | 170 | 144 | 26 | 8 ulps |  |
-| `BINOM.INV` | statistical | implemented | 163 | 162 | 1 |  |  |
+| `BINOM.DIST` | statistical | implemented | 597 | 532 | 65 | 8 ulps |  |
+| `BINOM.DIST.RANGE` | statistical | implemented | 171 | 145 | 26 | 8 ulps |  |
+| `BINOM.INV` | statistical | implemented | 164 | 163 | 1 |  |  |
 | `BINOMDIST` | statistical | implemented | 94 | 94 | 0 | 8 ulps |  |
-| `BITAND` | engineering | implemented | 200 | 200 | 0 |  |  |
-| `BITLSHIFT` | engineering | implemented | 228 | 228 | 0 |  |  |
-| `BITOR` | engineering | implemented | 200 | 200 | 0 |  |  |
-| `BITRSHIFT` | engineering | implemented | 228 | 228 | 0 |  |  |
-| `BITXOR` | engineering | implemented | 200 | 200 | 0 |  |  |
-| `BYCOL` | logical | implemented | 6 | 6 | 0 |  |  |
-| `BYROW` | logical | implemented | 6 | 6 | 0 |  |  |
+| `BITAND` | engineering | implemented | 201 | 201 | 0 |  |  |
+| `BITLSHIFT` | engineering | implemented | 229 | 229 | 0 |  |  |
+| `BITOR` | engineering | implemented | 201 | 201 | 0 |  |  |
+| `BITRSHIFT` | engineering | implemented | 229 | 229 | 0 |  |  |
+| `BITXOR` | engineering | implemented | 201 | 201 | 0 |  |  |
+| `BYCOL` | logical | implemented | 7 | 7 | 0 |  |  |
+| `BYROW` | logical | implemented | 7 | 7 | 0 |  |  |
 | `CALL` | | absent | | | | | |
 | `CEILING` | math | implemented | 276 | 276 | 0 |  |  |
-| `CEILING.MATH` | math | implemented | 246 | 246 | 0 |  |  |
-| `CEILING.PRECISE` | math | implemented | 305 | 305 | 0 |  |  |
+| `CEILING.MATH` | math | implemented | 247 | 247 | 0 |  |  |
+| `CEILING.PRECISE` | math | implemented | 306 | 306 | 0 |  |  |
 | `CELL` | information | partial | 3 | 3 | 0 |  | the kinds that depend on formatting are unsupported: styles are not read |
 | `CHAR` | text | implemented | 1173 | 1173 | 0 |  |  |
 | `CHIDIST` | statistical | implemented | 16 | 16 | 0 | 1e-14 relative |  |
 | `CHIINV` | statistical | implemented | 34 | 30 | 4 | 1e-14 relative |  |
-| `CHISQ.DIST` | statistical | implemented | 197 | 197 | 0 | 1e-12 relative |  |
-| `CHISQ.DIST.RT` | statistical | implemented | 87 | 87 | 0 | 1e-13 relative |  |
-| `CHISQ.INV` | statistical | implemented | 130 | 126 | 4 | 1e-13 relative |  |
-| `CHISQ.INV.RT` | statistical | implemented | 177 | 163 | 14 | 1e-13 relative |  |
-| `CHISQ.TEST` | statistical | implemented | 19 | 19 | 0 | 1e-15 relative |  |
+| `CHISQ.DIST` | statistical | implemented | 198 | 198 | 0 | 1e-12 relative |  |
+| `CHISQ.DIST.RT` | statistical | implemented | 88 | 88 | 0 | 1e-13 relative |  |
+| `CHISQ.INV` | statistical | implemented | 131 | 127 | 4 | 1e-13 relative |  |
+| `CHISQ.INV.RT` | statistical | implemented | 178 | 164 | 14 | 1e-13 relative |  |
+| `CHISQ.TEST` | statistical | implemented | 20 | 20 | 0 | 1e-15 relative |  |
 | `CHITEST` | statistical | implemented | 19 | 19 | 0 | 1e-15 relative |  |
 | `CHOOSE` | lookup and reference | implemented | 13 | 13 | 0 |  |  |
-| `CHOOSECOLS` | lookup and reference | implemented | 43 | 43 | 0 |  |  |
-| `CHOOSEROWS` | lookup and reference | implemented | 29 | 29 | 0 |  |  |
+| `CHOOSECOLS` | lookup and reference | implemented | 44 | 44 | 0 |  |  |
+| `CHOOSEROWS` | lookup and reference | implemented | 30 | 30 | 0 |  |  |
 | `CLEAN` | text | implemented | 539 | 539 | 0 |  |  |
 | `CODE` | text | implemented | 418 | 418 | 0 |  |  |
 | `COLUMN` | lookup and reference | implemented | 5 | 5 | 0 |  |  |
 | `COLUMNS` | lookup and reference | implemented | 11 | 11 | 0 |  |  |
 | `COMBIN` | math | implemented | 290 | 290 | 0 | 4 ulps |  |
-| `COMBINA` | math | implemented | 208 | 208 | 0 | 4 ulps |  |
+| `COMBINA` | math | implemented | 209 | 209 | 0 | 4 ulps |  |
 | `COMPLEX` | engineering | implemented | 385 | 385 | 0 |  |  |
-| `CONCAT` | text | implemented | 35 | 35 | 0 |  |  |
+| `CONCAT` | text | implemented | 36 | 36 | 0 |  |  |
 | `CONCATENATE` | text | implemented | 22 | 22 | 0 |  |  |
 | `CONFIDENCE` | statistical | implemented | 805 | 805 | 0 | 4 ulps |  |
-| `CONFIDENCE.NORM` | statistical | implemented | 805 | 805 | 0 | 4 ulps |  |
-| `CONFIDENCE.T` | statistical | implemented | 98 | 93 | 5 | 1e-14 relative |  |
+| `CONFIDENCE.NORM` | statistical | implemented | 806 | 806 | 0 | 4 ulps |  |
+| `CONFIDENCE.T` | statistical | implemented | 99 | 94 | 5 | 1e-14 relative |  |
 | `CONVERT` | engineering | implemented | 12232 | 12232 | 0 |  |  |
 | `CORREL` | statistical | implemented | 16 | 16 | 0 | 4 ulps |  |
 | `COS` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
 | `COSH` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
-| `COT` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
-| `COTH` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
+| `COT` | math | implemented | 32 | 32 | 0 | 4 ulps |  |
+| `COTH` | math | implemented | 32 | 32 | 0 | 4 ulps |  |
 | `COUNT` | statistical | implemented | 17 | 17 | 0 |  |  |
 | `COUNTA` | statistical | implemented | 17 | 17 | 0 |  |  |
 | `COUNTBLANK` | statistical | implemented | 7 | 7 | 0 |  |  |
@@ -114,11 +114,11 @@ platform.
 | `COUPNUM` | financial | implemented | 110 | 110 | 0 |  |  |
 | `COUPPCD` | financial | implemented | 96 | 96 | 0 |  |  |
 | `COVAR` | statistical | implemented | 25 | 25 | 0 | 4 ulps |  |
-| `COVARIANCE.P` | statistical | implemented | 25 | 25 | 0 | 4 ulps |  |
-| `COVARIANCE.S` | statistical | implemented | 25 | 25 | 0 | 4 ulps |  |
+| `COVARIANCE.P` | statistical | implemented | 26 | 26 | 0 | 4 ulps |  |
+| `COVARIANCE.S` | statistical | implemented | 26 | 26 | 0 | 4 ulps |  |
 | `CRITBINOM` | statistical | implemented | 53 | 53 | 0 |  |  |
-| `CSC` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
-| `CSCH` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
+| `CSC` | math | implemented | 32 | 32 | 0 | 4 ulps |  |
+| `CSCH` | math | implemented | 32 | 32 | 0 | 4 ulps |  |
 | `CUBEKPIMEMBER` | | absent | | | | | |
 | `CUBEMEMBER` | | absent | | | | | |
 | `CUBEMEMBERPROPERTY` | | absent | | | | | |
@@ -133,7 +133,7 @@ platform.
 | `DATEVALUE` | date and time | implemented | 138 | 138 | 0 |  |  |
 | `DAVERAGE` | database | partial | 141 | 140 | 1 |  | computed criteria are not supported |
 | `DAY` | date and time | implemented | 38 | 38 | 0 |  |  |
-| `DAYS` | date and time | implemented | 394 | 394 | 0 |  |  |
+| `DAYS` | date and time | implemented | 395 | 395 | 0 |  |  |
 | `DAYS360` | date and time | implemented | 402 | 402 | 0 |  |  |
 | `DB` | financial | implemented | 1494 | 1494 | 0 | 8 ulps |  |
 | `DBCS` | | absent | | | | | |
@@ -143,7 +143,7 @@ platform.
 | `DEC2BIN` | engineering | implemented | 313 | 313 | 0 |  |  |
 | `DEC2HEX` | engineering | implemented | 313 | 313 | 0 |  |  |
 | `DEC2OCT` | engineering | implemented | 313 | 313 | 0 |  |  |
-| `DECIMAL` | math | implemented | 88 | 88 | 0 |  |  |
+| `DECIMAL` | math | implemented | 89 | 89 | 0 |  |  |
 | `DEGREES` | math | implemented | 31 | 31 | 0 |  |  |
 | `DELTA` | engineering | implemented | 136 | 136 | 0 |  |  |
 | `DEVSQ` | statistical | implemented | 33 | 33 | 0 | 4 ulps |  |
@@ -155,7 +155,7 @@ platform.
 | `DOLLARDE` | financial | implemented | 225 | 225 | 0 |  |  |
 | `DOLLARFR` | financial | implemented | 225 | 225 | 0 |  |  |
 | `DPRODUCT` | database | partial | 154 | 152 | 2 |  | computed criteria are not supported |
-| `DROP` | lookup and reference | implemented | 28 | 28 | 0 |  |  |
+| `DROP` | lookup and reference | implemented | 29 | 29 | 0 |  |  |
 | `DSTDEV` | database | partial | 154 | 152 | 2 | 4 ulps | computed criteria are not supported |
 | `DSTDEVP` | database | partial | 154 | 152 | 2 | 4 ulps | computed criteria are not supported |
 | `DSUM` | database | partial | 142 | 141 | 1 |  | computed criteria are not supported |
@@ -167,22 +167,22 @@ platform.
 | `ENCODEURL` | text | partial | 179 | 179 | 0 |  | computed under platform="windows"; #NAME? under "mac", as Excel for Mac does not know it |
 | `EOMONTH` | date and time | implemented | 41 | 41 | 0 |  |  |
 | `ERF` | engineering | implemented | 108 | 103 | 5 | 4 ulps |  |
-| `ERF.PRECISE` | engineering | implemented | 56 | 56 | 0 | 4 ulps |  |
+| `ERF.PRECISE` | engineering | implemented | 57 | 57 | 0 | 4 ulps |  |
 | `ERFC` | engineering | implemented | 56 | 54 | 2 | 4 ulps |  |
-| `ERFC.PRECISE` | engineering | implemented | 56 | 54 | 2 | 4 ulps |  |
-| `ERROR.TYPE` | information | implemented | 569 | 535 | 1 |  |  |
+| `ERFC.PRECISE` | engineering | implemented | 57 | 55 | 2 | 4 ulps |  |
+| `ERROR.TYPE` | information | implemented | 722 | 688 | 1 |  |  |
 | `EUROCONVERT` | | absent | | | | | |
 | `EVEN` | math | implemented | 31 | 31 | 0 |  |  |
 | `EXACT` | text | implemented | 85 | 85 | 0 |  |  |
 | `EXP` | math | implemented | 18 | 18 | 0 |  |  |
-| `EXPAND` | lookup and reference | implemented | 36 | 36 | 0 |  |  |
-| `EXPON.DIST` | statistical | implemented | 143 | 143 | 0 | 4 ulps |  |
+| `EXPAND` | lookup and reference | implemented | 37 | 37 | 0 |  |  |
+| `EXPON.DIST` | statistical | implemented | 144 | 144 | 0 | 4 ulps |  |
 | `EXPONDIST` | statistical | implemented | 17 | 17 | 0 | 4 ulps |  |
-| `F.DIST` | statistical | implemented | 545 | 544 | 1 | 1e-12 relative |  |
-| `F.DIST.RT` | statistical | implemented | 253 | 253 | 0 | 1e-12 relative |  |
-| `F.INV` | statistical | implemented | 203 | 199 | 4 | 1e-12 relative |  |
-| `F.INV.RT` | statistical | implemented | 173 | 170 | 3 | 1e-13 relative |  |
-| `F.TEST` | statistical | implemented | 23 | 23 | 0 | 1e-14 relative |  |
+| `F.DIST` | statistical | implemented | 546 | 545 | 1 | 1e-12 relative |  |
+| `F.DIST.RT` | statistical | implemented | 254 | 254 | 0 | 1e-12 relative |  |
+| `F.INV` | statistical | implemented | 204 | 200 | 4 | 1e-12 relative |  |
+| `F.INV.RT` | statistical | implemented | 174 | 171 | 3 | 1e-13 relative |  |
+| `F.TEST` | statistical | implemented | 24 | 24 | 0 | 1e-14 relative |  |
 | `FACT` | math | implemented | 37 | 37 | 0 | 8 ulps |  |
 | `FACTDOUBLE` | math | implemented | 37 | 37 | 0 | 8 ulps |  |
 | `FALSE` | logical | implemented | 1 | 1 | 0 |  |  |
@@ -196,27 +196,27 @@ platform.
 | `FISHERINV` | statistical | implemented | 19 | 19 | 0 | 4 ulps |  |
 | `FIXED` | text | implemented | 259 | 259 | 0 |  |  |
 | `FLOOR` | math | implemented | 276 | 276 | 0 |  |  |
-| `FLOOR.MATH` | math | implemented | 246 | 246 | 0 |  |  |
-| `FLOOR.PRECISE` | math | implemented | 305 | 305 | 0 |  |  |
+| `FLOOR.MATH` | math | implemented | 247 | 247 | 0 |  |  |
+| `FLOOR.PRECISE` | math | implemented | 306 | 306 | 0 |  |  |
 | `FORECAST` | statistical | implemented | 173 | 172 | 1 | 4 ulps |  |
 | `FORECAST.ETS` | | absent | | | | | |
 | `FORECAST.ETS.CONFINT` | | absent | | | | | |
 | `FORECAST.ETS.SEASONALITY` | | absent | | | | | |
 | `FORECAST.ETS.STAT` | | absent | | | | | |
-| `FORECAST.LINEAR` | statistical | implemented | 173 | 172 | 1 | 4 ulps |  |
-| `FORMULATEXT` | information | partial | 25 | 23 | 2 |  | the @ the formula bar adds to a legacy formula is not shown |
+| `FORECAST.LINEAR` | statistical | implemented | 174 | 173 | 1 | 4 ulps |  |
+| `FORMULATEXT` | information | partial | 26 | 24 | 2 |  | the @ the formula bar adds to a legacy formula is not shown |
 | `FREQUENCY` | statistical | implemented | 24 | 24 | 0 |  |  |
 | `FTEST` | statistical | implemented | 23 | 23 | 0 | 1e-14 relative |  |
 | `FV` | financial | implemented | 129 | 129 | 0 |  |  |
 | `FVSCHEDULE` | financial | implemented | 88 | 88 | 0 |  |  |
-| `GAMMA` | statistical | implemented | 63 | 61 | 2 | 4 ulps |  |
-| `GAMMA.DIST` | statistical | implemented | 377 | 375 | 2 | 1e-13 relative |  |
-| `GAMMA.INV` | statistical | implemented | 209 | 206 | 3 | 1e-13 relative |  |
+| `GAMMA` | statistical | implemented | 64 | 62 | 2 | 4 ulps |  |
+| `GAMMA.DIST` | statistical | implemented | 378 | 376 | 2 | 1e-13 relative |  |
+| `GAMMA.INV` | statistical | implemented | 210 | 207 | 3 | 1e-13 relative |  |
 | `GAMMADIST` | statistical | implemented | 22 | 22 | 0 | 1e-14 relative |  |
 | `GAMMAINV` | statistical | implemented | 11 | 11 | 0 | 1e-15 relative |  |
 | `GAMMALN` | statistical | implemented | 63 | 59 | 4 | 4 ulps |  |
-| `GAMMALN.PRECISE` | statistical | implemented | 63 | 59 | 4 | 4 ulps |  |
-| `GAUSS` | statistical | implemented | 19 | 18 | 1 | 4 ulps |  |
+| `GAMMALN.PRECISE` | statistical | implemented | 64 | 60 | 4 | 4 ulps |  |
+| `GAUSS` | statistical | implemented | 20 | 19 | 1 | 4 ulps |  |
 | `GCD` | math | implemented | 214 | 214 | 0 |  |  |
 | `GEOMEAN` | statistical | implemented | 33 | 31 | 2 | 4 ulps |  |
 | `GESTEP` | engineering | implemented | 136 | 136 | 0 |  |  |
@@ -229,24 +229,24 @@ platform.
 | `HEX2OCT` | engineering | implemented | 212 | 212 | 0 |  |  |
 | `HLOOKUP` | lookup and reference | implemented | 25 | 25 | 0 |  |  |
 | `HOUR` | date and time | implemented | 27 | 27 | 0 |  |  |
-| `HSTACK` | lookup and reference | implemented | 19 | 19 | 0 |  |  |
+| `HSTACK` | lookup and reference | implemented | 20 | 20 | 0 |  |  |
 | `HYPERLINK` | lookup and reference | implemented | 64 | 64 | 0 |  |  |
-| `HYPGEOM.DIST` | statistical | implemented | 633 | 633 | 0 | 8 ulps |  |
+| `HYPGEOM.DIST` | statistical | implemented | 634 | 634 | 0 | 8 ulps |  |
 | `HYPGEOMDIST` | statistical | implemented | 70 | 70 | 0 | 8 ulps |  |
 | `IF` | logical | implemented | 63 | 63 | 0 |  |  |
-| `IFERROR` | logical | implemented | 525 | 492 | 0 |  |  |
-| `IFNA` | logical | implemented | 15 | 15 | 0 |  |  |
-| `IFS` | logical | implemented | 33 | 33 | 0 |  |  |
+| `IFERROR` | logical | implemented | 678 | 645 | 0 |  |  |
+| `IFNA` | logical | implemented | 16 | 16 | 0 |  |  |
+| `IFS` | logical | implemented | 34 | 34 | 0 |  |  |
 | `IMABS` | engineering | implemented | 19 | 19 | 0 |  |  |
 | `IMAGE` | | absent | | | | | |
 | `IMAGINARY` | engineering | implemented | 35 | 35 | 0 |  |  |
 | `IMARGUMENT` | engineering | implemented | 16 | 16 | 0 | 4 ulps |  |
 | `IMCONJUGATE` | engineering | implemented | 16 | 16 | 0 |  |  |
 | `IMCOS` | engineering | implemented | 16 | 16 | 0 |  |  |
-| `IMCOSH` | engineering | implemented | 16 | 15 | 1 |  |  |
-| `IMCOT` | engineering | implemented | 35 | 32 | 3 |  |  |
-| `IMCSC` | engineering | implemented | 16 | 14 | 2 |  |  |
-| `IMCSCH` | engineering | implemented | 16 | 13 | 3 |  |  |
+| `IMCOSH` | engineering | implemented | 17 | 16 | 1 |  |  |
+| `IMCOT` | engineering | implemented | 36 | 33 | 3 |  |  |
+| `IMCSC` | engineering | implemented | 17 | 15 | 2 |  |  |
+| `IMCSCH` | engineering | implemented | 17 | 14 | 3 |  |  |
 | `IMDIV` | engineering | implemented | 70 | 70 | 0 |  |  |
 | `IMEXP` | engineering | implemented | 16 | 11 | 5 |  |  |
 | `IMLN` | engineering | implemented | 29 | 29 | 0 |  |  |
@@ -255,14 +255,14 @@ platform.
 | `IMPOWER` | engineering | implemented | 186 | 160 | 26 |  |  |
 | `IMPRODUCT` | engineering | implemented | 72 | 72 | 0 |  |  |
 | `IMREAL` | engineering | implemented | 36 | 36 | 0 |  |  |
-| `IMSEC` | engineering | implemented | 16 | 13 | 3 |  |  |
-| `IMSECH` | engineering | implemented | 16 | 13 | 3 |  |  |
+| `IMSEC` | engineering | implemented | 17 | 14 | 3 |  |  |
+| `IMSECH` | engineering | implemented | 17 | 14 | 3 |  |  |
 | `IMSIN` | engineering | implemented | 16 | 14 | 2 |  |  |
-| `IMSINH` | engineering | implemented | 16 | 14 | 2 |  |  |
+| `IMSINH` | engineering | implemented | 17 | 15 | 2 |  |  |
 | `IMSQRT` | engineering | implemented | 16 | 10 | 6 |  |  |
 | `IMSUB` | engineering | implemented | 70 | 70 | 0 |  |  |
 | `IMSUM` | engineering | implemented | 72 | 72 | 0 |  |  |
-| `IMTAN` | engineering | implemented | 35 | 33 | 2 |  |  |
+| `IMTAN` | engineering | implemented | 36 | 34 | 2 |  |  |
 | `INDEX` | lookup and reference | implemented | 488 | 478 | 10 |  |  |
 | `INDIRECT` | lookup and reference | implemented | 15 | 15 | 0 |  |  |
 | `INFO` | | absent | | | | | |
@@ -275,21 +275,21 @@ platform.
 | `ISERR` | information | implemented | 19 | 19 | 0 |  |  |
 | `ISERROR` | information | implemented | 24 | 24 | 0 |  |  |
 | `ISEVEN` | information | implemented | 59 | 58 | 1 |  |  |
-| `ISFORMULA` | information | implemented | 25 | 24 | 1 |  |  |
+| `ISFORMULA` | information | implemented | 26 | 25 | 1 |  |  |
 | `ISLOGICAL` | information | implemented | 20 | 20 | 0 |  |  |
 | `ISNA` | information | implemented | 22 | 22 | 0 |  |  |
 | `ISNONTEXT` | information | implemented | 60 | 59 | 1 |  |  |
 | `ISNUMBER` | information | implemented | 51 | 51 | 0 |  |  |
 | `ISO.CEILING` | math | implemented | 305 | 305 | 0 |  |  |
 | `ISODD` | information | implemented | 59 | 58 | 1 |  |  |
-| `ISOMITTED` | information | implemented | 6 | 6 | 0 |  |  |
-| `ISOWEEKNUM` | date and time | implemented | 42 | 42 | 0 |  |  |
+| `ISOMITTED` | information | implemented | 7 | 7 | 0 |  |  |
+| `ISOWEEKNUM` | date and time | implemented | 43 | 43 | 0 |  |  |
 | `ISPMT` | financial | implemented | 1326 | 1326 | 0 | 4 ulps |  |
 | `ISREF` | information | implemented | 41 | 41 | 0 |  |  |
 | `ISTEXT` | information | implemented | 22 | 22 | 0 |  |  |
 | `JIS` | | absent | | | | | |
 | `KURT` | statistical | implemented | 33 | 31 | 2 | 4 ulps |  |
-| `LAMBDA` | logical | implemented | 91 | 91 | 0 |  |  |
+| `LAMBDA` | logical | implemented | 92 | 92 | 0 |  |  |
 | `LARGE` | statistical | implemented | 32 | 31 | 1 |  |  |
 | `LCM` | math | implemented | 214 | 214 | 0 |  |  |
 | `LEFT` | text | implemented | 37 | 37 | 0 |  |  |
@@ -303,17 +303,17 @@ platform.
 | `LOG10` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
 | `LOGEST` | | absent | | | | | |
 | `LOGINV` | statistical | implemented | 21 | 21 | 0 | 4 ulps |  |
-| `LOGNORM.DIST` | statistical | implemented | 262 | 246 | 16 | 4 ulps |  |
-| `LOGNORM.INV` | statistical | implemented | 167 | 167 | 0 | 4 ulps |  |
+| `LOGNORM.DIST` | statistical | implemented | 263 | 247 | 16 | 4 ulps |  |
+| `LOGNORM.INV` | statistical | implemented | 168 | 168 | 0 | 4 ulps |  |
 | `LOGNORMDIST` | statistical | implemented | 51 | 50 | 1 | 4 ulps |  |
 | `LOOKUP` | lookup and reference | implemented | 46 | 46 | 0 |  |  |
 | `LOWER` | text | implemented | 23 | 23 | 0 |  |  |
-| `MAKEARRAY` | logical | implemented | 13 | 13 | 0 |  |  |
-| `MAP` | logical | implemented | 17 | 17 | 0 |  |  |
+| `MAKEARRAY` | logical | implemented | 14 | 14 | 0 |  |  |
+| `MAP` | logical | implemented | 18 | 18 | 0 |  |  |
 | `MATCH` | lookup and reference | implemented | 143 | 143 | 0 |  |  |
 | `MAX` | statistical | implemented | 17 | 17 | 0 |  |  |
 | `MAXA` | statistical | implemented | 38 | 38 | 0 |  |  |
-| `MAXIFS` | math | implemented | 87 | 87 | 0 |  |  |
+| `MAXIFS` | math | implemented | 88 | 88 | 0 |  |  |
 | `MDETERM` | math | implemented | 58 | 58 | 0 |  |  |
 | `MDURATION` | financial | implemented | 115 | 114 | 1 | 4 ulps |  |
 | `MEDIAN` | statistical | implemented | 38 | 38 | 0 |  |  |
@@ -321,30 +321,30 @@ platform.
 | `MIDB` | text | implemented | 453 | 453 | 0 |  |  |
 | `MIN` | statistical | implemented | 17 | 17 | 0 |  |  |
 | `MINA` | statistical | implemented | 38 | 38 | 0 |  |  |
-| `MINIFS` | math | implemented | 87 | 87 | 0 |  |  |
+| `MINIFS` | math | implemented | 88 | 88 | 0 |  |  |
 | `MINUTE` | date and time | implemented | 27 | 27 | 0 |  |  |
 | `MINVERSE` | math | implemented | 303 | 303 | 0 |  |  |
 | `MIRR` | financial | implemented | 597 | 597 | 0 | 8 ulps |  |
 | `MMULT` | math | implemented | 35 | 35 | 0 |  |  |
 | `MOD` | math | implemented | 15 | 15 | 0 |  |  |
 | `MODE` | statistical | implemented | 36 | 36 | 0 |  |  |
-| `MODE.MULT` | statistical | implemented | 19 | 19 | 0 |  |  |
-| `MODE.SNGL` | statistical | implemented | 36 | 36 | 0 |  |  |
+| `MODE.MULT` | statistical | implemented | 20 | 20 | 0 |  |  |
+| `MODE.SNGL` | statistical | implemented | 37 | 37 | 0 |  |  |
 | `MONTH` | date and time | implemented | 38 | 38 | 0 |  |  |
 | `MROUND` | math | implemented | 276 | 276 | 0 |  |  |
 | `MULTINOMIAL` | math | implemented | 46 | 32 | 14 |  |  |
-| `MUNIT` | math | implemented | 39 | 39 | 0 |  |  |
+| `MUNIT` | math | implemented | 40 | 40 | 0 |  |  |
 | `N` | lookup and reference | implemented | 20 | 20 | 0 |  |  |
 | `NA` | information | implemented | 34 | 34 | 0 |  |  |
-| `NEGBINOM.DIST` | statistical | implemented | 396 | 382 | 14 | 8 ulps |  |
+| `NEGBINOM.DIST` | statistical | implemented | 397 | 383 | 14 | 8 ulps |  |
 | `NEGBINOMDIST` | statistical | implemented | 32 | 32 | 0 | 8 ulps |  |
 | `NETWORKDAYS` | date and time | implemented | 140 | 140 | 0 |  |  |
 | `NETWORKDAYS.INTL` | date and time | implemented | 77 | 77 | 0 |  |  |
 | `NOMINAL` | financial | implemented | 148 | 148 | 0 | 4 ulps |  |
-| `NORM.DIST` | statistical | implemented | 22 | 21 | 1 | 4 ulps |  |
-| `NORM.INV` | statistical | implemented | 23 | 23 | 0 | 4 ulps |  |
-| `NORM.S.DIST` | statistical | implemented | 44 | 40 | 4 | 4 ulps |  |
-| `NORM.S.INV` | statistical | implemented | 20 | 20 | 0 | 4 ulps |  |
+| `NORM.DIST` | statistical | implemented | 23 | 22 | 1 | 4 ulps |  |
+| `NORM.INV` | statistical | implemented | 24 | 24 | 0 | 4 ulps |  |
+| `NORM.S.DIST` | statistical | implemented | 45 | 41 | 4 | 4 ulps |  |
+| `NORM.S.INV` | statistical | implemented | 21 | 21 | 0 | 4 ulps |  |
 | `NORMDIST` | statistical | implemented | 32 | 31 | 1 | 4 ulps |  |
 | `NORMINV` | statistical | implemented | 35 | 35 | 0 | 4 ulps |  |
 | `NORMSDIST` | statistical | implemented | 34 | 29 | 5 | 4 ulps |  |
@@ -353,7 +353,7 @@ platform.
 | `NOW` | date and time | implemented | 1 | 1 | 0 |  |  |
 | `NPER` | financial | implemented | 120 | 120 | 0 |  |  |
 | `NPV` | financial | implemented | 88 | 88 | 0 | 4 ulps |  |
-| `NUMBERVALUE` | text | implemented | 521 | 520 | 1 |  |  |
+| `NUMBERVALUE` | text | implemented | 522 | 521 | 1 |  |  |
 | `OCT2BIN` | engineering | implemented | 306 | 306 | 0 |  |  |
 | `OCT2DEC` | engineering | implemented | 23 | 23 | 0 |  |  |
 | `OCT2HEX` | engineering | implemented | 207 | 207 | 0 |  |  |
@@ -364,24 +364,24 @@ platform.
 | `ODDLYIELD` | | absent | | | | | |
 | `OFFSET` | lookup and reference | implemented | 28 | 28 | 0 |  |  |
 | `OR` | logical | implemented | 26 | 26 | 0 |  |  |
-| `PDURATION` | financial | implemented | 645 | 645 | 0 | 4 ulps |  |
+| `PDURATION` | financial | implemented | 646 | 646 | 0 | 4 ulps |  |
 | `PEARSON` | statistical | implemented | 25 | 25 | 0 | 4 ulps |  |
 | `PERCENTILE` | statistical | implemented | 54 | 54 | 0 |  |  |
-| `PERCENTILE.EXC` | statistical | implemented | 124 | 124 | 0 |  |  |
-| `PERCENTILE.INC` | statistical | implemented | 54 | 54 | 0 |  |  |
+| `PERCENTILE.EXC` | statistical | implemented | 125 | 125 | 0 |  |  |
+| `PERCENTILE.INC` | statistical | implemented | 55 | 55 | 0 |  |  |
 | `PERCENTOF` | | absent | | | | | |
 | `PERCENTRANK` | statistical | implemented | 181 | 181 | 0 |  |  |
-| `PERCENTRANK.EXC` | statistical | implemented | 181 | 181 | 0 |  |  |
-| `PERCENTRANK.INC` | statistical | implemented | 181 | 181 | 0 |  |  |
+| `PERCENTRANK.EXC` | statistical | implemented | 182 | 182 | 0 |  |  |
+| `PERCENTRANK.INC` | statistical | implemented | 182 | 182 | 0 |  |  |
 | `PERMUT` | math | implemented | 290 | 290 | 0 | 4 ulps |  |
-| `PERMUTATIONA` | math | implemented | 208 | 208 | 0 |  |  |
-| `PHI` | statistical | implemented | 19 | 19 | 0 | 4 ulps |  |
+| `PERMUTATIONA` | math | implemented | 209 | 209 | 0 |  |  |
+| `PHI` | statistical | implemented | 20 | 20 | 0 | 4 ulps |  |
 | `PHONETIC` | | absent | | | | | |
 | `PI` | math | implemented | 2 | 2 | 0 |  |  |
 | `PIVOTBY` | | absent | | | | | |
 | `PMT` | financial | implemented | 141 | 141 | 0 | 4 ulps |  |
 | `POISSON` | statistical | implemented | 53 | 51 | 2 | 8 ulps |  |
-| `POISSON.DIST` | statistical | implemented | 131 | 117 | 14 | 8 ulps |  |
+| `POISSON.DIST` | statistical | implemented | 132 | 118 | 14 | 8 ulps |  |
 | `POWER` | math | implemented | 15 | 15 | 0 |  |  |
 | `PPMT` | financial | implemented | 82 | 82 | 0 | 4 ulps |  |
 | `PRICE` | financial | implemented | 123 | 121 | 2 | 8 ulps |  |
@@ -392,19 +392,19 @@ platform.
 | `PROPER` | text | implemented | 29 | 29 | 0 |  |  |
 | `PV` | financial | implemented | 131 | 131 | 0 |  |  |
 | `QUARTILE` | statistical | implemented | 25 | 25 | 0 |  |  |
-| `QUARTILE.EXC` | statistical | implemented | 92 | 92 | 0 |  |  |
-| `QUARTILE.INC` | statistical | implemented | 25 | 25 | 0 |  |  |
+| `QUARTILE.EXC` | statistical | implemented | 93 | 93 | 0 |  |  |
+| `QUARTILE.INC` | statistical | implemented | 26 | 26 | 0 |  |  |
 | `QUOTIENT` | math | implemented | 208 | 208 | 0 |  |  |
 | `RADIANS` | math | implemented | 31 | 31 | 0 |  |  |
 | `RAND` | math | implemented | 5 | 4 | 1 |  |  |
-| `RANDARRAY` | math | implemented | 28 | 18 | 10 |  |  |
+| `RANDARRAY` | math | implemented | 29 | 19 | 10 |  |  |
 | `RANDBETWEEN` | math | implemented | 9 | 7 | 2 |  |  |
 | `RANK` | statistical | implemented | 21 | 21 | 0 |  |  |
-| `RANK.AVG` | statistical | implemented | 21 | 21 | 0 |  |  |
-| `RANK.EQ` | statistical | implemented | 21 | 21 | 0 |  |  |
+| `RANK.AVG` | statistical | implemented | 22 | 22 | 0 |  |  |
+| `RANK.EQ` | statistical | implemented | 22 | 22 | 0 |  |  |
 | `RATE` | financial | implemented | 208 | 202 | 6 | 1e-09 relative |  |
 | `RECEIVED` | financial | implemented | 381 | 381 | 0 | 4 ulps |  |
-| `REDUCE` | logical | implemented | 9 | 9 | 0 |  |  |
+| `REDUCE` | logical | implemented | 10 | 10 | 0 |  |  |
 | `REGEXEXTRACT` | | absent | | | | | |
 | `REGEXREPLACE` | | absent | | | | | |
 | `REGEXTEST` | | absent | | | | | |
@@ -420,36 +420,36 @@ platform.
 | `ROUNDUP` | math | implemented | 678 | 678 | 0 |  |  |
 | `ROW` | lookup and reference | implemented | 9 | 9 | 0 |  |  |
 | `ROWS` | lookup and reference | implemented | 18 | 18 | 0 |  |  |
-| `RRI` | financial | implemented | 645 | 645 | 0 | 4 ulps |  |
+| `RRI` | financial | implemented | 646 | 646 | 0 | 4 ulps |  |
 | `RSQ` | statistical | implemented | 25 | 25 | 0 | 4 ulps |  |
 | `RTD` | | absent | | | | | |
-| `SCAN` | logical | implemented | 10 | 10 | 0 |  |  |
+| `SCAN` | logical | implemented | 11 | 11 | 0 |  |  |
 | `SEARCH` | text | implemented | 403 | 403 | 0 |  |  |
 | `SEARCHB` | text | implemented | 353 | 353 | 0 |  |  |
-| `SEC` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
-| `SECH` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
+| `SEC` | math | implemented | 32 | 32 | 0 | 4 ulps |  |
+| `SECH` | math | implemented | 32 | 32 | 0 | 4 ulps |  |
 | `SECOND` | date and time | implemented | 27 | 27 | 0 |  |  |
-| `SEQUENCE` | math | implemented | 44 | 44 | 0 |  |  |
+| `SEQUENCE` | math | implemented | 45 | 45 | 0 |  |  |
 | `SERIESSUM` | math | implemented | 69 | 69 | 0 | 4 ulps |  |
-| `SHEET` | information | implemented | 25 | 23 | 2 |  |  |
-| `SHEETS` | information | implemented | 25 | 23 | 2 |  |  |
+| `SHEET` | information | implemented | 26 | 24 | 2 |  |  |
+| `SHEETS` | information | implemented | 26 | 24 | 2 |  |  |
 | `SIGN` | math | implemented | 31 | 31 | 0 |  |  |
 | `SIN` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
 | `SINGLE` | lookup and reference | implemented | 1 | 1 | 0 |  |  |
 | `SINH` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
 | `SKEW` | statistical | implemented | 33 | 33 | 0 | 4 ulps |  |
-| `SKEW.P` | statistical | implemented | 33 | 33 | 0 | 4 ulps |  |
+| `SKEW.P` | statistical | implemented | 34 | 34 | 0 | 4 ulps |  |
 | `SLN` | financial | implemented | 41 | 41 | 0 |  |  |
 | `SLOPE` | statistical | implemented | 25 | 25 | 0 | 4 ulps |  |
 | `SMALL` | statistical | implemented | 32 | 31 | 1 |  |  |
 | `SORT` | lookup and reference | implemented | 137 | 137 | 0 |  |  |
-| `SORTBY` | lookup and reference | implemented | 26 | 26 | 0 |  |  |
+| `SORTBY` | lookup and reference | implemented | 27 | 27 | 0 |  |  |
 | `SQRT` | math | implemented | 18 | 18 | 0 |  |  |
 | `SQRTPI` | math | implemented | 31 | 31 | 0 |  |  |
 | `STANDARDIZE` | statistical | implemented | 821 | 821 | 0 |  |  |
 | `STDEV` | statistical | implemented | 38 | 38 | 0 | 4 ulps |  |
-| `STDEV.P` | statistical | implemented | 38 | 38 | 0 | 4 ulps |  |
-| `STDEV.S` | statistical | implemented | 38 | 38 | 0 | 4 ulps |  |
+| `STDEV.P` | statistical | implemented | 39 | 39 | 0 | 4 ulps |  |
+| `STDEV.S` | statistical | implemented | 39 | 39 | 0 | 4 ulps |  |
 | `STDEVA` | statistical | implemented | 38 | 38 | 0 | 4 ulps |  |
 | `STDEVP` | statistical | implemented | 38 | 38 | 0 | 4 ulps |  |
 | `STDEVPA` | statistical | implemented | 38 | 38 | 0 | 4 ulps |  |
@@ -465,16 +465,16 @@ platform.
 | `SUMX2MY2` | math | implemented | 9 | 9 | 0 |  |  |
 | `SUMX2PY2` | math | implemented | 9 | 9 | 0 |  |  |
 | `SUMXMY2` | math | implemented | 9 | 9 | 0 |  |  |
-| `SWITCH` | logical | implemented | 40 | 40 | 0 |  |  |
+| `SWITCH` | logical | implemented | 41 | 41 | 0 |  |  |
 | `SYD` | financial | implemented | 261 | 261 | 0 |  |  |
 | `T` | text | implemented | 33 | 33 | 0 |  |  |
-| `T.DIST` | statistical | implemented | 233 | 226 | 7 | 1e-12 relative |  |
-| `T.DIST.2T` | statistical | implemented | 103 | 96 | 7 | 1e-13 relative |  |
-| `T.DIST.RT` | statistical | implemented | 107 | 100 | 7 | 1e-13 relative |  |
-| `T.INV` | statistical | implemented | 130 | 113 | 17 | 1e-12 relative |  |
-| `T.INV.2T` | statistical | implemented | 159 | 138 | 21 | 1e-13 relative |  |
-| `T.TEST` | statistical | implemented | 335 | 335 | 0 | 1e-14 relative |  |
-| `TAKE` | lookup and reference | implemented | 37 | 37 | 0 |  |  |
+| `T.DIST` | statistical | implemented | 234 | 227 | 7 | 1e-12 relative |  |
+| `T.DIST.2T` | statistical | implemented | 104 | 97 | 7 | 1e-13 relative |  |
+| `T.DIST.RT` | statistical | implemented | 108 | 101 | 7 | 1e-13 relative |  |
+| `T.INV` | statistical | implemented | 131 | 114 | 17 | 1e-12 relative |  |
+| `T.INV.2T` | statistical | implemented | 160 | 139 | 21 | 1e-13 relative |  |
+| `T.TEST` | statistical | implemented | 336 | 336 | 0 | 1e-14 relative |  |
+| `TAKE` | lookup and reference | implemented | 38 | 38 | 0 |  |  |
 | `TAN` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
 | `TANH` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
 | `TBILLEQ` | financial | implemented | 271 | 270 | 1 | 4 ulps |  |
@@ -482,16 +482,16 @@ platform.
 | `TBILLYIELD` | financial | implemented | 271 | 271 | 0 | 4 ulps |  |
 | `TDIST` | statistical | implemented | 115 | 115 | 0 | 1e-14 relative |  |
 | `TEXT` | text | implemented | 1173 | 1173 | 0 |  |  |
-| `TEXTAFTER` | text | implemented | 2447 | 2447 | 0 |  |  |
-| `TEXTBEFORE` | text | implemented | 2447 | 2447 | 0 |  |  |
-| `TEXTJOIN` | text | implemented | 81 | 81 | 0 |  |  |
-| `TEXTSPLIT` | text | implemented | 77 | 77 | 0 |  |  |
+| `TEXTAFTER` | text | implemented | 2448 | 2448 | 0 |  |  |
+| `TEXTBEFORE` | text | implemented | 2448 | 2448 | 0 |  |  |
+| `TEXTJOIN` | text | implemented | 82 | 82 | 0 |  |  |
+| `TEXTSPLIT` | text | implemented | 78 | 78 | 0 |  |  |
 | `TIME` | date and time | implemented | 551 | 551 | 0 |  |  |
 | `TIMEVALUE` | date and time | implemented | 128 | 128 | 0 |  |  |
 | `TINV` | statistical | implemented | 24 | 24 | 0 | 1e-13 relative |  |
-| `TOCOL` | lookup and reference | implemented | 34 | 34 | 0 |  |  |
+| `TOCOL` | lookup and reference | implemented | 35 | 35 | 0 |  |  |
 | `TODAY` | date and time | implemented | 1 | 1 | 0 |  |  |
-| `TOROW` | lookup and reference | implemented | 16 | 16 | 0 |  |  |
+| `TOROW` | lookup and reference | implemented | 17 | 17 | 0 |  |  |
 | `TRANSLATE` | | absent | | | | | |
 | `TRANSPOSE` | lookup and reference | implemented | 16 | 16 | 0 |  |  |
 | `TREND` | | absent | | | | | |
@@ -502,40 +502,40 @@ platform.
 | `TRUNC` | math | implemented | 307 | 307 | 0 |  |  |
 | `TTEST` | statistical | implemented | 335 | 335 | 0 | 1e-14 relative |  |
 | `TYPE` | information | implemented | 60 | 59 | 1 |  |  |
-| `UNICHAR` | text | implemented | 705 | 705 | 0 |  |  |
-| `UNICODE` | text | implemented | 286 | 286 | 0 |  |  |
-| `UNIQUE` | lookup and reference | implemented | 36 | 36 | 0 |  |  |
+| `UNICHAR` | text | implemented | 706 | 706 | 0 |  |  |
+| `UNICODE` | text | implemented | 287 | 287 | 0 |  |  |
+| `UNIQUE` | lookup and reference | implemented | 37 | 37 | 0 |  |  |
 | `UPPER` | text | implemented | 24 | 24 | 0 |  |  |
 | `USDOLLAR` | text | implemented | 198 | 198 | 0 |  |  |
 | `VALUE` | text | implemented | 150 | 150 | 0 |  |  |
-| `VALUETOTEXT` | text | implemented | 193 | 193 | 0 |  |  |
+| `VALUETOTEXT` | text | implemented | 194 | 194 | 0 |  |  |
 | `VAR` | statistical | implemented | 38 | 38 | 0 | 4 ulps |  |
-| `VAR.P` | statistical | implemented | 38 | 38 | 0 | 4 ulps |  |
-| `VAR.S` | statistical | implemented | 38 | 38 | 0 | 4 ulps |  |
+| `VAR.P` | statistical | implemented | 39 | 39 | 0 | 4 ulps |  |
+| `VAR.S` | statistical | implemented | 39 | 39 | 0 | 4 ulps |  |
 | `VARA` | statistical | implemented | 38 | 38 | 0 | 4 ulps |  |
 | `VARP` | statistical | implemented | 38 | 38 | 0 | 4 ulps |  |
 | `VARPA` | statistical | implemented | 38 | 38 | 0 | 4 ulps |  |
 | `VDB` | financial | implemented | 505 | 423 | 82 | 4 ulps |  |
 | `VLOOKUP` | lookup and reference | implemented | 93 | 93 | 0 |  |  |
-| `VSTACK` | lookup and reference | implemented | 25 | 25 | 0 |  |  |
+| `VSTACK` | lookup and reference | implemented | 26 | 26 | 0 |  |  |
 | `WEBSERVICE` | | absent | | | | | |
 | `WEEKDAY` | date and time | implemented | 76 | 76 | 0 |  |  |
 | `WEEKNUM` | date and time | implemented | 954 | 874 | 80 |  |  |
 | `WEIBULL` | statistical | implemented | 70 | 70 | 0 | 4 ulps |  |
-| `WEIBULL.DIST` | statistical | implemented | 382 | 370 | 12 | 4 ulps |  |
+| `WEIBULL.DIST` | statistical | implemented | 383 | 371 | 12 | 4 ulps |  |
 | `WORKDAY` | date and time | implemented | 152 | 152 | 0 |  |  |
 | `WORKDAY.INTL` | date and time | implemented | 77 | 77 | 0 |  |  |
-| `WRAPCOLS` | lookup and reference | implemented | 19 | 19 | 0 |  |  |
-| `WRAPROWS` | lookup and reference | implemented | 34 | 34 | 0 |  |  |
+| `WRAPCOLS` | lookup and reference | implemented | 20 | 20 | 0 |  |  |
+| `WRAPROWS` | lookup and reference | implemented | 35 | 35 | 0 |  |  |
 | `XIRR` | financial | implemented | 707 | 667 | 40 |  |  |
-| `XLOOKUP` | lookup and reference | partial | 326 | 325 | 1 |  | the regular-expression match mode is not implemented |
-| `XMATCH` | lookup and reference | partial | 488 | 487 | 1 |  | the regular-expression match mode is not implemented |
+| `XLOOKUP` | lookup and reference | partial | 327 | 326 | 1 |  | the regular-expression match mode is not implemented |
+| `XMATCH` | lookup and reference | partial | 489 | 488 | 1 |  | the regular-expression match mode is not implemented |
 | `XNPV` | financial | implemented | 32 | 32 | 0 |  |  |
-| `XOR` | logical | implemented | 129 | 129 | 0 |  |  |
+| `XOR` | logical | implemented | 130 | 130 | 0 |  |  |
 | `YEAR` | date and time | implemented | 38 | 38 | 0 |  |  |
 | `YEARFRAC` | date and time | implemented | 995 | 995 | 0 |  |  |
 | `YIELD` | financial | implemented | 124 | 123 | 1 | 1e-09 relative |  |
 | `YIELDDISC` | financial | implemented | 381 | 381 | 0 | 4 ulps |  |
 | `YIELDMAT` | | absent | | | | | |
-| `Z.TEST` | statistical | implemented | 73 | 73 | 0 | 1e-12 relative |  |
+| `Z.TEST` | statistical | implemented | 74 | 74 | 0 | 1e-12 relative |  |
 | `ZTEST` | statistical | implemented | 73 | 73 | 0 | 1e-12 relative |  |

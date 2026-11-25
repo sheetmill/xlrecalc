@@ -109,7 +109,9 @@ class Report:
     Attributes:
         unsupported: Unsupported function or feature, and the number of cells using it. A run
             of iterative calculation that would pass ``ReadLimits.max_iteration_evaluations``
-            counts its cells under a label naming that limit.
+            counts its cells under a label naming that limit. A name Excel writes with a file
+            prefix, called without it (``XLOOKUP`` for ``_xlfn.XLOOKUP``), is ``#NAME?`` as in
+            Excel, and its cells are counted under a label saying so.
         exceptions: Cells where an internal error was caught, with the error; such a cell is
             ``#VALUE!`` and uncomputed.
         circular: Cells on a circular reference or depending on one, with iterative calculation

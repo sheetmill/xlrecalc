@@ -335,8 +335,9 @@ def _prefix_rows() -> list[tuple[str, str, str, str, str]]:
 
 @pytest.mark.parametrize("row", _prefix_rows(), ids=lambda r: r[2])
 def test_plain_formulas_match_excel_or_are_reported(row: tuple[str, str, str, str, str]) -> None:
-    """With ``_xlfn.`` each computes Excel's value; without it, a name Excel does not know, the
-    cell is reported with that cause and, the file holding no value for it, is ``#NAME?``."""
+    """With ``_xlfn.`` each computes Excel's value; without it, a name Excel does not know, each
+    computes Excel's value too (``#NAME?`` where the bare call runs) and the report names the
+    cause."""
     _, prefix, text, kind, value = row
     first = f'<row r="1"><c r="A1"><f>{text_escape(text)}</f></c><c r="Z1"><v>1.0</v></c></row>'
     rest = "".join(f'<row r="{i}"><c r="Z{i}"><v>{i}.0</v></c></row>' for i in (2, 3))
@@ -350,17 +351,15 @@ def test_plain_formulas_match_excel_or_are_reported(row: tuple[str, str, str, st
         assert same(got, want), (text, got, want)
         return
     labels = " ".join(report.unsupported)
-    assert "written without Excel's file prefix (_xlfn.): Excel shows #NAME?" in labels, labels
-    assert got == ErrorValue.NAME
-    if text in _BARE_INSIDE:  # reported, as every bare name is, though Excel's value differs
-        assert value != "#NAME?", text
-    else:
-        assert value == "#NAME?", text
+    assert "written without the _xlfn. prefix Excel requires; Excel shows #NAME?" in labels, labels
+    want = ErrorValue(value) if kind == "e" else float(value)
+    assert same(got, want), (text, got, want)
+    assert (value != "#NAME?") == (text in _BARE_INSIDE), text
 
 
 _BARE_INSIDE = frozenset({"_xlfn.LAMBDA(_xlpm.x,_xlpm.y,ISOMITTED(_xlpm.y))(1)"})
-"""A bare name inside a body Excel never runs (one argument for two parameters: ``#VALUE!``);
-the engine reports the formula for the name, as it does any formula holding a bare one."""
+"""A bare name inside a body Excel never runs (one argument for two parameters: ``#VALUE!``):
+the engine gives Excel's value and counts the label, as for any formula holding a bare name."""
 
 
 @pytest.mark.parametrize(

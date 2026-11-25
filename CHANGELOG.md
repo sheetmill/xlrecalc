@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- A name Excel writes with a file prefix, read from a file without it (`=XLOOKUP(...)` as openpyxl
+  writes it), computes to `#NAME?`, as Excel shows it, where the formula kept the value the file
+  caches, or was uncomputed without one. `Report.unsupported` counts such cells under
+  `XLOOKUP written without the _xlfn. prefix Excel requires; Excel shows #NAME?`; the cells are
+  computed, not in `from_kept` or `uncomputed`. A bare `SORT` or `FILTER` stays refused, and a
+  bare `LET`, not captured, keeps its value and is reported as before.
+
 ### Added
 - `SECURITY.md`, linked from the README: how to report a security problem privately, through
   GitHub's private vulnerability reporting, and which releases receive fixes (the latest).
+- The `bare_names` capture, from Excel for Mac and Excel for Windows, which agree: each of 153 names
+  Excel writes with a file prefix, called without it in a file with no cached values, is `#NAME?`.
 - The `dyn_cancel` capture, from Excel for Mac and Excel for Windows, which agree: cancellation
   snapping applies to an array result element by element, in a dynamic array and a legacy array
   formula, and `SUM` snaps its additions over an array while `SUMPRODUCT` does not, as the package

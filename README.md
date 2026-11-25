@@ -96,9 +96,9 @@ ws["E1"] = "=_xlfn._xlws.SORT(A1:A9)"      # SORT and FILTER take _xlfn._xlws.
 ws["F1"] = "=_xlfn.LET(_xlpm.x,A1,_xlpm.x*2)"  # LET's names take _xlpm.
 ```
 
-xlrecalc reads such a file as Excel does and names the cause in the report:
-`Report.unsupported` holds `UNIQUE written without Excel's file prefix (_xlfn.): Excel shows
-#NAME?`, and a bare `SORT` or `FILTER`, or a `LET` name without `_xlpm.`, is in
+xlrecalc reads such a file as Excel does and names the cause in the report: the bare `UNIQUE` is
+`#NAME?`, and `Report.unsupported` holds `UNIQUE written without the _xlfn. prefix Excel requires;
+Excel shows #NAME?`; a bare `SORT` or `FILTER`, or a `LET` name without `_xlpm.`, is in
 `Report.refused`. openpyxl writes no dynamic-array marker either, so its formulas are legacy
 ones, computed with implicit intersection: `D1` above gets one value and does not spill.
 `Workbook.set_formula` takes the names as typed in Excel and writes the prefixes itself, and for
@@ -198,7 +198,7 @@ text shows before evaluating.
   unit conversion.
   The [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 121,301 formulas computed by Excel and compared with xlrecalc's results: 120,491
+- **Evidence**: 121,454 formulas computed by Excel and compared with xlrecalc's results: 120,644
   match, bit for bit or within a small tolerance declared per function (a few units in the last
   place, or a relative one: 1E-9 for `IRR`, `RATE` and `YIELD`, 1E-15 to 1E-12 for the beta,
   gamma, chi-squared, F and t distributions), 777 known deviations, each listed with its reason

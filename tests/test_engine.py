@@ -418,8 +418,9 @@ def test_a_name_in_another_workbook_is_reported_like_any_external_reference():
 def test_a_bare_prefixed_name_in_a_file_is_reported_with_its_fix(tmp_path):
     """A function written without the prefix Excel gives it in a file is a name Excel does not know.
 
-    Excel shows #NAME? for UNIQUE, SORTBY and SEQUENCE written so, and refuses the file for SORT
-    and FILTER (captures dyn_*). The report names the cause and the prefix to write.
+    Excel shows #NAME? for each name it writes with a prefix, written so, whatever value the file
+    caches (capture bare_names), and refuses the file for SORT and FILTER (captures dyn_*). The
+    cell is computed, and the report names the cause and the prefix to write.
     """
     import xlrecalc
     from tests.xlsx_files import package
@@ -431,15 +432,18 @@ def test_a_bare_prefixed_name_in_a_file_is_reported_with_its_fix(tmp_path):
         '<c r="D1"><f>_xlfn.XLOOKUP(1,A1:A1,A1:A1)</f></c>'
         '<c r="E1"><f>NOSUCHFN(A1)</f></c>'
         '<c r="F1"><f>SORT(A1:A1)</f><v>1</v></c>'
+        '<c r="G1"><f>XLOOKUP(1,A1:A1,A1:A1)</f><v>5</v></c>'
     )
     path = tmp_path / "bare.xlsx"
     path.write_bytes(package(f'<row r="1">{cells}</row>'))
     report = xlrecalc.recalculate(path, tmp_path / "out.xlsx")
     assert report.unsupported == {
-        "XLOOKUP written without Excel's file prefix (_xlfn.): Excel shows #NAME?": 1,
-        "TEXTJOIN written without Excel's file prefix (_xlfn.): Excel shows #NAME?": 1,
+        "XLOOKUP written without the _xlfn. prefix Excel requires; Excel shows #NAME?": 2,
+        "TEXTJOIN written without the _xlfn. prefix Excel requires; Excel shows #NAME?": 1,
         "NOSUCHFN": 1,
     }
+    assert not report.from_kept
+    assert report.uncomputed == {xlrecalc.CellRef("Data", 1, 5)}  # NOSUCHFN: no cached value
     assert report.refused == {
         xlrecalc.CellRef("Data", 1, 6): (
             "SORT written without Excel's file prefix (_xlfn._xlws.): Excel refuses the file"
@@ -447,6 +451,7 @@ def test_a_bare_prefixed_name_in_a_file_is_reported_with_its_fix(tmp_path):
     }
     wb = xlrecalc.load(tmp_path / "out.xlsx")
     assert wb.value("D1") == 1.0
+    assert [wb.value(c) for c in ("B1", "C1", "G1")] == [xlrecalc.ErrorValue.NAME] * 3
 
 
 def test_number_literals_as_excel_takes_them_in_a_file():

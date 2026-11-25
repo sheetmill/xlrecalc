@@ -3856,6 +3856,37 @@ def function_names() -> list[Case]:
     return cases
 
 
+_BARE_LEFT_OUT = {"SORT", "FILTER", "LET"}
+"""Prefixed names whose bare call makes Excel refuse the file (``SORT``, ``FILTER``: ``REFUSED``
+of ``capture/dynamic_suites.py``) or may (``LET``, whose bound names Excel refuses without
+``_xlpm.``): a refused workbook gives no capture."""
+
+
+def bare_names() -> list[Case]:
+    """Each name Excel writes with a file prefix (``PREFIXES``), called without it.
+
+    The call is the one ``function_names`` makes with the prefix, the outer name's prefix dropped
+    (prefixes inside it, ``_xlfn.LAMBDA`` or ``_xlpm.``, stay). The cell is TRUE when the call gives
+    ``#NAME?``. Written by openpyxl, so no formula has a cached value and the workbook asks for a
+    full calculation on loading (``fullCalcOnLoad``). ``_BARE_LEFT_OUT`` and ``NAMES_LEFT_OUT``
+    are not called.
+    """
+    from capture.functions_list import FUNCTIONS
+    from xlrecalc._formula._prefixes import PREFIXES
+
+    taken = _formula_bar_calls()
+    cases = []
+    for name in sorted(PREFIXES):
+        if name in _BARE_LEFT_OUT or name in NAMES_LEFT_OUT:
+            continue
+        prefixed = PREFIXES[name] + name + "("
+        calls = _NAME_CALLS.get(name) or ([taken[name]] if name in FUNCTIONS else [])
+        call = next(c for c in calls if c.startswith(prefixed))
+        bare = name + "(" + call[len(prefixed) :]
+        cases.append(Case(name.lower(), f"IFERROR(ERROR.TYPE({bare})=5,FALSE)"))
+    return cases
+
+
 def encodeurl() -> list[Case]:
     """ENCODEURL over every code from 1 to 127, characters beyond, texts, other values, long text.
 
@@ -5147,4 +5178,5 @@ SUITES = {
     "xirr_sign_rules": Suite(xirr_sign_rules),
     "function_names": Suite(function_names, fixed={"Z1": 1.0, "Z2": 2.0}),
     "encodeurl": Suite(encodeurl),
+    "bare_names": Suite(bare_names, fixed={"Z1": 1.0, "Z2": 2.0}),
 }
