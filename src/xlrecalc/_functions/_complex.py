@@ -30,7 +30,7 @@ import re
 import sys
 from typing import Any
 
-from xlrecalc._arith import flush
+from xlrecalc._arith import flush, plain_sum
 from xlrecalc._coerce import Context, to_number
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._registry import function
@@ -447,7 +447,7 @@ def IMSUM(ctx: Any, *args: Any) -> Any:
     suffix = _suffix(*zs)
     if isinstance(suffix, ErrorValue):
         return VALUE
-    return _text(sum(z[0] for z in zs), sum(z[1] for z in zs), suffix)
+    return _text(plain_sum(z[0] for z in zs), plain_sum(z[1] for z in zs), suffix)
 
 
 @function("IMPRODUCT", "raw", variadic=True, category=E)

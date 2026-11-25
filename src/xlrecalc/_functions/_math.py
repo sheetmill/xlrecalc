@@ -10,7 +10,7 @@ from decimal import ROUND_DOWN, ROUND_HALF_DOWN, ROUND_HALF_UP, ROUND_UP, Decima
 from fractions import Fraction
 from typing import Any
 
-from xlrecalc._arith import flush, snap
+from xlrecalc._arith import flush, plain_sum, snap
 from xlrecalc._arrays import Padded, check_area, element, is_array, shape, to_array
 from xlrecalc._coerce import Context, numbers, scalar, to_number
 from xlrecalc._compare import criterion
@@ -1236,18 +1236,24 @@ def _paired(a: Any, b: Any) -> list[tuple[float, float]] | ErrorValue:
 def SUMX2MY2(ctx: Context, a: Any, b: Any) -> float | ErrorValue:
     """Sum of the differences of the squares of pairs."""
     pairs = _paired(a, b)
-    return pairs if isinstance(pairs, ErrorValue) else _finite(sum(x * x - y * y for x, y in pairs))
+    if isinstance(pairs, ErrorValue):
+        return pairs
+    return _finite(plain_sum(x * x - y * y for x, y in pairs))
 
 
 @function("SUMX2PY2", "array", "array", category=C)
 def SUMX2PY2(ctx: Context, a: Any, b: Any) -> float | ErrorValue:
     """Sum of the sums of the squares of pairs."""
     pairs = _paired(a, b)
-    return pairs if isinstance(pairs, ErrorValue) else _finite(sum(x * x + y * y for x, y in pairs))
+    if isinstance(pairs, ErrorValue):
+        return pairs
+    return _finite(plain_sum(x * x + y * y for x, y in pairs))
 
 
 @function("SUMXMY2", "array", "array", category=C)
 def SUMXMY2(ctx: Context, a: Any, b: Any) -> float | ErrorValue:
     """Sum of the squares of the differences of pairs."""
     pairs = _paired(a, b)
-    return pairs if isinstance(pairs, ErrorValue) else _finite(sum((x - y) ** 2 for x, y in pairs))
+    if isinstance(pairs, ErrorValue):
+        return pairs
+    return _finite(plain_sum((x - y) ** 2 for x, y in pairs))

@@ -11,11 +11,24 @@ left operand: ``=0.1+0.2-0.3`` and ``=(0.1+0.2)-0.3`` are 0, ``=(0.1+0.2-0.3)`` 
 from __future__ import annotations
 
 import math
+from collections.abc import Iterable
 
 from xlrecalc._numtext import DBL_MIN
 from xlrecalc._quirks import Quirks
 
-__all__ = ["flush", "snap"]
+__all__ = ["flush", "plain_sum", "snap"]
+
+
+def plain_sum(values: Iterable[float]) -> float:
+    """A sum of doubles added left to right, each addition rounded, as Excel adds.
+
+    Python's own ``sum`` compensates its additions from 3.12 (Neumaier) and does not on 3.11, so
+    its last bits differ between versions; this does not.
+    """
+    s = 0.0
+    for v in values:
+        s += v
+    return s
 
 
 def flush(x: float) -> float:

@@ -16,6 +16,7 @@ import struct
 import sys
 from typing import Any
 
+from xlrecalc._arith import plain_sum
 from xlrecalc._arrays import is_array, shape
 from xlrecalc._coerce import numbers
 from xlrecalc._formula import MISSING
@@ -319,7 +320,7 @@ def _gamma_temme(a: float, x: float) -> tuple[float, float]:
     phi = _minus_log1p((x - a) / a)
     y = a * phi
     z = math.sqrt(2 * phi) * (-1 if x < a else 1)
-    c = [sum(k * z**i for i, k in enumerate(row)) for row in _TEMME]
+    c = [plain_sum(k * z**i for i, k in enumerate(row)) for row in _TEMME]
     rest = (c[0] + (c[1] + c[2] / a) / a) * _exp(-y) / math.sqrt(2 * math.pi * a)
     if x < a:
         lower = math.erfc(math.sqrt(y)) / 2 - rest
@@ -816,8 +817,8 @@ def _sample(arg: Any, ctx: Any) -> list[float] | ErrorValue:
 
 
 def _mean_var(xs: list[float]) -> tuple[float, float]:
-    mean = sum(xs) / len(xs)
-    return mean, sum((v - mean) ** 2 for v in xs) / (len(xs) - 1)
+    mean = plain_sum(xs) / len(xs)
+    return mean, plain_sum((v - mean) ** 2 for v in xs) / (len(xs) - 1)
 
 
 @function("TTEST", "raw", "raw", "number", "number", category=S, rel=1e-14, rel_reason=_REL_TEST)
@@ -974,7 +975,7 @@ def Z_TEST(ctx: Any, array: Any, x: float, sigma: float | None = None) -> Any:
         return a
     if not a:
         return NA
-    mean = sum(a) / len(a)
+    mean = plain_sum(a) / len(a)
     if sigma is None:
         if len(a) < 2:
             return DIV0

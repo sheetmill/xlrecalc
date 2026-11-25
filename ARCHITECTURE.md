@@ -185,7 +185,9 @@ error can never share a key.
 **Arithmetic** (`_arith.py`): any result smaller in magnitude than the smallest normal double
 is 0; Excel has no subnormal numbers, and reads a subnormal constant from a file as 0. Sums are
 taken left to right in plain double arithmetic, no compensated summation, in `SUM` over a range
-or over arguments and in a chain of `+` (suite `sums`). `MOD(n,d)` is `n - d·⌊n/d⌋` computed
+or over arguments and in a chain of `+` (suite `sums`). Every sum of doubles in the package goes
+through `plain_sum`, never Python's `sum`, which compensates its additions from Python 3.12, so
+results do not depend on the Python version (`tests/test_sums.py`). `MOD(n,d)` is `n - d·⌊n/d⌋` computed
 exactly and rounded once (`MOD(-8,1/3)` is 0.33333333333333287); a negative number to a
 fractional power is its odd root when `1/y` is an odd integer (`(-8)^(1/3)` is
 -1.9999999999999998, `-exp(y·ln|x|)`), `#NUM!` otherwise. `ROUND` and `ROUNDDOWN`

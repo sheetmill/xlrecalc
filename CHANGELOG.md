@@ -21,6 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `linest_multi` capture (864 formulas), `linest_ill` (an ill-conditioned fit, 42 formulas),
   and `empty_args` with `LOGEST`, `TREND` and `GROWTH`, from Excel for Mac and Excel for Windows.
 
+### Fixed
+- On Python 3.12 and later, `BINOM.DIST`, `BINOM.DIST.RANGE`, `NEGBINOM.DIST`, `POISSON.DIST`,
+  `POISSON` and `F.TEST` (`FTEST`) could differ in their last bits from their results on Python
+  3.11, which the captures check against Excel: Python's `sum` compensates its additions from
+  3.12. Every sum of doubles now adds left to right, as on 3.11, on every version.
+
 ## [0.12.0] - 2026-11-25
 
 ### Added

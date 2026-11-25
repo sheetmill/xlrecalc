@@ -905,9 +905,9 @@ OTHER_PLATFORMS = frozenset({_LIBM_CANCELLATION, _COMPLEX_TEXT_BOUNDARY, _XIRR_P
 
 # Where the strict rules above for math-library rows hold. The last bits come with the operating
 # system's math library (its major and minor version: lgamma differs between macOS 26.5 and 26.7),
-# the machine's architecture, and Python's own math module (Python 3.14 on macOS 26.5 gives four
-# BINOM.DIST rows of distributions_family within 8 ulps that 3.11 gives past them). Moving it
-# means rerunning the suite there and settling every row that changes.
+# the machine's architecture, and Python's minor version (its math module; sums of doubles do not
+# depend on it, since the package adds them with plain_sum: tests/test_sums.py). Moving it means
+# rerunning the suite there and settling every row that changes.
 REFERENCE_PLATFORM = "macOS 26.5, arm64, Python 3.11"
 
 

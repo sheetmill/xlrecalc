@@ -16,6 +16,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
+from xlrecalc._arith import plain_sum
 from xlrecalc._arrays import to_array
 from xlrecalc._coerce import Context
 from xlrecalc._formula import MISSING
@@ -90,7 +91,7 @@ def fit(y: list[float], xs: list[list[float]], const: bool) -> Fit:
     null = [all(v == 0.0 for v in col) or (const and all(v == col[0] for v in col)) for col in xs]
     cols = ([[1.0] * n] if const else []) + [list(col) for j, col in enumerate(xs) if not null[j]]
     names = ([-1] if const else []) + [j for j in range(k) if not null[j]]  # -1: the constant
-    own = [math.sqrt(sum(v * v for v in col)) for col in cols]
+    own = [math.sqrt(plain_sum(v * v for v in col)) for col in cols]
     qy = list(y)
     order: list[int] = []  # positions in cols, in the order they are factored
     diag: list[float] = []
@@ -102,24 +103,24 @@ def fit(y: list[float], xs: list[list[float]], const: bool) -> Fit:
         if const and step == 0:
             at = 0
         else:
-            norms = [math.sqrt(sum(cols[j][i] ** 2 for i in range(step, n))) for j in left]
+            norms = [math.sqrt(plain_sum(cols[j][i] ** 2 for i in range(step, n))) for j in left]
             at = norms.index(max(norms))
         pick = left[at]
         left[0], left[at] = left[at], left[0]
         left.pop(0)
         col = cols[pick]
-        a = math.sqrt(sum(col[i] ** 2 for i in range(step, n)))
+        a = math.sqrt(plain_sum(col[i] ** 2 for i in range(step, n)))
         if own[pick] == 0.0 or a <= COLLINEAR * own[pick]:
             continue  # collinear with the columns before it: dropped
         v = col[step:]
         v[0] += math.copysign(a, v[0])
-        vv = sum(t * t for t in v)
+        vv = plain_sum(t * t for t in v)
         for j in [*left, pick]:
             c = cols[j]
-            s = 2.0 * sum(v[i] * c[step + i] for i in range(len(v))) / vv
+            s = 2.0 * plain_sum(v[i] * c[step + i] for i in range(len(v))) / vv
             for i in range(len(v)):
                 c[step + i] -= s * v[i]
-        s = 2.0 * sum(v[i] * qy[step + i] for i in range(len(v))) / vv
+        s = 2.0 * plain_sum(v[i] * qy[step + i] for i in range(len(v))) / vv
         for i in range(len(v)):
             qy[step + i] -= s * v[i]
         order.append(pick)
@@ -135,12 +136,12 @@ def fit(y: list[float], xs: list[list[float]], const: bool) -> Fit:
         coef[i] = s / cols[order[i]][i]
     p = r + sum(null)
     out.df = n - p
-    out.ssresid = sum(t * t for t in qy[p:]) if p < n else 0.0
+    out.ssresid = plain_sum(t * t for t in qy[p:]) if p < n else 0.0
     if const:
-        mean = sum(y) / n
-        total = sum((t - mean) ** 2 for t in y)
+        mean = plain_sum(y) / n
+        total = plain_sum((t - mean) ** 2 for t in y)
     else:
-        total = sum(t * t for t in y)
+        total = plain_sum(t * t for t in y)
     out.ssreg = total - out.ssresid
     out.regressors = p - (1 if const else 0)
     # standard errors: sey * the norm of each row of R's inverse
@@ -154,7 +155,7 @@ def fit(y: list[float], xs: list[list[float]], const: bool) -> Fit:
     sey = math.sqrt(out.ssresid / out.df) if out.df > 0 else 0.0
     for i, pos in enumerate(order):
         name = names[pos]
-        se = sey * math.sqrt(sum(t * t for t in inv[i])) if out.df > 0 else 0.0
+        se = sey * math.sqrt(plain_sum(t * t for t in inv[i])) if out.df > 0 else 0.0
         if name == -1:
             out.b, out.se_b = coef[i], se
         else:
@@ -279,7 +280,7 @@ def _predict(ys: Any, xs: Any, new: Any, const: Any, log: bool) -> Any:
                 return REF
             points = rows
             shape = (len(points), 1)
-    values = [f.b + sum(f.m[j] * pt[j] for j in range(k)) for pt in points]
+    values = [f.b + plain_sum(f.m[j] * pt[j] for j in range(k)) for pt in points]
     values = [math.exp(v) if log else v for v in values]
     if shape[0] == 1:
         return (tuple(values),)

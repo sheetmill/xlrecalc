@@ -9,7 +9,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
-from xlrecalc._arith import flush
+from xlrecalc._arith import flush, plain_sum
 from xlrecalc._arrays import NotImplementedFormError
 from xlrecalc._coerce import scalar, to_number
 from xlrecalc._functions._registry import function
@@ -71,7 +71,7 @@ def _binom_cdf(k: float, n: float, p: float) -> float:
     if k >= n:
         return 1.0
     _terms(int(k) + 1, "BINOM.DIST")
-    return min(1.0, sum(_binom_pmf(float(i), n, p) for i in range(int(k) + 1)))
+    return min(1.0, plain_sum(_binom_pmf(float(i), n, p) for i in range(int(k) + 1)))
 
 
 # Binomial -----------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ def BINOM_DIST_RANGE(
     if n < 0 or not 0 <= p <= 1 or lo < 0 or lo > n or hi < lo or hi > n:
         return NUM
     _terms(hi - lo + 1, "BINOM.DIST.RANGE")
-    return sum(_binom_pmf(float(i), n, p) for i in range(lo, hi + 1))
+    return plain_sum(_binom_pmf(float(i), n, p) for i in range(lo, hi + 1))
 
 
 @function("CRITBINOM", "number", "number", "number", category=S)
@@ -172,7 +172,7 @@ def NEGBINOM_DIST(ctx: Any, number_f: float, number_s: float, p: float, cumulati
     if not cumulative:
         return pmf(f)
     _terms(f + 1, "NEGBINOM.DIST")
-    return sum(pmf(i) for i in range(f + 1))
+    return plain_sum(pmf(i) for i in range(f + 1))
 
 
 # Poisson and hypergeometric -------------------------------------------------------------------
@@ -203,7 +203,7 @@ def POISSON_DIST(ctx: Any, x: float, mean: float, cumulative: bool) -> Any:
     if not cumulative:
         return pmf(k)
     _terms(k + 1, "POISSON.DIST")
-    return sum(pmf(i) for i in range(k + 1))
+    return plain_sum(pmf(i) for i in range(k + 1))
 
 
 @function(
@@ -247,7 +247,7 @@ def HYPGEOM_DIST(
 
     if cumulative:
         _terms(min(k, high) - low + 1, "HYPGEOM.DIST")
-        return sum((pmf(i) for i in range(low, min(k, high) + 1)), 0.0)
+        return plain_sum(pmf(i) for i in range(low, min(k, high) + 1))
     return pmf(k)
 
 
