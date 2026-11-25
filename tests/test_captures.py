@@ -964,6 +964,7 @@ SUITES = [
     "ties_tiny",
     "three_d",
     "unions",
+    "three_d_snap",
 ]
 # Suites compared in part: only the rows whose tag is named. Of ``iteration``, the XIRR rows; its
 # IRR, RATE and YIELD rows are evidence for their methods, not matched.

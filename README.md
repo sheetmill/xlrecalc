@@ -198,7 +198,7 @@ union given to a function no capture shows reading one) raises `UnsupportedError
   unit conversion.
   The [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 121,779 formulas computed by Excel and compared with xlrecalc's results: 120,964
+- **Evidence**: 121,793 formulas computed by Excel and compared with xlrecalc's results: 120,978
   match, bit for bit or within a small tolerance declared per function (a few units in the last
   place, or a relative one: 1E-9 for `IRR`, `RATE` and `YIELD`, 1E-15 to 1E-12 for the beta,
   gamma, chi-squared, F and t distributions), 780 known deviations, each listed with its reason

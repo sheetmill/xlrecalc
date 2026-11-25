@@ -43,6 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `SECURITY.md`, linked from the README: what the package does with untrusted workbooks, how to
   report a security problem privately, through GitHub's private vulnerability reporting, where a
   problem of xlio, xlformat or sheetpeek goes, and which releases receive fixes (the latest).
+- The `three_d_snap` capture, from Excel for Mac and Excel for Windows, which agree: a `SUM` over a
+  3-D reference snaps cancellation as a `SUM` over one range does, as the package computes it (no
+  change in results).
 - The `three_d` capture, from Excel for Mac and Excel for Windows, which agree: 3-D references
   over three sheets in every function that takes a reference, and their forms. A capture suite's
   fixed cells may name another sheet (`Jan!A1`), which the workbook then holds after the case

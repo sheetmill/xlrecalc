@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "job_id": "xlrecalc-20261125-094855-three-d-snap",
+  "package": "xlrecalc",
+  "purpose": "capture suite three_d_snap: open the workbook, save a copy with the cached values",
+  "requires": {
+    "excel_build_min": {
+      "windows": "16.0.20527.0"
+    },
+    "edition": "Microsoft 365"
+  },
+  "limits": {
+    "job_seconds": 3600,
+    "step_seconds": 600
+  },
+  "audit": false,
+  "workbooks": [
+    {
+      "file": "three_d_snap.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "three_d_snap.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    }
+  ]
+}

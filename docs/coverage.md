@@ -457,7 +457,7 @@ platform.
 | `STOCKHISTORY` | | absent | | | | | |
 | `SUBSTITUTE` | text | implemented | 521 | 521 | 0 |  |  |
 | `SUBTOTAL` | math | implemented | 21 | 21 | 0 |  |  |
-| `SUM` | math | implemented | 167 | 167 | 0 |  |  |
+| `SUM` | math | implemented | 179 | 179 | 0 |  |  |
 | `SUMIF` | math | implemented | 90 | 90 | 0 |  |  |
 | `SUMIFS` | math | implemented | 45 | 45 | 0 |  |  |
 | `SUMPRODUCT` | math | implemented | 22 | 22 | 0 |  |  |

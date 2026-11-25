@@ -1,0 +1,27 @@
+# suite: three_d_snap
+# excel: 16.115 for Mac, locale en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# date_system: 1900
+# captured: 2026-11-25
+# generator: capture/suites.py:three_d_snap
+# method: openpyxl writes the formula in column A and the inputs in B onward (floats as
+#   repr text); Excel opens the workbook, calculates and saves a copy; the cached value
+#   and type of A are read from the copy's XML (n: number, str: text, b: logical,
+#   e: error); inputs and expected_repr are Python repr, with ErrorValue('#N/A') for an
+#   error input and FormulaInput('=""') for an input cell holding that formula
+# fixed: {'Jan!A1': 3.96, 'Feb!A1': -5.6, 'Mar!A1': 1.64, 'Jan!B1': 0.1, 'Feb!B1': 0.2, 'Mar!B1': -0.3, 'X1': 3.96, 'X2': -5.6, 'X3': 1.64, 'Y1': 0.1, 'Y2': 0.2, 'Y3': -0.3}
+# columns: suite tag case formula inputs expected_type expected_repr
+three_d_snap	form	1	SUM(Jan:Mar!A1)	()	n	0.0
+three_d_snap	form	2	SUM(Jan!A1,Feb!A1,Mar!A1)	()	n	0.0
+three_d_snap	form	3	SUM(X1:X3)	()	n	0.0
+three_d_snap	form	4	SUM((X1,X2,X3))	()	n	0.0
+three_d_snap	form	5	Jan!A1+Feb!A1+Mar!A1	()	n	0.0
+three_d_snap	form	6	SUM(Jan:Feb!A1,Mar!A1)	()	n	0.0
+three_d_snap	form	7	SUM(Jan:Mar!A1)+0	()	n	0.0
+three_d_snap	form	8	0+SUM(Jan:Mar!A1)	()	n	0.0
+three_d_snap	form	9	SUM(Jan:Mar!B1)	()	n	0.0
+three_d_snap	form	10	SUM(Jan!B1,Feb!B1,Mar!B1)	()	n	0.0
+three_d_snap	form	11	SUM(Y1:Y3)	()	n	0.0
+three_d_snap	form	12	Jan!B1+Feb!B1+Mar!B1	()	n	0.0
+three_d_snap	form	13	SUM(Jan:Mar!A1:B1)	()	n	0.0
+three_d_snap	form	14	SUM(Jan:Mar!A1,Jan:Mar!B1)	()	n	0.0

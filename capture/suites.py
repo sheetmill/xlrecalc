@@ -4086,6 +4086,29 @@ def unions() -> list[Case]:
     return cases
 
 
+_THREE_D_SNAP_TABLE: dict[str, Input] = {
+    "Jan!A1": 3.96, "Feb!A1": -5.6, "Mar!A1": 1.64,
+    "Jan!B1": 0.1, "Feb!B1": 0.2, "Mar!B1": -0.3,
+    "X1": 3.96, "X2": -5.6, "X3": 1.64,
+    "Y1": 0.1, "Y2": 0.2, "Y3": -0.3,
+}  # fmt: skip
+"""Numbers whose sum cancels to a residue of a few units in the last place, once on three sheets
+(``A1`` and ``B1`` of Jan, Feb and Mar) and once down one column of the case sheet."""
+
+
+def three_d_snap() -> list[Case]:
+    """Whether a 3-D ``SUM`` snaps cancellation as ``SUM`` over one range does (capture
+    ``dyn_cancel``): the same three numbers as a 3-D reference, as three arguments, as one range,
+    as a union, added by operators, and under a last ``+``."""
+    forms = [
+        "SUM(Jan:Mar!A1)", "SUM(Jan!A1,Feb!A1,Mar!A1)", "SUM(X1:X3)", "SUM((X1,X2,X3))",
+        "Jan!A1+Feb!A1+Mar!A1", "SUM(Jan:Feb!A1,Mar!A1)", "SUM(Jan:Mar!A1)+0",
+        "0+SUM(Jan:Mar!A1)", "SUM(Jan:Mar!B1)", "SUM(Jan!B1,Feb!B1,Mar!B1)", "SUM(Y1:Y3)",
+        "Jan!B1+Feb!B1+Mar!B1", "SUM(Jan:Mar!A1:B1)", "SUM(Jan:Mar!A1,Jan:Mar!B1)",
+    ]  # fmt: skip
+    return [Case("form", f) for f in forms]
+
+
 def encodeurl() -> list[Case]:
     """ENCODEURL over every code from 1 to 127, characters beyond, texts, other values, long text.
 
@@ -5381,4 +5404,5 @@ SUITES = {
     "ties_tiny": Suite(ties_tiny),
     "three_d": Suite(three_d, fixed=_THREE_D_TABLE),
     "unions": Suite(unions, fixed=_UNIONS_TABLE),
+    "three_d_snap": Suite(three_d_snap, fixed=_THREE_D_SNAP_TABLE),
 }

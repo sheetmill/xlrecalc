@@ -1,0 +1,329 @@
+# suite: three_d_snap
+# generator: capture/suites.py:three_d_snap, capture/job.py
+# method: the job beside this file (three_d_snap.job.json) opens the workbook the
+#   generator writes and saves a copy; the cached value and type of A are read from the
+#   copy's XML as capture/pipeline.py reads them (n: number, str: text, b: logical,
+#   e: error)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "three_d_snap.xlsx": {
+#      "bytes": 6436,
+#      "sha256": "4d01ce847a99c9e3b9fdda823cf3c26156de3c76f5a09a70ee4a16d7f6dda37a"
+#     }
+#    },
+#    "job_id": "xlrecalc-20261125-094855-three-d-snap",
+#    "manifest_sha256": "9a0e7b7e24755ca8f310950167dd03dc7b5ad54bfa43efc040c6e2211cb8f299",
+#    "runner_version": "0.1.28"
+#   }
+# columns: suite tag case formula inputs expected_type expected_repr
+three_d_snap	form	1	SUM(Jan:Mar!A1)	()	n	0.0
+three_d_snap	form	2	SUM(Jan!A1,Feb!A1,Mar!A1)	()	n	0.0
+three_d_snap	form	3	SUM(X1:X3)	()	n	0.0
+three_d_snap	form	4	SUM((X1,X2,X3))	()	n	0.0
+three_d_snap	form	5	Jan!A1+Feb!A1+Mar!A1	()	n	0.0
+three_d_snap	form	6	SUM(Jan:Feb!A1,Mar!A1)	()	n	0.0
+three_d_snap	form	7	SUM(Jan:Mar!A1)+0	()	n	0.0
+three_d_snap	form	8	0+SUM(Jan:Mar!A1)	()	n	0.0
+three_d_snap	form	9	SUM(Jan:Mar!B1)	()	n	0.0
+three_d_snap	form	10	SUM(Jan!B1,Feb!B1,Mar!B1)	()	n	0.0
+three_d_snap	form	11	SUM(Y1:Y3)	()	n	0.0
+three_d_snap	form	12	Jan!B1+Feb!B1+Mar!B1	()	n	0.0
+three_d_snap	form	13	SUM(Jan:Mar!A1:B1)	()	n	0.0
+three_d_snap	form	14	SUM(Jan:Mar!A1,Jan:Mar!B1)	()	n	0.0
