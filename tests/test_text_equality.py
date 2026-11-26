@@ -1,4 +1,4 @@
-"""Which equality of text each kind of comparison uses (capture ``collate_functions``).
+"""Which equality of text each kind of comparison uses on the Mac (capture ``collate_functions``).
 
 The operators' ``=`` folds ``ß`` to ``ss``; a criterion's equality and a binary search follow it,
 an exact lookup's scan ignores case only, and a binary search finds the first of equal entries.
@@ -9,16 +9,16 @@ from xlrecalc._compare import compare, criterion, lookup_equal, lookup_key
 
 
 def test_operators_fold_sharp_s():
-    assert compare("ß", "ss", "=") is True
-    assert compare("ae", "æ", "=") is False
+    assert compare("ß", "ss", "=", platform="mac") is True
+    assert compare("ae", "æ", "=", platform="mac") is False
 
 
 def test_criterion_equality_is_the_operators():
-    assert criterion("ß")("ss")
-    assert criterion("ss")("ß")
-    assert criterion("SS")("ß")
-    assert not criterion("ae")("æ")
-    assert not criterion("<>ß")("ss")
+    assert criterion("ß", platform="mac")("ss")
+    assert criterion("ss", platform="mac")("ß")
+    assert criterion("SS", platform="mac")("ß")
+    assert not criterion("ae", platform="mac")("æ")
+    assert not criterion("<>ß", platform="mac")("ss")
 
 
 def test_exact_lookup_ignores_case_only():
@@ -26,8 +26,8 @@ def test_exact_lookup_ignores_case_only():
     assert not lookup_equal("ß", "ss")
     assert lookup_key("ß") != lookup_key("ss")
     assert lookup_key("ABC") == lookup_key("abc")
-    assert evaluate('MATCH("ß",{"ss";"ß"},0)') == 2.0
-    assert evaluate('_xlfn.XLOOKUP("ß",{"ss";"ß"},{1;2})') == 2.0
+    assert evaluate('MATCH("ß",{"ss";"ß"},0)', platform="mac") == 2.0
+    assert evaluate('_xlfn.XLOOKUP("ß",{"ss";"ß"},{1;2})', platform="mac") == 2.0
 
 
 # SORT of the table of capture collate_functions, as Excel gave it
@@ -39,7 +39,7 @@ SORTED = (
 
 def _xmatch(key: str, words: tuple[str, ...], search: int) -> object:
     array = ";".join(f'"{w}"' for w in words)
-    return evaluate(f'_xlfn.XMATCH("{key}",{{{array}}},0,{search})')
+    return evaluate(f'_xlfn.XMATCH("{key}",{{{array}}},0,{search})', platform="mac")
 
 
 def test_binary_search_finds_the_first_equal_entry():

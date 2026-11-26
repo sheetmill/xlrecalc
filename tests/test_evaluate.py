@@ -213,7 +213,7 @@ def _agrees(name: str, every: int) -> list[str]:
             continue
         text = formula_text(row, k)
         try:
-            f = Formula.parse(text, origin=f"A{k}", legacy=True)
+            f = Formula.parse(text, origin=f"A{k}", legacy=True, platform="mac")
         except FormulaError as exc:
             differ.append(f"{name} {k} {text}: {exc}")
             continue

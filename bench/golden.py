@@ -28,7 +28,9 @@ path left out); ``recalculate`` again on the written file, where nothing changes
 every kind through ``load`` and ``Workbook.save``. Each part of each written file goes on one
 line with its SHA-256 (a file's new parts carry the time of writing in the zip, and openpyxl
 stamps ``docProps/core.xml`` of the workbooks it builds, so the parts are compared, not the
-files). The lines go to ``golden_files.txt`` (``golden_files_large.txt``) beside OUT.
+files). The lines go to ``golden_files.txt`` (``golden_files_large.txt``) beside OUT. Both
+digests compute as Excel for Mac (``platform="mac"``), as the captures they started from, so a
+change of the default platform leaves them as they are.
 """
 
 from __future__ import annotations
@@ -106,9 +108,9 @@ def captures() -> Iterator[str]:
         yield from cells(engine)
         yield from report(engine)
     workbooks = {
-        "arrays": lambda: load(io.BytesIO(test_arrays.workbook())),
-        "array_refs": lambda: load(io.BytesIO(test_array_refs.workbook())),
-        "dynrefs": lambda: _with_path(load(io.BytesIO(test_dynrefs.workbook()))),
+        "arrays": lambda: load(io.BytesIO(test_arrays.workbook()), platform="mac"),
+        "array_refs": lambda: load(io.BytesIO(test_array_refs.workbook()), platform="mac"),
+        "dynrefs": lambda: _with_path(load(io.BytesIO(test_dynrefs.workbook()), platform="mac")),
         "circular": _circular,
     }
     for name, make in workbooks.items():
@@ -138,7 +140,7 @@ def _circular() -> Engine:
 def _table(n: int) -> Engine:
     with (DATA / f"bench_{n}.pkl").open("rb") as f:
         table = pickle.load(f)
-    engine = Engine()
+    engine = Engine(platform="mac")
     s = engine.add_sheet("Sheet1")
     sheet = engine.sheets[s]
     for r, row in enumerate(table):
@@ -175,7 +177,7 @@ def bench(n: int, source: str) -> Iterator[str]:
     if not path.exists():
         sys.exit(f"missing {path}: cd bench && uv run python gen.py {n}")
     digest_columns = n >= 100_000
-    engine = _table(n) if source == "pickle" else load(path)
+    engine = _table(n) if source == "pickle" else load(path, platform="mac")
     yield f"# bench {n} {source}"
     engine.recalculate(full=True)
     yield from _stage(engine, "full", digest_columns)
@@ -204,7 +206,7 @@ def parts(path: Path, skip: frozenset[str] = frozenset()) -> Iterator[str]:
 
 def _edit(path: Path, out: Path, last_row: int) -> None:
     """Edits of every kind through the public API, saved to ``out``."""
-    book = load_book(path)
+    book = load_book(path, platform="mac")
     names = book.sheet_names
     on = (lambda ref: f"'{names[0]}'!{ref}") if len(names) > 1 else (lambda ref: ref)  # first sheet
     book.set(on("A1"), 1000)  # a constant changed
@@ -232,11 +234,11 @@ def written(source: Path, label: str, skip: frozenset[str] = frozenset()) -> Ite
         folder / "again.xlsx",
         folder / "edited.xlsx",
     )
-    report = recalculate(source, first)
+    report = recalculate(source, first, platform="mac")
     yield f"# written {label}: recalculate"
     yield f"report circular={len(report.circular)} uncomputed={len(report.uncomputed)}"
     yield from parts(first, skip)
-    recalculate(first, again)
+    recalculate(first, again, platform="mac")
     yield f"# written {label}: recalculate again"
     yield from parts(again, skip)
     with zipfile.ZipFile(first) as z:

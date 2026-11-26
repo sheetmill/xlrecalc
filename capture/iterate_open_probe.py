@@ -145,7 +145,7 @@ def main() -> None:
         build(path, calc, CACHED)
         files.append((name, path, CACHED))
     written = CONTAINER / "xlrecalc_iterate_written.xlsx"
-    report = xlrecalc.recalculate(files[1][1], written)
+    report = xlrecalc.recalculate(files[1][1], written, platform="mac")
     print("recalculate:", dict(report.unsupported), len(report.uncomputed))
     files.append(("written_by_recalculate", written, CASES))
     made = [path for _, path, _ in files]
@@ -181,7 +181,7 @@ def main() -> None:
     made.append(held)
     run("excel_copy", held, CACHED)
     rewritten = CONTAINER / "xlrecalc_iterate_excel_copy_written.xlsx"
-    report = xlrecalc.recalculate(held, rewritten)
+    report = xlrecalc.recalculate(held, rewritten, platform="mac")
     made.append(rewritten)
     print("recalculate:", dict(report.unsupported), len(report.uncomputed))
     run("excel_copy_written", rewritten, CACHED)

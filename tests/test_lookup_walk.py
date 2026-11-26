@@ -45,7 +45,7 @@ def _full_approximate(key, line, descending=False):
     while lo <= hi:
         mid = (lo + hi) // 2
         v = line[candidates[mid]]
-        if compare(v, key, ">=" if descending else "<=", Quirks.EXCEL) is True:
+        if compare(v, key, ">=" if descending else "<=", Quirks.EXCEL, "mac") is True:
             found, lo = candidates[mid], mid + 1
         else:
             hi = mid - 1

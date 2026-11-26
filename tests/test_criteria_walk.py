@@ -60,7 +60,7 @@ def _grid(rng: random.Random, rows: int, cols: int, density: float) -> Grid:
 def _matching(conditions: list[tuple[Ref, object]]) -> list[tuple[int, int]]:
     """Every position of the ranges, each tested in every range: what the walks must equal."""
     first = conditions[0][0]
-    tests = [(ref, criterion(c, Quirks.EXCEL)) for ref, c in conditions]
+    tests = [(ref, criterion(c, Quirks.EXCEL, "mac")) for ref, c in conditions]
     return [
         (r, c)
         for r in range(first.rows)

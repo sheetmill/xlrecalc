@@ -202,7 +202,7 @@ def _cached_values(engine: Engine, path: str) -> dict[int, Any]:
 
 def compare_workbook(path: str) -> dict[str, Any]:
     """One workbook's counts, labels and distinct mismatches."""
-    engine = load(path, recalc_on_load="always")
+    engine = load(path, recalc_on_load="always", platform="mac")  # as the earlier sweeps compared
     cached = _cached_values(engine, path)
     formulas = [(index << 34) | key for index, s in enumerate(engine.sheets) for key in s.templates]
     chains: list[int] = []
