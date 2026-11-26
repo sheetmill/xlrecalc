@@ -307,16 +307,20 @@ not). An empty argument is `#N/A`.
   3.5, 512 units away; R squared of values near 1E9, 25,087 units away), listed; and the normal
   distribution's lower tail (z of -2.3 and below), 5 to 80 units away, where Excel is closer to
   the true value than `math.erfc` and does not use Cody's algorithm either.
-- Declared tolerances, regression over several x columns (capture `linest_multi`): `LINEST`,
-  `LOGEST`, `TREND` and `GROWTH` within 5E-14 relative: the coefficients within 31 units in the
-  last place, the statistics within 67, and up to 195 beside a zero or constant column or with as
-  many rows as unknowns; the QR steps are not Excel's own. Listed: where exactly collinear
-  columns tie, rounding in Excel's steps picks the column it drops, and on four of the captured
-  fits it picks another than the package does (22 rows; r2, F and the sums of squares agree);
-  `LOGEST` of a nearly exact fit, whose residuals are rounding noise (7 rows); and four
-  coefficients of an ill-conditioned fit (capture `linest_ill`: 14 columns, a date serial beside
-  the constant), where Excel's coefficients are within 6.2E-14 of the exact least-squares
-  solution and the package's within 3.3E-13, up to 3.9E-13 from Excel's.
+- Declared tolerances, regression over several x columns (captures `linest_multi`, `linest_ill`
+  and `linest_shift`): `LINEST`, `LOGEST`, `TREND` and `GROWTH` within 5E-14 relative. The QR
+  steps are Excel's in their order (pivots, layout, centering), not in their last bits: the
+  coefficients within 65 units in the last place, the statistics within 203, and up to 312 beside
+  a zero or constant column or with as many rows as unknowns; the ill-conditioned fit within 226.
+  Listed: a column exactly the sum of two others, with the constant, where the remaining norms
+  tie and rounding in Excel's steps drops another column than the package's (6 rows; r2, F and
+  the sums of squares agree), and `TREND` of that fit at new x values (2 rows); F and `ssresid`
+  of a five-column fit, 5.5E-14 from Excel's (2 rows); `LOGEST` of a nearly exact fit, whose
+  residuals are rounding noise (7 rows); and one coefficient of an ill-conditioned fit (capture
+  `linest_ill`: 14 columns, a date serial beside the constant), 9.9E-14 from Excel's, the same
+  with the date moved to 1E6 or 1E8 and with the columns permuted (4 rows), where Excel's
+  coefficients are within 6.2E-14 of the exact least-squares solution and the package's within
+  3.7E-14.
 - `LINEST` and `LOGEST` with an all-zero x column, or with a column holding one value beside the
   constant: the column's coefficient and standard error are 0, as for a collinear column, but
   the residual degrees of freedom do not grow, and `ssresid` is too small and `ssreg` too large by

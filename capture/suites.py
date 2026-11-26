@@ -4317,6 +4317,114 @@ def linest_ill() -> list[Case]:
     return cases
 
 
+SHIFT_SCALES = (1e-3, 1e-4, 1e-8, 1e-9)
+"""``linest_shift``: the scales of the small independent column beside a dropped one."""
+
+
+def _shift_blocks() -> dict[str, list[list[float]]]:
+    """The data of ``linest_shift``: name -> columns (y first, then the x columns)."""
+    ill = _ill_columns()
+    y, x = ill[0], ill[1:]
+    blocks: dict[str, list[list[float]]] = {}
+    for name, start in (("shift6", 1e6), ("shift8", 1e8)):  # the date serial moved
+        dates = [start + i for i in range(len(y))]
+        blocks[name] = [y, *x[:11], dates, *x[12:]]
+    order = list(range(14))
+    random.Random(20261126).shuffle(order)
+    blocks["permuted"] = [y, *(x[j] for j in order)]
+    rng = random.Random(20261126)
+
+    def ints(n: int) -> list[float]:
+        return [float(rng.randint(-20, 20)) for _ in range(n)]
+
+    for data in (1, 2):  # identical columns at several positions
+        a, b, c = ints(10), ints(10), ints(10)
+        yv = [
+            1.5 * p - 2 * q + 0.5 * r + rng.randint(-8, 8) / 4
+            for p, q, r in zip(a, b, c, strict=True)
+        ]
+        for tag, cols in {
+            "aab": [a, a, b], "aba": [a, b, a], "baa": [b, a, a], "abb": [a, b, b],
+            "abca": [a, b, c, a], "abac": [a, b, a, c], "caba": [c, a, b, a], "aabb": [a, a, b, b],
+        }.items():  # fmt: skip
+            blocks[f"dup{data}_{tag}"] = [yv, *cols]
+    for n, k in ((3, 4), (3, 5), (4, 5), (4, 6)):  # more columns than rows
+        blocks[f"wide{n}x{k}"] = [ints(n) for _ in range(k + 1)]
+    a, b, c = ints(10), ints(10), ints(10)
+    jitter = [rng.choice((-1.0, 1.0)) * 1e-6 for _ in range(10)]
+    near = [p + q + j for p, q, j in zip(a, b, jitter, strict=True)]  # dropped: 1E-6 off a sum
+    yv = [
+        1.5 * p - 2 * q + 0.75 * r + rng.randint(-8, 8) / 4 for p, q, r in zip(a, b, c, strict=True)
+    ]
+    for e, scale in enumerate(SHIFT_SCALES):
+        small = [scale * r for r in c]
+        blocks[f"small{e}_after"] = [yv, a, b, near, small]
+        blocks[f"small{e}_first"] = [yv, small, a, b, near]
+    return blocks
+
+
+def _shift_layout() -> tuple[dict[str, Input], dict[str, list[str]]]:
+    """The blocks side by side from column AA, a column between: cells, and name -> the ranges
+    of its columns."""
+    cells: dict[str, Input] = {}
+    ranges: dict[str, list[str]] = {}
+    col = 27
+    for name, cols in _shift_blocks().items():
+        ranges[name] = []
+        for values in cols:
+            letter = _letters(col)
+            ranges[name].append(f"{letter}1:{letter}{len(values)}")
+            for r, v in enumerate(values, 1):
+                cells[f"{letter}{r}"] = v
+            col += 1
+        col += 1
+    return cells, ranges
+
+
+def linest_shift() -> list[Case]:
+    """LINEST over shifted, permuted, repeated, wide and mixed-scale columns.
+
+    ``linest_ill``'s fit with the date serial moved to 1E6 and 1E8 and with its columns
+    permuted (every coefficient, then r2, sey, F, df, ssreg and ssresid); identical columns at
+    several positions (the standard errors: a dropped column's is 0); more columns than rows (the
+    coefficients); and a column 1E-6 off the sum of two others beside an independent column
+    scaled by 1E-3 to 1E-9, given after or before them (the coefficients, the standard errors and
+    df), all with and without the constant.
+    """
+    _, ranges = _shift_layout()
+    cases: list[Case] = []
+
+    def call(name: str, const: str) -> str:
+        cols = ranges[name]
+        return f"LINEST({cols[0]},{_span(cols[1:])},{const},TRUE)"
+
+    for name, consts in (
+        ("shift6", ("TRUE",)),
+        ("shift8", ("TRUE",)),
+        ("permuted", ("TRUE", "FALSE")),
+    ):
+        for const in consts:
+            for c in range(1, 16):
+                cases.append(Case("ill", f"INDEX({call(name, const)},1,{c})"))
+            for r, c in ((3, 1), (3, 2), (4, 1), (4, 2), (5, 1), (5, 2)):
+                cases.append(Case("ill", f"INDEX({call(name, const)},{r},{c})"))
+    for name, cols in ranges.items():
+        k = len(cols) - 1
+        for const in ("TRUE", "FALSE"):
+            if name.startswith("dup"):
+                for c in range(1, k + 1):
+                    cases.append(Case("dup", f"INDEX({call(name, const)},2,{c})"))
+            elif name.startswith("wide"):
+                for c in range(1, k + 2):
+                    cases.append(Case("wide", f"INDEX({call(name, const)},1,{c})"))
+            elif name.startswith("small"):
+                for r in (1, 2):
+                    for c in range(1, k + (2 if const == "TRUE" or r == 1 else 1)):
+                        cases.append(Case("scale", f"INDEX({call(name, const)},{r},{c})"))
+                cases.append(Case("scale", f"INDEX({call(name, const)},4,2)"))
+    return cases
+
+
 def encodeurl() -> list[Case]:
     """ENCODEURL over every code from 1 to 127, characters beyond, texts, other values, long text.
 
@@ -5615,4 +5723,5 @@ SUITES = {
     "three_d_snap": Suite(three_d_snap, fixed=_THREE_D_SNAP_TABLE),
     "linest_multi": Suite(linest_multi, fixed=_regression_layout()[0]),
     "linest_ill": Suite(linest_ill, fixed=_ill_layout()),
+    "linest_shift": Suite(linest_shift, fixed=_shift_layout()[0]),
 }

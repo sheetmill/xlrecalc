@@ -263,7 +263,7 @@ platform.
 | `IMSUB` | engineering | implemented | 70 | 70 | 0 |  |  |
 | `IMSUM` | engineering | implemented | 72 | 72 | 0 |  |  |
 | `IMTAN` | engineering | implemented | 36 | 34 | 2 |  |  |
-| `INDEX` | lookup and reference | implemented | 1419 | 1381 | 38 |  |  |
+| `INDEX` | lookup and reference | implemented | 1831 | 1805 | 26 |  |  |
 | `INDIRECT` | lookup and reference | implemented | 15 | 15 | 0 |  |  |
 | `INFO` | | absent | | | | | |
 | `INT` | math | implemented | 19 | 18 | 1 |  |  |
@@ -297,11 +297,11 @@ platform.
 | `LEN` | text | implemented | 431 | 431 | 0 |  |  |
 | `LENB` | text | implemented | 29 | 29 | 0 |  |  |
 | `LET` | logical | implemented | 61 | 61 | 0 |  |  |
-| `LINEST` | statistical | implemented | 837 | 812 | 25 | 4 ulps |  |
+| `LINEST` | statistical | implemented | 1249 | 1232 | 17 | 4 ulps |  |
 | `LN` | math | implemented | 18 | 18 | 0 |  |  |
 | `LOG` | math | implemented | 229 | 229 | 0 | 4 ulps |  |
 | `LOG10` | math | implemented | 31 | 31 | 0 | 4 ulps |  |
-| `LOGEST` | statistical | implemented | 119 | 106 | 13 | 5e-14 relative |  |
+| `LOGEST` | statistical | implemented | 119 | 112 | 7 | 5e-14 relative |  |
 | `LOGINV` | statistical | implemented | 21 | 21 | 0 | 4 ulps |  |
 | `LOGNORM.DIST` | statistical | implemented | 263 | 247 | 16 | 4 ulps |  |
 | `LOGNORM.INV` | statistical | implemented | 168 | 168 | 0 | 4 ulps |  |
@@ -494,7 +494,7 @@ platform.
 | `TOROW` | lookup and reference | implemented | 17 | 17 | 0 |  |  |
 | `TRANSLATE` | | absent | | | | | |
 | `TRANSPOSE` | lookup and reference | implemented | 16 | 16 | 0 |  |  |
-| `TREND` | statistical | implemented | 26 | 26 | 0 | 5e-14 relative |  |
+| `TREND` | statistical | implemented | 26 | 24 | 2 | 5e-14 relative |  |
 | `TRIM` | text | implemented | 24 | 24 | 0 |  |  |
 | `TRIMMEAN` | statistical | implemented | 246 | 246 | 0 | 4 ulps |  |
 | `TRIMRANGE` | | absent | | | | | |

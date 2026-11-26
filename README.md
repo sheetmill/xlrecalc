@@ -198,11 +198,11 @@ union given to a function no capture shows reading one) raises `UnsupportedError
   unit conversion.
   The [coverage matrix](https://xlrecalc.readthedocs.io/en/latest/coverage.html) lists every
   Excel function, whether it is computed, and the captured evidence for it.
-- **Evidence**: 122,723 formulas computed by Excel and compared with xlrecalc's results: 121,883
+- **Evidence**: 123,135 formulas computed by Excel and compared with xlrecalc's results: 122,307
   match, bit for bit or within a small tolerance declared per function (a few units in the last
   place, or a relative one: 1E-9 for `IRR`, `RATE` and `YIELD`, 5E-14 for `LINEST`, `LOGEST`,
   `TREND` and `GROWTH`, 1E-15 to 1E-12 for the beta, gamma, chi-squared, F and t
-  distributions), 808 known deviations, each listed with its reason in
+  distributions), 796 known deviations, each listed with its reason in
   [QUIRKS.md](https://github.com/sheetmill/xlrecalc/blob/main/QUIRKS.md), and 32 not evaluated
   (calls of functions xlrecalc does not compute). Each listed
   deviation is still computed and compared with Excel on every test run, and one that starts to

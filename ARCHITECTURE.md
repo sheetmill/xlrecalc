@@ -1067,12 +1067,19 @@ Behavior that is not the obvious reading, each from its capture:
   × (1 + |a| + |b|). Flows with a root at 0, and the negative brackets of some roots, are not
   reproduced (`QUIRKS.md`). `XIRR` reads text dates and dates in any order after the first, unlike
   `XNPV`.
-- Regression over several x columns (capture `linest_multi`, Mac and Windows alike): `LINEST`,
-  `LOGEST`, `TREND` and `GROWTH` fit by a Householder QR decomposition (`_functions/_regression.py`):
-  the column of ones first when there is a constant, then at each step the x column with the
-  largest remaining norm, the first on a tie in the order the swaps leave. A column left with at
-  most 1E-6 of its own norm is collinear with those before it: its coefficient and standard error
-  are 0, and it adds one to the residual degrees of freedom. An all-zero column, or one holding a
+- Regression over several x columns (captures `linest_multi`, `linest_ill` and `linest_shift`, Mac
+  and Windows alike): `LINEST`, `LOGEST`, `TREND` and `GROWTH` fit by a Householder QR
+  decomposition with column pivoting, as LAPACK's `dgeqp3` computes it
+  (`_functions/_regression.py`). With a constant, the x columns and y lose their means first, and
+  the constant is the mean of y, plus the fitted coefficient of a column of ones, less each slope
+  times its column's mean; Excel's slopes are the same to the bit with a column shifted to 1E6 or
+  1E8, and with the columns permuted. The column of ones comes last in the design and is swapped
+  to the front, so `[x1, x2, x3, 1]` is factored from `[1, x2, x3, x1]`; each step then takes the
+  column with the largest remaining norm, the first in that order on a tie, at every step up to
+  the last row. Columns are kept up to the first whose diagonal entry is at most 1E-6 of its own
+  norm: that column is collinear with those before it, and it and every column factored after it
+  (an independent column at 1E-8 of the others' scale included) have coefficient and standard
+  error 0, each adding one to the residual degrees of freedom. An all-zero column, or one holding a
   single value beside the constant, has coefficient 0 but keeps its place: the degrees of freedom
   stay, and the residual sum of squares is read after every column's place, as Excel reads it
   (QUIRKS.md). With as many rows as kept columns, the standard errors and sey are 0, r2 is 1 and

@@ -168,20 +168,24 @@ _UNION_CELL = (
 )
 _REGEX = "the regular-expression match mode (3) is not implemented, and the cell is reported"
 _REGRESSION_TIE = (
-    "LINEST and LOGEST over exactly collinear columns whose remaining norms tie: rounding in "
-    "Excel's own QR steps decides which column it drops, and the package's steps drop another; "
-    "r2, F and the sums of squares agree"
+    "LINEST over a column that is exactly the sum of two others, with the constant: the remaining "
+    "norms tie, and rounding in Excel's own QR steps decides which column it drops, where the "
+    "package's steps drop another (r2, F and the sums of squares agree); TREND of that fit at new "
+    "x values, where the sum does not hold, follows the dropped column"
+)
+_REGRESSION_LAST_BITS = (
+    "LINEST's F and ssresid of a five-column fit with the constant: 5.5E-14 relative from Excel's, "
+    "past the tolerance; the last bits of Excel's QR steps are not reproduced"
 )
 _ILL_CONDITIONED = (
     "LINEST over an ill-conditioned fit (a date serial beside the constant): Excel's coefficients "
-    "are within 6.2E-14 of the exact solution and the package's within 3.3E-13, up to 3.9E-13 "
-    "from Excel's, past the tolerance"
+    "are within 6.2E-14 of the exact solution and the package's within 3.7E-14; one coefficient "
+    "is 9.9E-14 from Excel's, past the tolerance, and is the same on both sides with the date "
+    "moved to 1E6 or 1E8 and with the columns permuted"
 )
 _REGRESSION_TIE_CASES = (
-    *(241, 242, 243, 245, 246, 247),  # sum, without the constant
-    *(381, 383, 385, 387),  # first_dup, with the constant
-    *(561, 562, 563, 565, 566, 567),  # near14, without the constant
-    *(813, 814, 815, 817, 818, 819),  # LOGEST over a sum, without the constant
+    *(221, 222, 223, 225, 226, 227),  # sum, with the constant
+    *(863, 864),  # TREND of the sum fit at new x values
 )
 _LOGEST_NOISE = (
     "LOGEST of a nearly exact fit (ssresid near 4E-14): its residuals are rounding noise, and "
@@ -632,7 +636,9 @@ KNOWN_DEVIATIONS: dict[tuple[str, int], str] = {
     ("unions", 66): _UNION_CELL,
     **{("linest_multi", case): _REGRESSION_TIE for case in _REGRESSION_TIE_CASES},
     **{("linest_multi", case): _LOGEST_NOISE for case in (742, 743, 744, 745, 747, 750, 755)},
-    **{("linest_ill", case): _ILL_CONDITIONED for case in (7, 9, 11, 12)},
+    **{("linest_multi", case): _REGRESSION_LAST_BITS for case in (139, 146)},
+    ("linest_ill", 11): _ILL_CONDITIONED,
+    **{("linest_shift", case): _ILL_CONDITIONED for case in (11, 32, 56)},
     ("info_family", 468): _AT_SIGN,
     **{("dates_family", case): _WEEKNUM_ODD_TYPE for case in _WEEKNUM_ODD_CASES},
     ("dates_family", 2004): _DATEDIF_MARCH,
@@ -986,6 +992,7 @@ SUITES = [
     "three_d_snap",
     "linest_multi",
     "linest_ill",
+    "linest_shift",
 ]
 # Suites compared in part: only the rows whose tag is named. Of ``iteration``, the XIRR rows; its
 # IRR, RATE and YIELD rows are evidence for their methods, not matched.

@@ -1,13 +1,16 @@
 """Least squares over several x columns: LINEST's and LOGEST's fit, TREND and GROWTH.
 
-The fit is a Householder QR decomposition, as capture ``linest_multi`` shows Excel computing it on
-Mac and Windows alike: the column of ones first when there is a constant, then the x columns,
-each step taking the column with the largest remaining norm. A column left with less than
-``COLLINEAR`` of its own norm is collinear with the columns before it: its coefficient and
-standard error are 0, and it adds to the residual degrees of freedom. A column that is all zero,
-or all one value beside the constant, has coefficient 0 too but keeps its place in the count of
-columns: the degrees of freedom do not grow, and the residual sum of squares is read from the
-entries after every column's place, as Excel reads it (``ssresid`` too small and ``ssreg`` too
+The fit is a Householder QR decomposition with column pivoting (LAPACK's ``dgeqp3``), as captures
+``linest_multi``, ``linest_ill`` and ``linest_shift`` show Excel computing it on Mac and Windows
+alike. With a constant, the x columns and y lose their means first (Excel's slopes are the same to
+the bit with a column shifted by 1E8), and a column of ones, last in the design, is swapped to the
+front and factored first; then each step takes the column with the largest remaining norm, the
+first in the current order on a tie, up to the last row. Columns are kept up to the first whose
+diagonal entry is at most ``COLLINEAR`` of its own norm: it, and every column after it, has
+coefficient and standard error 0, and each adds to the residual degrees of freedom. A column that
+is all zero, or all one value beside the constant, has coefficient 0 too but keeps its place in the
+count of columns: the degrees of freedom do not grow, and the residual sum of squares is read from
+the entries after every column's place, as Excel reads it (``ssresid`` too small and ``ssreg`` too
 large by the same amount; QUIRKS.md).
 """
 
@@ -26,9 +29,14 @@ from xlrecalc._values import ErrorValue, Ref
 NA, NUM, REF, VALUE = ErrorValue.NA, ErrorValue.NUM, ErrorValue.REF, ErrorValue.VALUE
 
 COLLINEAR = 1e-6
-"""A column's remaining norm, relative to its own, at or below which it is dropped (capture
-``linest_multi``: a column 1E-6 off a sum of two others is dropped; independent columns keep far
-more)."""
+"""A diagonal entry, relative to its column's own norm, at or below which the column and every
+column factored after it are dropped (captures ``linest_multi``: a column 1E-6 off a sum of two
+others is dropped; ``linest_shift``: so is an independent column scaled by 1E-8 factored after
+it, and one scaled by 1E-4 factored before it is kept)."""
+
+_RECOMPUTE = math.sqrt(2.0**-53)
+"""A downdated remaining norm is recomputed when its square has lost this share of the column's
+norm squared since the last computation (LAPACK's ``tol3z``)."""
 
 
 def grid(arg: Any) -> list[list[Any]]:
@@ -84,64 +92,141 @@ def columns(ys: Any, xs: Any) -> tuple[list[float], list[list[float]]] | ErrorVa
     return flat, x_cols
 
 
+def _norm(col: list[float], start: int = 0) -> float:
+    """The Euclidean norm of ``col[start:]``: the squares added in order, then the root."""
+    return math.sqrt(plain_sum(v * v for v in col[start:]))
+
+
+def _reflector(col: list[float], i: int) -> float:
+    """A Householder reflector for ``col[i:]`` (LAPACK ``dlarfg``); returns tau.
+
+    ``col[i]`` becomes the diagonal entry and ``col[i + 1:]`` the reflector's tail (its head is 1).
+    """
+    if len(col) - i <= 1:
+        return 0.0
+    alpha = col[i]
+    rest = _norm(col, i + 1)
+    if rest == 0.0:
+        return 0.0
+    w, z = max(abs(alpha), rest), min(abs(alpha), rest)
+    beta = -math.copysign(w * math.sqrt(1.0 + (z / w) ** 2), alpha)
+    tau = (beta - alpha) / beta
+    r = 1.0 / (alpha - beta)
+    for t in range(i + 1, len(col)):
+        col[t] = r * col[t]
+    col[i] = beta
+    return tau
+
+
+def _reflect(v: list[float], i: int, tau: float, targets: list[list[float]]) -> None:
+    """Apply ``I - tau v v'`` to rows ``i:`` of each target (LAPACK ``dlarf``).
+
+    The caller sets ``v[i]`` to 1.
+    """
+    if tau == 0.0:
+        return
+    for c in targets:
+        temp = -tau * plain_sum(c[t] * v[t] for t in range(i, len(v)))
+        if temp != 0.0:
+            for t in range(i, len(v)):
+                c[t] += v[t] * temp
+
+
+def _factor(cols: list[list[float]], fixed: int) -> tuple[list[int], list[float]]:
+    """A QR decomposition with column pivoting (LAPACK ``dgeqp3``), in place.
+
+    R and the reflectors overwrite ``cols``. Column ``fixed`` (or none, -1) is swapped to the
+    front and factored first; then each step takes the column with the largest remaining norm,
+    the first in the current order on a tie, at every step to the last row, and swaps it into
+    place. The remaining norms are downdated, and recomputed when downdating has lost half the
+    digits.
+
+    Returns:
+        The original position of each column in its new place, and the reflectors' taus.
+    """
+    n, k = len(cols[0]), len(cols)
+    perm = list(range(k))
+    if fixed > 0:
+        cols[0], cols[fixed] = cols[fixed], cols[0]
+        perm[0], perm[fixed] = perm[fixed], perm[0]
+    steps = min(n, k)
+    taus = [0.0] * steps
+    start = 0
+    if fixed >= 0 and steps:
+        col = cols[0]
+        taus[0] = _reflector(col, 0)
+        head, col[0] = col[0], 1.0
+        _reflect(col, 0, taus[0], cols[1:])
+        col[0] = head
+        start = 1
+    vn1 = [0.0] * k
+    vn2 = [0.0] * k
+    for j in range(start, k):
+        vn1[j] = vn2[j] = _norm(cols[j], start)
+    for i in range(start, steps):
+        pvt, best = i, -1.0
+        for j in range(i, k):
+            if vn1[j] > best:
+                pvt, best = j, vn1[j]
+        if pvt != i:
+            cols[pvt], cols[i] = cols[i], cols[pvt]
+            perm[pvt], perm[i] = perm[i], perm[pvt]
+            vn1[pvt], vn2[pvt] = vn1[i], vn2[i]
+        col = cols[i]
+        taus[i] = _reflector(col, i) if i < n - 1 else 0.0
+        if i < k - 1:
+            head, col[i] = col[i], 1.0
+            _reflect(col, i, taus[i], cols[i + 1 :])
+            col[i] = head
+        for j in range(i + 1, k):
+            if vn1[j] != 0.0:
+                temp = max(1.0 - (abs(cols[j][i]) / vn1[j]) ** 2, 0.0)
+                if temp * (vn1[j] / vn2[j]) ** 2 <= _RECOMPUTE:
+                    vn1[j] = vn2[j] = _norm(cols[j], i + 1) if i < n - 1 else 0.0
+                else:
+                    vn1[j] *= math.sqrt(temp)
+    return perm, taus
+
+
 def fit(y: list[float], xs: list[list[float]], const: bool) -> Fit:
     """The least-squares fit of ``y`` on the columns ``xs`` (and a constant)."""
     n, k = len(y), len(xs)
     out = Fit(k)
     null = [all(v == 0.0 for v in col) or (const and all(v == col[0] for v in col)) for col in xs]
-    cols = ([[1.0] * n] if const else []) + [list(col) for j, col in enumerate(xs) if not null[j]]
-    names = ([-1] if const else []) + [j for j in range(k) if not null[j]]  # -1: the constant
-    own = [math.sqrt(plain_sum(v * v for v in col)) for col in cols]
+    names = [j for j in range(k) if not null[j]]
+    means = [0.0] * k
     qy = list(y)
-    order: list[int] = []  # positions in cols, in the order they are factored
-    diag: list[float] = []
-    # The columns not yet factored, in the order a swap of the chosen column into place leaves
-    # them: on a tie the first in this order is taken.
-    left = list(range(len(cols)))
-    step = 0
-    while left and step < n:
-        if const and step == 0:
-            at = 0
-        else:
-            norms = [math.sqrt(plain_sum(cols[j][i] ** 2 for i in range(step, n))) for j in left]
-            at = norms.index(max(norms))
-        pick = left[at]
-        left[0], left[at] = left[at], left[0]
-        left.pop(0)
-        col = cols[pick]
-        a = math.sqrt(plain_sum(col[i] ** 2 for i in range(step, n)))
-        if own[pick] == 0.0 or a <= COLLINEAR * own[pick]:
-            continue  # collinear with the columns before it: dropped
-        v = col[step:]
-        v[0] += math.copysign(a, v[0])
-        vv = plain_sum(t * t for t in v)
-        for j in [*left, pick]:
-            c = cols[j]
-            s = 2.0 * plain_sum(v[i] * c[step + i] for i in range(len(v))) / vv
-            for i in range(len(v)):
-                c[step + i] -= s * v[i]
-        s = 2.0 * plain_sum(v[i] * qy[step + i] for i in range(len(v))) / vv
-        for i in range(len(v)):
-            qy[step + i] -= s * v[i]
-        order.append(pick)
-        diag.append(col[step])
-        step += 1
-    r = len(order)
+    if const:  # centered: x and y lose their means, and a column of ones comes last
+        for j in names:
+            means[j] = plain_sum(xs[j]) / n
+        mean_y = plain_sum(y) / n
+        cols = [[v - means[j] for v in xs[j]] for j in names] + [[1.0] * n]
+        names.append(-1)  # -1: the constant
+        qy = [v - mean_y for v in y]
+    else:
+        cols = [list(xs[j]) for j in names]
+    own = [_norm(col) for col in cols]
+    perm, taus = _factor(cols, len(cols) - 1 if const else -1)
+    # the kept columns: up to the first whose diagonal entry is small beside its own norm
+    r = 0
+    while r < min(n, len(cols)) and abs(cols[r][r]) > COLLINEAR * own[perm[r]]:
+        r += 1
+    for i in range(r):
+        col = cols[i]
+        head, col[i] = col[i], 1.0
+        _reflect(col, i, taus[i], [qy])
+        col[i] = head
     # back substitution: R c = Q'y over the kept columns
-    coef = [0.0] * r
-    for i in range(r - 1, -1, -1):
-        s = qy[i]
-        for j in range(i + 1, r):
-            s -= cols[order[j]][i] * coef[j]
-        coef[i] = s / cols[order[i]][i]
+    coef = qy[:r]
+    for j in range(r - 1, -1, -1):
+        if coef[j] != 0.0:
+            coef[j] /= cols[j][j]
+            for i in range(j - 1, -1, -1):
+                coef[i] -= coef[j] * cols[j][i]
     p = r + sum(null)
     out.df = n - p
     out.ssresid = plain_sum(t * t for t in qy[p:]) if p < n else 0.0
-    if const:
-        mean = plain_sum(y) / n
-        total = plain_sum((t - mean) ** 2 for t in y)
-    else:
-        total = plain_sum(t * t for t in y)
+    total = plain_sum((t - mean_y) ** 2 for t in y) if const else plain_sum(t * t for t in y)
     out.ssreg = total - out.ssresid
     out.regressors = p - (1 if const else 0)
     # standard errors: sey * the norm of each row of R's inverse
@@ -150,16 +235,28 @@ def fit(y: list[float], xs: list[list[float]], const: bool) -> Fit:
         for i in range(last, -1, -1):
             s = 1.0 if i == last else 0.0
             for j in range(i + 1, last + 1):
-                s -= cols[order[j]][i] * inv[j][last]
-            inv[i][last] = s / cols[order[i]][i]
+                s -= cols[j][i] * inv[j][last]
+            inv[i][last] = s / cols[i][i]
     sey = math.sqrt(out.ssresid / out.df) if out.df > 0 else 0.0
-    for i, pos in enumerate(order):
-        name = names[pos]
-        se = sey * math.sqrt(plain_sum(t * t for t in inv[i])) if out.df > 0 else 0.0
+    shift = 0.0  # the slopes times the means, taken off the constant
+    for i in range(r):
+        name = names[perm[i]]
         if name == -1:
-            out.b, out.se_b = coef[i], se
+            out.b = coef[i]
         else:
-            out.m[name], out.se[name] = coef[i], se
+            out.m[name] = coef[i]
+            out.se[name] = sey * math.sqrt(plain_sum(t * t for t in inv[i])) if out.df > 0 else 0.0
+    if const:
+        for j in names:
+            if j != -1:
+                shift += out.m[j] * means[j]
+        out.b = mean_y + out.b - shift
+        # the constant's variance through R's inverse: g = 1 for the ones column, -mean for x
+        g = [1.0 if names[perm[i]] == -1 else -means[names[perm[i]]] for i in range(r)]
+        v = plain_sum(
+            t * t for t in (plain_sum(inv[i][j] * g[i] for i in range(r)) for j in range(r))
+        )
+        out.se_b = sey * math.sqrt(v) if out.df > 0 else 0.0
     return out
 
 
@@ -196,11 +293,12 @@ def table(f: Fit, const: bool, stats: bool, log: bool = False) -> tuple[tuple[An
 
 
 _FIT = (
-    "Excel's QR decomposition is not reproduced step for step, and its last bits differ "
-    "(capture linest_multi, Mac and Windows alike): the coefficients within 31 units in the last "
-    "place, the standard errors, r2, sey, F and the sums of squares within 67, and up to 195 "
-    "(2.5E-14 relative) beside a zero or constant column or with as many rows as unknowns; "
-    "TREND within 14 and GROWTH within 6. Past this, listed rows"
+    "Excel's QR steps are reproduced in their order (pivots, layout, centering), not in their last "
+    "bits (captures linest_multi, linest_ill and linest_shift, Mac and Windows alike): the "
+    "coefficients within 65 units in the last place, the standard errors, r2, sey, F and the sums "
+    "of squares within 203 (2.8E-14 relative), and up to 312 (4.1E-14) beside a zero or constant "
+    "column or with as many rows as unknowns; TREND within 24 and GROWTH within 10; the "
+    "ill-conditioned fit within 226 (3.8E-14). Past this, listed rows"
 )
 
 
