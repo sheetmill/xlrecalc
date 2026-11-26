@@ -15,7 +15,7 @@ import xlformat
 
 PlatformName = Literal["mac", "windows"]
 
-DEFAULT_PLATFORM: PlatformName = "mac"
+DEFAULT_PLATFORM: PlatformName = "windows"
 """What ``platform=None`` means."""
 
 

@@ -29,7 +29,7 @@ from xlrecalc._formula._nodes import Call, Reference
 from xlrecalc._formula._prefixes import PREFIXES
 from xlrecalc._limits import ReadLimits, io_limits
 from xlrecalc._opening import Opening, Rule, Volatility
-from xlrecalc._platform import PlatformName
+from xlrecalc._platform import DEFAULT_PLATFORM, PlatformName
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef
 from xlrecalc._store import COLS
@@ -602,7 +602,7 @@ def load(
     recalc_on_load: RecalcOnLoad = "excel",
     today: dt.date | None = None,
     saving: bool = False,
-    platform: PlatformName = "mac",
+    platform: PlatformName = DEFAULT_PLATFORM,
     regional_settings: xlformat.RegionalSettings | None = None,
 ) -> Engine:
     """Read a workbook into an engine; formulas whose cached values are trusted stay unevaluated.
@@ -660,7 +660,7 @@ class _Loader:
         today: dt.date | None = None,
         saving: bool = False,
         path: str | None = None,
-        platform: PlatformName = "mac",
+        platform: PlatformName = DEFAULT_PLATFORM,
         regional_settings: xlformat.RegionalSettings | None = None,
     ) -> None:
         if recalc_on_load not in RECALC_ON_LOAD:

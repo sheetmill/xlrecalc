@@ -12,7 +12,8 @@ Excel's results are captured for the tests. Measured numbers are in `bench/resul
 ### 1.1 Goals
 
 1. **Excel's results.** Excel's type coercion, error values, date serials, array semantics and
-   precision quirks (§4.4), with Excel 16 for Mac as the reference.
+   precision quirks (§4.4), with Excel 16 for Windows (the default) and Excel 16 for Mac as the
+   references.
 2. **Recalculate and write back.** Fill in the cached values of a workbook written by openpyxl
    or another generator, so pandas, openpyxl's data-only mode and other readers see values.
    The writer changes only what it must (§9.2).
@@ -1552,16 +1553,16 @@ xlrecalc.ConditionalFormula.cell_is("between", ["$Z$1", "10"], sqref="A1:A5")
 One workbook is used from one thread at a time, and so is one `Formula`.
 
 **Platform and regional settings.** Every entry point above (`load`, `Loader`, `recalculate`,
-`evaluate`, `Formula.parse`, `ConditionalFormula.parse` and `cell_is`) takes `platform=`
-(`"mac"`, `"windows"`, or an `xlformat.Platform`, which counts by its name) and
-`regional_settings=` (an `xlformat.RegionalSettings`, en-US only); `None` is the Mac and the
-platform's en-US preset, and `Workbook.platform` and `Workbook.regional_settings` say what a
-workbook was loaded with. The two `parse` methods take them when the formula is compiled, as they
-take `quirks`. `TEXT` passes both on to `xlformat.text_function`. What else depends on them (the
-code page of `CHAR` and `CODE` in `_functions/_text.py`, the order of text in `_compare.py`, the
-names Excel knows in `_functions/__init__.py`'s `registry_for`, which formulas compile against) is
-decided from the two together inside the package, so nothing public changes when other regional
-settings come.
+`evaluate`, `Formula.parse`, `ConditionalFormula.parse` and `cell_is`) takes `platform=` (`"mac"`,
+`"windows"`, or an `xlformat.Platform`, which counts by its name) and `regional_settings=` (an
+`xlformat.RegionalSettings`, en-US only); `None` is Windows (`DEFAULT_PLATFORM`, which every
+internal default follows too) and the platform's en-US preset, and `Workbook.platform` and
+`Workbook.regional_settings` say what a workbook was loaded with. The two `parse` methods take them
+when the formula is compiled, as they take `quirks`. `TEXT` passes both on to
+`xlformat.text_function`. What else depends on them (the code page of `CHAR` and `CODE` in
+`_functions/_text.py`, the order of text in `_compare.py`, the names Excel knows in
+`_functions/__init__.py`'s `registry_for`, which formulas compile against) is decided from the two
+together inside the package, so nothing public changes when other regional settings come.
 
 **One formula outside a workbook** (`_evaluate.py`). The formula is compiled as a cell's formula
 would be, at `origin`, and its template is run at `at` on an engine that holds no formula cells: it

@@ -30,6 +30,7 @@ from decimal import ROUND_HALF_DOWN, Decimal
 from typing import Literal
 
 from xlrecalc._numtext import text_to_number
+from xlrecalc._platform import DEFAULT_PLATFORM
 from xlrecalc._quirks import Quirks
 from xlrecalc._values import BLANK, ErrorValue, Value
 
@@ -167,7 +168,7 @@ COLLATIONS: dict[str, Callable[[str], object]] = {"mac": COLLATION, "windows": w
 
 
 def compare(
-    a: Value, b: Value, op: Op, quirks: Quirks = Quirks.EXCEL, platform: str = "mac"
+    a: Value, b: Value, op: Op, quirks: Quirks = Quirks.EXCEL, platform: str = DEFAULT_PLATFORM
 ) -> bool | ErrorValue:
     """``a op b`` as Excel's comparison operators compute it, in the platform's order of text."""
     if isinstance(a, ErrorValue):
@@ -257,7 +258,7 @@ _CRITERION = re.compile(r"(<=|>=|<>|=|<|>)?(.*)", re.S)
 
 
 def criterion(
-    value: Value, quirks: Quirks = Quirks.EXCEL, platform: str = "mac"
+    value: Value, quirks: Quirks = Quirks.EXCEL, platform: str = DEFAULT_PLATFORM
 ) -> Callable[[Value], bool]:
     """The test a ``COUNTIF``-family criterion applies to each cell, in the platform's order."""
     if isinstance(value, ErrorValue):

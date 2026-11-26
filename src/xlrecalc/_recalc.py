@@ -63,7 +63,7 @@ def recalculate(
             run of iterative calculation, and the steps of loops inside functions.
         quirks: Which Excel quirks to reproduce; all by default.
         full: Deprecated, to be removed in 1.0: ``True`` is ``recalc_on_load="always"``.
-        platform: Which Excel computes the workbook: ``"mac"`` (the default) or ``"windows"``, or
+        platform: Which Excel computes the workbook: ``"windows"`` (the default) or ``"mac"``, or
             an ``xlformat.Platform``, which counts by its name.
         regional_settings: The viewer's regional settings, an ``xlformat.RegionalSettings``
             (en-US only), which ``TEXT`` follows; by default the platform's en-US preset.

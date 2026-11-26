@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **The default platform is Excel for Windows.** `platform=None` (`load`, `Loader`, `recalculate`,
+  `evaluate`, `Formula.parse`, `ConditionalFormula.parse` and `cell_is`) now means `"windows"`
+  (`DEFAULT_PLATFORM`), and `regional_settings=None` means
+  `xlformat.RegionalSettings.EN_US_WINDOWS`; every sheetmill package switches on the same day.
+  Pass `platform="mac"` to keep Excel for Mac: with it every result is the same as before. A
+  caller passing nothing now sees:
+  - `CHAR` and `CODE` in Windows-1252: `CHAR(233)` is `é` (the Mac's `È`), `CODE("é")` 233
+    (142), and `CLEAN` of `CHAR(129)&"x"` is `x` (`Åx`).
+  - Text ordered and compared as Excel for Windows orders it, in the operators, criteria,
+    sorting, lookups and `UNIQUE`: `"ae"="æ"` is `TRUE` (`FALSE`), `"co-op"<"coop"` `FALSE`
+    (`TRUE`).
+  - The names Excel for Windows knows: `_xlfn.ENCODEURL("a b")` is `a%20b` (`#NAME?`).
+  - `TEXT` is passed `platform="windows"` and the Windows regional settings; Excel gives the same
+    text on both for every row of capture `textfmt`.
+
 ### Added
 - `LINEST` with several x columns, and `LOGEST`, `TREND` and `GROWTH`, computed as captures
   `linest_multi`, `linest_ill` and `linest_shift` show Excel for Mac and for Windows computing

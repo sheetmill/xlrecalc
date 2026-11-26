@@ -47,7 +47,7 @@ from xlrecalc._functions import BARE_NAMES, registry_for
 from xlrecalc._limits import StepLimitError
 from xlrecalc._opening import Volatility
 from xlrecalc._ops import Ops
-from xlrecalc._platform import PlatformName
+from xlrecalc._platform import DEFAULT_PLATFORM, PlatformName
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import CellRef, CellStatus, Report
 from xlrecalc._store import COLS, MAX_COL, MAX_ROW, Sheet
@@ -206,7 +206,7 @@ class Engine:
         iterate_delta: float = 0.001,
         max_iteration_evaluations: int | None = 100_000_000,
         max_function_steps: int | None = 1_000_000_000,
-        platform: PlatformName = "mac",
+        platform: PlatformName = DEFAULT_PLATFORM,
         regional_settings: xlformat.RegionalSettings | None = None,
         saved_by_excel: bool = False,
     ) -> None:

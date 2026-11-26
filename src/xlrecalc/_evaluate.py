@@ -22,7 +22,7 @@ from xlrecalc._formula._codegen import EXTERNAL
 from xlrecalc._functions._excel_names import EXCEL_NAMES
 from xlrecalc._limits import StepLimitError
 from xlrecalc._load import refused_in_file
-from xlrecalc._platform import PlatformName, resolve
+from xlrecalc._platform import DEFAULT_PLATFORM, PlatformName, resolve
 from xlrecalc._quirks import Quirks
 from xlrecalc._report import column_letters
 from xlrecalc._store import COLS, MAX_COL, MAX_ROW
@@ -105,7 +105,7 @@ def evaluate(
             in Excel today (a dynamic array).
         quirks: Departures from Excel's behavior, as in :func:`load`.
         date1904: The 1904 date system.
-        platform: Which Excel computes it: ``"mac"`` (the default) or ``"windows"``, or an
+        platform: Which Excel computes it: ``"windows"`` (the default) or ``"mac"``, or an
             ``xlformat.Platform``, which counts by its name.
         regional_settings: The viewer's regional settings, an ``xlformat.RegionalSettings``
             (en-US only), which ``TEXT`` follows; by default the platform's en-US preset.
@@ -144,7 +144,7 @@ class Formula:
         origin: tuple[int, int],
         legacy: bool,
         quirks: Quirks,
-        platform: PlatformName = "mac",
+        platform: PlatformName = DEFAULT_PLATFORM,
         regional_settings: xlformat.RegionalSettings | None = None,
     ) -> None:
         self.text = text

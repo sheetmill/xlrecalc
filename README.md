@@ -3,12 +3,12 @@
 xlrecalc recalculates Excel workbooks in pure Python. It evaluates a workbook's formulas with
 the results Excel computes and writes them back into the file as the cached values Excel
 stores, so that openpyxl's data-only mode, pandas and other readers see values where a workbook
-written by a program has only formulas. Results are tested against values captured on Excel for
-Mac 16.115 (Microsoft 365), the default, and with `platform="windows"` against the suites of
-function results (`capture/suites.py`) captured on Excel for Windows too (16.0.20527, Microsoft
-365); the captures of behavior (dynamic arrays, `LAMBDA`, iteration, circular references,
-conditional formats) are Excel for Mac's. Excel in other languages and locales is not yet
-supported.
+written by a program has only formulas. The results are Excel for Windows' by default, and
+Excel for Mac's with `platform="mac"`. They are tested against values captured on Excel for Mac
+16.115 (Microsoft 365), and against the suites of function results (`capture/suites.py`)
+captured on Excel for Windows too (16.0.20527, Microsoft 365); the captures of behavior (dynamic
+arrays, `LAMBDA`, iteration, circular references, conditional formats) are Excel for Mac's.
+Excel in other languages and locales is not yet supported.
 
 Documentation: <https://xlrecalc.readthedocs.io>.
 

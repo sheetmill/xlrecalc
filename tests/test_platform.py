@@ -21,14 +21,14 @@ from tests.xlsx_files import package
 DATA = package('<row r="1"><c r="A1"><v>2</v></c><c r="B1"><f>TEXT(A1,"0.00")</f></c></row>')
 
 
-def test_the_mac_is_the_default() -> None:
+def test_windows_is_the_default() -> None:
     wb = xlrecalc.load(io.BytesIO(DATA))
-    assert wb.platform == "mac"
-    assert wb.regional_settings is xlformat.RegionalSettings.EN_US_MAC
+    assert wb.platform == "windows"
+    assert wb.regional_settings is xlformat.RegionalSettings.EN_US_WINDOWS
     assert wb.value("Data!B1") == "2.00"
 
 
-@pytest.mark.parametrize("platform", [None, "mac", xlformat.Platform.MAC])
+@pytest.mark.parametrize("platform", ["mac", xlformat.Platform.MAC])
 def test_the_mac_by_name_or_as_xlformat_platform(platform: object) -> None:
     wb = xlrecalc.load(io.BytesIO(DATA), platform=platform)  # type: ignore[arg-type]
     assert wb.platform == "mac"
@@ -44,14 +44,14 @@ WINDOWS_DATA = package(
 )
 
 
-@pytest.mark.parametrize("platform", ["windows", xlformat.Platform.WINDOWS])
+@pytest.mark.parametrize("platform", [None, "windows", xlformat.Platform.WINDOWS])
 def test_windows_by_name_or_as_xlformat_platform(platform: object) -> None:
     wb = xlrecalc.load(io.BytesIO(WINDOWS_DATA), platform=platform)  # type: ignore[arg-type]
     assert wb.platform == "windows"
     assert wb.regional_settings is xlformat.RegionalSettings.EN_US_WINDOWS
     got = [wb.value(f"Data!{c}1") for c in "ABCD"]
     assert got == ["é", True, "a%20b%7E", xlrecalc.ErrorValue.NAME]
-    mac = xlrecalc.load(io.BytesIO(WINDOWS_DATA))
+    mac = xlrecalc.load(io.BytesIO(WINDOWS_DATA), platform="mac")
     assert [mac.value(f"Data!{c}1") for c in "ABCD"] == [
         "È",
         False,
@@ -114,9 +114,9 @@ def test_text_passes_the_platform_and_the_regional_settings_to_xlformat(
         return text_function(*args, **kwargs)  # type: ignore[arg-type]
 
     monkeypatch.setattr(xlformat, "text_function", recorded)
-    regional = xlformat.RegionalSettings.EN_US_WINDOWS
+    regional = xlformat.RegionalSettings.EN_US_MAC
     wb = xlrecalc.load(io.BytesIO(DATA), regional_settings=regional)
     assert wb.regional_settings is regional
     assert wb.value("Data!B1") == "2.00"
     assert xlrecalc.evaluate('=TEXT(3,"0")', regional_settings=regional) == "3"
-    assert [(k["platform"], k["regional_settings"]) for k in seen] == [("mac", regional)] * 2
+    assert [(k["platform"], k["regional_settings"]) for k in seen] == [("windows", regional)] * 2
