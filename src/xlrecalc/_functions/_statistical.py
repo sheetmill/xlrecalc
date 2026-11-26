@@ -10,7 +10,7 @@ from xlrecalc._coerce import Context, numbers, to_number
 from xlrecalc._formula import MISSING
 from xlrecalc._functions._math import _total
 from xlrecalc._functions._registry import function
-from xlrecalc._functions._regression import _FIT, several
+from xlrecalc._functions._regression import _FIT, _flags, line, several
 from xlrecalc._values import BLANK, Areas, ErrorValue, Ref
 
 DIV0, NA, NUM, VALUE = ErrorValue.DIV0, ErrorValue.NA, ErrorValue.NUM, ErrorValue.VALUE
@@ -315,46 +315,7 @@ def LINEST(ctx: Context, ys: Any, xs: Any = MISSING, const: Any = True, stats: A
             return v
         if type(v) is not float:
             return VALUE
-    const = True if const is MISSING else bool(const)
-    stats = False if stats is MISSING else bool(stats)
-    n = len(yv)
-    if const:
-        mx, my = _plain(xv) / n, _plain(yv) / n
-    else:
-        mx = my = 0.0
-    sxx = sxy = 0.0
-    for x, y in zip(xv, yv, strict=True):
-        sxx += (x - mx) * (x - mx)
-        sxy += (x - mx) * (y - my)
-    if sxx == 0:
-        slope, intercept = 0.0, my
-    else:
-        slope = sxy / sxx
-        intercept = my - slope * mx if const else 0.0
-    if not stats:
-        return ((slope, intercept),)
-    df = n - (2 if const else 1)
-    ssreg = ssresid = 0.0
-    for x, y in zip(xv, yv, strict=True):
-        fit = slope * x + intercept
-        ssresid += (y - fit) * (y - fit)
-        ssreg += (fit - my) * (fit - my)
-    na = ErrorValue.NA
-    if df <= 0:
-        return ((slope, intercept), (na, na), (1.0, 0.0), (NUM, df), (ssreg, ssresid))
-    sey = math.sqrt(ssresid / df)
-    se_slope = sey / math.sqrt(sxx) if sxx else NUM
-    se_int: Any = sey * math.sqrt(1 / n + mx * mx / sxx) if const and sxx else na
-    total = ssreg + ssresid
-    r2 = ssreg / total if total else 1.0
-    f: Any = ssreg / (ssresid / df) if ssresid else NUM  # one regressor: 1 degree of freedom
-    return (
-        (slope, intercept),
-        (se_slope, se_int),
-        (r2, sey),
-        (f, float(df)),
-        (ssreg, ssresid),
-    )
+    return line(yv, xv, *_flags(const, stats))
 
 
 def _rank(ctx: Context, x: float, ref: Any, order: float, average: bool) -> float | ErrorValue:

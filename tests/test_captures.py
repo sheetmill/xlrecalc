@@ -189,7 +189,9 @@ _REGRESSION_TIE_CASES = (
 )
 _LOGEST_NOISE = (
     "LOGEST of a nearly exact fit (ssresid near 4E-14): its residuals are rounding noise, and "
-    "Excel's standard errors, sey, F and ssresid differ from the package's past the tolerance"
+    "Excel's standard errors, sey, F and ssresid differ from the package's past the tolerance; "
+    "neither centering x or y alone, nor no centering, nor the column of ones first brings them "
+    "closer"
 )
 _AT_SIGN = "the @ the formula bar shows in a legacy formula is not shown by FORMULATEXT"
 _WEEKNUM_ODD_TYPE = (

@@ -316,7 +316,8 @@ not). An empty argument is `#N/A`.
   tie and rounding in Excel's steps drops another column than the package's (6 rows; r2, F and
   the sums of squares agree), and `TREND` of that fit at new x values (2 rows); F and `ssresid`
   of a five-column fit, 5.5E-14 from Excel's (2 rows); `LOGEST` of a nearly exact fit, whose
-  residuals are rounding noise (7 rows); and one coefficient of an ill-conditioned fit (capture
+  residuals are rounding noise (7 rows; no centering variant and not the column of ones first
+  brings them closer); and one coefficient of an ill-conditioned fit (capture
   `linest_ill`: 14 columns, a date serial beside the constant), 9.9E-14 from Excel's, the same
   with the date moved to 1E6 or 1E8 and with the columns permuted (4 rows), where Excel's
   coefficients are within 6.2E-14 of the exact least-squares solution and the package's within

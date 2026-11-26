@@ -1085,7 +1085,9 @@ Behavior that is not the obvious reading, each from its capture:
   (QUIRKS.md). With as many rows as kept columns, the standard errors and sey are 0, r2 is 1 and
   F `#NUM!`. A blank, text or logical among the inputs is `#VALUE!`; x is given in columns beside
   a y column, or in rows beside a y row. `LOGEST` and `GROWTH` fit the logarithms of y. One x
-  column keeps `LINEST`'s own sums (capture `statistics`).
+  column keeps `LINEST`'s own sums about the means (capture `statistics`), and `LOGEST` and
+  `GROWTH` take the same sums over the logarithms (capture `empty_args`: with x omitted or given
+  as one column, their results are Excel's to the bit this way, and not by the QR decomposition).
 - Day counts and coupons (capture `bonds`): `DAYS360`'s US method and `YEARFRAC` basis 0 differ at
   the end of February; actual/actual takes year lengths from the calendar (1900 has 365 days
   there); coupon dates step back from maturity keeping its day (the month's last day when maturity

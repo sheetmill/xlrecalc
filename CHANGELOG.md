@@ -18,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   entry is within 1E-6 of its own norm; it and those after it are collinear: coefficient and
   standard error 0, and one more residual degree of freedom each. A zero column, or a constant
   one beside the constant, gets coefficient 0 without the extra degree of freedom, with Excel's
-  `ssresid` and `ssreg` (QUIRKS.md). Results are within a declared relative tolerance of 5E-14;
+  `ssresid` and `ssreg` (QUIRKS.md). With one x column, `LOGEST` and `GROWTH` fit the
+  logarithms by `LINEST`'s own one-column sums instead. Results are within a declared relative tolerance of 5E-14;
   where a column is exactly the sum of two others, Excel may drop another of them than the
   package does (listed rows).
 - The `linest_multi` capture (864 formulas), `linest_ill` (an ill-conditioned fit, 42 formulas),

@@ -260,6 +260,52 @@ def fit(y: list[float], xs: list[list[float]], const: bool) -> Fit:
     return out
 
 
+def line(y: list[float], x: list[float], const: bool, stats: bool) -> tuple[tuple[Any, ...], ...]:
+    """LINEST's result over one x column, from sums about the means (capture ``statistics``).
+
+    LOGEST and GROWTH with one x column take it over the logarithms of y (capture ``empty_args``:
+    their results with x omitted, and with x given, are Excel's to the bit this way and not by the
+    QR decomposition of ``fit``).
+    """
+    n = len(y)
+    if const:
+        mx, my = plain_sum(x) / n, plain_sum(y) / n
+    else:
+        mx = my = 0.0
+    sxx = sxy = 0.0
+    for u, v in zip(x, y, strict=True):
+        sxx += (u - mx) * (u - mx)
+        sxy += (u - mx) * (v - my)
+    if sxx == 0:
+        slope, intercept = 0.0, my
+    else:
+        slope = sxy / sxx
+        intercept = my - slope * mx if const else 0.0
+    if not stats:
+        return ((slope, intercept),)
+    df = n - (2 if const else 1)
+    ssreg = ssresid = 0.0
+    for u, v in zip(x, y, strict=True):
+        fitted = slope * u + intercept
+        ssresid += (v - fitted) * (v - fitted)
+        ssreg += (fitted - my) * (fitted - my)
+    if df <= 0:
+        return ((slope, intercept), (NA, NA), (1.0, 0.0), (NUM, df), (ssreg, ssresid))
+    sey = math.sqrt(ssresid / df)
+    se_slope = sey / math.sqrt(sxx) if sxx else NUM
+    se_int: Any = sey * math.sqrt(1 / n + mx * mx / sxx) if const and sxx else NA
+    total = ssreg + ssresid
+    r2 = ssreg / total if total else 1.0
+    f: Any = ssreg / (ssresid / df) if ssresid else NUM  # one regressor: 1 degree of freedom
+    return (
+        (slope, intercept),
+        (se_slope, se_int),
+        (r2, sey),
+        (f, float(df)),
+        (ssreg, ssresid),
+    )
+
+
 def table(f: Fit, const: bool, stats: bool, log: bool = False) -> tuple[tuple[Any, ...], ...]:
     """LINEST's (or LOGEST's) result.
 
@@ -326,6 +372,9 @@ def several(ys: Any, xs: Any, const: Any, stats: Any, log: bool = False) -> Any:
             return logs
         y = logs
     c, s = _flags(const, stats)
+    if len(cols) == 1:  # LOGEST over one column: LINEST's line through the logarithms
+        first, *rest = line(y, cols[0], c, s)
+        return (tuple(math.exp(v) for v in first), *rest)
     return table(fit(y, cols, c), c, s, log)
 
 
@@ -352,8 +401,12 @@ def _predict(ys: Any, xs: Any, new: Any, const: Any, log: bool) -> Any:
             return logs
         y = logs
     c, _ = _flags(const)
-    f = fit(y, cols, c)
     k = len(cols)
+    if log and k == 1:  # GROWTH over one column: LINEST's line through the logarithms
+        f = Fit(1)
+        f.m[0], f.b = line(y, cols[0], c, False)[0]
+    else:
+        f = fit(y, cols, c)
     as_row = len(grid(ys)) == 1 and len(grid(ys)[0]) > 1
     if new is MISSING:
         points = [[col[i] for col in cols] for i in range(len(y))]
