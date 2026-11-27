@@ -15,13 +15,6 @@ import sys
 from fractions import Fraction
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-
-from capture.suites import _ill_columns
-from tests.captures import load
-
-from xlrecalc._functions._regression import fit
-
 
 def exact(y: list[float], xs: list[list[float]], const: bool) -> tuple[list[Fraction], Fraction]:
     """The least-squares coefficients of ``y`` on ``xs`` (and a constant), exactly.
@@ -50,6 +43,13 @@ def relative(a: float, b: float) -> float:
 
 
 def main() -> None:
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    # the capture generator needs openpyxl, which exact() does not
+    from capture.suites import _ill_columns
+    from tests.captures import load
+
+    from xlrecalc._functions._regression import fit
+
     columns = _ill_columns()
     y, xs = columns[0], columns[1:]
     rows = load("linest_ill").rows
