@@ -3,8 +3,9 @@
 Every worksheet function Excel has, whether this package computes it, and the
 evidence: captured rows that call the function (a row counts for every function in
 its formula), how many match Excel, exactly or within the function's declared
-tolerance (in units in the last place, or relative for the iterative functions and
-the beta, gamma, chi-squared, F and t distributions), and how many are listed
+tolerance (in units in the last place, or relative for the iterative functions, the
+regression functions `LINEST`, `LOGEST`, `TREND` and `GROWTH`, and the beta, gamma,
+chi-squared, F and t distributions), and how many are listed
 deviations with their reasons (`QUIRKS.md`, `tests/test_captures.py`,
 `tests/test_dynamic_arrays.py`). A random draw counts as listed: it is tested by its
 properties, not its value, so a draw that equals Excel's by chance is never counted
@@ -297,7 +298,7 @@ platform.
 | `LEN` | text | implemented | 431 | 431 | 0 |  |  |
 | `LENB` | text | implemented | 29 | 29 | 0 |  |  |
 | `LET` | logical | implemented | 61 | 61 | 0 |  |  |
-| `LINEST` | statistical | implemented | 1249 | 1232 | 17 | 4 ulps |  |
+| `LINEST` | statistical | implemented | 1249 | 1232 | 17 | 4 ulps, 5e-14 relative |  |
 | `LN` | math | implemented | 18 | 18 | 0 |  |  |
 | `LOG` | math | implemented | 229 | 229 | 0 | 4 ulps |  |
 | `LOG10` | math | implemented | 31 | 31 | 0 | 4 ulps |  |

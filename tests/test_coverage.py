@@ -14,6 +14,23 @@ def test_coverage_matrix_is_current():
     )
 
 
+def test_a_function_declaring_both_tolerances_shows_both():
+    from types import SimpleNamespace
+
+    from tools.coverage import _declared
+
+    assert _declared(SimpleNamespace(ulps=4, rel=5e-14)) == "4 ulps, 5e-14 relative"
+    assert _declared(SimpleNamespace(ulps=4, rel=0.0)) == "4 ulps"
+    assert _declared(SimpleNamespace(ulps=0, rel=1e-9)) == "1e-09 relative"
+    assert "| `LINEST` |" in OUTPUT.read_text(encoding="utf-8")
+    line = next(
+        ln
+        for ln in OUTPUT.read_text(encoding="utf-8").splitlines()
+        if ln.startswith("| `LINEST` |")
+    )
+    assert "4 ulps, 5e-14 relative" in line
+
+
 def test_every_registered_function_appears():
     from xlrecalc._functions import SPECS
 
