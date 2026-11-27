@@ -324,7 +324,7 @@ not). An empty argument is `#N/A`.
   `linest_ill`: 14 columns, a date serial beside the constant), 9.9E-14 from Excel's, the same
   with the date moved to 1E6 or 1E8 and with the columns permuted (4 rows), where Excel's
   coefficients are within 6.2E-14 of the exact least-squares solution and the package's within
-  3.7E-14.
+  3.7E-14 (solved in rational arithmetic by `tools/exact_regression.py`).
 - `LINEST` and `LOGEST` with an all-zero x column, or with a column holding one value beside the
   constant: the column's coefficient and standard error are 0, as for a collinear column, but
   the residual degrees of freedom do not grow, and `ssresid` is too small and `ssreg` too large by

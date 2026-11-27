@@ -179,7 +179,8 @@ _REGRESSION_LAST_BITS = (
 )
 _ILL_CONDITIONED = (
     "LINEST over an ill-conditioned fit (a date serial beside the constant): Excel's coefficients "
-    "are within 6.2E-14 of the exact solution and the package's within 3.7E-14; one coefficient "
+    "are within 6.2E-14 of the exact solution (tools/exact_regression.py) and the package's within "
+    "3.7E-14; one coefficient "
     "is 9.9E-14 from Excel's, past the tolerance, and is the same on both sides with the date "
     "moved to 1E6 or 1E8 and with the columns permuted"
 )
