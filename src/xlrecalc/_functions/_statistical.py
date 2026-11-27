@@ -20,8 +20,8 @@ _VARIANCE = (
     "means, the textbook and corrected formulas tried); within 4 units in the last place"
 )
 _REGRESSION = (
-    "Excel's sums of products and its regression (likely by QR decomposition) differ in the "
-    "last bits; within 4 units in the last place except listed rows near cancellation"
+    "Excel's sums of products and its regression over one x column differ in the last bits; "
+    "within 4 units in the last place except listed rows near cancellation"
 )
 _NORMAL = (
     "Excel's normal distribution is not math.erfc or Cody's algorithm in the last bits; "
@@ -301,7 +301,7 @@ def CORREL(ctx: Context, xs: Any, ys: Any) -> float | ErrorValue:
     ulps=4, ulps_reason=_REGRESSION, rel=5e-14, rel_reason=_FIT, makes_array=True,
 )  # fmt: skip
 def LINEST(ctx: Context, ys: Any, xs: Any = MISSING, const: Any = True, stats: Any = False) -> Any:
-    """Least-squares line through the points: slope and intercept, with statistics."""
+    """The least-squares fit of y on one or several x columns, with its statistics when asked."""
     yv = _cells(ys)
     xv = [float(i) for i in range(1, len(yv) + 1)] if xs is MISSING else _cells(xs)
     if xs is not MISSING and yv and len(xv) > len(yv):  # several x columns (capture linest_multi)

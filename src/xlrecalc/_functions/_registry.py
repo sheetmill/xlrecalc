@@ -40,10 +40,12 @@ file form, upper case, with ``_xlfn.`` for functions newer than Excel 2007.
 Results are compared with Excel's bit for bit. A function whose results still differ after a fixed
 time spent fitting Excel's last bits declares a small tolerance in units in the last place
 (``ulps``) with its reason (``ulps_reason``); the capture tests count rows within it separately
-from exact matches, and ``QUIRKS.md`` lists it as a known deviation. An iterative function
-(IRR, XIRR, RATE, YIELD), whose result Excel itself guarantees only to its documented stopping
-tolerance, may instead declare a relative tolerance (``rel``, 1E-9, with ``rel_reason``),
-counted apart from both.
+from exact matches, and ``QUIRKS.md`` lists it as a known deviation. A function may declare a
+relative tolerance instead, or as well (``rel``, with ``rel_reason``), counted apart from both: the
+iterative functions (IRR, XIRR, RATE, YIELD), whose result Excel itself guarantees only to its
+documented stopping tolerance, at 1E-9; the beta, gamma, chi-squared, F and t distributions at
+1E-15 to 1E-12; and the regression over several x columns (LINEST, LOGEST, TREND, GROWTH) at
+5E-14.
 """
 
 from __future__ import annotations
