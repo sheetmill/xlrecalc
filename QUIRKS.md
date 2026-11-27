@@ -191,9 +191,10 @@ not). An empty argument is `#N/A`.
   starts only where a character starts; the limit of a text, 32,767, counts units (capture `text_family`, Excel 16.115;
   16.114 counted units in `LEN`, `MID`, `REPLACE`, `FIND` and `SEARCH` too).
 - `ENCODEURL`, `FILTERXML` and `EUROCONVERT` give `#NAME?` in Excel 16 for Mac in every file form and with any
-  arguments (captures `mac_gaps`, `function_names`, `encodeurl`), and so they do here: a cell using one computes to
-  `#NAME?` where Excel computes it. Excel for Windows knows `ENCODEURL` and `FILTERXML` written with `_xlfn.` only
-  (without it, `#NAME?`, as here under `platform="windows"`), and `EUROCONVERT` with its add-in: there `ENCODEURL` is
+  arguments (captures `mac_gaps`, `function_names`, `encodeurl`), and so they do under `platform="mac"`: a cell using
+  one computes to `#NAME?` where Excel for Mac computes it. Excel for Windows, the default, knows `ENCODEURL` and
+  `FILTERXML` written with `_xlfn.` only (without it, `#NAME?`, and so under `platform="windows"`), and `EUROCONVERT`
+  with its add-in: there `ENCODEURL` is
   computed (capture `windows/encodeurl`; a result of 32,767 characters or more is `#VALUE!`, whatever the argument's
   length), while `FILTERXML` and `EUROCONVERT` are not. Any other name the package does not compute (an add-in's
   function, a name no Excel knows) keeps its cached value and is reported, since what Excel shows depends on add-ins
@@ -263,21 +264,23 @@ not). An empty argument is `#N/A`.
   rows (`ATAN`, `ATAN2`, `TAN`, `COT`, `ACOT`, `LOG`, `LOG10`, the t distribution, `GAMMA.DIST`, `CONFIDENCE.T`,
   `BESSELJ`, `BESSELY`, and `BETA.INV` and `F.INV` near 1E-150), all within the functions' declared tolerances or
   among the rows the Mac lists already, but one: `IMCOSH("3+4i")`, whose imaginary part Excel for Windows writes
-  `-7.58155274274654` and Excel for Mac, as here, `-7.58155274274655`. It is listed for Windows.
+  `-7.58155274274654` and Excel for Mac `-7.58155274274655`, which the package gives on both platforms. It is listed
+  for Windows.
 - `VDB` from a fractional start, or late in a schedule, differs in its last bits on 75 of the 317 rows of `finance` that
   sweep fractional periods (5 to 1,131 units in the last place, Excel's rule otherwise reproduced): the book value carried
   period by period rounds differently from Excel's, and a straight-line amount computed once or a closed-form book value
   fit no more rows. Listed in `tests/test_captures.py`.
 - An empty argument: `VDB` with an empty `factor` is `#DIV/0!` in Excel and 0 here (two rows of `empty_args`). Two others there carry the known noise of `MULTINOMIAL` and `CUMIPMT`.
-- How text orders is captured for printable ASCII, 28 Latin-1 letters and signs, and `œ`, `Œ`
-  (every pair of 125 characters, capture `collate_chars`), 40 words (`collate_words`) and the
-  pairs of `modern`, on Excel 16.115 for Mac: one consistent order, followed exactly. Other
+- How text orders under `platform="mac"` is captured for printable ASCII, 28 Latin-1 letters and
+  signs, and `œ`, `Œ` (every pair of 125 characters, capture `collate_chars`), 40 words
+  (`collate_words`) and the pairs of `modern`, on Excel 16.115 for Mac: one consistent order,
+  followed exactly. Other
   characters (another script, a symbol outside this set) sort after the letters by code point and
   controls first, our choice, so they may not sort as Excel sorts them. Sorting, ordered criteria
   and approximate lookups follow the same order; a criterion's equality (`COUNTIF(r,"ß")` counts
   `ss`) and `XMATCH`'s binary search follow `=`, while an exact `MATCH`, `VLOOKUP` or `XLOOKUP`
   scan ignores case only (`MATCH("ß",r,0)` passes over `ss`; capture `collate_functions`). Under
-  `platform="windows"` text orders as Excel for Windows orders it, with the same uses of `<` and
+  `platform="windows"`, the default, text orders as Excel for Windows orders it, with the same uses of `<` and
   `=` (captures `windows/collate_chars`, `collate_words`, `collate_functions`, `modern`, Excel
   16.0.20527.20196, locale and sort locale en-US): case is ignored; `'` and `-` count only between
   texts otherwise equal; other marks follow code order, then `+ < = >`, `« » § µ ¶`, digits and

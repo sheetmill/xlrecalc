@@ -1,8 +1,8 @@
 """``platform=`` and ``regional_settings=``: which Excel computes, and the viewer's settings.
 
 Every entry point takes both (``load``, ``Loader``, ``recalculate``, ``evaluate``,
-``Formula.parse``, ``ConditionalFormula.parse`` and ``cell_is``); ``None`` is the Mac and the
-platform's en-US preset. ``TEXT`` passes both on to ``xlformat``. Under Excel for Windows,
+``Formula.parse``, ``ConditionalFormula.parse`` and ``cell_is``); ``None`` is Excel for Windows
+and the platform's en-US preset. ``TEXT`` passes both on to ``xlformat``. Under each platform,
 ``CHAR`` and ``CODE`` take its code page, text orders as it orders text, and the names it knows
 are its own.
 """
