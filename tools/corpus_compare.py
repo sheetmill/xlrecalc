@@ -8,7 +8,9 @@ in a child under the memory watchdog (``tests/watchdog.py``), with a time limit 
 JSON line per workbook goes to ``OUT/rows``, a finished workbook is not evaluated again, and the
 run stops at the first batch killed, naming the workbook it was reading. A workbook named in
 ``OUT/skip.txt`` is left out. ``OUT`` then gets ``summary.txt`` and ``mismatches.tsv``. They
-describe someone else's workbooks, so they stay local, as the corpus does.
+describe someone else's workbooks, so they stay local, as the corpus does. Every workbook is
+computed as Excel for Mac (``platform="mac"``), not under the default platform, so that the
+counts of one run can be compared with another's across a change of the default.
 
 Each formula is evaluated twice:
 
@@ -26,12 +28,12 @@ Categories, the first that applies to a formula cell:
   are compared.
 - ``iterating_converged_matches``, ``iterating_converged_differs``, ``iterating_count_matches``,
   ``iterating_count_differs``, ``iterating_stopped``: on or after a cycle with iteration on,
-  computed as ``recalculate(path, recalc_on_load="always")`` computes it (an evaluating run,
-  then the save's run, Excel's saved copy) and compared with the cache in the full
+  computed as ``recalculate(path, recalc_on_load="always", platform="mac")`` computes it (an
+  evaluating run, then the save's run, Excel's saved copy) and compared with the cache in the full
   recalculation only. Split by why the save's run ended: on ``iterateDelta`` (a converging loop,
   which should match the state Excel saved), on ``iterateCount`` (a loop that moves on every run
-  and differs by design), or stopped by a limit or an unread cell (kept, reported). Matches are
-  any of the grades below.
+  and differs by design), or stopped by a limit or an unread cell (kept, reported). Matches are any
+  of the grades below.
 - ``circular_empty``, ``circular_alone_matches``, ``circular_alone_differs``: on or after a cycle
   with iteration off. The first is what Excel saves for such a cell. In the others the cache holds
   a value, so the cache is older than the cycle or the engine calls circular what Excel does not.
@@ -202,7 +204,7 @@ def _cached_values(engine: Engine, path: str) -> dict[int, Any]:
 
 def compare_workbook(path: str) -> dict[str, Any]:
     """One workbook's counts, labels and distinct mismatches."""
-    engine = load(path, recalc_on_load="always", platform="mac")  # as the earlier sweeps compared
+    engine = load(path, recalc_on_load="always", platform="mac")  # see the module docstring
     cached = _cached_values(engine, path)
     formulas = [(index << 34) | key for index, s in enumerate(engine.sheets) for key in s.templates]
     chains: list[int] = []
