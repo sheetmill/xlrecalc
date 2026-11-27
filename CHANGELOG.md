@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-11-27
+
 ### Changed
 - **The default platform is Excel for Windows.** `platform=None` (`load`, `Loader`, `recalculate`,
   `evaluate`, `Formula.parse`, `ConditionalFormula.parse` and `cell_is`) now means `"windows"`
@@ -21,22 +23,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - The names Excel for Windows knows: `_xlfn.ENCODEURL("a b")` is `a%20b` (`#NAME?`).
   - `TEXT` is passed `platform="windows"` and the Windows regional settings; Excel gives the same
     text on both for every row of capture `textfmt`.
+- Requires xlio 0.5 (`xlio==0.5.*`), which reads a workbook's cells as Excel shows them while the
+  file is open. An error a file holds as a rich value with `errorType` 14 reads as `#CALC!`, where
+  it read as 0, so `=A1` over it is `#CALC!`; `errorType` 18 with sub-type 1 reads as `#PYTHON!`.
+  `ERROR.TYPE` of such a cell is that of the error's text, not Excel's (QUIRKS.md). A row of zero
+  custom height reads as hidden, so `SUBTOTAL` 101 to 111 leave it out.
 
 ### Added
 - `LINEST` with several x columns, and `LOGEST`, `TREND` and `GROWTH`, computed as captures
-  `linest_multi`, `linest_ill` and `linest_shift` show Excel for Mac and for Windows computing
-  them, which agree on every row. Such a `LINEST` kept the value the file caches and was reported
-  under `LINEST with several regressors`; the other three were not computed. The fit is a QR
-  decomposition with column pivoting, as LAPACK's `dgeqp3` computes it: with a constant, the
-  columns and y are centered first and a column of ones is factored first; then each step takes
-  the column with the largest remaining norm. Columns are kept up to the first whose diagonal
-  entry is within 1E-6 of its own norm; it and those after it are collinear: coefficient and
-  standard error 0, and one more residual degree of freedom each. A zero column, or a constant
-  one beside the constant, gets coefficient 0 without the extra degree of freedom, with Excel's
-  `ssresid` and `ssreg` (QUIRKS.md). With one x column, `LOGEST` and `GROWTH` fit the
-  logarithms by `LINEST`'s own one-column sums instead. Results are within a declared relative tolerance of 5E-14;
-  where a column is exactly the sum of two others, Excel may drop another of them than the
-  package does (listed rows).
+  `linest_multi`, `linest_ill` and `linest_shift` show Excel for Mac and for Windows computing them,
+  which agree on every row. Such a `LINEST` kept the value the file caches and was reported under
+  `LINEST with several regressors`; the other three were not computed. The fit is a QR decomposition
+  with column pivoting, as LAPACK's `dgeqp3` computes it: with a constant, the columns and y are
+  centered first and a column of ones is factored first; then each step takes the column with the
+  largest remaining norm. Columns are kept up to the first whose diagonal entry is within 1E-6 of
+  its own norm; it and those after it are collinear: coefficient and standard error 0, and one more
+  residual degree of freedom each. A zero column, or a constant one beside the constant, gets
+  coefficient 0 without the extra degree of freedom, with Excel's `ssresid` and `ssreg` (QUIRKS.md).
+  With one x column, `LOGEST` and `GROWTH` fit the logarithms by `LINEST`'s own one-column sums
+  instead. Results are within a declared relative tolerance of 5E-14; where a column is exactly the
+  sum of two others, Excel may drop another of them than the package does (listed rows).
 - The `linest_multi` capture (864 formulas), `linest_ill` (an ill-conditioned fit, 42 formulas),
   `linest_shift` (shifted, permuted, repeated, wide and mixed-scale columns, 412 formulas), and
   `empty_args` with `LOGEST`, `TREND` and `GROWTH`, from Excel for Mac and Excel for Windows.
@@ -942,7 +948,8 @@ First release.
   calculation settings; archive limits (`ReadLimits`, `LimitError`) and a refusal of DTDs
   protect against hostile files; `PackageError` for a file that is not a readable package.
 
-[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.12.0...HEAD
+[Unreleased]: https://github.com/sheetmill/xlrecalc/compare/v0.13.0...HEAD
+[0.13.0]: https://github.com/sheetmill/xlrecalc/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/sheetmill/xlrecalc/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/sheetmill/xlrecalc/compare/v0.10.1...v0.11.0
 [0.10.1]: https://github.com/sheetmill/xlrecalc/compare/v0.10.0...v0.10.1

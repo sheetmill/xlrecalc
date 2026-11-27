@@ -134,6 +134,14 @@ not). An empty argument is `#N/A`.
 
 ## Known deviations
 
+- An error a file holds as a rich value is read as the error Excel shows while the workbook is open (through xlio), and
+  `=A1`, `ISERROR` and `VALUETOTEXT` over it give Excel's results. `ERROR.TYPE` does not: Excel gives such an error its
+  `errorType` plus one, so errorType 14, shown as `#CALC!`, is 15, and errorType 18 with sub-type 0, shown as
+  `#UNKNOWN!`, is 19 (xlio's captures
+  [`errors_shown`](https://github.com/sheetmill/xlio/blob/main/tests/captures/errors_shown.tsv) and
+  [`errors`](https://github.com/sheetmill/xlio/blob/main/tests/captures/errors.tsv)), where the package, which receives
+  the error by its text, gives `#CALC!`'s 14 and `#UNKNOWN!`'s 12. errorType 8 (`#SPILL!`, 9) and 13 (`#CALC!`, 14)
+  match.
 - An array past `ReadLimits.max_array_cells` (ten full columns by default) is not made: the formula keeps the value
   the file holds and is reported. Over a whole sheet this stops `CORREL`, `LINEST`, `XIRR` and `XNPV`; given `CORREL`
   over the whole sheet Excel too keeps the value the file holds, though it computes `CORREL` over ten columns
